@@ -39,16 +39,80 @@
 <main>
 
   <section class="hero" id="top">
-    <canvas class="globe-canvas" id="globeCanvas" aria-hidden="true"></canvas>
-    <div class="hero-scrim" aria-hidden="true"></div>
-    <div class="hero-inner">
-      <h1 class="display">Cybersecurity<br>and Asset<br>Tokenization</h1>
-      <p class="lead">
-        Sectora secures digital infrastructure and turns real-world assets into
-        verifiable on-chain instruments, combining institutional-grade cybersecurity
-        with secure tokenization.
+    <div class="hero-scene" aria-hidden="true">
+      <div class="hero-stars"></div>
+
+      <svg class="hero-mountains hero-mountains--back" viewBox="0 0 1440 400" preserveAspectRatio="none">
+        <path d="M0,400 L0,260 L140,300 L260,210 L400,290 L560,190 L720,280 L900,180 L1060,270 L1220,200 L1440,260 L1440,400 Z" fill="#0c1c3c"/>
+      </svg>
+
+      <svg class="hero-mountains hero-mountains--front" viewBox="0 0 1440 400" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="ridgeFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#12234a"/>
+            <stop offset="1" stop-color="#060c1c"/>
+          </linearGradient>
+          <filter id="ridgeGlow" x="-20%" y="-50%" width="140%" height="220%">
+            <feGaussianBlur stdDeviation="6" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <path d="M0,400 L0,220 L120,260 L220,150 L340,230 L460,120 L600,240 L760,110 L920,250 L1080,140 L1220,230 L1340,160 L1440,220 L1440,400 Z" fill="url(#ridgeFill)"/>
+        <path d="M0,220 L120,260 L220,150 L340,230 L460,120 L600,240 L760,110 L920,250 L1080,140 L1220,230 L1340,160 L1440,220" fill="none" stroke="rgba(90,170,255,0.65)" stroke-width="2" filter="url(#ridgeGlow)"/>
+      </svg>
+
+      <div class="hero-water">
+        <div class="hero-reflection">
+          <svg viewBox="0 0 1440 400" preserveAspectRatio="none">
+            <path d="M0,400 L0,220 L120,260 L220,150 L340,230 L460,120 L600,240 L760,110 L920,250 L1080,140 L1220,230 L1340,160 L1440,220 L1440,400 Z" fill="#0c1c3c"/>
+            <path d="M0,220 L120,260 L220,150 L340,230 L460,120 L600,240 L760,110 L920,250 L1080,140 L1220,230 L1340,160 L1440,220" fill="none" stroke="rgba(90,170,255,0.5)" stroke-width="2"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-centerpiece" id="heroCenterpiece">
+      <div class="hero-mark-glow" id="heroMarkGlow"></div>
+      <div class="hero-mark" id="heroMark">
+        <svg viewBox="0 0 200 200" width="220" height="220" aria-hidden="true">
+          <defs>
+            <linearGradient id="heroFacetLeft" x1="0" y1="0" x2="0.4" y2="1">
+              <stop offset="0" stop-color="#f3f9ff"/>
+              <stop offset="1" stop-color="#4da6ff"/>
+            </linearGradient>
+            <linearGradient id="heroFacetRight" x1="0" y1="0" x2="0.6" y2="1">
+              <stop offset="0" stop-color="#2f7dd6"/>
+              <stop offset="1" stop-color="#0c2c58"/>
+            </linearGradient>
+          </defs>
+          <path d="M100 18 L24 180 L100 180 Z" fill="url(#heroFacetLeft)"/>
+          <path d="M100 18 L100 180 L176 180 Z" fill="url(#heroFacetRight)"/>
+          <path d="M100 18 L24 180 L100 180 Z M100 18 L100 180 L176 180 Z" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M92 46 L52 152" stroke="rgba(255,255,255,0.5)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+    </div>
+
+    <ul class="hero-words" id="heroWords" aria-hidden="true">
+      <li class="active"><span class="hero-words-dot"></span>Security</li>
+      <li>Verification</li>
+      <li>Custody</li>
+      <li>Transparency</li>
+      <li>Integrity</li>
+      <li>Trust</li>
+    </ul>
+
+    <div class="hero-content">
+      <h1 class="hero-heading">We Secure the Future<br>of Tokenized Assets</h1>
+      <p class="hero-lead">
+        For every asset we protect, Sectora combines institutional-grade
+        cybersecurity with verifiable on-chain tokenization -- built to
+        outlast the threats of tomorrow.
       </p>
-      <a class="btn btn-light" href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer">
+      <a class="btn btn-glass" href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer">
         Buy on Uniswap
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
       </a>
@@ -261,7 +325,7 @@
 
 <div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
 
-<script src="globe.js"></script>
+<script src="hero.js"></script>
 <script src="cursor.js"></script>
 <script src="showcase.js"></script>
 <script src="script.js"></script>

@@ -264,64 +264,203 @@ img {
   flex-direction: column;
   justify-content: space-between;
   padding-top: 72px;
-  background: var(--black);
+  background: linear-gradient(180deg, #060a16 0%, #0a1530 55%, #0a1a38 100%);
   overflow: hidden;
 }
 
-.globe-canvas {
+/* -- background scene: stars, mountains, water -- */
+
+.hero-scene {
   position: absolute;
   inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-stars {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-stars span {
+  position: absolute;
+  border-radius: 50%;
+  background: #ffffff;
+  animation: hero-twinkle 4s ease-in-out infinite;
+}
+
+@keyframes hero-twinkle {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-mountains {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 24%;
+}
+
+.hero-mountains--back {
+  height: 19%;
+  opacity: 0.5;
+}
+
+.hero-water {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 13%;
+  background: linear-gradient(180deg, rgba(10, 22, 46, 0.85) 0%, rgba(2, 5, 12, 1) 100%);
+  overflow: hidden;
+}
+
+.hero-reflection {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 220px;
+  transform: scaleY(-1);
+  opacity: 0.3;
+  filter: blur(2px);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 88%);
+  mask-image: linear-gradient(to bottom, black 0%, transparent 88%);
+}
+
+.hero-reflection svg {
+  display: block;
   width: 100%;
   height: 100%;
-  z-index: 0;
-  cursor: grab;
-  touch-action: none;
 }
 
-.globe-canvas.dragging {
-  cursor: grabbing;
-}
+/* -- centerpiece mark -- */
 
-.hero-scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.8) 32%, rgba(0, 0, 0, 0.3) 58%, rgba(0, 0, 0, 0) 78%),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0) 26%);
-}
-
-.hero-inner {
+.hero-centerpiece {
   position: relative;
-  z-index: 2;
-  flex: 1;
+  z-index: 1;
   display: flex;
   align-items: center;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 40px 24px;
-  gap: 20px;
+  justify-content: center;
+  padding-top: 64px;
+  perspective: 1000px;
   pointer-events: none;
 }
 
-.hero-inner a {
-  pointer-events: auto;
+.hero-mark-glow {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(93, 200, 255, 0.5) 0%, rgba(77, 166, 255, 0.18) 45%, transparent 72%);
+  filter: blur(6px);
 }
 
-.hero-inner .display {
-  font-size: clamp(44px, 8vw, 98px);
+.hero-mark {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.55));
 }
 
-.hero-inner {
+/* -- cycling word list -- */
+
+.hero-words {
+  position: absolute;
+  z-index: 2;
+  left: 24px;
+  top: 46%;
+  display: none;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.32);
 }
 
-.hero-inner .btn {
-  margin-top: 8px;
+.hero-words li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.4s ease;
+}
+
+.hero-words-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.hero-words li.active {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.hero-words li.active .hero-words-dot {
+  opacity: 1;
+  background: rgba(93, 200, 255, 0.95);
+  box-shadow: 0 0 8px rgba(93, 200, 255, 0.9);
+}
+
+@media (min-width: 900px) {
+  .hero-words {
+    display: flex;
+  }
+}
+
+/* -- headline / copy -- */
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+  padding: 0 24px 32px;
+  margin-top: -8%;
+}
+
+.hero-heading {
+  font-size: clamp(32px, 5.6vw, 58px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  color: var(--white);
+  text-wrap: balance;
+}
+
+.hero-lead {
+  max-width: 560px;
+  font-size: clamp(15px, 1.5vw, 17px);
+  font-weight: 300;
+  line-height: 1.55;
+  letter-spacing: 0.2px;
+  color: rgba(210, 224, 245, 0.75);
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.16);
 }
 
 /* ---------- Marquee ---------- */
