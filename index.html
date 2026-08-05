@@ -42,33 +42,40 @@
     <div class="hero-scene" aria-hidden="true">
       <div class="hero-stars"></div>
 
-      <svg class="hero-mountains hero-mountains--back" viewBox="0 0 1440 400" preserveAspectRatio="none">
-        <path d="M0,400 L0,260 L140,300 L260,210 L400,290 L560,190 L720,280 L900,180 L1060,270 L1220,200 L1440,260 L1440,400 Z" fill="#0c1c3c"/>
+      <svg class="hero-mountains hero-mountains--back" viewBox="0 0 1440 600" preserveAspectRatio="none">
+        <path d="M0,600 L0,380 Q100,350 200,370 Q320,390 400,340 Q480,300 580,330 Q680,360 760,310 Q860,260 960,300 Q1060,340 1160,320 Q1280,300 1360,330 L1440,350 L1440,600 Z" fill="#0d1e42"/>
       </svg>
 
-      <svg class="hero-mountains hero-mountains--front" viewBox="0 0 1440 400" preserveAspectRatio="none">
+      <svg class="hero-mountains hero-mountains--front" viewBox="0 0 1440 600" preserveAspectRatio="none">
         <defs>
           <linearGradient id="ridgeFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#12234a"/>
-            <stop offset="1" stop-color="#060c1c"/>
+            <stop offset="0" stop-color="#1c3868"/>
+            <stop offset="0.18" stop-color="#132a54"/>
+            <stop offset="1" stop-color="#050a18"/>
           </linearGradient>
-          <filter id="ridgeGlow" x="-20%" y="-50%" width="140%" height="220%">
-            <feGaussianBlur stdDeviation="6" result="blur"/>
+          <radialGradient id="ridgeHot" cx="0.5" cy="0" r="0.6">
+            <stop offset="0" stop-color="rgba(120,195,255,0.32)"/>
+            <stop offset="1" stop-color="rgba(120,195,255,0)"/>
+          </radialGradient>
+          <filter id="ridgeGlow" x="-20%" y="-80%" width="140%" height="280%">
+            <feGaussianBlur stdDeviation="12" result="blur"/>
             <feMerge>
               <feMergeNode in="blur"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
         </defs>
-        <path d="M0,400 L0,220 L120,260 L220,150 L340,230 L460,120 L600,240 L760,110 L920,250 L1080,140 L1220,230 L1340,160 L1440,220 L1440,400 Z" fill="url(#ridgeFill)"/>
-        <path d="M0,220 L120,260 L220,150 L340,230 L460,120 L600,240 L760,110 L920,250 L1080,140 L1220,230 L1340,160 L1440,220" fill="none" stroke="rgba(90,170,255,0.65)" stroke-width="2" filter="url(#ridgeGlow)"/>
+        <path id="ridgeLine" d="M0,340 Q80,300 160,320 Q260,345 320,280 Q380,220 460,260 Q540,300 620,230 Q700,160 800,200 Q900,240 980,180 Q1060,120 1160,170 Q1260,220 1340,250 Q1400,270 1440,300" fill="none"/>
+        <path d="M0,600 L0,340 Q80,300 160,320 Q260,345 320,280 Q380,220 460,260 Q540,300 620,230 Q700,160 800,200 Q900,240 980,180 Q1060,120 1160,170 Q1260,220 1340,250 Q1400,270 1440,300 L1440,600 Z" fill="url(#ridgeFill)"/>
+        <path d="M300,600 L300,300 Q700,60 1100,300 L1100,600 Z" fill="url(#ridgeHot)"/>
+        <path d="M0,340 Q80,300 160,320 Q260,345 320,280 Q380,220 460,260 Q540,300 620,230 Q700,160 800,200 Q900,240 980,180 Q1060,120 1160,170 Q1260,220 1340,250 Q1400,270 1440,300" fill="none" stroke="rgba(110,190,255,0.8)" stroke-width="3" filter="url(#ridgeGlow)"/>
       </svg>
 
       <div class="hero-water">
         <div class="hero-reflection">
-          <svg viewBox="0 0 1440 400" preserveAspectRatio="none">
-            <path d="M0,400 L0,220 L120,260 L220,150 L340,230 L460,120 L600,240 L760,110 L920,250 L1080,140 L1220,230 L1340,160 L1440,220 L1440,400 Z" fill="#0c1c3c"/>
-            <path d="M0,220 L120,260 L220,150 L340,230 L460,120 L600,240 L760,110 L920,250 L1080,140 L1220,230 L1340,160 L1440,220" fill="none" stroke="rgba(90,170,255,0.5)" stroke-width="2"/>
+          <svg viewBox="0 0 1440 600" preserveAspectRatio="none">
+            <path d="M0,600 L0,340 Q80,300 160,320 Q260,345 320,280 Q380,220 460,260 Q540,300 620,230 Q700,160 800,200 Q900,240 980,180 Q1060,120 1160,170 Q1260,220 1340,250 Q1400,270 1440,300 L1440,600 Z" fill="#132a54"/>
+            <path d="M0,340 Q80,300 160,320 Q260,345 320,280 Q380,220 460,260 Q540,300 620,230 Q700,160 800,200 Q900,240 980,180 Q1060,120 1160,170 Q1260,220 1340,250 Q1400,270 1440,300" fill="none" stroke="rgba(110,190,255,0.6)" stroke-width="3"/>
           </svg>
         </div>
       </div>
@@ -77,7 +84,7 @@
     <div class="hero-centerpiece" id="heroCenterpiece">
       <div class="hero-mark-glow" id="heroMarkGlow"></div>
       <div class="hero-mark" id="heroMark">
-        <svg viewBox="0 0 200 200" width="220" height="220" aria-hidden="true">
+        <svg viewBox="0 0 200 200" width="300" height="300" aria-hidden="true">
           <defs>
             <linearGradient id="heroFacetLeft" x1="0" y1="0" x2="0.4" y2="1">
               <stop offset="0" stop-color="#f3f9ff"/>
