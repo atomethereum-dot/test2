@@ -599,6 +599,89 @@ img {
   height: 14px;
 }
 
+/* ---------- Showcase (3D logo mark) ---------- */
+
+.showcase {
+  position: relative;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 45%, rgba(77, 166, 255, 0.1), transparent 70%),
+    var(--black);
+  padding: 140px 24px;
+  overflow: hidden;
+}
+
+.showcase-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  text-align: center;
+}
+
+.showcase-inner .eyebrow {
+  margin-bottom: 0;
+}
+
+.showcase-stage {
+  position: relative;
+  width: min(70vw, 420px);
+  height: min(70vw, 420px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+.showcase-glow {
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(77, 166, 255, 0.4) 0%, rgba(77, 166, 255, 0.12) 45%, transparent 72%);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.showcase-float {
+  animation: showcase-float 6s ease-in-out infinite;
+}
+
+@keyframes showcase-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+.showcase-logo {
+  transform-style: preserve-3d;
+  will-change: transform;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
+}
+
+.showcase-caption {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase-float {
+    animation: none;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .showcase-caption {
+    display: none;
+  }
+}
+
 /* ---------- Footer ---------- */
 
 .footer {
@@ -614,6 +697,15 @@ img {
   flex-wrap: wrap;
   gap: 48px;
   justify-content: space-between;
+}
+
+.footer-brand {
+  max-width: 260px;
+}
+
+.footer-mark {
+  margin-bottom: 12px;
+  opacity: 0.85;
 }
 
 .footer-brand p {
