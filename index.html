@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sectora | Cybersecurity and Asset Tokenization</title>
 <meta name="description" content="Sectora secures digital infrastructure and turns real-world assets into verifiable on-chain instruments." />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M100 15 L174 57.5 L100 100 L26 57.5 Z' fill='%23bcdcff'/%3E%3Cpath d='M26 57.5 L100 100 L100 185 L26 142.5 Z' fill='%234da6ff'/%3E%3Cpath d='M174 57.5 L174 142.5 L100 185 L100 100 Z' fill='%230c2c58'/%3E%3C/svg%3E" />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -185,16 +186,26 @@
         <div class="showcase-glow" id="showcaseGlow" aria-hidden="true"></div>
         <div class="showcase-float">
           <div class="showcase-logo" id="showcaseLogo">
-            <!-- placeholder mark -- swap for the real logo asset once attached -->
-            <svg viewBox="0 0 200 240" width="220" height="264" aria-hidden="true">
+            <svg viewBox="0 0 200 200" width="240" height="240" aria-hidden="true">
               <defs>
-                <linearGradient id="markGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
-                  <stop offset="1" stop-color="#ffffff" stop-opacity="0.12"/>
+                <linearGradient id="facetTopShow" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#f3f9ff"/>
+                  <stop offset="1" stop-color="#a9d2ff"/>
+                </linearGradient>
+                <linearGradient id="facetLeftShow" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#7cbcff"/>
+                  <stop offset="1" stop-color="#2f7dd6"/>
+                </linearGradient>
+                <linearGradient id="facetRightShow" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#1f5fb0"/>
+                  <stop offset="1" stop-color="#0c2c58"/>
                 </linearGradient>
               </defs>
-              <path d="M20 112 L100 22 L180 112" fill="none" stroke="url(#markGrad)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M50 188 L100 130 L150 188 L100 228 Z" fill="none" stroke="url(#markGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M100 15 L174 57.5 L100 100 L26 57.5 Z" fill="url(#facetTopShow)"/>
+              <path d="M26 57.5 L100 100 L100 185 L26 142.5 Z" fill="url(#facetLeftShow)"/>
+              <path d="M174 57.5 L174 142.5 L100 185 L100 100 Z" fill="url(#facetRightShow)"/>
+              <path d="M100 15 L174 57.5 L100 100 L26 57.5 Z M26 57.5 L100 100 L100 185 L26 142.5 Z M174 57.5 L174 142.5 L100 185 L100 100 Z" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M52 66 L96 90" stroke="rgba(255,255,255,0.55)" stroke-width="3" stroke-linecap="round" fill="none"/>
             </svg>
           </div>
         </div>
@@ -209,10 +220,25 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <div class="footer-mark" aria-hidden="true">
-        <!-- placeholder mark -- swap for the real logo asset once attached -->
-        <svg viewBox="0 0 200 240" width="28" height="34">
-          <path d="M20 112 L100 22 L180 112" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M50 188 L100 130 L150 188 L100 228 Z" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg viewBox="0 0 200 200" width="30" height="30">
+          <defs>
+            <linearGradient id="facetTopFoot" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f3f9ff"/>
+              <stop offset="1" stop-color="#a9d2ff"/>
+            </linearGradient>
+            <linearGradient id="facetLeftFoot" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#7cbcff"/>
+              <stop offset="1" stop-color="#2f7dd6"/>
+            </linearGradient>
+            <linearGradient id="facetRightFoot" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#1f5fb0"/>
+              <stop offset="1" stop-color="#0c2c58"/>
+            </linearGradient>
+          </defs>
+          <path d="M100 15 L174 57.5 L100 100 L26 57.5 Z" fill="url(#facetTopFoot)"/>
+          <path d="M26 57.5 L100 100 L100 185 L26 142.5 Z" fill="url(#facetLeftFoot)"/>
+          <path d="M174 57.5 L174 142.5 L100 185 L100 100 Z" fill="url(#facetRightFoot)"/>
+          <path d="M100 15 L174 57.5 L100 100 L26 57.5 Z M26 57.5 L100 100 L100 185 L26 142.5 Z M174 57.5 L174 142.5 L100 185 L100 100 Z" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2" stroke-linejoin="round"/>
         </svg>
       </div>
       <span class="wordmark">SECTORA</span>
