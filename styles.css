@@ -550,3 +550,42 @@ img {
   font-size: 13px;
   color: rgba(255, 255, 255, 0.4);
 }
+
+/* ---------- Cursor light ---------- */
+
+.cursor-light {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 520px;
+  height: 520px;
+  margin: -260px 0 0 -260px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(170, 210, 255, 0.85) 0%,
+    rgba(77, 166, 255, 0.4) 28%,
+    rgba(77, 166, 255, 0.12) 55%,
+    rgba(77, 166, 255, 0) 75%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transform: translate(-1000px, -1000px);
+  transition: opacity 0.25s ease, transform 0.12s ease-out;
+  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cursor-light {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-light {
+    transition: opacity 0.25s ease;
+  }
+}
