@@ -215,6 +215,18 @@ img {
   .nav-inner .btn-sm {
     display: none;
   }
+  .nav-logo {
+    padding: 4px 14px 4px 6px;
+    gap: 8px;
+  }
+  .nav-logo-mark svg {
+    width: 24px;
+    height: 24px;
+  }
+  .nav-logo-word {
+    font-size: 12px;
+    letter-spacing: 3px;
+  }
 }
 
 /* ---------- Buttons ---------- */
