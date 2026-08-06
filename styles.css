@@ -749,16 +749,38 @@ img {
 
 .section-seam {
   position: relative;
-  height: 90px;
+  height: 160px;
   overflow: hidden;
 }
 
 .section-seam--to-light {
-  background: linear-gradient(180deg, #000000 0%, rgba(77, 166, 255, 0.22) 50%, #ffffff 100%);
+  background: linear-gradient(
+    180deg,
+    #000000 0%,
+    #04091a 14%,
+    #0b1c3c 28%,
+    #163464 40%,
+    #2f5c9e 52%,
+    #6fa3d8 66%,
+    #b3d0ec 80%,
+    #eef5fb 92%,
+    #ffffff 100%
+  );
 }
 
 .section-seam--to-dark {
-  background: linear-gradient(180deg, #ffffff 0%, rgba(77, 166, 255, 0.22) 50%, #000000 100%);
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #eef5fb 8%,
+    #b3d0ec 20%,
+    #6fa3d8 34%,
+    #2f5c9e 48%,
+    #163464 60%,
+    #0b1c3c 72%,
+    #04091a 86%,
+    #000000 100%
+  );
 }
 
 .section-seam::after {
@@ -783,7 +805,7 @@ img {
 
 @media (max-width: 720px) {
   .section-seam {
-    height: 56px;
+    height: 110px;
   }
 }
 
