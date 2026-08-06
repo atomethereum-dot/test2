@@ -393,6 +393,20 @@ img {
   .hero-cta {
     align-self: flex-start;
   }
+
+  .hero-heading {
+    font-size: clamp(24px, 7.5vw, 34px);
+    max-width: 280px;
+  }
+
+  .hero-subtitle {
+    font-size: 10.5px;
+    max-width: 260px;
+  }
+
+  .hero-badge-word {
+    font-size: 11px;
+  }
 }
 
 /* -- animated blue horizon band -- */
