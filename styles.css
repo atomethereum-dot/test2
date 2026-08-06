@@ -148,6 +148,8 @@ img {
 }
 
 .nav-logo-word {
+  position: relative;
+  top: 2px;
   font-size: 14px;
   font-weight: 300;
   letter-spacing: 4px;
