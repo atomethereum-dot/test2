@@ -1,6 +1,7 @@
 (() => {
   const el = document.getElementById("loadIntro");
   const fill = document.getElementById("loadIntroFill");
+  const markWrap = document.getElementById("loadIntroMarkWrap");
   if (!el) return;
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -9,6 +10,7 @@
   }
 
   function dismiss() {
+    if (markWrap) markWrap.classList.add("is-exiting");
     el.classList.add("is-hidden");
     setTimeout(() => el.remove(), 700);
   }
