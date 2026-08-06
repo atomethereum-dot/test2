@@ -1234,9 +1234,37 @@ img {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.event-banner--a {
-  background: radial-gradient(circle at 75% 15%, rgba(77, 166, 255, 0.35), transparent 55%),
-    radial-gradient(circle at 75% 15%, rgba(20, 40, 75, 0.95), rgba(3, 6, 12, 1) 70%);
+.event-banner--hk {
+  background: radial-gradient(circle at 50% 0%, rgba(255, 45, 65, 0.22), transparent 60%), #050506;
+}
+
+.event-banner-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.event-stage-frame {
+  position: absolute;
+  inset: 16px;
+  border-radius: 18px;
+  border: 2px solid rgba(255, 50, 72, 0.85);
+  box-shadow: 0 0 20px rgba(255, 40, 60, 0.55), inset 0 0 20px rgba(255, 40, 60, 0.25);
+}
+
+.event-stage-stripes {
+  position: absolute;
+  right: -12%;
+  bottom: -8%;
+  width: 62%;
+  height: 42%;
+  background: repeating-linear-gradient(115deg, rgba(77, 166, 255, 0.55) 0 4px, transparent 4px 14px);
+  -webkit-mask-image: linear-gradient(135deg, transparent 20%, black 62%);
+  mask-image: linear-gradient(135deg, transparent 20%, black 62%);
+  opacity: 0.75;
 }
 
 .event-banner--b {
