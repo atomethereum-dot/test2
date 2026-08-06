@@ -707,6 +707,137 @@ img {
   }
 }
 
+/* ---------- Supply (tokenomics stat bar) ---------- */
+
+.supply {
+  background: var(--black);
+}
+
+.supply-top {
+  position: relative;
+  overflow: hidden;
+  padding: 96px 24px 72px;
+}
+
+.supply-top::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 55% 100% at 75% 25%, black, transparent 72%);
+  mask-image: radial-gradient(ellipse 55% 100% at 75% 25%, black, transparent 72%);
+  pointer-events: none;
+}
+
+.supply-top-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.supply-top-inner .lead {
+  margin-top: 4px;
+}
+
+.supply-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.supply-badge:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.supply-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+.supply-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--white-faint);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.supply-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+  min-height: 200px;
+  padding: 36px 28px;
+  border-left: 1px solid var(--white-faint);
+}
+
+.supply-stat:first-child {
+  border-left: none;
+}
+
+.supply-stat-value {
+  font-family: var(--font-sans);
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: -0.5px;
+  font-size: clamp(30px, 4vw, 52px);
+  color: #14e0a0;
+}
+
+.supply-stat-label {
+  max-width: 230px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--white-dim);
+}
+
+@media (max-width: 900px) {
+  .supply-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .supply-stat:nth-child(3) {
+    border-left: none;
+  }
+  .supply-stat:nth-child(3),
+  .supply-stat:nth-child(4) {
+    border-top: 1px solid var(--white-faint);
+  }
+}
+
+@media (max-width: 520px) {
+  .supply-top {
+    padding: 80px 24px 56px;
+  }
+  .supply-stats {
+    grid-template-columns: 1fr;
+  }
+  .supply-stat {
+    min-height: 0;
+    gap: 24px;
+    border-left: none !important;
+    border-top: 1px solid var(--white-faint);
+  }
+  .supply-stat:first-child {
+    border-top: none;
+  }
+}
+
 /* ---------- Exec (execution / equalizer showcase) ---------- */
 
 .exec {
