@@ -1908,6 +1908,23 @@ img {
   max-width: 260px;
 }
 
+.footer-powered {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-eth-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--white-dim);
+}
+
+.footer-eth-icon svg {
+  width: 10px;
+  height: auto;
+}
+
 .footer-cols {
   display: flex;
   flex-wrap: wrap;
