@@ -377,6 +377,24 @@ img {
   margin-top: 22px;
 }
 
+@media (max-width: 720px) {
+  .hero {
+    text-align: left;
+  }
+
+  .hero-main {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .hero-badge,
+  .hero-heading,
+  .hero-subtitle,
+  .hero-cta {
+    align-self: flex-start;
+  }
+}
+
 /* -- animated blue horizon band -- */
 
 .hero-wave {
