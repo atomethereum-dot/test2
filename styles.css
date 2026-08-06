@@ -1178,6 +1178,7 @@ img {
 
 .events-header .display {
   font-size: clamp(32px, 4.4vw, 52px);
+  line-height: 1.25;
 }
 
 .events-heading-group {
