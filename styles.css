@@ -1146,18 +1146,7 @@ img {
 }
 
 .join-heading {
-  font-size: clamp(56px, 8vw, 108px);
-  font-weight: 200;
-  line-height: 0.9;
-  letter-spacing: -1px;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.55);
-}
-
-@supports not (-webkit-text-stroke: 1px white) {
-  .join-heading {
-    color: rgba(255, 255, 255, 0.85);
-  }
+  font-size: clamp(40px, 6vw, 72px);
 }
 
 .join-content {
