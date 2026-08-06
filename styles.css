@@ -128,7 +128,7 @@ img {
   }
   .nav-toggle {
     display: flex;
-    order: -1;
+    margin-left: auto;
   }
   .nav-inner .btn-sm {
     display: none;
