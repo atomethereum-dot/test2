@@ -1322,6 +1322,49 @@ img {
   }
 }
 
+.growth--light {
+  background: var(--white);
+}
+
+.growth--light .growth-chart {
+  border-top-color: var(--zinc-200);
+}
+
+.growth--light .growth-year,
+.growth--light .growth-amount,
+.growth--light .growth-axis-track,
+.growth--light .growth-source {
+  color: var(--zinc-600);
+}
+
+.growth--light .growth-track {
+  background: rgba(9, 9, 11, 0.06);
+}
+
+.growth--light .growth-fill {
+  background: linear-gradient(90deg, rgba(9, 9, 11, 0.16), rgba(9, 9, 11, 0.38));
+}
+
+.growth--light .growth-row--peak .growth-fill {
+  background: linear-gradient(90deg, #52525b, #09090b);
+}
+
+.growth--light .growth-row--peak .growth-amount {
+  color: var(--zinc-950);
+}
+
+.growth--light .growth-stat {
+  border-top-color: var(--zinc-200);
+}
+
+.growth--light .growth-stat-value {
+  color: var(--zinc-950);
+}
+
+.growth--light .growth-stat-label {
+  color: var(--zinc-600);
+}
+
 /* ---------- Events carousel ---------- */
 
 .events {
