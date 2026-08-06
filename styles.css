@@ -135,8 +135,8 @@ img {
 .nav-logo {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 16px 6px 10px;
+  gap: 10px;
+  padding: 6px 18px 6px 10px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
@@ -148,10 +148,10 @@ img {
 }
 
 .nav-logo-word {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .nav-links {
