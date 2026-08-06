@@ -54,8 +54,8 @@ img {
   right: 0;
   z-index: 51;
   height: var(--announce-h);
-  background: linear-gradient(90deg, #0c2c58, #1c5fb8 50%, #0c2c58);
-  border-bottom: 1px solid rgba(77, 166, 255, 0.35);
+  background: var(--black);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .announce-bar-inner {
@@ -469,7 +469,7 @@ img {
     justify-content: flex-start;
     text-align: left;
     padding-top: 56px;
-    gap: 44px;
+    gap: 28px;
   }
 
   .hero-badge,
@@ -484,8 +484,8 @@ img {
   }
 
   .hero-heading {
-    font-size: clamp(40px, 12.5vw, 56px);
-    max-width: 340px;
+    font-size: clamp(36px, 11vw, 48px);
+    max-width: 330px;
   }
 
   .hero-break {
@@ -503,7 +503,7 @@ img {
   }
 
   .hero-cta-row {
-    margin-top: 44px;
+    margin-top: 26px;
     gap: 12px;
   }
 
