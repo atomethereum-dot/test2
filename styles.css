@@ -2364,11 +2364,41 @@ body::after {
   animation: load-intro-exit 0.5s var(--ease) forwards;
 }
 
-.load-intro-mark {
-  display: block;
+.load-intro-pyramid {
+  position: relative;
+  width: 120px;
+  height: 120px;
   transform-style: preserve-3d;
   animation: load-intro-spin 2.4s linear infinite;
   animation-delay: 0.1s;
+}
+
+.load-intro-face {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 8%, 12% 92%, 88% 92%);
+  background: linear-gradient(160deg, #ffffff, #9a9ea6);
+  backface-visibility: hidden;
+}
+
+.load-intro-face--1 {
+  transform: rotateY(0deg) translateZ(34px);
+  filter: brightness(1.18);
+}
+
+.load-intro-face--2 {
+  transform: rotateY(90deg) translateZ(34px);
+  filter: brightness(0.8);
+}
+
+.load-intro-face--3 {
+  transform: rotateY(180deg) translateZ(34px);
+  filter: brightness(0.5);
+}
+
+.load-intro-face--4 {
+  transform: rotateY(270deg) translateZ(34px);
+  filter: brightness(0.8);
 }
 
 @keyframes load-intro-in {
