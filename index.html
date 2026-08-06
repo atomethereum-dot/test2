@@ -11,14 +11,21 @@
 <body>
 
 <div class="load-intro" id="loadIntro" aria-hidden="true">
-  <div class="load-intro-mark-wrap" id="loadIntroMarkWrap">
-    <div class="load-intro-pyramid" aria-hidden="true">
-      <span class="load-intro-face load-intro-face--1"></span>
-      <span class="load-intro-face load-intro-face--2"></span>
-      <span class="load-intro-face load-intro-face--3"></span>
-    </div>
-  </div>
-  <span class="load-intro-word" id="loadIntroWord">SECTORA</span>
+  <svg class="load-intro-mark" viewBox="0 0 200 200" width="120" height="120">
+    <defs>
+      <linearGradient id="introFacetLeft" x1="0" y1="0" x2="0.4" y2="1">
+        <stop offset="0" stop-color="#ffffff"/>
+        <stop offset="1" stop-color="#b9bcc2"/>
+      </linearGradient>
+      <linearGradient id="introFacetRight" x1="0" y1="0" x2="0.6" y2="1">
+        <stop offset="0" stop-color="#7d8087"/>
+        <stop offset="1" stop-color="#2e2f34"/>
+      </linearGradient>
+    </defs>
+    <path d="M100 18 L24 180 L100 180 Z" fill="url(#introFacetLeft)"/>
+    <path d="M100 18 L100 180 L176 180 Z" fill="url(#introFacetRight)"/>
+  </svg>
+  <span class="load-intro-word">SECTORA</span>
   <div class="load-intro-bar">
     <div class="load-intro-bar-fill" id="loadIntroFill"></div>
   </div>

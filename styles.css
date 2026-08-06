@@ -2352,72 +2352,17 @@ body::after {
   transition: opacity 0.6s var(--ease), visibility 0.6s var(--ease);
 }
 
-.load-intro-mark-wrap {
+.load-intro-mark {
   opacity: 0;
   transform: scale(0.88);
   animation: load-intro-in 0.7s var(--ease) forwards 0.1s;
   filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.15));
-  perspective: 480px;
-}
-
-.load-intro-mark-wrap.is-exiting {
-  animation: load-intro-exit 0.5s var(--ease) forwards;
-}
-
-.load-intro-pyramid {
-  position: relative;
-  width: 110px;
-  height: 130px;
-  margin: 0 auto;
-  transform-style: preserve-3d;
-  animation: load-intro-spin 3.2s linear infinite;
-  animation-delay: 0.1s;
-}
-
-.load-intro-face {
-  position: absolute;
-  inset: 0;
-  clip-path: polygon(50% 4%, 8% 98%, 92% 98%);
-  background: linear-gradient(160deg, #ffffff, #9a9ea6);
-  backface-visibility: hidden;
-  transform-origin: 50% 50%;
-}
-
-.load-intro-face--1 {
-  transform: rotateY(0deg) translateZ(31.75px);
-  filter: brightness(1.25);
-}
-
-.load-intro-face--2 {
-  transform: rotateY(120deg) translateZ(31.75px);
-  filter: brightness(0.75);
-}
-
-.load-intro-face--3 {
-  transform: rotateY(240deg) translateZ(31.75px);
-  filter: brightness(0.42);
 }
 
 @keyframes load-intro-in {
   to {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes load-intro-exit {
-  to {
-    opacity: 0;
-    transform: translateY(-46px) scale(0.92);
-  }
-}
-
-@keyframes load-intro-spin {
-  from {
-    transform: rotateY(0deg);
-  }
-  to {
-    transform: rotateY(360deg);
   }
 }
 
@@ -2447,13 +2392,13 @@ body::after {
   bottom: 0;
   width: 0%;
   border-radius: 2px;
-  background: #4da6ff;
+  background: #1c7ce6;
   box-shadow:
     0 0 6px 1px #ffffff,
-    0 0 14px 3px #4da6ff,
-    0 0 28px 7px rgba(77, 166, 255, 0.95),
-    0 0 52px 14px rgba(77, 166, 255, 0.7),
-    0 0 90px 22px rgba(77, 166, 255, 0.4);
+    0 0 16px 4px #1c7ce6,
+    0 0 32px 9px rgba(28, 124, 230, 1),
+    0 0 60px 16px rgba(28, 124, 230, 0.85),
+    0 0 100px 26px rgba(28, 124, 230, 0.5);
   transition: width 1.3s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
