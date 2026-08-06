@@ -266,62 +266,162 @@ img {
   padding-top: 72px;
   background: var(--black);
   overflow: hidden;
+  text-align: center;
 }
 
-.globe-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  cursor: grab;
-  touch-action: none;
-}
-
-.globe-canvas.dragging {
-  cursor: grabbing;
-}
-
-.hero-scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.8) 32%, rgba(0, 0, 0, 0.3) 58%, rgba(0, 0, 0, 0) 78%),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0) 26%);
-}
-
-.hero-inner {
+.hero-main {
   position: relative;
-  z-index: 2;
   flex: 1;
   display: flex;
-  align-items: center;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 40px 24px;
-  gap: 20px;
-  pointer-events: none;
-}
-
-.hero-inner a {
-  pointer-events: auto;
-}
-
-.hero-inner .display {
-  font-size: clamp(44px, 8vw, 98px);
-}
-
-.hero-inner {
   flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  padding: 40px 24px;
 }
 
-.hero-inner .btn {
-  margin-top: 8px;
+.hero-badge {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-badge-word {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.hero-heading {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(30px, 5vw, 52px);
+  max-width: 780px;
+}
+
+.hero-subtitle {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(210, 224, 245, 0.75);
+}
+
+.hero-cta {
+  position: relative;
+  z-index: 1;
+}
+
+/* -- animated blue horizon band -- */
+
+.hero-wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 58%;
+  height: 36%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 30%, black 75%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 30%, black 75%, transparent);
+}
+
+.hero-wave-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(30, 80, 160, 0.28) 35%,
+    rgba(70, 140, 230, 0.4) 55%,
+    rgba(30, 80, 160, 0.22) 75%,
+    transparent 100%
+  );
+  filter: blur(2px);
+}
+
+.hero-wave-lines span {
+  position: absolute;
+  left: -20%;
+  width: 140%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(140, 200, 255, 0.85), transparent);
+  background-size: 45% 100%;
+  background-repeat: no-repeat;
+  opacity: 0.6;
+  animation: wave-flow linear infinite;
+}
+
+.hero-wave-lines span:nth-child(1) {
+  top: 28%;
+  animation-duration: 9s;
+}
+
+.hero-wave-lines span:nth-child(2) {
+  top: 46%;
+  animation-duration: 12s;
+  animation-direction: reverse;
+  opacity: 0.4;
+}
+
+.hero-wave-lines span:nth-child(3) {
+  top: 62%;
+  animation-duration: 7.5s;
+}
+
+.hero-wave-lines span:nth-child(4) {
+  top: 78%;
+  animation-duration: 14s;
+  animation-direction: reverse;
+  opacity: 0.35;
+}
+
+@keyframes wave-flow {
+  from {
+    background-position: -60% 0;
+  }
+  to {
+    background-position: 160% 0;
+  }
+}
+
+.hero-wave-particles span {
+  position: absolute;
+  border-radius: 50%;
+  background: #bfe0ff;
+  opacity: 0;
+  animation: wave-particle ease-in-out infinite;
+}
+
+@keyframes wave-particle {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  15% {
+    opacity: 0.9;
+  }
+  85% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(46px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-wave-lines span,
+  .hero-wave-particles span {
+    animation: none;
+    opacity: 0.4;
+  }
 }
 
 /* ---------- Marquee ---------- */
@@ -1006,5 +1106,58 @@ img {
 @media (prefers-reduced-motion: reduce) {
   .cursor-light {
     transition: opacity 0.25s ease;
+  }
+}
+
+/* ---------- Custom round cursor ---------- */
+
+.cursor-dot,
+.cursor-ring {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0;
+  mix-blend-mode: difference;
+  transition: opacity 0.2s ease;
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  transition: opacity 0.2s ease, width 0.2s ease, height 0.2s ease;
+}
+
+.cursor-ring--hover {
+  width: 52px;
+  height: 52px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cursor-dot,
+  .cursor-ring {
+    display: block;
+  }
+
+  html,
+  body,
+  a,
+  button,
+  .btn,
+  input,
+  textarea,
+  select,
+  [role="button"] {
+    cursor: none;
   }
 }

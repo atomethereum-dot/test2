@@ -41,16 +41,40 @@
 <main>
 
   <section class="hero" id="top">
-    <canvas class="globe-canvas" id="globeCanvas" aria-hidden="true"></canvas>
-    <div class="hero-scrim" aria-hidden="true"></div>
-    <div class="hero-inner">
-      <h1 class="display">Cybersecurity<br>and Asset<br>Tokenization</h1>
-      <p class="lead">
-        Sectora secures digital infrastructure and turns real-world assets into
-        verifiable on-chain instruments, combining institutional-grade cybersecurity
-        with secure tokenization.
-      </p>
-      <a class="btn btn-light" href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer">
+    <div class="hero-main">
+      <div class="hero-wave" aria-hidden="true">
+        <div class="hero-wave-glow"></div>
+        <div class="hero-wave-lines">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <div class="hero-wave-particles" id="heroWaveParticles"></div>
+      </div>
+
+      <div class="hero-badge">
+        <span class="hero-badge-mark" aria-hidden="true">
+          <svg viewBox="0 0 200 200" width="22" height="22">
+            <defs>
+              <linearGradient id="badgeFacetLeft" x1="0" y1="0" x2="0.4" y2="1">
+                <stop offset="0" stop-color="#f3f9ff"/>
+                <stop offset="1" stop-color="#4da6ff"/>
+              </linearGradient>
+              <linearGradient id="badgeFacetRight" x1="0" y1="0" x2="0.6" y2="1">
+                <stop offset="0" stop-color="#2f7dd6"/>
+                <stop offset="1" stop-color="#0c2c58"/>
+              </linearGradient>
+            </defs>
+            <path d="M100 18 L24 180 L100 180 Z" fill="url(#badgeFacetLeft)"/>
+            <path d="M100 18 L100 180 L176 180 Z" fill="url(#badgeFacetRight)"/>
+          </svg>
+        </span>
+        <span class="hero-badge-word">SECTORA</span>
+      </div>
+
+      <h1 class="display hero-heading">Cybersecurity for the<br>Future of Tokenized Assets</h1>
+
+      <p class="hero-subtitle">Milestones and a New Era of Verifiable Security</p>
+
+      <a class="btn btn-light hero-cta" href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer">
         Buy on Uniswap
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
       </a>
@@ -332,8 +356,10 @@
 </footer>
 
 <div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
-<script src="globe.js"></script>
+<script src="wave.js"></script>
 <script src="cursor.js"></script>
 <script src="showcase.js"></script>
 <script src="roadmap.js"></script>
