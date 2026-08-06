@@ -315,6 +315,7 @@ img {
 .hero-cta {
   position: relative;
   z-index: 1;
+  margin-top: 22px;
 }
 
 /* -- animated blue horizon band -- */
