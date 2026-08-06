@@ -857,6 +857,10 @@ img {
   height: auto;
 }
 
+.stack-layer {
+  will-change: transform;
+}
+
 .stack-label {
   font-family: var(--font-mono);
   font-size: 8.5px;

@@ -17,21 +17,49 @@
   }
 
   const captions = document.querySelectorAll(".stack-caption");
-  if (!captions.length) return;
 
-  if (reduced || !("IntersectionObserver" in window)) {
-    captions.forEach((el) => el.classList.add("active"));
-    return;
+  if (captions.length) {
+    if (reduced || !("IntersectionObserver" in window)) {
+      captions.forEach((el) => el.classList.add("active"));
+    } else {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            entry.target.classList.toggle("active", entry.isIntersecting);
+          });
+        },
+        { threshold: 0.5 }
+      );
+      captions.forEach((el) => observer.observe(el));
+    }
   }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        entry.target.classList.toggle("active", entry.isIntersecting);
-      });
-    },
-    { threshold: 0.5 }
-  );
+  const stackSection = document.querySelector(".stack");
+  const layers = document.querySelectorAll(".stack-layer");
+  if (!stackSection || !layers.length || reduced) return;
 
-  captions.forEach((el) => observer.observe(el));
+  const MAX_OFFSET = 34;
+  let rafId = null;
+
+  function updateExplode() {
+    rafId = null;
+    const rect = stackSection.getBoundingClientRect();
+    const total = rect.height - window.innerHeight;
+    const progress = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
+    layers.forEach((layer) => {
+      const depth = parseFloat(layer.dataset.depth || "0");
+      layer.style.transform = `translateY(${(depth * MAX_OFFSET * progress).toFixed(2)}px)`;
+      if (depth !== 0) {
+        layer.style.opacity = `${(1 - progress * 0.6).toFixed(2)}`;
+      }
+    });
+  }
+
+  function scheduleExplode() {
+    if (rafId === null) rafId = requestAnimationFrame(updateExplode);
+  }
+
+  window.addEventListener("scroll", scheduleExplode, { passive: true });
+  window.addEventListener("resize", scheduleExplode);
+  updateExplode();
 })();
