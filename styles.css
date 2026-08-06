@@ -802,8 +802,11 @@ img {
 
 .supply-stat-label {
   max-width: 230px;
+  font-family: var(--font-sans);
   font-size: 14px;
+  font-weight: 300;
   line-height: 1.45;
+  letter-spacing: 0.3px;
   color: var(--white-dim);
 }
 
