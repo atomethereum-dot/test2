@@ -2392,13 +2392,13 @@ body::after {
   bottom: 0;
   width: 0%;
   border-radius: 2px;
-  background: #2fd6ff;
+  background: #4da6ff;
   box-shadow:
     0 0 6px 1px #ffffff,
-    0 0 14px 3px #2fd6ff,
-    0 0 28px 7px rgba(47, 214, 255, 0.95),
-    0 0 52px 14px rgba(47, 214, 255, 0.7),
-    0 0 90px 22px rgba(47, 214, 255, 0.4);
+    0 0 14px 3px #4da6ff,
+    0 0 28px 7px rgba(77, 166, 255, 0.95),
+    0 0 52px 14px rgba(77, 166, 255, 0.7),
+    0 0 90px 22px rgba(77, 166, 255, 0.4);
   transition: width 1.3s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
