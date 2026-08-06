@@ -10,6 +10,23 @@
 </head>
 <body>
 
+<div class="load-intro" id="loadIntro" aria-hidden="true">
+  <svg class="load-intro-mark" viewBox="0 0 200 200" width="64" height="64">
+    <defs>
+      <linearGradient id="introFacetLeft" x1="0" y1="0" x2="0.4" y2="1">
+        <stop offset="0" stop-color="#ffffff"/>
+        <stop offset="1" stop-color="#b9bcc2"/>
+      </linearGradient>
+      <linearGradient id="introFacetRight" x1="0" y1="0" x2="0.6" y2="1">
+        <stop offset="0" stop-color="#7d8087"/>
+        <stop offset="1" stop-color="#2e2f34"/>
+      </linearGradient>
+    </defs>
+    <path d="M100 18 L24 180 L100 180 Z" fill="url(#introFacetLeft)"/>
+    <path d="M100 18 L100 180 L176 180 Z" fill="url(#introFacetRight)"/>
+  </svg>
+</div>
+
 <div class="announce-bar" id="announceBar">
   <a class="announce-bar-inner" href="#supply">
     <span class="announce-bar-text"><strong>Strategic Supply Reduction:</strong> 50%</span>
@@ -49,7 +66,7 @@
       <a href="#blog">Blog</a>
       <a href="#contact">Contact</a>
     </nav>
-    <a class="btn btn-light btn-sm" href="#" target="_blank" rel="noopener noreferrer">
+    <a class="btn btn-light btn-sm magnetic" href="#" target="_blank" rel="noopener noreferrer">
       Legal Documents
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
     </a>
@@ -103,10 +120,10 @@
       <p class="hero-subtitle">Milestones and a New Era of Verifiable Security</p>
 
       <div class="hero-cta-row">
-        <a class="btn btn-audit" href="#">
+        <a class="btn btn-audit magnetic" href="#">
           Audit #SECT
         </a>
-        <a class="btn btn-light hero-cta" href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer">
+        <a class="btn btn-light hero-cta magnetic" href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer">
           Buy on Uniswap
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </a>
@@ -141,21 +158,21 @@
 
   <section class="protocol" id="protocol">
     <div class="protocol-inner">
-      <div class="protocol-heading">
+      <div class="protocol-heading reveal">
         <h2 class="display display-md">Sectora Protocol</h2>
         <p class="display display-md muted-strong">In Development</p>
       </div>
-      <p class="lead lead-center">
+      <p class="lead lead-center reveal">
         Native infrastructure to audit, protect, and tokenize real-world assets.
         Cryptographic verification, distributed custody, and institutional-grade
         security, by design.
       </p>
-      <div class="btn-row">
-        <a class="btn btn-light" href="https://dexscreener.com" target="_blank" rel="noopener noreferrer">
+      <div class="btn-row reveal">
+        <a class="btn btn-light magnetic" href="https://dexscreener.com" target="_blank" rel="noopener noreferrer">
           DexScreener
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </a>
-        <a class="btn btn-light" href="#" target="_blank" rel="noopener noreferrer">
+        <a class="btn btn-light magnetic" href="#" target="_blank" rel="noopener noreferrer">
           Whitepaper
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </a>
@@ -165,17 +182,17 @@
 
   <section class="supply" id="supply">
     <div class="supply-top">
-      <div class="supply-top-inner">
+      <div class="supply-top-inner reveal">
         <span class="eyebrow eyebrow-dot"><span class="exec-dot"></span>Sectora Foundation</span>
         <h2 class="display display-lg">Strategic Supply<br>Reduction</h2>
         <p class="lead">A one-time reduction to strengthen long-term tokenomics and align circulating supply with real network usage.</p>
-        <a class="supply-badge" href="#">
+        <a class="supply-badge magnetic" href="#">
           Details · #SECT
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
         </a>
       </div>
     </div>
-    <div class="supply-stats">
+    <div class="supply-stats reveal-stagger">
       <div class="supply-stat">
         <span class="supply-stat-value" data-count data-target="50000000">50.000.000</span>
         <span class="supply-stat-label">Initial supply</span>
@@ -200,7 +217,7 @@
     <div class="exec-bars" id="execBars" aria-hidden="true"></div>
     <div class="exec-fade" aria-hidden="true"></div>
 
-    <div class="exec-content">
+    <div class="exec-content reveal">
       <span class="exec-badge"><span class="exec-dot"></span>SECTORA PROTOCOL</span>
       <h2 class="exec-heading">Built for<br>Verification.</h2>
       <p class="exec-status">Live on Testnet</p>
@@ -230,14 +247,14 @@
   </section>
 
   <section class="events" id="events">
-    <div class="events-header">
+    <div class="events-header reveal">
       <div class="events-heading-group">
         <h2 class="display display-lg">Upcoming Events<br>#SECT 2027</h2>
       </div>
-      <a class="btn events-view-all" href="#">View All</a>
+      <a class="btn events-view-all magnetic" href="#">View All</a>
     </div>
 
-    <div class="events-carousel">
+    <div class="events-carousel reveal-stagger">
       <article class="event-card">
         <div class="event-banner event-banner--a">
           <div class="event-banner-top">
@@ -323,8 +340,10 @@
 
   <section class="roadmap" id="roadmap">
     <div class="roadmap-inner">
-      <span class="eyebrow">Roadmap</span>
-      <h2 class="display display-md">What's Next</h2>
+      <div class="reveal">
+        <span class="eyebrow">Roadmap</span>
+        <h2 class="display display-md">What's Next</h2>
+      </div>
 
       <div class="roadmap-timeline" id="roadmapTimeline">
         <div class="roadmap-track"></div>
@@ -389,12 +408,12 @@
 
   <section class="growth growth--light" id="growth">
     <div class="growth-inner">
-      <div class="growth-head">
+      <div class="growth-head reveal">
         <span class="eyebrow eyebrow-dark">Market Opportunity</span>
         <h2 class="display display-md dark-text">RWA Industry<br>Projected Growth</h2>
       </div>
       <div class="growth-body">
-        <div class="growth-chart">
+        <div class="growth-chart reveal">
           <div class="growth-bars" id="growthBars">
             <div class="growth-row">
               <span class="growth-year">2025</span>
@@ -436,7 +455,7 @@
           </div>
           <p class="growth-source">Source: Boston Consulting Group</p>
         </div>
-        <div class="growth-stat">
+        <div class="growth-stat reveal">
           <span class="growth-stat-value" data-count data-target="16.1" data-prefix="$" data-suffix=" Trillion">$0 Trillion</span>
           <span class="growth-stat-label">Projected value of tokenized real-world assets by 2030 — the market Sectora is built to secure.</span>
         </div>
@@ -445,7 +464,7 @@
   </section>
 
   <section class="light-section" id="about">
-    <div class="light-inner partner-row">
+    <div class="light-inner partner-row reveal">
       <h2 class="display display-lg dark-text">Work<br>With Us</h2>
       <div class="dot-grid" aria-hidden="true">
         <span></span><span></span><span></span>
@@ -458,7 +477,7 @@
           assets, or blockchain infrastructure, we invite you to help us build the
           systems that will protect and provide liquidity for tomorrow's assets.
         </p>
-        <a class="btn btn-dark" href="#contact" id="contact">
+        <a class="btn btn-dark magnetic" href="#contact" id="contact">
           Let's Talk
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </a>
@@ -468,7 +487,7 @@
     <div class="light-inner backers" id="backers">
       <span class="eyebrow-dark">backed by</span>
       <div class="hr"></div>
-      <div class="logo-grid">
+      <div class="logo-grid reveal-stagger">
         <span class="text-logo">Vertex Capital</span>
         <span class="text-logo">Northbridge Ventures</span>
         <span class="text-logo">Meridian Partners</span>
@@ -476,9 +495,9 @@
       </div>
     </div>
 
-    <div class="light-inner blog-block" id="blog">
+    <div class="light-inner blog-block reveal" id="blog">
       <h2 class="display display-md dark-text">From the Blog</h2>
-      <div class="blog-grid">
+      <div class="blog-grid reveal-stagger">
         <a class="blog-card" href="#">
           <div class="blog-banner blog-banner--intro">
             <div class="blog-banner-corner blog-banner-corner--tl">
@@ -559,20 +578,20 @@
 
   <section class="join" id="join">
     <div class="join-glow" aria-hidden="true"></div>
-    <div class="join-inner">
+    <div class="join-inner reveal">
       <h2 class="display join-heading">Join Us</h2>
       <div class="join-content">
         <p class="lead">Sectora is building the security layer for tokenized assets — where verification, custody, and markets run on cryptographic trust.</p>
         <div class="join-actions">
-          <a class="join-btn" href="#" target="_blank" rel="noopener noreferrer">
+          <a class="join-btn magnetic" href="#" target="_blank" rel="noopener noreferrer">
             <span>Twitter / X</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
           </a>
-          <a class="join-btn" href="#" target="_blank" rel="noopener noreferrer">
+          <a class="join-btn magnetic" href="#" target="_blank" rel="noopener noreferrer">
             <span>Telegram</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
           </a>
-          <a class="join-btn join-btn--outline" href="#" target="_blank" rel="noopener noreferrer">
+          <a class="join-btn join-btn--outline magnetic" href="#" target="_blank" rel="noopener noreferrer">
             <span>Whitepaper</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
           </a>
@@ -653,6 +672,9 @@
 <script src="exec.js"></script>
 <script src="supply.js"></script>
 <script src="growth.js"></script>
+<script src="reveal.js"></script>
+<script src="magnetic.js"></script>
+<script src="intro.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

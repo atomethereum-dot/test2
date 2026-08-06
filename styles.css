@@ -11,6 +11,7 @@
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --announce-h: 40px;
   --nav-h: 72px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -241,7 +242,7 @@ img {
   border-radius: 999px;
   font-size: 14px;
   font-weight: 600;
-  transition: opacity 0.15s ease, background 0.15s ease;
+  transition: opacity 0.15s ease, background 0.15s ease, transform 0.3s var(--ease);
   white-space: nowrap;
 }
 
@@ -720,7 +721,7 @@ img {
   text-align: center;
 }
 
-.roadmap-inner > h2 {
+.roadmap-inner h2 {
   text-align: center;
   margin-bottom: 72px;
 }
@@ -2261,5 +2262,115 @@ img {
   select,
   [role="button"] {
     cursor: none;
+  }
+}
+
+/* ---------- Reveal on scroll ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  will-change: opacity, transform;
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  will-change: opacity, transform;
+}
+
+.reveal-stagger.is-in > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-stagger.is-in > *:nth-child(1) { transition-delay: 0ms; }
+.reveal-stagger.is-in > *:nth-child(2) { transition-delay: 90ms; }
+.reveal-stagger.is-in > *:nth-child(3) { transition-delay: 180ms; }
+.reveal-stagger.is-in > *:nth-child(4) { transition-delay: 270ms; }
+.reveal-stagger.is-in > *:nth-child(5) { transition-delay: 360ms; }
+.reveal-stagger.is-in > *:nth-child(6) { transition-delay: 450ms; }
+.reveal-stagger.is-in > *:nth-child(7) { transition-delay: 540ms; }
+.reveal-stagger.is-in > *:nth-child(8) { transition-delay: 630ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---------- Magnetic buttons ---------- */
+
+.magnetic {
+  transition: transform 0.25s var(--ease), opacity 0.15s ease, background 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magnetic {
+    transition: opacity 0.15s ease, background 0.15s ease;
+  }
+}
+
+/* ---------- Grain texture overlay ---------- */
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* ---------- Load intro ---------- */
+
+.load-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--black);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s var(--ease), visibility 0.6s var(--ease);
+}
+
+.load-intro-mark {
+  opacity: 0;
+  transform: scale(0.82);
+  animation: load-intro-in 0.8s var(--ease) forwards 0.15s;
+}
+
+@keyframes load-intro-in {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.load-intro.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .load-intro {
+    display: none;
   }
 }
