@@ -793,11 +793,11 @@ img {
 
 .supply-stat-value {
   font-family: var(--font-sans);
-  font-weight: 200;
+  font-weight: 700;
   line-height: 1;
   letter-spacing: -0.5px;
   font-size: clamp(30px, 4vw, 52px);
-  color: #14e0a0;
+  color: var(--white);
 }
 
 .supply-stat-label {
