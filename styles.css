@@ -745,6 +745,55 @@ img {
   height: 14px;
 }
 
+/* ---------- Section seam (animated black/white transition) ---------- */
+
+.section-seam {
+  position: relative;
+  height: 90px;
+  overflow: hidden;
+}
+
+.section-seam--to-light {
+  background: linear-gradient(180deg, #000000 0%, rgba(77, 166, 255, 0.22) 50%, #ffffff 100%);
+}
+
+.section-seam--to-dark {
+  background: linear-gradient(180deg, #ffffff 0%, rgba(77, 166, 255, 0.22) 50%, #000000 100%);
+}
+
+.section-seam::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(150, 205, 255, 0.75), transparent);
+  background-size: 55% 100%;
+  background-repeat: no-repeat;
+  mix-blend-mode: screen;
+  animation: seam-shimmer 4.5s ease-in-out infinite;
+}
+
+@keyframes seam-shimmer {
+  0% {
+    background-position: -60% 0;
+  }
+  100% {
+    background-position: 160% 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .section-seam {
+    height: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-seam::after {
+    animation: none;
+    background-position: 50% 0;
+  }
+}
+
 /* ---------- Showcase (3D logo mark) ---------- */
 
 .showcase {
