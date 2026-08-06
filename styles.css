@@ -305,6 +305,12 @@ img {
   margin-bottom: 8px;
 }
 
+.eyebrow-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .eyebrow-dark {
   font-family: var(--font-mono);
   font-size: 11px;
