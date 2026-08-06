@@ -809,6 +809,120 @@ img {
   }
 }
 
+/* ---------- Projects (NEO-style split intro) ---------- */
+
+.accent-blue {
+  color: #4da6ff;
+}
+
+.projects-block {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 64px;
+  align-items: center;
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+
+.projects-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 460px;
+}
+
+.projects-heading {
+  font-weight: 800;
+  font-size: clamp(34px, 4.4vw, 58px);
+  line-height: 0.98;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  color: var(--zinc-950);
+}
+
+.projects-cta {
+  align-self: flex-start;
+}
+
+.projects-divider {
+  align-self: stretch;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, #4da6ff, transparent);
+}
+
+.projects-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.projects-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: #eef1f5;
+  border-radius: 12px;
+  padding: 22px 28px 22px 36px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(9, 9, 11, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.projects-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px rgba(9, 9, 11, 0.1);
+}
+
+.projects-card-bar {
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 4px;
+  border-radius: 0 3px 3px 0;
+  background: #4da6ff;
+}
+
+.projects-card-label {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--zinc-950);
+}
+
+.projects-card-icon {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  color: #4da6ff;
+}
+
+@media (max-width: 900px) {
+  .projects-block {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+  .projects-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #4da6ff, transparent);
+  }
+  .projects-copy {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projects-card {
+    transition: none;
+  }
+}
+
 /* ---------- Supply (tokenomics stat bar) ---------- */
 
 .supply {
