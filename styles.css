@@ -1115,6 +1115,132 @@ img {
   }
 }
 
+/* ---------- Join Us ---------- */
+
+.join {
+  position: relative;
+  overflow: hidden;
+  padding: 140px 24px;
+  background: var(--black);
+}
+
+.join-glow {
+  position: absolute;
+  top: 50%;
+  left: 6%;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(77, 166, 255, 0.24), transparent 70%);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.join-inner {
+  position: relative;
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.join-heading {
+  font-size: clamp(56px, 8vw, 108px);
+  font-weight: 200;
+  line-height: 0.9;
+  letter-spacing: -1px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.55);
+}
+
+@supports not (-webkit-text-stroke: 1px white) {
+  .join-heading {
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
+
+.join-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.join-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 420px;
+}
+
+.join-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 56px;
+  padding: 0 28px;
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--black);
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity 0.15s ease, background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+}
+
+.join-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.join-btn svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.join-btn--outline {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.join-btn--outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+@media (max-width: 780px) {
+  .join {
+    padding: 96px 24px;
+  }
+
+  .join-glow {
+    width: 360px;
+    height: 360px;
+  }
+
+  .join-inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    text-align: left;
+  }
+
+  .join-heading {
+    font-size: clamp(48px, 15vw, 64px);
+  }
+
+  .join-actions {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .join-btn {
+    transition: none;
+  }
+}
+
 /* ---------- Footer ---------- */
 
 .footer {
