@@ -348,16 +348,20 @@ img {
 .hero-badge {
   position: relative;
   z-index: 1;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 10px;
+  padding: 8px 22px 8px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
 }
 
 .hero-badge-word {
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 4px;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .hero-heading {
