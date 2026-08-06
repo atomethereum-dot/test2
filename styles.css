@@ -371,10 +371,46 @@ img {
   color: rgba(210, 224, 245, 0.75);
 }
 
-.hero-cta {
+.hero-cta-row {
   position: relative;
   z-index: 1;
   margin-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btn-audit {
+  position: relative;
+  color: var(--white);
+  border: 1.5px solid transparent;
+  background-image: linear-gradient(var(--black), var(--black)),
+    linear-gradient(120deg, #8fd0ff, #4da6ff, #1c5fb8);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  animation: audit-blink 2.4s ease-in-out infinite;
+}
+
+.btn-audit:hover {
+  background-image: linear-gradient(#0a0a0a, #0a0a0a),
+    linear-gradient(120deg, #8fd0ff, #4da6ff, #1c5fb8);
+}
+
+@keyframes audit-blink {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(77, 166, 255, 0.3), 0 0 0 rgba(77, 166, 255, 0);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(77, 166, 255, 0.8), 0 0 30px rgba(77, 166, 255, 0.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-audit {
+    animation: none;
+    box-shadow: 0 0 10px rgba(77, 166, 255, 0.5);
+  }
 }
 
 @media (max-width: 720px) {
@@ -392,7 +428,7 @@ img {
   .hero-badge,
   .hero-heading,
   .hero-subtitle,
-  .hero-cta {
+  .hero-cta-row {
     align-self: flex-start;
   }
 
@@ -418,7 +454,8 @@ img {
     font-size: 12px;
   }
 
-  .hero-cta {
+  .hero-cta,
+  .btn-audit {
     height: 40px;
     padding: 0 24px;
     gap: 6px;
