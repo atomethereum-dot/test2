@@ -9,6 +9,8 @@
   --zinc-200: #e4e4e7;
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --announce-h: 40px;
+  --nav-h: 72px;
 }
 
 * {
@@ -43,11 +45,67 @@ img {
   display: block;
 }
 
+/* ---------- Announcement bar ---------- */
+
+.announce-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 51;
+  height: var(--announce-h);
+  background: linear-gradient(90deg, #0c2c58, #1c5fb8 50%, #0c2c58);
+  border-bottom: 1px solid rgba(77, 166, 255, 0.35);
+}
+
+.announce-bar-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white);
+  white-space: nowrap;
+}
+
+.announce-bar-text strong {
+  font-weight: 700;
+}
+
+.announce-bar-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  color: var(--white);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  flex-shrink: 0;
+}
+
+.announce-bar-cta svg {
+  width: 12px;
+  height: 12px;
+}
+
+@media (max-width: 560px) {
+  .announce-bar-inner {
+    gap: 6px;
+    padding: 0 16px;
+    font-size: 11.5px;
+  }
+}
+
 /* ---------- Nav ---------- */
 
 .nav {
   position: fixed;
-  top: 0;
+  top: var(--announce-h);
   left: 0;
   right: 0;
   z-index: 50;
@@ -264,7 +322,7 @@ img {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-top: 72px;
+  padding-top: calc(var(--announce-h) + var(--nav-h));
   background: var(--black);
   overflow: hidden;
   text-align: center;
