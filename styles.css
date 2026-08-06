@@ -398,16 +398,28 @@ img {
 
   .hero-heading {
     font-size: clamp(30px, 9vw, 42px);
-    max-width: 330px;
+    max-width: 280px;
   }
 
   .hero-subtitle {
     font-size: 11.5px;
-    max-width: 280px;
+    max-width: 240px;
   }
 
   .hero-badge-word {
     font-size: 12px;
+  }
+
+  .hero-cta {
+    height: 40px;
+    padding: 0 24px;
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  .hero-cta svg {
+    width: 12px;
+    height: 12px;
   }
 }
 
