@@ -437,8 +437,9 @@ img {
   }
 
   .hero-heading {
-    font-size: clamp(32px, 9.5vw, 42px);
-    max-width: 330px;
+    font-size: clamp(44px, 13vw, 58px);
+    line-height: 0.98;
+    max-width: 340px;
   }
 
   .hero-break {
@@ -446,25 +447,36 @@ img {
   }
 
   .hero-subtitle {
-    font-size: 11.5px;
-    max-width: 240px;
+    font-size: 13.5px;
+    letter-spacing: 2px;
+    max-width: 300px;
   }
 
   .hero-badge-word {
     font-size: 12px;
   }
 
+  .hero-cta-row {
+    margin-top: 30px;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 320px;
+    gap: 12px;
+  }
+
   .hero-cta,
   .btn-audit {
-    height: 40px;
-    padding: 0 24px;
-    gap: 6px;
-    font-size: 11px;
+    width: 100%;
+    height: 54px;
+    padding: 0 28px;
+    gap: 8px;
+    font-size: 14px;
   }
 
   .hero-cta svg {
-    width: 12px;
-    height: 12px;
+    width: 15px;
+    height: 15px;
   }
 }
 
