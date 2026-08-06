@@ -469,7 +469,6 @@ img {
     justify-content: flex-start;
     text-align: left;
     padding-top: 56px;
-    gap: 28px;
   }
 
   .hero-badge,
@@ -484,7 +483,7 @@ img {
   }
 
   .hero-heading {
-    font-size: clamp(36px, 11vw, 48px);
+    font-size: clamp(34px, 10vw, 44px);
     max-width: 330px;
   }
 
@@ -493,9 +492,8 @@ img {
   }
 
   .hero-subtitle {
-    font-size: 13.5px;
-    max-width: 270px;
-    line-height: 1.5;
+    font-size: 12.5px;
+    max-width: 250px;
   }
 
   .hero-badge-word {
@@ -503,7 +501,7 @@ img {
   }
 
   .hero-cta-row {
-    margin-top: 26px;
+    margin-top: 24px;
     gap: 12px;
   }
 
