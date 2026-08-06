@@ -1,5 +1,6 @@
 (() => {
   const el = document.getElementById("loadIntro");
+  const fill = document.getElementById("loadIntroFill");
   if (!el) return;
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -12,12 +13,21 @@
     setTimeout(() => el.remove(), 700);
   }
 
+  function start() {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (fill) fill.classList.add("is-filling");
+      });
+    });
+    setTimeout(dismiss, 1550);
+  }
+
   if (document.readyState === "complete") {
-    setTimeout(dismiss, 500);
+    start();
   } else {
-    window.addEventListener("load", () => setTimeout(dismiss, 500));
+    window.addEventListener("load", start);
   }
 
   // Safety net in case load never fires cleanly.
-  setTimeout(dismiss, 2500);
+  setTimeout(dismiss, 3200);
 })();

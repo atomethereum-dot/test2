@@ -2342,8 +2342,10 @@ body::after {
   inset: 0;
   z-index: 10001;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 44px;
   background: var(--black);
   opacity: 1;
   visibility: visible;
@@ -2352,8 +2354,9 @@ body::after {
 
 .load-intro-mark {
   opacity: 0;
-  transform: scale(0.82);
-  animation: load-intro-in 0.8s var(--ease) forwards 0.15s;
+  transform: scale(0.88);
+  animation: load-intro-in 0.7s var(--ease) forwards 0.1s;
+  filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.15));
 }
 
 @keyframes load-intro-in {
@@ -2361,6 +2364,31 @@ body::after {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+.load-intro-bar {
+  position: relative;
+  width: 260px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+
+.load-intro-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #1c5fb8, #4da6ff, #8fd0ff);
+  box-shadow: 0 0 10px 1px rgba(77, 166, 255, 0.85), 0 0 22px 4px rgba(77, 166, 255, 0.4);
+  transition: width 1.3s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.load-intro-bar-fill.is-filling {
+  width: 100%;
 }
 
 .load-intro.is-hidden {
