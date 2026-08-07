@@ -852,6 +852,16 @@ img {
   transition: transform 0.3s var(--ease);
 }
 
+.choro-viewport.is-zoomed {
+  cursor: grab;
+  touch-action: none;
+}
+
+.choro-viewport.is-dragging {
+  cursor: grabbing;
+  transition: none;
+}
+
 .choro-svg {
   display: block;
   width: 100%;
