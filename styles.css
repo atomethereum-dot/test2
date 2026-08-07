@@ -1167,6 +1167,29 @@ img {
   }
 }
 
+/* ---------- Section fade (dark to light transition) ---------- */
+
+.section-fade {
+  height: 320px;
+  background: linear-gradient(
+    to bottom,
+    var(--black) 0%,
+    #050505 10%,
+    #161616 24%,
+    #3a3a3a 42%,
+    #7a7a7a 58%,
+    #c4c4c4 74%,
+    #ececec 88%,
+    var(--white) 100%
+  );
+}
+
+@media (max-width: 640px) {
+  .section-fade {
+    height: 160px;
+  }
+}
+
 /* ---------- RWA growth chart ---------- */
 
 .growth {
