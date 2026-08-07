@@ -2551,6 +2551,28 @@ img {
   gap: 6px;
 }
 
+.footer-location {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.footer-location-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--white-dim);
+  font-size: 13px;
+}
+
+.footer-location-text svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
 .footer-eth-icon {
   display: inline-flex;
   align-items: center;
