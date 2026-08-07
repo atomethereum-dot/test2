@@ -2240,8 +2240,8 @@ img {
 
 .footer-brand-top {
   display: flex;
-  align-items: center;
-  gap: 14px;
+  align-items: flex-end;
+  gap: 6px;
   margin-bottom: 16px;
 }
 
