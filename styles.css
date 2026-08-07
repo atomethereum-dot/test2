@@ -823,9 +823,25 @@ img {
 .choro-section {
   position: relative;
   background: #0a0a0a;
-  height: 90vh;
-  min-height: 560px;
-  max-height: 820px;
+  padding-top: calc(var(--announce-h) + var(--nav-h) + 56px);
+}
+
+.choro-header {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.choro-heading {
+  max-width: 640px;
+  margin-bottom: 36px;
+}
+
+.choro-map-wrap {
+  position: relative;
+  height: 78vh;
+  min-height: 480px;
+  max-height: 760px;
   overflow: hidden;
 }
 
@@ -861,15 +877,6 @@ img {
 .choro-dot {
   fill: #ffffff;
   opacity: 0.9;
-}
-
-.choro-heading {
-  position: absolute;
-  left: 40px;
-  top: calc(var(--announce-h) + var(--nav-h) + 32px);
-  z-index: 2;
-  max-width: 640px;
-  font-size: clamp(28px, 3.6vw, 48px);
 }
 
 .choro-zoom {
@@ -976,14 +983,17 @@ img {
 
 @media (max-width: 640px) {
   .choro-section {
-    height: 100vh;
-    min-height: 620px;
+    padding-top: calc(var(--announce-h) + var(--nav-h) + 36px);
   }
 
   .choro-heading {
-    left: 20px;
-    top: calc(var(--announce-h) + var(--nav-h) + 20px);
-    max-width: 260px;
+    max-width: 280px;
+    margin-bottom: 24px;
+  }
+
+  .choro-map-wrap {
+    height: 88vh;
+    min-height: 520px;
   }
 
   .choro-legend {
