@@ -142,4 +142,37 @@
     });
     highlight(parseInt(slider.value, 10));
   }
+
+  // Drive the slider from scroll position: as the section moves through
+  // the viewport, sweep from "Least Nodes" to "Most Nodes" so the map
+  // and slider animate together while scrolling instead of sitting still.
+  const section = document.getElementById("global-nodes");
+  if (section && slider) {
+    let scrollTicking = false;
+
+    function updateFromScroll() {
+      const rect = section.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const total = rect.height + vh;
+      let progress = total > 0 ? (vh - rect.top) / total : 0;
+      progress = Math.max(0, Math.min(1, progress));
+      const index = Math.round(progress * (CHORO_RANKED.length - 1));
+      slider.value = String(index);
+      highlight(index);
+      scrollTicking = false;
+    }
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!scrollTicking) {
+          requestAnimationFrame(updateFromScroll);
+          scrollTicking = true;
+        }
+      },
+      { passive: true }
+    );
+
+    updateFromScroll();
+  }
 })();
