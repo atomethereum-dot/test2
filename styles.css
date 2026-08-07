@@ -160,7 +160,7 @@ img {
 .nav-logo {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
   padding: 5px 18px 5px 8px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -2257,6 +2257,7 @@ img {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   color: var(--white);
+  transform: translateY(-5px);
 }
 
 .footer-brand p {
