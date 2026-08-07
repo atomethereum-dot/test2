@@ -2497,6 +2497,20 @@ img {
   opacity: 0.65;
 }
 
+@media (min-width: 641px) {
+  .footer-glow-line--a {
+    top: 10px;
+  }
+
+  .footer-glow-line--b {
+    top: 26px;
+  }
+
+  .footer-glow-line--c {
+    top: 42px;
+  }
+}
+
 @keyframes footer-glow-flow {
   from {
     background-position: -60% 0;
