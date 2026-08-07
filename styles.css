@@ -418,6 +418,15 @@ img {
   color: rgba(210, 224, 245, 0.75);
 }
 
+.scramble-done {
+  color: inherit;
+}
+
+.scramble-live {
+  color: #14e0a0;
+  text-shadow: 0 0 6px rgba(20, 224, 160, 0.65);
+}
+
 .hero-cta-row {
   position: relative;
   z-index: 1;
