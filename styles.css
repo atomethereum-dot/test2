@@ -2257,7 +2257,7 @@ img {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   color: var(--white);
-  transform: translateY(-5px);
+  transform: translateY(-13px);
 }
 
 .footer-brand p {
