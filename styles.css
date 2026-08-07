@@ -2535,7 +2535,6 @@ img {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   color: var(--white);
-  transform: translateY(-13px);
 }
 
 .footer-brand p {
@@ -2590,6 +2589,55 @@ img {
 
 .footer-cols a:hover {
   color: var(--white);
+}
+
+.footer-contact {
+  max-width: 280px;
+}
+
+.footer-contact-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-contact-dot {
+  width: 6px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+.footer-contact-email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.footer-contact-email:hover {
+  color: var(--white-dim);
+}
+
+.footer-contact-email svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.footer-contact-desc {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--white-dim);
 }
 
 .footer-giant {
