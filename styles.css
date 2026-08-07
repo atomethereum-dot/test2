@@ -1167,19 +1167,6 @@ img {
   }
 }
 
-/* ---------- Section fade (scroll-driven solid color transition) ---------- */
-
-.section-fade {
-  height: 100vh;
-  background: var(--black);
-}
-
-@media (max-width: 640px) {
-  .section-fade {
-    height: 70vh;
-  }
-}
-
 /* ---------- RWA growth chart ---------- */
 
 .growth {
