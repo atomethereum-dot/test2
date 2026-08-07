@@ -2559,17 +2559,17 @@ img {
 .footer-powered {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 6px;
 }
 
 .footer-location {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 10px;
-  margin-top: 20px;
+  align-items: flex-start;
+  text-align: left;
+  gap: 16px;
+  margin-top: 16px;
 }
 
 .footer-location-label {
@@ -2760,15 +2760,6 @@ img {
 
   .footer-brand-top {
     justify-content: flex-start;
-  }
-
-  .footer-powered {
-    justify-content: flex-start;
-  }
-
-  .footer-location {
-    align-items: flex-start;
-    text-align: left;
   }
 
   .footer-cols {
