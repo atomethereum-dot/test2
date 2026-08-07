@@ -2729,13 +2729,13 @@ img {
 
 @media (max-width: 640px) {
   .footer-giant-mark {
-    height: 16vw;
+    height: 14vw;
   }
 }
 
 @media (max-width: 640px) {
   .footer-giant span {
-    font-size: 25vw;
+    font-size: 21vw;
   }
 }
 
