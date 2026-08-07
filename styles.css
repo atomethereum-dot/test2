@@ -1035,40 +1035,8 @@ img {
 /* ---------- Roadmap ---------- */
 
 .roadmap {
-  position: relative;
   background: var(--black);
   padding: 120px 24px 140px;
-}
-
-.section-transition {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: -220px;
-  height: 440px;
-  z-index: 5;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s linear;
-  -webkit-mask-image: linear-gradient(180deg, transparent, black 30%, black 70%, transparent);
-  mask-image: linear-gradient(180deg, transparent, black 30%, black 70%, transparent);
-}
-
-.section-transition-bars {
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
-
-.section-transition-bar {
-  flex: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .section-transition {
-    display: none;
-  }
 }
 
 .roadmap-inner {
