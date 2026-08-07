@@ -2443,18 +2443,6 @@ img {
   background: rgba(255, 255, 255, 0.9);
 }
 
-.cookie-banner-details {
-  margin-top: 2px;
-  font-size: 13px;
-  color: var(--white-dim);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.cookie-banner-details:hover {
-  color: var(--white);
-}
-
 @media (max-width: 520px) {
   .cookie-banner {
     left: 12px;
