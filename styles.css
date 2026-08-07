@@ -848,12 +848,12 @@ img {
 
 .choro-viewport {
   position: absolute;
-  inset: 0;
-  transform-origin: center center;
+  top: 50%;
+  left: 50%;
   transition: transform 0.3s var(--ease);
 }
 
-.choro-viewport.is-zoomed {
+.choro-viewport.is-pannable {
   cursor: grab;
   touch-action: none;
 }
@@ -865,8 +865,6 @@ img {
 
 .choro-svg {
   display: block;
-  width: 100%;
-  height: 100%;
 }
 
 .choro-country {

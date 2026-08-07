@@ -1,12 +1,13 @@
 (() => {
   const wrap = document.querySelector(".choro-map-wrap");
   const viewport = document.getElementById("choroViewport");
+  const svg = document.querySelector(".choro-svg");
   const zoomInBtn = document.getElementById("choroZoomIn");
   const zoomOutBtn = document.getElementById("choroZoomOut");
   const slider = document.getElementById("choroSlider");
   const legendDot = document.getElementById("choroLegendDot");
   const legendName = document.getElementById("choroLegendName");
-  if (!viewport || typeof CHORO_RANKED === "undefined") return;
+  if (!viewport || !svg || !wrap || typeof CHORO_RANKED === "undefined") return;
 
   let zoom = 1;
   let panX = 0;
@@ -15,18 +16,40 @@
   const ZOOM_MAX = 3.2;
   const ZOOM_STEP = 0.4;
 
-  function clampPan() {
-    if (!wrap) return;
+  const vb = svg.viewBox.baseVal;
+  let renderedW = 0;
+  let renderedH = 0;
+  let maxPanX = 0;
+  let maxPanY = 0;
+
+  // The map is rendered at "cover" size for the frame (like CSS
+  // background-size: cover), so it always fills the frame with no gaps.
+  // Whenever the frame's aspect ratio doesn't match the map's own, part
+  // of the map extends beyond the frame even before any user zoom — that
+  // part is reachable by dragging, not just after pressing +.
+  function layout() {
     const rect = wrap.getBoundingClientRect();
-    const maxX = (rect.width * (zoom - 1)) / 2;
-    const maxY = (rect.height * (zoom - 1)) / 2;
-    panX = Math.max(-maxX, Math.min(maxX, panX));
-    panY = Math.max(-maxY, Math.min(maxY, panY));
+    const coverScale = Math.max(rect.width / vb.width, rect.height / vb.height);
+    renderedW = vb.width * coverScale;
+    renderedH = vb.height * coverScale;
+    svg.style.width = `${renderedW}px`;
+    svg.style.height = `${renderedH}px`;
+    clampPan();
+    applyTransform();
+  }
+
+  function clampPan() {
+    const rect = wrap.getBoundingClientRect();
+    maxPanX = Math.max(0, (renderedW * zoom - rect.width) / 2);
+    maxPanY = Math.max(0, (renderedH * zoom - rect.height) / 2);
+    panX = Math.max(-maxPanX, Math.min(maxPanX, panX));
+    panY = Math.max(-maxPanY, Math.min(maxPanY, panY));
   }
 
   function applyTransform() {
-    viewport.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
-    viewport.classList.toggle("is-zoomed", zoom > ZOOM_MIN);
+    viewport.style.transform =
+      `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) scale(${zoom})`;
+    viewport.classList.toggle("is-pannable", maxPanX > 0 || maxPanY > 0);
   }
 
   function setZoom(next) {
@@ -34,9 +57,8 @@
     if (zoom === ZOOM_MIN) {
       panX = 0;
       panY = 0;
-    } else {
-      clampPan();
     }
+    clampPan();
     applyTransform();
   }
 
@@ -47,7 +69,9 @@
     zoomOutBtn.addEventListener("click", () => setZoom(zoom - ZOOM_STEP));
   }
 
-  // Drag-to-pan (mouse + touch via Pointer Events) once zoomed in
+  // Drag-to-pan (mouse + touch via Pointer Events), available whenever
+  // the rendered map is bigger than the frame — which is true by
+  // default on most screens, not only once zoomed in.
   let dragging = false;
   let startX = 0;
   let startY = 0;
@@ -55,7 +79,7 @@
   let startPanY = 0;
 
   viewport.addEventListener("pointerdown", (e) => {
-    if (zoom === ZOOM_MIN) return;
+    if (maxPanX === 0 && maxPanY === 0) return;
     dragging = true;
     startX = e.clientX;
     startY = e.clientY;
@@ -84,7 +108,8 @@
   viewport.addEventListener("pointerup", endDrag);
   viewport.addEventListener("pointercancel", endDrag);
 
-  window.addEventListener("resize", clampPan);
+  window.addEventListener("resize", layout);
+  layout();
 
   const countryPaths = document.querySelectorAll(".choro-country");
   const byName = new Map();
