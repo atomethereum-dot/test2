@@ -2238,9 +2238,25 @@ img {
   max-width: 260px;
 }
 
-.footer-mark {
+.footer-brand-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   margin-bottom: 16px;
+}
+
+.footer-mark {
   opacity: 1;
+  flex-shrink: 0;
+}
+
+.footer-wordmark {
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1.1;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--white);
 }
 
 .footer-brand p {
