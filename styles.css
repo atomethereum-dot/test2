@@ -835,6 +835,7 @@ img {
 .choro-heading {
   max-width: 640px;
   margin-bottom: 36px;
+  line-height: 1.05;
 }
 
 .choro-map-wrap {
