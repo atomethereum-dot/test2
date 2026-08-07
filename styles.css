@@ -821,32 +821,61 @@ img {
 /* ---------- Choropleth map ---------- */
 
 .choro-section {
-  background: var(--black);
-  padding: 120px 24px;
-}
-
-.choro-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.choro-inner > h2 {
-  margin-bottom: 40px;
-}
-
-.choro-map-card {
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.02);
-  padding: 24px 24px 28px;
+  background: #0a0a0a;
+  height: 90vh;
+  min-height: 560px;
+  max-height: 820px;
   overflow: hidden;
+}
+
+.choro-viewport {
+  position: absolute;
+  inset: 0;
+  transform-origin: center center;
+  transition: transform 0.3s var(--ease);
+}
+
+.choro-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.choro-country {
+  stroke: rgba(0, 0, 0, 0.55);
+  stroke-width: 0.4;
+  transition: filter 0.2s ease;
+}
+
+.choro-country:hover {
+  filter: brightness(1.35);
+}
+
+.choro-country.is-active {
+  stroke: #ffffff;
+  stroke-width: 1.2;
+  filter: brightness(1.3);
+}
+
+.choro-dot {
+  fill: #ffffff;
+  opacity: 0.9;
+}
+
+.choro-heading {
+  position: absolute;
+  left: 40px;
+  top: calc(var(--announce-h) + var(--nav-h) + 32px);
+  z-index: 2;
+  max-width: 640px;
+  font-size: clamp(28px, 3.6vw, 48px);
 }
 
 .choro-zoom {
   position: absolute;
-  left: 36px;
-  top: 36px;
+  left: 24px;
+  bottom: 220px;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -869,42 +898,17 @@ img {
   background: rgba(255, 255, 255, 0.08);
 }
 
-.choro-viewport {
-  width: 100%;
-  transform-origin: center center;
-  transition: transform 0.3s var(--ease);
-}
-
-.choro-svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.choro-country {
-  stroke: rgba(0, 0, 0, 0.5);
-  stroke-width: 0.4;
-  transition: filter 0.2s ease;
-}
-
-.choro-country:hover {
-  filter: brightness(1.35);
-}
-
-.choro-country.is-active {
-  stroke: #ffffff;
-  stroke-width: 1.2;
-  filter: brightness(1.3);
-}
-
-.choro-dot {
-  fill: #ffffff;
-  opacity: 0.9;
-}
-
 .choro-legend {
-  margin-top: 28px;
-  max-width: 420px;
+  position: absolute;
+  left: 24px;
+  bottom: 32px;
+  z-index: 2;
+  width: 280px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: rgba(10, 10, 10, 0.72);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .choro-legend-track {
@@ -928,7 +932,7 @@ img {
   appearance: none;
   height: 3px;
   border-radius: 2px;
-  background: linear-gradient(90deg, #16223a, #4da6ff);
+  background: linear-gradient(90deg, #2a0f12, #ff2d3a);
   outline: none;
 }
 
@@ -966,17 +970,32 @@ img {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #4da6ff;
+  background: #ff2d3a;
   flex-shrink: 0;
 }
 
 @media (max-width: 640px) {
   .choro-section {
-    padding: 88px 24px;
+    height: 100vh;
+    min-height: 620px;
   }
 
-  .choro-map-card {
-    padding: 18px 16px 22px;
+  .choro-heading {
+    left: 20px;
+    top: calc(var(--announce-h) + var(--nav-h) + 20px);
+    max-width: 260px;
+  }
+
+  .choro-legend {
+    left: 16px;
+    right: 16px;
+    bottom: 20px;
+    width: auto;
+  }
+
+  .choro-zoom {
+    left: 16px;
+    bottom: 200px;
   }
 }
 
