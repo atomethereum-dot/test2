@@ -2,6 +2,7 @@
   const glow = document.getElementById("cursorLight");
   const dot = document.getElementById("cursorDot");
   const ring = document.getElementById("cursorRing");
+  const label = document.getElementById("cursorLabel");
   if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
   let visible = false;
@@ -47,13 +48,23 @@
 
   if (ring) {
     const interactive = "a, button, input, textarea, select, .btn, [role='button']";
+    const labeled = "[data-cursor-label]";
     document.addEventListener("mouseover", (e) => {
-      if (e.target.closest && e.target.closest(interactive)) {
+      if (!e.target.closest) return;
+      const labelTarget = e.target.closest(labeled);
+      if (labelTarget) {
+        ring.classList.add("cursor-ring--label");
+        if (label) label.textContent = labelTarget.dataset.cursorLabel;
+      } else if (e.target.closest(interactive)) {
         ring.classList.add("cursor-ring--hover");
       }
     });
     document.addEventListener("mouseout", (e) => {
-      if (e.target.closest && e.target.closest(interactive)) {
+      if (!e.target.closest) return;
+      if (e.target.closest(labeled)) {
+        ring.classList.remove("cursor-ring--label");
+        if (label) label.textContent = "";
+      } else if (e.target.closest(interactive)) {
         ring.classList.remove("cursor-ring--hover");
       }
     });

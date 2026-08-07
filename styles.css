@@ -1,3 +1,19 @@
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("fonts/SpaceGrotesk.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("fonts/JetBrainsMono.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --black: #000000;
   --white: #ffffff;
@@ -7,8 +23,8 @@
   --zinc-600: #52525b;
   --zinc-300: #d4d4d8;
   --zinc-200: #e4e4e7;
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --font-sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --announce-h: 40px;
   --nav-h: 72px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -526,6 +542,85 @@ img {
   .hero-cta svg {
     width: 13px;
     height: 13px;
+  }
+}
+
+/* -- security mesh backdrop -- */
+
+.hero-mesh {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 42%, black 30%, transparent 78%);
+  mask-image: radial-gradient(ellipse 70% 65% at 50% 42%, black 30%, transparent 78%);
+  will-change: transform;
+}
+
+.hero-mesh svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hero-mesh-lines line {
+  stroke: rgba(120, 170, 255, 0.22);
+  stroke-width: 1;
+  animation: mesh-line-flicker 7s ease-in-out infinite;
+}
+
+.hero-mesh-lines line:nth-child(3n) {
+  animation-delay: -1.4s;
+}
+
+.hero-mesh-lines line:nth-child(5n) {
+  animation-delay: -3.1s;
+  animation-duration: 9s;
+}
+
+.hero-mesh-lines line:nth-child(7n) {
+  animation-delay: -5s;
+  animation-duration: 5.5s;
+}
+
+.hero-mesh-node {
+  fill: rgba(160, 200, 255, 0.85);
+  animation: mesh-node-pulse var(--dur, 5s) ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes mesh-line-flicker {
+  0%, 100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes mesh-node-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-mesh-lines line,
+  .hero-mesh-node {
+    animation: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero-mesh {
+    opacity: 0.4;
   }
 }
 
@@ -1453,6 +1548,21 @@ img {
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+.event-card:hover .event-banner {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-banner {
+    transition: none;
+  }
+  .event-card:hover .event-banner {
+    transform: none;
+  }
 }
 
 .event-banner--a {
@@ -1787,7 +1897,7 @@ img {
   flex-direction: column;
   border: 1px solid rgba(77, 166, 255, 0.22);
   margin-bottom: 4px;
-  transition: transform 0.25s ease, border-color 0.25s ease;
+  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
 }
 
 .blog-card:hover .blog-banner {
@@ -1995,9 +2105,10 @@ img {
   left: 6%;
   width: 520px;
   height: 520px;
+  margin-top: -260px;
   background: radial-gradient(circle, rgba(77, 166, 255, 0.24), transparent 70%);
-  transform: translateY(-50%);
   pointer-events: none;
+  will-change: transform;
 }
 
 .join-inner {
@@ -2072,6 +2183,7 @@ img {
   .join-glow {
     width: 360px;
     height: 360px;
+    margin-top: -180px;
   }
 
   .join-inner {
@@ -2248,12 +2360,39 @@ img {
   width: 34px;
   height: 34px;
   border: 1.5px solid rgba(255, 255, 255, 0.75);
-  transition: opacity 0.2s ease, width 0.2s ease, height 0.2s ease;
+  transition: opacity 0.2s var(--ease), width 0.25s var(--ease), height 0.25s var(--ease), background 0.25s var(--ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cursor-ring--hover {
   width: 52px;
   height: 52px;
+}
+
+.cursor-ring--label {
+  width: 76px;
+  height: 76px;
+  background: rgba(255, 255, 255, 0.95);
+  border-color: transparent;
+  mix-blend-mode: normal;
+}
+
+.cursor-ring-label {
+  opacity: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #000000;
+  transition: opacity 0.2s var(--ease);
+  white-space: nowrap;
+}
+
+.cursor-ring--label .cursor-ring-label {
+  opacity: 1;
 }
 
 @media (hover: hover) and (pointer: fine) {
