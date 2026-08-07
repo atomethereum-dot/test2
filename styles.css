@@ -840,10 +840,6 @@ img {
 
 .choro-map-wrap {
   position: relative;
-}
-
-.choro-frame {
-  position: relative;
   height: 78vh;
   min-height: 480px;
   max-height: 760px;
@@ -1004,31 +1000,21 @@ img {
     margin-bottom: 24px;
   }
 
-  .choro-frame {
-    height: auto;
-    min-height: 0;
-    max-height: none;
-    aspect-ratio: 1000 / 391.7;
+  .choro-map-wrap {
+    height: 88vh;
+    min-height: 520px;
   }
 
   .choro-legend {
-    position: static;
-    left: auto;
-    right: auto;
-    bottom: auto;
+    left: 16px;
+    right: 16px;
+    bottom: 20px;
     width: auto;
-    margin: 20px 24px 40px;
   }
 
   .choro-zoom {
-    left: 10px;
-    bottom: 10px;
-  }
-
-  .choro-zoom-btn {
-    width: 26px;
-    height: 26px;
-    font-size: 14px;
+    left: 16px;
+    bottom: 200px;
   }
 }
 
