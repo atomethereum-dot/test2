@@ -2351,6 +2351,125 @@ img {
   }
 }
 
+/* ---------- Cookie banner ---------- */
+
+.cookie-banner {
+  position: fixed;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  z-index: 9998;
+  max-width: 420px;
+  border-radius: 20px;
+  background: rgba(9, 9, 11, 0.92);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+
+.cookie-banner.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.cookie-banner-inner {
+  padding: 22px 22px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.cookie-banner-icon {
+  flex-shrink: 0;
+  display: flex;
+  color: #4da6ff;
+  margin-top: 2px;
+}
+
+.cookie-banner-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.cookie-banner-text {
+  flex: 1;
+  min-width: 200px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--white-dim);
+}
+
+.cookie-banner-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.cookie-banner-btn {
+  width: 100%;
+  height: 44px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background 0.15s ease, transform 0.3s var(--ease);
+}
+
+.cookie-banner-btn--outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--white);
+}
+
+.cookie-banner-btn--outline:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.cookie-banner-btn--solid {
+  background: var(--white);
+  border: 1px solid var(--white);
+  color: var(--black);
+}
+
+.cookie-banner-btn--solid:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.cookie-banner-details {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--white-dim);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cookie-banner-details:hover {
+  color: var(--white);
+}
+
+@media (max-width: 520px) {
+  .cookie-banner {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cookie-banner {
+    transition: none;
+  }
+}
+
 /* ---------- Cursor light ---------- */
 
 .cursor-light {
