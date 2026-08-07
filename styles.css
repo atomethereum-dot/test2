@@ -2457,13 +2457,6 @@ img {
   z-index: 1;
 }
 
-@media (min-width: 641px) {
-  .footer-glow-line,
-  .footer-glow-line::after {
-    mix-blend-mode: screen;
-  }
-}
-
 .footer-glow-line {
   position: absolute;
   left: -20%;
@@ -2475,6 +2468,14 @@ img {
   filter: blur(0.5px);
   opacity: 0.9;
   animation: footer-glow-flow linear infinite;
+}
+
+@media (min-width: 641px) {
+  .footer-glow-line {
+    height: 3px;
+    background: linear-gradient(90deg, transparent, currentColor, #ffffff, currentColor, transparent);
+    opacity: 1;
+  }
 }
 
 .footer-glow-line::after {
