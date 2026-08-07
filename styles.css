@@ -823,13 +823,17 @@ img {
 .choro-section {
   position: relative;
   background: var(--black);
-  padding-top: calc(var(--announce-h) + var(--nav-h) + 56px);
+  padding: 120px 0;
 }
 
 .choro-header {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
 }
 
 .choro-heading {
@@ -990,7 +994,7 @@ img {
 
 @media (max-width: 640px) {
   .choro-section {
-    padding-top: calc(var(--announce-h) + var(--nav-h) + 36px);
+    padding: 120px 0 72px;
   }
 
   .choro-heading {
