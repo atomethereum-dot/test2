@@ -2722,20 +2722,20 @@ img {
   font-weight: 700;
   line-height: 0.78;
   letter-spacing: -0.01em;
-  font-size: 15vw;
+  font-size: 22vw;
   color: rgba(255, 255, 255, 0.045);
   white-space: nowrap;
 }
 
 @media (max-width: 640px) {
   .footer-giant-mark {
-    height: 14vw;
+    height: 16vw;
   }
 }
 
 @media (max-width: 640px) {
   .footer-giant span {
-    font-size: 20vw;
+    font-size: 25vw;
   }
 }
 
