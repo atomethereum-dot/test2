@@ -2445,10 +2445,10 @@ img {
   width: 140%;
   height: 2px;
   background: linear-gradient(90deg, transparent, currentColor, transparent);
-  background-size: 40% 100%;
+  background-size: 26% 100%;
   background-repeat: no-repeat;
   filter: blur(0.5px);
-  opacity: 0.75;
+  opacity: 0.9;
   animation: footer-glow-flow linear infinite;
 }
 
@@ -2457,32 +2457,32 @@ img {
   position: absolute;
   inset: -14px 0;
   background: linear-gradient(90deg, transparent, currentColor, transparent);
-  background-size: 40% 100%;
+  background-size: 26% 100%;
   background-repeat: no-repeat;
   background-position: inherit;
   filter: blur(12px);
-  opacity: 0.5;
+  opacity: 0.65;
 }
 
 .footer-glow-line--a {
   top: 38px;
   color: #19f352;
-  animation-duration: 6.5s;
+  animation-duration: 3.6s;
 }
 
 .footer-glow-line--b {
   top: 74px;
   color: #4da6ff;
-  animation-duration: 8.5s;
+  animation-duration: 4.8s;
   animation-direction: reverse;
-  opacity: 0.6;
+  opacity: 0.75;
 }
 
 .footer-glow-line--c {
   top: 108px;
   color: #a259ff;
-  animation-duration: 5.5s;
-  opacity: 0.5;
+  animation-duration: 3s;
+  opacity: 0.65;
 }
 
 @keyframes footer-glow-flow {
