@@ -2390,6 +2390,42 @@ img {
   color: var(--white);
 }
 
+.footer-giant {
+  position: relative;
+  overflow: hidden;
+  padding-top: 12px;
+  border-top: 1px solid var(--white-faint);
+}
+
+.footer-giant::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 58%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.footer-giant span {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: 0.78;
+  letter-spacing: -0.01em;
+  font-size: 15vw;
+  color: rgba(255, 255, 255, 0.045);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .footer-giant span {
+    font-size: 20vw;
+  }
+}
+
 .footer-bottom {
   max-width: 1400px;
   margin: 0 auto;
