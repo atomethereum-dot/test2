@@ -822,7 +822,7 @@ img {
 
 .choro-section {
   position: relative;
-  background: #0a0a0a;
+  background: var(--black);
   padding-top: calc(var(--announce-h) + var(--nav-h) + 56px);
 }
 
@@ -923,9 +923,7 @@ img {
   width: 280px;
   padding: 18px 20px;
   border-radius: 16px;
-  background: rgba(10, 10, 10, 0.72);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--black);
 }
 
 .choro-legend-track {
