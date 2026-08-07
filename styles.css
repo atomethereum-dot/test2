@@ -1149,6 +1149,35 @@ img {
   max-width: 320px;
 }
 
+.roadmap--light {
+  background: var(--white);
+}
+
+.roadmap--light .eyebrow {
+  color: var(--zinc-600);
+}
+
+.roadmap--light .display {
+  color: var(--zinc-950);
+}
+
+.roadmap--light .roadmap-track {
+  background: var(--zinc-200);
+}
+
+.roadmap--light .roadmap-dot {
+  background: var(--white);
+  border-color: var(--zinc-300);
+}
+
+.roadmap--light .roadmap-content h3 {
+  color: var(--zinc-950);
+}
+
+.roadmap--light .roadmap-content p {
+  color: var(--zinc-600);
+}
+
 @media (max-width: 720px) {
   .roadmap-track,
   .roadmap-progress {
