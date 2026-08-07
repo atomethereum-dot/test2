@@ -2322,6 +2322,34 @@ img {
   color: rgba(255, 255, 255, 0.4);
 }
 
+@media (max-width: 640px) {
+  .footer-inner {
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .footer-brand {
+    max-width: none;
+  }
+
+  .footer-brand-top {
+    justify-content: flex-start;
+  }
+
+  .footer-powered {
+    justify-content: flex-start;
+  }
+
+  .footer-cols {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 20px;
+    border-top: 1px solid var(--white-faint);
+    padding-top: 28px;
+    width: 100%;
+  }
+}
+
 /* ---------- Cursor light ---------- */
 
 .cursor-light {
