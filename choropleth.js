@@ -153,7 +153,7 @@
     function updateFromScroll() {
       const rect = section.getBoundingClientRect();
       const vh = window.innerHeight || document.documentElement.clientHeight;
-      const total = rect.height * 0.6;
+      const total = rect.height;
       let progress = total > 0 ? (vh - rect.top) / total : 0;
       progress = Math.max(0, Math.min(1, progress));
       const index = Math.round(progress * (CHORO_RANKED.length - 1));
