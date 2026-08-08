@@ -641,8 +641,7 @@
 .dstat-value { font-family: var(--font-mono); font-size: 25px; font-weight: 600; }
 .dstat-chart-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; }
 .dstat-spark { width: 100%; max-width: 118px; height: 34px; flex: 1; }
-.dstat-spark-fill { opacity: 0.45; }
-.dstat-spark-line { fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.dstat-spark-line { fill: none; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
 .dstat-spark-dot { filter: drop-shadow(0 0 3px currentColor); }
 
 /* promo card */
@@ -868,13 +867,12 @@
 .dash-tps-chart { width: 100%; height: 110px; display: block; }
 .dash-tps-line {
   fill: none;
-  stroke: var(--db-green);
-  stroke-width: 1.8;
+  stroke-width: 1.1;
   stroke-linecap: round;
   stroke-linejoin: round;
-  filter: drop-shadow(0 0 5px rgba(20, 224, 160, 0.45));
+  filter: drop-shadow(0 0 4px rgba(20, 224, 160, 0.32));
 }
-.dash-tps-fill { fill: url(#dashTpsGrad); opacity: 0.5; }
+.dash-tps-fill { fill: url(#dashTpsGrad); }
 
 .dash-blocks-card { display: flex; flex-direction: column; }
 .dash-blocks-list { display: flex; flex-direction: column; gap: 4px; max-height: 260px; overflow: hidden; }
@@ -924,8 +922,8 @@
   padding: 3px 9px;
 }
 .metric-spark { width: 100%; height: 32px; display: block; margin-bottom: 10px; }
-.metric-spark-line { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.metric-spark-fill { stroke: none; opacity: 0.55; }
+.metric-spark-line { fill: none; stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
+.metric-spark-fill { stroke: none; }
 .metric-spark-dot { filter: drop-shadow(0 0 3px currentColor); }
 .metric-bottom { display: flex; align-items: baseline; gap: 6px; }
 .metric-value { font-family: var(--font-mono); font-size: 22px; font-weight: 600; color: var(--db-text); }

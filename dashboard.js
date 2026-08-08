@@ -396,14 +396,18 @@
     metrics[def.key] = { def, series, value: v, prevValue: v };
 
     const gradId = "gradMetric-" + def.key;
+    const lineGradId = "lineGradMetric-" + def.key;
     const card = document.createElement("div");
     card.className = "dcard metric-card";
     card.innerHTML =
       '<div class="metric-head"><span class="metric-label">' + def.label + '</span><span class="metric-window">24H</span></div>' +
       '<svg class="metric-spark" viewBox="0 0 200 32" preserveAspectRatio="none">' +
-      '<defs><linearGradient id="' + gradId + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + def.color + '" stop-opacity="0.45"/><stop offset="100%" stop-color="' + def.color + '" stop-opacity="0"/></linearGradient></defs>' +
+      '<defs>' +
+      '<linearGradient id="' + gradId + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + def.color + '" stop-opacity="0.38"/><stop offset="55%" stop-color="' + def.color + '" stop-opacity="0.09"/><stop offset="100%" stop-color="' + def.color + '" stop-opacity="0"/></linearGradient>' +
+      '<linearGradient id="' + lineGradId + '" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="' + def.color + '" stop-opacity="0.5"/><stop offset="100%" stop-color="' + def.color + '" stop-opacity="1"/></linearGradient>' +
+      '</defs>' +
       '<path id="fill-' + def.key + '" class="metric-spark-fill" fill="url(#' + gradId + ')"/>' +
-      '<path id="spark-' + def.key + '" class="metric-spark-line" stroke="' + def.color + '"/>' +
+      '<path id="spark-' + def.key + '" class="metric-spark-line" stroke="url(#' + lineGradId + ')"/>' +
       '<circle id="dot-' + def.key + '" class="metric-spark-dot" r="2.4" fill="' + def.color + '"/>' +
       '</svg>' +
       '<div class="metric-bottom"><span class="metric-value" id="val-' + def.key + '">&mdash;</span><span class="metric-unit">' + def.unit + '</span>' +

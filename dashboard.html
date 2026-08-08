@@ -9,7 +9,7 @@
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260808g" />
-<link rel="stylesheet" href="dashboard.css?v=20260808d" />
+<link rel="stylesheet" href="dashboard.css?v=20260808e" />
 </head>
 <body>
 
@@ -109,9 +109,12 @@
         </div>
         <div class="dstat-chart-row">
           <svg class="dstat-spark" id="spark-kpiValidators-svg" viewBox="0 0 120 34" preserveAspectRatio="none">
-            <defs><linearGradient id="gradKpiValidators" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#14e0a0" stop-opacity="0.5"/><stop offset="100%" stop-color="#14e0a0" stop-opacity="0"/></linearGradient></defs>
+            <defs>
+              <linearGradient id="gradKpiValidators" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#14e0a0" stop-opacity="0.38"/><stop offset="55%" stop-color="#14e0a0" stop-opacity="0.09"/><stop offset="100%" stop-color="#14e0a0" stop-opacity="0"/></linearGradient>
+              <linearGradient id="lineKpiValidators" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#14e0a0" stop-opacity="0.5"/><stop offset="100%" stop-color="#14e0a0" stop-opacity="1"/></linearGradient>
+            </defs>
             <path class="dstat-spark-fill" id="fill-kpiValidators" fill="url(#gradKpiValidators)"/>
-            <path class="dstat-spark-line" id="line-kpiValidators" stroke="#14e0a0"/>
+            <path class="dstat-spark-line" id="line-kpiValidators" stroke="url(#lineKpiValidators)"/>
             <circle class="dstat-spark-dot" id="dot-kpiValidators" r="2.6" fill="#14e0a0"/>
           </svg>
           <span class="metric-delta" id="delta-kpiValidators"></span>
@@ -129,9 +132,12 @@
         </div>
         <div class="dstat-chart-row">
           <svg class="dstat-spark" id="spark-kpiContracts-svg" viewBox="0 0 120 34" preserveAspectRatio="none">
-            <defs><linearGradient id="gradKpiContracts" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5b8cff" stop-opacity="0.5"/><stop offset="100%" stop-color="#5b8cff" stop-opacity="0"/></linearGradient></defs>
+            <defs>
+              <linearGradient id="gradKpiContracts" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5b8cff" stop-opacity="0.38"/><stop offset="55%" stop-color="#5b8cff" stop-opacity="0.09"/><stop offset="100%" stop-color="#5b8cff" stop-opacity="0"/></linearGradient>
+              <linearGradient id="lineKpiContracts" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5b8cff" stop-opacity="0.5"/><stop offset="100%" stop-color="#5b8cff" stop-opacity="1"/></linearGradient>
+            </defs>
             <path class="dstat-spark-fill" id="fill-kpiContracts" fill="url(#gradKpiContracts)"/>
-            <path class="dstat-spark-line" id="line-kpiContracts" stroke="#5b8cff"/>
+            <path class="dstat-spark-line" id="line-kpiContracts" stroke="url(#lineKpiContracts)"/>
             <circle class="dstat-spark-dot" id="dot-kpiContracts" r="2.6" fill="#5b8cff"/>
           </svg>
           <span class="metric-delta" id="delta-kpiContracts"></span>
@@ -149,9 +155,12 @@
         </div>
         <div class="dstat-chart-row">
           <svg class="dstat-spark" id="spark-kpiTps-svg" viewBox="0 0 120 34" preserveAspectRatio="none">
-            <defs><linearGradient id="gradKpiTps" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a685ff" stop-opacity="0.5"/><stop offset="100%" stop-color="#a685ff" stop-opacity="0"/></linearGradient></defs>
+            <defs>
+              <linearGradient id="gradKpiTps" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a685ff" stop-opacity="0.38"/><stop offset="55%" stop-color="#a685ff" stop-opacity="0.09"/><stop offset="100%" stop-color="#a685ff" stop-opacity="0"/></linearGradient>
+              <linearGradient id="lineKpiTps" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a685ff" stop-opacity="0.5"/><stop offset="100%" stop-color="#a685ff" stop-opacity="1"/></linearGradient>
+            </defs>
             <path class="dstat-spark-fill" id="fill-kpiTps" fill="url(#gradKpiTps)"/>
-            <path class="dstat-spark-line" id="line-kpiTps" stroke="#a685ff"/>
+            <path class="dstat-spark-line" id="line-kpiTps" stroke="url(#lineKpiTps)"/>
             <circle class="dstat-spark-dot" id="dot-kpiTps" r="2.6" fill="#a685ff"/>
           </svg>
           <span class="metric-delta" id="delta-kpiTps"></span>
@@ -461,12 +470,17 @@
         <svg class="dash-tps-chart" id="dashTpsChart" viewBox="0 0 600 110" preserveAspectRatio="none">
           <defs>
             <linearGradient id="dashTpsGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#14e0a0" stop-opacity="0.55"/>
+              <stop offset="0%" stop-color="#14e0a0" stop-opacity="0.4"/>
+              <stop offset="55%" stop-color="#14e0a0" stop-opacity="0.1"/>
               <stop offset="100%" stop-color="#14e0a0" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="dashTpsLineGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#14e0a0" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#14e0a0" stop-opacity="1"/>
             </linearGradient>
           </defs>
           <path class="dash-tps-fill" id="dashTpsFill" d=""/>
-          <path class="dash-tps-line" id="dashTpsLine" d=""/>
+          <path class="dash-tps-line" id="dashTpsLine" stroke="url(#dashTpsLineGrad)" d=""/>
         </svg>
       </div>
 
@@ -526,6 +540,6 @@
   </div>
 </div>
 
-<script src="dashboard.js?v=20260808c"></script>
+<script src="dashboard.js?v=20260808d"></script>
 </body>
 </html>
