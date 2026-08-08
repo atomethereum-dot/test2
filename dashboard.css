@@ -162,7 +162,7 @@
 
 @media (max-width: 640px) {
   .dash-heroband { height: calc(100dvh - 65px); min-height: calc(100dvh - 65px); padding-bottom: 8px; display: flex; flex-direction: column; justify-content: flex-start; }
-  .dash-heroband-inner { padding: 15dvh 18px 28px 0; height: auto; justify-content: flex-start; }
+  .dash-heroband-inner { margin: 0; width: 100%; max-width: none; padding: 15dvh 18px 28px 18px; height: auto; justify-content: flex-start; }
   .dash-heroband .dash-title { font-size: clamp(37px, 10.8vw, 47px); line-height: 1.22; }
   .dash-title-dash { display: none; }
   .dash-title-viz { display: block; }
