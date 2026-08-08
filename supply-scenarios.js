@@ -1,14 +1,39 @@
 (() => {
   const section = document.getElementById("supply-scenarios");
   if (!section) return;
-
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const SEC_SUPPLY = 25000000;
+  const POLL_MS = 10000;
+  const COINGECKO_URL =
+    "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,bitcoin-cash,solana,litecoin&vs_currencies=usd";
+
+  const ASSET_META = {
+    bitcoin: { supply: 20070000, price: 64940 },
+    ethereum: { supply: 120000000, price: 1897 },
+    "bitcoin-cash": { supply: 19870000, price: 216.69 },
+    solana: { supply: 581000000, price: 73.8 },
+    litecoin: { supply: 77470954, price: 45.69 },
+  };
 
   function fmtPrice(n) {
     if (n >= 1000) return "$" + n.toLocaleString("en-US", { maximumFractionDigits: 0 });
     return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
+  function fmtLivePrice(n) {
+    return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function fmtUSD(n) {
+    if (n >= 1e12) return "$" + (n / 1e12).toFixed(2) + "T";
+    if (n >= 1e9) return "$" + (n / 1e9).toFixed(2) + "B";
+    if (n >= 1e6) return "$" + (n / 1e6).toFixed(2) + "M";
+    return "$" + n.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  }
+  function fmtClock(ts) {
+    return new Date(ts).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  }
 
+  // ---- entrance animation ----
   function runBars() {
     section.querySelectorAll(".supply-bar-fill").forEach((fill) => {
       const pct = fill.dataset.pct;
@@ -21,50 +46,212 @@
       });
     });
   }
-
   function animateCount(el) {
     const target = parseFloat(el.dataset.target);
-
     if (reduced) {
       el.textContent = fmtPrice(target);
       return;
     }
-
     const duration = 1200;
     const start = performance.now();
-
     function tick(now) {
       const p = Math.min(1, (now - start) / duration);
       const eased = 1 - Math.pow(1 - p, 3);
       el.textContent = fmtPrice(target * eased);
       if (p < 1) requestAnimationFrame(tick);
     }
-
     requestAnimationFrame(tick);
   }
-
   function runCounts() {
     section.querySelectorAll("[data-count]").forEach(animateCount);
   }
 
-  if (!("IntersectionObserver" in window)) {
+  function onEntrance() {
     runBars();
     runCounts();
-    return;
+    setTimeout(startLive, reduced ? 0 : 1400);
   }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          runBars();
-          runCounts();
-          observer.unobserve(entry.target);
+  if (!("IntersectionObserver" in window)) {
+    onEntrance();
+  } else {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            onEntrance();
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(section);
+  }
+
+  // ---- live data via the public CoinGecko API (plain fetch, works for any visitor) ----
+
+  const statusDot = document.getElementById("supplyStatusDot");
+  const statusText = document.getElementById("supplyStatusText");
+  const stamp = document.getElementById("supplyStamp");
+
+  function setStatus(mode, text) {
+    if (!statusDot || !statusText) return;
+    statusDot.className = "supply-status-dot supply-status-dot--" + mode;
+    statusText.textContent = text;
+  }
+
+  function markLiveUpdated(ts) {
+    if (!stamp) return;
+    stamp.textContent =
+      "SOURCE: COINGECKO API (LIVE) · #SECT SCENARIOS COMPUTED CLIENT-SIDE · LAST TICK " + fmtClock(ts);
+  }
+
+  const assets = [];
+  section.querySelectorAll("[data-asset]").forEach((row) => {
+    const id = row.dataset.asset;
+    const meta = ASSET_META[id];
+    if (!meta) return;
+    let asset = assets.filter((a) => a.id === id)[0];
+    if (!asset) {
+      asset = { id: id, supply: meta.supply, price: meta.price, liveMode: false, targets: [] };
+      assets.push(asset);
+    }
+    asset.targets.push({
+      rowEl: row,
+      isMobile: row.classList.contains("supply-mobile-row"),
+      dot: row.querySelector('[data-el="dot"]'),
+      price: row.querySelector('[data-el="price"]'),
+      mcap: row.querySelector('[data-el="mcap"]'),
+      bar: row.querySelector('[data-el="bar"]'),
+      implied5: row.querySelector('[data-el="implied5"]'),
+    });
+  });
+
+  function flash(el, dir) {
+    if (!el) return;
+    el.classList.remove("flash-up", "flash-down");
+    void el.offsetWidth;
+    el.classList.add(dir > 0 ? "flash-up" : "flash-down");
+    setTimeout(() => el.classList.remove("flash-up", "flash-down"), 1400);
+  }
+
+  function recomputeBars() {
+    const mcaps = assets.map((a) => a.price * a.supply);
+    const maxLog = Math.log10(Math.max.apply(null, mcaps));
+    const minLog = Math.log10(Math.min.apply(null, mcaps));
+    const span = maxLog - minLog || 1;
+    assets.forEach((a, i) => {
+      const pct = 8 + ((Math.log10(mcaps[i]) - minLog) / span) * 92;
+      a.targets.forEach((t) => {
+        if (t.bar) t.bar.style.width = pct + "%";
+      });
+    });
+  }
+
+  function renderAsset(asset, price, live) {
+    const fmt = live ? fmtLivePrice : fmtPrice;
+    const mcap = price * asset.supply;
+    const implied5 = (mcap * 0.05) / SEC_SUPPLY;
+    asset.targets.forEach((t) => {
+      if (t.price) t.price.textContent = fmt(price);
+      if (t.mcap) t.mcap.textContent = fmtUSD(mcap);
+      if (t.implied5) t.implied5.textContent = fmtPrice(implied5);
+    });
+    asset.price = price;
+  }
+
+  function tweenAsset(asset, target, duration, live) {
+    if (asset.tweenRaf) cancelAnimationFrame(asset.tweenRaf);
+    const from = asset.price;
+    const delta = target - from;
+    if (delta === 0) return;
+    const dir = delta > 0 ? 1 : -1;
+    const start = performance.now();
+    if (live) {
+      asset.targets.forEach((t) => {
+        flash(t.isMobile ? t.rowEl : t.price, dir);
+      });
+    }
+    function frame(now) {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 2);
+      renderAsset(asset, from + delta * eased, live);
+      if (t < 1) {
+        asset.tweenRaf = requestAnimationFrame(frame);
+      } else {
+        asset.tweenRaf = null;
+        recomputeBars();
+      }
+    }
+    asset.tweenRaf = requestAnimationFrame(frame);
+  }
+
+  let anyTickEver = false;
+  let stallTimer = null;
+  let pollTimer = null;
+  let consecutiveFailures = 0;
+
+  function goStatic(reason) {
+    setStatus("static", "STATIC SNAPSHOT" + (reason ? " — " + reason : ""));
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+  }
+
+  function pollPrices() {
+    fetch(COINGECKO_URL, { cache: "no-store" })
+      .then((res) => {
+        if (!res.ok) throw new Error("http_" + res.status);
+        return res.json();
+      })
+      .then((data) => {
+        let anySuccess = false;
+        assets.forEach((asset) => {
+          const entry = data[asset.id];
+          const price = entry && typeof entry.usd === "number" ? entry.usd : null;
+          if (price) {
+            anySuccess = true;
+            asset.liveMode = true;
+            tweenAsset(asset, price, 700, true);
+            asset.targets.forEach((t) => {
+              if (t.dot) t.dot.classList.add("live");
+            });
+          }
+        });
+        if (!anySuccess) throw new Error("no_prices_in_response");
+        consecutiveFailures = 0;
+        if (!anyTickEver) {
+          anyTickEver = true;
+          if (stallTimer) {
+            clearTimeout(stallTimer);
+            stallTimer = null;
+          }
+        }
+        setStatus("live", "LIVE · CoinGecko · updates ~10s");
+        recomputeBars();
+        markLiveUpdated(Date.now());
+      })
+      .catch((err) => {
+        consecutiveFailures += 1;
+        console.warn("[supply-scenarios] live price fetch failed:", err);
+        if (consecutiveFailures >= 4) {
+          goStatic("live prices unavailable right now");
         }
       });
-    },
-    { threshold: 0.3 }
-  );
+  }
 
-  observer.observe(section);
+  function startLive() {
+    if (!("fetch" in window)) {
+      setStatus("static", "STATIC SNAPSHOT");
+      return;
+    }
+    setStatus("connecting", "Connecting to live prices…");
+    stallTimer = setTimeout(() => {
+      if (!anyTickEver) goStatic("taking too long to load");
+    }, 12000);
+    pollPrices();
+    pollTimer = setInterval(pollPrices, POLL_MS);
+  }
 })();
