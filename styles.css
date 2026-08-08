@@ -2213,7 +2213,7 @@ img {
 .supply-scenarios-block {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 32px;
   padding-top: 56px;
   padding-bottom: 64px;
 }
@@ -2225,7 +2225,7 @@ img {
   line-height: 1.5;
   letter-spacing: 0.3px;
   color: var(--zinc-600);
-  margin-top: 60px;
+  margin-top: 28px;
 }
 
 .supply-lede strong {
@@ -2236,7 +2236,7 @@ img {
 }
 
 .supply-table-wrap {
-  margin-top: 40px;
+  margin-top: 8px;
   border: 1px solid var(--zinc-200);
   overflow-x: auto;
 }
@@ -2378,7 +2378,7 @@ img {
 
 @media (max-width: 640px) {
   .supply-lede {
-    margin-top: 40px;
+    margin-top: 8px;
   }
 
   .supply-table-wrap {
