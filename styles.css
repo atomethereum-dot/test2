@@ -2097,6 +2097,11 @@ img {
   padding-bottom: 96px;
 }
 
+#developments .blog-block {
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+
 .blog-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -2340,6 +2345,10 @@ img {
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
+  color: var(--zinc-600);
+}
+
+.eyebrow.dark-text {
   color: var(--zinc-600);
 }
 
