@@ -159,7 +159,7 @@
 @media (max-width: 640px) {
   .dash-heroband { padding-bottom: 8px; }
   .dash-heroband-inner { padding: 32px 18px 28px; justify-content: flex-start; }
-  .dash-title { font-size: clamp(32px, 9.5vw, 44px); line-height: 1.22; }
+  .dash-heroband .dash-title { font-size: clamp(37px, 10.8vw, 47px); line-height: 1.22; }
   .dash-title-sub { font-size: 15px; line-height: 1.55; margin-top: 20px; }
   .dash-eyebrow { margin-bottom: 18px; }
   .dash-heroband .dash-sim-note { margin-top: 30px; }
@@ -438,15 +438,20 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 12.5px;
-  color: var(--db-text-faint);
-  padding: 11px 16px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--black);
+  background: var(--white);
+  height: 48px;
+  padding: 0 22px;
   border-radius: 999px;
-  border: 1px solid var(--db-border);
+  border: none;
   white-space: nowrap;
+  transition: background 0.15s ease;
 }
-.dash-sim-note svg { width: 13px; height: 13px; flex: none; color: var(--db-text-dim); }
+.dash-sim-note:hover { background: rgba(255, 255, 255, 0.9); }
+.dash-sim-note svg { width: 13px; height: 13px; flex: none; color: var(--black); }
 
 /* ---- generic card ---- */
 .dcard {
@@ -1136,7 +1141,6 @@
   .dash-shell { padding: 28px 18px 80px; }
   .dash-metrics-grid { grid-template-columns: 1fr; }
   .dash-validator-grid { grid-template-columns: 1fr 1fr; }
-  .dash-title { font-size: 26px; }
   .dash-map-card, .dash-map-frame { min-height: 260px; }
 }
 
