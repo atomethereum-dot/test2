@@ -1179,6 +1179,7 @@ img {
 
 .roadmap--light .roadmap-content h3 {
   color: var(--zinc-950);
+  font-weight: 400;
 }
 
 .roadmap--light .roadmap-content p {
@@ -2379,7 +2380,7 @@ img {
 .dev-card h3 {
   color: var(--zinc-950);
   font-size: clamp(17px, 1.6vw, 20px);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.3;
 }
 
