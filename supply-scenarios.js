@@ -7,6 +7,17 @@
   const POLL_MS = 10000;
   const COINGECKO_URL =
     "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,bitcoin-cash,solana,litecoin,ripple,sui,hyperliquid&vs_currencies=usd";
+  const BINANCE_URL = "https://api.binance.com/api/v3/ticker/price";
+  const BINANCE_SYMBOLS = {
+    bitcoin: "BTCUSDT",
+    ethereum: "ETHUSDT",
+    "bitcoin-cash": "BCHUSDT",
+    solana: "SOLUSDT",
+    litecoin: "LTCUSDT",
+    ripple: "XRPUSDT",
+    sui: "SUIUSDT",
+    hyperliquid: "HYPEUSDT",
+  };
 
   const ASSET_META = {
     bitcoin: { supply: 20070000, price: 64940 },
@@ -115,7 +126,7 @@
     if (mode === "connecting") {
       statusText.innerHTML = t("supplyScenarios.statusConnecting", "Connecting to live prices&hellip;");
     } else if (mode === "live") {
-      statusText.innerHTML = t("supplyScenarios.statusLive", "LIVE · CoinGecko · updates ~10s");
+      statusText.innerHTML = t("supplyScenarios.statusLive", "LIVE · updates ~10s");
     } else {
       const base = t("supplyScenarios.statusStatic", "STATIC SNAPSHOT");
       const reason = currentStatus.reasonKey ? t(currentStatus.reasonKey, "") : "";
@@ -134,7 +145,7 @@
     if (lastTickTs) {
       stamp.innerHTML = t(
         "supplyScenarios.stampLive",
-        "SOURCE: COINGECKO API (LIVE) · #SECT SCENARIOS COMPUTED CLIENT-SIDE · LAST TICK {time}"
+        "SOURCE: LIVE MARKET DATA · #SECT SCENARIOS COMPUTED CLIENT-SIDE · LAST TICK {time}"
       ).replace("{time}", fmtClock(lastTickTs));
     }
     // While no live tick has landed yet, the stamp keeps whatever the page's
@@ -245,46 +256,87 @@
     }
   }
 
-  function pollPrices() {
-    fetch(COINGECKO_URL, { cache: "no-store" })
-      .then((res) => {
-        if (!res.ok) throw new Error("http_" + res.status);
-        return res.json();
-      })
-      .then((data) => {
-        let anySuccess = false;
-        assets.forEach((asset) => {
-          const entry = data[asset.id];
-          const price = entry && typeof entry.usd === "number" ? entry.usd : null;
-          if (price) {
-            anySuccess = true;
-            asset.liveMode = true;
-            tweenAsset(asset, price, 700, true);
-            asset.targets.forEach((t) => {
-              if (t.dot) t.dot.classList.add("live");
-            });
-          }
+  function fetchCoinGeckoPrices() {
+    return fetch(COINGECKO_URL, { cache: "no-store" }).then((res) => {
+      if (!res.ok) throw new Error("coingecko_http_" + res.status);
+      return res.json();
+    }).then((data) => {
+      const prices = {};
+      assets.forEach((asset) => {
+        const entry = data[asset.id];
+        const price = entry && typeof entry.usd === "number" ? entry.usd : null;
+        if (price) prices[asset.id] = price;
+      });
+      return prices;
+    });
+  }
+
+  function fetchBinancePrices() {
+    return fetch(BINANCE_URL, { cache: "no-store" }).then((res) => {
+      if (!res.ok) throw new Error("binance_http_" + res.status);
+      return res.json();
+    }).then((list) => {
+      const bySymbol = {};
+      (Array.isArray(list) ? list : []).forEach((row) => {
+        bySymbol[row.symbol] = parseFloat(row.price);
+      });
+      const prices = {};
+      assets.forEach((asset) => {
+        const symbol = BINANCE_SYMBOLS[asset.id];
+        const price = symbol && bySymbol[symbol];
+        if (price && !isNaN(price)) prices[asset.id] = price;
+      });
+      return prices;
+    });
+  }
+
+  function applyPrices(prices) {
+    let anySuccess = false;
+    assets.forEach((asset) => {
+      const price = prices[asset.id];
+      if (price) {
+        anySuccess = true;
+        asset.liveMode = true;
+        tweenAsset(asset, price, 700, true);
+        asset.targets.forEach((t) => {
+          if (t.dot) t.dot.classList.add("live");
         });
-        if (!anySuccess) throw new Error("no_prices_in_response");
-        consecutiveFailures = 0;
-        if (!anyTickEver) {
-          anyTickEver = true;
-          if (stallTimer) {
-            clearTimeout(stallTimer);
-            stallTimer = null;
-          }
-        }
-        setStatus("live", null);
-        recomputeBars();
-        markLiveUpdated(Date.now());
-        document.dispatchEvent(new CustomEvent("sectora:pricetick"));
+      }
+    });
+    if (!anySuccess) return false;
+    consecutiveFailures = 0;
+    if (!anyTickEver) {
+      anyTickEver = true;
+      if (stallTimer) {
+        clearTimeout(stallTimer);
+        stallTimer = null;
+      }
+    }
+    setStatus("live", null);
+    recomputeBars();
+    markLiveUpdated(Date.now());
+    document.dispatchEvent(new CustomEvent("sectora:pricetick"));
+    return true;
+  }
+
+  function pollPrices() {
+    fetchCoinGeckoPrices()
+      .then((prices) => {
+        if (!applyPrices(prices)) throw new Error("coingecko_no_prices");
       })
-      .catch((err) => {
-        consecutiveFailures += 1;
-        console.warn("[supply-scenarios] live price fetch failed:", err);
-        if (consecutiveFailures >= 4) {
-          goStatic("supplyScenarios.statusStaticFail");
-        }
+      .catch((primaryErr) => {
+        console.warn("[supply-scenarios] CoinGecko poll failed, trying Binance:", primaryErr);
+        fetchBinancePrices()
+          .then((prices) => {
+            if (!applyPrices(prices)) throw new Error("binance_no_prices");
+          })
+          .catch((fallbackErr) => {
+            consecutiveFailures += 1;
+            console.warn("[supply-scenarios] Binance fallback also failed:", fallbackErr);
+            if (consecutiveFailures >= 4) {
+              goStatic("supplyScenarios.statusStaticFail");
+            }
+          });
       });
   }
 
