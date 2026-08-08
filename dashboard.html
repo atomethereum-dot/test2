@@ -9,7 +9,7 @@
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260808g" />
-<link rel="stylesheet" href="dashboard.css?v=20260808l" />
+<link rel="stylesheet" href="dashboard.css?v=20260808m" />
 </head>
 <body>
 
@@ -98,162 +98,6 @@
   </section>
 
   <main class="dash-shell">
-
-    <!-- ---- KPI row: network stat cards + promo ---- -->
-    <div class="dash-kpi-row reveal-stagger">
-      <div class="dcard dstat-card">
-        <div class="dstat-head">
-          <span class="dstat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-          <a class="dstat-link" href="#validator-panel" aria-label="View validators"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
-        </div>
-        <div class="dstat-body">
-          <span class="dstat-label" data-i18n="dashboard.kpi.validators">Active Validators</span>
-          <span class="dstat-value" id="dashKpiValidators">&mdash;</span>
-        </div>
-        <div class="dstat-chart-row">
-          <svg class="dstat-spark" id="spark-kpiValidators-svg" viewBox="0 0 120 34" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="gradKpiValidators" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#14e0a0" stop-opacity="0.38"/><stop offset="55%" stop-color="#14e0a0" stop-opacity="0.09"/><stop offset="100%" stop-color="#14e0a0" stop-opacity="0"/></linearGradient>
-              <linearGradient id="lineKpiValidators" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#14e0a0" stop-opacity="0.5"/><stop offset="100%" stop-color="#14e0a0" stop-opacity="1"/></linearGradient>
-            </defs>
-            <path class="dstat-spark-fill" id="fill-kpiValidators" fill="url(#gradKpiValidators)"/>
-            <path class="dstat-spark-line" id="line-kpiValidators" stroke="url(#lineKpiValidators)"/>
-            <circle class="dstat-spark-dot" id="dot-kpiValidators" r="2.6" fill="#14e0a0"/>
-          </svg>
-          <span class="metric-delta" id="delta-kpiValidators"></span>
-        </div>
-      </div>
-
-      <div class="dcard dstat-card">
-        <div class="dstat-head">
-          <span class="dstat-icon dstat-icon--blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span>
-          <a class="dstat-link" href="#network-metrics" aria-label="View metrics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
-        </div>
-        <div class="dstat-body">
-          <span class="dstat-label" data-i18n="dashboard.kpi.contracts">Contracts Deployed</span>
-          <span class="dstat-value" id="dashKpiContracts">&mdash;</span>
-        </div>
-        <div class="dstat-chart-row">
-          <svg class="dstat-spark" id="spark-kpiContracts-svg" viewBox="0 0 120 34" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="gradKpiContracts" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.3"/><stop offset="55%" stop-color="#ffffff" stop-opacity="0.07"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
-              <linearGradient id="lineKpiContracts" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0.9"/></linearGradient>
-            </defs>
-            <path class="dstat-spark-fill" id="fill-kpiContracts" fill="url(#gradKpiContracts)"/>
-            <path class="dstat-spark-line" id="line-kpiContracts" stroke="url(#lineKpiContracts)"/>
-            <circle class="dstat-spark-dot" id="dot-kpiContracts" r="2.6" fill="#ffffff"/>
-          </svg>
-          <span class="metric-delta" id="delta-kpiContracts"></span>
-        </div>
-      </div>
-
-      <div class="dcard dstat-card">
-        <div class="dstat-head">
-          <span class="dstat-icon dstat-icon--violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg></span>
-          <a class="dstat-link" href="#network-metrics" aria-label="View throughput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
-        </div>
-        <div class="dstat-body">
-          <span class="dstat-label" data-i18n="dashboard.kpi.tps">Live TPS</span>
-          <span class="dstat-value" id="dashKpiTps">&mdash;</span>
-        </div>
-        <div class="dstat-chart-row">
-          <svg class="dstat-spark" id="spark-kpiTps-svg" viewBox="0 0 120 34" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="gradKpiTps" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#14e0a0" stop-opacity="0.38"/><stop offset="55%" stop-color="#14e0a0" stop-opacity="0.09"/><stop offset="100%" stop-color="#14e0a0" stop-opacity="0"/></linearGradient>
-              <linearGradient id="lineKpiTps" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#14e0a0" stop-opacity="0.5"/><stop offset="100%" stop-color="#14e0a0" stop-opacity="1"/></linearGradient>
-            </defs>
-            <path class="dstat-spark-fill" id="fill-kpiTps" fill="url(#gradKpiTps)"/>
-            <path class="dstat-spark-line" id="line-kpiTps" stroke="url(#lineKpiTps)"/>
-            <circle class="dstat-spark-dot" id="dot-kpiTps" r="2.6" fill="#14e0a0"/>
-          </svg>
-          <span class="metric-delta" id="delta-kpiTps"></span>
-        </div>
-      </div>
-
-      <div class="dash-promo-card">
-        <span class="dash-promo-badge" data-i18n="dashboard.promo.badge">Testnet</span>
-        <h3 class="dash-promo-title" data-i18n="dashboard.promo.title">Run a Sectora Validator</h3>
-        <p class="dash-promo-sub" data-i18n="dashboard.promo.sub">Spin up a node, help secure the test network, and get on the leaderboard before mainnet.</p>
-        <div class="dash-promo-actions">
-          <a class="dash-promo-btn dash-promo-btn--solid" href="mailto:support@sectoraorg.com">
-            <span data-i18n="dashboard.promo.join">Join the Testnet</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
-          </a>
-          <a class="dash-promo-btn dash-promo-btn--outline" href="index.html#protocol">
-            <span data-i18n="dashboard.promo.docs">Read the Docs</span>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- ---- validator detail panel ---- -->
-    <section class="dash-validator-panel reveal-stagger" id="validator-panel">
-      <div class="dcard dvp-main">
-        <div class="dvp-head">
-          <div class="dvp-avatar" id="dashValAvatar">S</div>
-          <div class="dvp-name-wrap">
-            <span class="dvp-name" id="dashValName">&mdash;</span>
-            <span class="dvp-addr" id="dashValAddr">&mdash;</span>
-          </div>
-          <span class="dvp-status"><span class="dvp-status-dot"></span><span data-i18n="dashboard.validator.active">Active</span></span>
-        </div>
-
-        <div class="dvp-stake-row">
-          <span class="dvp-stake-label" data-i18n="dashboard.validator.stakedBalance">Staked Balance</span>
-          <div class="dvp-stake-line">
-            <span class="dvp-stake-value" id="dashValStake">&mdash;</span>
-            <span class="dvp-stake-unit">#SECT</span>
-          </div>
-        </div>
-
-        <div class="dvp-actions">
-          <a class="dvp-btn dvp-btn--solid" href="#validator-panel">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <span data-i18n="dashboard.validator.explorer">View on Explorer</span>
-          </a>
-          <button class="dvp-btn dvp-btn--outline" type="button" id="dashCopyAddr">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            <span data-i18n="dashboard.validator.copy">Copy Address</span>
-          </button>
-        </div>
-
-        <div class="dvp-chips">
-          <div class="dvp-chip">
-            <div class="dvp-chip-top"><span class="dvp-chip-label" data-i18n="dashboard.validator.uptime">Uptime</span></div>
-            <span class="dvp-chip-value" id="dashValUptime">&mdash;</span>
-          </div>
-          <div class="dvp-chip">
-            <div class="dvp-chip-top"><span class="dvp-chip-label" data-i18n="dashboard.validator.commission">Commission</span></div>
-            <span class="dvp-chip-value" id="dashValCommission">&mdash;</span>
-          </div>
-          <div class="dvp-chip">
-            <div class="dvp-chip-top"><span class="dvp-chip-label" data-i18n="dashboard.validator.blocksProposed">Blocks Proposed</span></div>
-            <span class="dvp-chip-value" id="dashValBlocks">&mdash;</span>
-          </div>
-          <div class="dvp-chip">
-            <div class="dvp-chip-top"><span class="dvp-chip-label" data-i18n="dashboard.validator.networkRank">Network Rank</span></div>
-            <span class="dvp-chip-value" id="dashValRank">&mdash;</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="dvp-side">
-        <div class="dcard dvp-epoch-card">
-          <div class="dvp-epoch-ring-wrap">
-            <svg viewBox="0 0 52 52">
-              <circle class="dvp-epoch-ring-bg" cx="26" cy="26" r="22"/>
-              <circle class="dvp-epoch-ring-fg" id="dashEpochRing" cx="26" cy="26" r="22" stroke-dasharray="138.2" stroke-dashoffset="138.2"/>
-            </svg>
-            <div class="dvp-epoch-center">
-              <span class="dvp-epoch-num" id="dashEpochNum">&mdash;</span>
-              <span class="dvp-epoch-label2" data-i18n="dashboard.validator.epoch">Epoch</span>
-            </div>
-          </div>
-          <span class="dvp-epoch-eta" id="dashEpochEta">&mdash;</span>
-          <div class="dvp-bar-track"><div class="dvp-bar-fill" id="dashEpochBar" style="width: 0%"></div></div>
-        </div>
-      </div>
-    </section>
 
     <!-- ---- node map ---- -->
     <section class="dash-hero reveal" id="node-map">
@@ -457,6 +301,162 @@
       <div class="dash-history-bars" id="dashHistoryBars"></div>
       <div class="dash-history-labels"><span data-i18n="dashboard.history.rangeStart">-30 epochs</span><span data-i18n="dashboard.history.rangeNow">now</span></div>
     </div>
+
+    <!-- ---- KPI row: network stat cards + promo ---- -->
+    <div class="dash-kpi-row reveal-stagger">
+      <div class="dcard dstat-card">
+        <div class="dstat-head">
+          <span class="dstat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <a class="dstat-link" href="#validator-panel" aria-label="View validators"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+        </div>
+        <div class="dstat-body">
+          <span class="dstat-label" data-i18n="dashboard.kpi.validators">Active Validators</span>
+          <span class="dstat-value" id="dashKpiValidators">&mdash;</span>
+        </div>
+        <div class="dstat-chart-row">
+          <svg class="dstat-spark" id="spark-kpiValidators-svg" viewBox="0 0 120 34" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="gradKpiValidators" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#14e0a0" stop-opacity="0.38"/><stop offset="55%" stop-color="#14e0a0" stop-opacity="0.09"/><stop offset="100%" stop-color="#14e0a0" stop-opacity="0"/></linearGradient>
+              <linearGradient id="lineKpiValidators" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#14e0a0" stop-opacity="0.5"/><stop offset="100%" stop-color="#14e0a0" stop-opacity="1"/></linearGradient>
+            </defs>
+            <path class="dstat-spark-fill" id="fill-kpiValidators" fill="url(#gradKpiValidators)"/>
+            <path class="dstat-spark-line" id="line-kpiValidators" stroke="url(#lineKpiValidators)"/>
+            <circle class="dstat-spark-dot" id="dot-kpiValidators" r="2.6" fill="#14e0a0"/>
+          </svg>
+          <span class="metric-delta" id="delta-kpiValidators"></span>
+        </div>
+      </div>
+
+      <div class="dcard dstat-card">
+        <div class="dstat-head">
+          <span class="dstat-icon dstat-icon--blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span>
+          <a class="dstat-link" href="#network-metrics" aria-label="View metrics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+        </div>
+        <div class="dstat-body">
+          <span class="dstat-label" data-i18n="dashboard.kpi.contracts">Contracts Deployed</span>
+          <span class="dstat-value" id="dashKpiContracts">&mdash;</span>
+        </div>
+        <div class="dstat-chart-row">
+          <svg class="dstat-spark" id="spark-kpiContracts-svg" viewBox="0 0 120 34" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="gradKpiContracts" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.3"/><stop offset="55%" stop-color="#ffffff" stop-opacity="0.07"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+              <linearGradient id="lineKpiContracts" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0.9"/></linearGradient>
+            </defs>
+            <path class="dstat-spark-fill" id="fill-kpiContracts" fill="url(#gradKpiContracts)"/>
+            <path class="dstat-spark-line" id="line-kpiContracts" stroke="url(#lineKpiContracts)"/>
+            <circle class="dstat-spark-dot" id="dot-kpiContracts" r="2.6" fill="#ffffff"/>
+          </svg>
+          <span class="metric-delta" id="delta-kpiContracts"></span>
+        </div>
+      </div>
+
+      <div class="dcard dstat-card">
+        <div class="dstat-head">
+          <span class="dstat-icon dstat-icon--violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg></span>
+          <a class="dstat-link" href="#network-metrics" aria-label="View throughput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
+        </div>
+        <div class="dstat-body">
+          <span class="dstat-label" data-i18n="dashboard.kpi.tps">Live TPS</span>
+          <span class="dstat-value" id="dashKpiTps">&mdash;</span>
+        </div>
+        <div class="dstat-chart-row">
+          <svg class="dstat-spark" id="spark-kpiTps-svg" viewBox="0 0 120 34" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="gradKpiTps" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#14e0a0" stop-opacity="0.38"/><stop offset="55%" stop-color="#14e0a0" stop-opacity="0.09"/><stop offset="100%" stop-color="#14e0a0" stop-opacity="0"/></linearGradient>
+              <linearGradient id="lineKpiTps" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#14e0a0" stop-opacity="0.5"/><stop offset="100%" stop-color="#14e0a0" stop-opacity="1"/></linearGradient>
+            </defs>
+            <path class="dstat-spark-fill" id="fill-kpiTps" fill="url(#gradKpiTps)"/>
+            <path class="dstat-spark-line" id="line-kpiTps" stroke="url(#lineKpiTps)"/>
+            <circle class="dstat-spark-dot" id="dot-kpiTps" r="2.6" fill="#14e0a0"/>
+          </svg>
+          <span class="metric-delta" id="delta-kpiTps"></span>
+        </div>
+      </div>
+
+      <div class="dash-promo-card">
+        <span class="dash-promo-badge" data-i18n="dashboard.promo.badge">Testnet</span>
+        <h3 class="dash-promo-title" data-i18n="dashboard.promo.title">Run a Sectora Validator</h3>
+        <p class="dash-promo-sub" data-i18n="dashboard.promo.sub">Spin up a node, help secure the test network, and get on the leaderboard before mainnet.</p>
+        <div class="dash-promo-actions">
+          <a class="dash-promo-btn dash-promo-btn--solid" href="mailto:support@sectoraorg.com">
+            <span data-i18n="dashboard.promo.join">Join the Testnet</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+          </a>
+          <a class="dash-promo-btn dash-promo-btn--outline" href="index.html#protocol">
+            <span data-i18n="dashboard.promo.docs">Read the Docs</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- validator detail panel ---- -->
+    <section class="dash-validator-panel reveal-stagger" id="validator-panel">
+      <div class="dcard dvp-main">
+        <div class="dvp-head">
+          <div class="dvp-avatar" id="dashValAvatar">S</div>
+          <div class="dvp-name-wrap">
+            <span class="dvp-name" id="dashValName">&mdash;</span>
+            <span class="dvp-addr" id="dashValAddr">&mdash;</span>
+          </div>
+          <span class="dvp-status"><span class="dvp-status-dot"></span><span data-i18n="dashboard.validator.active">Active</span></span>
+        </div>
+
+        <div class="dvp-stake-row">
+          <span class="dvp-stake-label" data-i18n="dashboard.validator.stakedBalance">Staked Balance</span>
+          <div class="dvp-stake-line">
+            <span class="dvp-stake-value" id="dashValStake">&mdash;</span>
+            <span class="dvp-stake-unit">#SECT</span>
+          </div>
+        </div>
+
+        <div class="dvp-actions">
+          <a class="dvp-btn dvp-btn--solid" href="#validator-panel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span data-i18n="dashboard.validator.explorer">View on Explorer</span>
+          </a>
+          <button class="dvp-btn dvp-btn--outline" type="button" id="dashCopyAddr">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span data-i18n="dashboard.validator.copy">Copy Address</span>
+          </button>
+        </div>
+
+        <div class="dvp-chips">
+          <div class="dvp-chip">
+            <div class="dvp-chip-top"><span class="dvp-chip-label" data-i18n="dashboard.validator.uptime">Uptime</span></div>
+            <span class="dvp-chip-value" id="dashValUptime">&mdash;</span>
+          </div>
+          <div class="dvp-chip">
+            <div class="dvp-chip-top"><span class="dvp-chip-label" data-i18n="dashboard.validator.commission">Commission</span></div>
+            <span class="dvp-chip-value" id="dashValCommission">&mdash;</span>
+          </div>
+          <div class="dvp-chip">
+            <div class="dvp-chip-top"><span class="dvp-chip-label" data-i18n="dashboard.validator.blocksProposed">Blocks Proposed</span></div>
+            <span class="dvp-chip-value" id="dashValBlocks">&mdash;</span>
+          </div>
+          <div class="dvp-chip">
+            <div class="dvp-chip-top"><span class="dvp-chip-label" data-i18n="dashboard.validator.networkRank">Network Rank</span></div>
+            <span class="dvp-chip-value" id="dashValRank">&mdash;</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dvp-side">
+        <div class="dcard dvp-epoch-card">
+          <div class="dvp-epoch-ring-wrap">
+            <svg viewBox="0 0 52 52">
+              <circle class="dvp-epoch-ring-bg" cx="26" cy="26" r="22"/>
+              <circle class="dvp-epoch-ring-fg" id="dashEpochRing" cx="26" cy="26" r="22" stroke-dasharray="138.2" stroke-dashoffset="138.2"/>
+            </svg>
+            <div class="dvp-epoch-center">
+              <span class="dvp-epoch-num" id="dashEpochNum">&mdash;</span>
+              <span class="dvp-epoch-label2" data-i18n="dashboard.validator.epoch">Epoch</span>
+            </div>
+          </div>
+          <span class="dvp-epoch-eta" id="dashEpochEta">&mdash;</span>
+          <div class="dvp-bar-track"><div class="dvp-bar-fill" id="dashEpochBar" style="width: 0%"></div></div>
+        </div>
+      </div>
+    </section>
 
     <!-- ---- TPS + recent blocks ---- -->
     <div class="dash-section-head">
