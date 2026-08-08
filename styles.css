@@ -2285,7 +2285,6 @@ img {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  background-image: url("images/dev-banner.png");
   background-size: cover;
   background-position: center;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -2296,6 +2295,30 @@ img {
 .dev-card:hover .dev-banner {
   transform: translateY(-4px);
   border-color: rgba(0, 0, 0, 0.22);
+}
+
+.dev-banner--protocol {
+  background-image: url("images/dev-protocol.png");
+}
+
+.dev-banner--network {
+  background-image: url("images/dev-network.png");
+}
+
+.dev-banner--security {
+  background-image: url("images/dev-security.png");
+}
+
+.dev-banner--nodes {
+  background-image: url("images/dev-nodes.png");
+}
+
+.dev-banner--yield {
+  background-image: url("images/dev-yield.png");
+}
+
+.dev-banner--stablecoin {
+  background-image: url("images/dev-stablecoin.png");
 }
 
 @media (prefers-reduced-motion: reduce) {
