@@ -9,7 +9,7 @@
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260808g" />
-<link rel="stylesheet" href="dashboard.css?v=20260808p" />
+<link rel="stylesheet" href="dashboard.css?v=20260808q" />
 </head>
 <body>
 
@@ -302,6 +302,33 @@
       <div class="dash-history-labels"><span data-i18n="dashboard.history.rangeStart">-30 epochs</span><span data-i18n="dashboard.history.rangeNow">now</span></div>
     </div>
 
+    <!-- ---- network globe (3D) ---- -->
+    <div class="dcard dash-globe-card reveal" id="network-globe">
+      <div class="dash-globe-stage" id="dashGlobeStage">
+        <canvas id="dashGlobeCanvas" aria-label="Rotatable globe showing live Sectora testnet validator nodes"></canvas>
+        <div class="dgl-title-row">
+          <span class="dash-map-title" data-i18n="dashboard.globe.title">Sectora Network Globe</span>
+        </div>
+        <p class="dgl-hint" id="dashGlobeHint" data-i18n="dashboard.globe.hint">Drag to rotate &middot; scroll to zoom</p>
+        <label class="dgl-saver">
+          <input type="checkbox" id="dashGlobeSaver">
+          <span class="dgl-saver-box">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path d="M2 6.3 4.6 9 10 3.2" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span data-i18n="dashboard.globe.saver">Battery saver</span>
+        </label>
+        <button class="dgl-recenter" id="dashGlobeRecenter" type="button" aria-label="Recenter globe">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="10" cy="10" r="3.1" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 1.2v3.2M10 15.6v3.2M1.2 10h3.2M15.6 10h3.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M3 3h2.6M3 3v2.6M17 3h-2.6M17 3v2.6M3 17h2.6M3 17v-2.6M17 17h-2.6M17 17v-2.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
     <!-- ---- KPI row: network stat cards + promo ---- -->
     <div class="dash-kpi-row reveal-stagger">
       <div class="dcard dstat-card">
@@ -546,10 +573,13 @@
 <div class="dcursor-ring" id="dCursorRing" aria-hidden="true"></div>
 <div class="dcursor-dot" id="dCursorDot" aria-hidden="true"></div>
 
-<script src="translations.js?v=20260808i"></script>
+<script src="translations.js?v=20260808j"></script>
 <script src="i18n.js?v=20260808h"></script>
 <script src="dashboard.js?v=20260808f"></script>
 <script src="dashboard-cursor.js?v=20260808a"></script>
 <script src="reveal.js?v=20260808h"></script>
+<script src="dashboard-globe-land.js?v=20260808a"></script>
+<script src="three.min.js?v=20260808a"></script>
+<script src="dashboard-globe.js?v=20260808a"></script>
 </body>
 </html>

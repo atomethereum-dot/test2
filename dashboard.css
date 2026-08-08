@@ -769,6 +769,125 @@
   z-index: 3;
 }
 
+/* ---- network globe (3D, WebGL) ---- */
+.dash-globe-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 460px;
+  padding: 0;
+  display: flex;
+}
+
+.dash-globe-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 460px;
+  cursor: grab;
+}
+
+.dash-globe-stage canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.dgl-title-row {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  right: 18px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.dgl-hint {
+  position: absolute;
+  left: 50%;
+  top: 18px;
+  transform: translateX(-50%);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--db-text-faint);
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--db-border);
+  border-radius: 999px;
+  padding: 7px 12px;
+  backdrop-filter: blur(6px);
+  z-index: 3;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.dgl-hint.is-gone { opacity: 0; }
+
+.dgl-saver {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--db-text-dim);
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--db-border);
+  border-radius: 999px;
+  padding: 7px 14px 7px 7px;
+  backdrop-filter: blur(6px);
+}
+.dgl-saver input { position: absolute; opacity: 0; width: 0; height: 0; }
+.dgl-saver-box {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  display: grid;
+  place-items: center;
+  transition: background 0.16s ease;
+  flex: none;
+}
+.dgl-saver-box svg { opacity: 0; transform: scale(0.7); transition: opacity 0.16s ease, transform 0.16s ease; }
+.dgl-saver input:checked + .dgl-saver-box { background: var(--db-green); }
+.dgl-saver input:checked + .dgl-saver-box svg { opacity: 1; transform: none; }
+.dgl-saver input:focus-visible + .dgl-saver-box { outline: 2px solid var(--db-green); outline-offset: 2px; }
+
+.dgl-recenter {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 3;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--db-border);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--db-text-dim);
+  transition: background 0.18s var(--db-ease), color 0.18s var(--db-ease), transform 0.3s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.dgl-recenter:hover { background: rgba(255, 255, 255, 0.08); color: var(--db-text); }
+.dgl-recenter.is-spin { transform: rotate(180deg); }
+.dgl-recenter svg { width: 16px; height: 16px; }
+
+@media (max-width: 640px) {
+  .dash-globe-card, .dash-globe-stage { min-height: 320px; }
+  .dgl-hint { display: none; }
+}
+
 /* ---- section title ---- */
 .dash-section-head {
   display: flex;
