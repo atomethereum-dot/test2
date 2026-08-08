@@ -6,7 +6,7 @@
   const SEC_SUPPLY = 25000000;
   const POLL_MS = 10000;
   const COINGECKO_URL =
-    "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,bitcoin-cash,solana,litecoin&vs_currencies=usd";
+    "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,bitcoin-cash,solana,litecoin,ripple,sui,hyperliquid&vs_currencies=usd";
 
   const ASSET_META = {
     bitcoin: { supply: 20070000, price: 64940 },
@@ -14,6 +14,9 @@
     "bitcoin-cash": { supply: 19870000, price: 216.69 },
     solana: { supply: 581000000, price: 73.8 },
     litecoin: { supply: 77470954, price: 45.69 },
+    ripple: { supply: 59000000000, price: 2.85 },
+    sui: { supply: 5700000000, price: 3.4 },
+    hyperliquid: { supply: 450000000, price: 28.5 },
   };
   window.SECTORA_ASSET_META = ASSET_META;
   window.SECTORA_SEC_SUPPLY = SEC_SUPPLY;
@@ -105,15 +108,18 @@
 
   function renderStatusText() {
     if (!statusText) return;
+    // innerHTML (not textContent) so HTML entities in the dictionary
+    // (&hellip;, etc.) render as glyphs — these are our own static
+    // translated strings, never user input.
     const mode = currentStatus.mode;
     if (mode === "connecting") {
-      statusText.textContent = t("supplyScenarios.statusConnecting", "Connecting to live prices…");
+      statusText.innerHTML = t("supplyScenarios.statusConnecting", "Connecting to live prices&hellip;");
     } else if (mode === "live") {
-      statusText.textContent = t("supplyScenarios.statusLive", "LIVE · CoinGecko · updates ~10s");
+      statusText.innerHTML = t("supplyScenarios.statusLive", "LIVE · CoinGecko · updates ~10s");
     } else {
       const base = t("supplyScenarios.statusStatic", "STATIC SNAPSHOT");
       const reason = currentStatus.reasonKey ? t(currentStatus.reasonKey, "") : "";
-      statusText.textContent = reason ? base + " — " + reason : base;
+      statusText.innerHTML = reason ? base + " — " + reason : base;
     }
   }
 
@@ -126,7 +132,7 @@
   function renderStamp() {
     if (!stamp) return;
     if (lastTickTs) {
-      stamp.textContent = t(
+      stamp.innerHTML = t(
         "supplyScenarios.stampLive",
         "SOURCE: COINGECKO API (LIVE) · #SECT SCENARIOS COMPUTED CLIENT-SIDE · LAST TICK {time}"
       ).replace("{time}", fmtClock(lastTickTs));

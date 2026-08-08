@@ -9,6 +9,9 @@
     "bitcoin-cash": { supply: 19870000, price: 216.69 },
     solana: { supply: 581000000, price: 73.8 },
     litecoin: { supply: 77470954, price: 45.69 },
+    ripple: { supply: 59000000000, price: 2.85 },
+    sui: { supply: 5700000000, price: 3.4 },
+    hyperliquid: { supply: 450000000, price: 28.5 },
   };
 
   function assetMeta() {
