@@ -397,7 +397,7 @@
     { key: "gasPrice", i18nKey: "dashboard.metrics.gasPrice", label: "Gas Price", unit: "gwei-eq", base: 1.8, vol: 0.3, decimals: 2, color: "#ffffff" },
     { key: "highestFee", i18nKey: "dashboard.metrics.highestFee", label: "Highest Fee (24h)", unit: "#SECT", base: 0.083, vol: 0.01, decimals: 3, color: "#ffffff" },
     { key: "blockTime", i18nKey: "dashboard.metrics.blockTime", label: "Avg Block Time", unit: "sec", base: 2.1, vol: 0.15, decimals: 2, color: "#ffffff" },
-    { key: "blockFullness", i18nKey: "dashboard.metrics.blockFullness", label: "Block Fullness", unit: "%", base: 46, vol: 6, decimals: 1, color: "#14e0a0", max: 100 },
+    { key: "blockFullness", i18nKey: "dashboard.metrics.blockFullness", label: "Block Fullness", unit: "%", base: 46, vol: 6, decimals: 1, color: "#468ce6", max: 100 },
     { key: "largestBlock", i18nKey: "dashboard.metrics.largestBlock", label: "Largest Block (24h)", unit: "KB", base: 210, vol: 25, decimals: 0, color: "#ffffff" },
   ];
   const metricsGrid = document.getElementById("dashMetricsGrid");

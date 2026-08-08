@@ -159,14 +159,14 @@
         varying vec2 vUv; varying vec3 vN; varying vec3 vNv;
         void main(){
           float land = texture2D(uMask, vUv).r;
-          vec3 base = mix(vec3(0.043,0.043,0.051), vec3(0.075,0.30,0.22), land);
+          vec3 base = mix(vec3(0.043,0.043,0.051), vec3(0.09,0.18,0.34), land);
 
           vec3  L   = normalize(vec3(-0.35, 0.75, 0.55));
           float lam = clamp(dot(vN, L) * 0.5 + 0.5, 0.0, 1.0);
           base *= 0.30 + 0.95 * pow(lam, 1.35);
 
           float edge = 1.0 - abs(vNv.z);
-          base += vec3(0.078,0.878,0.627) * pow(edge, 13.0) * 0.55 * uRim * (0.5 + 0.5 * lam);
+          base += vec3(0.275,0.549,0.902) * pow(edge, 13.0) * 0.55 * uRim * (0.5 + 0.5 * lam);
           base += vec3(1.0) * pow(edge,  4.0) * 0.03 * uRim * lam;
 
           gl_FragColor = vec4(base, 1.0);
@@ -193,7 +193,7 @@
         void main(){
           float f = pow(1.0 - abs(vNv.z), 6.5);
           float lam = clamp(dot(vN, normalize(vec3(-0.35,0.75,0.55))) * 0.5 + 0.5, 0.0, 1.0);
-          gl_FragColor = vec4(vec3(0.08,0.88,0.63), f * 0.16 * uRim * (0.35 + 0.65 * lam));
+          gl_FragColor = vec4(vec3(0.275,0.549,0.902), f * 0.16 * uRim * (0.35 + 0.65 * lam));
         }`
     })
   ));
@@ -253,7 +253,7 @@
         if (d > 0.5) discard;
         float core = smoothstep(0.40, 0.12, d);
         float halo = smoothstep(0.50, 0.10, d) * 0.18;
-        vec3 c = mix(vec3(0.08,0.62,0.44), vec3(0.35,0.94,0.75), core * 0.6);
+        vec3 c = mix(vec3(0.16,0.42,0.78), vec3(0.55,0.78,1.0), core * 0.6);
         gl_FragColor = vec4(c, min(1.0, core * 0.88 + halo));
       }`
   });
@@ -266,9 +266,9 @@
     const s = 128, c = document.createElement("canvas"); c.width = c.height = s;
     const g = c.getContext("2d");
     const grd = g.createRadialGradient(s / 2, s / 2, s * 0.32, s / 2, s / 2, s * 0.5);
-    grd.addColorStop(0, "rgba(20,224,160,0)");
-    grd.addColorStop(0.55, "rgba(90,240,200,0.55)");
-    grd.addColorStop(1, "rgba(20,224,160,0)");
+    grd.addColorStop(0, "rgba(70,140,230,0)");
+    grd.addColorStop(0.55, "rgba(120,180,245,0.55)");
+    grd.addColorStop(1, "rgba(70,140,230,0)");
     g.fillStyle = grd; g.beginPath(); g.arc(s / 2, s / 2, s / 2, 0, 6.284); g.fill();
     return new THREE.CanvasTexture(c);
   })();
@@ -286,7 +286,7 @@
     const pts = new THREE.QuadraticBezierCurve3(a.clone().multiplyScalar(1.004), mid, b.clone().multiplyScalar(1.004)).getPoints(96);
     const geo = new THREE.BufferGeometry().setFromPoints(pts);
     geo.setDrawRange(0, 2);
-    const line = new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0x9beac9, transparent: true, opacity: 0, depthWrite: false }));
+    const line = new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0x9bc2ea, transparent: true, opacity: 0, depthWrite: false }));
     globe.add(line); arcs.push({ line, t: 0, n: pts.length });
   }
 
