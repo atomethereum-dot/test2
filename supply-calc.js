@@ -160,7 +160,7 @@
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0 }
     );
     observer.observe(root);
   }

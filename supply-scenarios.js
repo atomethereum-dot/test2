@@ -103,7 +103,11 @@
           }
         });
       },
-      { threshold: 0.3 }
+      // threshold: 0 (not a fraction like 0.3) — this section is tall enough
+      // (table + calculator) that a large percentage of it is often never
+      // simultaneously visible on typical viewports, especially mobile,
+      // which meant entrance/live-start could silently never fire.
+      { threshold: 0 }
     );
     observer.observe(section);
   }
