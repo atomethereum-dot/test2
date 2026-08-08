@@ -68,7 +68,7 @@
   position: relative;
   overflow: hidden;
   background: var(--black);
-  height: clamp(280px, 30vw, 380px);
+  min-height: 100dvh;
   border-bottom: 1px solid var(--db-border);
 }
 
@@ -157,8 +157,8 @@
 }
 
 @media (max-width: 640px) {
-  .dash-heroband { height: auto; min-height: 300px; padding-bottom: 8px; }
-  .dash-heroband-inner { padding: 96px 18px 28px; justify-content: flex-start; }
+  .dash-heroband { padding-bottom: 8px; }
+  .dash-heroband-inner { padding: 32px 18px 28px; justify-content: flex-start; }
 }
 
 /* ---- app shell: sidebar + content ---- */
