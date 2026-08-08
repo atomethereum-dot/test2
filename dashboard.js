@@ -92,6 +92,7 @@
   const ringEl = document.getElementById("dashEpochRing");
   const epochNumEl = document.getElementById("dashEpochNum");
   const epochEtaEl = document.getElementById("dashEpochEta");
+  const epochBarEl = document.getElementById("dashEpochBar");
   const RING_CIRC = 138.2;
 
   function tickEpoch() {
@@ -103,6 +104,7 @@
       p = 0;
     }
     if (ringEl) ringEl.style.strokeDashoffset = String(RING_CIRC * (1 - p));
+    if (epochBarEl) epochBarEl.style.width = (p * 100).toFixed(1) + "%";
     if (epochNumEl) epochNumEl.textContent = "#" + fmtInt(epochNum);
     if (epochEtaEl) {
       const remaining = Math.max(0, Math.round(EPOCH_LEN_S - elapsed % EPOCH_LEN_S));
@@ -129,6 +131,7 @@
       commission: rand(3, 8),
       stake: rand(180000, 640000),
       blocks: Math.floor(rand(1200, 9800)),
+      rank: Math.floor(rand(1, 119)),
     };
   }
   function renderValidator(v) {
@@ -139,13 +142,15 @@
     const commission = document.getElementById("dashValCommission");
     const stake = document.getElementById("dashValStake");
     const blocks = document.getElementById("dashValBlocks");
+    const rank = document.getElementById("dashValRank");
     if (avatar) avatar.textContent = v.name.replace("sectora-node-", "")[0].toUpperCase();
     if (name) name.textContent = v.name;
     if (addr) addr.textContent = fmtAddr(v.addr);
     if (uptime) uptime.textContent = v.uptime.toFixed(2) + "%";
     if (commission) commission.textContent = v.commission.toFixed(1) + "%";
-    if (stake) stake.textContent = fmtUSD(v.stake) + " #SECT";
+    if (stake) stake.textContent = fmtInt(v.stake);
     if (blocks) blocks.textContent = fmtInt(v.blocks);
+    if (rank) rank.textContent = "#" + v.rank + " / 118";
   }
   let currentValidator = pickValidator();
   renderValidator(currentValidator);
@@ -154,21 +159,89 @@
     renderValidator(currentValidator);
   }, 14000);
 
-  // ---- network stats row ----
+  const copyBtn = document.getElementById("dashCopyAddr");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", () => {
+      const label = copyBtn.querySelector("span");
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(currentValidator.addr).catch(() => {});
+      }
+      if (label) {
+        const original = label.textContent;
+        label.textContent = "Copied!";
+        setTimeout(() => { label.textContent = original; }, 1600);
+      }
+    });
+  }
+
+  // ---- network stats (KPI cards) ----
+  function seedWalk(base, n, vol) {
+    const arr = [];
+    let v = base;
+    for (let i = 0; i < n; i++) {
+      v = Math.max(0, v + rand(-vol, vol));
+      arr.push(v);
+    }
+    return arr;
+  }
+  function buildSparkDot(series, w, h) {
+    const max = Math.max.apply(null, series) * 1.08;
+    const min = Math.min.apply(null, series) * 0.92;
+    const span = max - min || 1;
+    const stepX = w / (series.length - 1);
+    let line = "";
+    let dotX = 0, dotY = 0;
+    series.forEach((v, i) => {
+      const x = i * stepX;
+      const y = h - 2 - ((v - min) / span) * (h - 4);
+      line += (i === 0 ? "M" : "L") + x.toFixed(1) + " " + y.toFixed(1) + " ";
+      dotX = x;
+      dotY = y;
+    });
+    const fill = "M0 " + h + " " + line.replace("M", "L") + "L" + w + " " + h + " Z";
+    return { line: line.trim(), fill, dotX, dotY };
+  }
+  function renderKpiCard(key, valueElId, series, value, prevValue, fmt) {
+    const { line, fill, dotX, dotY } = buildSparkDot(series, 120, 34);
+    const lineEl = document.getElementById("line-" + key);
+    const fillEl = document.getElementById("fill-" + key);
+    const dotEl = document.getElementById("dot-" + key);
+    const deltaEl = document.getElementById("delta-" + key);
+    const valueEl = document.getElementById(valueElId);
+    if (lineEl) lineEl.setAttribute("d", line);
+    if (fillEl) fillEl.setAttribute("d", fill);
+    if (dotEl) { dotEl.setAttribute("cx", dotX.toFixed(1)); dotEl.setAttribute("cy", dotY.toFixed(1)); }
+    if (valueEl) valueEl.textContent = fmt(value);
+    if (deltaEl) {
+      const pct = ((value - prevValue) / (prevValue || 1)) * 100;
+      deltaEl.textContent = (pct >= 0 ? "+" : "") + pct.toFixed(1) + "%";
+      deltaEl.className = "metric-delta " + (pct >= 0 ? "is-up" : "is-down");
+    }
+  }
+
   let stats = { validators: 118, contracts: 3420, cities: 46 };
+  const kpiValidatorsSeries = seedWalk(stats.validators, 16, 3);
+  const kpiContractsSeries = seedWalk(stats.contracts, 16, 25);
+  let kpiValidatorsPrev = stats.validators;
+  let kpiContractsPrev = stats.contracts;
+
   function renderStats() {
-    const v = document.getElementById("dashStatValidators");
-    const c = document.getElementById("dashStatContracts");
     const ci = document.getElementById("dashStatCities");
-    if (v) v.textContent = fmtInt(stats.validators);
-    if (c) c.textContent = fmtInt(stats.contracts);
     if (ci) ci.textContent = fmtInt(stats.cities);
+    renderKpiCard("kpiValidators", "dashKpiValidators", kpiValidatorsSeries, stats.validators, kpiValidatorsPrev, fmtInt);
+    renderKpiCard("kpiContracts", "dashKpiContracts", kpiContractsSeries, stats.contracts, kpiContractsPrev, fmtInt);
   }
   renderStats();
   setInterval(() => {
+    kpiValidatorsPrev = stats.validators;
+    kpiContractsPrev = stats.contracts;
     stats.contracts += Math.floor(rand(1, 6));
     if (Math.random() < 0.15) stats.validators += Math.random() < 0.5 ? 1 : -1;
     stats.validators = clamp(stats.validators, 96, 140);
+    kpiValidatorsSeries.push(stats.validators);
+    kpiContractsSeries.push(stats.contracts);
+    if (kpiValidatorsSeries.length > 16) kpiValidatorsSeries.shift();
+    if (kpiContractsSeries.length > 16) kpiContractsSeries.shift();
     renderStats();
   }, 5000);
 
@@ -221,6 +294,8 @@
     tpsCurrent = tpsSeries[tpsSeries.length - 1];
     tpsPeak = Math.max.apply(null, tpsSeries);
   }
+  const kpiTpsSeries = tpsSeries.slice(-16);
+  let kpiTpsPrev = tpsCurrent;
 
   function buildPath(series) {
     const max = Math.max.apply(null, series) * 1.15;
@@ -244,13 +319,18 @@
     if (tpsPeakEl) tpsPeakEl.textContent = fmtInt(tpsPeak) + " TPS";
   }
   renderTps();
+  renderKpiCard("kpiTps", "dashKpiTps", kpiTpsSeries, tpsCurrent, kpiTpsPrev, fmtInt);
   setInterval(() => {
     const delta = rand(-90, 100);
+    kpiTpsPrev = tpsCurrent;
     tpsCurrent = clamp(tpsCurrent + delta, 180, 2400);
     tpsSeries.push(tpsCurrent);
     if (tpsSeries.length > TPS_POINTS) tpsSeries.shift();
+    kpiTpsSeries.push(tpsCurrent);
+    if (kpiTpsSeries.length > 16) kpiTpsSeries.shift();
     if (tpsCurrent > tpsPeak) tpsPeak = tpsCurrent;
     renderTps();
+    renderKpiCard("kpiTps", "dashKpiTps", kpiTpsSeries, tpsCurrent, kpiTpsPrev, fmtInt);
   }, 2200);
 
   // ---- recent blocks ----
@@ -315,11 +395,17 @@
     }
     metrics[def.key] = { def, series, value: v, prevValue: v };
 
+    const gradId = "gradMetric-" + def.key;
     const card = document.createElement("div");
     card.className = "dcard metric-card";
     card.innerHTML =
       '<div class="metric-head"><span class="metric-label">' + def.label + '</span><span class="metric-window">24H</span></div>' +
-      '<svg class="metric-spark" viewBox="0 0 200 32" preserveAspectRatio="none"><path id="spark-' + def.key + '" stroke="' + def.color + '"/></svg>' +
+      '<svg class="metric-spark" viewBox="0 0 200 32" preserveAspectRatio="none">' +
+      '<defs><linearGradient id="' + gradId + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + def.color + '" stop-opacity="0.45"/><stop offset="100%" stop-color="' + def.color + '" stop-opacity="0"/></linearGradient></defs>' +
+      '<path id="fill-' + def.key + '" class="metric-spark-fill" fill="url(#' + gradId + ')"/>' +
+      '<path id="spark-' + def.key + '" class="metric-spark-line" stroke="' + def.color + '"/>' +
+      '<circle id="dot-' + def.key + '" class="metric-spark-dot" r="2.4" fill="' + def.color + '"/>' +
+      '</svg>' +
       '<div class="metric-bottom"><span class="metric-value" id="val-' + def.key + '">&mdash;</span><span class="metric-unit">' + def.unit + '</span>' +
       '<span class="metric-delta" id="delta-' + def.key + '"></span></div>';
     metricsGrid.appendChild(card);
@@ -328,19 +414,14 @@
   function renderMetric(key) {
     const m = metrics[key];
     const path = document.getElementById("spark-" + key);
+    const fillPath = document.getElementById("fill-" + key);
+    const dotEl = document.getElementById("dot-" + key);
     const valueEl = document.getElementById("val-" + key);
     const deltaEl = document.getElementById("delta-" + key);
-    const max = Math.max.apply(null, m.series) * 1.08;
-    const min = Math.min.apply(null, m.series) * 0.92;
-    const span = max - min || 1;
-    const stepX = 200 / (m.series.length - 1);
-    let d = "";
-    m.series.forEach((v, i) => {
-      const x = i * stepX;
-      const y = 30 - ((v - min) / span) * 28;
-      d += (i === 0 ? "M" : "L") + x.toFixed(1) + " " + y.toFixed(1) + " ";
-    });
-    if (path) path.setAttribute("d", d.trim());
+    const { line, fill, dotX, dotY } = buildSparkDot(m.series, 200, 32);
+    if (path) path.setAttribute("d", line);
+    if (fillPath) fillPath.setAttribute("d", fill);
+    if (dotEl) { dotEl.setAttribute("cx", dotX.toFixed(1)); dotEl.setAttribute("cy", dotY.toFixed(1)); }
     if (valueEl) valueEl.textContent = m.value.toFixed(m.def.decimals);
     if (deltaEl) {
       const pct = ((m.value - m.prevValue) / (m.prevValue || 1)) * 100;
