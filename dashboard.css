@@ -157,8 +157,8 @@
 }
 
 @media (max-width: 640px) {
-  .dash-heroband { min-height: 78vh; padding-bottom: 8px; display: flex; flex-direction: column; justify-content: center; }
-  .dash-heroband-inner { padding: 32px 18px 28px; height: auto; justify-content: flex-start; }
+  .dash-heroband { height: calc(100dvh - 65px); min-height: calc(100dvh - 65px); padding-bottom: 8px; display: flex; flex-direction: column; justify-content: flex-start; }
+  .dash-heroband-inner { padding: 15dvh 18px 28px; height: auto; justify-content: flex-start; }
   .dash-heroband .dash-title { font-size: clamp(37px, 10.8vw, 47px); line-height: 1.22; }
   .dash-title-sub { font-size: 15px; line-height: 1.55; margin-top: 20px; }
   .dash-eyebrow { margin-bottom: 18px; }
