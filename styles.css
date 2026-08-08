@@ -2422,6 +2422,19 @@ img {
     border-top: 1px solid rgba(10, 143, 95, 0.28);
   }
 
+  .supply-mobile-row--sectora .supply-coin {
+    color: #0a8f5f;
+  }
+
+  .supply-mobile-row--sectora .supply-coin-dot {
+    background: #14e0a0;
+    box-shadow: 0 0 8px rgba(20, 224, 160, 0.55);
+  }
+
+  .supply-mobile-row--sectora .supply-coin-ticker {
+    color: rgba(10, 143, 95, 0.75);
+  }
+
   .supply-mobile-top {
     display: flex;
     align-items: baseline;
