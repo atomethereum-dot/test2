@@ -17,6 +17,7 @@
   --db-num: rgba(255, 255, 255, 0.82);
   --db-blue: #468ce6;
   --db-blue-dim: rgba(70, 140, 230, 0.14);
+  --db-green: #14e0a0;
   --db-red: #ff5c6c;
   --db-red-dim: rgba(255, 92, 108, 0.14);
   --db-radius: 16px;
@@ -137,8 +138,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--db-blue);
-  box-shadow: 0 0 8px rgba(70, 140, 230, 0.9);
+  background: var(--db-green);
+  box-shadow: 0 0 8px rgba(20, 224, 160, 0.9);
   animation: dashPulseDot 1.8s ease-in-out infinite;
 }
 
@@ -319,8 +320,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--db-blue);
-  box-shadow: 0 0 8px rgba(70, 140, 230, 0.65);
+  background: var(--db-green);
+  box-shadow: 0 0 8px rgba(20, 224, 160, 0.65);
   animation: dashPulseDot 1.8s ease-in-out infinite;
 }
 @keyframes dashPulseDot {
@@ -411,7 +412,7 @@
   font-size: 13px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--db-blue);
+  color: var(--db-text-dim);
   margin: 0 0 24px;
 }
 
