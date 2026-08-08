@@ -834,6 +834,62 @@
         CoinGecko API roughly every 10 seconds.</span>
         <span class="supply-stamp" id="supplyStamp" data-i18n="supplyScenarios.stampStatic">SOURCE: STATIC SNAPSHOT &mdash; COINGECKO, COINMARKETCAP &mdash; AS OF AUGUST 7&ndash;8, 2026</span>
       </p>
+
+      <div class="supply-calc reveal" id="supplyCalc">
+        <div class="supply-calc-head">
+          <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span><span data-i18n="calc.eyebrow">#SECT Price Calculator</span></span>
+          <h3 class="supply-calc-title" data-i18n="calc.heading">Model Your Own Scenario</h3>
+          <p class="supply-calc-lede" data-i18n="calc.lede">Pick a reference network, choose what share of its market cap #SECT could reach, and see the implied price and what your investment would be worth.</p>
+        </div>
+
+        <div class="supply-calc-body">
+          <div class="supply-calc-controls">
+            <div class="supply-calc-field">
+              <span class="supply-calc-label" data-i18n="calc.assetLabel">Reference Network</span>
+              <div class="supply-calc-pills" id="calcAssetPills" role="radiogroup" aria-label="Reference network">
+                <button type="button" class="supply-calc-pill is-active" data-asset="bitcoin" role="radio" aria-checked="true">Bitcoin</button>
+                <button type="button" class="supply-calc-pill" data-asset="ethereum" role="radio" aria-checked="false">Ethereum</button>
+                <button type="button" class="supply-calc-pill" data-asset="bitcoin-cash" role="radio" aria-checked="false">Bitcoin Cash</button>
+                <button type="button" class="supply-calc-pill" data-asset="solana" role="radio" aria-checked="false">Solana</button>
+                <button type="button" class="supply-calc-pill" data-asset="litecoin" role="radio" aria-checked="false">Litecoin</button>
+              </div>
+            </div>
+
+            <div class="supply-calc-field">
+              <label class="supply-calc-label" for="calcPctSlider" data-i18n="calc.pctLabel">Share of Market Cap</label>
+              <div class="supply-calc-slider-row">
+                <input type="range" id="calcPctSlider" class="supply-calc-slider" min="0.1" max="100" step="0.1" value="5" />
+                <span class="supply-calc-pct-value mono" id="calcPctValue">5.0%</span>
+              </div>
+            </div>
+
+            <div class="supply-calc-field">
+              <label class="supply-calc-label" for="calcInvestInput" data-i18n="calc.investLabel">Your Investment</label>
+              <div class="supply-calc-input-wrap">
+                <span class="supply-calc-input-prefix mono">$</span>
+                <input type="number" id="calcInvestInput" class="supply-calc-input mono" value="1000" min="0" step="100" inputmode="decimal" />
+              </div>
+            </div>
+          </div>
+
+          <div class="supply-calc-results">
+            <div class="supply-calc-result">
+              <span class="supply-calc-result-label" data-i18n="calc.impliedMcap">Implied #SECT Market Cap</span>
+              <span class="supply-calc-result-value mono" id="calcMcapOut">$0</span>
+            </div>
+            <div class="supply-calc-result supply-calc-result--accent">
+              <span class="supply-calc-result-label" data-i18n="calc.impliedPrice">Implied #SECT Price</span>
+              <span class="supply-calc-result-value supply-calc-result-value--big mono" id="calcPriceOut">$0</span>
+            </div>
+            <div class="supply-calc-result">
+              <span class="supply-calc-result-label" data-i18n="calc.tokensOut">#SECT You&rsquo;d Hold</span>
+              <span class="supply-calc-result-value mono" id="calcTokensOut">0</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="supply-calc-note" data-i18n="calc.note">Illustrative only &mdash; same assumptions as the table above. Not financial advice.</p>
+      </div>
     </div>
   </section>
 
@@ -1309,6 +1365,7 @@
 <script src="exec.js"></script>
 <script src="supply.js"></script>
 <script src="supply-scenarios.js"></script>
+<script src="supply-calc.js"></script>
 <script src="growth.js"></script>
 <script src="reveal.js"></script>
 <script src="magnetic.js"></script>

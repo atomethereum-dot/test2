@@ -15,6 +15,8 @@
     solana: { supply: 581000000, price: 73.8 },
     litecoin: { supply: 77470954, price: 45.69 },
   };
+  window.SECTORA_ASSET_META = ASSET_META;
+  window.SECTORA_SEC_SUPPLY = SEC_SUPPLY;
 
   function fmtPrice(n) {
     if (n >= 1000) return "$" + n.toLocaleString("en-US", { maximumFractionDigits: 0 });
@@ -163,6 +165,7 @@
       implied5: row.querySelector('[data-el="implied5"]'),
     });
   });
+  window.SECTORA_ASSETS = assets;
 
   function flash(el, dir) {
     if (!el) return;
@@ -268,6 +271,7 @@
         setStatus("live", null);
         recomputeBars();
         markLiveUpdated(Date.now());
+        document.dispatchEvent(new CustomEvent("sectora:pricetick"));
       })
       .catch((err) => {
         consecutiveFailures += 1;
