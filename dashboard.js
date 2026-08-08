@@ -376,12 +376,12 @@
 
   // ---- metrics grid (sparkline mini-cards) ----
   const METRIC_DEFS = [
-    { key: "medianFee", label: "Median Fee", unit: "#SECT", base: 0.0042, vol: 0.0006, decimals: 4, color: "#14e0a0" },
-    { key: "gasPrice", label: "Gas Price", unit: "gwei-eq", base: 1.8, vol: 0.3, decimals: 2, color: "#5b8cff" },
-    { key: "highestFee", label: "Highest Fee (24h)", unit: "#SECT", base: 0.083, vol: 0.01, decimals: 3, color: "#a685ff" },
-    { key: "blockTime", label: "Avg Block Time", unit: "sec", base: 2.1, vol: 0.15, decimals: 2, color: "#f2b84b" },
+    { key: "medianFee", label: "Median Fee", unit: "#SECT", base: 0.0042, vol: 0.0006, decimals: 4, color: "#ffffff" },
+    { key: "gasPrice", label: "Gas Price", unit: "gwei-eq", base: 1.8, vol: 0.3, decimals: 2, color: "#ffffff" },
+    { key: "highestFee", label: "Highest Fee (24h)", unit: "#SECT", base: 0.083, vol: 0.01, decimals: 3, color: "#ffffff" },
+    { key: "blockTime", label: "Avg Block Time", unit: "sec", base: 2.1, vol: 0.15, decimals: 2, color: "#ffffff" },
     { key: "blockFullness", label: "Block Fullness", unit: "%", base: 46, vol: 6, decimals: 1, color: "#14e0a0", max: 100 },
-    { key: "largestBlock", label: "Largest Block (24h)", unit: "KB", base: 210, vol: 25, decimals: 0, color: "#5b8cff" },
+    { key: "largestBlock", label: "Largest Block (24h)", unit: "KB", base: 210, vol: 25, decimals: 0, color: "#ffffff" },
   ];
   const metricsGrid = document.getElementById("dashMetricsGrid");
   const metrics = {};
