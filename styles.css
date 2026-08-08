@@ -2201,6 +2201,71 @@ img {
   opacity: 0.85;
 }
 
+.dev-banner {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 0;
+  overflow: hidden;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  background: #050505;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 4px;
+  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+.blog-card:hover .dev-banner {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dev-banner {
+    transition: none;
+  }
+  .blog-card:hover .dev-banner {
+    transform: none;
+  }
+}
+
+.dev-banner--glow {
+  background: radial-gradient(circle at 78% 26%, rgba(255, 255, 255, 0.16), transparent 55%), #000000;
+}
+
+.dev-banner--plain {
+  background: #000000;
+}
+
+.dev-banner--facet {
+  background: #000000;
+}
+
+.dev-poly {
+  position: absolute;
+  right: -10%;
+  bottom: -8%;
+  width: 72%;
+  max-width: 220px;
+  z-index: 1;
+}
+
+.dev-mark {
+  width: 15px;
+  height: 23px;
+  flex-shrink: 0;
+}
+
+.blog-banner-brand .dev-mark {
+  width: 13px;
+  height: 20px;
+}
+
+.blog-banner-corner--tr .dev-mark {
+  width: 16px;
+  height: 25px;
+}
+
 .blog-banner-corner {
   position: absolute;
   z-index: 2;
