@@ -32,6 +32,9 @@
   function fmtClock(ts) {
     return new Date(ts).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
   }
+  function t(key, fallback) {
+    return window.SECTORA_T ? window.SECTORA_T(key) : fallback;
+  }
 
   // ---- entrance animation ----
   function runBars() {
@@ -95,17 +98,50 @@
   const statusText = document.getElementById("supplyStatusText");
   const stamp = document.getElementById("supplyStamp");
 
-  function setStatus(mode, text) {
-    if (!statusDot || !statusText) return;
-    statusDot.className = "supply-status-dot supply-status-dot--" + mode;
-    statusText.textContent = text;
+  let currentStatus = { mode: "connecting", reasonKey: null };
+  let lastTickTs = null;
+
+  function renderStatusText() {
+    if (!statusText) return;
+    const mode = currentStatus.mode;
+    if (mode === "connecting") {
+      statusText.textContent = t("supplyScenarios.statusConnecting", "Connecting to live prices…");
+    } else if (mode === "live") {
+      statusText.textContent = t("supplyScenarios.statusLive", "LIVE · CoinGecko · updates ~10s");
+    } else {
+      const base = t("supplyScenarios.statusStatic", "STATIC SNAPSHOT");
+      const reason = currentStatus.reasonKey ? t(currentStatus.reasonKey, "") : "";
+      statusText.textContent = reason ? base + " — " + reason : base;
+    }
+  }
+
+  function setStatus(mode, reasonKey) {
+    currentStatus = { mode: mode, reasonKey: reasonKey || null };
+    if (statusDot) statusDot.className = "supply-status-dot supply-status-dot--" + mode;
+    renderStatusText();
+  }
+
+  function renderStamp() {
+    if (!stamp) return;
+    if (lastTickTs) {
+      stamp.textContent = t(
+        "supplyScenarios.stampLive",
+        "SOURCE: COINGECKO API (LIVE) · #SECT SCENARIOS COMPUTED CLIENT-SIDE · LAST TICK {time}"
+      ).replace("{time}", fmtClock(lastTickTs));
+    }
+    // While no live tick has landed yet, the stamp keeps whatever the page's
+    // own data-i18n walk rendered for supplyScenarios.stampStatic.
   }
 
   function markLiveUpdated(ts) {
-    if (!stamp) return;
-    stamp.textContent =
-      "SOURCE: COINGECKO API (LIVE) · #SECT SCENARIOS COMPUTED CLIENT-SIDE · LAST TICK " + fmtClock(ts);
+    lastTickTs = ts;
+    renderStamp();
   }
+
+  document.addEventListener("sectora:langchange", () => {
+    renderStatusText();
+    renderStamp();
+  });
 
   const assets = [];
   section.querySelectorAll("[data-asset]").forEach((row) => {
@@ -192,8 +228,8 @@
   let pollTimer = null;
   let consecutiveFailures = 0;
 
-  function goStatic(reason) {
-    setStatus("static", "STATIC SNAPSHOT" + (reason ? " — " + reason : ""));
+  function goStatic(reasonKey) {
+    setStatus("static", reasonKey);
     if (pollTimer) {
       clearInterval(pollTimer);
       pollTimer = null;
@@ -229,7 +265,7 @@
             stallTimer = null;
           }
         }
-        setStatus("live", "LIVE · CoinGecko · updates ~10s");
+        setStatus("live", null);
         recomputeBars();
         markLiveUpdated(Date.now());
       })
@@ -237,19 +273,19 @@
         consecutiveFailures += 1;
         console.warn("[supply-scenarios] live price fetch failed:", err);
         if (consecutiveFailures >= 4) {
-          goStatic("live prices unavailable right now");
+          goStatic("supplyScenarios.statusStaticFail");
         }
       });
   }
 
   function startLive() {
     if (!("fetch" in window)) {
-      setStatus("static", "STATIC SNAPSHOT");
+      setStatus("static", null);
       return;
     }
-    setStatus("connecting", "Connecting to live prices…");
+    setStatus("connecting", null);
     stallTimer = setTimeout(() => {
-      if (!anyTickEver) goStatic("taking too long to load");
+      if (!anyTickEver) goStatic("supplyScenarios.statusStaticStall");
     }, 12000);
     pollPrices();
     pollTimer = setInterval(pollPrices, POLL_MS);

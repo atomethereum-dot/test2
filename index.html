@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="htmlRoot">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sectora | Cybersecurity and Asset Tokenization</title>
-<meta name="description" content="Sectora secures digital infrastructure and turns real-world assets into verifiable on-chain instruments." />
+<title data-i18n="meta.title">Sectora | Cybersecurity and Asset Tokenization</title>
+<meta name="description" content="Sectora secures digital infrastructure and turns real-world assets into verifiable on-chain instruments." data-i18n-attr="content:meta.description" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%2756.8%2034.4%2086.4%20134.4%27%3E%3Cpath%20d%3D%27M85.6%2034.4%20L56.8%2052.0%20L56.8%20122.4%20L85.6%20104.8%20Z%20M82.0%2068.0%20L82.0%20104.8%20L58.5%2086.4%20Z%27%20fill%3D%27%23ffffff%27%20fill-rule%3D%27evenodd%27%2F%3E%3Cpath%20d%3D%27M114.4%2052.0%20L141.6%2068.0%20L141.6%20120.8%20L114.4%20135.2%20L85.6%20120.8%20L85.6%2068.0%20Z%20M114.4%20126.0%20L114.4%2089.2%20L142.4%20107.6%20Z%27%20fill%3D%27%23e3e5e8%27%20fill-rule%3D%27evenodd%27%2F%3E%3Cpath%20d%3D%27M114.4%20159.6%20L143.2%20142.0%20L143.2%2071.6%20L114.4%2089.2%20Z%20M117.9%20126.0%20L117.9%2089.2%20L141.4%20107.6%20Z%27%20fill%3D%27%23c0c3c8%27%20fill-rule%3D%27evenodd%27%2F%3E%3C%2Fsvg%3E" />
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
@@ -23,9 +23,9 @@
 
 <div class="announce-bar" id="announceBar">
   <a class="announce-bar-inner" href="#supply">
-    <span class="announce-bar-text"><strong>Strategic Supply Reduction:</strong> 50%</span>
+    <span class="announce-bar-text" data-i18n="announce.text" data-i18n-html><strong>Strategic Supply Reduction:</strong> 50%</span>
     <span class="announce-bar-cta">
-      Read more
+      <span data-i18n="announce.cta">Read more</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </span>
   </a>
@@ -40,27 +40,33 @@
       <span class="nav-logo-word">SECTORA</span>
     </a>
     <nav class="nav-links">
-      <a href="#protocol">Protocol</a>
-      <a href="#roadmap">Roadmap</a>
-      <a href="#about">About</a>
-      <a href="#backers">Backers</a>
-      <a href="#blog">Blog</a>
-      <a href="#contact">Contact</a>
+      <a href="#protocol" data-i18n="nav.protocol">Protocol</a>
+      <a href="#roadmap" data-i18n="nav.roadmap">Roadmap</a>
+      <a href="#about" data-i18n="nav.about">About</a>
+      <a href="#backers" data-i18n="nav.backers">Backers</a>
+      <a href="#blog" data-i18n="nav.blog">Blog</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
     </nav>
     <a class="btn btn-light btn-sm magnetic" href="#" target="_blank" rel="noopener noreferrer">
-      Legal Documents
+      <span data-i18n="nav.legalDocuments">Legal Documents</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
     </a>
-    <button class="nav-toggle" aria-label="Open menu" id="navToggle">
+    <div class="lang-switch-wrap">
+      <select class="lang-switch" id="langSwitch" data-i18n-attr="aria-label:nav.langLabel" aria-label="Language"></select>
+    </div>
+    <button class="nav-toggle" aria-label="Open menu" id="navToggle" data-i18n-attr="aria-label:nav.openMenu">
       <span></span><span></span><span></span>
     </button>
   </div>
   <nav class="nav-links-mobile" id="navMobile">
-    <a href="#protocol">Protocol</a>
-    <a href="#roadmap">Roadmap</a>
-    <a href="#about">About</a>
-    <a href="#backers">Backers</a>
-    <a href="#contact">Contact</a>
+    <a href="#protocol" data-i18n="nav.protocol">Protocol</a>
+    <a href="#roadmap" data-i18n="nav.roadmap">Roadmap</a>
+    <a href="#about" data-i18n="nav.about">About</a>
+    <a href="#backers" data-i18n="nav.backers">Backers</a>
+    <a href="#contact" data-i18n="nav.contact">Contact</a>
+    <div class="lang-switch-wrap lang-switch-wrap--mobile">
+      <select class="lang-switch" id="langSwitchMobile" data-i18n-attr="aria-label:nav.langLabel" aria-label="Language"></select>
+    </div>
   </nav>
 </header>
 
@@ -191,23 +197,23 @@
         <span class="hero-badge-word">SECTORA</span>
       </div>
 
-      <h1 class="display hero-heading">Cybersecurity for the<br class="hero-break"> Future of Tokenized Assets</h1>
+      <h1 class="display hero-heading" data-i18n="hero.heading" data-i18n-html>Cybersecurity for the<br class="hero-break"> Future of Tokenized Assets</h1>
 
-      <p class="hero-subtitle" data-scramble data-scramble-delay="1900">Milestones and a New Era of Verifiable Security</p>
+      <p class="hero-subtitle" data-scramble data-scramble-delay="1900" data-i18n="hero.subtitle">Milestones and a New Era of Verifiable Security</p>
 
       <div class="hero-cta-row">
         <a class="btn btn-audit magnetic" href="#">
-          Audit #SECT
+          <span data-i18n="hero.auditBtn">Audit #SECT</span>
         </a>
         <a class="btn btn-light hero-cta magnetic" href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer">
-          Buy on Uniswap
+          <span data-i18n="hero.buyBtn">Buy on Uniswap</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </a>
       </div>
     </div>
 
     <div class="marquee-section" aria-labelledby="marquee-heading">
-      <p id="marquee-heading" class="eyebrow">In Collaboration With</p>
+      <p id="marquee-heading" class="eyebrow" data-i18n="marquee.heading">In Collaboration With</p>
       <div class="marquee-mask">
         <ul class="marquee-track">
           <li>CyberShield</li>
@@ -235,21 +241,21 @@
   <section class="protocol" id="protocol">
     <div class="protocol-inner">
       <div class="protocol-heading reveal">
-        <h2 class="display display-md">Sectora Protocol</h2>
-        <p class="display display-md muted-strong">In Development</p>
+        <h2 class="display display-md" data-i18n="protocol.heading">Sectora Protocol</h2>
+        <p class="display display-md muted-strong" data-i18n="protocol.status">In Development</p>
       </div>
-      <p class="lead lead-center reveal">
+      <p class="lead lead-center reveal" data-i18n="protocol.lead">
         Native infrastructure to audit, protect, and tokenize real-world assets.
         Cryptographic verification, distributed custody, and institutional-grade
         security, by design.
       </p>
       <div class="btn-row reveal">
         <a class="btn btn-light magnetic" href="https://dexscreener.com" target="_blank" rel="noopener noreferrer">
-          DexScreener
+          <span data-i18n="protocol.dexscreener">DexScreener</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </a>
         <a class="btn btn-light magnetic" href="#" target="_blank" rel="noopener noreferrer">
-          Whitepaper
+          <span data-i18n="protocol.whitepaper">Whitepaper</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </a>
       </div>
@@ -262,9 +268,9 @@
     <div class="exec-fade" aria-hidden="true"></div>
 
     <div class="exec-content reveal">
-      <span class="exec-badge"><span class="exec-dot"></span>SECTORA PROTOCOL</span>
-      <h2 class="exec-heading">Built for<br>Verification.</h2>
-      <p class="exec-status">Live on Testnet</p>
+      <span class="exec-badge"><span class="exec-dot"></span><span data-i18n="exec.badge">SECTORA PROTOCOL</span></span>
+      <h2 class="exec-heading" data-i18n="exec.heading" data-i18n-html>Built for<br>Verification.</h2>
+      <p class="exec-status" data-i18n="exec.status">Live on Testnet</p>
     </div>
 
     <div class="exec-tape">
@@ -293,11 +299,11 @@
   <section class="supply" id="supply">
     <div class="supply-top">
       <div class="supply-top-inner reveal">
-        <span class="eyebrow eyebrow-dot"><span class="exec-dot"></span>Sectora Foundation</span>
-        <h2 class="display display-lg">Strategic Supply<br>Reduction</h2>
-        <p class="lead">A one-time reduction to strengthen long-term tokenomics and align circulating supply with real network usage.</p>
+        <span class="eyebrow eyebrow-dot"><span class="exec-dot"></span><span data-i18n="supply.eyebrow">Sectora Foundation</span></span>
+        <h2 class="display display-lg" data-i18n="supply.heading" data-i18n-html>Strategic Supply<br>Reduction</h2>
+        <p class="lead" data-i18n="supply.lead">A one-time reduction to strengthen long-term tokenomics and align circulating supply with real network usage.</p>
         <a class="supply-badge magnetic" href="#">
-          Details · #SECT
+          <span data-i18n="supply.detailsBtn">Details · #SECT</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
         </a>
       </div>
@@ -305,19 +311,19 @@
     <div class="supply-stats reveal-stagger">
       <div class="supply-stat">
         <span class="supply-stat-value" data-count data-target="50000000">50.000.000</span>
-        <span class="supply-stat-label">Initial supply</span>
+        <span class="supply-stat-label" data-i18n="supply.stat1Label">Initial supply</span>
       </div>
       <div class="supply-stat">
         <span class="supply-stat-value" data-count data-target="25000000">25.000.000</span>
-        <span class="supply-stat-label">Final supply after the December 2026 reduction</span>
+        <span class="supply-stat-label" data-i18n="supply.stat2Label">Final supply after the December 2026 reduction</span>
       </div>
       <div class="supply-stat">
         <span class="supply-stat-value" data-count data-target="1000000" data-prefix="$">$1.000.000</span>
-        <span class="supply-stat-label">Initial liquidity (locked)</span>
+        <span class="supply-stat-label" data-i18n="supply.stat3Label">Initial liquidity (locked)</span>
       </div>
       <div class="supply-stat">
         <span class="supply-stat-value" data-count data-target="5000000" data-prefix="$">$5.000.000</span>
-        <span class="supply-stat-label">Fully diluted valuation</span>
+        <span class="supply-stat-label" data-i18n="supply.stat4Label">Fully diluted valuation</span>
       </div>
     </div>
   </section>
@@ -325,90 +331,90 @@
   <section class="events" id="events">
     <div class="events-header reveal">
       <div class="events-heading-group">
-        <span class="eyebrow eyebrow-dot"><span class="exec-dot"></span>Sectora Projects</span>
-        <h2 class="display display-lg">Upcoming Events<br>#SECT 2027</h2>
+        <span class="eyebrow eyebrow-dot"><span class="exec-dot"></span><span data-i18n="events.eyebrow">Sectora Projects</span></span>
+        <h2 class="display display-lg" data-i18n="events.heading" data-i18n-html>Upcoming Events<br>#SECT 2027</h2>
       </div>
-      <a class="btn events-view-all magnetic" href="#">View All</a>
+      <a class="btn events-view-all magnetic" href="#" data-i18n="events.viewAll">View All</a>
     </div>
 
     <div class="events-carousel reveal-stagger">
       <article class="event-card">
-        <div class="event-banner event-banner--a" data-cursor-label="View">
+        <div class="event-banner event-banner--a" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
           <div class="event-banner-top">
             <span class="event-brand">
               <svg viewBox="0 0 200 200" aria-hidden="true"><path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z M82.0 68.0 L82.0 104.8 L58.5 86.4 Z" fill="#cde6ff" fill-rule="evenodd"/><path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z M114.4 126.0 L114.4 89.2 L142.4 107.6 Z" fill="#4da6ff" fill-rule="evenodd"/><path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z M117.9 126.0 L117.9 89.2 L141.4 107.6 Z" fill="#0c2c58" fill-rule="evenodd"/></svg>
               SECTORA
             </span>
-            <span class="event-date">FEBRUARY<br>2027</span>
+            <span class="event-date" data-i18n="events.card1.dateBadge" data-i18n-html>FEBRUARY<br>2027</span>
           </div>
           <div class="event-banner-body">
-            <span class="event-eyebrow">Meet Us At</span>
-            <h3>Consensus Hong Kong</h3>
-            <p>Sectora is preparing to join the region's largest gathering of builders, exchanges, and institutions shaping digital asset infrastructure.</p>
+            <span class="event-eyebrow" data-i18n="events.meetUsAt">Meet Us At</span>
+            <h3 data-i18n="events.card1.title">Consensus Hong Kong</h3>
+            <p data-i18n="events.card1.desc">Sectora is preparing to join the region's largest gathering of builders, exchanges, and institutions shaping digital asset infrastructure.</p>
           </div>
         </div>
         <div class="event-footer">
-          <span>Sectora at Consensus Hong Kong</span>
+          <span data-i18n="events.card1.footer">Sectora at Consensus Hong Kong</span>
           <span class="event-chip">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-            Feb 2027
+            <span data-i18n="events.card1.date">Feb 2027</span>
           </span>
         </div>
       </article>
 
       <article class="event-card">
-        <div class="event-banner event-banner--b" data-cursor-label="View">
+        <div class="event-banner event-banner--b" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
           <div class="event-banner-top">
-            <span class="event-status">In Person</span>
+            <span class="event-status" data-i18n="events.card2.status">In Person</span>
           </div>
           <div class="event-banner-body event-banner-body--center">
-            <h3 class="event-banner-title">Sectora<br>Builders Forum</h3>
-            <p>A closed-door session for infrastructure partners building custody and verification tooling on the Sectora network.</p>
+            <h3 class="event-banner-title" data-i18n="events.card2.title" data-i18n-html>Sectora<br>Builders Forum</h3>
+            <p data-i18n="events.card2.desc">A closed-door session for infrastructure partners building custody and verification tooling on the Sectora network.</p>
           </div>
         </div>
         <div class="event-footer">
-          <span>Sectora Builders Forum — London</span>
+          <span data-i18n="events.card2.footer">Sectora Builders Forum — London</span>
           <span class="event-chip">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-            Tue, Apr 20
+            <span data-i18n="events.card2.date">Tue, Apr 20</span>
           </span>
         </div>
       </article>
 
       <article class="event-card">
-        <div class="event-banner event-banner--c" data-cursor-label="View">
+        <div class="event-banner event-banner--c" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
           <div class="event-banner-body event-banner-body--center">
             <span class="event-mark" aria-hidden="true">
               <svg viewBox="0 0 200 200"><path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z M82.0 68.0 L82.0 104.8 L58.5 86.4 Z" fill="rgba(255,255,255,0.95)" fill-rule="evenodd"/><path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z M114.4 126.0 L114.4 89.2 L142.4 107.6 Z" fill="rgba(255,255,255,0.78)" fill-rule="evenodd"/><path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z M117.9 126.0 L117.9 89.2 L141.4 107.6 Z" fill="rgba(255,255,255,0.55)" fill-rule="evenodd"/></svg>
             </span>
-            <span class="event-eyebrow event-eyebrow--light">Meet Us At</span>
-            <h3 class="event-banner-title">Blockchain<br>Summit 2027</h3>
+            <span class="event-eyebrow event-eyebrow--light" data-i18n="events.meetUsAt">Meet Us At</span>
+            <h3 class="event-banner-title" data-i18n="events.card3.title" data-i18n-html>Blockchain<br>Summit 2027</h3>
           </div>
         </div>
         <div class="event-footer">
-          <span>Sectora at Blockchain Summit 2027</span>
+          <span data-i18n="events.card3.footer">Sectora at Blockchain Summit 2027</span>
           <span class="event-chip">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-            Sep 14–16
+            <span data-i18n="events.card3.date">Sep 14–16</span>
           </span>
         </div>
       </article>
 
       <article class="event-card">
-        <div class="event-banner event-banner--d" data-cursor-label="View">
+        <div class="event-banner event-banner--d" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
           <div class="event-banner-top">
-            <span class="event-brand-sm">SECTORA · MEET US AT</span>
+            <span class="event-brand-sm" data-i18n="events.card4.brandLine">SECTORA · MEET US AT</span>
           </div>
           <div class="event-banner-body event-banner-body--bottom">
-            <h3 class="event-banner-title event-banner-title--sm">Consensus<br>Miami Beach</h3>
-            <span class="event-status event-status--light">MAY 18–20</span>
+            <h3 class="event-banner-title event-banner-title--sm" data-i18n="events.card4.title" data-i18n-html>Consensus<br>Miami Beach</h3>
+            <span class="event-status event-status--light" data-i18n="events.card4.status">MAY 18–20</span>
           </div>
         </div>
         <div class="event-footer">
-          <span>Sectora at Consensus Miami Beach</span>
+          <span data-i18n="events.card4.footer">Sectora at Consensus Miami Beach</span>
           <span class="event-chip">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-            May 18–20
+            <span data-i18n="events.card4.date">May 18–20</span>
           </span>
         </div>
       </article>
@@ -417,13 +423,13 @@
 
   <section class="choro-section" id="global-nodes">
     <div class="choro-header">
-      <span class="eyebrow eyebrow-dot reveal"><span class="exec-dot"></span>Security Nodes</span>
-      <h2 class="display display-md choro-heading reveal">Top Countries by<br>Deployed Nodes</h2>
+      <span class="eyebrow eyebrow-dot reveal"><span class="exec-dot"></span><span data-i18n="choro.eyebrow">Security Nodes</span></span>
+      <h2 class="display display-md choro-heading reveal" data-i18n="choro.heading" data-i18n-html>Top Countries by<br>Deployed Nodes</h2>
     </div>
     <div class="choro-map-wrap">
     <div class="choro-zoom">
-      <button class="choro-zoom-btn" id="choroZoomIn" type="button" aria-label="Zoom in">+</button>
-      <button class="choro-zoom-btn" id="choroZoomOut" type="button" aria-label="Zoom out">−</button>
+      <button class="choro-zoom-btn" id="choroZoomIn" type="button" aria-label="Zoom in" data-i18n-attr="aria-label:choro.zoomIn">+</button>
+      <button class="choro-zoom-btn" id="choroZoomOut" type="button" aria-label="Zoom out" data-i18n-attr="aria-label:choro.zoomOut">−</button>
     </div>
     <div class="choro-viewport" id="choroViewport">
       <svg class="choro-svg" viewBox="0 0 1000 391.7" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -635,9 +641,9 @@
     </div>
     <div class="choro-legend">
       <div class="choro-legend-track">
-        <span class="choro-legend-label">Least Nodes</span>
-        <input type="range" class="choro-slider" id="choroSlider" min="0" max="44" value="44" aria-label="Country node ranking" />
-        <span class="choro-legend-label">Most Nodes</span>
+        <span class="choro-legend-label" data-i18n="choro.leastNodes">Least Nodes</span>
+        <input type="range" class="choro-slider" id="choroSlider" min="0" max="44" value="44" aria-label="Country node ranking" data-i18n-attr="aria-label:choro.sliderLabel" />
+        <span class="choro-legend-label" data-i18n="choro.mostNodes">Most Nodes</span>
       </div>
       <div class="choro-legend-active">
         <span class="choro-legend-dot" id="choroLegendDot"></span>
@@ -649,9 +655,9 @@
 
   <section class="light-section" id="supply-scenarios">
     <div class="light-inner supply-scenarios-block reveal">
-      <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span>Supply &amp; Market Cap</span>
-      <h2 class="display display-md dark-text supply-heading">What a <strong>25,000,000</strong><br>token supply implies<br>at other networks&rsquo; market<br>caps</h2>
-      <p class="supply-lede">
+      <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span><span data-i18n="supplyScenarios.eyebrow">Supply &amp; Market Cap</span></span>
+      <h2 class="display display-md dark-text supply-heading" data-i18n="supplyScenarios.heading" data-i18n-html>What a <strong>25,000,000</strong><br>token supply implies<br>at other networks&rsquo; market<br>caps</h2>
+      <p class="supply-lede" data-i18n="supplyScenarios.lede" data-i18n-html>
         Sectora's circulating supply settles at <strong>25,000,000 #SECT</strong> after the December
         2026 reduction. Below, the price and market capitalization of five established networks
         currently trading above $10 &mdash; each paired with what #SECT would be priced at if Sectora
@@ -660,18 +666,18 @@
 
       <div class="supply-status-badge" id="supplyStatusBadge">
         <span class="supply-status-dot" id="supplyStatusDot" aria-hidden="true"></span>
-        <span id="supplyStatusText">Connecting to live prices&hellip;</span>
+        <span id="supplyStatusText" data-i18n="supplyScenarios.statusConnecting">Connecting to live prices&hellip;</span>
       </div>
 
       <div class="supply-table-wrap">
         <table class="supply-table">
           <thead>
             <tr>
-              <th>Asset</th>
-              <th class="num">Price</th>
-              <th class="num">Circulating Supply</th>
-              <th class="num supply-bar-col">Market Cap</th>
-              <th class="num">#SECT @ 5% Cap</th>
+              <th data-i18n="supplyScenarios.tableAsset">Asset</th>
+              <th class="num" data-i18n="supplyScenarios.tablePrice">Price</th>
+              <th class="num" data-i18n="supplyScenarios.tableSupply">Circulating Supply</th>
+              <th class="num supply-bar-col" data-i18n="supplyScenarios.tableMcap">Market Cap</th>
+              <th class="num" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% Cap</th>
             </tr>
           </thead>
           <tbody>
@@ -729,7 +735,7 @@
               <td><span class="supply-coin"><span class="supply-coin-dot" aria-hidden="true"></span>Sectora <span class="supply-coin-ticker">#SECT</span></span></td>
               <td class="num mono">&mdash;</td>
               <td class="num mono">25.0M</td>
-              <td class="num mono supply-bar-col">fixed supply</td>
+              <td class="num mono supply-bar-col" data-i18n="supplyScenarios.fixedSupply">fixed supply</td>
               <td class="num mono">&mdash;</td>
             </tr>
           </tbody>
@@ -743,11 +749,11 @@
             <span class="mono" data-el="price">$64,940</span>
           </div>
           <div class="supply-mobile-meta">
-            <span>Supply <span class="mono">20.1M</span></span>
-            <span>Market cap <span class="mono" data-el="mcap">$1.30T</span></span>
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">20.1M</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$1.30T</span>
           </div>
           <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
             <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="2607" data-prefix="$">$0</span>
           </div>
         </div>
@@ -757,11 +763,11 @@
             <span class="mono" data-el="price">$1,897</span>
           </div>
           <div class="supply-mobile-meta">
-            <span>Supply <span class="mono">120M</span></span>
-            <span>Market cap <span class="mono" data-el="mcap">$227.64B</span></span>
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">120M</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$227.64B</span>
           </div>
           <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
             <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="455.28" data-prefix="$">$0</span>
           </div>
         </div>
@@ -771,11 +777,11 @@
             <span class="mono" data-el="price">$216.69</span>
           </div>
           <div class="supply-mobile-meta">
-            <span>Supply <span class="mono">19.9M</span></span>
-            <span>Market cap <span class="mono" data-el="mcap">$4.31B</span></span>
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">19.9M</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$4.31B</span>
           </div>
           <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
             <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="8.61" data-prefix="$">$0</span>
           </div>
         </div>
@@ -785,11 +791,11 @@
             <span class="mono" data-el="price">$73.80</span>
           </div>
           <div class="supply-mobile-meta">
-            <span>Supply <span class="mono">581M</span></span>
-            <span>Market cap <span class="mono" data-el="mcap">$42.88B</span></span>
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">581M</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$42.88B</span>
           </div>
           <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
             <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="85.76" data-prefix="$">$0</span>
           </div>
         </div>
@@ -799,61 +805,61 @@
             <span class="mono" data-el="price">$45.69</span>
           </div>
           <div class="supply-mobile-meta">
-            <span>Supply <span class="mono">77.5M</span></span>
-            <span>Market cap <span class="mono" data-el="mcap">$3.54B</span></span>
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">77.5M</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$3.54B</span>
           </div>
           <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
             <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="7.08" data-prefix="$">$0</span>
           </div>
         </div>
         <div class="supply-mobile-row supply-mobile-row--sectora">
           <div class="supply-mobile-top">
             <span class="supply-coin"><span class="supply-coin-dot" aria-hidden="true"></span>Sectora <span class="supply-coin-ticker">#SECT</span></span>
-            <span class="mono">fixed supply</span>
+            <span class="mono" data-i18n="supplyScenarios.fixedSupply">fixed supply</span>
           </div>
           <div class="supply-mobile-meta">
-            <span>Supply <span class="mono">25.0M</span></span>
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">25.0M</span>
             <span>&mdash;</span>
           </div>
         </div>
       </div>
 
       <p class="supply-disclaimer">
-        Illustrative only, not a price prediction or financial advice. The #SECT @ 5% cap column
+        <span data-i18n="supplyScenarios.disclaimer" data-i18n-html>Illustrative only, not a price prediction or financial advice. The #SECT @ 5% cap column
         divides 5% of each reference asset's market cap by Sectora's fixed 25,000,000 #SECT supply.
         It assumes valuation parity with each network, which is not guaranteed, and ignores
         differences in token utility, unlock schedules, and liquidity depth. Circulating supply
         figures are fixed reference snapshots; price and market cap refresh live from the
-        CoinGecko API roughly every 10 seconds.
-        <span class="supply-stamp" id="supplyStamp">SOURCE: STATIC SNAPSHOT &mdash; COINGECKO, COINMARKETCAP &mdash; AS OF AUGUST 7&ndash;8, 2026</span>
+        CoinGecko API roughly every 10 seconds.</span>
+        <span class="supply-stamp" id="supplyStamp" data-i18n="supplyScenarios.stampStatic">SOURCE: STATIC SNAPSHOT &mdash; COINGECKO, COINMARKETCAP &mdash; AS OF AUGUST 7&ndash;8, 2026</span>
       </p>
     </div>
   </section>
 
   <section class="light-section" id="developments">
     <div class="light-inner dev-block reveal">
-      <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span>Sectora Platform</span>
-      <h2 class="display display-md dark-text">Our Developments</h2>
+      <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span><span data-i18n="dev.eyebrow">Sectora Platform</span></span>
+      <h2 class="display display-md dark-text" data-i18n="dev.heading">Our Developments</h2>
       <div class="dev-grid reveal-stagger">
-        <a class="dev-card" href="#" data-cursor-label="View">
-          <div class="dev-banner dev-banner--protocol" data-cursor-label="View">
+        <a class="dev-card" href="#" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
+          <div class="dev-banner dev-banner--protocol" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
             <div class="dev-corner dev-corner--tl">
-              <span class="dev-tag"><span class="dev-dot" aria-hidden="true"></span>Testnet</span>
+              <span class="dev-tag"><span class="dev-dot" aria-hidden="true"></span><span data-i18n="dev.card1.tag">Testnet</span></span>
             </div>
             <div class="dev-corner dev-corner--tr">
               <svg class="dev-mark" viewBox="56.8 34.4 86.4 134.4" aria-hidden="true"><path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z M82.0 68.0 L82.0 104.8 L58.5 86.4 Z" fill="#e7e8ea" fill-rule="evenodd"/><path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z M114.4 126.0 L114.4 89.2 L142.4 107.6 Z" fill="#9a9da3" fill-rule="evenodd"/><path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z M117.9 126.0 L117.9 89.2 L141.4 107.6 Z" fill="#55585e" fill-rule="evenodd"/></svg>
             </div>
           </div>
-          <span class="dev-category">Protocol</span>
-          <h3>Asset Tokenization Network</h3>
-          <p>Real-world assets verified, custodied, and represented as on-chain instruments.</p>
-          <span class="dev-byline">SECTORA · LIVE</span>
+          <span class="dev-category" data-i18n="dev.card1.category">Protocol</span>
+          <h3 data-i18n="dev.card1.title">Asset Tokenization Network</h3>
+          <p data-i18n="dev.card1.desc">Real-world assets verified, custodied, and represented as on-chain instruments.</p>
+          <span class="dev-byline" data-i18n="dev.byline.live">SECTORA · LIVE</span>
         </a>
-        <a class="dev-card" href="#" data-cursor-label="View">
-          <div class="dev-banner dev-banner--network" data-cursor-label="View">
+        <a class="dev-card" href="#" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
+          <div class="dev-banner dev-banner--network" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
             <div class="dev-corner dev-corner--tr">
-              <span class="dev-caption">Mainnet loading</span>
+              <span class="dev-caption" data-i18n="dev.card2.caption">Mainnet loading</span>
             </div>
             <div class="dev-corner dev-corner--bl">
               <span class="dev-brand">
@@ -862,13 +868,13 @@
               </span>
             </div>
           </div>
-          <span class="dev-category">Network</span>
-          <h3>Layer 3 Blockchain Network</h3>
-          <p>A dedicated settlement layer built for institutional-grade custody and speed.</p>
-          <span class="dev-byline">SECTORA · LIVE</span>
+          <span class="dev-category" data-i18n="dev.card2.category">Network</span>
+          <h3 data-i18n="dev.card2.title">Layer 3 Blockchain Network</h3>
+          <p data-i18n="dev.card2.desc">A dedicated settlement layer built for institutional-grade custody and speed.</p>
+          <span class="dev-byline" data-i18n="dev.byline.live">SECTORA · LIVE</span>
         </a>
-        <a class="dev-card" href="#" data-cursor-label="View">
-          <div class="dev-banner dev-banner--security" data-cursor-label="View">
+        <a class="dev-card" href="#" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
+          <div class="dev-banner dev-banner--security" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
             <div class="dev-corner dev-corner--tl">
               <span class="dev-brand">
                 <svg class="dev-mark" viewBox="56.8 34.4 86.4 134.4" aria-hidden="true"><path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z M82.0 68.0 L82.0 104.8 L58.5 86.4 Z" fill="#e7e8ea" fill-rule="evenodd"/><path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z M114.4 126.0 L114.4 89.2 L142.4 107.6 Z" fill="#9a9da3" fill-rule="evenodd"/><path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z M117.9 126.0 L117.9 89.2 L141.4 107.6 Z" fill="#55585e" fill-rule="evenodd"/></svg>
@@ -882,15 +888,15 @@
               <span class="dev-plus" aria-hidden="true">+</span>
             </div>
           </div>
-          <span class="dev-category">Security</span>
-          <h3>Quantum Cybersecurity Software</h3>
-          <p>Post-quantum cryptography hardening every verification and custody layer.</p>
-          <span class="dev-byline">SECTORA · IN DEVELOPMENT</span>
+          <span class="dev-category" data-i18n="dev.card3.category">Security</span>
+          <h3 data-i18n="dev.card3.title">Quantum Cybersecurity Software</h3>
+          <p data-i18n="dev.card3.desc">Post-quantum cryptography hardening every verification and custody layer.</p>
+          <span class="dev-byline" data-i18n="dev.byline.inDevelopment">SECTORA · IN DEVELOPMENT</span>
         </a>
-        <a class="dev-card" href="#" data-cursor-label="View">
-          <div class="dev-banner dev-banner--nodes" data-cursor-label="View">
+        <a class="dev-card" href="#" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
+          <div class="dev-banner dev-banner--nodes" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
             <div class="dev-corner dev-corner--tl">
-              <span class="dev-tag"><span class="dev-dot" aria-hidden="true"></span>Validators</span>
+              <span class="dev-tag"><span class="dev-dot" aria-hidden="true"></span><span data-i18n="dev.card4.tag">Validators</span></span>
             </div>
             <div class="dev-corner dev-corner--bl">
               <span class="dev-brand">
@@ -899,27 +905,27 @@
               </span>
             </div>
           </div>
-          <span class="dev-category">Nodes</span>
-          <h3>Security Node Validation</h3>
-          <p>A distributed validator network securing every transaction across the protocol.</p>
-          <span class="dev-byline">SECTORA · LIVE</span>
+          <span class="dev-category" data-i18n="dev.card4.category">Nodes</span>
+          <h3 data-i18n="dev.card4.title">Security Node Validation</h3>
+          <p data-i18n="dev.card4.desc">A distributed validator network securing every transaction across the protocol.</p>
+          <span class="dev-byline" data-i18n="dev.byline.live">SECTORA · LIVE</span>
         </a>
-        <a class="dev-card" href="#" data-cursor-label="View">
-          <div class="dev-banner dev-banner--yield" data-cursor-label="View">
+        <a class="dev-card" href="#" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
+          <div class="dev-banner dev-banner--yield" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
             <div class="dev-corner dev-corner--tl">
-              <span class="dev-tag"><span class="dev-dot" aria-hidden="true"></span>Yield</span>
+              <span class="dev-tag"><span class="dev-dot" aria-hidden="true"></span><span data-i18n="dev.card5.tag">Yield</span></span>
             </div>
             <div class="dev-corner dev-corner--tr">
               <span class="dev-plus" aria-hidden="true">+</span>
             </div>
           </div>
-          <span class="dev-category">Yield</span>
-          <h3>15.2% APY</h3>
-          <p>Yield generated across tokenized real-world asset pools.</p>
-          <span class="dev-byline">SECTORA · LIVE</span>
+          <span class="dev-category" data-i18n="dev.card5.category">Yield</span>
+          <h3 data-i18n="dev.card5.title">15.2% APY</h3>
+          <p data-i18n="dev.card5.desc">Yield generated across tokenized real-world asset pools.</p>
+          <span class="dev-byline" data-i18n="dev.byline.live">SECTORA · LIVE</span>
         </a>
-        <a class="dev-card" href="#" data-cursor-label="View">
-          <div class="dev-banner dev-banner--stablecoin" data-cursor-label="View">
+        <a class="dev-card" href="#" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
+          <div class="dev-banner dev-banner--stablecoin" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
             <div class="dev-corner dev-corner--tl">
               <span class="dev-brand">
                 <svg class="dev-mark" viewBox="56.8 34.4 86.4 134.4" aria-hidden="true"><path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z M82.0 68.0 L82.0 104.8 L58.5 86.4 Z" fill="#e7e8ea" fill-rule="evenodd"/><path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z M114.4 126.0 L114.4 89.2 L142.4 107.6 Z" fill="#9a9da3" fill-rule="evenodd"/><path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z M117.9 126.0 L117.9 89.2 L141.4 107.6 Z" fill="#55585e" fill-rule="evenodd"/></svg>
@@ -927,13 +933,13 @@
               </span>
             </div>
             <div class="dev-corner dev-corner--tr">
-              <span class="dev-caption">USD-SEC</span>
+              <span class="dev-caption" data-i18n="dev.card6.caption">USD-SEC</span>
             </div>
           </div>
-          <span class="dev-category">Stablecoin</span>
-          <h3>USD-SEC Stablecoin</h3>
-          <p>Sectora's fully-collateralized stablecoin for settlement across the network.</p>
-          <span class="dev-byline">SECTORA · LIVE</span>
+          <span class="dev-category" data-i18n="dev.card6.category">Stablecoin</span>
+          <h3 data-i18n="dev.card6.title">USD-SEC Stablecoin</h3>
+          <p data-i18n="dev.card6.desc">Sectora's fully-collateralized stablecoin for settlement across the network.</p>
+          <span class="dev-byline" data-i18n="dev.byline.live">SECTORA · LIVE</span>
         </a>
       </div>
     </div>
@@ -942,8 +948,8 @@
   <section class="roadmap roadmap--light" id="roadmap">
     <div class="roadmap-inner">
       <div class="reveal">
-        <span class="eyebrow">Roadmap</span>
-        <h2 class="display display-md">What's Next</h2>
+        <span class="eyebrow" data-i18n="roadmap.eyebrow">Roadmap</span>
+        <h2 class="display display-md" data-i18n="roadmap.heading">What's Next</h2>
       </div>
 
       <div class="roadmap-timeline" id="roadmapTimeline">
@@ -953,54 +959,54 @@
         <div class="roadmap-item">
           <div class="roadmap-dot"></div>
           <div class="roadmap-content roadmap-content--left">
-            <span class="roadmap-date">Q1 2026</span>
-            <h3>Security Audit Completion</h3>
-            <p>Sectora Protocol completes its third-party security audit cycle, covering smart contracts, custody logic, and the verification layer.</p>
+            <span class="roadmap-date" data-i18n="roadmap.q1_2026.date">Q1 2026</span>
+            <h3 data-i18n="roadmap.q1_2026.title">Security Audit Completion</h3>
+            <p data-i18n="roadmap.q1_2026.desc">Sectora Protocol completes its third-party security audit cycle, covering smart contracts, custody logic, and the verification layer.</p>
           </div>
         </div>
 
         <div class="roadmap-item">
           <div class="roadmap-dot"></div>
           <div class="roadmap-content roadmap-content--right">
-            <span class="roadmap-date">Q2 2026</span>
-            <h3>Testnet Launch</h3>
-            <p>The Sectora testnet opens to security researchers and early partners for stress-testing custody and tokenization flows.</p>
+            <span class="roadmap-date" data-i18n="roadmap.q2_2026.date">Q2 2026</span>
+            <h3 data-i18n="roadmap.q2_2026.title">Testnet Launch</h3>
+            <p data-i18n="roadmap.q2_2026.desc">The Sectora testnet opens to security researchers and early partners for stress-testing custody and tokenization flows.</p>
           </div>
         </div>
 
         <div class="roadmap-item">
           <div class="roadmap-dot"></div>
           <div class="roadmap-content roadmap-content--left">
-            <span class="roadmap-date">Q3 2026</span>
-            <h3>Custody Network Genesis</h3>
-            <p>Onboarding of the first wave of validators and custody nodes, moving Sectora from development to an active, distributed network.</p>
+            <span class="roadmap-date" data-i18n="roadmap.q3_2026.date">Q3 2026</span>
+            <h3 data-i18n="roadmap.q3_2026.title">Custody Network Genesis</h3>
+            <p data-i18n="roadmap.q3_2026.desc">Onboarding of the first wave of validators and custody nodes, moving Sectora from development to an active, distributed network.</p>
           </div>
         </div>
 
         <div class="roadmap-item">
           <div class="roadmap-dot"></div>
           <div class="roadmap-content roadmap-content--right">
-            <span class="roadmap-date">Q4 2026</span>
-            <h3>Mainnet Launch</h3>
-            <p>Sectora Protocol goes live on mainnet, enabling verifiable tokenization and institutional-grade custody in production.</p>
+            <span class="roadmap-date" data-i18n="roadmap.q4_2026.date">Q4 2026</span>
+            <h3 data-i18n="roadmap.q4_2026.title">Mainnet Launch</h3>
+            <p data-i18n="roadmap.q4_2026.desc">Sectora Protocol goes live on mainnet, enabling verifiable tokenization and institutional-grade custody in production.</p>
           </div>
         </div>
 
         <div class="roadmap-item">
           <div class="roadmap-dot"></div>
           <div class="roadmap-content roadmap-content--left">
-            <span class="roadmap-date">Q1 2027</span>
-            <h3>Institutional Integrations</h3>
-            <p>First integrations with custody partners and exchanges, expanding access to tokenized real-world assets.</p>
+            <span class="roadmap-date" data-i18n="roadmap.q1_2027.date">Q1 2027</span>
+            <h3 data-i18n="roadmap.q1_2027.title">Institutional Integrations</h3>
+            <p data-i18n="roadmap.q1_2027.desc">First integrations with custody partners and exchanges, expanding access to tokenized real-world assets.</p>
           </div>
         </div>
 
         <div class="roadmap-item">
           <div class="roadmap-dot"></div>
           <div class="roadmap-content roadmap-content--right">
-            <span class="roadmap-date">Q2 2027</span>
-            <h3>Cross-Chain Expansion</h3>
-            <p>Sectora extends verification and custody coverage across additional chains, following the same audited security model.</p>
+            <span class="roadmap-date" data-i18n="roadmap.q2_2027.date">Q2 2027</span>
+            <h3 data-i18n="roadmap.q2_2027.title">Cross-Chain Expansion</h3>
+            <p data-i18n="roadmap.q2_2027.desc">Sectora extends verification and custody coverage across additional chains, following the same audited security model.</p>
           </div>
         </div>
       </div>
@@ -1010,8 +1016,8 @@
   <section class="growth growth--light" id="growth">
     <div class="growth-inner">
       <div class="growth-head reveal">
-        <span class="eyebrow eyebrow-dark">Market Opportunity</span>
-        <h2 class="display display-md dark-text">RWA Industry<br>Projected Growth</h2>
+        <span class="eyebrow eyebrow-dark" data-i18n="growth.eyebrow">Market Opportunity</span>
+        <h2 class="display display-md dark-text" data-i18n="growth.heading" data-i18n-html>RWA Industry<br>Projected Growth</h2>
       </div>
       <div class="growth-body">
         <div class="growth-chart reveal">
@@ -1054,11 +1060,11 @@
             </div>
             <span></span>
           </div>
-          <p class="growth-source">Source: Boston Consulting Group</p>
+          <p class="growth-source" data-i18n="growth.source">Source: Boston Consulting Group</p>
         </div>
         <div class="growth-stat reveal">
           <span class="growth-stat-value" data-count data-target="16.1" data-prefix="$" data-suffix=" Trillion">$0 Trillion</span>
-          <span class="growth-stat-label">Projected value of tokenized real-world assets by 2030 — the market Sectora is built to secure.</span>
+          <span class="growth-stat-label" data-i18n="growth.statLabel">Projected value of tokenized real-world assets by 2030 — the market Sectora is built to secure.</span>
         </div>
       </div>
     </div>
@@ -1066,27 +1072,27 @@
 
   <section class="light-section" id="about">
     <div class="light-inner partner-row reveal">
-      <h2 class="display display-lg dark-text">Work<br>With Us</h2>
+      <h2 class="display display-lg dark-text" data-i18n="about.heading" data-i18n-html>Work<br>With Us</h2>
       <div class="dot-grid" aria-hidden="true">
         <span></span><span></span><span></span>
         <span></span><span></span><span></span>
         <span></span><span></span><span></span>
       </div>
       <div class="partner-copy">
-        <p class="lead-light">
+        <p class="lead-light" data-i18n="about.lead">
           If you're part of the next wave of innovation in cybersecurity, digital
           assets, or blockchain infrastructure, we invite you to help us build the
           systems that will protect and provide liquidity for tomorrow's assets.
         </p>
         <a class="btn btn-dark magnetic" href="#contact" id="contact">
-          Let's Talk
+          <span data-i18n="about.letsTalk">Let's Talk</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </a>
       </div>
     </div>
 
     <div class="light-inner backers" id="backers">
-      <span class="eyebrow-dark">backed by</span>
+      <span class="eyebrow-dark" data-i18n="backers.eyebrow">backed by</span>
       <div class="hr"></div>
       <div class="logo-grid reveal-stagger">
         <span class="text-logo">Vertex Capital</span>
@@ -1097,36 +1103,36 @@
     </div>
 
     <div class="light-inner blog-block reveal" id="blog">
-      <h2 class="display display-md dark-text">From the Blog</h2>
+      <h2 class="display display-md dark-text" data-i18n="blog.heading">From the Blog</h2>
       <div class="blog-grid reveal-stagger">
         <a class="blog-card" href="#">
-          <div class="blog-banner blog-banner--intro" data-cursor-label="Read">
+          <div class="blog-banner blog-banner--intro" data-cursor-label="Read" data-i18n-attr="data-cursor-label:common.read">
             <div class="blog-banner-corner blog-banner-corner--tl">
-              <span class="blog-banner-tag"><span class="blog-banner-dot" aria-hidden="true"></span>Mainnet</span>
+              <span class="blog-banner-tag"><span class="blog-banner-dot" aria-hidden="true"></span><span data-i18n="blog.card1.tag">Mainnet</span></span>
             </div>
             <div class="blog-banner-corner blog-banner-corner--tr">
               <svg class="blog-banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 2 3 7l9 5 9-5-9-5Z"/><path d="M3 12l9 5 9-5"/><path d="M3 7v10l9 5 9-5V7"/></svg>
             </div>
             <div class="blog-banner-main">
-              <h3>Inside Our Security<br>Audit Roadmap</h3>
-              <p>A look at the multi-phase audit process behind Sectora Protocol, from formal verification to third-party penetration testing.</p>
+              <h3 data-i18n="blog.card1.title" data-i18n-html>Inside Our Security<br>Audit Roadmap</h3>
+              <p data-i18n="blog.card1.desc">A look at the multi-phase audit process behind Sectora Protocol, from formal verification to third-party penetration testing.</p>
             </div>
             <div class="blog-banner-corner blog-banner-corner--br">
-              <span class="blog-banner-caption">Security for the agentic era</span>
+              <span class="blog-banner-caption" data-i18n="blog.card1.caption">Security for the agentic era</span>
             </div>
           </div>
-          <span class="blog-eyebrow">SECTORA · SECURITY</span>
+          <span class="blog-eyebrow" data-i18n="blog.eyebrow.security">SECTORA · SECURITY</span>
         </a>
         <a class="blog-card" href="#">
-          <div class="blog-banner blog-banner--exchange" data-cursor-label="Read">
+          <div class="blog-banner blog-banner--exchange" data-cursor-label="Read" data-i18n-attr="data-cursor-label:common.read">
             <svg class="blog-facet" viewBox="0 0 200 200" aria-hidden="true"><path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z M82.0 68.0 L82.0 104.8 L58.5 86.4 Z" fill="#2a5490" fill-rule="evenodd"/><path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z M114.4 126.0 L114.4 89.2 L142.4 107.6 Z" fill="#123262" fill-rule="evenodd"/><path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z M117.9 126.0 L117.9 89.2 L141.4 107.6 Z" fill="#050c1a" fill-rule="evenodd"/><path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linejoin="round"/><path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linejoin="round"/><path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linejoin="round"/>
             </svg>
             <div class="blog-banner-corner blog-banner-corner--tr">
-              <span class="blog-banner-status">In development</span>
+              <span class="blog-banner-status" data-i18n="blog.card2.status">In development</span>
             </div>
             <div class="blog-banner-main blog-banner-main--top">
-              <h3>How Asset Tokenization<br>Works on Sectora</h3>
-              <p>Breaking down how real-world assets are verified, custodied, and represented as on-chain instruments.</p>
+              <h3 data-i18n="blog.card2.title" data-i18n-html>How Asset Tokenization<br>Works on Sectora</h3>
+              <p data-i18n="blog.card2.desc">Breaking down how real-world assets are verified, custodied, and represented as on-chain instruments.</p>
             </div>
             <div class="blog-banner-corner blog-banner-corner--bl">
               <span class="blog-banner-brand">
@@ -1135,10 +1141,10 @@
               </span>
             </div>
           </div>
-          <span class="blog-eyebrow">SECTORA · PROTOCOL</span>
+          <span class="blog-eyebrow" data-i18n="blog.eyebrow.protocol">SECTORA · PROTOCOL</span>
         </a>
         <a class="blog-card" href="#">
-          <div class="blog-banner blog-banner--report" data-cursor-label="Read">
+          <div class="blog-banner blog-banner--report" data-cursor-label="Read" data-i18n-attr="data-cursor-label:common.read">
             <div class="blog-banner-corner blog-banner-corner--tl">
               <span class="blog-banner-brand">
                 <svg viewBox="0 0 200 200" aria-hidden="true"><path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z M82.0 68.0 L82.0 104.8 L58.5 86.4 Z" fill="#cde6ff" fill-rule="evenodd"/><path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z M114.4 126.0 L114.4 89.2 L142.4 107.6 Z" fill="#4da6ff" fill-rule="evenodd"/><path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z M117.9 126.0 L117.9 89.2 L141.4 107.6 Z" fill="#0c2c58" fill-rule="evenodd"/></svg>
@@ -1149,7 +1155,7 @@
               <span class="blog-banner-plus" aria-hidden="true">+</span>
             </div>
             <div class="blog-banner-main blog-banner-main--center">
-              <h3>Building the Sectora<br>Backer Network</h3>
+              <h3 data-i18n="blog.card3.title" data-i18n-html>Building the Sectora<br>Backer Network</h3>
             </div>
             <div class="blog-banner-corner blog-banner-corner--bl">
               <span class="blog-banner-url">SECTORA.IO/JOURNAL/BACKER-NETWORK</span>
@@ -1158,7 +1164,7 @@
               <span class="blog-banner-plus" aria-hidden="true">+</span>
             </div>
           </div>
-          <span class="blog-eyebrow">SECTORA · COMPANY</span>
+          <span class="blog-eyebrow" data-i18n="blog.eyebrow.company">SECTORA · COMPANY</span>
         </a>
       </div>
     </div>
@@ -1167,20 +1173,20 @@
   <section class="join" id="join">
     <div class="join-glow" aria-hidden="true" data-parallax="0.18"></div>
     <div class="join-inner reveal">
-      <h2 class="display join-heading">Join Us</h2>
+      <h2 class="display join-heading" data-i18n="join.heading">Join Us</h2>
       <div class="join-content">
-        <p class="lead">Sectora is building the security layer for tokenized assets — where verification, custody, and markets run on cryptographic trust.</p>
+        <p class="lead" data-i18n="join.lead">Sectora is building the security layer for tokenized assets — where verification, custody, and markets run on cryptographic trust.</p>
         <div class="join-actions">
           <a class="join-btn magnetic" href="#" target="_blank" rel="noopener noreferrer">
-            <span>Twitter / X</span>
+            <span data-i18n="join.twitter">Twitter / X</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
           </a>
           <a class="join-btn magnetic" href="#" target="_blank" rel="noopener noreferrer">
-            <span>Telegram</span>
+            <span data-i18n="join.telegram">Telegram</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
           </a>
           <a class="join-btn join-btn--outline magnetic" href="#" target="_blank" rel="noopener noreferrer">
-            <span>Whitepaper</span>
+            <span data-i18n="join.whitepaper">Whitepaper</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
           </a>
         </div>
@@ -1205,7 +1211,7 @@
         <span class="footer-wordmark">Sectora<br>Foundation IL</span>
       </div>
       <p class="footer-powered">
-        <span data-scramble>Powered By</span>
+        <span data-scramble data-i18n="footer.poweredBy">Powered By</span>
         <span class="footer-eth-icon" aria-hidden="true">
           <svg viewBox="0 0 256 417" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" fill-opacity="0.6" d="M127.9611 0L125.1661 9.5V285.168L127.9611 287.958L255.9231 212.32L127.9611 0Z"/>
@@ -1216,38 +1222,38 @@
             <path fill="currentColor" fill-opacity="0.6" d="M0.0009 212.3204L127.9609 287.9584V154.1584L0.0009 212.3204Z"/>
           </svg>
         </span>
-        <span data-scramble>Ethereum</span>
+        <span data-scramble data-i18n="footer.ethereum">Ethereum</span>
       </p>
       <div class="footer-location">
-        <span class="footer-location-label" data-scramble>Location:</span>
+        <span class="footer-location-label" data-scramble data-i18n="footer.location">Location:</span>
         <span class="footer-location-text">Chicago, IL, United States 63601</span>
         <a class="btn btn-light btn-xs magnetic" href="#" target="_blank" rel="noopener noreferrer">
-          View Documents
+          <span data-i18n="footer.viewDocuments">View Documents</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </a>
       </div>
     </div>
     <div class="footer-cols">
       <div>
-        <h3 data-scramble>Product</h3>
-        <a href="#protocol">Protocol</a>
-        <a href="#protocol">Security</a>
-        <a href="#protocol">Tokenization</a>
+        <h3 data-scramble data-i18n="footer.colProduct">Product</h3>
+        <a href="#protocol" data-i18n="nav.protocol">Protocol</a>
+        <a href="#protocol" data-i18n="footer.linkSecurity">Security</a>
+        <a href="#protocol" data-i18n="footer.linkTokenization">Tokenization</a>
       </div>
       <div>
-        <h3 data-scramble>Company</h3>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
+        <h3 data-scramble data-i18n="footer.colCompany">Company</h3>
+        <a href="#about" data-i18n="nav.about">About</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
       </div>
       <div>
-        <h3 data-scramble>Community</h3>
+        <h3 data-scramble data-i18n="footer.colCommunity">Community</h3>
         <a href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer">Uniswap</a>
-        <a href="#" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
+        <a href="#" target="_blank" rel="noopener noreferrer" data-i18n="footer.linkTwitter">X (Twitter)</a>
         <a href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
     </div>
     <div class="footer-contact">
-      <span class="footer-contact-label"><span class="footer-contact-dot"></span><span data-scramble>Contact Sectora</span></span>
+      <span class="footer-contact-label"><span class="footer-contact-dot"></span><span data-scramble data-i18n="footer.contactSectora">Contact Sectora</span></span>
       <a class="footer-contact-email" href="mailto:support@sectoraorg.com">
         support@sectoraorg.com
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
@@ -1256,7 +1262,7 @@
         marketing@sectoraorg.com
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
       </a>
-      <p class="footer-contact-desc">For general information or partnership inquiries.</p>
+      <p class="footer-contact-desc" data-i18n="footer.contactDesc">For general information or partnership inquiries.</p>
     </div>
   </div>
   <div class="footer-giant" aria-hidden="true">
@@ -1270,19 +1276,19 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 Sectora Foundation IL. All rights reserved.</span>
+    <span data-i18n="footer.copyright">© 2026 Sectora Foundation IL. All rights reserved.</span>
   </div>
 </footer>
 
-<div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie notice">
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie notice" data-i18n-attr="aria-label:cookie.ariaLabel">
   <div class="cookie-banner-inner">
     <div class="cookie-banner-icon" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5.2 3.4 9.4 8 11 4.6-1.6 8-5.8 8-11V5Z"/></svg>
     </div>
-    <p class="cookie-banner-text">This website uses cookies to give you a better browsing experience. Learn more about how we use cookies.</p>
+    <p class="cookie-banner-text" data-i18n="cookie.text">This website uses cookies to give you a better browsing experience. Learn more about how we use cookies.</p>
     <div class="cookie-banner-actions">
-      <button class="cookie-banner-btn cookie-banner-btn--outline magnetic" id="cookieReject" type="button">Reject</button>
-      <button class="cookie-banner-btn cookie-banner-btn--solid magnetic" id="cookieAccept" type="button">Accept</button>
+      <button class="cookie-banner-btn cookie-banner-btn--outline magnetic" id="cookieReject" type="button" data-i18n="cookie.reject">Reject</button>
+      <button class="cookie-banner-btn cookie-banner-btn--solid magnetic" id="cookieAccept" type="button" data-i18n="cookie.accept">Accept</button>
     </div>
   </div>
 </div>
@@ -1291,6 +1297,8 @@
 <div class="cursor-ring" id="cursorRing" aria-hidden="true"><span class="cursor-ring-label" id="cursorLabel"></span></div>
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
+<script src="translations.js"></script>
+<script src="i18n.js"></script>
 <script src="wave.js"></script>
 <script src="mesh.js"></script>
 <script src="parallax.js"></script>
