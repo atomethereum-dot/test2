@@ -2371,8 +2371,8 @@ img {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #14161a;
-  box-shadow: 0 0 6px rgba(20, 20, 22, 0.35);
+  background: #14e0a0;
+  box-shadow: 0 0 6px rgba(20, 224, 160, 0.55);
 }
 
 .dev-caption {
