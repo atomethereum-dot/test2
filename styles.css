@@ -2218,6 +2218,15 @@ img {
   padding-bottom: 64px;
 }
 
+.supply-heading {
+  max-width: 760px;
+}
+
+.supply-heading strong {
+  font-weight: 500;
+  color: #0a8f5f;
+}
+
 .supply-lede {
   max-width: 640px;
   font-size: 18px;
