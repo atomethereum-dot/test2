@@ -34,11 +34,22 @@
 }
 
 .dash .mono,
-.dash-epoch-num, .dash-epoch-eta, .dash-vstat-value, .dash-stat-value,
+.dash-epoch-num, .dash-epoch-eta, .dvp-chip-value, .dvp-stake-value,
 .dash-tps-value, .dash-tps-peak, .dash-block-num, .dash-block-txns,
 .metric-value, .metric-delta, .stake-value, .dash-history-uptime,
-.dash-validator-addr, .dash-node-count, .dash-net-pill {
+.dvp-addr, .dash-node-count, .dash-net-pill, .dstat-value {
   font-variant-numeric: tabular-nums;
+}
+
+/* ---- RTL support (Arabic): numbers, addresses, hashes and units stay
+   left-to-right and isolated from surrounding RTL text ---- */
+[dir="rtl"] .dash .mono,
+[dir="rtl"] .dash-epoch-num, [dir="rtl"] .dash-epoch-eta, [dir="rtl"] .dvp-chip-value, [dir="rtl"] .dvp-stake-value,
+[dir="rtl"] .dash-tps-value, [dir="rtl"] .dash-tps-peak, [dir="rtl"] .dash-block-num, [dir="rtl"] .dash-block-txns,
+[dir="rtl"] .metric-value, [dir="rtl"] .metric-delta, [dir="rtl"] .stake-value, [dir="rtl"] .dash-history-uptime,
+[dir="rtl"] .dvp-addr, [dir="rtl"] .dash-node-count, [dir="rtl"] .dstat-value, [dir="rtl"] .dash-block-time {
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 .dash-glow {

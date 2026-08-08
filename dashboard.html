@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Testnet Dashboard | Sectora</title>
-<meta name="description" content="Live network overview for the Sectora testnet: validators, epochs, throughput, blocks and staking." />
+<title data-i18n="dashboard.meta.title">Testnet Dashboard | Sectora</title>
+<meta name="description" content="Live network overview for the Sectora testnet: validators, epochs, throughput, blocks and staking." data-i18n-attr="content:dashboard.meta.description" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%2756.8%2034.4%2086.4%20134.4%27%3E%3Cpath%20d%3D%27M85.6%2034.4%20L56.8%2052.0%20L56.8%20122.4%20L85.6%20104.8%20Z%20M82.0%2068.0%20L82.0%20104.8%20L58.5%2086.4%20Z%27%20fill%3D%27%23ffffff%27%20fill-rule%3D%27evenodd%27%2F%3E%3Cpath%20d%3D%27M114.4%2052.0%20L141.6%2068.0%20L141.6%20120.8%20L114.4%20135.2%20L85.6%20120.8%20L85.6%2068.0%20Z%20M114.4%20126.0%20L114.4%2089.2%20L142.4%20107.6%20Z%27%20fill%3D%27%23e3e5e8%27%20fill-rule%3D%27evenodd%27%2F%3E%3Cpath%20d%3D%27M114.4%20159.6%20L143.2%20142.0%20L143.2%2071.6%20L114.4%2089.2%20Z%20M117.9%20126.0%20L117.9%2089.2%20L141.4%20107.6%20Z%27%20fill%3D%27%23c0c3c8%27%20fill-rule%3D%27evenodd%27%2F%3E%3C%2Fsvg%3E" />
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
@@ -27,31 +27,31 @@
       <nav class="dash-sidebar-nav">
         <a class="dash-sidebar-link is-active" href="#overview">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
-          <span>Overview</span>
+          <span data-i18n="dashboard.sidebar.overview">Overview</span>
         </a>
         <a class="dash-sidebar-link" href="#validator-panel">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          <span>Validators</span>
+          <span data-i18n="dashboard.sidebar.validators">Validators</span>
         </a>
         <a class="dash-sidebar-link" href="#node-map">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5.2 3.4 9.4 8 11 4.6-1.6 8-5.8 8-11V5Z"/></svg>
-          <span>Node Map</span>
+          <span data-i18n="dashboard.sidebar.nodeMap">Node Map</span>
         </a>
         <a class="dash-sidebar-link" href="#network-metrics">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-4 4"/></svg>
-          <span>Metrics</span>
+          <span data-i18n="dashboard.sidebar.metrics">Metrics</span>
         </a>
         <a class="dash-sidebar-link" href="#staking">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          <span>Staking</span>
+          <span data-i18n="dashboard.sidebar.staking">Staking</span>
         </a>
       </nav>
       <div class="dash-sidebar-foot">
         <div class="dash-sidebar-cta">
-          <span class="dash-sidebar-cta-title">Explore the Mainnet</span>
-          <span class="dash-sidebar-cta-sub">See #SECT price, supply and the live network story on the main site.</span>
+          <span class="dash-sidebar-cta-title" data-i18n="dashboard.sidebar.ctaTitle">Explore the Mainnet</span>
+          <span class="dash-sidebar-cta-sub" data-i18n="dashboard.sidebar.ctaSub">See #SECT price, supply and the live network story on the main site.</span>
           <a class="dash-sidebar-cta-btn" href="index.html">
-            <span>Visit sectoraorg.com</span>
+            <span data-i18n="dashboard.sidebar.ctaBtn">Visit sectoraorg.com</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
           </a>
         </div>
@@ -63,18 +63,21 @@
   <header class="dash-topbar">
     <div class="dash-search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="text" placeholder="Search validators, blocks…" aria-label="Search" />
+      <input type="text" placeholder="Search validators, blocks…" aria-label="Search" data-i18n-attr="placeholder:dashboard.topbar.searchPlaceholder;aria-label:dashboard.topbar.searchPlaceholder" />
     </div>
     <div class="dash-topbar-right">
-      <span class="dash-net-pill"><span class="dash-net-dot" aria-hidden="true"></span>Sectora Testnet</span>
-      <button class="dash-icon-btn" type="button" aria-label="Notifications">
+      <span class="dash-net-pill"><span class="dash-net-dot" aria-hidden="true"></span><span data-i18n="dashboard.topbar.netPill">Sectora Testnet</span></span>
+      <button class="dash-icon-btn" type="button" aria-label="Notifications" data-i18n-attr="aria-label:dashboard.topbar.notifications">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="dash-icon-dot" aria-hidden="true"></span>
       </button>
       <a class="dash-back" href="index.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-        <span>Back to site</span>
+        <span data-i18n="dashboard.topbar.back">Back to site</span>
       </a>
+      <div class="lang-switch-wrap">
+        <select class="lang-switch" id="dashLangSwitch" data-i18n-attr="aria-label:nav.langLabel" aria-label="Language"></select>
+      </div>
       <span class="dash-avatar" aria-hidden="true">S</span>
     </div>
   </header>
@@ -84,12 +87,12 @@
     <div class="dash-heroband-bars" id="dashHeroBars" aria-hidden="true"></div>
     <div class="dash-heroband-fade" aria-hidden="true"></div>
     <div class="dash-heroband-inner">
-      <p class="dash-eyebrow"><span class="dash-eyebrow-dot" aria-hidden="true"></span>Network Overview</p>
-      <h1 class="dash-title">Sectora Testnet Dashboard</h1>
-      <p class="dash-title-sub">Validators, throughput, blocks and staking across the Sectora test network, refreshed in real time.</p>
+      <p class="dash-eyebrow"><span class="dash-eyebrow-dot" aria-hidden="true"></span><span data-i18n="dashboard.hero.eyebrow">Network Overview</span></p>
+      <h1 class="dash-title" data-i18n="dashboard.hero.title">Sectora Testnet Dashboard</h1>
+      <p class="dash-title-sub" data-i18n="dashboard.hero.sub">Validators, throughput, blocks and staking across the Sectora test network, refreshed in real time.</p>
       <span class="dash-sim-note">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
-        Illustrative preview &middot; simulated data
+        <span data-i18n="dashboard.hero.simNote">Illustrative preview &middot; simulated data</span>
       </span>
     </div>
   </section>
@@ -97,14 +100,14 @@
   <main class="dash-shell">
 
     <!-- ---- KPI row: network stat cards + promo ---- -->
-    <div class="dash-kpi-row">
+    <div class="dash-kpi-row reveal-stagger">
       <div class="dcard dstat-card">
         <div class="dstat-head">
           <span class="dstat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
           <a class="dstat-link" href="#validator-panel" aria-label="View validators"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
         </div>
         <div class="dstat-body">
-          <span class="dstat-label">Active Validators</span>
+          <span class="dstat-label" data-i18n="dashboard.kpi.validators">Active Validators</span>
           <span class="dstat-value" id="dashKpiValidators">&mdash;</span>
         </div>
         <div class="dstat-chart-row">
@@ -127,7 +130,7 @@
           <a class="dstat-link" href="#network-metrics" aria-label="View metrics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
         </div>
         <div class="dstat-body">
-          <span class="dstat-label">Contracts Deployed</span>
+          <span class="dstat-label" data-i18n="dashboard.kpi.contracts">Contracts Deployed</span>
           <span class="dstat-value" id="dashKpiContracts">&mdash;</span>
         </div>
         <div class="dstat-chart-row">
@@ -150,7 +153,7 @@
           <a class="dstat-link" href="#network-metrics" aria-label="View throughput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
         </div>
         <div class="dstat-body">
-          <span class="dstat-label">Live TPS</span>
+          <span class="dstat-label" data-i18n="dashboard.kpi.tps">Live TPS</span>
           <span class="dstat-value" id="dashKpiTps">&mdash;</span>
         </div>
         <div class="dstat-chart-row">
@@ -168,23 +171,23 @@
       </div>
 
       <div class="dash-promo-card">
-        <span class="dash-promo-badge">Testnet</span>
-        <h3 class="dash-promo-title">Run a Sectora Validator</h3>
-        <p class="dash-promo-sub">Spin up a node, help secure the test network, and get on the leaderboard before mainnet.</p>
+        <span class="dash-promo-badge" data-i18n="dashboard.promo.badge">Testnet</span>
+        <h3 class="dash-promo-title" data-i18n="dashboard.promo.title">Run a Sectora Validator</h3>
+        <p class="dash-promo-sub" data-i18n="dashboard.promo.sub">Spin up a node, help secure the test network, and get on the leaderboard before mainnet.</p>
         <div class="dash-promo-actions">
           <a class="dash-promo-btn dash-promo-btn--solid" href="mailto:support@sectoraorg.com">
-            <span>Join the Testnet</span>
+            <span data-i18n="dashboard.promo.join">Join the Testnet</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
           </a>
           <a class="dash-promo-btn dash-promo-btn--outline" href="index.html#protocol">
-            <span>Read the Docs</span>
+            <span data-i18n="dashboard.promo.docs">Read the Docs</span>
           </a>
         </div>
       </div>
     </div>
 
     <!-- ---- validator detail panel ---- -->
-    <section class="dash-validator-panel" id="validator-panel">
+    <section class="dash-validator-panel reveal-stagger" id="validator-panel">
       <div class="dcard dvp-main">
         <div class="dvp-head">
           <div class="dvp-avatar" id="dashValAvatar">S</div>
@@ -192,11 +195,11 @@
             <span class="dvp-name" id="dashValName">&mdash;</span>
             <span class="dvp-addr" id="dashValAddr">&mdash;</span>
           </div>
-          <span class="dvp-status"><span class="dvp-status-dot"></span>Active</span>
+          <span class="dvp-status"><span class="dvp-status-dot"></span><span data-i18n="dashboard.validator.active">Active</span></span>
         </div>
 
         <div class="dvp-stake-row">
-          <span class="dvp-stake-label">Staked Balance</span>
+          <span class="dvp-stake-label" data-i18n="dashboard.validator.stakedBalance">Staked Balance</span>
           <div class="dvp-stake-line">
             <span class="dvp-stake-value" id="dashValStake">&mdash;</span>
             <span class="dvp-stake-unit">#SECT</span>
@@ -206,29 +209,29 @@
         <div class="dvp-actions">
           <a class="dvp-btn dvp-btn--solid" href="#validator-panel">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <span>View on Explorer</span>
+            <span data-i18n="dashboard.validator.explorer">View on Explorer</span>
           </a>
           <button class="dvp-btn dvp-btn--outline" type="button" id="dashCopyAddr">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            <span>Copy Address</span>
+            <span data-i18n="dashboard.validator.copy">Copy Address</span>
           </button>
         </div>
 
         <div class="dvp-chips">
           <div class="dvp-chip">
-            <div class="dvp-chip-top"><span class="dvp-chip-label">Uptime</span></div>
+            <div class="dvp-chip-top"><span class="dvp-chip-label" data-i18n="dashboard.validator.uptime">Uptime</span></div>
             <span class="dvp-chip-value" id="dashValUptime">&mdash;</span>
           </div>
           <div class="dvp-chip">
-            <div class="dvp-chip-top"><span class="dvp-chip-label">Commission</span></div>
+            <div class="dvp-chip-top"><span class="dvp-chip-label" data-i18n="dashboard.validator.commission">Commission</span></div>
             <span class="dvp-chip-value" id="dashValCommission">&mdash;</span>
           </div>
           <div class="dvp-chip">
-            <div class="dvp-chip-top"><span class="dvp-chip-label">Blocks Proposed</span></div>
+            <div class="dvp-chip-top"><span class="dvp-chip-label" data-i18n="dashboard.validator.blocksProposed">Blocks Proposed</span></div>
             <span class="dvp-chip-value" id="dashValBlocks">&mdash;</span>
           </div>
           <div class="dvp-chip">
-            <div class="dvp-chip-top"><span class="dvp-chip-label">Network Rank</span></div>
+            <div class="dvp-chip-top"><span class="dvp-chip-label" data-i18n="dashboard.validator.networkRank">Network Rank</span></div>
             <span class="dvp-chip-value" id="dashValRank">&mdash;</span>
           </div>
         </div>
@@ -243,7 +246,7 @@
             </svg>
             <div class="dvp-epoch-center">
               <span class="dvp-epoch-num" id="dashEpochNum">&mdash;</span>
-              <span class="dvp-epoch-label2">Epoch</span>
+              <span class="dvp-epoch-label2" data-i18n="dashboard.validator.epoch">Epoch</span>
             </div>
           </div>
           <span class="dvp-epoch-eta" id="dashEpochEta">&mdash;</span>
@@ -253,7 +256,7 @@
     </section>
 
     <!-- ---- node map ---- -->
-    <section class="dash-hero" id="node-map">
+    <section class="dash-hero reveal" id="node-map">
       <div class="dcard dash-map-card">
         <div class="dash-map-frame" id="dashMapFrame">
           <svg class="dmap-svg" viewBox="0 0 1000 391.7" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -437,8 +440,8 @@
         </g>
           </svg>
           <div class="dash-map-overlay-top">
-            <span class="dash-map-title">Validator Node Map</span>
-            <span class="dash-node-count"><strong id="dashNodeCount">0</strong> nodes online</span>
+            <span class="dash-map-title" data-i18n="dashboard.map.title">Validator Node Map</span>
+            <span class="dash-node-count"><strong id="dashNodeCount">0</strong> <span data-i18n="dashboard.map.nodesOnline">nodes online</span></span>
           </div>
           <div id="dashMapNodes"></div>
         </div>
@@ -446,26 +449,26 @@
     </section>
 
     <!-- ---- history timeline ---- -->
-    <div class="dcard dash-history-card">
+    <div class="dcard dash-history-card reveal">
       <div class="dash-history-top">
-        <span class="dash-section-title">Epoch History</span>
-        <span class="dash-history-uptime">30-epoch uptime <strong id="dashUptimePct">&mdash;</strong></span>
+        <span class="dash-section-title" data-i18n="dashboard.history.title">Epoch History</span>
+        <span class="dash-history-uptime"><span data-i18n="dashboard.history.uptime">30-epoch uptime</span> <strong id="dashUptimePct">&mdash;</strong></span>
       </div>
       <div class="dash-history-bars" id="dashHistoryBars"></div>
-      <div class="dash-history-labels"><span>-30 epochs</span><span>now</span></div>
+      <div class="dash-history-labels"><span data-i18n="dashboard.history.rangeStart">-30 epochs</span><span data-i18n="dashboard.history.rangeNow">now</span></div>
     </div>
 
     <!-- ---- TPS + recent blocks ---- -->
     <div class="dash-section-head">
-      <span class="dash-section-title">Throughput &amp; Activity</span>
-      <span class="dash-section-hint">Live, updates every few seconds</span>
+      <span class="dash-section-title" data-i18n="dashboard.throughput.title">Throughput &amp; Activity</span>
+      <span class="dash-section-hint" data-i18n="dashboard.throughput.hint">Live, updates every few seconds</span>
     </div>
-    <div class="dash-row-2">
+    <div class="dash-row-2 reveal-stagger">
       <div class="dcard dash-tps-card">
-        <div class="dcard-label">Transactions per Second</div>
+        <div class="dcard-label" data-i18n="dashboard.throughput.tpsLabel">Transactions per Second</div>
         <div class="dash-tps-top">
-          <div><span class="dash-tps-value" id="dashTpsValue">0</span><span class="dash-tps-unit">TPS</span></div>
-          <div class="dash-tps-peak">24H peak<br><strong id="dashTpsPeak">&mdash;</strong></div>
+          <div><span class="dash-tps-value" id="dashTpsValue">0</span><span class="dash-tps-unit" data-i18n="dashboard.throughput.tpsUnit">TPS</span></div>
+          <div class="dash-tps-peak"><span data-i18n="dashboard.throughput.peak">24H peak</span><br><strong id="dashTpsPeak">&mdash;</strong></div>
         </div>
         <svg class="dash-tps-chart" id="dashTpsChart" viewBox="0 0 600 110" preserveAspectRatio="none">
           <defs>
@@ -485,41 +488,41 @@
       </div>
 
       <div class="dcard dash-blocks-card">
-        <div class="dcard-label">Recent Blocks</div>
+        <div class="dcard-label" data-i18n="dashboard.throughput.recentBlocks">Recent Blocks</div>
         <div class="dash-blocks-list" id="dashBlocksList"></div>
       </div>
     </div>
 
     <!-- ---- metrics grid ---- -->
     <div class="dash-section-head" id="network-metrics">
-      <span class="dash-section-title">Network Metrics</span>
-      <span class="dash-section-hint">Rolling window</span>
+      <span class="dash-section-title" data-i18n="dashboard.metrics.title">Network Metrics</span>
+      <span class="dash-section-hint" data-i18n="dashboard.metrics.hint">Rolling window</span>
     </div>
-    <div class="dash-metrics-grid" id="dashMetricsGrid"></div>
+    <div class="dash-metrics-grid reveal-stagger" id="dashMetricsGrid"></div>
 
     <!-- ---- staking ---- -->
     <div class="dash-section-head" id="staking">
-      <span class="dash-section-title">Staking</span>
-      <span class="dash-section-hint">Network totals</span>
+      <span class="dash-section-title" data-i18n="dashboard.staking.title">Staking</span>
+      <span class="dash-section-hint" data-i18n="dashboard.staking.hint">Network totals</span>
     </div>
-    <div class="dash-staking-grid">
+    <div class="dash-staking-grid reveal-stagger">
       <div class="dcard stake-card">
         <div class="stake-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-        <div class="stake-label">Total Staked</div>
+        <div class="stake-label" data-i18n="dashboard.staking.total">Total Staked</div>
         <div class="stake-value" id="dashStakeTotal">&mdash;</div>
         <div class="stake-sub" id="dashStakeTotalPct">&mdash;</div>
       </div>
       <div class="dcard stake-card">
         <div class="stake-icon stake-icon--blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-        <div class="stake-label">Pending Stake</div>
+        <div class="stake-label" data-i18n="dashboard.staking.pending">Pending Stake</div>
         <div class="stake-value" id="dashStakePending">&mdash;</div>
         <div class="stake-sub" id="dashStakePendingSub">&mdash;</div>
       </div>
       <div class="dcard stake-card">
         <div class="stake-icon stake-icon--violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 12-4-4v3H3v2h15v3Z"/><path d="M2 12v0"/></svg></div>
-        <div class="stake-label">Estimated APY</div>
+        <div class="stake-label" data-i18n="dashboard.staking.apy">Estimated APY</div>
         <div class="stake-value" id="dashStakeApy">&mdash;</div>
-        <div class="stake-sub">Variable, network-wide average</div>
+        <div class="stake-sub" data-i18n="dashboard.staking.apySub">Variable, network-wide average</div>
       </div>
     </div>
 
@@ -527,11 +530,11 @@
 
   <footer class="dash-footer">
     <div class="dash-footer-inner">
-      <span class="dash-footer-brand">&copy; 2026 Sectora Foundation IL &middot; Testnet preview</span>
+      <span class="dash-footer-brand" data-i18n="dashboard.footer.copyright">&copy; 2026 Sectora Foundation IL &middot; Testnet preview</span>
       <span class="dash-footer-links">
-        <a href="index.html">Main site</a>
-        <a href="index.html#protocol">Protocol</a>
-        <a href="mailto:support@sectoraorg.com">Support</a>
+        <a href="index.html" data-i18n="dashboard.footer.mainSite">Main site</a>
+        <a href="index.html#protocol" data-i18n="dashboard.footer.protocol">Protocol</a>
+        <a href="mailto:support@sectoraorg.com" data-i18n="dashboard.footer.support">Support</a>
       </span>
     </div>
   </footer>
@@ -543,7 +546,10 @@
 <div class="dcursor-ring" id="dCursorRing" aria-hidden="true"></div>
 <div class="dcursor-dot" id="dCursorDot" aria-hidden="true"></div>
 
-<script src="dashboard.js?v=20260808e"></script>
+<script src="translations.js?v=20260808h"></script>
+<script src="i18n.js?v=20260808h"></script>
+<script src="dashboard.js?v=20260808f"></script>
 <script src="dashboard-cursor.js?v=20260808a"></script>
+<script src="reveal.js?v=20260808h"></script>
 </body>
 </html>

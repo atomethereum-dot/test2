@@ -27,6 +27,9 @@
   })();
 
   // ---- formatting helpers ----
+  function t(key, fallback) {
+    return window.SECTORA_T ? window.SECTORA_T(key) : fallback;
+  }
   function fmtInt(n) {
     return Math.round(n).toLocaleString("en-US");
   }
@@ -61,9 +64,15 @@
     [534.5, 113.8], [528.3, 74.7], [570.0, 310.4], [512.7, 89.9],
   ];
   function regionFor(x) {
-    if (x < 330) return "Americas";
-    if (x < 650) return "Europe / Africa";
-    return "Asia-Pacific";
+    if (x < 330) return t("dashboard.map.regionAmericas", "Americas");
+    if (x < 650) return t("dashboard.map.regionEuropeAfrica", "Europe / Africa");
+    return t("dashboard.map.regionAsiaPacific", "Asia-Pacific");
+  }
+  function renderNodeTooltips() {
+    document.querySelectorAll(".dmap-node[data-x]").forEach((node) => {
+      const x = Number(node.dataset.x);
+      node.title = t("dashboard.map.nodeTooltip", "Validator node — {region}").replace("{region}", regionFor(x));
+    });
   }
 
   const mapFrame = document.getElementById("dashMapFrame");
@@ -75,13 +84,14 @@
     NODE_POSITIONS.forEach(([x, y]) => {
       const node = document.createElement("div");
       node.className = "dmap-node";
+      node.dataset.x = String(x);
       node.style.left = (x / 1000 * 100) + "%";
       node.style.top = (y / 391.7 * 100) + "%";
-      node.title = "Validator node — " + regionFor(x);
       node.innerHTML = '<span class="dmap-node-ring"></span><span class="dmap-node-core"></span>';
       frag.appendChild(node);
     });
     mapNodesEl.appendChild(frag);
+    renderNodeTooltips();
   }
   if (nodeCountEl) nodeCountEl.textContent = String(NODE_POSITIONS.length);
 
@@ -110,7 +120,7 @@
       const remaining = Math.max(0, Math.round(EPOCH_LEN_S - elapsed % EPOCH_LEN_S));
       const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
       const ss = String(remaining % 60).padStart(2, "0");
-      epochEtaEl.textContent = "next in " + mm + ":" + ss;
+      epochEtaEl.textContent = t("dashboard.validator.nextIn", "next in {time}").replace("{time}", mm + ":" + ss);
     }
   }
   tickEpoch();
@@ -168,7 +178,7 @@
       }
       if (label) {
         const original = label.textContent;
-        label.textContent = "Copied!";
+        label.textContent = t("dashboard.validator.copied", "Copied!");
         setTimeout(() => { label.textContent = original; }, 1600);
       }
     });
@@ -316,7 +326,7 @@
     if (tpsLineEl) tpsLineEl.setAttribute("d", line);
     if (tpsFillEl) tpsFillEl.setAttribute("d", fill);
     if (tpsValueEl) tpsValueEl.textContent = fmtInt(tpsCurrent);
-    if (tpsPeakEl) tpsPeakEl.textContent = fmtInt(tpsPeak) + " TPS";
+    if (tpsPeakEl) tpsPeakEl.textContent = fmtInt(tpsPeak) + " " + t("dashboard.throughput.tpsUnit", "TPS");
   }
   renderTps();
   renderKpiCard("kpiTps", "dashKpiTps", kpiTpsSeries, tpsCurrent, kpiTpsPrev, fmtInt);
@@ -341,7 +351,7 @@
     '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/>',
   ];
   function timeAgoLabel() {
-    return "just now";
+    return t("dashboard.throughput.justNow", "just now");
   }
   function addBlock() {
     blockHeight += 1;
@@ -355,7 +365,7 @@
       '</svg></span>' +
       '<span class="dash-block-mid"><span class="dash-block-num">#' + fmtInt(blockHeight) + '</span><br>' +
       '<span class="dash-block-validator">' + validator + '</span></span>' +
-      '<span class="dash-block-right"><span class="dash-block-txns">' + txns + ' txns</span><br>' +
+      '<span class="dash-block-right"><span class="dash-block-txns">' + txns + ' ' + t("dashboard.throughput.txns", "txns") + '</span><br>' +
       '<span class="dash-block-time" data-ts="' + Date.now() + '">' + timeAgoLabel() + '</span></span>';
     if (blocksListEl) {
       blocksListEl.insertBefore(row, blocksListEl.firstChild);
@@ -370,18 +380,20 @@
   setInterval(() => {
     document.querySelectorAll(".dash-block-time[data-ts]").forEach((el) => {
       const secs = Math.round((Date.now() - Number(el.dataset.ts)) / 1000);
-      el.textContent = secs < 2 ? "just now" : secs + "s ago";
+      el.textContent = secs < 2
+        ? t("dashboard.throughput.justNow", "just now")
+        : t("dashboard.throughput.secAgo", "{n}s ago").replace("{n}", String(secs));
     });
   }, 1000);
 
   // ---- metrics grid (sparkline mini-cards) ----
   const METRIC_DEFS = [
-    { key: "medianFee", label: "Median Fee", unit: "#SECT", base: 0.0042, vol: 0.0006, decimals: 4, color: "#ffffff" },
-    { key: "gasPrice", label: "Gas Price", unit: "gwei-eq", base: 1.8, vol: 0.3, decimals: 2, color: "#ffffff" },
-    { key: "highestFee", label: "Highest Fee (24h)", unit: "#SECT", base: 0.083, vol: 0.01, decimals: 3, color: "#ffffff" },
-    { key: "blockTime", label: "Avg Block Time", unit: "sec", base: 2.1, vol: 0.15, decimals: 2, color: "#ffffff" },
-    { key: "blockFullness", label: "Block Fullness", unit: "%", base: 46, vol: 6, decimals: 1, color: "#14e0a0", max: 100 },
-    { key: "largestBlock", label: "Largest Block (24h)", unit: "KB", base: 210, vol: 25, decimals: 0, color: "#ffffff" },
+    { key: "medianFee", i18nKey: "dashboard.metrics.medianFee", label: "Median Fee", unit: "#SECT", base: 0.0042, vol: 0.0006, decimals: 4, color: "#ffffff" },
+    { key: "gasPrice", i18nKey: "dashboard.metrics.gasPrice", label: "Gas Price", unit: "gwei-eq", base: 1.8, vol: 0.3, decimals: 2, color: "#ffffff" },
+    { key: "highestFee", i18nKey: "dashboard.metrics.highestFee", label: "Highest Fee (24h)", unit: "#SECT", base: 0.083, vol: 0.01, decimals: 3, color: "#ffffff" },
+    { key: "blockTime", i18nKey: "dashboard.metrics.blockTime", label: "Avg Block Time", unit: "sec", base: 2.1, vol: 0.15, decimals: 2, color: "#ffffff" },
+    { key: "blockFullness", i18nKey: "dashboard.metrics.blockFullness", label: "Block Fullness", unit: "%", base: 46, vol: 6, decimals: 1, color: "#14e0a0", max: 100 },
+    { key: "largestBlock", i18nKey: "dashboard.metrics.largestBlock", label: "Largest Block (24h)", unit: "KB", base: 210, vol: 25, decimals: 0, color: "#ffffff" },
   ];
   const metricsGrid = document.getElementById("dashMetricsGrid");
   const metrics = {};
@@ -400,7 +412,7 @@
     const card = document.createElement("div");
     card.className = "dcard metric-card";
     card.innerHTML =
-      '<div class="metric-head"><span class="metric-label">' + def.label + '</span><span class="metric-window">24H</span></div>' +
+      '<div class="metric-head"><span class="metric-label" id="label-' + def.key + '">' + t(def.i18nKey, def.label) + '</span><span class="metric-window" id="window-' + def.key + '">' + t("dashboard.metrics.window", "24H") + '</span></div>' +
       '<svg class="metric-spark" viewBox="0 0 200 32" preserveAspectRatio="none">' +
       '<defs>' +
       '<linearGradient id="' + gradId + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + def.color + '" stop-opacity="0.38"/><stop offset="55%" stop-color="' + def.color + '" stop-opacity="0.09"/><stop offset="100%" stop-color="' + def.color + '" stop-opacity="0"/></linearGradient>' +
@@ -455,9 +467,12 @@
     const pendingSub = document.getElementById("dashStakePendingSub");
     const apy = document.getElementById("dashStakeApy");
     if (total) total.textContent = fmtUSD(staking.total) + " #SECT";
-    if (totalPct) totalPct.textContent = ((staking.total / 25000000) * 100).toFixed(1) + "% of circulating supply";
+    if (totalPct) {
+      const pct = ((staking.total / 25000000) * 100).toFixed(1);
+      totalPct.textContent = t("dashboard.staking.totalPct", "{pct}% of circulating supply").replace("{pct}", pct);
+    }
     if (pending) pending.textContent = fmtUSD(staking.pending) + " #SECT";
-    if (pendingSub) pendingSub.textContent = "activating next epoch";
+    if (pendingSub) pendingSub.textContent = t("dashboard.staking.pendingSub", "activating next epoch");
     if (apy) apy.textContent = staking.apy.toFixed(2) + "%";
   }
   renderStaking();
@@ -467,4 +482,15 @@
     staking.apy = clamp(staking.apy + rand(-0.06, 0.06), 5.5, 9.5);
     renderStaking();
   }, 6000);
+
+  // ---- re-render text that's only painted once, on language switch ----
+  document.addEventListener("sectora:langchange", () => {
+    METRIC_DEFS.forEach((def) => {
+      const labelEl = document.getElementById("label-" + def.key);
+      const windowEl = document.getElementById("window-" + def.key);
+      if (labelEl) labelEl.textContent = t(def.i18nKey, def.label);
+      if (windowEl) windowEl.textContent = t("dashboard.metrics.window", "24H");
+    });
+    renderNodeTooltips();
+  });
 })();
