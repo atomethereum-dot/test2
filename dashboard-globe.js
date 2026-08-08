@@ -63,7 +63,7 @@
           }
           mg.closePath();
         }
-        mg.fill("evenodd");
+        mg.fill("nonzero");
       }
     }
   }
@@ -76,6 +76,15 @@
       ring.forEach((p, i) => { const x = X(p[0]), y = Y(p[1]); i ? mg.lineTo(x, y) : mg.moveTo(x, y); });
       mg.closePath(); mg.fill();
     }
+    fillSouthPoleCap();
+  }
+  /* Public land datasets routinely leave the last few degrees around the
+     south pole uncovered (no coastline data that far in) -- on a sphere that
+     gap renders as a small black disc punched into Antarctica. Close it. */
+  function fillSouthPoleCap() {
+    const capRow = Math.round(MH * (90 - -84) / 180);
+    mg.fillStyle = "#fff";
+    mg.fillRect(0, capRow, MW, MH - capRow);
   }
   paintFallback();
 
@@ -113,7 +122,7 @@
   if (window.SECTORA_GLOBE_TOPOLOGY) {
     try {
       const polys = decodeTopology(window.SECTORA_GLOBE_TOPOLOGY);
-      if (polys.length) { clear(); tracePolys(polys); mask.needsUpdate = true; }
+      if (polys.length) { clear(); tracePolys(polys); fillSouthPoleCap(); mask.needsUpdate = true; }
     } catch (e) { /* keep the fallback silhouette */ }
   }
 
