@@ -125,7 +125,6 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 14px;
 }
 
 .dash-heroband .dash-eyebrow {
@@ -153,12 +152,16 @@
 
 .dash-heroband .dash-sim-note {
   align-self: flex-start;
-  margin-top: 4px;
+  margin-top: 32px;
 }
 
 @media (max-width: 640px) {
   .dash-heroband { padding-bottom: 8px; }
   .dash-heroband-inner { padding: 32px 18px 28px; justify-content: flex-start; }
+  .dash-title { font-size: clamp(32px, 9.5vw, 44px); }
+  .dash-title-sub { font-size: 16px; margin-top: 20px; }
+  .dash-eyebrow { margin-bottom: 14px; }
+  .dash-heroband .dash-sim-note { margin-top: 24px; }
 }
 
 /* ---- app shell: sidebar + content ---- */
@@ -410,17 +413,17 @@
 
 .dash-eyebrow {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: 13px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--db-green);
-  margin: 0 0 10px;
+  margin: 0 0 18px;
 }
 
 .dash-title {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: clamp(28px, 3.4vw, 40px);
+  font-size: clamp(44px, 6vw, 84px);
   letter-spacing: -0.02em;
   margin: 0;
   line-height: 1.05;
@@ -428,9 +431,10 @@
 
 .dash-title-sub {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: clamp(17px, 1.6vw, 21px);
+  line-height: 1.55;
   color: var(--db-text-dim);
-  margin: 10px 0 0;
+  margin: 26px 0 0;
   max-width: 46ch;
 }
 
@@ -439,9 +443,9 @@
   align-items: center;
   gap: 8px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12.5px;
   color: var(--db-text-faint);
-  padding: 9px 14px;
+  padding: 11px 16px;
   border-radius: 999px;
   border: 1px solid var(--db-border);
   white-space: nowrap;
