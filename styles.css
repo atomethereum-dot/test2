@@ -840,7 +840,7 @@ img {
 .choro-section {
   position: relative;
   background: var(--black);
-  padding: 20px 0 0;
+  padding: 20px 0 64px;
 }
 
 .choro-header {
@@ -1011,7 +1011,7 @@ img {
 
 @media (max-width: 640px) {
   .choro-section {
-    padding: 16px 0 0;
+    padding: 16px 0 48px;
   }
 
   .choro-heading {
