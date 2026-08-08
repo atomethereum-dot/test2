@@ -132,7 +132,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin: 0;
+  margin: 0 0 26px;
 }
 .dash-eyebrow-dot {
   width: 6px;
@@ -152,7 +152,7 @@
 }
 
 .dash-heroband .dash-title-sub {
-  margin: 0;
+  margin: 26px 0 0;
 }
 
 .dash-heroband .dash-sim-note {
@@ -166,8 +166,7 @@
   .dash-heroband .dash-title { font-size: clamp(37px, 10.8vw, 47px); line-height: 1.22; }
   .dash-title-dash { display: none; }
   .dash-title-viz { display: block; }
-  .dash-title-sub { font-size: 15px; line-height: 1.55; margin-top: 20px; }
-  .dash-eyebrow { margin-bottom: 18px; }
+  .dash-heroband .dash-title-sub { font-size: 15px; line-height: 1.55; }
   .dash-heroband .dash-sim-note { margin-top: 30px; }
 }
 
