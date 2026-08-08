@@ -84,12 +84,6 @@
   mask.minFilter = THREE.LinearMipmapLinearFilter;
   mask.magFilter = THREE.LinearFilter;
 
-  const SOURCES = [
-    "https://cdn.jsdelivr.net/npm/world-atlas@2/land-50m.json",
-    "https://unpkg.com/world-atlas@2/land-50m.json",
-    "https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json",
-    "https://unpkg.com/world-atlas@2/land-110m.json"
-  ];
   function decodeTopology(topo) {
     const [sx, sy] = topo.transform.scale, [tx, ty] = topo.transform.translate;
     const arcs = topo.arcs.map((arc) => {
@@ -113,19 +107,15 @@
     }
     return polys;
   }
-  (async () => {
-    for (const url of SOURCES) {
-      try {
-        const r = await fetch(url, { mode: "cors" });
-        if (!r.ok) continue;
-        const polys = decodeTopology(await r.json());
-        if (!polys.length) continue;
-        clear(); tracePolys(polys);
-        mask.needsUpdate = true;
-        return;
-      } catch (e) { /* try the next mirror */ }
-    }
-  })();
+
+  /* Real coastlines (Natural Earth 110m, bundled locally — no network
+     fetch needed), swapped in over the coarse fallback silhouette. */
+  if (window.SECTORA_GLOBE_TOPOLOGY) {
+    try {
+      const polys = decodeTopology(window.SECTORA_GLOBE_TOPOLOGY);
+      if (polys.length) { clear(); tracePolys(polys); mask.needsUpdate = true; }
+    } catch (e) { /* keep the fallback silhouette */ }
+  }
 
   /* ================================================================= *
    * 2. Scene
