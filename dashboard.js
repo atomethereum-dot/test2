@@ -1,0 +1,360 @@
+(() => {
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---- formatting helpers ----
+  function fmtInt(n) {
+    return Math.round(n).toLocaleString("en-US");
+  }
+  function fmtUSD(n) {
+    if (n >= 1e9) return "$" + (n / 1e9).toFixed(2) + "B";
+    if (n >= 1e6) return "$" + (n / 1e6).toFixed(2) + "M";
+    if (n >= 1e3) return "$" + (n / 1e3).toFixed(1) + "K";
+    return "$" + n.toFixed(2);
+  }
+  function fmtAddr(addr) {
+    return addr.slice(0, 8) + "…" + addr.slice(-6);
+  }
+  function randHex(len) {
+    let s = "";
+    for (let i = 0; i < len; i++) s += Math.floor(Math.random() * 16).toString(16);
+    return s;
+  }
+  function rand(min, max) {
+    return min + Math.random() * (max - min);
+  }
+  function clamp(n, min, max) {
+    return Math.max(min, Math.min(max, n));
+  }
+
+  // ---- validator node map (reuses the site's world map coordinate set) ----
+  const NODE_POSITIONS = [
+    [162.8, 105.5], [490.0, 80.6], [523.1, 100.6], [529.7, 88.8],
+    [650.7, 163.4], [794.0, 129.0], [515.7, 85.7], [881.0, 127.2],
+    [470.2, 132.2], [854.1, 128.6], [247.5, 49.4], [872.8, 300.3],
+    [732.2, 164.0], [478.5, 81.9], [546.0, 56.3], [341.9, 257.4],
+    [597.7, 141.5], [551.7, 31.3], [487.6, 119.0], [571.6, 48.7],
+    [534.5, 113.8], [528.3, 74.7], [570.0, 310.4], [512.7, 89.9],
+  ];
+  function regionFor(x) {
+    if (x < 330) return "Americas";
+    if (x < 650) return "Europe / Africa";
+    return "Asia-Pacific";
+  }
+
+  const mapFrame = document.getElementById("dashMapFrame");
+  const mapNodesEl = document.getElementById("dashMapNodes");
+  const nodeCountEl = document.getElementById("dashNodeCount");
+
+  if (mapNodesEl) {
+    const frag = document.createDocumentFragment();
+    NODE_POSITIONS.forEach(([x, y]) => {
+      const node = document.createElement("div");
+      node.className = "dmap-node";
+      node.style.left = (x / 1000 * 100) + "%";
+      node.style.top = (y / 391.7 * 100) + "%";
+      node.title = "Validator node — " + regionFor(x);
+      node.innerHTML = '<span class="dmap-node-ring"></span><span class="dmap-node-core"></span>';
+      frag.appendChild(node);
+    });
+    mapNodesEl.appendChild(frag);
+  }
+  if (nodeCountEl) nodeCountEl.textContent = String(NODE_POSITIONS.length);
+
+  // ---- epoch ring ----
+  const EPOCH_LEN_S = 90;
+  let epochNum = 4128;
+  let epochStart = Date.now();
+  const ringEl = document.getElementById("dashEpochRing");
+  const epochNumEl = document.getElementById("dashEpochNum");
+  const epochEtaEl = document.getElementById("dashEpochEta");
+  const RING_CIRC = 138.2;
+
+  function tickEpoch() {
+    const elapsed = (Date.now() - epochStart) / 1000;
+    let p = elapsed / EPOCH_LEN_S;
+    if (p >= 1) {
+      epochNum += 1;
+      epochStart = Date.now();
+      p = 0;
+    }
+    if (ringEl) ringEl.style.strokeDashoffset = String(RING_CIRC * (1 - p));
+    if (epochNumEl) epochNumEl.textContent = "#" + fmtInt(epochNum);
+    if (epochEtaEl) {
+      const remaining = Math.max(0, Math.round(EPOCH_LEN_S - elapsed % EPOCH_LEN_S));
+      const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
+      const ss = String(remaining % 60).padStart(2, "0");
+      epochEtaEl.textContent = "next in " + mm + ":" + ss;
+    }
+  }
+  tickEpoch();
+  setInterval(tickEpoch, 1000);
+
+  // ---- selected validator card ----
+  const VALIDATORS = [
+    "sectora-node-lux", "sectora-node-atlas", "sectora-node-vega",
+    "sectora-node-orion", "sectora-node-nova", "sectora-node-halo",
+    "sectora-node-quartz", "sectora-node-ember",
+  ];
+  function pickValidator() {
+    const name = VALIDATORS[Math.floor(Math.random() * VALIDATORS.length)];
+    return {
+      name,
+      addr: "0x" + randHex(40),
+      uptime: rand(98.2, 99.99),
+      commission: rand(3, 8),
+      stake: rand(180000, 640000),
+      blocks: Math.floor(rand(1200, 9800)),
+    };
+  }
+  function renderValidator(v) {
+    const avatar = document.getElementById("dashValAvatar");
+    const name = document.getElementById("dashValName");
+    const addr = document.getElementById("dashValAddr");
+    const uptime = document.getElementById("dashValUptime");
+    const commission = document.getElementById("dashValCommission");
+    const stake = document.getElementById("dashValStake");
+    const blocks = document.getElementById("dashValBlocks");
+    if (avatar) avatar.textContent = v.name.replace("sectora-node-", "")[0].toUpperCase();
+    if (name) name.textContent = v.name;
+    if (addr) addr.textContent = fmtAddr(v.addr);
+    if (uptime) uptime.textContent = v.uptime.toFixed(2) + "%";
+    if (commission) commission.textContent = v.commission.toFixed(1) + "%";
+    if (stake) stake.textContent = fmtUSD(v.stake) + " #SECT";
+    if (blocks) blocks.textContent = fmtInt(v.blocks);
+  }
+  let currentValidator = pickValidator();
+  renderValidator(currentValidator);
+  setInterval(() => {
+    currentValidator = pickValidator();
+    renderValidator(currentValidator);
+  }, 14000);
+
+  // ---- network stats row ----
+  let stats = { validators: 118, contracts: 3420, cities: 46 };
+  function renderStats() {
+    const v = document.getElementById("dashStatValidators");
+    const c = document.getElementById("dashStatContracts");
+    const ci = document.getElementById("dashStatCities");
+    if (v) v.textContent = fmtInt(stats.validators);
+    if (c) c.textContent = fmtInt(stats.contracts);
+    if (ci) ci.textContent = fmtInt(stats.cities);
+  }
+  renderStats();
+  setInterval(() => {
+    stats.contracts += Math.floor(rand(1, 6));
+    if (Math.random() < 0.15) stats.validators += Math.random() < 0.5 ? 1 : -1;
+    stats.validators = clamp(stats.validators, 96, 140);
+    renderStats();
+  }, 5000);
+
+  // ---- epoch history bars ----
+  const historyBarsEl = document.getElementById("dashHistoryBars");
+  const uptimePctEl = document.getElementById("dashUptimePct");
+  if (historyBarsEl) {
+    const N = 30;
+    const values = [];
+    for (let i = 0; i < N; i++) {
+      const r = Math.random();
+      let v;
+      if (r < 0.05) v = rand(55, 78);
+      else if (r < 0.18) v = rand(80, 93);
+      else v = rand(94, 100);
+      values.push(v);
+    }
+    const frag = document.createDocumentFragment();
+    values.forEach((v) => {
+      const bar = document.createElement("div");
+      bar.className = "dash-history-bar" + (v < 80 ? " is-miss" : v < 94 ? " is-low" : "");
+      bar.style.height = (reduced ? v : 4) + "%";
+      frag.appendChild(bar);
+      if (!reduced) requestAnimationFrame(() => { bar.style.height = v + "%"; });
+    });
+    historyBarsEl.appendChild(frag);
+    if (uptimePctEl) {
+      const avg = values.reduce((a, b) => a + b, 0) / values.length;
+      uptimePctEl.textContent = avg.toFixed(1) + "%";
+    }
+  }
+
+  // ---- live TPS chart ----
+  const tpsValueEl = document.getElementById("dashTpsValue");
+  const tpsPeakEl = document.getElementById("dashTpsPeak");
+  const tpsLineEl = document.getElementById("dashTpsLine");
+  const tpsFillEl = document.getElementById("dashTpsFill");
+  const TPS_POINTS = 48;
+  const CHART_W = 600;
+  const CHART_H = 110;
+  let tpsSeries = [];
+  let tpsCurrent = 640;
+  let tpsPeak = 640;
+  {
+    let seed = tpsCurrent;
+    for (let i = 0; i < TPS_POINTS; i++) {
+      seed = clamp(seed + rand(-55, 60), 300, 1400);
+      tpsSeries.push(seed);
+    }
+    tpsCurrent = tpsSeries[tpsSeries.length - 1];
+    tpsPeak = Math.max.apply(null, tpsSeries);
+  }
+
+  function buildPath(series) {
+    const max = Math.max.apply(null, series) * 1.15;
+    const min = Math.min.apply(null, series) * 0.85;
+    const span = max - min || 1;
+    const stepX = CHART_W / (series.length - 1);
+    let line = "";
+    series.forEach((v, i) => {
+      const x = i * stepX;
+      const y = CHART_H - ((v - min) / span) * CHART_H;
+      line += (i === 0 ? "M" : "L") + x.toFixed(1) + " " + y.toFixed(1) + " ";
+    });
+    const fill = "M0 " + CHART_H + " " + line.replace("M", "L") + "L" + CHART_W + " " + CHART_H + " Z";
+    return { line: line.trim(), fill };
+  }
+  function renderTps() {
+    const { line, fill } = buildPath(tpsSeries);
+    if (tpsLineEl) tpsLineEl.setAttribute("d", line);
+    if (tpsFillEl) tpsFillEl.setAttribute("d", fill);
+    if (tpsValueEl) tpsValueEl.textContent = fmtInt(tpsCurrent);
+    if (tpsPeakEl) tpsPeakEl.textContent = fmtInt(tpsPeak) + " TPS";
+  }
+  renderTps();
+  setInterval(() => {
+    const delta = rand(-90, 100);
+    tpsCurrent = clamp(tpsCurrent + delta, 180, 2400);
+    tpsSeries.push(tpsCurrent);
+    if (tpsSeries.length > TPS_POINTS) tpsSeries.shift();
+    if (tpsCurrent > tpsPeak) tpsPeak = tpsCurrent;
+    renderTps();
+  }, 2200);
+
+  // ---- recent blocks ----
+  const blocksListEl = document.getElementById("dashBlocksList");
+  let blockHeight = 1284932;
+  const BLOCK_ICONS = [
+    '<path d="M12 2 4 5v6c0 5.2 3.4 9.4 8 11 4.6-1.6 8-5.8 8-11V5Z"/>',
+    '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/>',
+  ];
+  function timeAgoLabel() {
+    return "just now";
+  }
+  function addBlock() {
+    blockHeight += 1;
+    const validator = VALIDATORS[Math.floor(Math.random() * VALIDATORS.length)];
+    const txns = Math.floor(rand(4, 340));
+    const row = document.createElement("div");
+    row.className = "dash-block-row is-new";
+    row.innerHTML =
+      '<span class="dash-block-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+      BLOCK_ICONS[Math.floor(Math.random() * BLOCK_ICONS.length)] +
+      '</svg></span>' +
+      '<span class="dash-block-mid"><span class="dash-block-num">#' + fmtInt(blockHeight) + '</span><br>' +
+      '<span class="dash-block-validator">' + validator + '</span></span>' +
+      '<span class="dash-block-right"><span class="dash-block-txns">' + txns + ' txns</span><br>' +
+      '<span class="dash-block-time" data-ts="' + Date.now() + '">' + timeAgoLabel() + '</span></span>';
+    if (blocksListEl) {
+      blocksListEl.insertBefore(row, blocksListEl.firstChild);
+      while (blocksListEl.children.length > 7) {
+        blocksListEl.removeChild(blocksListEl.lastChild);
+      }
+    }
+  }
+  for (let i = 0; i < 7; i++) addBlock();
+  setInterval(addBlock, 2600);
+
+  setInterval(() => {
+    document.querySelectorAll(".dash-block-time[data-ts]").forEach((el) => {
+      const secs = Math.round((Date.now() - Number(el.dataset.ts)) / 1000);
+      el.textContent = secs < 2 ? "just now" : secs + "s ago";
+    });
+  }, 1000);
+
+  // ---- metrics grid (sparkline mini-cards) ----
+  const METRIC_DEFS = [
+    { key: "medianFee", label: "Median Fee", unit: "#SECT", base: 0.0042, vol: 0.0006, decimals: 4, color: "#14e0a0" },
+    { key: "gasPrice", label: "Gas Price", unit: "gwei-eq", base: 1.8, vol: 0.3, decimals: 2, color: "#5b8cff" },
+    { key: "highestFee", label: "Highest Fee (24h)", unit: "#SECT", base: 0.083, vol: 0.01, decimals: 3, color: "#a685ff" },
+    { key: "blockTime", label: "Avg Block Time", unit: "sec", base: 2.1, vol: 0.15, decimals: 2, color: "#f2b84b" },
+    { key: "blockFullness", label: "Block Fullness", unit: "%", base: 46, vol: 6, decimals: 1, color: "#14e0a0", max: 100 },
+    { key: "largestBlock", label: "Largest Block (24h)", unit: "KB", base: 210, vol: 25, decimals: 0, color: "#5b8cff" },
+  ];
+  const metricsGrid = document.getElementById("dashMetricsGrid");
+  const metrics = {};
+
+  METRIC_DEFS.forEach((def) => {
+    const series = [];
+    let v = def.base;
+    for (let i = 0; i < 24; i++) {
+      v = clamp(v + rand(-def.vol, def.vol) * 0.5, def.base * 0.5, def.max || def.base * 2.2);
+      series.push(v);
+    }
+    metrics[def.key] = { def, series, value: v, prevValue: v };
+
+    const card = document.createElement("div");
+    card.className = "dcard metric-card";
+    card.innerHTML =
+      '<div class="metric-head"><span class="metric-label">' + def.label + '</span><span class="metric-window">24H</span></div>' +
+      '<svg class="metric-spark" viewBox="0 0 200 32" preserveAspectRatio="none"><path id="spark-' + def.key + '" stroke="' + def.color + '"/></svg>' +
+      '<div class="metric-bottom"><span class="metric-value" id="val-' + def.key + '">&mdash;</span><span class="metric-unit">' + def.unit + '</span>' +
+      '<span class="metric-delta" id="delta-' + def.key + '"></span></div>';
+    metricsGrid.appendChild(card);
+  });
+
+  function renderMetric(key) {
+    const m = metrics[key];
+    const path = document.getElementById("spark-" + key);
+    const valueEl = document.getElementById("val-" + key);
+    const deltaEl = document.getElementById("delta-" + key);
+    const max = Math.max.apply(null, m.series) * 1.08;
+    const min = Math.min.apply(null, m.series) * 0.92;
+    const span = max - min || 1;
+    const stepX = 200 / (m.series.length - 1);
+    let d = "";
+    m.series.forEach((v, i) => {
+      const x = i * stepX;
+      const y = 30 - ((v - min) / span) * 28;
+      d += (i === 0 ? "M" : "L") + x.toFixed(1) + " " + y.toFixed(1) + " ";
+    });
+    if (path) path.setAttribute("d", d.trim());
+    if (valueEl) valueEl.textContent = m.value.toFixed(m.def.decimals);
+    if (deltaEl) {
+      const pct = ((m.value - m.prevValue) / (m.prevValue || 1)) * 100;
+      deltaEl.textContent = (pct >= 0 ? "+" : "") + pct.toFixed(1) + "%";
+      deltaEl.className = "metric-delta " + (pct >= 0 ? "is-up" : "is-down");
+    }
+  }
+  Object.keys(metrics).forEach(renderMetric);
+  setInterval(() => {
+    Object.keys(metrics).forEach((key) => {
+      const m = metrics[key];
+      m.prevValue = m.value;
+      const next = clamp(m.value + rand(-m.def.vol, m.def.vol), m.def.base * 0.4, m.def.max || m.def.base * 2.5);
+      m.value = next;
+      m.series.push(next);
+      if (m.series.length > 24) m.series.shift();
+      renderMetric(key);
+    });
+  }, 4000);
+
+  // ---- staking ----
+  let staking = { total: 18400000, pending: 92000, apy: 7.4 };
+  function renderStaking() {
+    const total = document.getElementById("dashStakeTotal");
+    const totalPct = document.getElementById("dashStakeTotalPct");
+    const pending = document.getElementById("dashStakePending");
+    const pendingSub = document.getElementById("dashStakePendingSub");
+    const apy = document.getElementById("dashStakeApy");
+    if (total) total.textContent = fmtUSD(staking.total) + " #SECT";
+    if (totalPct) totalPct.textContent = ((staking.total / 25000000) * 100).toFixed(1) + "% of circulating supply";
+    if (pending) pending.textContent = fmtUSD(staking.pending) + " #SECT";
+    if (pendingSub) pendingSub.textContent = "activating next epoch";
+    if (apy) apy.textContent = staking.apy.toFixed(2) + "%";
+  }
+  renderStaking();
+  setInterval(() => {
+    staking.total = clamp(staking.total + rand(-4000, 9000), 15000000, 22000000);
+    staking.pending = clamp(staking.pending + rand(-6000, 6000), 20000, 220000);
+    staking.apy = clamp(staking.apy + rand(-0.06, 0.06), 5.5, 9.5);
+    renderStaking();
+  }, 6000);
+})();
