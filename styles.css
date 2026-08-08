@@ -2396,7 +2396,7 @@ img {
 }
 
 .dev-card h3 {
-  color: var(--zinc-950);
+  color: #2c2c31;
   font-size: clamp(17px, 1.6vw, 20px);
   font-weight: 400;
   line-height: 1.3;
