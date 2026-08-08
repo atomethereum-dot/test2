@@ -586,7 +586,7 @@ window.SECTORA_I18N = {
     "dashboard.hero.eyebrow": "Network Overview",
     "dashboard.hero.simNote": "Preview Dashboard &middot; Visualizer Network",
     "dashboard.hero.sub": "Validators, throughput,<br>blocks and staking across<br>the Sectora test network,<br>refreshed in real time.",
-    "dashboard.hero.title": "Sectora Testnet<br>Dashboard",
+    "dashboard.hero.title": "Sectora<br>Testnet<br>Dashboard",
     "dashboard.history.rangeNow": "now",
     "dashboard.history.rangeStart": "-30 epochs",
     "dashboard.history.title": "Epoch History",
