@@ -2224,7 +2224,25 @@ img {
 
 @media (min-width: 800px) {
   .dev-grid {
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 24px;
+    -webkit-overflow-scrolling: touch;
+    gap: 24px;
+    margin: 0 -24px;
+    padding: 4px 24px 16px;
+    scrollbar-width: none;
+  }
+
+  .dev-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dev-grid .dev-card {
+    flex: 0 0 calc(33.333% - 16px);
+    scroll-snap-align: start;
   }
 }
 
