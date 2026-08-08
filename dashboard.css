@@ -9,11 +9,12 @@
   --db-bg: var(--black);
   --db-panel: var(--black);
   --db-panel-hover: rgba(255, 255, 255, 0.03);
-  --db-border: var(--white-faint);
-  --db-border-strong: rgba(255, 255, 255, 0.22);
+  --db-border: rgba(255, 255, 255, 0.07);
+  --db-border-strong: rgba(255, 255, 255, 0.14);
   --db-text: var(--white);
   --db-text-dim: var(--white-dim);
   --db-text-faint: rgba(255, 255, 255, 0.38);
+  --db-num: rgba(255, 255, 255, 0.88);
   --db-green: #14e0a0;
   --db-green-dim: rgba(20, 224, 160, 0.14);
   --db-red: #ff5c6c;
@@ -511,7 +512,7 @@
 .dstat-link:hover { color: var(--db-text); border-color: var(--db-border-strong); }
 .dstat-body { display: flex; flex-direction: column; gap: 2px; }
 .dstat-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--db-text-faint); }
-.dstat-value { font-family: var(--font-mono); font-size: 25px; font-weight: 600; }
+.dstat-value { font-family: var(--font-mono); font-size: 25px; font-weight: 500; color: var(--db-num); }
 .dstat-chart-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; }
 .dstat-spark { width: 100%; max-width: 118px; height: 34px; flex: 1; }
 .dstat-spark-line { fill: none; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
@@ -613,7 +614,7 @@
 .dvp-stake-row { display: flex; flex-direction: column; gap: 4px; }
 .dvp-stake-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--db-text-faint); }
 .dvp-stake-line { display: flex; align-items: baseline; gap: 8px; }
-.dvp-stake-value { font-family: var(--font-mono); font-size: 40px; font-weight: 600; line-height: 1; }
+.dvp-stake-value { font-family: var(--font-mono); font-size: 40px; font-weight: 500; line-height: 1; color: var(--db-num); }
 .dvp-stake-unit { font-family: var(--font-mono); font-size: 14px; color: var(--db-text-dim); }
 
 .dvp-actions { display: flex; gap: 10px; }
@@ -641,7 +642,7 @@
 .dvp-chip-top { display: flex; align-items: center; justify-content: space-between; }
 .dvp-chip-label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--db-text-faint); }
 .dvp-chip-caret { color: var(--db-text-faint); width: 12px; height: 12px; }
-.dvp-chip-value { font-family: var(--font-mono); font-size: 15px; font-weight: 600; }
+.dvp-chip-value { font-family: var(--font-mono); font-size: 15px; font-weight: 500; color: var(--db-num); }
 
 .dvp-side { display: flex; flex-direction: column; gap: 16px; height: 100%; }
 .dvp-epoch-card { display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center; flex: 1; justify-content: center; }
@@ -650,7 +651,7 @@
 .dvp-epoch-ring-bg { fill: none; stroke: rgba(255, 255, 255, 0.08); stroke-width: 6; }
 .dvp-epoch-ring-fg { fill: none; stroke: var(--db-green); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.6s var(--db-ease); }
 .dvp-epoch-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
-.dvp-epoch-num { font-family: var(--font-mono); font-size: 17px; font-weight: 600; }
+.dvp-epoch-num { font-family: var(--font-mono); font-size: 17px; font-weight: 500; color: var(--db-num); }
 .dvp-epoch-label2 { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--db-text-faint); }
 .dvp-epoch-eta { font-family: var(--font-mono); font-size: 12px; color: var(--db-text-dim); }
 .dvp-bar-track { width: 100%; height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
@@ -914,7 +915,7 @@
 .dgl-block[data-rank="3"] .dgl-block-tx { color: #303338; }
 
 @media (max-width: 640px) {
-  .dash-globe-card, .dash-globe-stage { min-height: 320px; }
+  .dash-globe-card, .dash-globe-stage { min-height: 82vh; max-height: 720px; }
   .dgl-hint { display: none; }
   .dgl-feed { top: 60px; right: 14px; width: 150px; gap: 16px; }
 }
@@ -986,10 +987,10 @@
 
 .dash-tps-card { display: flex; flex-direction: column; }
 .dash-tps-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-.dash-tps-value { font-family: var(--font-mono); font-size: 34px; font-weight: 600; color: var(--db-text); line-height: 1; }
+.dash-tps-value { font-family: var(--font-mono); font-size: 34px; font-weight: 500; color: var(--db-num); line-height: 1; }
 .dash-tps-unit { font-family: var(--font-mono); font-size: 12px; color: var(--db-text-faint); margin-left: 6px; }
 .dash-tps-peak { text-align: right; font-family: var(--font-mono); font-size: 12px; color: var(--db-text-dim); }
-.dash-tps-peak strong { color: var(--db-text); font-weight: 600; }
+.dash-tps-peak strong { color: var(--db-num); font-weight: 500; }
 .dash-tps-chart { width: 100%; height: 110px; display: block; }
 .dash-tps-line {
   fill: none;
@@ -1018,7 +1019,7 @@
 }
 .dash-block-icon svg { width: 14px; height: 14px; }
 .dash-block-mid { flex: 1; min-width: 0; }
-.dash-block-num { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--db-text); }
+.dash-block-num { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--db-num); }
 .dash-block-validator { font-family: var(--font-sans); font-size: 11.5px; color: var(--db-text-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dash-block-right { text-align: right; flex: none; }
 .dash-block-txns { font-family: var(--font-mono); font-size: 12px; color: var(--db-text-dim); }
@@ -1052,7 +1053,7 @@
 .metric-spark-fill { stroke: none; }
 .metric-spark-dot { filter: drop-shadow(0 0 3px currentColor); }
 .metric-bottom { display: flex; align-items: baseline; gap: 6px; }
-.metric-value { font-family: var(--font-mono); font-size: 22px; font-weight: 600; color: var(--db-text); }
+.metric-value { font-family: var(--font-mono); font-size: 22px; font-weight: 500; color: var(--db-num); }
 .metric-unit { font-family: var(--font-mono); font-size: 12px; color: var(--db-text-faint); }
 .metric-delta {
   margin-left: auto;
@@ -1082,7 +1083,7 @@
 }
 .stake-icon svg { width: 16px; height: 16px; }
 .stake-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--db-text-faint); margin-bottom: 8px; }
-.stake-value { font-family: var(--font-mono); font-size: 26px; font-weight: 600; color: var(--db-text); }
+.stake-value { font-family: var(--font-mono); font-size: 26px; font-weight: 500; color: var(--db-num); }
 .stake-sub { font-family: var(--font-sans); font-size: 12px; color: var(--db-text-dim); margin-top: 6px; }
 
 /* ---- footer ---- */
