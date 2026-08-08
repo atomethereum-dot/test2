@@ -16,6 +16,9 @@
   ];
   const RTL_LANGS = new Set(["ar"]);
   const SUPPORTED = new Set(LANGS.map((l) => l.code));
+  // Spanish-speaking visitors default to English unless they pick Spanish
+  // themselves from the switcher — browser-language auto-detection skips it.
+  const AUTO_DETECT_EXCLUDE = new Set(["es"]);
 
   function dict() {
     return (window.SECTORA_I18N && window.SECTORA_I18N) || {};
@@ -32,6 +35,7 @@
     for (const raw of candidates) {
       if (!raw) continue;
       const code = raw.toLowerCase().split("-")[0];
+      if (AUTO_DETECT_EXCLUDE.has(code)) continue;
       if (SUPPORTED.has(code)) return code;
     }
     return "en";
