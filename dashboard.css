@@ -32,7 +32,6 @@
   font-family: var(--font-sans);
   min-height: 100vh;
   position: relative;
-  overflow-x: hidden;
 }
 
 .dash .mono,
@@ -799,6 +798,7 @@
     max-width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
+    margin-bottom: 60px;
     border: none;
     border-radius: 0;
     height: 100vh;
@@ -915,8 +915,9 @@
 /* ---- block feed (design ported 1:1 from the Nexus globe reference) ---- */
 .dgl-feed {
   position: absolute;
-  top: 18px;
+  top: 50%;
   right: 18px;
+  transform: translateY(-50%);
   z-index: 3;
   width: 190px;
   display: flex;
@@ -944,7 +945,7 @@
 @media (max-width: 640px) {
   .dash-globe-card, .dash-globe-stage { min-height: 82vh; max-height: 720px; }
   .dgl-hint { display: none; }
-  .dgl-feed { top: 60px; right: 14px; width: 150px; gap: 16px; }
+  .dgl-feed { top: 50%; right: 14px; transform: translateY(-50%); width: 150px; gap: 16px; }
 }
 
 /* ---- section title ---- */

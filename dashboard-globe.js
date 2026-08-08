@@ -305,12 +305,16 @@
   /* ================================================================= *
    * 5. Interaction (scoped to this card, not the whole page)
    * ================================================================= */
-  let rx = HOME.rx, ry = HOME.ry, vx = 0, vy = 0, dragging = false, px = 0, py = 0, spun = false;
+  let rx = HOME.rx, ry = HOME.ry, vx = 0, vy = 0, dragging = false, px = 0, py = 0, spun = false, selected = false;
   const hint = document.getElementById("dashGlobeHint");
   canvas.style.cursor = "grab";
   canvas.addEventListener("pointerdown", (e) => {
+    selected = true;
     canvas.setPointerCapture(e.pointerId); dragging = true; px = e.clientX; py = e.clientY; vx = vy = 0;
     canvas.style.cursor = "grabbing";
+  });
+  document.addEventListener("pointerdown", (e) => {
+    if (!stage.contains(e.target)) selected = false;
   });
   canvas.addEventListener("pointermove", (e) => {
     if (!dragging) return;
@@ -324,6 +328,7 @@
   canvas.addEventListener("pointerup", up);
   canvas.addEventListener("pointercancel", up);
   canvas.addEventListener("wheel", (e) => {
+    if (!selected) return;
     e.preventDefault();
     dist = Math.min(8, Math.max(2.15, dist + e.deltaY * 0.0022));
   }, { passive: false });
