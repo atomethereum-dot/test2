@@ -159,14 +159,14 @@
         varying vec2 vUv; varying vec3 vN; varying vec3 vNv;
         void main(){
           float land = texture2D(uMask, vUv).r;
-          vec3 base = mix(vec3(0.043,0.043,0.051), vec3(0.09,0.18,0.34), land);
+          vec3 base = mix(vec3(0.255,0.259,0.271), vec3(0.043,0.043,0.051), land);
 
           vec3  L   = normalize(vec3(-0.35, 0.75, 0.55));
           float lam = clamp(dot(vN, L) * 0.5 + 0.5, 0.0, 1.0);
           base *= 0.30 + 0.95 * pow(lam, 1.35);
 
           float edge = 1.0 - abs(vNv.z);
-          base += vec3(0.275,0.549,0.902) * pow(edge, 13.0) * 0.55 * uRim * (0.5 + 0.5 * lam);
+          base += vec3(1.0) * pow(edge, 13.0) * 0.62 * uRim * (0.5 + 0.5 * lam);
           base += vec3(1.0) * pow(edge,  4.0) * 0.03 * uRim * lam;
 
           gl_FragColor = vec4(base, 1.0);
@@ -193,7 +193,7 @@
         void main(){
           float f = pow(1.0 - abs(vNv.z), 6.5);
           float lam = clamp(dot(vN, normalize(vec3(-0.35,0.75,0.55))) * 0.5 + 0.5, 0.0, 1.0);
-          gl_FragColor = vec4(vec3(0.275,0.549,0.902), f * 0.16 * uRim * (0.35 + 0.65 * lam));
+          gl_FragColor = vec4(vec3(0.86,0.89,0.94), f * 0.13 * uRim * (0.35 + 0.65 * lam));
         }`
     })
   ));
