@@ -135,7 +135,11 @@
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-  const HOME = { dist: 3.85, rx: 0.6, ry: -Math.PI / 2 - (22 * Math.PI) / 180 };
+  /* On desktop the stage is now a full-viewport (100vh) section rather than a
+     contained card, so the sphere needs more headroom or its top/bottom --
+     including the atmosphere rim glow -- clips against the canvas edges. */
+  const isDesktopStage = matchMedia("(min-width: 641px)").matches;
+  const HOME = { dist: isDesktopStage ? 5.0 : 3.85, rx: 0.6, ry: -Math.PI / 2 - (22 * Math.PI) / 180 };
   let dist = HOME.dist;
 
   const globe = new THREE.Group();
@@ -166,8 +170,8 @@
           base *= 0.30 + 0.95 * pow(lam, 1.35);
 
           float edge = 1.0 - abs(vNv.z);
-          base += vec3(1.0) * pow(edge, 13.0) * 0.62 * uRim * (0.5 + 0.5 * lam);
-          base += vec3(1.0) * pow(edge,  4.0) * 0.03 * uRim * lam;
+          base += vec3(1.0) * pow(edge, 13.0) * 0.78 * uRim * (0.5 + 0.5 * lam);
+          base += vec3(1.0) * pow(edge,  4.0) * 0.05 * uRim * lam;
 
           gl_FragColor = vec4(base, 1.0);
         }`
@@ -191,9 +195,9 @@
         uniform float uRim;
         varying vec3 vNv; varying vec3 vN;
         void main(){
-          float f = pow(1.0 - abs(vNv.z), 6.5);
+          float f = pow(1.0 - abs(vNv.z), 5.0);
           float lam = clamp(dot(vN, normalize(vec3(-0.35,0.75,0.55))) * 0.5 + 0.5, 0.0, 1.0);
-          gl_FragColor = vec4(vec3(0.86,0.89,0.94), f * 0.13 * uRim * (0.35 + 0.65 * lam));
+          gl_FragColor = vec4(vec3(0.9,0.93,0.98), f * 0.27 * uRim * (0.45 + 0.55 * lam));
         }`
     })
   ));
