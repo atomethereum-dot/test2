@@ -360,6 +360,27 @@
   }
 
   /* ================================================================= *
+   * 5b. Block feed (same live blocks as the Recent Blocks card)
+   * ================================================================= */
+  const feedEl = document.getElementById("dashGlobeFeed");
+  if (feedEl) {
+    function pushFeedBlock(block) {
+      const el = document.createElement("div");
+      el.className = "dgl-block"; el.dataset.rank = "0";
+      el.innerHTML =
+        '<div class="dgl-block-id">' + t("dashboard.globe.blockPrefix", "Block") + " #" + block.height + '</div>' +
+        '<div class="dgl-block-tx">' + block.txns + " " + t("dashboard.throughput.txns", "txns") + '</div>';
+      feedEl.prepend(el);
+      [...feedEl.children].forEach((c, i) => {
+        c.dataset.rank = String(i);
+        if (i > 3) c.remove();
+      });
+    }
+    (window.SECTORA_RECENT_BLOCKS || []).slice(0, 4).reverse().forEach(pushFeedBlock);
+    document.addEventListener("sectora:block", (e) => pushFeedBlock(e.detail));
+  }
+
+  /* ================================================================= *
    * 6. Resize + loop
    * ================================================================= */
   function resize() {

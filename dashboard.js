@@ -373,6 +373,11 @@
         blocksListEl.removeChild(blocksListEl.lastChild);
       }
     }
+
+    window.SECTORA_RECENT_BLOCKS = window.SECTORA_RECENT_BLOCKS || [];
+    window.SECTORA_RECENT_BLOCKS.unshift({ height: blockHeight, txns: txns });
+    if (window.SECTORA_RECENT_BLOCKS.length > 8) window.SECTORA_RECENT_BLOCKS.length = 8;
+    document.dispatchEvent(new CustomEvent("sectora:block", { detail: { height: blockHeight, txns: txns } }));
   }
   for (let i = 0; i < 7; i++) addBlock();
   setInterval(addBlock, 2600);
