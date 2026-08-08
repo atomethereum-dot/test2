@@ -54,6 +54,79 @@
     return Math.max(min, Math.min(max, n));
   }
 
+  // ---- validator node map: real country borders (Natural Earth 110m,
+  // self-hosted, same resolution/source family as the 3D globe) ----
+  (() => {
+    const g = document.getElementById("dmapCountries");
+    const topo = window.SECTORA_MAP_TOPOLOGY;
+    if (!g || !topo) return;
+
+    const NORTH = 83, SOUTH = -58;
+    function project(lon, lat) {
+      const x = (lon + 180) / 360 * 1000;
+      const y = (NORTH - lat) / (NORTH - SOUTH) * 391.7;
+      return [x, y];
+    }
+
+    const [sx, sy] = topo.transform.scale, [tx, ty] = topo.transform.translate;
+    const arcs = topo.arcs.map((arc) => {
+      let x = 0, y = 0;
+      return arc.map((d) => { x += d[0]; y += d[1]; return [x * sx + tx, y * sy + ty]; });
+    });
+    function ring(idx) {
+      const out = [];
+      for (const i of idx) {
+        const a = i < 0 ? arcs[~i].slice().reverse() : arcs[i];
+        for (let k = out.length ? 1 : 0; k < a.length; k++) out.push(a[k]);
+      }
+      return out;
+    }
+    function unwrap(r) {
+      const out = [[r[0][0], r[0][1]]];
+      for (let i = 1; i < r.length; i++) {
+        let lon = r[i][0];
+        const prev = out[i - 1][0];
+        while (lon - prev > 180) lon -= 360;
+        while (prev - lon > 180) lon += 360;
+        out.push([lon, r[i][1]]);
+      }
+      return out;
+    }
+
+    const frag = document.createDocumentFragment();
+    for (const geom of topo.objects.countries.geometries) {
+      const polys =
+        geom.type === "MultiPolygon" ? geom.arcs.map((p) => p.map(ring)) :
+        geom.type === "Polygon" ? [geom.arcs.map(ring)] : [];
+      let d = "";
+      for (const poly of polys) {
+        const rings = poly.map(unwrap);
+        let lo = Infinity, hi = -Infinity;
+        for (const r of rings) for (const p of r) { if (p[0] < lo) lo = p[0]; if (p[0] > hi) hi = p[0]; }
+        const offsets = [0];
+        if (hi > 180) offsets.push(-360);
+        if (lo < -180) offsets.push(360);
+        for (const off of offsets) {
+          for (const r of rings) {
+            let sub = "";
+            for (let i = 0; i < r.length; i++) {
+              const [x, y] = project(r[i][0] + off, r[i][1]);
+              sub += (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1) + " ";
+            }
+            d += sub + "Z ";
+          }
+        }
+      }
+      if (d) {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("class", "dmap-country");
+        path.setAttribute("d", d.trim());
+        frag.appendChild(path);
+      }
+    }
+    g.appendChild(frag);
+  })();
+
   // ---- validator node map (reuses the site's world map coordinate set) ----
   const NODE_POSITIONS = [
     [162.8, 105.5], [490.0, 80.6], [523.1, 100.6], [529.7, 88.8],
