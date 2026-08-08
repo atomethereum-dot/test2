@@ -2225,7 +2225,7 @@ img {
   line-height: 1.5;
   letter-spacing: 0.3px;
   color: var(--zinc-600);
-  margin-top: 4px;
+  margin-top: 60px;
 }
 
 .supply-lede strong {
@@ -2377,6 +2377,10 @@ img {
 }
 
 @media (max-width: 640px) {
+  .supply-lede {
+    margin-top: 40px;
+  }
+
   .supply-table-wrap {
     display: none;
   }
