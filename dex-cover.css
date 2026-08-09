@@ -181,6 +181,12 @@
 
 .dcov-footer { position: relative; z-index: 1; }
 
+@media (max-width: 900px) {
+  /* This page has no tabs/Connect Wallet crowding the header like the
+     trading screen does, so there's room to keep the full wordmark. */
+  .dcov .dx-logo-word { display: inline; }
+}
+
 @media (max-width: 640px) {
   .dcov-hero { min-height: calc(100dvh - 56px); }
   .dcov-hero-inner { margin: 0; width: 100%; max-width: none; padding: 40px 18px 32px 18px; justify-content: flex-start; }

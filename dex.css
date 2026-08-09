@@ -959,6 +959,11 @@
   .dx-topbar-row { gap: 10px; padding: 0 12px; flex-wrap: wrap; height: auto; padding-top: 10px; padding-bottom: 10px; }
   .dx-logo-word { display: none; }
   .dx-back span { display: none; }
+  /* The site-wide rule hides any non-hamburger-menu language switcher
+     under 720px, but the DEX pages have no hamburger menu with a second
+     copy of it — without this override there'd be no way to change
+     language on mobile at all. */
+  .dx-topbar-right .lang-switch-wrap { display: flex; }
   .dx-tabs { order: 3; width: 100%; }
   .dx-tab { flex: 1; justify-content: center; }
   .dx-main { padding: 14px; }
