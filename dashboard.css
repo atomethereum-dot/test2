@@ -167,6 +167,7 @@
 
 .dash-heroband .dash-title {
   text-wrap: balance;
+  margin-left: -4px;
 }
 
 .dash-title-viz {
@@ -174,7 +175,7 @@
 }
 
 .dash-heroband .dash-title-sub {
-  margin: 26px 0 0;
+  margin: 26px 0 0 -4px;
 }
 
 .dash-heroband .dash-hero-actions {
