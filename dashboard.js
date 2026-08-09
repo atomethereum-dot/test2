@@ -101,13 +101,13 @@
       let d = "";
       for (const poly of polys) {
         const rings = poly.map(unwrap);
-        let lo = Infinity, hi = -Infinity;
-        for (const r of rings) for (const p of r) { if (p[0] < lo) lo = p[0]; if (p[0] > hi) hi = p[0]; }
-        const offsets = [0];
-        if (hi > 180) offsets.push(-360);
-        if (lo < -180) offsets.push(360);
-        for (const off of offsets) {
-          for (const r of rings) {
+        for (const r of rings) {
+          let lo = Infinity, hi = -Infinity;
+          for (const p of r) { if (p[0] < lo) lo = p[0]; if (p[0] > hi) hi = p[0]; }
+          const offsets = [0];
+          if (hi > 180) offsets.push(-360);
+          if (lo < -180) offsets.push(360);
+          for (const off of offsets) {
             let sub = "";
             for (let i = 0; i < r.length; i++) {
               const [x, y] = project(r[i][0] + off, r[i][1]);
