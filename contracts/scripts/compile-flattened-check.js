@@ -3,7 +3,7 @@ const path = require("path");
 const solc = require("solc");
 
 const DIR = path.join(__dirname, "..", "flattened");
-for (const name of ["SectoraToken", "SectoraStaking", "ValidatorRegistry"]) {
+for (const name of ["SectoraToken", "SectoraHashMarket", "ValidatorRegistry"]) {
   const file = name + ".flattened.sol";
   const input = {
     language: "Solidity",

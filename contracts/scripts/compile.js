@@ -6,7 +6,7 @@ const ROOT = path.join(__dirname, "..");
 const CONTRACTS_DIR = path.join(ROOT, "contracts");
 const OUT_DIR = path.join(ROOT, "artifacts-manual");
 
-const CONTRACT_FILES = ["SectoraToken.sol", "SectoraStaking.sol", "ValidatorRegistry.sol"];
+const CONTRACT_FILES = ["SectoraToken.sol", "SectoraHashMarket.sol", "ValidatorRegistry.sol"];
 
 function findImport(importPath) {
   const candidates = [
