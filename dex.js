@@ -32,15 +32,20 @@
   // turned out unreliable, so this stays at the original scale.
   // [id, ticker, name, approxRank] — approxRank only drives local tiering
   // (order-book depth, trade sizes), not display order.
+  // 5th field is a starting price shown the instant the page loads (before
+  // the first live poll lands), so the market never sits on an empty "—"
+  // while a request is in flight or if a single poll fails — same
+  // resilience behavior as the very first version of this page. Live
+  // polling still overwrites this with the real price a few seconds later.
   const COIN_DEFS = [
-    ["bitcoin", "BTC", "Bitcoin", 1], ["ethereum", "ETH", "Ethereum", 2],
-    ["bitcoin-cash", "BCH", "Bitcoin Cash", 18], ["solana", "SOL", "Solana", 5],
-    ["litecoin", "LTC", "Litecoin", 21], ["ripple", "XRP", "XRP", 6],
-    ["sui", "SUI", "Sui", 24], ["hyperliquid", "HYPE", "Hyperliquid", 30],
+    ["bitcoin", "BTC", "Bitcoin", 1, 65000], ["ethereum", "ETH", "Ethereum", 2, 1900],
+    ["bitcoin-cash", "BCH", "Bitcoin Cash", 18, 220], ["solana", "SOL", "Solana", 5, 75],
+    ["litecoin", "LTC", "Litecoin", 21, 46], ["ripple", "XRP", "XRP", 6, 2.9],
+    ["sui", "SUI", "Sui", 24, 3.5], ["hyperliquid", "HYPE", "Hyperliquid", 30, 29],
   ];
   const METAL_DEFS = [
-    ["pax-gold", "PAXG", "Gold"],
-    ["kinesis-silver", "KAG", "Silver"],
+    ["pax-gold", "PAXG", "Gold", 2650],
+    ["kinesis-silver", "KAG", "Silver", 31],
   ];
   const METAL_IDS = { "pax-gold": "Gold", "kinesis-silver": "Silver" };
   const ALL_COIN_IDS = COIN_DEFS.map((c) => c[0]).concat(METAL_DEFS.map((m) => m[0]));
@@ -220,6 +225,40 @@
   const COIN_DEF_BY_ID = {};
   COIN_DEFS.forEach((c) => { COIN_DEF_BY_ID[c[0]] = c; });
   METAL_DEFS.forEach((m) => { COIN_DEF_BY_ID[m[0]] = m; });
+
+  // Fills ASSETS with a starting price for every coin/metal right away, so
+  // the market list is never empty on load — the live poll then overwrites
+  // these with real numbers within a couple seconds.
+  function seedAssetsFromDefs() {
+    COIN_DEFS.concat(METAL_DEFS).forEach((def) => {
+      const id = def[0];
+      const isMetal = !!METAL_IDS[id];
+      const base = def[isMetal ? 3 : 4];
+      if (BY_ID[id] || typeof base !== "number") return;
+      const asset = {
+        id: id,
+        ticker: def[1],
+        name: def[2],
+        category: isMetal ? "metal" : "crypto",
+        color: colorForSymbol(def[1]),
+        chain: isMetal ? def[2] + " (tokenized)" : def[2] + " Network",
+        rank: isMetal ? 9999 : def[3],
+        price: base,
+        open24h: base,
+        high24h: base,
+        low24h: base,
+        change24h: 0,
+        vol24h: 0,
+        candles: {},
+      };
+      if (isMetal) asset.subLabel = def[2] + " (" + def[1] + ")";
+      asset.tier = tierOf(asset);
+      BY_ID[id] = asset;
+      ASSETS.push(asset);
+    });
+    ASSETS.sort((a, b) => (a.rank || 9999) - (b.rank || 9999));
+    ASSETS.forEach(seedCandles);
+  }
 
   // Row shape here matches CoinGecko's /simple/price response for one id:
   // { usd, usd_market_cap, usd_24h_vol, usd_24h_change }. That endpoint
@@ -417,10 +456,9 @@
     marketLiveEl.classList.toggle("is-stale", !isLive);
     const labelEl = marketLiveEl.querySelector("span:last-child");
     if (labelEl) {
-      const base = isLive
+      labelEl.textContent = isLive
         ? t("dex.trade.markets.liveNote", "LIVE · updates ~20s")
         : t("dex.trade.markets.staleNote", "Live feed unreachable — showing last known prices");
-      labelEl.textContent = !isLive && lastFetchErrorText ? base + " (" + lastFetchErrorText + ")" : base;
     }
   }
 
@@ -1247,11 +1285,15 @@
   });
 
   function init() {
-    if (marketTableEl) marketTableEl.classList.add("is-loading");
+    seedAssetsFromDefs();
+    dataReady = true;
+    if (!BY_ID[activeSymbol] && ASSETS[0]) activeSymbol = ASSETS[0].id;
+
     renderMarketTable();
     renderTicker();
     renderTrades();
     renderSwapFeed();
+    onDataChanged();
 
     tick();
     setInterval(tick, CRYPTO_POLL_MS);
