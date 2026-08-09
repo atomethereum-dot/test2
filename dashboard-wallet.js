@@ -61,6 +61,11 @@
       deepLink: (uri) => "https://link.trustwallet.com/wc?uri=" + encodeURIComponent(uri),
     },
     {
+      rdns: "com.binance.wallet",
+      name: "Binance Wallet",
+      logo: LOGOS.binance,
+    },
+    {
       rdns: "com.coinbase.wallet",
       name: "Coinbase Wallet",
       logo: LOGOS.coinbase,

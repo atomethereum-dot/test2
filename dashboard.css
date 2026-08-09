@@ -1432,6 +1432,31 @@
 }
 
 /* ---- custom cursor (pro, minimal) ---- */
+.dcursor-light {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 480px;
+  height: 480px;
+  margin: -240px 0 0 -240px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(150, 195, 255, 0.8) 0%,
+    rgba(70, 140, 230, 0.35) 28%,
+    rgba(70, 140, 230, 0.1) 55%,
+    rgba(70, 140, 230, 0) 75%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 199;
+  opacity: 0;
+  transform: translate(-1000px, -1000px);
+  transition: opacity 0.25s ease, transform 0.12s ease-out;
+  will-change: transform;
+}
+
 .dcursor-dot,
 .dcursor-ring {
   display: none;
@@ -1468,6 +1493,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+  .dcursor-light,
   .dcursor-dot,
   .dcursor-ring {
     display: block;
@@ -1477,5 +1503,11 @@
   .dash button,
   .dash input {
     cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dcursor-light {
+    transition: opacity 0.25s ease;
   }
 }

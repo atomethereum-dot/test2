@@ -1,4 +1,5 @@
 (() => {
+  const light = document.getElementById("dCursorLight");
   const ring = document.getElementById("dCursorRing");
   const dot = document.getElementById("dCursorDot");
   if (!ring || !dot) return;
@@ -15,17 +16,19 @@
   function show() {
     if (visible) return;
     visible = true;
+    if (light) light.style.opacity = "1";
     ring.style.opacity = "1";
     dot.style.opacity = "1";
   }
   function hide() {
     visible = false;
+    if (light) light.style.opacity = "0";
     ring.style.opacity = "0";
     dot.style.opacity = "0";
   }
   function tick() {
     rafId = null;
-    const ease = reduced ? 1 : 0.2;
+    const ease = reduced ? 1 : 0.45;
     ringX += (targetX - ringX) * ease;
     ringY += (targetY - ringY) * ease;
     ring.style.transform = "translate(" + ringX + "px, " + ringY + "px) translate(-50%, -50%)";
@@ -37,6 +40,7 @@
   window.addEventListener("pointermove", (e) => {
     targetX = e.clientX;
     targetY = e.clientY;
+    if (light) light.style.transform = "translate(" + e.clientX + "px, " + e.clientY + "px)";
     dot.style.transform = "translate(" + e.clientX + "px, " + e.clientY + "px) translate(-50%, -50%)";
     show();
     if (rafId === null) rafId = requestAnimationFrame(tick);
