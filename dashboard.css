@@ -409,7 +409,11 @@
 @media (max-width: 980px) {
   .dash-search { display: none; }
   .dash-topbar-right { width: 100%; margin-left: 0; }
-  .dash-topbar-right .dash-icon-btn { margin-left: auto; }
+  /* The site-wide rule hides any non-hamburger-menu language switcher
+     under 720px, and this page has no hamburger menu with a second copy
+     of it — without this override there'd be no way to change language
+     on mobile at all. Order it first so it sits at the left edge. */
+  .dash-topbar-right .lang-switch-wrap { display: flex; order: -1; }
 }
 
 /* ---- shell / layout ---- */
