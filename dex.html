@@ -128,6 +128,19 @@
           <div class="dx-market-card">
             <div class="dx-market-card-head">
               <span data-i18n="dex.trade.markets.title">Markets</span>
+              <span class="dx-market-live" id="dexMarketLive"><span class="dx-live-dot" aria-hidden="true"></span><span data-i18n="dex.trade.markets.liveNote">LIVE · updates ~20s</span></span>
+            </div>
+            <div class="dx-market-toolbar">
+              <div class="dx-market-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="dexMarketSearch" data-i18n-attr="placeholder:dex.trade.markets.search" placeholder="Search markets…" />
+              </div>
+              <div class="dx-cat-tabs" id="dexCatTabs">
+                <button class="dx-cat-tab is-active" type="button" data-cat="all" data-i18n="dex.trade.markets.catAll">All</button>
+                <button class="dx-cat-tab" type="button" data-cat="crypto" data-i18n="dex.trade.markets.catCrypto">Crypto</button>
+                <button class="dx-cat-tab" type="button" data-cat="metal" data-i18n="dex.trade.markets.catMetals">Metals</button>
+                <button class="dx-cat-tab" type="button" data-cat="index" data-i18n="dex.trade.markets.catIndices">Indices</button>
+              </div>
             </div>
             <div class="dx-market-table" id="dexMarketTable"></div>
           </div>
