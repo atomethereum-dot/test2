@@ -3309,6 +3309,38 @@ img {
   border-color: rgba(255, 255, 255, 0.45);
 }
 
+.join--light {
+  background: var(--white);
+}
+
+.join--light .join-heading {
+  color: var(--zinc-950);
+}
+
+.join--light .lead {
+  color: var(--zinc-600);
+}
+
+.join--light .join-btn {
+  background: var(--zinc-950);
+  color: var(--white);
+}
+
+.join--light .join-btn:hover {
+  background: #27272a;
+}
+
+.join--light .join-btn--outline {
+  background: transparent;
+  color: var(--zinc-950);
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+.join--light .join-btn--outline:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.32);
+}
+
 @media (max-width: 780px) {
   .join {
     padding: 96px 24px;
