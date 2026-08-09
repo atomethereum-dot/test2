@@ -1387,7 +1387,7 @@
 .stake-sub { font-family: var(--font-sans); font-size: 12px; color: var(--db-text-dim); margin-top: 6px; }
 
 /* ---- hash market: buy hash, become a validator ---- */
-.dhm-card { padding: 26px; display: flex; flex-direction: column; gap: 22px; }
+.dhm-card { padding: 26px; margin-bottom: 36px; display: flex; flex-direction: column; gap: 22px; }
 
 .dhm-not-deployed {
   display: flex;
@@ -1402,6 +1402,7 @@
   line-height: 1.4;
 }
 .dhm-not-deployed svg { width: 16px; height: 16px; flex: none; }
+.dhm-not-deployed[hidden] { display: none; }
 
 .dhm-top {
   display: flex;
@@ -1541,6 +1542,7 @@
 .dhm-progress-fill.is-complete { background: var(--db-green); }
 
 .dhm-register-form { display: flex; flex-direction: column; gap: 12px; max-width: 420px; }
+.dhm-register-form[hidden] { display: none; }
 .dhm-field { display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .dhm-field-row { display: flex; align-items: flex-end; gap: 8px; }
 .dhm-field-label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--db-text-faint); }
@@ -1601,6 +1603,7 @@
   background: rgba(20, 224, 160, 0.06);
   border: 1px solid rgba(20, 224, 160, 0.25);
 }
+.dhm-registered-status[hidden] { display: none; }
 .dhm-registered-row { display: flex; align-items: center; gap: 10px; font-family: var(--font-sans); font-size: 13px; color: var(--db-text); }
 .dhm-registered-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--db-green); box-shadow: 0 0 8px rgba(20, 224, 160, 0.8); animation: dashPulseDot 1.8s ease-in-out infinite; flex: none; }
 .dhm-deactivate-btn {
