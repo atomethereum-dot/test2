@@ -195,9 +195,9 @@
         uniform float uRim;
         varying vec3 vNv; varying vec3 vN;
         void main(){
-          float f = pow(1.0 - abs(vNv.z), 2.2);
+          float f = pow(1.0 - abs(vNv.z), 4.5);
           float lam = clamp(dot(vN, normalize(vec3(-0.35,0.75,0.55))) * 0.5 + 0.5, 0.0, 1.0);
-          gl_FragColor = vec4(vec3(1.5,1.55,1.6), f * 0.95 * uRim * (0.8 + 0.2 * lam));
+          gl_FragColor = vec4(vec3(1.0,1.0,1.0), f * 0.85 * uRim * (0.85 + 0.15 * lam));
         }`
     })
   ));
