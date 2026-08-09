@@ -26,70 +26,17 @@
 
   const QUOTE = "USDX";
 
-  // CoinGecko's heavier /coins/markets endpoint (used to build the first
-  // version of this list) turned out to be rate-limited far more
-  // aggressively than /simple/price for keyless requests — the same
-  // /simple/price endpoint the main site's live Supply table already
-  // uses successfully. So the DEX uses that same proven endpoint with a
-  // large, hand-picked list of real coin ids instead of an auto-ranked
-  // "top 100" call. [id, ticker, name, approxRank] — approxRank only
-  // drives local tiering (order-book depth, trade sizes), not display
-  // order (the UI sorts live, by price/name/search).
+  // Kept intentionally small — the exact same shape (one /simple/price
+  // call, a handful of ids) as the main site's live Supply table, which is
+  // proven to work. A much larger, chunked version of this was tried and
+  // turned out unreliable, so this stays at the original scale.
+  // [id, ticker, name, approxRank] — approxRank only drives local tiering
+  // (order-book depth, trade sizes), not display order.
   const COIN_DEFS = [
     ["bitcoin", "BTC", "Bitcoin", 1], ["ethereum", "ETH", "Ethereum", 2],
-    ["binancecoin", "BNB", "BNB", 4], ["solana", "SOL", "Solana", 5],
-    ["ripple", "XRP", "XRP", 6], ["cardano", "ADA", "Cardano", 9],
-    ["dogecoin", "DOGE", "Dogecoin", 10], ["tron", "TRX", "TRON", 11],
-    ["the-open-network", "TON", "Toncoin", 12], ["avalanche-2", "AVAX", "Avalanche", 14],
-    ["shiba-inu", "SHIB", "Shiba Inu", 15], ["chainlink", "LINK", "Chainlink", 17],
-    ["bitcoin-cash", "BCH", "Bitcoin Cash", 18], ["polkadot", "DOT", "Polkadot", 19],
-    ["near", "NEAR", "NEAR Protocol", 20], ["litecoin", "LTC", "Litecoin", 21],
-    ["uniswap", "UNI", "Uniswap", 23], ["sui", "SUI", "Sui", 24],
-    ["internet-computer", "ICP", "Internet Computer", 27], ["aptos", "APT", "Aptos", 29],
-    ["hyperliquid", "HYPE", "Hyperliquid", 30], ["pepe", "PEPE", "Pepe", 31],
-    ["ethereum-classic", "ETC", "Ethereum Classic", 32], ["monero", "XMR", "Monero", 33],
-    ["stellar", "XLM", "Stellar", 34], ["okb", "OKB", "OKB", 36],
-    ["cronos", "CRO", "Cronos", 37], ["filecoin", "FIL", "Filecoin", 38],
-    ["immutable-x", "IMX", "Immutable", 39], ["hedera-hashgraph", "HBAR", "Hedera", 40],
-    ["matic-network", "MATIC", "Polygon", 41], ["arbitrum", "ARB", "Arbitrum", 42],
-    ["vechain", "VET", "VeChain", 43], ["cosmos", "ATOM", "Cosmos", 44],
-    ["injective-protocol", "INJ", "Injective", 45], ["optimism", "OP", "Optimism", 46],
-    ["the-graph", "GRT", "The Graph", 47], ["render-token", "RENDER", "Render", 48],
-    ["thorchain", "RUNE", "THORChain", 49], ["algorand", "ALGO", "Algorand", 50],
-    ["mantle", "MNT", "Mantle", 51], ["celestia", "TIA", "Celestia", 52],
-    ["bittensor", "TAO", "Bittensor", 53], ["sei-network", "SEI", "Sei", 54],
-    ["stacks", "STX", "Stacks", 55], ["fantom", "FTM", "Fantom", 56],
-    ["tezos", "XTZ", "Tezos", 57], ["theta-token", "THETA", "Theta Network", 58],
-    ["flow", "FLOW", "Flow", 59], ["axie-infinity", "AXS", "Axie Infinity", 60],
-    ["the-sandbox", "SAND", "The Sandbox", 61], ["decentraland", "MANA", "Decentraland", 62],
-    ["eos", "EOS", "EOS", 63], ["chiliz", "CHZ", "Chiliz", 64],
-    ["gala", "GALA", "Gala", 65], ["aave", "AAVE", "Aave", 66],
-    ["maker", "MKR", "Maker", 67], ["rocket-pool", "RPL", "Rocket Pool", 68],
-    ["lido-dao", "LDO", "Lido DAO", 69], ["curve-dao-token", "CRV", "Curve DAO", 70],
-    ["pancakeswap-token", "CAKE", "PancakeSwap", 71], ["synthetix-network-token", "SNX", "Synthetix", 72],
-    ["dydx", "DYDX", "dYdX", 73], ["gmx", "GMX", "GMX", 74],
-    ["1inch", "1INCH", "1inch", 75], ["sushi", "SUSHI", "Sushi", 76],
-    ["apecoin", "APE", "ApeCoin", 77], ["blur", "BLUR", "Blur", 78],
-    ["worldcoin-wld", "WLD", "Worldcoin", 79], ["jasmycoin", "JASMY", "JasmyCoin", 80],
-    ["pyth-network", "PYTH", "Pyth Network", 81], ["jupiter-exchange-solana", "JUP", "Jupiter", 82],
-    ["wormhole", "W", "Wormhole", 83], ["dogwifcoin", "WIF", "dogwifhat", 84],
-    ["bonk", "BONK", "Bonk", 85], ["floki", "FLOKI", "FLOKI", 86],
-    ["ronin", "RON", "Ronin", 87], ["akash-network", "AKT", "Akash Network", 88],
-    ["kava", "KAVA", "Kava", 89], ["osmosis", "OSMO", "Osmosis", 90],
-    ["zcash", "ZEC", "Zcash", 91], ["dash", "DASH", "Dash", 92],
-    ["waves", "WAVES", "Waves", 93], ["iota", "IOTA", "IOTA", 94],
-    ["neo", "NEO", "NEO", 95], ["ravencoin", "RVN", "Ravencoin", 96],
-    ["zilliqa", "ZIL", "Zilliqa", 97], ["icon", "ICX", "ICON", 98],
-    ["enjincoin", "ENJ", "Enjin Coin", 99], ["basic-attention-token", "BAT", "Basic Attention Token", 100],
-    ["0x", "ZRX", "0x Protocol", 101], ["loopring", "LRC", "Loopring", 102],
-    ["status", "SNT", "Status", 103], ["storj", "STORJ", "Storj", 104],
-    ["ankr", "ANKR", "Ankr", 105], ["celo", "CELO", "Celo", 106],
-    ["harmony", "ONE", "Harmony", 107], ["oasis-network", "ROSE", "Oasis Network", 108],
-    ["moonbeam", "GLMR", "Moonbeam", 109], ["klay-token", "KLAY", "Klaytn", 110],
-    ["gnosis", "GNO", "Gnosis", 111], ["frax-share", "FXS", "Frax Share", 112],
-    ["convex-finance", "CVX", "Convex Finance", 113], ["balancer", "BAL", "Balancer", 114],
-    ["ocean-protocol", "OCEAN", "Ocean Protocol", 115], ["fetch-ai", "FET", "Fetch.ai", 116],
-    ["singularitynet", "AGIX", "SingularityNET", 117], ["numeraire", "NMR", "Numeraire", 118],
+    ["bitcoin-cash", "BCH", "Bitcoin Cash", 18], ["solana", "SOL", "Solana", 5],
+    ["litecoin", "LTC", "Litecoin", 21], ["ripple", "XRP", "XRP", 6],
+    ["sui", "SUI", "Sui", 24], ["hyperliquid", "HYPE", "Hyperliquid", 30],
   ];
   const METAL_DEFS = [
     ["pax-gold", "PAXG", "Gold"],
@@ -97,27 +44,9 @@
   ];
   const METAL_IDS = { "pax-gold": "Gold", "kinesis-silver": "Silver" };
   const ALL_COIN_IDS = COIN_DEFS.map((c) => c[0]).concat(METAL_DEFS.map((m) => m[0]));
-
-  // A single /simple/price call for all ~110 ids at once turned out to be
-  // unreliable (likely CoinGecko's anonymous-tier request-size/complexity
-  // limit) even though the exact same endpoint with a small id list (the
-  // main site's live Supply table, 8 ids) works fine. So this is split
-  // into several small requests — the same size as that proven call —
-  // fetched in parallel; a failure in one chunk doesn't take down the rest.
-  const SIMPLE_PRICE_CHUNK_SIZE = 12;
-  function simplePriceChunks() {
-    const chunks = [];
-    for (let i = 0; i < ALL_COIN_IDS.length; i += SIMPLE_PRICE_CHUNK_SIZE) {
-      chunks.push(ALL_COIN_IDS.slice(i, i + SIMPLE_PRICE_CHUNK_SIZE));
-    }
-    return chunks;
-  }
-  function simplePriceUrl(ids) {
-    return (
-      "https://api.coingecko.com/api/v3/simple/price?ids=" + ids.join(",") +
-      "&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true"
-    );
-  }
+  const SIMPLE_PRICE_URL =
+    "https://api.coingecko.com/api/v3/simple/price?ids=" + ALL_COIN_IDS.join(",") +
+    "&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true";
 
   const INDEX_DEFS = [
     { symbol: "^DJI", ticker: "DJI", name: "Dow Jones" },
@@ -131,17 +60,9 @@
   // list. Binance's public 24hr ticker also returns real market data.
   const BINANCE_FALLBACK = [
     ["BTCUSDT", "bitcoin", "Bitcoin", 1], ["ETHUSDT", "ethereum", "Ethereum", 2],
-    ["BNBUSDT", "binancecoin", "BNB", 3], ["SOLUSDT", "solana", "Solana", 5],
-    ["XRPUSDT", "ripple", "XRP", 6], ["ADAUSDT", "cardano", "Cardano", 9],
-    ["DOGEUSDT", "dogecoin", "Dogecoin", 10], ["AVAXUSDT", "avalanche-2", "Avalanche", 14],
-    ["DOTUSDT", "polkadot", "Polkadot", 16], ["LINKUSDT", "chainlink", "Chainlink", 17],
-    ["MATICUSDT", "matic-network", "Polygon", 20], ["LTCUSDT", "litecoin", "Litecoin", 22],
-    ["BCHUSDT", "bitcoin-cash", "Bitcoin Cash", 28], ["SUIUSDT", "sui", "Sui", 24],
-    ["HYPEUSDT", "hyperliquid", "Hyperliquid", 30], ["ATOMUSDT", "cosmos", "Cosmos", 40],
-    ["NEARUSDT", "near", "NEAR Protocol", 26], ["APTUSDT", "aptos", "Aptos", 35],
-    ["FILUSDT", "filecoin", "Filecoin", 45], ["ETCUSDT", "ethereum-classic", "Ethereum Classic", 32],
-    ["ARBUSDT", "arbitrum", "Arbitrum", 42], ["OPUSDT", "optimism", "Optimism", 48],
-    ["UNIUSDT", "uniswap", "Uniswap", 25], ["TONUSDT", "the-open-network", "Toncoin", 12],
+    ["BCHUSDT", "bitcoin-cash", "Bitcoin Cash", 18], ["SOLUSDT", "solana", "Solana", 5],
+    ["LTCUSDT", "litecoin", "Litecoin", 21], ["XRPUSDT", "ripple", "XRP", 6],
+    ["SUIUSDT", "sui", "Sui", 24], ["HYPEUSDT", "hyperliquid", "Hyperliquid", 30],
   ];
 
   const CRYPTO_POLL_MS = 20000;
@@ -419,43 +340,32 @@
   let lastFetchErrorText = "";
 
   // CoinGecko's /simple/price is the same proven, keyless endpoint the
-  // main site's live Supply table already relies on; if every chunk fails
-  // outright, fall back to Binance's public 24hr ticker for the major
-  // pairs so the DEX never sits empty because of a single unreachable
-  // provider.
+  // main site's live Supply table already relies on, with the same small
+  // id-list shape; if it fails outright, fall back to Binance's public
+  // 24hr ticker so the DEX never sits empty because of a single
+  // unreachable provider.
   function pollCrypto() {
     const isFirstLoad = !dataReady;
-    const chunks = simplePriceChunks();
-    return Promise.allSettled(chunks.map((ids) => fetchJson(simplePriceUrl(ids)))).then((results) => {
-      const merged = {};
-      let anyOk = false;
-      let firstError = null;
-      results.forEach((r) => {
-        if (r.status === "fulfilled" && r.value && typeof r.value === "object") {
-          Object.assign(merged, r.value);
-          anyOk = true;
-        } else if (r.status === "rejected" && !firstError) {
-          firstError = r.reason;
-        }
-      });
-      if (anyOk && applyPriceMap(merged, isFirstLoad)) {
+    return fetchJson(SIMPLE_PRICE_URL)
+      .then((idPriceMap) => {
+        if (!applyPriceMap(idPriceMap, isFirstLoad)) throw new Error("empty_response");
         lastFetchErrorText = "";
         return true;
-      }
-      const errText = firstError ? String(firstError.message || firstError) : "empty_response";
-      console.warn("[dex] CoinGecko /simple/price chunks failed (" + errText + "), trying Binance fallback");
-      return fetchBinanceFallback()
-        .then((fallbackMap) => {
-          const ok = applyPriceMap(fallbackMap, isFirstLoad);
-          if (ok) lastFetchErrorText = "";
-          else lastFetchErrorText = errText;
-          return ok;
-        })
-        .catch((binErr) => {
-          lastFetchErrorText = errText + " / binance: " + String(binErr.message || binErr);
-          return false;
-        });
-    });
+      })
+      .catch((err) => {
+        const errText = String(err.message || err);
+        console.warn("[dex] CoinGecko /simple/price failed (" + errText + "), trying Binance fallback");
+        return fetchBinanceFallback()
+          .then((fallbackMap) => {
+            const ok = applyPriceMap(fallbackMap, isFirstLoad);
+            lastFetchErrorText = ok ? "" : errText;
+            return ok;
+          })
+          .catch((binErr) => {
+            lastFetchErrorText = errText + " / binance: " + String(binErr.message || binErr);
+            return false;
+          });
+      });
   }
 
   function fetchYahoo(symbol) {
