@@ -46,87 +46,76 @@
   // in that app on mobile; the rest fall back to the raw wc: URI, which
   // most WalletConnect-compatible wallets also register as a URL scheme
   // handler. On desktop, every entry renders as a scannable QR code.
+  const LOGOS = window.SECTORA_WALLET_LOGOS || {};
   const POPULAR_WALLETS = [
     {
       rdns: "io.metamask",
       name: "MetaMask",
-      color: "#f6851b",
-      mono: "M",
+      logo: LOGOS.metaMask,
       deepLink: (uri) => "https://metamask.app.link/wc?uri=" + encodeURIComponent(uri),
     },
     {
       rdns: "com.trustwallet.app",
       name: "Trust Wallet",
-      color: "#3375bb",
-      mono: "T",
+      logo: LOGOS.trust,
       deepLink: (uri) => "https://link.trustwallet.com/wc?uri=" + encodeURIComponent(uri),
     },
     {
       rdns: "com.coinbase.wallet",
       name: "Coinbase Wallet",
-      color: "#0052ff",
-      mono: "C",
+      logo: LOGOS.coinbase,
       deepLink: (uri) => "https://go.cb-w.com/wc?uri=" + encodeURIComponent(uri),
     },
     {
       rdns: "me.rainbow",
       name: "Rainbow",
-      color: "#001e59",
-      mono: "R",
+      logo: LOGOS.rainbow,
       deepLink: (uri) => "https://rnbwapp.com/wc?uri=" + encodeURIComponent(uri),
     },
     {
       rdns: "com.okex.wallet",
       name: "OKX Wallet",
-      color: "#000000",
-      mono: "O",
+      logo: LOGOS.okx,
       deepLink: (uri) => "okx://wallet/wc?uri=" + encodeURIComponent(uri),
     },
     {
       rdns: "io.zerion.wallet",
       name: "Zerion",
-      color: "#2962ef",
-      mono: "Z",
+      logo: LOGOS.zerion,
       deepLink: (uri) => "zerion://wc?uri=" + encodeURIComponent(uri),
     },
     {
       rdns: "im.token.app",
       name: "imToken",
-      color: "#11c4d1",
-      mono: "I",
+      logo: LOGOS.imToken,
       deepLink: (uri) => "imtokenv2://wc?uri=" + encodeURIComponent(uri),
     },
     {
       rdns: "pro.tokenpocket.app",
       name: "TokenPocket",
-      color: "#2980fe",
-      mono: "TP",
+      logo: LOGOS.tokenPocket,
     },
     {
       rdns: "io.safepal.wallet",
       name: "SafePal",
-      color: "#472ff3",
-      mono: "SP",
+      logo: LOGOS.safepal,
     },
     {
       rdns: "io.1inch.wallet",
       name: "1inch Wallet",
-      color: "#dc2f43",
-      mono: "1",
+      logo: LOGOS.oneInch,
     },
     {
       rdns: "com.bitget.web3",
       name: "Bitget Wallet",
-      color: "#00b578",
-      mono: "B",
+      logo: LOGOS.bitget,
     },
   ];
 
   const GENERIC_WC = {
     rdns: "walletconnect",
     name: "Other wallets",
-    color: "#3b99fc",
-    mono: "◈",
+    logo: LOGOS.walletConnect,
     deepLink: (uri) => uri,
   };
 
@@ -173,19 +162,13 @@
   function positionPanel() {
     const margin = 18;
     const rect = btn.getBoundingClientRect();
-    const spaceBelow = window.innerHeight - rect.bottom - margin;
     const spaceAbove = rect.top - margin;
-    const openUpward = spaceBelow < 200 && spaceAbove > spaceBelow;
 
-    if (openUpward) {
-      panel.style.bottom = window.innerHeight - rect.top + 10 + "px";
-      panel.style.top = "auto";
-      panel.style.maxHeight = Math.max(160, spaceAbove) + "px";
-    } else {
-      panel.style.top = rect.bottom + 10 + "px";
-      panel.style.bottom = "auto";
-      panel.style.maxHeight = Math.max(160, spaceBelow) + "px";
-    }
+    // Always opens upward so the full wallet list is reachable regardless
+    // of how far down the page the button sits.
+    panel.style.bottom = window.innerHeight - rect.top + 10 + "px";
+    panel.style.top = "auto";
+    panel.style.maxHeight = Math.max(160, spaceAbove) + "px";
     panel.style.left = rect.left + "px";
     panel.style.overflowY = "auto";
 
@@ -256,33 +239,48 @@
   }
 
   // ---- wallet list rendering ----
-  function walletRow({ key, name, icon, subtitle }) {
+  // Icons are built as real DOM nodes (never string-concatenated into
+  // innerHTML) because the bundled wallet logos are raw, unescaped SVG data
+  // URIs — some contain literal quote characters that would break out of an
+  // HTML attribute if interpolated as a string.
+  function makeIconEl(w) {
+    if (w.logo) {
+      const img = document.createElement("img");
+      img.className = "dash-wallet-row-icon";
+      img.src = w.logo;
+      img.alt = "";
+      return img;
+    }
+    const span = document.createElement("span");
+    span.className = "dash-wallet-row-icon";
+    span.style.background =
+      w.rdns === "me.rainbow"
+        ? "linear-gradient(135deg,#ff5757,#ffa640,#5ce6a4,#4ba9ff,#9b6bff)"
+        : w.color || "#888";
+    span.textContent = w.mono || "?";
+    return span;
+  }
+
+  function walletRow({ key, name, iconEl, subtitle }) {
     const row = document.createElement("button");
     row.type = "button";
     row.className = "dash-wallet-row";
     row.dataset.wallet = key;
-    row.innerHTML =
-      icon +
-      '<span class="dash-wallet-row-text"><span class="dash-wallet-row-name"></span>' +
-      (subtitle ? '<span class="dash-wallet-row-sub"></span>' : "") +
-      "</span>";
-    row.querySelector(".dash-wallet-row-name").textContent = name;
-    if (subtitle) row.querySelector(".dash-wallet-row-sub").textContent = subtitle;
+    row.appendChild(iconEl);
+    const text = document.createElement("span");
+    text.className = "dash-wallet-row-text";
+    const nameEl = document.createElement("span");
+    nameEl.className = "dash-wallet-row-name";
+    nameEl.textContent = name;
+    text.appendChild(nameEl);
+    if (subtitle) {
+      const sub = document.createElement("span");
+      sub.className = "dash-wallet-row-sub";
+      sub.textContent = subtitle;
+      text.appendChild(sub);
+    }
+    row.appendChild(text);
     return row;
-  }
-
-  function monogramIcon(w) {
-    const bg =
-      w.rdns === "me.rainbow"
-        ? "linear-gradient(135deg,#ff5757,#ffa640,#5ce6a4,#4ba9ff,#9b6bff)"
-        : w.color;
-    return (
-      '<span class="dash-wallet-row-icon" style="background:' +
-      bg +
-      '">' +
-      w.mono +
-      "</span>"
-    );
   }
 
   function renderList() {
@@ -293,10 +291,8 @@
     const detectedRdns = new Set(detected.map((d) => d.info.rdns));
 
     detected.forEach(({ info, provider }) => {
-      const icon = info.icon
-        ? '<img class="dash-wallet-row-icon" src="' + info.icon + '" alt="" />'
-        : monogramIcon({ color: "#888", mono: info.name?.[0] || "?", rdns: info.rdns });
-      const row = walletRow({ key: "injected:" + info.rdns, name: info.name, icon, subtitle: "Detected" });
+      const iconEl = makeIconEl({ logo: info.icon, color: "#888", mono: info.name?.[0] || "?", rdns: info.rdns });
+      const row = walletRow({ key: "injected:" + info.rdns, name: info.name, iconEl, subtitle: "Detected" });
       row.addEventListener("click", () => connectInjected(provider, info.name));
       list.appendChild(row);
     });
@@ -306,7 +302,7 @@
       const row = walletRow({
         key: "injected:legacy",
         name: "Browser Wallet",
-        icon: monogramIcon({ color: "#888", mono: "W", rdns: "" }),
+        iconEl: makeIconEl({ color: "#888", mono: "W", rdns: "" }),
         subtitle: "Detected",
       });
       row.addEventListener("click", () => connectInjected(window.ethereum, "Browser Wallet"));
@@ -314,12 +310,12 @@
     }
 
     POPULAR_WALLETS.filter((w) => !detectedRdns.has(w.rdns)).forEach((w) => {
-      const row = walletRow({ key: w.rdns, name: w.name, icon: monogramIcon(w) });
+      const row = walletRow({ key: w.rdns, name: w.name, iconEl: makeIconEl(w) });
       row.addEventListener("click", () => connectViaWalletConnect(w));
       list.appendChild(row);
     });
 
-    const wcRow = walletRow({ key: "walletconnect", name: GENERIC_WC.name, icon: monogramIcon(GENERIC_WC) });
+    const wcRow = walletRow({ key: "walletconnect", name: GENERIC_WC.name, iconEl: makeIconEl(GENERIC_WC) });
     wcRow.addEventListener("click", () => connectViaWalletConnect(GENERIC_WC));
     list.appendChild(wcRow);
   }
