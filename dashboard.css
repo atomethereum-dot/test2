@@ -410,7 +410,7 @@
   z-index: 1;
   max-width: 1360px;
   margin: 0 auto;
-  padding: 40px 32px 100px;
+  padding: 40px 32px 40px;
 }
 
 .dash-eyebrow {
@@ -1125,7 +1125,7 @@
 /* ---- footer ---- */
 .dash-footer {
   border-top: 1px solid var(--db-border);
-  margin-top: 60px;
+  margin-top: 0;
   padding: 28px 32px 40px;
   position: relative;
   z-index: 1;
@@ -1168,7 +1168,7 @@
 @media (max-width: 640px) {
   .dash-topbar { padding: 14px 18px; }
   .dash-back span { display: none; }
-  .dash-shell { padding: 28px 18px 80px; }
+  .dash-shell { padding: 28px 18px 32px; }
   .dash-metrics-grid { grid-template-columns: 1fr; }
   .dash-validator-grid { grid-template-columns: 1fr 1fr; }
   .dash-map-card, .dash-map-frame { min-height: 260px; }
