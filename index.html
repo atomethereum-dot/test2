@@ -506,6 +506,321 @@
     </div>
   </section>
 
+  <section class="light-section" id="supply-scenarios">
+    <div class="light-inner supply-scenarios-block reveal">
+      <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span><span data-i18n="supplyScenarios.eyebrow">Supply &amp; Market Cap</span></span>
+      <h2 class="display display-md dark-text supply-heading" data-i18n="supplyScenarios.heading" data-i18n-html>What a <strong>25,000,000</strong><br>token supply implies<br>at other networks&rsquo; market<br>caps</h2>
+      <p class="supply-lede" data-i18n="supplyScenarios.lede" data-i18n-html>
+        Sectora's circulating supply settles at <strong>25,000,000 #SECT</strong> after the December
+        2026 reduction. Below, the price and market capitalization of several established networks
+        &mdash; each paired with what #SECT would be priced at if Sectora
+        reached just 5% of that network's market cap, a conservative scenario.
+      </p>
+
+      <div class="supply-status-badge" id="supplyStatusBadge">
+        <span class="supply-status-dot" id="supplyStatusDot" aria-hidden="true"></span>
+        <span id="supplyStatusText" data-i18n="supplyScenarios.statusConnecting">Connecting to live prices&hellip;</span>
+      </div>
+
+      <div class="supply-table-wrap">
+        <table class="supply-table">
+          <thead>
+            <tr>
+              <th data-i18n="supplyScenarios.tableAsset">Asset</th>
+              <th class="num" data-i18n="supplyScenarios.tablePrice">Price</th>
+              <th class="num" data-i18n="supplyScenarios.tableSupply">Circulating Supply</th>
+              <th class="num supply-bar-col" data-i18n="supplyScenarios.tableMcap">Market Cap</th>
+              <th class="num" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% Cap</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-asset="bitcoin">
+              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Bitcoin <span class="supply-coin-ticker">BTC</span></span></td>
+              <td class="num mono" data-el="price">$64,940</td>
+              <td class="num mono">20.1M</td>
+              <td class="num supply-bar-col">
+                <div class="mono supply-mcap" data-el="mcap">$1.30T</div>
+                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="100"></div></div>
+              </td>
+              <td class="num mono supply-implied" data-el="implied5" data-count data-target="2607" data-prefix="$">$0</td>
+            </tr>
+            <tr data-asset="ethereum">
+              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Ethereum <span class="supply-coin-ticker">ETH</span></span></td>
+              <td class="num mono" data-el="price">$1,897</td>
+              <td class="num mono">120M</td>
+              <td class="num supply-bar-col">
+                <div class="mono supply-mcap" data-el="mcap">$227.64B</div>
+                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="73"></div></div>
+              </td>
+              <td class="num mono supply-implied" data-el="implied5" data-count data-target="455.28" data-prefix="$">$0</td>
+            </tr>
+            <tr data-asset="bitcoin-cash">
+              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Bitcoin Cash <span class="supply-coin-ticker">BCH</span></span></td>
+              <td class="num mono" data-el="price">$216.69</td>
+              <td class="num mono">19.9M</td>
+              <td class="num supply-bar-col">
+                <div class="mono supply-mcap" data-el="mcap">$4.31B</div>
+                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="11"></div></div>
+              </td>
+              <td class="num mono supply-implied" data-el="implied5" data-count data-target="8.61" data-prefix="$">$0</td>
+            </tr>
+            <tr data-asset="solana">
+              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Solana <span class="supply-coin-ticker">SOL</span></span></td>
+              <td class="num mono" data-el="price">$73.80</td>
+              <td class="num mono">581M</td>
+              <td class="num supply-bar-col">
+                <div class="mono supply-mcap" data-el="mcap">$42.88B</div>
+                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="47"></div></div>
+              </td>
+              <td class="num mono supply-implied" data-el="implied5" data-count data-target="85.76" data-prefix="$">$0</td>
+            </tr>
+            <tr data-asset="litecoin">
+              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Litecoin <span class="supply-coin-ticker">LTC</span></span></td>
+              <td class="num mono" data-el="price">$45.69</td>
+              <td class="num mono">77.5M</td>
+              <td class="num supply-bar-col">
+                <div class="mono supply-mcap" data-el="mcap">$3.54B</div>
+                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="8"></div></div>
+              </td>
+              <td class="num mono supply-implied" data-el="implied5" data-count data-target="7.08" data-prefix="$">$0</td>
+            </tr>
+            <tr data-asset="ripple">
+              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>XRP <span class="supply-coin-ticker">XRP</span></span></td>
+              <td class="num mono" data-el="price">$2.85</td>
+              <td class="num mono">59.0B</td>
+              <td class="num supply-bar-col">
+                <div class="mono supply-mcap" data-el="mcap">$168.15B</div>
+                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="68"></div></div>
+              </td>
+              <td class="num mono supply-implied" data-el="implied5" data-count data-target="336.30" data-prefix="$">$0</td>
+            </tr>
+            <tr data-asset="sui">
+              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Sui <span class="supply-coin-ticker">SUI</span></span></td>
+              <td class="num mono" data-el="price">$3.40</td>
+              <td class="num mono">5.7B</td>
+              <td class="num supply-bar-col">
+                <div class="mono supply-mcap" data-el="mcap">$19.38B</div>
+                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="35"></div></div>
+              </td>
+              <td class="num mono supply-implied" data-el="implied5" data-count data-target="38.76" data-prefix="$">$0</td>
+            </tr>
+            <tr data-asset="hyperliquid">
+              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Hyperliquid <span class="supply-coin-ticker">HYPE</span></span></td>
+              <td class="num mono" data-el="price">$28.50</td>
+              <td class="num mono">450M</td>
+              <td class="num supply-bar-col">
+                <div class="mono supply-mcap" data-el="mcap">$12.83B</div>
+                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="28"></div></div>
+              </td>
+              <td class="num mono supply-implied" data-el="implied5" data-count data-target="25.65" data-prefix="$">$0</td>
+            </tr>
+            <tr class="supply-row--sectora">
+              <td><span class="supply-coin"><span class="supply-coin-dot" aria-hidden="true"></span>Sectora <span class="supply-coin-ticker">#SECT</span></span></td>
+              <td class="num mono">$0.10</td>
+              <td class="num mono">50.0M</td>
+              <td class="num mono supply-bar-col">$5.00M</td>
+              <td class="num mono">&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="supply-mobile-list">
+        <div class="supply-mobile-row" data-asset="bitcoin">
+          <div class="supply-mobile-top">
+            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Bitcoin <span class="supply-coin-ticker">BTC</span></span>
+            <span class="mono" data-el="price">$64,940</span>
+          </div>
+          <div class="supply-mobile-meta">
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">20.1M</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$1.30T</span>
+          </div>
+          <div class="supply-mobile-implied">
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="2607" data-prefix="$">$0</span>
+          </div>
+        </div>
+        <div class="supply-mobile-row" data-asset="ethereum">
+          <div class="supply-mobile-top">
+            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Ethereum <span class="supply-coin-ticker">ETH</span></span>
+            <span class="mono" data-el="price">$1,897</span>
+          </div>
+          <div class="supply-mobile-meta">
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">120M</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$227.64B</span>
+          </div>
+          <div class="supply-mobile-implied">
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="455.28" data-prefix="$">$0</span>
+          </div>
+        </div>
+        <div class="supply-mobile-row" data-asset="bitcoin-cash">
+          <div class="supply-mobile-top">
+            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Bitcoin Cash <span class="supply-coin-ticker">BCH</span></span>
+            <span class="mono" data-el="price">$216.69</span>
+          </div>
+          <div class="supply-mobile-meta">
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">19.9M</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$4.31B</span>
+          </div>
+          <div class="supply-mobile-implied">
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="8.61" data-prefix="$">$0</span>
+          </div>
+        </div>
+        <div class="supply-mobile-row" data-asset="solana">
+          <div class="supply-mobile-top">
+            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Solana <span class="supply-coin-ticker">SOL</span></span>
+            <span class="mono" data-el="price">$73.80</span>
+          </div>
+          <div class="supply-mobile-meta">
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">581M</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$42.88B</span>
+          </div>
+          <div class="supply-mobile-implied">
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="85.76" data-prefix="$">$0</span>
+          </div>
+        </div>
+        <div class="supply-mobile-row" data-asset="litecoin">
+          <div class="supply-mobile-top">
+            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Litecoin <span class="supply-coin-ticker">LTC</span></span>
+            <span class="mono" data-el="price">$45.69</span>
+          </div>
+          <div class="supply-mobile-meta">
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">77.5M</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$3.54B</span>
+          </div>
+          <div class="supply-mobile-implied">
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="7.08" data-prefix="$">$0</span>
+          </div>
+        </div>
+        <div class="supply-mobile-row" data-asset="ripple">
+          <div class="supply-mobile-top">
+            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>XRP <span class="supply-coin-ticker">XRP</span></span>
+            <span class="mono" data-el="price">$2.85</span>
+          </div>
+          <div class="supply-mobile-meta">
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">59.0B</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$168.15B</span>
+          </div>
+          <div class="supply-mobile-implied">
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="336.30" data-prefix="$">$0</span>
+          </div>
+        </div>
+        <div class="supply-mobile-row" data-asset="sui">
+          <div class="supply-mobile-top">
+            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Sui <span class="supply-coin-ticker">SUI</span></span>
+            <span class="mono" data-el="price">$3.40</span>
+          </div>
+          <div class="supply-mobile-meta">
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">5.7B</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$19.38B</span>
+          </div>
+          <div class="supply-mobile-implied">
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="38.76" data-prefix="$">$0</span>
+          </div>
+        </div>
+        <div class="supply-mobile-row" data-asset="hyperliquid">
+          <div class="supply-mobile-top">
+            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Hyperliquid <span class="supply-coin-ticker">HYPE</span></span>
+            <span class="mono" data-el="price">$28.50</span>
+          </div>
+          <div class="supply-mobile-meta">
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">450M</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$12.83B</span>
+          </div>
+          <div class="supply-mobile-implied">
+            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
+            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="25.65" data-prefix="$">$0</span>
+          </div>
+        </div>
+        <div class="supply-mobile-row supply-mobile-row--sectora">
+          <div class="supply-mobile-top">
+            <span class="supply-coin"><span class="supply-coin-dot" aria-hidden="true"></span>Sectora <span class="supply-coin-ticker">#SECT</span></span>
+            <span class="mono">$0.10</span>
+          </div>
+          <div class="supply-mobile-meta">
+            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">50.0M</span>
+            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono">$5.00M</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="supply-disclaimer">
+        <span data-i18n="supplyScenarios.disclaimer" data-i18n-html>Illustrative only, not a price prediction or financial advice. The #SECT @ 5% cap column
+        divides 5% of each reference asset's market cap by Sectora's fixed 25,000,000 #SECT supply.
+        It assumes valuation parity with each network, which is not guaranteed, and ignores
+        differences in token utility, unlock schedules, and liquidity depth. Circulating supply
+        figures are fixed reference snapshots; price and market cap refresh from
+        live market data roughly every 10 seconds.</span>
+        <span class="supply-stamp" id="supplyStamp" data-i18n="supplyScenarios.stampStatic">SOURCE: STATIC SNAPSHOT &mdash; COINGECKO, COINMARKETCAP &mdash; AS OF AUGUST 7&ndash;8, 2026</span>
+      </p>
+
+      <div class="supply-calc reveal" id="supplyCalc">
+        <div class="supply-calc-head">
+          <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span><span data-i18n="calc.eyebrow">#SECT Price Calculator</span></span>
+          <h3 class="supply-calc-title" data-i18n="calc.heading">Model Your Own Scenario</h3>
+          <p class="supply-calc-lede" data-i18n="calc.lede">Pick a reference network, choose what share of its market cap #SECT could reach, and see the implied price and what your investment would be worth.</p>
+        </div>
+
+        <div class="supply-calc-body">
+          <div class="supply-calc-controls">
+            <div class="supply-calc-field">
+              <span class="supply-calc-label" data-i18n="calc.assetLabel">Reference Network</span>
+              <div class="supply-calc-pills" id="calcAssetPills" role="radiogroup" aria-label="Reference network">
+                <button type="button" class="supply-calc-pill is-active" data-asset="bitcoin" role="radio" aria-checked="true">Bitcoin</button>
+                <button type="button" class="supply-calc-pill" data-asset="ethereum" role="radio" aria-checked="false">Ethereum</button>
+                <button type="button" class="supply-calc-pill" data-asset="bitcoin-cash" role="radio" aria-checked="false">Bitcoin Cash</button>
+                <button type="button" class="supply-calc-pill" data-asset="solana" role="radio" aria-checked="false">Solana</button>
+                <button type="button" class="supply-calc-pill" data-asset="litecoin" role="radio" aria-checked="false">Litecoin</button>
+                <button type="button" class="supply-calc-pill" data-asset="ripple" role="radio" aria-checked="false">XRP</button>
+                <button type="button" class="supply-calc-pill" data-asset="sui" role="radio" aria-checked="false">Sui</button>
+                <button type="button" class="supply-calc-pill" data-asset="hyperliquid" role="radio" aria-checked="false">Hyperliquid</button>
+              </div>
+            </div>
+
+            <div class="supply-calc-field">
+              <label class="supply-calc-label" for="calcPctSlider" data-i18n="calc.pctLabel">Share of Market Cap</label>
+              <div class="supply-calc-slider-row">
+                <input type="range" id="calcPctSlider" class="supply-calc-slider" min="0.1" max="100" step="0.1" value="5" />
+                <span class="supply-calc-pct-value mono" id="calcPctValue">5.0%</span>
+              </div>
+            </div>
+
+            <div class="supply-calc-field">
+              <label class="supply-calc-label" for="calcInvestInput" data-i18n="calc.investLabel">Your Investment</label>
+              <div class="supply-calc-input-wrap">
+                <span class="supply-calc-input-prefix mono">$</span>
+                <input type="number" id="calcInvestInput" class="supply-calc-input mono" value="1000" min="0" step="100" inputmode="decimal" />
+              </div>
+            </div>
+          </div>
+
+          <div class="supply-calc-results">
+            <div class="supply-calc-result">
+              <span class="supply-calc-result-label" data-i18n="calc.impliedMcap">Implied #SECT Market Cap</span>
+              <span class="supply-calc-result-value mono" id="calcMcapOut">$0</span>
+            </div>
+            <div class="supply-calc-result supply-calc-result--accent">
+              <span class="supply-calc-result-label" data-i18n="calc.impliedPrice">Implied #SECT Price</span>
+              <span class="supply-calc-result-value supply-calc-result-value--big mono" id="calcPriceOut">$0</span>
+            </div>
+            <div class="supply-calc-result">
+              <span class="supply-calc-result-label" data-i18n="calc.tokensOut">#SECT You&rsquo;d Hold</span>
+              <span class="supply-calc-result-value mono" id="calcTokensOut">0</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="supply-calc-note" data-i18n="calc.note">Illustrative only &mdash; same assumptions as the table above. Not financial advice.</p>
+      </div>
+    </div>
+  </section>
+
   <section class="events" id="events">
     <div class="events-header reveal">
       <div class="events-heading-group">
@@ -828,321 +1143,6 @@
         <span id="choroLegendName">United States of America</span>
       </div>
     </div>
-    </div>
-  </section>
-
-  <section class="light-section" id="supply-scenarios">
-    <div class="light-inner supply-scenarios-block reveal">
-      <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span><span data-i18n="supplyScenarios.eyebrow">Supply &amp; Market Cap</span></span>
-      <h2 class="display display-md dark-text supply-heading" data-i18n="supplyScenarios.heading" data-i18n-html>What a <strong>25,000,000</strong><br>token supply implies<br>at other networks&rsquo; market<br>caps</h2>
-      <p class="supply-lede" data-i18n="supplyScenarios.lede" data-i18n-html>
-        Sectora's circulating supply settles at <strong>25,000,000 #SECT</strong> after the December
-        2026 reduction. Below, the price and market capitalization of several established networks
-        &mdash; each paired with what #SECT would be priced at if Sectora
-        reached just 5% of that network's market cap, a conservative scenario.
-      </p>
-
-      <div class="supply-status-badge" id="supplyStatusBadge">
-        <span class="supply-status-dot" id="supplyStatusDot" aria-hidden="true"></span>
-        <span id="supplyStatusText" data-i18n="supplyScenarios.statusConnecting">Connecting to live prices&hellip;</span>
-      </div>
-
-      <div class="supply-table-wrap">
-        <table class="supply-table">
-          <thead>
-            <tr>
-              <th data-i18n="supplyScenarios.tableAsset">Asset</th>
-              <th class="num" data-i18n="supplyScenarios.tablePrice">Price</th>
-              <th class="num" data-i18n="supplyScenarios.tableSupply">Circulating Supply</th>
-              <th class="num supply-bar-col" data-i18n="supplyScenarios.tableMcap">Market Cap</th>
-              <th class="num" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% Cap</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr data-asset="bitcoin">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Bitcoin <span class="supply-coin-ticker">BTC</span></span></td>
-              <td class="num mono" data-el="price">$64,940</td>
-              <td class="num mono">20.1M</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$1.30T</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="100"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="2607" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="ethereum">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Ethereum <span class="supply-coin-ticker">ETH</span></span></td>
-              <td class="num mono" data-el="price">$1,897</td>
-              <td class="num mono">120M</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$227.64B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="73"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="455.28" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="bitcoin-cash">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Bitcoin Cash <span class="supply-coin-ticker">BCH</span></span></td>
-              <td class="num mono" data-el="price">$216.69</td>
-              <td class="num mono">19.9M</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$4.31B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="11"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="8.61" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="solana">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Solana <span class="supply-coin-ticker">SOL</span></span></td>
-              <td class="num mono" data-el="price">$73.80</td>
-              <td class="num mono">581M</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$42.88B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="47"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="85.76" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="litecoin">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Litecoin <span class="supply-coin-ticker">LTC</span></span></td>
-              <td class="num mono" data-el="price">$45.69</td>
-              <td class="num mono">77.5M</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$3.54B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="8"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="7.08" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="ripple">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>XRP <span class="supply-coin-ticker">XRP</span></span></td>
-              <td class="num mono" data-el="price">$2.85</td>
-              <td class="num mono">59.0B</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$168.15B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="68"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="336.30" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="sui">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Sui <span class="supply-coin-ticker">SUI</span></span></td>
-              <td class="num mono" data-el="price">$3.40</td>
-              <td class="num mono">5.7B</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$19.38B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="35"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="38.76" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="hyperliquid">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Hyperliquid <span class="supply-coin-ticker">HYPE</span></span></td>
-              <td class="num mono" data-el="price">$28.50</td>
-              <td class="num mono">450M</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$12.83B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="28"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="25.65" data-prefix="$">$0</td>
-            </tr>
-            <tr class="supply-row--sectora">
-              <td><span class="supply-coin"><span class="supply-coin-dot" aria-hidden="true"></span>Sectora <span class="supply-coin-ticker">#SECT</span></span></td>
-              <td class="num mono">$0.10</td>
-              <td class="num mono">50.0M</td>
-              <td class="num mono supply-bar-col">$5.00M</td>
-              <td class="num mono">&mdash;</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="supply-mobile-list">
-        <div class="supply-mobile-row" data-asset="bitcoin">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Bitcoin <span class="supply-coin-ticker">BTC</span></span>
-            <span class="mono" data-el="price">$64,940</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">20.1M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$1.30T</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="2607" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="ethereum">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Ethereum <span class="supply-coin-ticker">ETH</span></span>
-            <span class="mono" data-el="price">$1,897</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">120M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$227.64B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="455.28" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="bitcoin-cash">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Bitcoin Cash <span class="supply-coin-ticker">BCH</span></span>
-            <span class="mono" data-el="price">$216.69</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">19.9M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$4.31B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="8.61" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="solana">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Solana <span class="supply-coin-ticker">SOL</span></span>
-            <span class="mono" data-el="price">$73.80</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">581M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$42.88B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="85.76" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="litecoin">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Litecoin <span class="supply-coin-ticker">LTC</span></span>
-            <span class="mono" data-el="price">$45.69</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">77.5M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$3.54B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="7.08" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="ripple">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>XRP <span class="supply-coin-ticker">XRP</span></span>
-            <span class="mono" data-el="price">$2.85</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">59.0B</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$168.15B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="336.30" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="sui">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Sui <span class="supply-coin-ticker">SUI</span></span>
-            <span class="mono" data-el="price">$3.40</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">5.7B</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$19.38B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="38.76" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="hyperliquid">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Hyperliquid <span class="supply-coin-ticker">HYPE</span></span>
-            <span class="mono" data-el="price">$28.50</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">450M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$12.83B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="25.65" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row supply-mobile-row--sectora">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" aria-hidden="true"></span>Sectora <span class="supply-coin-ticker">#SECT</span></span>
-            <span class="mono">$0.10</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">50.0M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono">$5.00M</span>
-          </div>
-        </div>
-      </div>
-
-      <p class="supply-disclaimer">
-        <span data-i18n="supplyScenarios.disclaimer" data-i18n-html>Illustrative only, not a price prediction or financial advice. The #SECT @ 5% cap column
-        divides 5% of each reference asset's market cap by Sectora's fixed 25,000,000 #SECT supply.
-        It assumes valuation parity with each network, which is not guaranteed, and ignores
-        differences in token utility, unlock schedules, and liquidity depth. Circulating supply
-        figures are fixed reference snapshots; price and market cap refresh from
-        live market data roughly every 10 seconds.</span>
-        <span class="supply-stamp" id="supplyStamp" data-i18n="supplyScenarios.stampStatic">SOURCE: STATIC SNAPSHOT &mdash; COINGECKO, COINMARKETCAP &mdash; AS OF AUGUST 7&ndash;8, 2026</span>
-      </p>
-
-      <div class="supply-calc reveal" id="supplyCalc">
-        <div class="supply-calc-head">
-          <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span><span data-i18n="calc.eyebrow">#SECT Price Calculator</span></span>
-          <h3 class="supply-calc-title" data-i18n="calc.heading">Model Your Own Scenario</h3>
-          <p class="supply-calc-lede" data-i18n="calc.lede">Pick a reference network, choose what share of its market cap #SECT could reach, and see the implied price and what your investment would be worth.</p>
-        </div>
-
-        <div class="supply-calc-body">
-          <div class="supply-calc-controls">
-            <div class="supply-calc-field">
-              <span class="supply-calc-label" data-i18n="calc.assetLabel">Reference Network</span>
-              <div class="supply-calc-pills" id="calcAssetPills" role="radiogroup" aria-label="Reference network">
-                <button type="button" class="supply-calc-pill is-active" data-asset="bitcoin" role="radio" aria-checked="true">Bitcoin</button>
-                <button type="button" class="supply-calc-pill" data-asset="ethereum" role="radio" aria-checked="false">Ethereum</button>
-                <button type="button" class="supply-calc-pill" data-asset="bitcoin-cash" role="radio" aria-checked="false">Bitcoin Cash</button>
-                <button type="button" class="supply-calc-pill" data-asset="solana" role="radio" aria-checked="false">Solana</button>
-                <button type="button" class="supply-calc-pill" data-asset="litecoin" role="radio" aria-checked="false">Litecoin</button>
-                <button type="button" class="supply-calc-pill" data-asset="ripple" role="radio" aria-checked="false">XRP</button>
-                <button type="button" class="supply-calc-pill" data-asset="sui" role="radio" aria-checked="false">Sui</button>
-                <button type="button" class="supply-calc-pill" data-asset="hyperliquid" role="radio" aria-checked="false">Hyperliquid</button>
-              </div>
-            </div>
-
-            <div class="supply-calc-field">
-              <label class="supply-calc-label" for="calcPctSlider" data-i18n="calc.pctLabel">Share of Market Cap</label>
-              <div class="supply-calc-slider-row">
-                <input type="range" id="calcPctSlider" class="supply-calc-slider" min="0.1" max="100" step="0.1" value="5" />
-                <span class="supply-calc-pct-value mono" id="calcPctValue">5.0%</span>
-              </div>
-            </div>
-
-            <div class="supply-calc-field">
-              <label class="supply-calc-label" for="calcInvestInput" data-i18n="calc.investLabel">Your Investment</label>
-              <div class="supply-calc-input-wrap">
-                <span class="supply-calc-input-prefix mono">$</span>
-                <input type="number" id="calcInvestInput" class="supply-calc-input mono" value="1000" min="0" step="100" inputmode="decimal" />
-              </div>
-            </div>
-          </div>
-
-          <div class="supply-calc-results">
-            <div class="supply-calc-result">
-              <span class="supply-calc-result-label" data-i18n="calc.impliedMcap">Implied #SECT Market Cap</span>
-              <span class="supply-calc-result-value mono" id="calcMcapOut">$0</span>
-            </div>
-            <div class="supply-calc-result supply-calc-result--accent">
-              <span class="supply-calc-result-label" data-i18n="calc.impliedPrice">Implied #SECT Price</span>
-              <span class="supply-calc-result-value supply-calc-result-value--big mono" id="calcPriceOut">$0</span>
-            </div>
-            <div class="supply-calc-result">
-              <span class="supply-calc-result-label" data-i18n="calc.tokensOut">#SECT You&rsquo;d Hold</span>
-              <span class="supply-calc-result-value mono" id="calcTokensOut">0</span>
-            </div>
-          </div>
-        </div>
-
-        <p class="supply-calc-note" data-i18n="calc.note">Illustrative only &mdash; same assumptions as the table above. Not financial advice.</p>
-      </div>
     </div>
   </section>
 
