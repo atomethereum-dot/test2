@@ -102,13 +102,31 @@
 }
 
 .dash-heroband-bar {
+  position: relative;
   flex: 1;
   min-width: 2px;
   height: 4%;
-  border-radius: 1px 1px 0 0;
-  background: linear-gradient(to top, #14e0a0, rgba(20, 224, 160, 0.18));
-  box-shadow: 0 0 3px rgba(20, 224, 160, 0.5);
+  border-radius: 1px;
+  background: var(--db-green);
   transition: height 0.4s ease;
+}
+/* Flat, solid fill (no gradient fade, no glow) plus a thin "wick" tip
+   above the body — same crisp candlestick look as the DEX cover page,
+   kept single-color here since the Dashboard isn't up/down data. */
+.dash-heroband-bar::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%);
+  width: 1.5px;
+  height: 7px;
+  background: var(--db-green);
+}
+
+@media (max-width: 640px) {
+  .dash-heroband-bar { min-width: 4px; }
+  .dash-heroband-bar::after { width: 2px; height: 6px; }
 }
 
 .dash-heroband-fade {
