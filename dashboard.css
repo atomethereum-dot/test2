@@ -413,7 +413,7 @@
      under 720px, and this page has no hamburger menu with a second copy
      of it — without this override there'd be no way to change language
      on mobile at all. Order it first so it sits at the left edge. */
-  .dash-topbar-right .lang-switch-wrap { display: flex; order: -1; }
+  .dash-topbar-right .lang-switch-wrap { display: flex; margin-left: auto; }
 }
 
 /* ---- shell / layout ---- */
