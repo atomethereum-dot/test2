@@ -42,8 +42,10 @@
   };
 
   // Popular wallets offered even when not detected as a browser extension.
-  // Each has a mobile deep-link format for opening a WalletConnect pairing
-  // directly in that app; on desktop the same URI is rendered as a QR code.
+  // Wallets with a confirmed deep-link/universal-link format open directly
+  // in that app on mobile; the rest fall back to the raw wc: URI, which
+  // most WalletConnect-compatible wallets also register as a URL scheme
+  // handler. On desktop, every entry renders as a scannable QR code.
   const POPULAR_WALLETS = [
     {
       rdns: "io.metamask",
@@ -72,6 +74,51 @@
       color: "#001e59",
       mono: "R",
       deepLink: (uri) => "https://rnbwapp.com/wc?uri=" + encodeURIComponent(uri),
+    },
+    {
+      rdns: "com.okex.wallet",
+      name: "OKX Wallet",
+      color: "#000000",
+      mono: "O",
+      deepLink: (uri) => "okx://wallet/wc?uri=" + encodeURIComponent(uri),
+    },
+    {
+      rdns: "io.zerion.wallet",
+      name: "Zerion",
+      color: "#2962ef",
+      mono: "Z",
+      deepLink: (uri) => "zerion://wc?uri=" + encodeURIComponent(uri),
+    },
+    {
+      rdns: "im.token.app",
+      name: "imToken",
+      color: "#11c4d1",
+      mono: "I",
+      deepLink: (uri) => "imtokenv2://wc?uri=" + encodeURIComponent(uri),
+    },
+    {
+      rdns: "pro.tokenpocket.app",
+      name: "TokenPocket",
+      color: "#2980fe",
+      mono: "TP",
+    },
+    {
+      rdns: "io.safepal.wallet",
+      name: "SafePal",
+      color: "#472ff3",
+      mono: "SP",
+    },
+    {
+      rdns: "io.1inch.wallet",
+      name: "1inch Wallet",
+      color: "#dc2f43",
+      mono: "1",
+    },
+    {
+      rdns: "com.bitget.web3",
+      name: "Bitget Wallet",
+      color: "#00b578",
+      mono: "B",
     },
   ];
 
@@ -120,11 +167,42 @@
     picker.hidden = name !== "picker";
     qrView.hidden = name !== "qr";
     panelConnected.hidden = name !== "connected";
+    if (panelOpen) positionPanel();
+  }
+
+  function positionPanel() {
+    const margin = 18;
+    const rect = btn.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom - margin;
+    const spaceAbove = rect.top - margin;
+    const openUpward = spaceBelow < 200 && spaceAbove > spaceBelow;
+
+    if (openUpward) {
+      panel.style.bottom = window.innerHeight - rect.top + 10 + "px";
+      panel.style.top = "auto";
+      panel.style.maxHeight = Math.max(160, spaceAbove) + "px";
+    } else {
+      panel.style.top = rect.bottom + 10 + "px";
+      panel.style.bottom = "auto";
+      panel.style.maxHeight = Math.max(160, spaceBelow) + "px";
+    }
+    panel.style.left = rect.left + "px";
+    panel.style.overflowY = "auto";
+
+    requestAnimationFrame(() => {
+      const panelRect = panel.getBoundingClientRect();
+      const overflowRight = panelRect.right - (window.innerWidth - margin);
+      if (overflowRight > 0) {
+        panel.style.left = Math.max(margin, rect.left - overflowRight) + "px";
+      }
+    });
   }
 
   function openPanel() {
     panelOpen = true;
     panel.hidden = false;
+    positionPanel();
+    window.addEventListener("scroll", closePanel, { passive: true, once: true });
     btn.setAttribute("aria-expanded", "true");
   }
   function closePanel() {
@@ -326,8 +404,8 @@
       const provider = await getWcProvider();
 
       const onUri = (uri) => {
-        if (IS_MOBILE_OS && walletDef.deepLink) {
-          const deepLink = walletDef.deepLink(uri);
+        if (IS_MOBILE_OS) {
+          const deepLink = (walletDef.deepLink || GENERIC_WC.deepLink)(uri);
           const evt = new CustomEvent("sectora:wallet-deeplink", {
             detail: { url: deepLink, wallet: walletDef.name },
             cancelable: true,
