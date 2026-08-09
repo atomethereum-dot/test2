@@ -154,7 +154,7 @@
   margin: 26px 0 0;
 }
 
-.dash-heroband .dash-sim-note {
+.dash-heroband .dash-hero-actions {
   align-self: flex-start;
   margin-top: 40px;
 }
@@ -166,7 +166,7 @@
   .dash-title-dash { display: none; }
   .dash-title-viz { display: block; }
   .dash-heroband .dash-title-sub { font-size: 12.5px; }
-  .dash-heroband .dash-sim-note { margin-top: 30px; }
+  .dash-heroband .dash-hero-actions { margin-top: 30px; }
 }
 
 /* ---- app shell: sidebar + content ---- */
@@ -459,6 +459,146 @@
   transition: background 0.15s ease;
 }
 .dash-sim-note:hover { background: rgba(255, 255, 255, 0.9); }
+
+.dash-hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* ---- wallet connect ---- */
+.dash-wallet {
+  position: relative;
+}
+
+.dash-wallet-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--db-blue);
+  background: transparent;
+  height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(70, 140, 230, 0.55);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.dash-wallet-btn:hover { background: var(--db-blue-dim); }
+.dash-wallet-btn svg { width: 16px; height: 16px; flex: none; }
+
+.dash-wallet-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--db-green);
+  box-shadow: 0 0 8px rgba(20, 224, 160, 0.65);
+  animation: dashPulseDot 1.8s ease-in-out infinite;
+  flex: none;
+}
+
+.dash-wallet.is-connected .dash-wallet-btn {
+  color: var(--db-green);
+  background: rgba(20, 224, 160, 0.08);
+  border-color: rgba(20, 224, 160, 0.5);
+}
+.dash-wallet.is-connected .dash-wallet-btn:hover { background: rgba(20, 224, 160, 0.14); }
+
+.dash-wallet-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 50;
+  width: 260px;
+  max-width: calc(100vw - 36px);
+  background: #0a0a0a;
+  border: 1px solid var(--db-border-strong);
+  border-radius: var(--db-radius-sm);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.55);
+}
+.dash-wallet-panel[hidden] { display: none; }
+
+.dash-wallet-panel-connected {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dash-wallet-panel-connected[hidden] { display: none; }
+
+.dash-wallet-panel-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.dash-wallet-panel-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--db-text-faint);
+  flex: none;
+}
+.dash-wallet-panel-value {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--db-text);
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dash-wallet-panel-value.mono { font-family: var(--font-mono); }
+
+.dash-wallet-copy {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid var(--db-border);
+  background: transparent;
+  color: var(--db-text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.dash-wallet-copy svg { width: 12px; height: 12px; }
+.dash-wallet-copy.is-copied { color: var(--db-green); border-color: rgba(20, 224, 160, 0.5); }
+
+.dash-wallet-disconnect {
+  margin-top: 2px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--db-red);
+  background: var(--db-red-dim);
+  border: none;
+  border-radius: var(--db-radius-sm);
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.dash-wallet-disconnect:hover { background: rgba(255, 92, 108, 0.22); }
+
+.dash-wallet-hint {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--db-text-dim);
+  margin: 0;
+}
+.dash-wallet-hint[hidden] { display: none; }
+.dash-wallet-hint a { color: var(--db-blue); text-decoration: underline; text-underline-offset: 2px; }
 
 /* ---- generic card ---- */
 .dcard {
