@@ -25,18 +25,81 @@
   // ---------------------------------------------------------------------
 
   const QUOTE = "USDX";
-  const TOP_N = 100;
-  const MARKETS_TOP_URL =
-    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=" +
-    TOP_N + "&page=1&price_change_percentage=24h&sparkline=false";
-  const EXTRA_IDS = [
-    "bitcoin", "ethereum", "bitcoin-cash", "solana", "litecoin", "ripple", "sui", "hyperliquid",
-    "pax-gold", "kinesis-silver",
+
+  // CoinGecko's heavier /coins/markets endpoint (used to build the first
+  // version of this list) turned out to be rate-limited far more
+  // aggressively than /simple/price for keyless requests — the same
+  // /simple/price endpoint the main site's live Supply table already
+  // uses successfully. So the DEX uses that same proven endpoint with a
+  // large, hand-picked list of real coin ids instead of an auto-ranked
+  // "top 100" call. [id, ticker, name, approxRank] — approxRank only
+  // drives local tiering (order-book depth, trade sizes), not display
+  // order (the UI sorts live, by price/name/search).
+  const COIN_DEFS = [
+    ["bitcoin", "BTC", "Bitcoin", 1], ["ethereum", "ETH", "Ethereum", 2],
+    ["binancecoin", "BNB", "BNB", 4], ["solana", "SOL", "Solana", 5],
+    ["ripple", "XRP", "XRP", 6], ["cardano", "ADA", "Cardano", 9],
+    ["dogecoin", "DOGE", "Dogecoin", 10], ["tron", "TRX", "TRON", 11],
+    ["the-open-network", "TON", "Toncoin", 12], ["avalanche-2", "AVAX", "Avalanche", 14],
+    ["shiba-inu", "SHIB", "Shiba Inu", 15], ["chainlink", "LINK", "Chainlink", 17],
+    ["bitcoin-cash", "BCH", "Bitcoin Cash", 18], ["polkadot", "DOT", "Polkadot", 19],
+    ["near", "NEAR", "NEAR Protocol", 20], ["litecoin", "LTC", "Litecoin", 21],
+    ["uniswap", "UNI", "Uniswap", 23], ["sui", "SUI", "Sui", 24],
+    ["internet-computer", "ICP", "Internet Computer", 27], ["aptos", "APT", "Aptos", 29],
+    ["hyperliquid", "HYPE", "Hyperliquid", 30], ["pepe", "PEPE", "Pepe", 31],
+    ["ethereum-classic", "ETC", "Ethereum Classic", 32], ["monero", "XMR", "Monero", 33],
+    ["stellar", "XLM", "Stellar", 34], ["okb", "OKB", "OKB", 36],
+    ["cronos", "CRO", "Cronos", 37], ["filecoin", "FIL", "Filecoin", 38],
+    ["immutable-x", "IMX", "Immutable", 39], ["hedera-hashgraph", "HBAR", "Hedera", 40],
+    ["matic-network", "MATIC", "Polygon", 41], ["arbitrum", "ARB", "Arbitrum", 42],
+    ["vechain", "VET", "VeChain", 43], ["cosmos", "ATOM", "Cosmos", 44],
+    ["injective-protocol", "INJ", "Injective", 45], ["optimism", "OP", "Optimism", 46],
+    ["the-graph", "GRT", "The Graph", 47], ["render-token", "RENDER", "Render", 48],
+    ["thorchain", "RUNE", "THORChain", 49], ["algorand", "ALGO", "Algorand", 50],
+    ["mantle", "MNT", "Mantle", 51], ["celestia", "TIA", "Celestia", 52],
+    ["bittensor", "TAO", "Bittensor", 53], ["sei-network", "SEI", "Sei", 54],
+    ["stacks", "STX", "Stacks", 55], ["fantom", "FTM", "Fantom", 56],
+    ["tezos", "XTZ", "Tezos", 57], ["theta-token", "THETA", "Theta Network", 58],
+    ["flow", "FLOW", "Flow", 59], ["axie-infinity", "AXS", "Axie Infinity", 60],
+    ["the-sandbox", "SAND", "The Sandbox", 61], ["decentraland", "MANA", "Decentraland", 62],
+    ["eos", "EOS", "EOS", 63], ["chiliz", "CHZ", "Chiliz", 64],
+    ["gala", "GALA", "Gala", 65], ["aave", "AAVE", "Aave", 66],
+    ["maker", "MKR", "Maker", 67], ["rocket-pool", "RPL", "Rocket Pool", 68],
+    ["lido-dao", "LDO", "Lido DAO", 69], ["curve-dao-token", "CRV", "Curve DAO", 70],
+    ["pancakeswap-token", "CAKE", "PancakeSwap", 71], ["synthetix-network-token", "SNX", "Synthetix", 72],
+    ["dydx", "DYDX", "dYdX", 73], ["gmx", "GMX", "GMX", 74],
+    ["1inch", "1INCH", "1inch", 75], ["sushi", "SUSHI", "Sushi", 76],
+    ["apecoin", "APE", "ApeCoin", 77], ["blur", "BLUR", "Blur", 78],
+    ["worldcoin-wld", "WLD", "Worldcoin", 79], ["jasmycoin", "JASMY", "JasmyCoin", 80],
+    ["pyth-network", "PYTH", "Pyth Network", 81], ["jupiter-exchange-solana", "JUP", "Jupiter", 82],
+    ["wormhole", "W", "Wormhole", 83], ["dogwifcoin", "WIF", "dogwifhat", 84],
+    ["bonk", "BONK", "Bonk", 85], ["floki", "FLOKI", "FLOKI", 86],
+    ["ronin", "RON", "Ronin", 87], ["akash-network", "AKT", "Akash Network", 88],
+    ["kava", "KAVA", "Kava", 89], ["osmosis", "OSMO", "Osmosis", 90],
+    ["zcash", "ZEC", "Zcash", 91], ["dash", "DASH", "Dash", 92],
+    ["waves", "WAVES", "Waves", 93], ["iota", "IOTA", "IOTA", 94],
+    ["neo", "NEO", "NEO", 95], ["ravencoin", "RVN", "Ravencoin", 96],
+    ["zilliqa", "ZIL", "Zilliqa", 97], ["icon", "ICX", "ICON", 98],
+    ["enjincoin", "ENJ", "Enjin Coin", 99], ["basic-attention-token", "BAT", "Basic Attention Token", 100],
+    ["0x", "ZRX", "0x Protocol", 101], ["loopring", "LRC", "Loopring", 102],
+    ["status", "SNT", "Status", 103], ["storj", "STORJ", "Storj", 104],
+    ["ankr", "ANKR", "Ankr", 105], ["celo", "CELO", "Celo", 106],
+    ["harmony", "ONE", "Harmony", 107], ["oasis-network", "ROSE", "Oasis Network", 108],
+    ["moonbeam", "GLMR", "Moonbeam", 109], ["klay-token", "KLAY", "Klaytn", 110],
+    ["gnosis", "GNO", "Gnosis", 111], ["frax-share", "FXS", "Frax Share", 112],
+    ["convex-finance", "CVX", "Convex Finance", 113], ["balancer", "BAL", "Balancer", 114],
+    ["ocean-protocol", "OCEAN", "Ocean Protocol", 115], ["fetch-ai", "FET", "Fetch.ai", 116],
+    ["singularitynet", "AGIX", "SingularityNET", 117], ["numeraire", "NMR", "Numeraire", 118],
   ];
-  const MARKETS_EXTRA_URL =
-    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=" + EXTRA_IDS.join(",") +
-    "&order=market_cap_desc&per_page=50&price_change_percentage=24h&sparkline=false";
+  const METAL_DEFS = [
+    ["pax-gold", "PAXG", "Gold"],
+    ["kinesis-silver", "KAG", "Silver"],
+  ];
   const METAL_IDS = { "pax-gold": "Gold", "kinesis-silver": "Silver" };
+  const ALL_COIN_IDS = COIN_DEFS.map((c) => c[0]).concat(METAL_DEFS.map((m) => m[0]));
+  const SIMPLE_PRICE_URL =
+    "https://api.coingecko.com/api/v3/simple/price?ids=" + ALL_COIN_IDS.join(",") +
+    "&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true";
 
   const INDEX_DEFS = [
     { symbol: "^DJI", ticker: "DJI", name: "Dow Jones" },
@@ -45,8 +108,9 @@
   ];
   const YAHOO_HOSTS = ["https://query1.finance.yahoo.com", "https://query2.finance.yahoo.com"];
 
-  // Used only if BOTH CoinGecko calls fail — keeps the DEX populated with
-  // real prices for the major pairs instead of showing an empty list.
+  // Used only if the CoinGecko call fails outright — keeps the DEX
+  // populated with real prices for the major pairs instead of an empty
+  // list. Binance's public 24hr ticker also returns real market data.
   const BINANCE_FALLBACK = [
     ["BTCUSDT", "bitcoin", "Bitcoin", 1], ["ETHUSDT", "ethereum", "Ethereum", 2],
     ["BNBUSDT", "binancecoin", "BNB", 3], ["SOLUSDT", "solana", "Solana", 5],
@@ -214,32 +278,46 @@
   // resilience pattern as the main site's supply/marketcap table).
   // ---------------------------------------------------------------------
 
-  function upsertAssetFromCoinGecko(row) {
-    const id = row.id;
+  const COIN_DEF_BY_ID = {};
+  COIN_DEFS.forEach((c) => { COIN_DEF_BY_ID[c[0]] = c; });
+  METAL_DEFS.forEach((m) => { COIN_DEF_BY_ID[m[0]] = m; });
+
+  // Row shape here matches CoinGecko's /simple/price response for one id:
+  // { usd, usd_market_cap, usd_24h_vol, usd_24h_change }. That endpoint
+  // doesn't return an intraday high/low, so it's derived from the real
+  // price + real 24h change (open = price / (1 + change%), high/low
+  // bracket that range with a small buffer) rather than fabricated.
+  function upsertAssetFromSimplePrice(id, row) {
+    const def = COIN_DEF_BY_ID[id];
+    if (!def) return null;
     const isMetal = !!METAL_IDS[id];
     let asset = BY_ID[id];
     if (!asset) {
       asset = {
         id: id,
-        ticker: row.symbol ? row.symbol.toUpperCase() : id,
-        name: isMetal ? METAL_IDS[id] : row.name,
+        ticker: def[1],
+        name: isMetal ? def[2] : def[2],
         category: isMetal ? "metal" : "crypto",
-        color: colorForSymbol((row.symbol || id).toUpperCase()),
-        chain: isMetal ? row.name + " (tokenized)" : row.name + " Network",
+        color: colorForSymbol(def[1]),
+        chain: isMetal ? def[2] + " (tokenized)" : def[2] + " Network",
+        rank: isMetal ? 9999 : def[3],
         candles: {},
       };
       BY_ID[id] = asset;
       ASSETS.push(asset);
+      if (isMetal) asset.subLabel = def[2] + " (" + def[1] + ")";
     }
-    asset.rank = row.market_cap_rank || asset.rank || 9999;
-    asset.price = typeof row.current_price === "number" ? row.current_price : asset.price;
-    asset.change24h = typeof row.price_change_percentage_24h === "number" ? row.price_change_percentage_24h : asset.change24h;
-    asset.high24h = typeof row.high_24h === "number" ? row.high_24h : asset.high24h;
-    asset.low24h = typeof row.low_24h === "number" ? row.low_24h : asset.low24h;
-    asset.vol24h = typeof row.total_volume === "number" ? row.total_volume : asset.vol24h;
-    asset.marketCap = row.market_cap;
+    const price = row.usd;
+    if (typeof price !== "number") return asset;
+    asset.price = price;
+    const change = typeof row.usd_24h_change === "number" ? row.usd_24h_change : asset.change24h;
+    asset.change24h = change;
+    const openPrice = typeof change === "number" ? price / (1 + change / 100) : price;
+    asset.high24h = Math.max(price, openPrice) * 1.006;
+    asset.low24h = Math.min(price, openPrice) * 0.994;
+    asset.vol24h = typeof row.usd_24h_vol === "number" ? row.usd_24h_vol : asset.vol24h;
+    asset.marketCap = row.usd_market_cap;
     asset.tier = tierOf(asset);
-    if (!asset.subLabel) asset.subLabel = isMetal ? row.name + " (" + asset.ticker + ")" : null;
     return asset;
   }
 
@@ -273,9 +351,16 @@
     });
   }
 
-  function applyRows(rows, isFirstLoad) {
-    if (!rows.length) return false;
-    const touched = rows.map(upsertAssetFromCoinGecko);
+  // idPriceMap: { [coinId]: { usd, usd_24h_change, usd_24h_vol, usd_market_cap } }
+  function applyPriceMap(idPriceMap, isFirstLoad) {
+    const ids = Object.keys(idPriceMap || {});
+    if (!ids.length) return false;
+    const touched = [];
+    ids.forEach((id) => {
+      const asset = upsertAssetFromSimplePrice(id, idPriceMap[id]);
+      if (asset) touched.push(asset);
+    });
+    if (!touched.length) return false;
     if (isFirstLoad) {
       touched.sort((a, b) => (a.rank || 9999) - (b.rank || 9999));
       touched.forEach(seedCandles);
@@ -292,46 +377,35 @@
       if (!Array.isArray(list)) throw new Error("binance_bad_response");
       const bySymbol = {};
       list.forEach((row) => { bySymbol[row.symbol] = row; });
-      const rows = [];
-      BINANCE_FALLBACK.forEach(([bsym, id, name, rank]) => {
+      const map = {};
+      BINANCE_FALLBACK.forEach(([bsym, id]) => {
         const row = bySymbol[bsym];
         if (!row) return;
-        rows.push({
-          id: id,
-          symbol: bsym.replace(/USDT$/, ""),
-          name: name,
-          current_price: parseFloat(row.lastPrice),
-          price_change_percentage_24h: parseFloat(row.priceChangePercent),
-          high_24h: parseFloat(row.highPrice),
-          low_24h: parseFloat(row.lowPrice),
-          total_volume: parseFloat(row.quoteVolume),
-          market_cap_rank: rank,
-        });
+        map[id] = {
+          usd: parseFloat(row.lastPrice),
+          usd_24h_change: parseFloat(row.priceChangePercent),
+          usd_24h_vol: parseFloat(row.quoteVolume),
+        };
       });
-      return rows;
+      return map;
     });
   }
 
-  // CoinGecko is primary (real-time top ~100 by market cap + guaranteed
-  // extras/metals in one merged pass); if BOTH of its calls fail, fall
-  // back to Binance's public 24hr ticker for the major pairs so the DEX
-  // never sits empty because of a single unreachable provider.
+  // CoinGecko's /simple/price is the same proven, keyless endpoint the
+  // main site's live Supply table already relies on; if it fails outright,
+  // fall back to Binance's public 24hr ticker for the major pairs so the
+  // DEX never sits empty because of a single unreachable provider.
   function pollCrypto() {
     const isFirstLoad = !dataReady;
-    return Promise.allSettled([fetchJson(MARKETS_TOP_URL), fetchJson(MARKETS_EXTRA_URL)]).then((results) => {
-      const [topRes, extraRes] = results;
-      const rows = [];
-      const seen = {};
-      if (topRes.status === "fulfilled" && Array.isArray(topRes.value)) {
-        topRes.value.forEach((r) => { if (!seen[r.id]) { rows.push(r); seen[r.id] = true; } });
-      }
-      if (extraRes.status === "fulfilled" && Array.isArray(extraRes.value)) {
-        extraRes.value.forEach((r) => { if (!seen[r.id]) { rows.push(r); seen[r.id] = true; } });
-      }
-      if (rows.length) return applyRows(rows, isFirstLoad);
-      console.warn("[dex] Both CoinGecko calls failed, trying Binance fallback:", topRes.reason, extraRes.reason);
-      return fetchBinanceFallback().then((fallbackRows) => applyRows(fallbackRows, isFirstLoad));
-    });
+    return fetchJson(SIMPLE_PRICE_URL)
+      .then((idPriceMap) => {
+        if (applyPriceMap(idPriceMap, isFirstLoad)) return true;
+        throw new Error("empty_price_map");
+      })
+      .catch((err) => {
+        console.warn("[dex] CoinGecko /simple/price failed, trying Binance fallback:", err);
+        return fetchBinanceFallback().then((fallbackMap) => applyPriceMap(fallbackMap, isFirstLoad));
+      });
   }
 
   function fetchYahoo(symbol) {
