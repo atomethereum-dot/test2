@@ -181,6 +181,8 @@
 }
 .dcov-cta svg { width: 16px; height: 16px; }
 
+.dcov-store-badges { margin-top: 28px; }
+
 .dcov-note {
   font-family: var(--font-mono);
   font-size: 12px;

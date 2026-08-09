@@ -872,6 +872,68 @@
   border-top: 1px solid var(--dx-border);
 }
 .dx-footer-links { display: flex; gap: 18px; }
+
+/* ---- app store / play store "coming soon" badges (self-hosted icons,
+   no external logo assets) ---- */
+.dx-store-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.dx-store-label {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dx-blue);
+  background: rgba(70, 140, 230, 0.14);
+  border: 1px solid rgba(70, 140, 230, 0.3);
+  border-radius: 999px;
+  padding: 6px 12px;
+  white-space: nowrap;
+}
+.dx-store-list {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.dx-store-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--dx-border);
+  cursor: default;
+  user-select: none;
+  opacity: 0.9;
+}
+.dx-store-icon { width: 22px; height: 22px; flex: none; color: #fff; }
+.dx-store-icon--android { color: #3ddc84; }
+.dx-store-text { display: flex; flex-direction: column; line-height: 1.15; }
+.dx-store-text small {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dx-text-dim);
+}
+.dx-store-text strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dx-text);
+}
+
+.dx-store-badges--compact .dx-store-label { font-size: 10px; padding: 4px 9px; }
+.dx-store-badges--compact .dx-store-btn { padding: 5px 10px; gap: 6px; }
+.dx-store-badges--compact .dx-store-icon { width: 16px; height: 16px; }
+.dx-store-badges--compact .dx-store-text small { display: none; }
+.dx-store-badges--compact .dx-store-text strong { font-size: 11.5px; }
 .dx-footer-links a { color: var(--dx-text-faint); }
 .dx-footer-links a:hover { color: var(--dx-text); }
 
