@@ -2019,18 +2019,13 @@
 .dash-footer-inner {
   max-width: 1360px;
   margin: 0 auto;
-  padding: 56px 32px 28px;
+  padding: 28px 32px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
 }
-/* keep the glow band compact and clear of the copyright row above */
-.dash-footer .footer-glow { height: 56px; }
-.dash-footer .footer-glow-line--a { top: 4px; }
-.dash-footer .footer-glow-line--b { top: 20px; }
-.dash-footer .footer-glow-line--c { top: 36px; }
 .dash-footer-left { display: flex; flex-direction: column; gap: 8px; }
 .dash-footer-brand { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--db-text-faint); }
 .dash-footer-powered { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; color: var(--db-text-faint); margin: 0; }
