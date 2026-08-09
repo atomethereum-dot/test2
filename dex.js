@@ -165,16 +165,62 @@
   }
 
   // ---------------------------------------------------------------------
-  // Asset icon (self-hosted: colored initials disc, no external logos)
+  // Asset icons — self-hosted inline SVG marks (no external logo CDN).
+  // Each is a small hand-drawn glyph/shape in the asset's brand color;
+  // anything without a def here (indices) falls back to a colored
+  // initials disc.
   // ---------------------------------------------------------------------
+
+  const ICON_DEFS = {
+    "bitcoin": { bg: "#f7931a", fg: "#fff", type: "glyph", glyph: "₿" },
+    "bitcoin-cash": { bg: "#0ac18e", fg: "#fff", type: "glyph", glyph: "₿" },
+    "ethereum": { bg: "#627eea", type: "diamond" },
+    "litecoin": { bg: "#345d9d", fg: "#fff", type: "glyph", glyph: "Ł" },
+    "ripple": { bg: "#0f6fbe", fg: "#fff", type: "glyph", glyph: "X" },
+    "solana": { bg: "#0c0c14", type: "bars" },
+    "sui": { bg: "#4da2ff", type: "drop" },
+    "hyperliquid": { bg: "#14e0a0", fg: "#06231a", type: "glyph", glyph: "H" },
+    "pax-gold": { bg: "#d9b544", fg: "#3a2c05", type: "ingot" },
+    "kinesis-silver": { bg: "#b8bec4", fg: "#20242a", type: "ingot" },
+  };
 
   function iconHTML(asset, size) {
     size = size || 22;
-    const letters = asset.ticker.replace(/[#^]/g, "").slice(0, 3);
-    const color = asset.color || colorForSymbol(asset.ticker || asset.id);
+    const def = ICON_DEFS[asset.id];
+    if (!def) {
+      const letters = asset.ticker.replace(/[#^]/g, "").slice(0, 3);
+      const color = asset.color || colorForSymbol(asset.ticker || asset.id);
+      return (
+        '<span class="dx-icon-disc" style="width:' + size + "px;height:" + size + "px;background:" + color + ';font-size:' + Math.round(size * 0.34) + 'px">' +
+        letters +
+        "</span>"
+      );
+    }
+    const uid = "dxic-" + asset.id.replace(/[^a-z0-9]/gi, "");
+    let inner = "";
+    if (def.type === "glyph") {
+      inner = '<text x="16" y="21.5" text-anchor="middle" font-size="17" font-weight="700" font-family="inherit" fill="' + def.fg + '">' + def.glyph + "</text>";
+    } else if (def.type === "diamond") {
+      inner =
+        '<polygon points="16,4 25,16 16,20 7,16" fill="#ffffff" fill-opacity="0.92"/>' +
+        '<polygon points="16,22 25,17.5 16,29 7,17.5" fill="#ffffff" fill-opacity="0.58"/>';
+    } else if (def.type === "bars") {
+      inner =
+        '<defs><linearGradient id="' + uid + '" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0" stop-color="#9945ff"/><stop offset="1" stop-color="#14f195"/></linearGradient></defs>' +
+        '<rect x="6" y="8.6" width="20" height="3.6" rx="1.8" fill="url(#' + uid + ')"/>' +
+        '<rect x="6" y="14.2" width="20" height="3.6" rx="1.8" fill="url(#' + uid + ')" opacity="0.72"/>' +
+        '<rect x="6" y="19.8" width="20" height="3.6" rx="1.8" fill="url(#' + uid + ')"/>';
+    } else if (def.type === "drop") {
+      inner = '<path d="M16 6c4.5 5 7 8.7 7 12a7 7 0 1 1-14 0c0-3.3 2.5-7 7-12z" fill="#ffffff"/>';
+    } else if (def.type === "ingot") {
+      inner =
+        '<rect x="9" y="9" width="14" height="3" rx="1" fill="' + def.fg + '"/>' +
+        '<path d="M9 12h14l3 8H6z" fill="' + def.fg + '" fill-opacity="0.88"/>';
+    }
     return (
-      '<span class="dx-icon-disc" style="width:' + size + "px;height:" + size + "px;background:" + color + ';font-size:' + Math.round(size * 0.34) + 'px">' +
-      letters +
+      '<span class="dx-icon-disc dx-icon-svg" style="width:' + size + "px;height:" + size + 'px;background:' + def.bg + '">' +
+      '<svg viewBox="0 0 32 32" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">' + inner + "</svg>" +
       "</span>"
     );
   }
