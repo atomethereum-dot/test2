@@ -532,6 +532,9 @@
 .dx-form-row span:last-child { color: var(--dx-text); }
 
 .dx-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 46px;
   border-radius: 999px;
   font-size: 14px;
@@ -670,6 +673,7 @@
   border-radius: 999px;
   font-size: 12.5px;
   font-weight: 700;
+  text-align: center;
   justify-self: end;
 }
 .dx-p2p-action.is-buy { background: var(--dx-green); color: #04120c; }
@@ -856,6 +860,7 @@
   color: var(--black);
   font-size: 14px;
   font-weight: 600;
+  text-align: center;
 }
 .dx-modal-ok:hover { opacity: 0.88; }
 
