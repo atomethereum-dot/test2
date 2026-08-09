@@ -132,6 +132,22 @@
   let qrScriptPromise = null;
   let pendingWalletName = "";
 
+  // ---- global wallet API: lets other dashboard modules (hash market,
+  // validator registry) react to connect/disconnect without re-implementing
+  // the injected/WalletConnect provider juggling done in this file ----
+  const walletChangeListeners = [];
+  window.SectoraWallet = {
+    getProvider: () => activeProvider,
+    getAccount: () => account,
+    onChange: (cb) => {
+      walletChangeListeners.push(cb);
+      cb(account, activeProvider);
+    },
+  };
+  function notifyWalletChange() {
+    for (const cb of walletChangeListeners) cb(account, activeProvider);
+  }
+
   // ---- EIP-6963 discovery: real installed extensions announce themselves
   // with their own name/icon, instead of us guessing from window.ethereum ----
   const injectedProviders = new Map(); // rdns -> { info, provider }
@@ -206,6 +222,7 @@
     addrEl.textContent = "—";
     networkEl.textContent = "—";
     balanceEl.textContent = "—";
+    notifyWalletChange();
   }
 
   async function refreshBalanceAndNetwork() {
@@ -235,6 +252,7 @@
     addrEl.textContent = truncate(addr);
     showView("connected");
     refreshBalanceAndNetwork();
+    notifyWalletChange();
   }
 
   function showError(message) {

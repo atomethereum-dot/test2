@@ -194,6 +194,85 @@
       </div>
     </div>
 
+    <!-- ---- hash market: real on-chain validator onboarding ---- -->
+    <div class="dash-section-head" id="hash-market">
+      <span class="dash-section-title">Become a Validator</span>
+      <span class="dash-section-hint">Real on-chain testnet contracts</span>
+    </div>
+    <div class="dcard dhm-card reveal">
+      <div class="dhm-not-deployed" id="dhmNotDeployed" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+        <span>Contracts deploying to testnet &mdash; purchases open shortly.</span>
+      </div>
+
+      <div class="dhm-top">
+        <div class="dhm-top-left">
+          <span class="dhm-eyebrow"><span class="dhm-eyebrow-dot" aria-hidden="true"></span>Sectora Hash Market</span>
+          <p class="dhm-sub">Buy hash power &mdash; rented online or via physical validator hardware &mdash; to unlock on-chain validator registration.</p>
+        </div>
+        <div class="dhm-wallet-summary">
+          <div class="dhm-balance">
+            <span class="dhm-balance-label">tSECT Balance</span>
+            <span class="dhm-balance-value" id="dhmTokenBalance">&mdash;</span>
+          </div>
+          <button class="dhm-faucet-btn" id="dhmFaucetBtn" type="button">Claim faucet</button>
+        </div>
+      </div>
+
+      <div class="dhm-tabs" role="tablist">
+        <button class="dhm-tab is-active" id="dhmTabOnline" data-kind="0" type="button" role="tab" aria-selected="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+          Online Hash
+        </button>
+        <button class="dhm-tab" id="dhmTabPhysical" data-kind="1" type="button" role="tab" aria-selected="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="6" rx="1.5"/><rect x="4" y="14" width="16" height="6" rx="1.5"/><path d="M8 7h.01M8 17h.01"/></svg>
+          Physical Node
+        </button>
+      </div>
+
+      <div class="dhm-packages" id="dhmPackages"></div>
+
+      <div class="dhm-validator-panel">
+        <div class="dhm-progress">
+          <div class="dhm-progress-head">
+            <span class="dhm-progress-label">Your Hash Power</span>
+            <span class="dhm-progress-nums"><strong id="dhmHashPower">0</strong> / <span id="dhmHashRequired">&mdash;</span></span>
+          </div>
+          <div class="dhm-progress-bar"><div class="dhm-progress-fill" id="dhmProgressFill"></div></div>
+        </div>
+
+        <div class="dhm-register-form" id="dhmRegisterForm">
+          <div class="dhm-field">
+            <label class="dhm-field-label" for="dhmNodeName">Node name</label>
+            <input class="dhm-input" id="dhmNodeName" type="text" maxlength="64" placeholder="e.g. Sectora Node BA-1" />
+          </div>
+          <div class="dhm-field-row">
+            <div class="dhm-field">
+              <label class="dhm-field-label" for="dhmLat">Latitude</label>
+              <input class="dhm-input" id="dhmLat" type="number" step="0.0001" min="-90" max="90" placeholder="-34.6037" />
+            </div>
+            <div class="dhm-field">
+              <label class="dhm-field-label" for="dhmLon">Longitude</label>
+              <input class="dhm-input" id="dhmLon" type="number" step="0.0001" min="-180" max="180" placeholder="-58.3816" />
+            </div>
+            <button class="dhm-geo-btn" id="dhmGeoBtn" type="button" aria-label="Use my location">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            </button>
+          </div>
+          <button class="dhm-register-btn" id="dhmRegisterBtn" type="button">Register as Validator</button>
+          <p class="dhm-hint" id="dhmHint"></p>
+        </div>
+
+        <div class="dhm-registered-status" id="dhmRegisteredStatus" hidden>
+          <div class="dhm-registered-row">
+            <span class="dhm-registered-dot" aria-hidden="true"></span>
+            <span>Registered as <strong id="dhmRegisteredName">&mdash;</strong></span>
+          </div>
+          <button class="dhm-deactivate-btn" id="dhmDeactivateBtn" type="button">Deactivate</button>
+        </div>
+      </div>
+    </div>
+
     <!-- ---- KPI row: network stat cards + promo ---- -->
     <div class="dash-kpi-row reveal-stagger">
       <div class="dcard dstat-card">
@@ -445,6 +524,8 @@
 <script src="dashboard.js?v=20260808j"></script>
 <script src="dashboard-wallet-logos.js?v=20260809b"></script>
 <script src="dashboard-wallet.js?v=20260809g"></script>
+<script src="ethers.min.js?v=20260809a"></script>
+<script src="dashboard-hashmarket.js?v=20260809a"></script>
 <script src="dashboard-cursor.js?v=20260809a"></script>
 <script src="reveal.js?v=20260808h"></script>
 <script src="dashboard-globe-land.js?v=20260808a"></script>
