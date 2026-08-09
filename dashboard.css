@@ -1743,6 +1743,186 @@
   .dhm-registered-status { flex-direction: column; align-items: flex-start; }
 }
 
+/* ---- buyback engine ---- */
+.dbb-card { padding: 32px 28px; display: flex; flex-direction: column; align-items: center; gap: 26px; text-align: center; }
+
+.dbb-badge-row { display: flex; }
+.dbb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--db-blue);
+  background: var(--db-blue-dim);
+  border-radius: 999px;
+  padding: 7px 16px;
+}
+.dbb-badge svg { width: 12px; height: 12px; animation: dbbPulse 1.8s ease-in-out infinite; }
+.dbb-badge svg:last-child { animation-delay: 0.4s; }
+
+.dbb-flow { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 560px; }
+.dbb-node { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: none; width: 118px; }
+.dbb-node-icon {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--db-border);
+  color: var(--db-text-dim);
+}
+.dbb-node-icon svg { width: 20px; height: 20px; }
+.dbb-node-icon--pool {
+  width: 62px;
+  height: 62px;
+  background: radial-gradient(120% 120% at 50% 20%, rgba(70, 140, 230, 0.22), transparent 70%), rgba(255, 255, 255, 0.06);
+  border-color: rgba(70, 140, 230, 0.45);
+  box-shadow: 0 0 24px rgba(70, 140, 230, 0.25);
+}
+.dbb-node-icon-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--db-blue);
+  color: var(--white);
+  border: 2px solid var(--db-panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dbb-node-icon-badge svg { width: 9px; height: 9px; }
+.dbb-node-label { font-family: var(--font-sans); font-weight: 600; font-size: 13px; color: var(--db-text); }
+.dbb-node-sub { font-family: var(--font-mono); font-size: 10px; color: var(--db-text-faint); }
+
+.dbb-connector { position: relative; flex: 1 1 auto; min-width: 32px; max-width: 100px; height: 2px; margin: 0 4px 22px; }
+.dbb-connector-line {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(70, 140, 230, 0.45), transparent);
+}
+.dbb-connector-dot {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--db-blue);
+  box-shadow: 0 0 6px rgba(70, 140, 230, 0.85);
+  opacity: 0;
+  animation: dbbFlowH 2.4s linear infinite;
+}
+.dbb-connector-dot--1 { animation-delay: 0s; }
+.dbb-connector-dot--2 { animation-delay: 0.8s; }
+.dbb-connector-dot--3 { animation-delay: 1.6s; }
+
+.dbb-pill-row { display: flex; }
+.dbb-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--db-green);
+  background: rgba(20, 224, 160, 0.1);
+  border: 1px solid rgba(20, 224, 160, 0.28);
+  border-radius: 999px;
+  padding: 8px 16px;
+}
+.dbb-pill svg { width: 13px; height: 13px; flex: none; }
+
+.dbb-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 28px;
+  width: 100%;
+  max-width: 640px;
+  padding-top: 24px;
+  border-top: 1px solid var(--db-border);
+  text-align: left;
+}
+.dbb-feature { display: flex; gap: 12px; align-items: flex-start; }
+.dbb-feature-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--db-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--db-blue);
+  flex: none;
+}
+.dbb-feature-icon svg { width: 14px; height: 14px; }
+.dbb-feature-title { font-family: var(--font-sans); font-weight: 600; font-size: 13px; color: var(--db-text); margin: 0 0 3px; }
+.dbb-feature-text { font-family: var(--font-sans); font-size: 12px; line-height: 1.5; color: var(--db-text-dim); margin: 0; }
+
+.dbb-cta {
+  --dbb-cta-bg: #05070a;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  color: var(--db-text);
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  background-image: linear-gradient(var(--dbb-cta-bg), var(--dbb-cta-bg)), linear-gradient(120deg, var(--db-blue), rgba(180, 210, 255, 0.95), var(--db-blue));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-size: 100% 100%, 260% 260%;
+  animation: dbbCtaBorder 5s linear infinite;
+  transition: transform 0.2s var(--db-ease);
+}
+.dbb-cta:hover { transform: translateY(-1px); }
+.dbb-cta svg { width: 14px; height: 14px; }
+
+@keyframes dbbPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+@keyframes dbbFlowH {
+  0% { left: 0%; opacity: 0; transform: translate(-50%, -50%); }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { left: 100%; opacity: 0; transform: translate(-50%, -50%); }
+}
+@keyframes dbbFlowV {
+  0% { top: 0%; opacity: 0; transform: translate(-50%, -50%); }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { top: 100%; opacity: 0; transform: translate(-50%, -50%); }
+}
+@keyframes dbbCtaBorder {
+  0% { background-position: 0 0, 0% 50%; }
+  100% { background-position: 0 0, 260% 50%; }
+}
+
+@media (max-width: 640px) {
+  .dbb-card { padding: 26px 20px; }
+  .dbb-flow { flex-direction: column; }
+  .dbb-node { width: 100%; }
+  .dbb-connector { width: 2px; height: 34px; min-width: 0; max-width: none; margin: 6px 0; }
+  .dbb-connector-dot { animation-name: dbbFlowV; }
+  .dbb-features { grid-template-columns: 1fr; }
+}
+
 /* ---- footer ---- */
 .dash-footer {
   border-top: 1px solid var(--db-border);
@@ -1796,7 +1976,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dash-net-dot, .dash-eyebrow-dot, .dash-map-title-dot, .dmap-node-ring, .dmap-node-core, .dash-block-row.is-new, .dhm-eyebrow-dot, .dhm-registered-dot { animation: none !important; }
+  .dash-net-dot, .dash-eyebrow-dot, .dash-map-title-dot, .dmap-node-ring, .dmap-node-core, .dash-block-row.is-new, .dhm-eyebrow-dot, .dhm-registered-dot, .dbb-badge svg, .dbb-connector-dot, .dbb-cta { animation: none !important; }
+  .dbb-connector-dot { opacity: 0.6 !important; }
   .dash-heroband-bar { transition: none; }
 }
 
