@@ -1451,6 +1451,7 @@
 .dhm-faucet-btn:hover { background: rgba(255, 255, 255, 0.06); }
 .dhm-faucet-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
+.dhm-tabs-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .dhm-tabs { display: flex; gap: 8px; }
 .dhm-tab {
   display: inline-flex;
@@ -1470,6 +1471,116 @@
 .dhm-tab svg { width: 13px; height: 13px; }
 .dhm-tab:hover { color: var(--db-text); border-color: var(--db-border-strong); }
 .dhm-tab.is-active { background: var(--db-blue-dim); border-color: rgba(70, 140, 230, 0.4); color: var(--db-blue); }
+
+.dhm-howitworks-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--db-text-dim);
+  background: transparent;
+  border: none;
+  padding: 6px 2px;
+  cursor: pointer;
+  transition: color 0.2s var(--db-ease);
+}
+.dhm-howitworks-btn svg { width: 14px; height: 14px; }
+.dhm-howitworks-btn:hover { color: var(--db-blue); }
+
+.dhm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(2, 4, 8, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.2s var(--db-ease);
+}
+.dhm-modal-overlay[hidden] { display: none; }
+.dhm-modal-overlay.is-open { opacity: 1; }
+.dhm-modal {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: #060a10;
+  border: 1px solid var(--db-border-strong);
+  border-radius: var(--db-radius);
+  padding: 30px 28px 26px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  transform: translateY(10px) scale(0.98);
+  opacity: 0;
+  transition: transform 0.25s var(--db-ease), opacity 0.25s var(--db-ease);
+}
+.dhm-modal-overlay.is-open .dhm-modal { transform: none; opacity: 1; }
+.dhm-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--db-border);
+  background: transparent;
+  color: var(--db-text-dim);
+  cursor: pointer;
+  transition: background 0.2s var(--db-ease), color 0.2s var(--db-ease);
+}
+.dhm-modal-close svg { width: 13px; height: 13px; }
+.dhm-modal-close:hover { background: rgba(255, 255, 255, 0.06); color: var(--db-text); }
+.dhm-modal-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--db-blue);
+  margin: 0 0 6px;
+}
+.dhm-modal-title { font-family: var(--font-sans); font-weight: 600; font-size: 20px; margin: 0 0 22px; padding-right: 30px; }
+.dhm-modal-steps { list-style: none; margin: 0 0 24px; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+.dhm-modal-step { display: flex; gap: 14px; align-items: flex-start; }
+.dhm-modal-step-num {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--db-blue-dim);
+  color: var(--db-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+.dhm-modal-step-body { min-width: 0; }
+.dhm-modal-step-title { font-family: var(--font-sans); font-weight: 600; font-size: 13.5px; color: var(--db-text); margin: 0 0 4px; }
+.dhm-modal-step-text { font-family: var(--font-sans); font-size: 12.5px; line-height: 1.55; color: var(--db-text-dim); margin: 0; }
+.dhm-modal-got-it {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: var(--white);
+  color: var(--black);
+  cursor: pointer;
+  transition: background 0.2s var(--db-ease);
+}
+.dhm-modal-got-it:hover { background: rgba(255, 255, 255, 0.9); }
 
 .dhm-packages {
   display: grid;

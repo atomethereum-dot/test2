@@ -78,6 +78,10 @@
   const registeredStatus = $("dhmRegisteredStatus");
   const registeredNameEl = $("dhmRegisteredName");
   const deactivateBtn = $("dhmDeactivateBtn");
+  const howItWorksBtn = $("dhmHowItWorksBtn");
+  const modalOverlay = $("dhmModalOverlay");
+  const modalClose = $("dhmModalClose");
+  const modalGotIt = $("dhmModalGotIt");
 
   if (!packagesEl) return; // section not present on this page
 
@@ -430,6 +434,30 @@
     } catch (e) {
       ethProvider = null;
     }
+  }
+
+  function openModal() {
+    if (!modalOverlay) return;
+    modalOverlay.hidden = false;
+    requestAnimationFrame(() => modalOverlay.classList.add("is-open"));
+    document.addEventListener("keydown", onModalKeydown);
+  }
+  function closeModal() {
+    if (!modalOverlay) return;
+    modalOverlay.classList.remove("is-open");
+    document.removeEventListener("keydown", onModalKeydown);
+    setTimeout(() => { modalOverlay.hidden = true; }, 220);
+  }
+  function onModalKeydown(e) {
+    if (e.key === "Escape") closeModal();
+  }
+  if (howItWorksBtn) howItWorksBtn.addEventListener("click", openModal);
+  if (modalClose) modalClose.addEventListener("click", closeModal);
+  if (modalGotIt) modalGotIt.addEventListener("click", closeModal);
+  if (modalOverlay) {
+    modalOverlay.addEventListener("click", (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
   }
 
   setTab(0);
