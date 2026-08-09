@@ -380,6 +380,13 @@
       </a>
     </div>
 
+    <button class="dash-metrics-toggle" id="dashMetricsToggle" type="button" aria-expanded="false" aria-controls="dashMetricsCollapse">
+      <span data-i18n="dashboard.metrics.viewBtn">View metrics</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+
+    <div id="dashMetricsCollapse" hidden>
+
     <!-- ---- KPI row: network stat cards + promo ---- -->
     <div class="dash-kpi-row reveal-stagger">
       <div class="dcard dstat-card">
@@ -576,11 +583,7 @@
       <span class="dash-section-title" data-i18n="dashboard.metrics.title">Network Metrics</span>
       <span class="dash-section-hint" data-i18n="dashboard.metrics.hint">Rolling window</span>
     </div>
-    <button class="dash-metrics-toggle" id="dashMetricsToggle" type="button" aria-expanded="false" aria-controls="dashMetricsGrid">
-      <span data-i18n="dashboard.metrics.viewBtn">View metrics</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-    </button>
-    <div class="dash-metrics-grid reveal-stagger" id="dashMetricsGrid" hidden></div>
+    <div class="dash-metrics-grid reveal-stagger" id="dashMetricsGrid"></div>
 
     <!-- ---- staking ---- -->
     <div class="dash-section-head" id="staking">
@@ -606,6 +609,8 @@
         <div class="stake-value" id="dashStakeApy">&mdash;</div>
         <div class="stake-sub" data-i18n="dashboard.staking.apySub">Variable, network-wide average</div>
       </div>
+    </div>
+
     </div>
 
   </main>
@@ -704,7 +709,7 @@
 <script src="translations.js?v=20260809c"></script>
 <script src="i18n.js?v=20260808h"></script>
 <script src="dashboard-map-topology.js?v=20260808c"></script>
-<script src="dashboard.js?v=20260809b"></script>
+<script src="dashboard.js?v=20260809c"></script>
 <script src="dashboard-wallet-logos.js?v=20260809b"></script>
 <script src="dashboard-wallet.js?v=20260809g"></script>
 <script src="ethers.min.js?v=20260809a"></script>

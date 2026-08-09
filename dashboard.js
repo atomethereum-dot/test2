@@ -536,21 +536,46 @@
     });
   }, 4000);
 
-  // ---- metrics toggle ----
+  // ---- metrics toggle: shows/hides everything below "Become a
+  // Validator" (KPI row, validator panel, throughput, network
+  // metrics, staking) behind a single button ----
   const metricsToggleBtn = document.getElementById("dashMetricsToggle");
-  if (metricsToggleBtn && metricsGrid) {
+  const metricsCollapse = document.getElementById("dashMetricsCollapse");
+  if (metricsToggleBtn && metricsCollapse) {
     const metricsToggleLabel = metricsToggleBtn.querySelector("[data-i18n]");
-    metricsToggleBtn.addEventListener("click", () => {
-      const wasExpanded = metricsToggleBtn.getAttribute("aria-expanded") === "true";
-      const nowExpanded = !wasExpanded;
+    function setMetricsExpanded(nowExpanded) {
       metricsToggleBtn.setAttribute("aria-expanded", String(nowExpanded));
-      metricsGrid.hidden = !nowExpanded;
+      metricsCollapse.hidden = !nowExpanded;
       metricsToggleBtn.classList.toggle("is-open", nowExpanded);
       if (metricsToggleLabel) {
         const key = nowExpanded ? "dashboard.metrics.hideBtn" : "dashboard.metrics.viewBtn";
         const fallback = nowExpanded ? "Hide metrics" : "View metrics";
         metricsToggleLabel.setAttribute("data-i18n", key);
         metricsToggleLabel.textContent = t(key, fallback);
+      }
+    }
+    metricsToggleBtn.addEventListener("click", () => {
+      setMetricsExpanded(metricsToggleBtn.getAttribute("aria-expanded") !== "true");
+    });
+
+    // deep links into the collapsed area (e.g. #validator-panel) should
+    // expand it first, then let the browser's own anchor scroll happen
+    function expandIfHashInside() {
+      const id = location.hash.slice(1);
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (target && metricsCollapse.contains(target)) {
+        setMetricsExpanded(true);
+      }
+    }
+    expandIfHashInside();
+    window.addEventListener("hashchange", expandIfHashInside);
+    document.addEventListener("click", (e) => {
+      const link = e.target.closest && e.target.closest('a[href^="#"]');
+      if (!link) return;
+      const target = document.getElementById(link.getAttribute("href").slice(1));
+      if (target && metricsCollapse.contains(target) && metricsCollapse.hidden) {
+        setMetricsExpanded(true);
       }
     });
   }
