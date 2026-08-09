@@ -1012,6 +1012,9 @@
 }
 
 .dash-map-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.08em;
@@ -1022,6 +1025,15 @@
   border-radius: 999px;
   padding: 7px 12px;
   backdrop-filter: blur(6px);
+}
+.dash-map-title-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--db-green);
+  box-shadow: 0 0 8px rgba(20, 224, 160, 0.65);
+  animation: dashPulseDot 1.8s ease-in-out infinite;
+  flex: none;
 }
 
 .dash-node-count {
@@ -1427,7 +1439,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dash-net-dot, .dash-eyebrow-dot, .dmap-node-ring, .dmap-node-core, .dash-block-row.is-new { animation: none !important; }
+  .dash-net-dot, .dash-eyebrow-dot, .dash-map-title-dot, .dmap-node-ring, .dmap-node-core, .dash-block-row.is-new { animation: none !important; }
   .dash-heroband-bar { transition: none; }
 }
 

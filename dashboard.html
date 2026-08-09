@@ -9,7 +9,7 @@
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260808i" />
-<link rel="stylesheet" href="dashboard.css?v=2026080924" />
+<link rel="stylesheet" href="dashboard.css?v=2026080925" />
 </head>
 <body>
 
@@ -148,7 +148,7 @@
             <g class="dmap-countries" id="dmapCountries"></g>
           </svg>
           <div class="dash-map-overlay-top">
-            <span class="dash-map-title" data-i18n="dashboard.map.title">Validator Node Map</span>
+            <span class="dash-map-title"><span class="dash-map-title-dot" aria-hidden="true"></span><span data-i18n="dashboard.map.title">Validator Node Map</span></span>
             <span class="dash-node-count"><strong id="dashNodeCount">0</strong> <span data-i18n="dashboard.map.nodesOnline">nodes online</span></span>
           </div>
           <div id="dashMapNodes"></div>
@@ -171,7 +171,7 @@
       <div class="dash-globe-stage" id="dashGlobeStage">
         <canvas id="dashGlobeCanvas" aria-label="Rotatable globe showing live Sectora testnet validator nodes"></canvas>
         <div class="dgl-title-row">
-          <span class="dash-map-title" data-i18n="dashboard.globe.title">Sectora Network Globe</span>
+          <span class="dash-map-title"><span class="dash-map-title-dot" aria-hidden="true"></span><span data-i18n="dashboard.globe.title">Sectora Network Globe</span></span>
         </div>
         <p class="dgl-hint" id="dashGlobeHint" data-i18n="dashboard.globe.hint">Drag to rotate &middot; scroll to zoom</p>
         <div class="dgl-feed" id="dashGlobeFeed" aria-hidden="true"></div>
