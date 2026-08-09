@@ -1455,6 +1455,13 @@ img {
   font-size: 13px;
   color: rgba(255, 255, 255, 0.45);
 }
+.exec-status-link {
+  color: #468ce6;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+.exec-status-link:hover { color: #6fabf0; }
 
 .exec-tape {
   display: none;
