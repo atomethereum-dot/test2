@@ -401,11 +401,21 @@
 
   let lastFetchErrorText = "";
 
+  // A GitHub Action (.github/workflows/update-dex-prices.yml) fetches real
+  // prices server-side every few minutes and commits them to this file, so
+  // the browser can read them from our own site — no cross-origin request
+  // at all, which sidesteps whatever blocks the direct/proxied calls above
+  // for some visitors' browsers or networks.
+  function fetchLocalSnapshot() {
+    return fetchJson("dex-prices.json?t=" + Date.now());
+  }
+
   // CoinGecko's /simple/price is the same proven, keyless endpoint the
   // main site's live Supply table already relies on, with the same small
-  // id-list shape; if it fails outright, fall back to Binance's public
-  // 24hr ticker so the DEX never sits empty because of a single
-  // unreachable provider.
+  // id-list shape. If the direct/proxied call and the Binance fallback both
+  // fail outright, fall back to our own periodically-updated snapshot so
+  // the DEX never sits on stale numbers because of one unreachable
+  // provider.
   function pollCrypto() {
     const isFirstLoad = !dataReady;
     return fetchJsonResilient(SIMPLE_PRICE_URL)
@@ -419,13 +429,22 @@
         console.warn("[dex] CoinGecko /simple/price failed (" + errText + "), trying Binance fallback");
         return fetchBinanceFallback()
           .then((fallbackMap) => {
-            const ok = applyPriceMap(fallbackMap, isFirstLoad);
-            lastFetchErrorText = ok ? "" : errText;
-            return ok;
+            if (!applyPriceMap(fallbackMap, isFirstLoad)) throw new Error("binance_empty_response");
+            lastFetchErrorText = "";
+            return true;
           })
           .catch((binErr) => {
-            lastFetchErrorText = errText + " / binance: " + String(binErr.message || binErr);
-            return false;
+            console.warn("[dex] Binance fallback failed (" + String(binErr.message || binErr) + "), trying local snapshot");
+            return fetchLocalSnapshot()
+              .then((snap) => {
+                const ok = applyPriceMap((snap && snap.coins) || {}, isFirstLoad);
+                lastFetchErrorText = ok ? "" : errText;
+                return ok;
+              })
+              .catch(() => {
+                lastFetchErrorText = errText + " / binance: " + String(binErr.message || binErr);
+                return false;
+              });
           });
       });
   }
@@ -450,25 +469,34 @@
 
   function pollIndices() {
     const isFirstLoad = !ASSETS.some((a) => a.category === "index");
-    return Promise.all(
-      INDEX_DEFS.map((def) =>
-        fetchYahoo(def.symbol)
-          .then((data) => {
-            const result = data && data.chart && data.chart.result && data.chart.result[0];
-            const meta = result && result.meta;
-            if (!meta || typeof meta.regularMarketPrice !== "number") return null;
-            const asset = upsertIndex(def, meta);
-            return asset;
-          })
-          .catch(() => null)
-      )
-    ).then((results) => {
-      const touched = results.filter(Boolean);
-      if (!touched.length) return false;
-      if (isFirstLoad) touched.forEach(seedCandles);
-      else touched.forEach((a) => pushTick(a, a.price));
-      return true;
-    });
+    return fetchLocalSnapshot()
+      .catch(() => null)
+      .then((snap) => {
+        const snapIndices = (snap && snap.indices) || {};
+        return Promise.all(
+          INDEX_DEFS.map((def) =>
+            fetchYahoo(def.symbol)
+              .then((data) => {
+                const result = data && data.chart && data.chart.result && data.chart.result[0];
+                const meta = result && result.meta;
+                if (!meta || typeof meta.regularMarketPrice !== "number") throw new Error("bad_yahoo_response");
+                return upsertIndex(def, meta);
+              })
+              .catch(() => {
+                const meta = snapIndices[def.symbol];
+                if (!meta || typeof meta.regularMarketPrice !== "number") return null;
+                return upsertIndex(def, meta);
+              })
+          )
+        );
+      })
+      .then((results) => {
+        const touched = results.filter(Boolean);
+        if (!touched.length) return false;
+        if (isFirstLoad) touched.forEach(seedCandles);
+        else touched.forEach((a) => pushTick(a, a.price));
+        return true;
+      });
   }
 
   let cryptoFailures = 0;
