@@ -336,6 +336,29 @@
     });
   }
 
+  // Some browsers/networks block a direct cross-origin fetch() to these
+  // price APIs (the request never gets a response at all — CORS/security
+  // policy, not a server error), even though the same URL loads fine when
+  // typed directly into the address bar. If the direct attempt fails,
+  // retry the exact same request through a public CORS-relay so the
+  // response can actually reach the page — same live data, same 20s
+  // cadence, just re-wrapped so the browser will hand it over.
+  const CORS_RELAYS = [
+    (url) => "https://api.allorigins.win/raw?url=" + encodeURIComponent(url),
+    (url) => "https://corsproxy.io/?url=" + encodeURIComponent(url),
+  ];
+
+  function fetchJsonResilient(url) {
+    function attempt(i) {
+      const target = i === 0 ? url : CORS_RELAYS[i - 1](url);
+      return fetchJson(target).catch((err) => {
+        if (i < CORS_RELAYS.length) return attempt(i + 1);
+        throw err;
+      });
+    }
+    return attempt(0);
+  }
+
   // idPriceMap: { [coinId]: { usd, usd_24h_change, usd_24h_vol, usd_market_cap } }
   function applyPriceMap(idPriceMap, isFirstLoad) {
     const ids = Object.keys(idPriceMap || {});
@@ -358,7 +381,7 @@
   function fetchBinanceFallback() {
     const symbols = BINANCE_FALLBACK.map((r) => r[0]);
     const url = "https://api.binance.com/api/v3/ticker/24hr?symbols=" + encodeURIComponent(JSON.stringify(symbols));
-    return fetchJson(url).then((list) => {
+    return fetchJsonResilient(url).then((list) => {
       if (!Array.isArray(list)) throw new Error("binance_bad_response");
       const bySymbol = {};
       list.forEach((row) => { bySymbol[row.symbol] = row; });
@@ -385,7 +408,7 @@
   // unreachable provider.
   function pollCrypto() {
     const isFirstLoad = !dataReady;
-    return fetchJson(SIMPLE_PRICE_URL)
+    return fetchJsonResilient(SIMPLE_PRICE_URL)
       .then((idPriceMap) => {
         if (!applyPriceMap(idPriceMap, isFirstLoad)) throw new Error("empty_response");
         lastFetchErrorText = "";
