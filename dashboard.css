@@ -1341,6 +1341,27 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
 }
+.dash-metrics-grid[hidden] { display: none; }
+
+.dash-metrics-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 18px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 9px 15px;
+  border-radius: 999px;
+  border: 1px solid var(--db-border-strong);
+  background: transparent;
+  color: var(--db-text);
+  cursor: pointer;
+  transition: background 0.2s var(--db-ease), border-color 0.2s var(--db-ease);
+}
+.dash-metrics-toggle:hover { background: rgba(255, 255, 255, 0.06); }
+.dash-metrics-toggle svg { width: 13px; height: 13px; transition: transform 0.25s var(--db-ease); }
+.dash-metrics-toggle.is-open svg { transform: rotate(180deg); }
 .metric-card { padding: 18px; }
 .metric-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
 .metric-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--db-text-faint); }

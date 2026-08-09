@@ -536,6 +536,25 @@
     });
   }, 4000);
 
+  // ---- metrics toggle ----
+  const metricsToggleBtn = document.getElementById("dashMetricsToggle");
+  if (metricsToggleBtn && metricsGrid) {
+    const metricsToggleLabel = metricsToggleBtn.querySelector("[data-i18n]");
+    metricsToggleBtn.addEventListener("click", () => {
+      const wasExpanded = metricsToggleBtn.getAttribute("aria-expanded") === "true";
+      const nowExpanded = !wasExpanded;
+      metricsToggleBtn.setAttribute("aria-expanded", String(nowExpanded));
+      metricsGrid.hidden = !nowExpanded;
+      metricsToggleBtn.classList.toggle("is-open", nowExpanded);
+      if (metricsToggleLabel) {
+        const key = nowExpanded ? "dashboard.metrics.hideBtn" : "dashboard.metrics.viewBtn";
+        const fallback = nowExpanded ? "Hide metrics" : "View metrics";
+        metricsToggleLabel.setAttribute("data-i18n", key);
+        metricsToggleLabel.textContent = t(key, fallback);
+      }
+    });
+  }
+
   // ---- staking ----
   let staking = { total: 18400000, pending: 92000, apy: 7.4 };
   function renderStaking() {
