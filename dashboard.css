@@ -1782,7 +1782,7 @@
 .dbb-badge svg { width: 12px; height: 12px; animation: dbbPulse 1.8s ease-in-out infinite; }
 .dbb-badge svg:last-child { animation-delay: 0.4s; }
 
-.dbb-flow { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 560px; }
+.dbb-flow { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 920px; }
 .dbb-node { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: none; width: 118px; }
 .dbb-node-icon {
   position: relative;
@@ -1832,7 +1832,7 @@
 .dbb-node-label { font-family: var(--font-sans); font-weight: 600; font-size: 13px; color: var(--db-text); }
 .dbb-node-sub { font-family: var(--font-mono); font-size: 10px; color: var(--db-text-faint); }
 
-.dbb-connector { position: relative; flex: 1 1 auto; min-width: 32px; max-width: 100px; height: 2px; margin: 0 4px 22px; }
+.dbb-connector { position: relative; flex: 1 1 auto; min-width: 32px; max-width: 220px; height: 2px; margin: 0 4px 22px; }
 .dbb-connector-line {
   position: absolute;
   inset: 0;
@@ -1881,9 +1881,9 @@
 .dbb-features {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px 28px;
+  gap: 24px 48px;
   width: 100%;
-  max-width: 640px;
+  max-width: 900px;
   padding-top: 24px;
   border-top: 1px solid var(--db-border);
   text-align: left;
@@ -1951,6 +1951,29 @@
 @keyframes dbbCtaBorder {
   0% { background-position: 0 0, 0% 50%; }
   100% { background-position: 0 0, 320% 50%; }
+}
+
+@media (min-width: 981px) {
+  .dbb-card { padding: 48px 56px; gap: 34px; }
+  .dbb-badge { font-size: 12px; padding: 8px 18px; }
+  .dbb-flow { max-width: 1040px; }
+  .dbb-node { width: 150px; gap: 10px; }
+  .dbb-node-icon { width: 64px; height: 64px; }
+  .dbb-node-icon svg { width: 24px; height: 24px; }
+  .dbb-node-icon--pool { width: 78px; height: 78px; }
+  .dbb-node-icon--pool svg:first-child { width: 28px; height: 43px; }
+  .dbb-node-icon-badge { width: 22px; height: 22px; }
+  .dbb-node-icon-badge svg { width: 11px; height: 11px; }
+  .dbb-node-label { font-size: 15px; }
+  .dbb-node-sub { font-size: 11px; }
+  .dbb-connector { max-width: 280px; }
+  .dbb-pill { font-size: 13.5px; padding: 10px 20px; }
+  .dbb-features { max-width: 980px; gap: 26px 56px; padding-top: 30px; }
+  .dbb-feature-icon { width: 36px; height: 36px; }
+  .dbb-feature-icon svg { width: 16px; height: 16px; }
+  .dbb-feature-title { font-size: 14.5px; }
+  .dbb-feature-text { font-size: 13px; }
+  .dbb-cta { font-size: 15px; padding: 14px 26px; }
 }
 
 @media (max-width: 640px) {
