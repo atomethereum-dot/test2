@@ -102,20 +102,29 @@
 }
 
 .dcov-bar {
+  position: relative;
   flex: 1;
   min-width: 2px;
   height: 4%;
-  border-radius: 1px 1px 0 0;
+  border-radius: 1px;
   transition: height 0.4s ease;
 }
-.dcov-bar.is-up {
-  background: linear-gradient(to top, var(--dx-green), rgba(20, 224, 160, 0.16));
-  box-shadow: 0 0 3px rgba(20, 224, 160, 0.5);
+/* Flat, solid fills like a real candlestick body — no gradient fade, no
+   glow — plus a thin "wick" above the body, like the high/low tail on a
+   real OHLC candle. */
+.dcov-bar.is-up { background: var(--dx-green); }
+.dcov-bar.is-down { background: var(--dx-red); }
+.dcov-bar::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%);
+  width: 1.5px;
+  height: 7px;
 }
-.dcov-bar.is-down {
-  background: linear-gradient(to top, var(--dx-red), rgba(255, 92, 108, 0.16));
-  box-shadow: 0 0 3px rgba(255, 92, 108, 0.5);
-}
+.dcov-bar.is-up::after { background: var(--dx-green); }
+.dcov-bar.is-down::after { background: var(--dx-red); }
 
 .dcov-hero-fade {
   position: absolute;
@@ -179,7 +188,15 @@
   color: var(--dx-text-dim);
 }
 
-.dcov-footer { position: relative; z-index: 1; }
+/* .dx-footer's shared margin-top + top padding leaves ~30px of dead
+   black space, barely noticeable below the dense trading screen but very
+   visible right under the bars here — tighten it down. */
+.dcov-footer {
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
+  padding-top: 14px;
+}
 
 @media (max-width: 900px) {
   /* This page has no tabs/Connect Wallet crowding the header like the
