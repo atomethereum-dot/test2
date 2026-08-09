@@ -97,9 +97,27 @@
   ];
   const METAL_IDS = { "pax-gold": "Gold", "kinesis-silver": "Silver" };
   const ALL_COIN_IDS = COIN_DEFS.map((c) => c[0]).concat(METAL_DEFS.map((m) => m[0]));
-  const SIMPLE_PRICE_URL =
-    "https://api.coingecko.com/api/v3/simple/price?ids=" + ALL_COIN_IDS.join(",") +
-    "&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true";
+
+  // A single /simple/price call for all ~110 ids at once turned out to be
+  // unreliable (likely CoinGecko's anonymous-tier request-size/complexity
+  // limit) even though the exact same endpoint with a small id list (the
+  // main site's live Supply table, 8 ids) works fine. So this is split
+  // into several small requests — the same size as that proven call —
+  // fetched in parallel; a failure in one chunk doesn't take down the rest.
+  const SIMPLE_PRICE_CHUNK_SIZE = 12;
+  function simplePriceChunks() {
+    const chunks = [];
+    for (let i = 0; i < ALL_COIN_IDS.length; i += SIMPLE_PRICE_CHUNK_SIZE) {
+      chunks.push(ALL_COIN_IDS.slice(i, i + SIMPLE_PRICE_CHUNK_SIZE));
+    }
+    return chunks;
+  }
+  function simplePriceUrl(ids) {
+    return (
+      "https://api.coingecko.com/api/v3/simple/price?ids=" + ids.join(",") +
+      "&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true"
+    );
+  }
 
   const INDEX_DEFS = [
     { symbol: "^DJI", ticker: "DJI", name: "Dow Jones" },
@@ -346,7 +364,14 @@
 
   function fetchJson(url) {
     return fetch(url, { cache: "no-store" }).then((res) => {
-      if (!res.ok) throw new Error("http_" + res.status);
+      if (!res.ok) {
+        return res
+          .text()
+          .catch(() => "")
+          .then((body) => {
+            throw new Error("HTTP " + res.status + (body ? ": " + body.slice(0, 140) : ""));
+          });
+      }
       return res.json();
     });
   }
@@ -391,21 +416,46 @@
     });
   }
 
+  let lastFetchErrorText = "";
+
   // CoinGecko's /simple/price is the same proven, keyless endpoint the
-  // main site's live Supply table already relies on; if it fails outright,
-  // fall back to Binance's public 24hr ticker for the major pairs so the
-  // DEX never sits empty because of a single unreachable provider.
+  // main site's live Supply table already relies on; if every chunk fails
+  // outright, fall back to Binance's public 24hr ticker for the major
+  // pairs so the DEX never sits empty because of a single unreachable
+  // provider.
   function pollCrypto() {
     const isFirstLoad = !dataReady;
-    return fetchJson(SIMPLE_PRICE_URL)
-      .then((idPriceMap) => {
-        if (applyPriceMap(idPriceMap, isFirstLoad)) return true;
-        throw new Error("empty_price_map");
-      })
-      .catch((err) => {
-        console.warn("[dex] CoinGecko /simple/price failed, trying Binance fallback:", err);
-        return fetchBinanceFallback().then((fallbackMap) => applyPriceMap(fallbackMap, isFirstLoad));
+    const chunks = simplePriceChunks();
+    return Promise.allSettled(chunks.map((ids) => fetchJson(simplePriceUrl(ids)))).then((results) => {
+      const merged = {};
+      let anyOk = false;
+      let firstError = null;
+      results.forEach((r) => {
+        if (r.status === "fulfilled" && r.value && typeof r.value === "object") {
+          Object.assign(merged, r.value);
+          anyOk = true;
+        } else if (r.status === "rejected" && !firstError) {
+          firstError = r.reason;
+        }
       });
+      if (anyOk && applyPriceMap(merged, isFirstLoad)) {
+        lastFetchErrorText = "";
+        return true;
+      }
+      const errText = firstError ? String(firstError.message || firstError) : "empty_response";
+      console.warn("[dex] CoinGecko /simple/price chunks failed (" + errText + "), trying Binance fallback");
+      return fetchBinanceFallback()
+        .then((fallbackMap) => {
+          const ok = applyPriceMap(fallbackMap, isFirstLoad);
+          if (ok) lastFetchErrorText = "";
+          else lastFetchErrorText = errText;
+          return ok;
+        })
+        .catch((binErr) => {
+          lastFetchErrorText = errText + " / binance: " + String(binErr.message || binErr);
+          return false;
+        });
+    });
   }
 
   function fetchYahoo(symbol) {
@@ -457,9 +507,10 @@
     marketLiveEl.classList.toggle("is-stale", !isLive);
     const labelEl = marketLiveEl.querySelector("span:last-child");
     if (labelEl) {
-      labelEl.textContent = isLive
+      const base = isLive
         ? t("dex.trade.markets.liveNote", "LIVE · updates ~20s")
         : t("dex.trade.markets.staleNote", "Live feed unreachable — showing last known prices");
+      labelEl.textContent = !isLive && lastFetchErrorText ? base + " (" + lastFetchErrorText + ")" : base;
     }
   }
 
