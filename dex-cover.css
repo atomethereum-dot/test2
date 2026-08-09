@@ -222,4 +222,10 @@
   .dcov-title-mobile-break { display: inline; }
   .dcov-sub { font-size: 12.5px; }
   .dcov-hero .dash-hero-actions { margin-top: 30px; flex-direction: column; align-items: flex-start; }
+  /* At mobile widths a 150-bar row shrinks each body to its 2px floor,
+     leaving no width difference for the wick to taper against — it just
+     reads as "the same line, a bit taller". Widen the body and the wick
+     so the tip is visibly narrower than the candle again. */
+  .dcov-bar { min-width: 4px; }
+  .dcov-bar::after { width: 2px; height: 6px; }
 }
