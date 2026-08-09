@@ -509,6 +509,8 @@
 }
 .dash-wallet.is-connected .dash-wallet-btn:hover { background: rgba(20, 224, 160, 0.14); }
 
+.dash-wallet.is-connecting .dash-wallet-btn { opacity: 0.7; cursor: wait; }
+
 .dash-wallet-panel {
   position: absolute;
   top: calc(100% + 10px);
@@ -599,6 +601,17 @@
 }
 .dash-wallet-hint[hidden] { display: none; }
 .dash-wallet-hint a { color: var(--db-blue); text-decoration: underline; text-underline-offset: 2px; }
+.dash-wallet-retry {
+  display: inline;
+  font: inherit;
+  color: var(--db-blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
 
 /* ---- generic card ---- */
 .dcard {

@@ -13,6 +13,12 @@
   const disconnectBtn = document.getElementById("dashWalletDisconnect");
   if (!root || !btn) return;
 
+  const WC_PROJECT_ID = "a491fc0784a2751d886adfc7a687c8cb";
+  const WC_SCRIPT_SRC = "walletconnect-provider.min.js?v=20260809a";
+  const WC_CHAINS = [1];
+  const WC_OPTIONAL_CHAINS = [137, 10, 42161, 8453, 56, 43114, 11155111];
+  const IS_MOBILE_OS = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
   const CHAIN_NAMES = {
     "0x1": "Ethereum Mainnet",
     "0xaa36a7": "Sepolia Testnet",
@@ -28,9 +34,11 @@
     "0x14a34": "Base Sepolia",
   };
 
-  const eth = window.ethereum;
   let account = null;
   let panelOpen = false;
+  let activeProvider = null;
+  let wcProviderPromise = null;
+  let wcScriptPromise = null;
 
   function truncate(addr) {
     return addr.slice(0, 6) + "…" + addr.slice(-4);
@@ -45,7 +53,7 @@
   }
 
   function chainName(hex) {
-    return CHAIN_NAMES[hex] || ("Chain " + parseInt(hex, 16));
+    return CHAIN_NAMES[hex] || "Chain " + parseInt(hex, 16);
   }
 
   function openPanel() {
@@ -59,6 +67,23 @@
     btn.setAttribute("aria-expanded", "false");
   }
 
+  function setConnectingUI(isConnecting) {
+    root.classList.toggle("is-connecting", isConnecting);
+    btn.disabled = isConnecting;
+    if (isConnecting) {
+      btnLabel.textContent = "Connecting…";
+    } else if (!account) {
+      btnLabel.textContent = "Connect Wallet";
+    }
+  }
+
+  function showHint(html) {
+    installHint.innerHTML = html;
+    installHint.hidden = false;
+    panelConnected.hidden = true;
+    openPanel();
+  }
+
   function setDisconnectedUI() {
     root.classList.remove("is-connected");
     btnLabel.textContent = "Connect Wallet";
@@ -70,15 +95,15 @@
   }
 
   async function refreshBalanceAndNetwork() {
-    if (!account) return;
+    if (!account || !activeProvider) return;
     try {
-      const chainId = await eth.request({ method: "eth_chainId" });
+      const chainId = await activeProvider.request({ method: "eth_chainId" });
       networkEl.textContent = chainName(chainId);
     } catch (e) {
       networkEl.textContent = "—";
     }
     try {
-      const balanceHex = await eth.request({
+      const balanceHex = await activeProvider.request({
         method: "eth_getBalance",
         params: [account, "latest"],
       });
@@ -99,25 +124,124 @@
     refreshBalanceAndNetwork();
   }
 
-  async function connect() {
-    if (!eth) {
-      openPanel();
-      installHint.hidden = false;
-      panelConnected.hidden = true;
-      return;
-    }
+  function loadWcScript() {
+    if (window.WalletConnectEthereumProvider) return Promise.resolve();
+    if (wcScriptPromise) return wcScriptPromise;
+    wcScriptPromise = new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = WC_SCRIPT_SRC;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error("wc-script-load-failed"));
+      document.head.appendChild(s);
+    });
+    return wcScriptPromise;
+  }
+
+  function getWcProvider() {
+    if (wcProviderPromise) return wcProviderPromise;
+    wcProviderPromise = window.WalletConnectEthereumProvider.EthereumProvider.init({
+      projectId: WC_PROJECT_ID,
+      chains: WC_CHAINS,
+      optionalChains: WC_OPTIONAL_CHAINS,
+      showQrModal: false,
+      metadata: {
+        name: "Sectora Testnet Dashboard",
+        description: "Live network overview for the Sectora testnet.",
+        url: window.location.origin,
+        icons: [],
+      },
+    }).then((provider) => {
+      provider.on("accountsChanged", (accounts) => {
+        if (accounts && accounts.length) {
+          setConnectedUI(accounts[0]);
+        } else {
+          disconnect();
+        }
+      });
+      provider.on("chainChanged", () => {
+        if (account) refreshBalanceAndNetwork();
+      });
+      provider.on("session_delete", () => disconnect());
+      provider.on("disconnect", () => disconnect());
+      return provider;
+    });
+    return wcProviderPromise;
+  }
+
+  async function connectInjected() {
     try {
-      const accounts = await eth.request({ method: "eth_requestAccounts" });
-      if (accounts && accounts.length) setConnectedUI(accounts[0]);
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+      if (accounts && accounts.length) {
+        activeProvider = window.ethereum;
+        setConnectedUI(accounts[0]);
+      }
     } catch (e) {
       // user rejected the connection request — no-op
     }
   }
 
+  async function connectWalletConnect() {
+    setConnectingUI(true);
+    try {
+      await loadWcScript();
+      const provider = await getWcProvider();
+
+      const onUri = (uri) => {
+        const deepLink = "https://metamask.app.link/wc?uri=" + encodeURIComponent(uri);
+        const evt = new CustomEvent("sectora:wallet-deeplink", {
+          detail: { url: deepLink },
+          cancelable: true,
+        });
+        if (window.dispatchEvent(evt)) window.location.href = deepLink;
+      };
+      provider.on("display_uri", onUri);
+
+      const timeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("timeout")), 30000)
+      );
+      const accounts = await Promise.race([provider.enable(), timeout]);
+      provider.removeListener?.("display_uri", onUri);
+
+      if (accounts && accounts.length) {
+        activeProvider = provider;
+        setConnectedUI(accounts[0]);
+      }
+    } catch (e) {
+      showHint(
+        'Couldn\'t open MetaMask, or the connection request was rejected. <button class="dash-wallet-retry" id="dashWalletRetry" type="button">Try again</button>'
+      );
+      document.getElementById("dashWalletRetry")?.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        connectWalletConnect();
+      });
+    } finally {
+      setConnectingUI(false);
+    }
+  }
+
+  async function connect() {
+    if (window.ethereum) {
+      connectInjected();
+    } else if (IS_MOBILE_OS) {
+      connectWalletConnect();
+    } else {
+      showHint(
+        'No wallet detected in this browser. <a href="https://metamask.io/download" target="_blank" rel="noopener">Install MetaMask</a> to connect a real wallet.'
+      );
+    }
+  }
+
   async function disconnect() {
-    if (eth && eth.request) {
+    if (activeProvider && activeProvider !== window.ethereum && activeProvider.disconnect) {
       try {
-        await eth.request({
+        await activeProvider.disconnect();
+      } catch (e) {
+        // relay already closed — no-op
+      }
+      wcProviderPromise = null;
+    } else if (window.ethereum && window.ethereum.request) {
+      try {
+        await window.ethereum.request({
           method: "wallet_revokePermissions",
           params: [{ eth_accounts: {} }],
         });
@@ -126,6 +250,7 @@
       }
     }
     account = null;
+    activeProvider = null;
     setDisconnectedUI();
     closePanel();
   }
@@ -134,8 +259,8 @@
     e.stopPropagation();
     if (account) {
       panelOpen ? closePanel() : openPanel();
-    } else if (!eth) {
-      panelOpen ? closePanel() : connect();
+    } else if (!window.ethereum && panelOpen) {
+      closePanel();
     } else {
       connect();
     }
@@ -165,26 +290,28 @@
     if (e.key === "Escape" && panelOpen) closePanel();
   });
 
-  if (eth) {
-    eth
+  if (window.ethereum) {
+    window.ethereum
       .request({ method: "eth_accounts" })
       .then((accounts) => {
-        if (accounts && accounts.length) setConnectedUI(accounts[0]);
+        if (accounts && accounts.length) {
+          activeProvider = window.ethereum;
+          setConnectedUI(accounts[0]);
+        }
       })
       .catch(() => {});
 
-    eth.on?.("accountsChanged", (accounts) => {
+    window.ethereum.on?.("accountsChanged", (accounts) => {
+      if (activeProvider !== window.ethereum) return;
       if (accounts && accounts.length) {
         setConnectedUI(accounts[0]);
       } else {
-        account = null;
-        setDisconnectedUI();
-        closePanel();
+        disconnect();
       }
     });
 
-    eth.on?.("chainChanged", () => {
-      if (account) refreshBalanceAndNetwork();
+    window.ethereum.on?.("chainChanged", () => {
+      if (activeProvider === window.ethereum && account) refreshBalanceAndNetwork();
     });
   }
 })();
