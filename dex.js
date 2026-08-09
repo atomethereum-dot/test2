@@ -70,6 +70,23 @@
     ["SUIUSDT", "sui", "Sui", 24], ["HYPEUSDT", "hyperliquid", "Hyperliquid", 30],
   ];
 
+  // Real DEX/exchange screens don't poll — they hold one socket open and
+  // paint every tick as it arrives. Binance's public market-data stream is
+  // free, keyless and needs no origin allowlist (it's not a browser CORS
+  // request at all), so it's used here for that same feel: prices move the
+  // instant a trade happens instead of waiting on a fixed interval. Only
+  // pairs that actually trade on Binance can stream this way — gold
+  // (PAXGUSDT) does, silver (kinesis-silver) doesn't, so silver and the NY
+  // indices still ride the polling path below.
+  const BINANCE_WS_URL = "wss://stream.binance.com:9443/stream?streams=";
+  const BINANCE_WS_SYMBOLS = [
+    ["btcusdt", "bitcoin"], ["ethusdt", "ethereum"], ["bchusdt", "bitcoin-cash"],
+    ["solusdt", "solana"], ["ltcusdt", "litecoin"], ["xrpusdt", "ripple"],
+    ["suiusdt", "sui"], ["hypeusdt", "hyperliquid"], ["paxgusdt", "pax-gold"],
+  ];
+  const WS_ID_BY_STREAM = {};
+  BINANCE_WS_SYMBOLS.forEach(([stream, id]) => { WS_ID_BY_STREAM[stream + "@ticker"] = id; });
+
   const CRYPTO_POLL_MS = 20000;
   const INDEX_POLL_MS = 30000;
   const TIMEFRAMES = { "1m": 60000, "5m": 300000, "15m": 900000, "1h": 3600000 };
@@ -513,22 +530,104 @@
     }
   }
 
+  function applyWsTicker(id, data) {
+    const asset = BY_ID[id];
+    if (!asset) return;
+    const price = parseFloat(data.c);
+    if (!isFinite(price)) return;
+    asset.price = price;
+    const change = parseFloat(data.P);
+    if (isFinite(change)) asset.change24h = change;
+    const high = parseFloat(data.h);
+    const low = parseFloat(data.l);
+    if (isFinite(high)) asset.high24h = high;
+    if (isFinite(low)) asset.low24h = low;
+    const quoteVol = parseFloat(data.q);
+    if (isFinite(quoteVol)) asset.vol24h = quoteVol;
+    asset.tier = tierOf(asset);
+    pushTick(asset, price);
+  }
+
+  let binanceWs = null;
+  let wsConnected = false;
+  let wsReconnectDelay = 2000;
+  let wsReconnectTimer = null;
+  let wsRenderPending = false;
+
+  function scheduleWsRender() {
+    if (wsRenderPending) return;
+    wsRenderPending = true;
+    requestAnimationFrame(() => {
+      wsRenderPending = false;
+      onDataChanged();
+    });
+  }
+
+  function scheduleWsReconnect() {
+    if (wsReconnectTimer) return;
+    wsReconnectTimer = setTimeout(() => {
+      wsReconnectTimer = null;
+      connectBinanceWs();
+    }, wsReconnectDelay);
+    wsReconnectDelay = Math.min(wsReconnectDelay * 2, 30000);
+  }
+
+  // Streams every tick for the pairs Binance lists, the instant a trade
+  // happens — no polling interval involved. If this socket can't connect
+  // or drops (retried with backoff), the 20s REST poll below keeps the
+  // market covered so it's never actually blank.
+  function connectBinanceWs() {
+    if (typeof WebSocket === "undefined") return;
+    const streams = BINANCE_WS_SYMBOLS.map(([s]) => s + "@ticker").join("/");
+    let socket;
+    try {
+      socket = new WebSocket(BINANCE_WS_URL + streams);
+    } catch (e) {
+      scheduleWsReconnect();
+      return;
+    }
+    binanceWs = socket;
+    socket.onopen = () => {
+      wsReconnectDelay = 2000;
+      wsConnected = true;
+      cryptoFailures = 0;
+      setMarketLive(true);
+    };
+    socket.onmessage = (event) => {
+      let msg;
+      try {
+        msg = JSON.parse(event.data);
+      } catch (e) {
+        return;
+      }
+      const id = msg && msg.stream && WS_ID_BY_STREAM[msg.stream];
+      if (!id || !msg.data) return;
+      applyWsTicker(id, msg.data);
+      scheduleWsRender();
+    };
+    socket.onclose = () => {
+      binanceWs = null;
+      wsConnected = false;
+      if (cryptoFailures > 0) setMarketLive(false);
+      scheduleWsReconnect();
+    };
+  }
+
+  // The market is "live" if either channel is up — the streaming socket
+  // (instant ticks) or the REST poll (20s). Only mark it stale when both
+  // have failed, so a slow/blocked REST call doesn't flip the badge while
+  // the socket is still streaming real prices just fine.
   function tick() {
     pollCrypto()
       .then((ok) => {
-        if (ok) {
-          cryptoFailures = 0;
-          setMarketLive(true);
-        } else {
-          cryptoFailures += 1;
-          setMarketLive(false);
-        }
+        cryptoFailures = ok ? 0 : cryptoFailures + 1;
+        setMarketLive(ok || wsConnected);
         onFirstReadyOrTick();
       })
       .catch((err) => {
         cryptoFailures += 1;
         console.warn("[dex] Price feed unreachable (CoinGecko + Binance fallback both failed):", err);
-        setMarketLive(false);
+        setMarketLive(wsConnected);
         onFirstReadyOrTick();
       });
   }
@@ -1348,6 +1447,7 @@
 
     tick();
     setInterval(tick, CRYPTO_POLL_MS);
+    connectBinanceWs();
     pollIndices().then(() => onDataChanged());
     setInterval(() => pollIndices().then(() => onDataChanged()), INDEX_POLL_MS);
 
