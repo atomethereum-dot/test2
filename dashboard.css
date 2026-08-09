@@ -708,9 +708,9 @@
   height: 100%;
 }
 .dmap-country {
-  fill: #3d4046;
-  stroke: rgba(255, 255, 255, 0.1);
-  stroke-width: 0.5;
+  fill: #45484f;
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 0.7;
 }
 
 .dmap-node {
@@ -718,18 +718,18 @@
   transform: translate(-50%, -50%);
 }
 .dmap-node-core {
-  width: 7px;
-  height: 7px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: var(--db-blue);
-  box-shadow: 0 0 14px 4px rgba(70, 140, 230, 1);
+  background: #6fabf0;
+  box-shadow: 0 0 20px 6px rgba(70, 140, 230, 1);
   animation: dmapCoreBlink 2.2s ease-in-out infinite;
 }
 .dmap-node-ring {
   position: absolute;
-  inset: -9px;
+  inset: -11px;
   border-radius: 50%;
-  border: 1px solid rgba(70, 140, 230, 0.7);
+  border: 1.5px solid rgba(111, 171, 240, 0.85);
   animation: dmapRing 2.6s var(--db-ease) infinite;
 }
 .dmap-node:nth-child(3n) .dmap-node-ring { animation-delay: 0.6s; }
