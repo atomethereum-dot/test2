@@ -139,7 +139,7 @@
      contained card, so the sphere needs more headroom or its top/bottom --
      including the atmosphere rim glow -- clips against the canvas edges. */
   const isDesktopStage = matchMedia("(min-width: 641px)").matches;
-  const HOME = { dist: isDesktopStage ? 5.0 : 3.85, rx: 0.6, ry: -Math.PI / 2 - (22 * Math.PI) / 180 };
+  const HOME = { dist: isDesktopStage ? 3.3 : 3.85, rx: 0.6, ry: -Math.PI / 2 - (22 * Math.PI) / 180 };
   let dist = HOME.dist;
 
   const globe = new THREE.Group();
@@ -195,9 +195,9 @@
         uniform float uRim;
         varying vec3 vNv; varying vec3 vN;
         void main(){
-          float f = pow(1.0 - abs(vNv.z), 5.0);
+          float f = pow(1.0 - abs(vNv.z), 2.2);
           float lam = clamp(dot(vN, normalize(vec3(-0.35,0.75,0.55))) * 0.5 + 0.5, 0.0, 1.0);
-          gl_FragColor = vec4(vec3(0.9,0.93,0.98), f * 0.27 * uRim * (0.45 + 0.55 * lam));
+          gl_FragColor = vec4(vec3(1.5,1.55,1.6), f * 0.95 * uRim * (0.8 + 0.2 * lam));
         }`
     })
   ));
