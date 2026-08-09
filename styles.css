@@ -3705,16 +3705,8 @@ img {
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.footer--light .footer-glow-line--a {
-  color: #0fb83e;
-}
-
-.footer--light .footer-glow-line--b {
-  color: #1f7fe0;
-}
-
-.footer--light .footer-glow-line--c {
-  color: #8a2be2;
+.footer--light .footer-glow {
+  display: none;
 }
 
 .footer--light .footer-mark {
