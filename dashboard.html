@@ -9,7 +9,7 @@
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260808i" />
-<link rel="stylesheet" href="dashboard.css?v=2026080920" />
+<link rel="stylesheet" href="dashboard.css?v=2026080921" />
 </head>
 <body>
 
@@ -101,6 +101,19 @@
             <span id="dashWalletBtnLabel">Connect Wallet</span>
           </button>
           <div class="dash-wallet-panel" id="dashWalletPanel" hidden>
+            <div class="dash-wallet-picker" id="dashWalletPicker">
+              <p class="dash-wallet-panel-title">Connect a wallet</p>
+              <div class="dash-wallet-list" id="dashWalletList"></div>
+              <p class="dash-wallet-hint" id="dashWalletError" hidden></p>
+            </div>
+            <div class="dash-wallet-qr" id="dashWalletQr" hidden>
+              <button class="dash-wallet-back" id="dashWalletQrBack" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                Back
+              </button>
+              <div class="dash-wallet-qr-box" id="dashWalletQrBox"></div>
+              <p class="dash-wallet-qr-hint">Scan with <span id="dashWalletQrWalletName">your wallet</span> app</p>
+            </div>
             <div class="dash-wallet-panel-connected" id="dashWalletPanelConnected" hidden>
               <div class="dash-wallet-panel-row">
                 <span class="dash-wallet-panel-label">Address</span>
@@ -119,7 +132,6 @@
               </div>
               <button class="dash-wallet-disconnect" id="dashWalletDisconnect" type="button">Disconnect</button>
             </div>
-            <p class="dash-wallet-hint" id="dashWalletInstallHint" hidden>No wallet detected in this browser. <a href="https://metamask.io/download" target="_blank" rel="noopener">Install MetaMask</a> to connect a real wallet.</p>
           </div>
         </div>
       </div>
@@ -430,7 +442,7 @@
 <script src="i18n.js?v=20260808h"></script>
 <script src="dashboard-map-topology.js?v=20260808c"></script>
 <script src="dashboard.js?v=20260808j"></script>
-<script src="dashboard-wallet.js?v=20260809c"></script>
+<script src="dashboard-wallet.js?v=20260809d"></script>
 <script src="dashboard-cursor.js?v=20260808a"></script>
 <script src="reveal.js?v=20260808h"></script>
 <script src="dashboard-globe-land.js?v=20260808a"></script>

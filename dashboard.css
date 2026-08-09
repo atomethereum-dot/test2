@@ -601,16 +601,117 @@
 }
 .dash-wallet-hint[hidden] { display: none; }
 .dash-wallet-hint a { color: var(--db-blue); text-decoration: underline; text-underline-offset: 2px; }
-.dash-wallet-retry {
-  display: inline;
-  font: inherit;
-  color: var(--db-blue);
-  text-decoration: underline;
-  text-underline-offset: 2px;
+
+.dash-wallet-picker { display: flex; flex-direction: column; gap: 10px; }
+.dash-wallet-picker[hidden] { display: none; }
+
+.dash-wallet-panel-title {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--db-text-faint);
+  margin: 0 0 2px;
+}
+
+.dash-wallet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.dash-wallet-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+.dash-wallet-row:hover { background: rgba(255, 255, 255, 0.05); }
+
+.dash-wallet-row-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 12px;
+  color: #fff;
+  object-fit: cover;
+}
+
+.dash-wallet-row-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.dash-wallet-row-name {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--db-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dash-wallet-row-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--db-green);
+}
+
+.dash-wallet-qr { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.dash-wallet-qr[hidden] { display: none; }
+
+.dash-wallet-back {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--db-text-dim);
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
+}
+.dash-wallet-back svg { width: 13px; height: 13px; }
+.dash-wallet-back:hover { color: var(--db-text); }
+
+.dash-wallet-qr-box {
+  width: 180px;
+  height: 180px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dash-wallet-qr-box svg { width: 100%; height: 100%; }
+
+.dash-wallet-qr-hint {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--db-text-dim);
+  margin: 0;
+  text-align: center;
 }
 
 /* ---- generic card ---- */

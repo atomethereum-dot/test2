@@ -4,8 +4,14 @@
   const btnLabel = document.getElementById("dashWalletBtnLabel");
   const dot = document.getElementById("dashWalletDot");
   const panel = document.getElementById("dashWalletPanel");
+  const picker = document.getElementById("dashWalletPicker");
+  const list = document.getElementById("dashWalletList");
+  const pickerError = document.getElementById("dashWalletError");
+  const qrView = document.getElementById("dashWalletQr");
+  const qrBox = document.getElementById("dashWalletQrBox");
+  const qrWalletName = document.getElementById("dashWalletQrWalletName");
+  const qrBack = document.getElementById("dashWalletQrBack");
   const panelConnected = document.getElementById("dashWalletPanelConnected");
-  const installHint = document.getElementById("dashWalletInstallHint");
   const addrEl = document.getElementById("dashWalletAddress");
   const networkEl = document.getElementById("dashWalletNetwork");
   const balanceEl = document.getElementById("dashWalletBalance");
@@ -15,6 +21,7 @@
 
   const WC_PROJECT_ID = "a491fc0784a2751d886adfc7a687c8cb";
   const WC_SCRIPT_SRC = "walletconnect-provider.min.js?v=20260809a";
+  const QR_SCRIPT_SRC = "qrcode-generator.min.js?v=20260809a";
   const WC_CHAINS = [1];
   const WC_OPTIONAL_CHAINS = [137, 10, 42161, 8453, 56, 43114, 11155111];
   const IS_MOBILE_OS = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -34,11 +41,64 @@
     "0x14a34": "Base Sepolia",
   };
 
+  // Popular wallets offered even when not detected as a browser extension.
+  // Each has a mobile deep-link format for opening a WalletConnect pairing
+  // directly in that app; on desktop the same URI is rendered as a QR code.
+  const POPULAR_WALLETS = [
+    {
+      rdns: "io.metamask",
+      name: "MetaMask",
+      color: "#f6851b",
+      mono: "M",
+      deepLink: (uri) => "https://metamask.app.link/wc?uri=" + encodeURIComponent(uri),
+    },
+    {
+      rdns: "com.trustwallet.app",
+      name: "Trust Wallet",
+      color: "#3375bb",
+      mono: "T",
+      deepLink: (uri) => "https://link.trustwallet.com/wc?uri=" + encodeURIComponent(uri),
+    },
+    {
+      rdns: "com.coinbase.wallet",
+      name: "Coinbase Wallet",
+      color: "#0052ff",
+      mono: "C",
+      deepLink: (uri) => "https://go.cb-w.com/wc?uri=" + encodeURIComponent(uri),
+    },
+    {
+      rdns: "me.rainbow",
+      name: "Rainbow",
+      color: "#001e59",
+      mono: "R",
+      deepLink: (uri) => "https://rnbwapp.com/wc?uri=" + encodeURIComponent(uri),
+    },
+  ];
+
+  const GENERIC_WC = {
+    rdns: "walletconnect",
+    name: "Other wallets",
+    color: "#3b99fc",
+    mono: "◈",
+    deepLink: (uri) => uri,
+  };
+
   let account = null;
   let panelOpen = false;
   let activeProvider = null;
   let wcProviderPromise = null;
   let wcScriptPromise = null;
+  let qrScriptPromise = null;
+  let pendingWalletName = "";
+
+  // ---- EIP-6963 discovery: real installed extensions announce themselves
+  // with their own name/icon, instead of us guessing from window.ethereum ----
+  const injectedProviders = new Map(); // rdns -> { info, provider }
+  window.addEventListener("eip6963:announceProvider", (e) => {
+    const { info, provider } = e.detail || {};
+    if (info && provider) injectedProviders.set(info.rdns, { info, provider });
+  });
+  window.dispatchEvent(new Event("eip6963:requestProvider"));
 
   function truncate(addr) {
     return addr.slice(0, 6) + "…" + addr.slice(-4);
@@ -56,6 +116,12 @@
     return CHAIN_NAMES[hex] || "Chain " + parseInt(hex, 16);
   }
 
+  function showView(name) {
+    picker.hidden = name !== "picker";
+    qrView.hidden = name !== "qr";
+    panelConnected.hidden = name !== "connected";
+  }
+
   function openPanel() {
     panelOpen = true;
     panel.hidden = false;
@@ -67,28 +133,10 @@
     btn.setAttribute("aria-expanded", "false");
   }
 
-  function setConnectingUI(isConnecting) {
-    root.classList.toggle("is-connecting", isConnecting);
-    btn.disabled = isConnecting;
-    if (isConnecting) {
-      btnLabel.textContent = "Connecting…";
-    } else if (!account) {
-      btnLabel.textContent = "Connect Wallet";
-    }
-  }
-
-  function showHint(html) {
-    installHint.innerHTML = html;
-    installHint.hidden = false;
-    panelConnected.hidden = true;
-    openPanel();
-  }
-
   function setDisconnectedUI() {
     root.classList.remove("is-connected");
     btnLabel.textContent = "Connect Wallet";
     dot.hidden = true;
-    panelConnected.hidden = true;
     addrEl.textContent = "—";
     networkEl.textContent = "—";
     balanceEl.textContent = "—";
@@ -118,23 +166,106 @@
     root.classList.add("is-connected");
     btnLabel.textContent = truncate(addr);
     dot.hidden = false;
-    panelConnected.hidden = false;
-    installHint.hidden = true;
     addrEl.textContent = truncate(addr);
+    showView("connected");
     refreshBalanceAndNetwork();
   }
 
-  function loadWcScript() {
-    if (window.WalletConnectEthereumProvider) return Promise.resolve();
-    if (wcScriptPromise) return wcScriptPromise;
-    wcScriptPromise = new Promise((resolve, reject) => {
+  function showError(message) {
+    pickerError.textContent = message;
+    pickerError.hidden = false;
+    showView("picker");
+  }
+
+  // ---- wallet list rendering ----
+  function walletRow({ key, name, icon, subtitle }) {
+    const row = document.createElement("button");
+    row.type = "button";
+    row.className = "dash-wallet-row";
+    row.dataset.wallet = key;
+    row.innerHTML =
+      icon +
+      '<span class="dash-wallet-row-text"><span class="dash-wallet-row-name"></span>' +
+      (subtitle ? '<span class="dash-wallet-row-sub"></span>' : "") +
+      "</span>";
+    row.querySelector(".dash-wallet-row-name").textContent = name;
+    if (subtitle) row.querySelector(".dash-wallet-row-sub").textContent = subtitle;
+    return row;
+  }
+
+  function monogramIcon(w) {
+    const bg =
+      w.rdns === "me.rainbow"
+        ? "linear-gradient(135deg,#ff5757,#ffa640,#5ce6a4,#4ba9ff,#9b6bff)"
+        : w.color;
+    return (
+      '<span class="dash-wallet-row-icon" style="background:' +
+      bg +
+      '">' +
+      w.mono +
+      "</span>"
+    );
+  }
+
+  function renderList() {
+    list.innerHTML = "";
+    pickerError.hidden = true;
+
+    const detected = Array.from(injectedProviders.values());
+    const detectedRdns = new Set(detected.map((d) => d.info.rdns));
+
+    detected.forEach(({ info, provider }) => {
+      const icon = info.icon
+        ? '<img class="dash-wallet-row-icon" src="' + info.icon + '" alt="" />'
+        : monogramIcon({ color: "#888", mono: info.name?.[0] || "?", rdns: info.rdns });
+      const row = walletRow({ key: "injected:" + info.rdns, name: info.name, icon, subtitle: "Detected" });
+      row.addEventListener("click", () => connectInjected(provider, info.name));
+      list.appendChild(row);
+    });
+
+    // Legacy fallback: an injected wallet that predates EIP-6963.
+    if (!detected.length && window.ethereum) {
+      const row = walletRow({
+        key: "injected:legacy",
+        name: "Browser Wallet",
+        icon: monogramIcon({ color: "#888", mono: "W", rdns: "" }),
+        subtitle: "Detected",
+      });
+      row.addEventListener("click", () => connectInjected(window.ethereum, "Browser Wallet"));
+      list.appendChild(row);
+    }
+
+    POPULAR_WALLETS.filter((w) => !detectedRdns.has(w.rdns)).forEach((w) => {
+      const row = walletRow({ key: w.rdns, name: w.name, icon: monogramIcon(w) });
+      row.addEventListener("click", () => connectViaWalletConnect(w));
+      list.appendChild(row);
+    });
+
+    const wcRow = walletRow({ key: "walletconnect", name: GENERIC_WC.name, icon: monogramIcon(GENERIC_WC) });
+    wcRow.addEventListener("click", () => connectViaWalletConnect(GENERIC_WC));
+    list.appendChild(wcRow);
+  }
+
+  function loadScript(src, promiseRef, globalCheck) {
+    if (globalCheck()) return Promise.resolve();
+    if (promiseRef.p) return promiseRef.p;
+    promiseRef.p = new Promise((resolve, reject) => {
       const s = document.createElement("script");
-      s.src = WC_SCRIPT_SRC;
+      s.src = src;
       s.onload = () => resolve();
-      s.onerror = () => reject(new Error("wc-script-load-failed"));
+      s.onerror = () => reject(new Error("script-load-failed: " + src));
       document.head.appendChild(s);
     });
-    return wcScriptPromise;
+    return promiseRef.p;
+  }
+
+  const wcScriptRef = {};
+  const qrScriptRef = {};
+  function loadWcScript() {
+    return loadScript(WC_SCRIPT_SRC, wcScriptRef, () => !!window.WalletConnectEthereumProvider);
+  }
+  function loadQrScript() {
+    return loadScript(QR_SCRIPT_SRC, qrScriptRef, () => !!window.SectoraQR);
   }
 
   function getWcProvider() {
@@ -168,36 +299,54 @@
     return wcProviderPromise;
   }
 
-  async function connectInjected() {
+  function renderQr(uri) {
+    const qr = window.SectoraQR(0, "M");
+    qr.addData(uri);
+    qr.make();
+    qrBox.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2 });
+  }
+
+  async function connectInjected(provider, name) {
     try {
-      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+      const accounts = await provider.request({ method: "eth_requestAccounts" });
       if (accounts && accounts.length) {
-        activeProvider = window.ethereum;
+        activeProvider = provider;
         setConnectedUI(accounts[0]);
       }
     } catch (e) {
-      // user rejected the connection request — no-op
+      showError(name + " rejected the connection request.");
     }
   }
 
-  async function connectWalletConnect() {
-    setConnectingUI(true);
+  async function connectViaWalletConnect(walletDef) {
+    pendingWalletName = walletDef.name;
+    qrWalletName.textContent = walletDef.name;
     try {
       await loadWcScript();
       const provider = await getWcProvider();
 
       const onUri = (uri) => {
-        const deepLink = "https://metamask.app.link/wc?uri=" + encodeURIComponent(uri);
-        const evt = new CustomEvent("sectora:wallet-deeplink", {
-          detail: { url: deepLink },
-          cancelable: true,
-        });
-        if (window.dispatchEvent(evt)) window.location.href = deepLink;
+        if (IS_MOBILE_OS && walletDef.deepLink) {
+          const deepLink = walletDef.deepLink(uri);
+          const evt = new CustomEvent("sectora:wallet-deeplink", {
+            detail: { url: deepLink, wallet: walletDef.name },
+            cancelable: true,
+          });
+          if (window.dispatchEvent(evt)) window.location.href = deepLink;
+        } else {
+          loadQrScript()
+            .then(() => {
+              renderQr(uri);
+              showView("qr");
+              openPanel();
+            })
+            .catch(() => showError("Couldn't load the QR code generator."));
+        }
       };
       provider.on("display_uri", onUri);
 
       const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("timeout")), 30000)
+        setTimeout(() => reject(new Error("timeout")), 90000)
       );
       const accounts = await Promise.race([provider.enable(), timeout]);
       provider.removeListener?.("display_uri", onUri);
@@ -207,27 +356,8 @@
         setConnectedUI(accounts[0]);
       }
     } catch (e) {
-      showHint(
-        'Couldn\'t open MetaMask, or the connection request was rejected. <button class="dash-wallet-retry" id="dashWalletRetry" type="button">Try again</button>'
-      );
-      document.getElementById("dashWalletRetry")?.addEventListener("click", (ev) => {
-        ev.stopPropagation();
-        connectWalletConnect();
-      });
-    } finally {
-      setConnectingUI(false);
-    }
-  }
-
-  async function connect() {
-    if (window.ethereum) {
-      connectInjected();
-    } else if (IS_MOBILE_OS) {
-      connectWalletConnect();
-    } else {
-      showHint(
-        'No wallet detected in this browser. <a href="https://metamask.io/download" target="_blank" rel="noopener">Install MetaMask</a> to connect a real wallet.'
-      );
+      wcProviderPromise = null;
+      showError("Couldn't connect to " + pendingWalletName + ". " + (IS_MOBILE_OS ? "Make sure the app is installed and try again." : "The request may have expired — try again."));
     }
   }
 
@@ -239,9 +369,9 @@
         // relay already closed — no-op
       }
       wcProviderPromise = null;
-    } else if (window.ethereum && window.ethereum.request) {
+    } else if (activeProvider && activeProvider.request) {
       try {
-        await window.ethereum.request({
+        await activeProvider.request({
           method: "wallet_revokePermissions",
           params: [{ eth_accounts: {} }],
         });
@@ -252,6 +382,7 @@
     account = null;
     activeProvider = null;
     setDisconnectedUI();
+    showView("picker");
     closePanel();
   }
 
@@ -259,11 +390,21 @@
     e.stopPropagation();
     if (account) {
       panelOpen ? closePanel() : openPanel();
-    } else if (!window.ethereum && panelOpen) {
-      closePanel();
-    } else {
-      connect();
+      return;
     }
+    if (panelOpen) {
+      closePanel();
+      return;
+    }
+    window.dispatchEvent(new Event("eip6963:requestProvider"));
+    renderList();
+    showView("picker");
+    openPanel();
+  });
+
+  qrBack.addEventListener("click", (e) => {
+    e.stopPropagation();
+    showView("picker");
   });
 
   copyBtn?.addEventListener("click", async (e) => {
@@ -290,6 +431,9 @@
     if (e.key === "Escape" && panelOpen) closePanel();
   });
 
+  // Silent restore on load: only for an already-authorized injected wallet
+  // (no popup). A prior WalletConnect session is not eagerly restored to
+  // avoid loading the 2MB SDK for visitors who never use it.
   if (window.ethereum) {
     window.ethereum
       .request({ method: "eth_accounts" })
