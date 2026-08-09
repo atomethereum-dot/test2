@@ -1463,6 +1463,13 @@ img {
 }
 .exec-status-link:hover { color: #6fabf0; }
 
+@media (max-width: 640px) {
+  .exec-status-link {
+    display: block;
+    margin-top: 6px;
+  }
+}
+
 .exec-tape {
   display: none;
   position: absolute;
