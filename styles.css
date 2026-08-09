@@ -3336,6 +3336,10 @@ img {
   border-color: rgba(0, 0, 0, 0.18);
 }
 
+.join--light .join-glow {
+  display: none;
+}
+
 .join--light .join-btn--outline:hover {
   background: rgba(0, 0, 0, 0.05);
   border-color: rgba(0, 0, 0, 0.32);
