@@ -46,9 +46,10 @@ Andá a **https://remix.ethereum.org** (corre en tu navegador, sin cuenta).
    - MetaMask** (confirmá que estás en Sepolia).
 4. Constructor `initialSupply`, poné:
    ```
-   1000000000000000000000000
+   50000000000000000000000000
    ```
-   (1,000,000 tSECT con 18 decimales).
+   (50,000,000 tSECT con 18 decimales — mismo supply inicial que
+   tendrá el token real en mainnet).
 5. **Deploy**, confirmá en MetaMask, **copiá la dirección desplegada**.
 
 ## Paso 3 — Desplegar SectoraHashMarket
