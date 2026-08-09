@@ -148,13 +148,8 @@
 }
 
 /* "Exchange" sits next to "Decentralized" on desktop instead of its own
-   line, so the whole block is shorter there — nudge it up a bit so it
-   doesn't just center into more empty space above it. Mobile keeps the
-   original 3-line title (plenty of vertical room there already). */
+   line. Mobile keeps that split (plenty of vertical room there already). */
 .dcov-title-mobile-break { display: none; }
-@media (min-width: 641px) {
-  .dcov-hero-inner { margin-top: -34px; }
-}
 
 .dcov-hero .dash-eyebrow {
   display: inline-flex;
