@@ -1,14 +1,15 @@
 /* ---- Sectora DEX preview: trade / P2P / swap, all client-side.
    Every listed price (crypto, precious metals, NY indices) is real and
    polled from public, keyless APIs — CoinGecko for ~108 cryptocurrencies
-   plus tokenized gold/silver, and Yahoo Finance's public chart endpoint
-   for the Dow Jones / S&P 500 / Nasdaq. Nothing about the price itself is
-   fabricated. Only the order book, recent-trades tape and P2P offers are
-   simulated trading activity layered on top of those real prices — no
-   wallet ever actually connects and no funds move; every action-taking
-   button opens the same "development preview" disclaimer modal.
-   #SECT has no public market yet, so it is shown at its fixed reference
-   price (no invented movement) rather than being faked as "live". ---- */
+   plus tokenized gold/silver (Binance as a fallback if CoinGecko is
+   unreachable), and Yahoo Finance's public chart endpoint for the Dow
+   Jones / S&P 500 / Nasdaq. Nothing about the price itself is fabricated.
+   Only the order book, recent-trades tape and P2P offers are simulated
+   trading activity layered on top of those real prices — no wallet ever
+   actually connects and no funds move; every action-taking button opens
+   the same "development preview" disclaimer modal.
+   #SECT has no public market yet and is intentionally NOT listed here —
+   there is nothing real to quote it against. ---- */
 (function () {
   "use strict";
 
@@ -44,20 +45,30 @@
   ];
   const YAHOO_HOSTS = ["https://query1.finance.yahoo.com", "https://query2.finance.yahoo.com"];
 
+  // Used only if BOTH CoinGecko calls fail — keeps the DEX populated with
+  // real prices for the major pairs instead of showing an empty list.
+  const BINANCE_FALLBACK = [
+    ["BTCUSDT", "bitcoin", "Bitcoin", 1], ["ETHUSDT", "ethereum", "Ethereum", 2],
+    ["BNBUSDT", "binancecoin", "BNB", 3], ["SOLUSDT", "solana", "Solana", 5],
+    ["XRPUSDT", "ripple", "XRP", 6], ["ADAUSDT", "cardano", "Cardano", 9],
+    ["DOGEUSDT", "dogecoin", "Dogecoin", 10], ["AVAXUSDT", "avalanche-2", "Avalanche", 14],
+    ["DOTUSDT", "polkadot", "Polkadot", 16], ["LINKUSDT", "chainlink", "Chainlink", 17],
+    ["MATICUSDT", "matic-network", "Polygon", 20], ["LTCUSDT", "litecoin", "Litecoin", 22],
+    ["BCHUSDT", "bitcoin-cash", "Bitcoin Cash", 28], ["SUIUSDT", "sui", "Sui", 24],
+    ["HYPEUSDT", "hyperliquid", "Hyperliquid", 30], ["ATOMUSDT", "cosmos", "Cosmos", 40],
+    ["NEARUSDT", "near", "NEAR Protocol", 26], ["APTUSDT", "aptos", "Aptos", 35],
+    ["FILUSDT", "filecoin", "Filecoin", 45], ["ETCUSDT", "ethereum-classic", "Ethereum Classic", 32],
+    ["ARBUSDT", "arbitrum", "Arbitrum", 42], ["OPUSDT", "optimism", "Optimism", 48],
+    ["UNIUSDT", "uniswap", "Uniswap", 25], ["TONUSDT", "the-open-network", "Toncoin", 12],
+  ];
+
   const CRYPTO_POLL_MS = 20000;
   const INDEX_POLL_MS = 30000;
   const TIMEFRAMES = { "1m": 60000, "5m": 300000, "15m": 900000, "1h": 3600000 };
 
-  const SECT_ASSET = {
-    id: "sect", ticker: "#SECT", name: "Sectora", category: "sect",
-    color: "#ffffff", chain: "Sectora on Ethereum", rank: 0,
-    price: 0.1, change24h: null, high24h: 0.1, low24h: 0.1, vol24h: null,
-    isStatic: true, tier: 3, candles: {},
-  };
-
-  let ASSETS = [SECT_ASSET];
-  let BY_ID = { sect: SECT_ASSET };
-  let activeSymbol = "sect"; // swapped to "bitcoin" once real data lands
+  let ASSETS = [];
+  let BY_ID = {};
+  let activeSymbol = "bitcoin";
   let activeTf = "1m";
   let dataReady = false;
   let activeCategory = "all";
@@ -117,7 +128,6 @@
   function tierOf(asset) {
     if (asset.category === "index") return 1;
     if (asset.category === "metal") return 2;
-    if (asset.category === "sect") return 3;
     if (asset.rank && asset.rank <= 10) return 1;
     if (asset.rank && asset.rank <= 50) return 2;
     return 3;
@@ -135,13 +145,6 @@
 
   function iconHTML(asset, size) {
     size = size || 22;
-    if (asset.id === "sect") {
-      return (
-        '<span class="dx-icon-disc dx-icon-sect" style="width:' + size + "px;height:" + size + 'px">' +
-        '<svg viewBox="56.8 34.4 86.4 134.4"><path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z M82.0 68.0 L82.0 104.8 L58.5 86.4 Z" fill="#0a0a0a" fill-rule="evenodd"/><path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z M114.4 126.0 L114.4 89.2 L142.4 107.6 Z" fill="#0a0a0a" fill-rule="evenodd"/><path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z M117.9 126.0 L117.9 89.2 L141.4 107.6 Z" fill="#0a0a0a" fill-rule="evenodd"/></svg>' +
-        "</span>"
-      );
-    }
     const letters = asset.ticker.replace(/[#^]/g, "").slice(0, 3);
     const color = asset.color || colorForSymbol(asset.ticker || asset.id);
     return (
@@ -270,30 +273,65 @@
     });
   }
 
-  function pollCrypto() {
-    return Promise.all([fetchJson(MARKETS_TOP_URL), fetchJson(MARKETS_EXTRA_URL)])
-      .then(([top, extra]) => {
-        const rows = Array.isArray(top) ? top.slice() : [];
-        const seen = {};
-        rows.forEach((r) => { seen[r.id] = true; });
-        (Array.isArray(extra) ? extra : []).forEach((r) => {
-          if (!seen[r.id]) { rows.push(r); seen[r.id] = true; }
+  function applyRows(rows, isFirstLoad) {
+    if (!rows.length) return false;
+    const touched = rows.map(upsertAssetFromCoinGecko);
+    if (isFirstLoad) {
+      touched.sort((a, b) => (a.rank || 9999) - (b.rank || 9999));
+      touched.forEach(seedCandles);
+    } else {
+      touched.forEach((a) => pushTick(a, a.price));
+    }
+    return true;
+  }
+
+  function fetchBinanceFallback() {
+    const symbols = BINANCE_FALLBACK.map((r) => r[0]);
+    const url = "https://api.binance.com/api/v3/ticker/24hr?symbols=" + encodeURIComponent(JSON.stringify(symbols));
+    return fetchJson(url).then((list) => {
+      if (!Array.isArray(list)) throw new Error("binance_bad_response");
+      const bySymbol = {};
+      list.forEach((row) => { bySymbol[row.symbol] = row; });
+      const rows = [];
+      BINANCE_FALLBACK.forEach(([bsym, id, name, rank]) => {
+        const row = bySymbol[bsym];
+        if (!row) return;
+        rows.push({
+          id: id,
+          symbol: bsym.replace(/USDT$/, ""),
+          name: name,
+          current_price: parseFloat(row.lastPrice),
+          price_change_percentage_24h: parseFloat(row.priceChangePercent),
+          high_24h: parseFloat(row.highPrice),
+          low_24h: parseFloat(row.lowPrice),
+          total_volume: parseFloat(row.quoteVolume),
+          market_cap_rank: rank,
         });
-        if (!rows.length) throw new Error("empty_markets");
-        const isFirstLoad = !dataReady;
-        const touched = [];
-        rows.forEach((row) => {
-          const asset = upsertAssetFromCoinGecko(row);
-          touched.push(asset);
-        });
-        if (isFirstLoad) {
-          touched.sort((a, b) => (a.rank || 9999) - (b.rank || 9999));
-          touched.forEach(seedCandles);
-        } else {
-          touched.forEach((a) => pushTick(a, a.price));
-        }
-        return true;
       });
+      return rows;
+    });
+  }
+
+  // CoinGecko is primary (real-time top ~100 by market cap + guaranteed
+  // extras/metals in one merged pass); if BOTH of its calls fail, fall
+  // back to Binance's public 24hr ticker for the major pairs so the DEX
+  // never sits empty because of a single unreachable provider.
+  function pollCrypto() {
+    const isFirstLoad = !dataReady;
+    return Promise.allSettled([fetchJson(MARKETS_TOP_URL), fetchJson(MARKETS_EXTRA_URL)]).then((results) => {
+      const [topRes, extraRes] = results;
+      const rows = [];
+      const seen = {};
+      if (topRes.status === "fulfilled" && Array.isArray(topRes.value)) {
+        topRes.value.forEach((r) => { if (!seen[r.id]) { rows.push(r); seen[r.id] = true; } });
+      }
+      if (extraRes.status === "fulfilled" && Array.isArray(extraRes.value)) {
+        extraRes.value.forEach((r) => { if (!seen[r.id]) { rows.push(r); seen[r.id] = true; } });
+      }
+      if (rows.length) return applyRows(rows, isFirstLoad);
+      console.warn("[dex] Both CoinGecko calls failed, trying Binance fallback:", topRes.reason, extraRes.reason);
+      return fetchBinanceFallback().then((fallbackRows) => applyRows(fallbackRows, isFirstLoad));
+    });
   }
 
   function fetchYahoo(symbol) {
@@ -353,23 +391,28 @@
 
   function tick() {
     pollCrypto()
-      .then(() => {
-        cryptoFailures = 0;
-        setMarketLive(true);
+      .then((ok) => {
+        if (ok) {
+          cryptoFailures = 0;
+          setMarketLive(true);
+        } else {
+          cryptoFailures += 1;
+          setMarketLive(false);
+        }
         onFirstReadyOrTick();
       })
       .catch((err) => {
         cryptoFailures += 1;
-        console.warn("[dex] CoinGecko poll failed:", err);
+        console.warn("[dex] Price feed unreachable (CoinGecko + Binance fallback both failed):", err);
         setMarketLive(false);
         onFirstReadyOrTick();
       });
   }
 
   function onFirstReadyOrTick() {
-    if (!dataReady && ASSETS.length > 1) {
+    if (!dataReady && ASSETS.length > 0) {
       dataReady = true;
-      if (activeSymbol === "sect" && BY_ID.bitcoin) activeSymbol = "bitcoin";
+      if (!BY_ID[activeSymbol] && ASSETS[0]) activeSymbol = ASSETS[0].id;
       hideLoading();
     }
     onDataChanged();
@@ -657,8 +700,8 @@
         '<span class="dx-market-row-text"><span class="dx-market-row-ticker">' + a.ticker + (a.category === "index" ? "" : "/" + QUOTE) + "</span>" +
         (sub ? '<span class="dx-market-row-sub">' + sub + "</span>" : "") + "</span></span>" +
         '<span class="mono">' + displayPrice(a, a.price) + "</span>" +
-        '<span class="mono ' + (a.isStatic ? "" : up ? "is-up" : "is-down") + '">' + (a.isStatic ? "—" : fmtPct(a.change24h)) + "</span>" +
-        '<span class="mono dx-market-row-vol">' + (a.isStatic ? "—" : fmtCompactUSD(a.vol24h)) + "</span>" +
+        '<span class="mono ' + (up ? "is-up" : "is-down") + '">' + fmtPct(a.change24h) + "</span>" +
+        '<span class="mono dx-market-row-vol">' + fmtCompactUSD(a.vol24h) + "</span>" +
         "</button>"
       );
     }).join("");
@@ -708,17 +751,12 @@
     if (symbolFullEl) symbolFullEl.textContent = a.subLabel || a.name;
     if (statMarkEl) statMarkEl.textContent = displayPrice(a, a.price);
     if (statChangeEl) {
-      if (a.isStatic) {
-        statChangeEl.textContent = t("dex.trade.stats.fixed", "Fixed");
-        statChangeEl.className = "dx-stat-value mono";
-      } else {
-        statChangeEl.textContent = fmtPct(a.change24h);
-        statChangeEl.className = "dx-stat-value mono " + ((a.change24h || 0) >= 0 ? "is-up" : "is-down");
-      }
+      statChangeEl.textContent = fmtPct(a.change24h);
+      statChangeEl.className = "dx-stat-value mono " + ((a.change24h || 0) >= 0 ? "is-up" : "is-down");
     }
     if (statHighEl) statHighEl.textContent = displayPrice(a, a.high24h);
     if (statLowEl) statLowEl.textContent = displayPrice(a, a.low24h);
-    if (statVolEl) statVolEl.textContent = a.isStatic ? "—" : fmtCompactUSD(a.vol24h);
+    if (statVolEl) statVolEl.textContent = fmtCompactUSD(a.vol24h);
     if (amountSuffixEl) amountSuffixEl.textContent = a.ticker;
     if (priceInputEl && !priceInputEl.dataset.userEdited) priceInputEl.value = displayPricePlain(a, a.price).replace(/,/g, "");
     updateFormTotals();
@@ -827,7 +865,7 @@
     if (!asset.simBalance) {
       const tier = tierOf(asset);
       const base = tier === 1 ? 2500 / Math.max(asset.price || 1, 1) : tier === 2 ? 25000 / Math.max(asset.price || 1, 1) : 12000;
-      asset.simBalance = asset.category === "sect" ? 12000 : Math.max(base, 0.001);
+      asset.simBalance = Math.max(base, 0.001);
     }
     return asset.simBalance;
   }
@@ -1026,7 +1064,7 @@
   // ---------------------------------------------------------------------
 
   let swapFrom = "bitcoin";
-  let swapTo = "sect";
+  let swapTo = "ethereum";
   const swapFromAmountEl = document.getElementById("dexSwapFromAmount");
   const swapToAmountEl = document.getElementById("dexSwapToAmount");
   const swapFromIconEl = document.getElementById("dexSwapFromIcon");
@@ -1091,11 +1129,10 @@
   const swapRecentListEl = document.getElementById("dexSwapRecentList");
   let swapFeed = [];
   function pushSimSwap() {
-    if (ASSETS.length < 3) return;
-    const priced = ASSETS.filter((a) => a.price != null && a.id !== "sect");
+    const priced = ASSETS.filter((a) => a.price != null);
     if (priced.length < 2) return;
     const a = pick(priced);
-    const b = Math.random() > 0.4 && BY_ID.sect.price != null ? BY_ID.sect : pick(priced.filter((x) => x.id !== a.id));
+    const b = pick(priced.filter((x) => x.id !== a.id));
     if (!b) return;
     const tier = tierOf(a);
     const amt = rand(0.05, tier === 1 ? 1.4 : tier === 2 ? 60 : 900);

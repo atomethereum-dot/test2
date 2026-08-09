@@ -4,12 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title data-i18n="dex.meta.title">DEX Preview | Sectora</title>
-<meta name="description" content="Sectora DEX preview: live-quoted trading, P2P marketplace and cross-chain swap for #SECT, BTC, ETH, BCH, SOL, LTC, XRP, SUI and HYPE." data-i18n-attr="content:dex.meta.description" />
+<meta name="description" content="Sectora DEX preview: live-quoted trading, P2P marketplace and cross-chain swap across 100+ cryptocurrencies, precious metals and NY indices." data-i18n-attr="content:dex.meta.description" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%2756.8%2034.4%2086.4%20134.4%27%3E%3Cpath%20d%3D%27M85.6%2034.4%20L56.8%2052.0%20L56.8%20122.4%20L85.6%20104.8%20Z%20M82.0%2068.0%20L82.0%20104.8%20L58.5%2086.4%20Z%27%20fill%3D%27%23ffffff%27%20fill-rule%3D%27evenodd%27%2F%3E%3Cpath%20d%3D%27M114.4%2052.0%20L141.6%2068.0%20L141.6%20120.8%20L114.4%20135.2%20L85.6%20120.8%20L85.6%2068.0%20Z%20M114.4%20126.0%20L114.4%2089.2%20L142.4%20107.6%20Z%27%20fill%3D%27%23e3e5e8%27%20fill-rule%3D%27evenodd%27%2F%3E%3Cpath%20d%3D%27M114.4%20159.6%20L143.2%20142.0%20L143.2%2071.6%20L114.4%2089.2%20Z%20M117.9%20126.0%20L117.9%2089.2%20L141.4%20107.6%20Z%27%20fill%3D%27%23c0c3c8%27%20fill-rule%3D%27evenodd%27%2F%3E%3C%2Fsvg%3E" />
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260809a" />
-<link rel="stylesheet" href="dex.css?v=20260809a" />
+<link rel="stylesheet" href="dex.css?v=20260809d" />
 </head>
 <body>
 
@@ -82,31 +82,31 @@
               <button class="dx-symbol-select" id="dexSymbolBtn" type="button">
                 <span class="dx-symbol-icon" id="dexSymbolIcon" aria-hidden="true"></span>
                 <span class="dx-symbol-name">
-                  <span class="dx-symbol-pair" id="dexSymbolPair">#SECT-USDX</span>
-                  <span class="dx-symbol-full" id="dexSymbolFull">Sectora</span>
+                  <span class="dx-symbol-pair" id="dexSymbolPair">BTC-USDX</span>
+                  <span class="dx-symbol-full" id="dexSymbolFull">Bitcoin</span>
                 </span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
               </button>
               <div class="dx-symbol-stats">
                 <div class="dx-stat">
                   <span class="dx-stat-label" data-i18n="dex.trade.stats.mark">Mark</span>
-                  <span class="dx-stat-value mono" id="dexStatMark">$0.1000</span>
+                  <span class="dx-stat-value mono" id="dexStatMark">—</span>
                 </div>
                 <div class="dx-stat">
                   <span class="dx-stat-label" data-i18n="dex.trade.stats.change">24h Change</span>
-                  <span class="dx-stat-value mono" id="dexStatChange">+0.00%</span>
+                  <span class="dx-stat-value mono" id="dexStatChange">—</span>
                 </div>
                 <div class="dx-stat">
                   <span class="dx-stat-label" data-i18n="dex.trade.stats.high">24h High</span>
-                  <span class="dx-stat-value mono" id="dexStatHigh">$0.1000</span>
+                  <span class="dx-stat-value mono" id="dexStatHigh">—</span>
                 </div>
                 <div class="dx-stat">
                   <span class="dx-stat-label" data-i18n="dex.trade.stats.low">24h Low</span>
-                  <span class="dx-stat-value mono" id="dexStatLow">$0.1000</span>
+                  <span class="dx-stat-value mono" id="dexStatLow">—</span>
                 </div>
                 <div class="dx-stat">
                   <span class="dx-stat-label" data-i18n="dex.trade.stats.vol">24h Volume</span>
-                  <span class="dx-stat-value mono" id="dexStatVol">$0</span>
+                  <span class="dx-stat-value mono" id="dexStatVol">—</span>
                 </div>
               </div>
             </div>
@@ -160,8 +160,8 @@
             </div>
             <div class="dx-book-asks" id="dexBookAsks"></div>
             <div class="dx-book-mid" id="dexBookMid">
-              <span class="dx-book-mid-price mono">$0.1000</span>
-              <span class="dx-book-mid-spread mono" id="dexBookSpread">spread 0.0</span>
+              <span class="dx-book-mid-price mono">—</span>
+              <span class="dx-book-mid-spread mono" id="dexBookSpread"></span>
             </div>
             <div class="dx-book-bids" id="dexBookBids"></div>
           </div>
@@ -190,7 +190,7 @@
           <label class="dx-field" id="dexPriceField" hidden>
             <span class="dx-field-label" data-i18n="dex.trade.form.price">Limit Price</span>
             <span class="dx-field-input">
-              <input type="text" inputmode="decimal" id="dexPriceInput" value="0.1000" />
+              <input type="text" inputmode="decimal" id="dexPriceInput" placeholder="0.00" />
               <span class="dx-field-suffix">USDX</span>
             </span>
           </label>
@@ -199,7 +199,7 @@
             <span class="dx-field-label" data-i18n="dex.trade.form.amount">Amount</span>
             <span class="dx-field-input">
               <input type="text" inputmode="decimal" id="dexAmountInput" placeholder="0.00" />
-              <span class="dx-field-suffix" id="dexAmountSuffix">#SECT</span>
+              <span class="dx-field-suffix" id="dexAmountSuffix">BTC</span>
             </span>
           </label>
 
@@ -275,7 +275,7 @@
       <div class="dx-swap-wrap">
         <div class="dx-swap-intro">
           <h1 class="dx-panel-title" data-i18n="dex.swap.title">Cross-Chain Swap</h1>
-          <p class="dx-panel-sub" data-i18n="dex.swap.subtitle">Swap between #SECT and native assets across their own chains, quoted from live market prices.</p>
+          <p class="dx-panel-sub" data-i18n="dex.swap.subtitle">Swap between real crypto, tokenized metals and index-tracked assets across their own chains, quoted from live market prices.</p>
         </div>
 
         <div class="dx-swap-card">
@@ -308,17 +308,17 @@
               <input type="text" inputmode="decimal" id="dexSwapToAmount" placeholder="0.00" readonly />
               <button class="dx-swap-token-btn" type="button" id="dexSwapToBtn">
                 <span class="dx-swap-token-icon" id="dexSwapToIcon" aria-hidden="true"></span>
-                <span id="dexSwapToSymbol">#SECT</span>
+                <span id="dexSwapToSymbol">ETH</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
               </button>
             </div>
-            <div class="dx-swap-panel-foot" id="dexSwapToChain">Sectora on Ethereum</div>
+            <div class="dx-swap-panel-foot" id="dexSwapToChain">Ethereum</div>
           </div>
 
           <div class="dx-swap-details">
             <div class="dx-swap-row">
               <span data-i18n="dex.swap.rate">Rate</span>
-              <span class="mono" id="dexSwapRate">1 BTC = 649,352 #SECT</span>
+              <span class="mono" id="dexSwapRate">1 BTC = 19.1 ETH</span>
             </div>
             <div class="dx-swap-row">
               <span data-i18n="dex.swap.networkFee">Network Fee</span>
@@ -370,8 +370,8 @@
 
 </div>
 
-<script src="translations.js?v=20260809d"></script>
+<script src="translations.js?v=20260809e"></script>
 <script src="i18n.js?v=20260808h"></script>
-<script src="dex.js?v=20260809a"></script>
+<script src="dex.js?v=20260809d"></script>
 </body>
 </html>
