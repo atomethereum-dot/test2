@@ -1819,7 +1819,7 @@
   );
   mix-blend-mode: screen;
   pointer-events: none;
-  z-index: 199;
+  z-index: 899;
   opacity: 0;
   transform: translate(-1000px, -1000px);
   transition: opacity 0.25s ease, transform 0.12s ease-out;
@@ -1834,7 +1834,7 @@
   left: 0;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 200;
+  z-index: 900;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
@@ -1870,7 +1870,10 @@
   .dash,
   .dash a,
   .dash button,
-  .dash input {
+  .dash input,
+  .dhm-modal-overlay,
+  .dhm-modal-overlay a,
+  .dhm-modal-overlay button {
     cursor: none;
   }
 }
