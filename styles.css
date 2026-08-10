@@ -2934,7 +2934,7 @@ img {
 }
 
 .dev-banner--network {
-  background-image: url("images/dev-network.png");
+  background-image: url("images/dev-network.png?v=2");
 }
 
 .dev-banner--security {
@@ -2942,11 +2942,11 @@ img {
 }
 
 .dev-banner--exchange {
-  background-image: url("images/dev-exchange.png?v=7");
+  background-image: url("images/dev-exchange.png?v=8");
 }
 
 .dev-banner--nodes {
-  background-image: url("images/dev-nodes.png");
+  background-image: url("images/dev-nodes.png?v=2");
 }
 
 .dev-banner--yield {
