@@ -3064,6 +3064,9 @@ img {
 }
 
 .dev-byline {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 500;
@@ -3072,6 +3075,7 @@ img {
   color: var(--zinc-400);
   margin-top: 2px;
 }
+.dev-byline .dev-dot { flex: none; }
 
 .blog-banner-corner {
   position: absolute;
