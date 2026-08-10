@@ -844,7 +844,7 @@
 }
 
 .wp-scene::before {
-  content: "\25C6 SECTORA";
+  content: "\25C6\0020SECTORA";
   position: absolute;
   left: 44px;
   bottom: 16px;
