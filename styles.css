@@ -1578,6 +1578,86 @@ img {
   }
 }
 
+/* ---------- Exec scrollytelling (Network / Protocol / DEX) ---------- */
+
+.exec-story {
+  position: relative;
+  background: var(--black);
+  height: calc(clamp(460px, 58vw, 640px) * 3);
+}
+
+.exec-story-sticky {
+  position: sticky;
+  top: calc(var(--announce-h) + var(--nav-h));
+}
+
+.exec-bars[data-stage] {
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.exec-bars[data-stage].is-active {
+  opacity: 1;
+}
+
+.exec-story-badge,
+.exec-story-heading,
+.exec-story-status {
+  transition: opacity 0.3s ease;
+}
+
+.exec-story-fading .exec-story-badge,
+.exec-story-fading .exec-story-heading,
+.exec-story-fading .exec-story-status {
+  opacity: 0;
+}
+
+.exec-story-dots {
+  position: absolute;
+  z-index: 2;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exec-story-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.exec-story-dot.is-active {
+  background: var(--white);
+  transform: scale(1.5);
+}
+
+@media (max-width: 720px) {
+  .exec-story {
+    height: calc(clamp(420px, 90vw, 560px) * 3);
+  }
+
+  .exec-story-dots {
+    right: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exec-bars[data-stage] {
+    transition: none;
+  }
+
+  .exec-story-badge,
+  .exec-story-heading,
+  .exec-story-status {
+    transition: none;
+  }
+}
+
 /* ---------- RWA growth chart ---------- */
 
 .growth {
@@ -4331,6 +4411,17 @@ select.lang-switch {
 [dir="rtl"] .supply-table thead th.num,
 [dir="rtl"] .supply-table tbody td.num {
   text-align: left;
+}
+
+[dir="rtl"] .exec-story-dots {
+  right: auto;
+  left: 28px;
+}
+
+@media (max-width: 720px) {
+  [dir="rtl"] .exec-story-dots {
+    left: 16px;
+  }
 }
 
 /* Roadmap items are placed by grid-column, which the browser already

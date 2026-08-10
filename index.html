@@ -9,7 +9,7 @@
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/SoraLight.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="styles.css?v=20260810m" />
+<link rel="stylesheet" href="styles.css?v=20260810n" />
 </head>
 <body>
 
@@ -268,104 +268,28 @@
     </div>
   </section>
 
-  <section class="exec" id="exec-network">
-    <div class="exec-grid" aria-hidden="true" data-parallax="0.12"></div>
-    <div class="exec-bars exec-bars--blue" aria-hidden="true"></div>
-    <div class="exec-fade" aria-hidden="true"></div>
+  <section class="exec-story" id="exec-story">
+    <div class="exec-story-sticky">
+      <div class="exec">
+        <div class="exec-grid" aria-hidden="true" data-parallax="0.12"></div>
 
-    <div class="exec-content reveal">
-      <span class="exec-badge"><span class="exec-dot"></span><span>SECTORA NETWORK</span></span>
-      <h2 class="exec-heading" data-i18n="execNetwork.heading" data-i18n-html>Layer 3<br>Blockchain<br>Network</h2>
-      <p class="exec-status"><span data-i18n="exec.status">Live on Testnet</span> <a class="exec-status-link" href="#execution">Click here</a></p>
-    </div>
+        <div class="exec-bars exec-bars--blue" data-stage="0" aria-hidden="true"></div>
+        <div class="exec-bars" data-stage="1" aria-hidden="true"></div>
+        <div class="exec-bars exec-bars--candle" data-stage="2" aria-hidden="true"></div>
 
-    <div class="exec-tape">
-      <div class="exec-tape-track">
-        <span class="up">SPX-SCTR <b>5,540</b> +0.59%</span>
-        <span class="down">XAU-SCTR <b>2,412</b> -0.27%</span>
-        <span class="up">NDX-SCTR <b>19,820</b> +1.01%</span>
-        <span class="down">WTI-SCTR <b>78.40</b> -0.61%</span>
-        <span class="up">HYPE-SCTR <b>28.44</b> +11.15%</span>
-        <span class="up">TAO-SCTR <b>412.8</b> +4.97%</span>
-        <span class="down">ETH-SCTR <b>3,321</b> -0.48%</span>
-        <span class="up">BTC-SCTR <b>102,193</b> +2.14%</span>
-        <!-- duplicate for seamless loop -->
-        <span class="up" aria-hidden="true">SPX-SCTR <b>5,540</b> +0.59%</span>
-        <span class="down" aria-hidden="true">XAU-SCTR <b>2,412</b> -0.27%</span>
-        <span class="up" aria-hidden="true">NDX-SCTR <b>19,820</b> +1.01%</span>
-        <span class="down" aria-hidden="true">WTI-SCTR <b>78.40</b> -0.61%</span>
-        <span class="up" aria-hidden="true">HYPE-SCTR <b>28.44</b> +11.15%</span>
-        <span class="up" aria-hidden="true">TAO-SCTR <b>412.8</b> +4.97%</span>
-        <span class="down" aria-hidden="true">ETH-SCTR <b>3,321</b> -0.48%</span>
-        <span class="up" aria-hidden="true">BTC-SCTR <b>102,193</b> +2.14%</span>
-      </div>
-    </div>
-  </section>
+        <div class="exec-fade" aria-hidden="true"></div>
 
-  <section class="exec" id="execution">
-    <div class="exec-grid" aria-hidden="true" data-parallax="0.12"></div>
-    <div class="exec-bars" id="execBars" aria-hidden="true"></div>
-    <div class="exec-fade" aria-hidden="true"></div>
+        <div class="exec-content reveal">
+          <span class="exec-badge"><span class="exec-dot"></span><span class="exec-story-badge">SECTORA NETWORK</span></span>
+          <h2 class="exec-heading exec-story-heading">Layer 3<br>Blockchain<br>Network</h2>
+          <p class="exec-status"><span class="exec-story-status">Live on Testnet</span> <a class="exec-status-link exec-story-link" href="#exec-story">Click here</a></p>
+        </div>
 
-    <div class="exec-content reveal">
-      <span class="exec-badge"><span class="exec-dot"></span><span data-i18n="exec.badge">SECTORA PROTOCOL</span></span>
-      <h2 class="exec-heading" data-i18n="exec.heading" data-i18n-html>Built for<br>Verification.</h2>
-      <p class="exec-status"><span data-i18n="exec.status">Live on Testnet</span> <a class="exec-status-link" href="/dash">Click here</a></p>
-    </div>
-
-    <div class="exec-tape">
-      <div class="exec-tape-track">
-        <span class="up">SPX-SCTR <b>5,540</b> +0.59%</span>
-        <span class="down">XAU-SCTR <b>2,412</b> -0.27%</span>
-        <span class="up">NDX-SCTR <b>19,820</b> +1.01%</span>
-        <span class="down">WTI-SCTR <b>78.40</b> -0.61%</span>
-        <span class="up">HYPE-SCTR <b>28.44</b> +11.15%</span>
-        <span class="up">TAO-SCTR <b>412.8</b> +4.97%</span>
-        <span class="down">ETH-SCTR <b>3,321</b> -0.48%</span>
-        <span class="up">BTC-SCTR <b>102,193</b> +2.14%</span>
-        <!-- duplicate for seamless loop -->
-        <span class="up" aria-hidden="true">SPX-SCTR <b>5,540</b> +0.59%</span>
-        <span class="down" aria-hidden="true">XAU-SCTR <b>2,412</b> -0.27%</span>
-        <span class="up" aria-hidden="true">NDX-SCTR <b>19,820</b> +1.01%</span>
-        <span class="down" aria-hidden="true">WTI-SCTR <b>78.40</b> -0.61%</span>
-        <span class="up" aria-hidden="true">HYPE-SCTR <b>28.44</b> +11.15%</span>
-        <span class="up" aria-hidden="true">TAO-SCTR <b>412.8</b> +4.97%</span>
-        <span class="down" aria-hidden="true">ETH-SCTR <b>3,321</b> -0.48%</span>
-        <span class="up" aria-hidden="true">BTC-SCTR <b>102,193</b> +2.14%</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="exec" id="exec-dex">
-    <div class="exec-grid" aria-hidden="true" data-parallax="0.12"></div>
-    <div class="exec-bars exec-bars--candle" aria-hidden="true"></div>
-    <div class="exec-fade" aria-hidden="true"></div>
-
-    <div class="exec-content reveal">
-      <span class="exec-badge"><span class="exec-dot"></span><span>SECTORA DEX</span></span>
-      <h2 class="exec-heading" data-i18n="dexCover.title" data-i18n-html>Sectora<br>Exchange DEX</h2>
-      <p class="exec-status"><span data-i18n="dexCover.simNote">Preview DEX &middot; Live Market Data</span> <a class="exec-status-link" href="dex-cover.html" data-i18n="dexCover.cta">Enter the DEX</a></p>
-    </div>
-
-    <div class="exec-tape">
-      <div class="exec-tape-track">
-        <span class="up">SPX-SCTR <b>5,540</b> +0.59%</span>
-        <span class="down">XAU-SCTR <b>2,412</b> -0.27%</span>
-        <span class="up">NDX-SCTR <b>19,820</b> +1.01%</span>
-        <span class="down">WTI-SCTR <b>78.40</b> -0.61%</span>
-        <span class="up">HYPE-SCTR <b>28.44</b> +11.15%</span>
-        <span class="up">TAO-SCTR <b>412.8</b> +4.97%</span>
-        <span class="down">ETH-SCTR <b>3,321</b> -0.48%</span>
-        <span class="up">BTC-SCTR <b>102,193</b> +2.14%</span>
-        <!-- duplicate for seamless loop -->
-        <span class="up" aria-hidden="true">SPX-SCTR <b>5,540</b> +0.59%</span>
-        <span class="down" aria-hidden="true">XAU-SCTR <b>2,412</b> -0.27%</span>
-        <span class="up" aria-hidden="true">NDX-SCTR <b>19,820</b> +1.01%</span>
-        <span class="down" aria-hidden="true">WTI-SCTR <b>78.40</b> -0.61%</span>
-        <span class="up" aria-hidden="true">HYPE-SCTR <b>28.44</b> +11.15%</span>
-        <span class="up" aria-hidden="true">TAO-SCTR <b>412.8</b> +4.97%</span>
-        <span class="down" aria-hidden="true">ETH-SCTR <b>3,321</b> -0.48%</span>
-        <span class="up" aria-hidden="true">BTC-SCTR <b>102,193</b> +2.14%</span>
+        <div class="exec-story-dots" aria-hidden="true">
+          <span class="exec-story-dot is-active"></span>
+          <span class="exec-story-dot"></span>
+          <span class="exec-story-dot"></span>
+        </div>
       </div>
     </div>
   </section>
@@ -1522,6 +1446,7 @@
 <script src="choropleth.js?v=20260808h"></script>
 <script src="roadmap.js?v=20260808h"></script>
 <script src="exec.js?v=20260810b"></script>
+<script src="exec-story.js?v=20260810a"></script>
 <script src="supply.js?v=20260808h"></script>
 <script src="supply-scenarios.js?v=20260808h"></script>
 <script src="supply-calc.js?v=20260808h"></script>
