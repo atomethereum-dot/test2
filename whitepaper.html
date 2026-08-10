@@ -10,7 +10,7 @@
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/SoraLight.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260810x" />
-<link rel="stylesheet" href="whitepaper.css?v=20260810e" />
+<link rel="stylesheet" href="whitepaper.css?v=20260810f" />
 </head>
 <body class="wp-body">
 
@@ -77,14 +77,14 @@
   <main class="wp-content">
 
     <section class="wp-section" id="abstract">
-      <p class="wp-kicker">00 &middot; Abstract</p>
+      <p class="wp-kicker">§00 &middot; Abstract</p>
       <h2 class="wp-h2">Abstract</h2>
       <p class="wp-body-text">Sectora is a Layer 3 network purpose-built for the verification, custody, and exchange of tokenized real-world assets. Where general-purpose chains treat asset tokenization as something built on top of the chain, Sectora treats verification as a protocol-level guarantee: every custodied asset is anchored to a dedicated attestation layer, secured by a distributed validator set, and made liquid through a native exchange.</p>
       <p class="wp-body-text">This document describes the network's architecture, its verification and custody protocol, the $SECT token and its supply policy, the buyback mechanism that ties token scarcity to real usage, and the roadmap carrying Sectora from its current testnet phase to mainnet launch and cross-chain expansion.</p>
     </section>
 
     <section class="wp-section" id="introduction">
-      <p class="wp-kicker">01 &middot; Introduction</p>
+      <p class="wp-kicker">§01 &middot; Introduction</p>
       <h2 class="wp-h2">Introduction</h2>
       <p class="wp-body-text">Real-world assets moving on-chain today generally rely on off-chain custody with an on-chain claim layered on top of it &mdash; a bridge of trust rather than a proof. Holders are asked to believe an attestation instead of verifying one. That gap is tolerable for low-stakes use cases; it is not tolerable for institutional capital.</p>
       <p class="wp-body-text">Sectora starts from a different premise: verification should be a primitive of the network, not a feature bolted onto it after the fact. Custody, attestation, and settlement are handled by infrastructure designed for that single purpose, rather than shared with unrelated general-purpose activity.</p>
@@ -92,42 +92,42 @@
     </section>
 
     <section class="wp-section" id="network">
-      <p class="wp-kicker">02 &middot; The Sectora Network</p>
+      <p class="wp-kicker">§02 &middot; The Sectora Network</p>
       <h2 class="wp-h2">Layer 3 Architecture</h2>
       <p class="wp-body-text">Sectora runs as a Layer 3 network, settling above a general-purpose base layer to inherit its security and finality while executing custody and verification logic in an environment purpose-built for that workload. Separating the execution layer from general-purpose blockspace means custody attestations never compete for throughput with unrelated activity, and the verification logic that matters most to institutional users can evolve independently of base-layer governance.</p>
       <p class="wp-body-text">The network is currently <strong>live on testnet</strong>, open to validators, security researchers, and early integration partners ahead of its mainnet launch.</p>
     </section>
 
     <section class="wp-section" id="protocol">
-      <p class="wp-kicker">03 &middot; Verification &amp; Custody</p>
+      <p class="wp-kicker">§03 &middot; Verification &amp; Custody</p>
       <h2 class="wp-h2">The Sectora Protocol</h2>
       <p class="wp-body-text">The Sectora Protocol is the network's verification layer: native infrastructure to audit, protect, and tokenize real-world assets through cryptographic verification, distributed custody, and institutional-grade security by design.</p>
       <p class="wp-body-text">Custodied assets are represented on-chain only after passing through a verification cycle &mdash; an auditable process that ties the on-chain instrument to its off-chain backing at defined intervals, rather than at issuance alone. The result is a continuously-verifiable claim rather than a one-time attestation, giving holders and counterparties a live cryptographic record instead of a static certificate.</p>
     </section>
 
     <section class="wp-section" id="validators">
-      <p class="wp-kicker">04 &middot; Validator Network</p>
+      <p class="wp-kicker">§04 &middot; Validator Network</p>
       <h2 class="wp-h2">Security by Distribution</h2>
       <p class="wp-body-text">Every transaction on Sectora &mdash; transfers, custody attestations, and DEX settlement alike &mdash; is secured by a distributed validator network. Validators stake $SECT to participate, propose and attest blocks in epoch-based rounds, and are economically accountable for the verification checks they perform.</p>
       <p class="wp-body-text">This is the same security model reflected in the network's live Node Map and Epoch History views on the <a class="wp-inline-link" href="dashboard.html">Dashboard</a>, where validator distribution, uptime, and staking activity are visible in real time across the Americas, Asia-Pacific, and Europe/Africa regions.</p>
     </section>
 
     <section class="wp-section" id="dex">
-      <p class="wp-kicker">05 &middot; Sectora DEX</p>
+      <p class="wp-kicker">§05 &middot; Sectora DEX</p>
       <h2 class="wp-h2">A Single Markets Layer</h2>
       <p class="wp-body-text">The <a class="wp-inline-link" href="dex-cover.html">Sectora DEX</a> is the network's markets layer: a single venue to trade, swap, and go P2P across live-quoted crypto, tokenized metals, and index-tracked assets. Rather than isolating tokenized real-world assets in a separate venue from native crypto pairs, Sectora settles both through the same custody-verified infrastructure, with every price refreshed in real time.</p>
       <p class="wp-body-text">Because tokenized assets on Sectora carry a live, verifiable custody record, the DEX can list them alongside crypto pairs without asking traders to trust a separate, off-chain attestation.</p>
     </section>
 
     <section class="wp-section" id="tokenization">
-      <p class="wp-kicker">06 &middot; RWA Tokenization</p>
+      <p class="wp-kicker">§06 &middot; RWA Tokenization</p>
       <h2 class="wp-h2">Real-World Assets &amp; USD-SEC</h2>
       <p class="wp-body-text">The Asset Tokenization Network is where real-world assets are verified, custodied, and represented as on-chain instruments &mdash; the substrate the rest of the protocol builds on. Tokenized positions can generate yield: current tokenized real-world-asset pools return an estimated <strong>15.2% APY</strong>, sourced from the underlying assets rather than emissions.</p>
       <p class="wp-body-text"><strong>USD-SEC</strong> is Sectora's fully-collateralized stablecoin, used as the unit of account for custody attestations and DEX settlement across the network &mdash; a stable base against which both crypto and tokenized real-world assets are priced and settled.</p>
     </section>
 
     <section class="wp-section" id="tokenomics">
-      <p class="wp-kicker">07 &middot; $SECT Tokenomics</p>
+      <p class="wp-kicker">§07 &middot; $SECT Tokenomics</p>
       <h2 class="wp-h2">The $SECT Token</h2>
       <p class="wp-body-text">$SECT is the network's native asset: validators stake it to secure the protocol, it is the reference collateral behind network fee capture, and it is the instrument through which the buyback engine ties token scarcity to real usage.</p>
       <div class="wp-stats">
@@ -151,7 +151,7 @@
     </section>
 
     <section class="wp-section" id="supply">
-      <p class="wp-kicker">08 &middot; Supply &amp; Buyback</p>
+      <p class="wp-kicker">§08 &middot; Supply &amp; Buyback</p>
       <h2 class="wp-h2">Supply Policy &amp; the Buyback Engine</h2>
       <p class="wp-body-text">Sectora's supply policy is deliberately conservative: rather than an open-ended emission schedule, the network commits to a one-time <strong>Strategic Supply Reduction in December 2026</strong>, cutting total supply by 50% &mdash; from 50,000,000 to 25,000,000 $SECT &mdash; to align circulating supply with actual network usage rather than a fixed issuance curve decided in advance.</p>
       <p class="wp-body-text">The <strong>Buyback Engine</strong> reinforces that alignment on an ongoing basis: a share of network fee revenue generated by validators flows into a buyback pool, which purchases $SECT on the open market. Token scarcity is therefore a function of network activity &mdash; validators, custody volume, and DEX usage &mdash; rather than speculative demand alone.</p>
@@ -165,7 +165,7 @@
     </section>
 
     <section class="wp-section" id="infrastructure">
-      <p class="wp-kicker">09 &middot; Infrastructure</p>
+      <p class="wp-kicker">§09 &middot; Infrastructure</p>
       <h2 class="wp-h2">Network Infrastructure</h2>
       <p class="wp-body-text">Three tools give the network's activity a public, verifiable surface.</p>
       <div class="wp-cards">
@@ -185,7 +185,7 @@
     </section>
 
     <section class="wp-section" id="roadmap">
-      <p class="wp-kicker">10 &middot; Roadmap</p>
+      <p class="wp-kicker">§10 &middot; Roadmap</p>
       <h2 class="wp-h2">What's Next</h2>
       <div class="wp-timeline">
         <div class="wp-timeline-item">
@@ -222,7 +222,7 @@
     </section>
 
     <section class="wp-section" id="governance">
-      <p class="wp-kicker">11 &middot; Governance &amp; Risk</p>
+      <p class="wp-kicker">§11 &middot; Governance &amp; Risk</p>
       <h2 class="wp-h2">Governance, Foundation &amp; Risk Disclosure</h2>
       <p class="wp-body-text">During the network's bootstrap phase, the Sectora Foundation IL stewards protocol development, treasury, and the roadmap outlined in this document. As validator participation and $SECT distribution mature, governance is intended to progressively decentralize toward the network's stakeholders.</p>
       <div class="wp-disclaimer">
@@ -232,7 +232,7 @@
     </section>
 
     <section class="wp-section" id="conclusion">
-      <p class="wp-kicker">12 &middot; Conclusion</p>
+      <p class="wp-kicker">§12 &middot; Conclusion</p>
       <h2 class="wp-h2">Conclusion</h2>
       <p class="wp-body-text">Sectora's premise is simple: tokenized real-world assets deserve infrastructure built around verification, not around trust. A dedicated Layer 3 network, a validator set that secures every custody attestation, a native exchange that settles crypto and real-world assets through the same verified rails, and a supply policy tied to real usage rather than speculation &mdash; together, these are the pieces of a network designed to hold institutional-grade capital.</p>
       <p class="wp-body-text">The testnet is live today. The Dashboard, Sectorascan, and the DEX are open to explore now, ahead of the mainnet launch outlined in the roadmap above.</p>
