@@ -139,7 +139,7 @@
      contained card, so the sphere needs more headroom or its top/bottom --
      including the atmosphere rim glow -- clips against the canvas edges. */
   const isDesktopStage = matchMedia("(min-width: 641px)").matches;
-  const HOME = { dist: isDesktopStage ? 3.2 : 3.85, rx: 0.6, ry: -Math.PI / 2 - (22 * Math.PI) / 180 };
+  const HOME = { dist: isDesktopStage ? 4.3 : 3.85, rx: 0.6, ry: -Math.PI / 2 - (22 * Math.PI) / 180 };
   let dist = HOME.dist;
 
   const globe = new THREE.Group();

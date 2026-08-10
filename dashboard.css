@@ -304,6 +304,12 @@
   border-bottom: 1px solid var(--db-border);
 }
 
+@media (min-width: 981px) {
+  .dash-topbar {
+    position: static;
+  }
+}
+
 .dash-topbar-right {
   display: flex;
   align-items: center;
