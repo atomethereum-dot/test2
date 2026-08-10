@@ -586,7 +586,7 @@ img {
 }
 
 .hero-mesh-node {
-  fill: #00c8ff;
+  fill: #7ef1ff;
   filter: drop-shadow(0 0 8px #00e0ff) drop-shadow(0 0 22px rgba(0, 200, 255, 0.9));
   animation: mesh-node-pulse var(--dur, 5s) ease-in-out infinite;
   animation-delay: var(--d, 0s);
@@ -662,7 +662,7 @@ img {
   left: -20%;
   width: 140%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+  background: linear-gradient(90deg, transparent, #7ef1ff, transparent);
   background-size: 45% 100%;
   background-repeat: no-repeat;
   opacity: 1;
@@ -707,7 +707,7 @@ img {
 .hero-wave-particles span {
   position: absolute;
   border-radius: 50%;
-  background: #00d4ff;
+  background: #ffffff;
   box-shadow: 0 0 6px 2px #00d4ff, 0 0 18px 4px rgba(0, 212, 255, 0.95);
   mix-blend-mode: screen;
   opacity: 0;
