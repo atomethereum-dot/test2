@@ -821,33 +821,52 @@
 .wp-scene {
   position: relative;
   margin: 0 0 32px;
-  height: 220px;
+  height: 260px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0a0a0c;
-  border: 1px solid rgba(9, 9, 11, 0.14);
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
   isolation: isolate;
+  padding: 0 44px 30px;
 }
 
 .wp-scene-glow {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 62%;
-  height: 160%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(70, 140, 230, 0.22) 0%, transparent 68%);
-  pointer-events: none;
-  z-index: 0;
+  display: none;
 }
 
 .wp-scene-dots {
   position: absolute;
   inset: 0;
   z-index: 0;
-  opacity: 0.5;
+  opacity: 0.32;
+}
+
+.wp-scene::before {
+  content: "\25C6 SECTORA";
+  position: absolute;
+  left: 44px;
+  bottom: 16px;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.wp-scene::after {
+  content: "VERIFICATION & CUSTODY FOR TOKENIZED ASSETS";
+  position: absolute;
+  right: 44px;
+  bottom: 16px;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.26);
 }
 
 .wp-scene-inner {
@@ -855,90 +874,119 @@
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: 28px;
-  padding: 0 40px;
+  justify-content: space-between;
+  width: 100%;
+  gap: 32px;
   max-width: 100%;
 }
 
 .wp-scene-icon {
   flex: none;
+  order: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.55));
+  filter: drop-shadow(0 18px 32px rgba(0, 0, 0, 0.8));
 }
 
 .wp-scene-icon svg {
   display: block;
-  height: 120px;
+  height: 152px;
   width: auto;
-  max-width: 220px;
+  max-width: 260px;
   overflow: visible;
 }
 
 .wp-scene-text {
   flex: none;
+  order: 1;
   text-align: left;
 }
 
 .wp-scene-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-  margin: 0 0 8px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 0 14px;
+}
+
+.wp-scene-eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: none;
+  background: #468ce6;
+  box-shadow: 0 0 8px rgba(70, 140, 230, 0.85);
 }
 
 .wp-scene-title {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.92);
+  font-family: "Sora Light", var(--font-sans);
+  font-weight: 200;
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -0.2px;
+  text-transform: none;
+  color: #ffffff;
   margin: 0;
 }
 
 @media (max-width: 720px) {
   .wp-scene {
-    height: 180px;
+    height: auto;
+    padding: 30px 26px 52px;
   }
 
   .wp-scene-inner {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 20px;
-    padding: 0 26px;
+  }
+
+  .wp-scene-icon,
+  .wp-scene-text {
+    order: 0;
   }
 
   .wp-scene-icon svg {
-    height: 88px;
+    height: 84px;
     max-width: 170px;
   }
 
-  .wp-scene-eyebrow {
-    font-size: 10px;
-    letter-spacing: 1.5px;
+  .wp-scene-title {
+    font-size: 21px;
   }
 
-  .wp-scene-title {
-    font-size: 12.5px;
+  .wp-scene::before,
+  .wp-scene::after {
+    font-size: 8.5px;
+    letter-spacing: 1px;
+  }
+
+  .wp-scene::after {
+    right: 26px;
+    max-width: 46%;
+    text-align: right;
+  }
+
+  .wp-scene::before {
+    left: 26px;
   }
 }
 
 @media (max-width: 480px) {
-  .wp-scene {
-    height: 156px;
-  }
-
   .wp-scene-icon svg {
-    height: 68px;
+    height: 64px;
     max-width: 130px;
   }
 
-  .wp-scene-inner {
-    gap: 16px;
-    padding: 0 20px;
+  .wp-scene::after {
+    content: none;
   }
 }
 
