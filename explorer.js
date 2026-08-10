@@ -850,7 +850,8 @@
      ============================================================ */
   const mainEl = () => document.getElementById("exMain");
 
-  function render() {
+  function render(opts) {
+    const preserveScroll = !!(opts && opts.preserveScroll);
     const { parts, params } = parseRoute();
     const view = parts[0] || "home";
     const page = parseInt(params.get("page") || "1", 10);
@@ -893,7 +894,7 @@
     const el = mainEl();
     if (el) el.innerHTML = html;
     updateNavActive(view);
-    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+    if (!preserveScroll) window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
     updateAges();
   }
 
@@ -1002,7 +1003,7 @@
       });
     }
 
-    window.addEventListener("hashchange", render);
+    window.addEventListener("hashchange", () => render());
   }
 
   function init() {
@@ -1016,13 +1017,13 @@
       const view = parts[0] || "home";
       const page = parseInt(params.get("page") || "1", 10);
       if (view === "" || view === "home" || ((view === "blocks" || view === "txs") && page === 1)) {
-        render();
+        render({ preserveScroll: true });
       } else {
         updateAges();
       }
       updateHeaderTicker();
     }, CHAIN.blockTimeMs);
-    setInterval(() => { jitterPrices(); if ((parseRoute().parts[0] || "home") === "home") render(); }, 3200);
+    setInterval(() => { jitterPrices(); if ((parseRoute().parts[0] || "home") === "home") render({ preserveScroll: true }); }, 3200);
     setInterval(updateAges, 5000);
   }
 
