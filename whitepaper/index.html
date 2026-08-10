@@ -126,6 +126,18 @@
   .lede{max-width:56ch;font-size:clamp(15px,1.2vw,17px);line-height:1.7;color:var(--ink-2)}
 
   .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:42px}
+
+  .status{display:flex;align-items:center;gap:9px;margin-top:24px;color:var(--ink-3)}
+  .dot{width:5px;height:5px;border-radius:50%;background:var(--blue);flex:none;position:relative}
+  .dot::after{
+    content:'';position:absolute;inset:-4px;border-radius:50%;
+    border:1px solid var(--blue);
+    animation:ping 2.8s var(--ease) infinite;
+  }
+  @keyframes ping{
+    0%{transform:scale(.6);opacity:.9}
+    70%,100%{transform:scale(1.9);opacity:0}
+  }
   .btn{
     position:relative;overflow:hidden;
     display:inline-flex;align-items:center;gap:11px;
@@ -240,6 +252,7 @@
           <a class="btn btn-primary" href="/docs/"><span>View the whitepaper</span><span class="arrow">&rarr;</span></a>
           <a class="btn btn-ghost" href="/docs/#legal"><span>Read the legal notice</span><span class="arrow">&rarr;</span></a>
         </div>
+        <p class="status mono lift" style="--d:.85s"><span class="dot"></span>Protocol status: operational</p>
       </div>
 
     </main>
