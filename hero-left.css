@@ -16,6 +16,8 @@
 
 .hero-left .hero-heading {
   text-align: left;
+  font-size: clamp(45px, 7.5vw, 78px);
+  max-width: 900px;
 }
 
 .hero-left .hero-cta-row {
@@ -24,7 +26,12 @@
 
 @media (max-width: 720px) {
   .hero-left .hero-main {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .hero-left .hero-heading {
+    font-size: clamp(42px, 13vw, 50px);
+    max-width: 350px;
   }
 }
