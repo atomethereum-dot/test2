@@ -11,6 +11,29 @@
     return 28 + Math.random() * 38;
   }
 
+  // The 3 merged scrollytelling stages stack a full set of bars each
+  // (data-stage), but only one is ever visible (.is-active) at a time.
+  // Animating all 3 in parallel forever was 3x the necessary style/paint
+  // work on a now full-screen section - only tick the visible layer, and
+  // stop entirely once the section scrolls off screen.
+  const hasStages = Array.from(containers).some((c) => c.hasAttribute("data-stage"));
+  let sectionVisible = true;
+  if (hasStages && "IntersectionObserver" in window) {
+    const story = document.getElementById("exec-story");
+    const observed = story || containers[0].closest(".exec");
+    if (observed) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            sectionVisible = entry.isIntersecting;
+          });
+        },
+        { threshold: 0 }
+      );
+      observer.observe(observed);
+    }
+  }
+
   containers.forEach((container) => {
     const isCandle = container.classList.contains("exec-bars--candle");
     const BAR_COUNT = isCandle ? 150 : 170;
@@ -25,7 +48,11 @@
     container.innerHTML = html;
     const bars = Array.from(container.querySelectorAll(".exec-bar"));
 
-    function tick() {
+    function tick(force) {
+      if (!force) {
+        if (!sectionVisible) return;
+        if (hasStages && !container.classList.contains("is-active")) return;
+      }
       bars.forEach((bar) => {
         if (Math.random() < 0.5) {
           bar.style.height = `${Math.min(96, randomHeight())}%`;
@@ -38,9 +65,9 @@
       });
     }
 
-    tick();
+    tick(true);
     if (!reduced) {
-      setInterval(tick, 200);
+      setInterval(() => tick(false), 200);
     }
   });
 })();
