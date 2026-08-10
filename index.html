@@ -9,7 +9,7 @@
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/SoraLight.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="styles.css?v=20260810n" />
+<link rel="stylesheet" href="styles.css?v=20260810o" />
 </head>
 <body>
 
@@ -655,7 +655,9 @@
     <div class="light-inner dev-block reveal">
       <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span><span data-i18n="dev.eyebrow">Sectora Platform</span></span>
       <h2 class="display display-md dark-text" data-i18n="dev.heading">Our Developments</h2>
-      <div class="dev-grid reveal-stagger">
+      <div class="dev-story" id="devStory">
+      <div class="dev-story-sticky">
+      <div class="dev-grid reveal-stagger" id="devGrid">
         <div class="dev-card" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
           <div class="dev-banner dev-banner--network" data-cursor-label="View" data-i18n-attr="data-cursor-label:common.view">
             <div class="dev-corner dev-corner--tl">
@@ -764,6 +766,9 @@
           <p data-i18n="dev.card6.desc">Sectora's fully-collateralized stablecoin for settlement across the network.</p>
           <span class="dev-byline" data-i18n="dev.byline.live">SECTORA · LIVE</span>
         </a>
+      </div>
+      <div class="dev-story-dots" id="devStoryDots" aria-hidden="true"></div>
+      </div>
       </div>
     </div>
   </section>
@@ -1452,6 +1457,7 @@
 <script src="supply-calc.js?v=20260808h"></script>
 <script src="growth.js?v=20260808h"></script>
 <script src="reveal.js?v=20260808h"></script>
+<script src="dev-story.js?v=20260810a"></script>
 <script src="magnetic.js?v=20260808h"></script>
 <script src="intro.js?v=20260808h"></script>
 <script src="scramble.js?v=20260808h"></script>

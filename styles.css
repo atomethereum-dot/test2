@@ -3217,6 +3217,87 @@ img {
 }
 .dev-byline-link:hover { color: #1a5fd6; }
 
+/* Our Developments — mobile-only scrollytelling: the desktop horizontal
+   carousel is untouched (these wrappers are inert via display:contents);
+   under the mobile breakpoint the card stack pins while scrolling and
+   cards cross-fade in as their own "chapter" instead of swiping. */
+.dev-story,
+.dev-story-sticky {
+  display: contents;
+}
+
+.dev-story-dots {
+  display: none;
+}
+
+@media (max-width: 799px) {
+  .dev-story {
+    display: block;
+    position: relative;
+  }
+
+  .dev-story-sticky {
+    display: block;
+    position: sticky;
+    top: calc(var(--announce-h) + var(--nav-h) + 16px);
+    z-index: 1;
+    background: var(--white, #fff);
+  }
+
+  .dev-story .dev-grid {
+    display: block;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+
+  /* Higher specificity than .reveal-stagger.is-in > * (0,2,0) so the
+     mobile stack still hides inactive cards once the stagger reveal
+     fires on scroll-into-view. */
+  .dev-story .dev-grid .dev-card {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    opacity: 0;
+    transform: none;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+
+  .dev-story .dev-grid .dev-card.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .dev-story-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .dev-story-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(20, 20, 22, 0.18);
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  .dev-story-dot.is-active {
+    background: #14e0a0;
+    transform: scale(1.4);
+  }
+}
+
+@media (max-width: 799px) and (prefers-reduced-motion: reduce) {
+  .dev-story .dev-card,
+  .dev-story-dot {
+    transition: none;
+  }
+}
+
 .blog-banner-corner {
   position: absolute;
   z-index: 2;
