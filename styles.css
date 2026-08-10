@@ -3077,6 +3077,21 @@ img {
 }
 .dev-byline .dev-dot { flex: none; }
 
+.dev-byline-link {
+  display: inline-block;
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #468ce6;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+.dev-byline-link:hover { color: #1a5fd6; }
+
 .blog-banner-corner {
   position: absolute;
   z-index: 2;
