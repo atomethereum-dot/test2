@@ -1595,6 +1595,15 @@ img {
   height: calc(100svh - var(--announce-h) - var(--nav-h));
 }
 
+/* The section is full-screen tall on every breakpoint now, so the bars
+   need to stretch to match instead of leaving a big empty gap under the
+   text (the old 78%/40px values were tuned for the much shorter,
+   fixed-height band this section used to be). */
+.exec-story-sticky .exec-bars {
+  height: 90%;
+  bottom: 24px;
+}
+
 .exec-bars[data-stage] {
   opacity: 0;
   transition: opacity 0.7s ease;
@@ -1643,13 +1652,6 @@ img {
 @media (max-width: 720px) {
   .exec-story-dots {
     right: 16px;
-  }
-
-  /* The section is now full-screen tall on mobile, so the bars need to
-     stretch to match instead of leaving a big empty gap under the text. */
-  .exec-story-sticky .exec-bars {
-    height: 92%;
-    bottom: 20px;
   }
 
   .exec-story-sticky .exec-content {

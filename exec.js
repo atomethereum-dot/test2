@@ -5,10 +5,10 @@
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function randomHeight() {
-    if (Math.random() < 0.16) {
-      return 55 + Math.random() * 40;
+    if (Math.random() < 0.22) {
+      return 62 + Math.random() * 34;
     }
-    return 4 + Math.random() * 34;
+    return 28 + Math.random() * 38;
   }
 
   containers.forEach((container) => {
