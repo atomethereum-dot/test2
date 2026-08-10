@@ -2,7 +2,6 @@
   const containers = document.querySelectorAll(".exec-bars");
   if (!containers.length) return;
 
-  const BAR_COUNT = 170;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function randomHeight() {
@@ -13,9 +12,15 @@
   }
 
   containers.forEach((container) => {
+    const isCandle = container.classList.contains("exec-bars--candle");
+    const BAR_COUNT = isCandle ? 150 : 170;
     let html = "";
     for (let i = 0; i < BAR_COUNT; i++) {
-      html += `<div class="exec-bar"></div>`;
+      if (isCandle) {
+        html += '<div class="exec-bar ' + (Math.random() < 0.55 ? "is-up" : "is-down") + '"></div>';
+      } else {
+        html += `<div class="exec-bar"></div>`;
+      }
     }
     container.innerHTML = html;
     const bars = Array.from(container.querySelectorAll(".exec-bar"));
@@ -24,6 +29,11 @@
       bars.forEach((bar) => {
         if (Math.random() < 0.5) {
           bar.style.height = `${Math.min(96, randomHeight())}%`;
+          if (isCandle && Math.random() < 0.2) {
+            const up = Math.random() < 0.55;
+            bar.classList.toggle("is-up", up);
+            bar.classList.toggle("is-down", !up);
+          }
         }
       });
     }

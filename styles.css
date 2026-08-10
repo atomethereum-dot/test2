@@ -1394,6 +1394,41 @@ img {
   transition: height 0.4s ease;
 }
 
+/* Candlestick-style bars, matching the DEX cover hero exactly: flat
+   solid green/red bodies plus a thin high/low wick, no glow. */
+.exec-bars--candle .exec-bar {
+  position: relative;
+  max-width: none;
+  border-radius: 1px;
+  box-shadow: none;
+}
+
+.exec-bars--candle .exec-bar.is-up {
+  background: #14e0a0;
+}
+
+.exec-bars--candle .exec-bar.is-down {
+  background: #ff5c6c;
+}
+
+.exec-bars--candle .exec-bar::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%);
+  width: 1.5px;
+  height: 7px;
+}
+
+.exec-bars--candle .exec-bar.is-up::after {
+  background: #14e0a0;
+}
+
+.exec-bars--candle .exec-bar.is-down::after {
+  background: #ff5c6c;
+}
+
 .exec-fade {
   position: absolute;
   inset: 0;
