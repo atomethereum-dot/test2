@@ -605,63 +605,6 @@
     renderStaking();
   }, 6000);
 
-  // ---- stake calculator (fixed 15% APY) ----
-  (() => {
-    const amountInput = document.getElementById("dstakeAmount");
-    const dailyEl = document.getElementById("dstakeDaily");
-    const monthlyEl = document.getElementById("dstakeMonthly");
-    const periodEl = document.getElementById("dstakePeriod");
-    const periodUsdEl = document.getElementById("dstakePeriodUsd");
-    const periodLabelEl = document.getElementById("dstakePeriodLabel");
-    const periodBtns = document.querySelectorAll(".dstake-period-btn");
-    const presetBtns = document.querySelectorAll(".dstake-preset-btn");
-    if (!amountInput || !dailyEl) return;
-
-    const APY = 0.15;
-    const SECT_PRICE = 0.1034;
-    let periodDays = 30;
-
-    const PERIOD_KEYS = { 30: "dashboard.stakeCalc.period30Earnings", 90: "dashboard.stakeCalc.period90Earnings", 365: "dashboard.stakeCalc.period365Earnings" };
-    const PERIOD_FALLBACK = { 30: "Est. earnings (30 days)", 90: "Est. earnings (90 days)", 365: "Est. earnings (1 year)" };
-
-    function fmtSect(n) {
-      return n.toLocaleString("en-US", { maximumFractionDigits: n < 1 ? 4 : 2, minimumFractionDigits: 0 });
-    }
-
-    function update() {
-      const amount = Math.max(0, parseFloat(amountInput.value) || 0);
-      const dailyRate = APY / 365;
-      const daily = amount * dailyRate;
-      const monthly = amount * dailyRate * 30;
-      const periodEarn = amount * dailyRate * periodDays;
-
-      dailyEl.innerHTML = fmtSect(daily) + " <small>#SECT</small>";
-      monthlyEl.innerHTML = fmtSect(monthly) + " <small>#SECT</small>";
-      periodEl.innerHTML = fmtSect(periodEarn) + " <small>#SECT</small>";
-      periodUsdEl.textContent = "≈ $" + (periodEarn * SECT_PRICE).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 2 });
-      if (periodLabelEl) periodLabelEl.textContent = t(PERIOD_KEYS[periodDays], PERIOD_FALLBACK[periodDays]);
-    }
-
-    amountInput.addEventListener("input", update);
-    presetBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        amountInput.value = btn.getAttribute("data-amount");
-        update();
-      });
-    });
-    periodBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        periodBtns.forEach((b) => b.classList.remove("is-active"));
-        btn.classList.add("is-active");
-        periodDays = parseInt(btn.getAttribute("data-days"), 10);
-        update();
-      });
-    });
-
-    document.addEventListener("sectora:langchange", update);
-    update();
-  })();
-
   // ---- re-render text that's only painted once, on language switch ----
   document.addEventListener("sectora:langchange", () => {
     METRIC_DEFS.forEach((def) => {
