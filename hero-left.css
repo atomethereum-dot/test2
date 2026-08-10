@@ -10,6 +10,13 @@
   padding-right: 60px;
 }
 
+@media (min-width: 721px) {
+  .hero-left .hero-main {
+    justify-content: flex-start;
+    padding-top: 48px;
+  }
+}
+
 .hero-left .hero-heading {
   text-align: left;
   font-size: clamp(45px, 7.5vw, 78px);
