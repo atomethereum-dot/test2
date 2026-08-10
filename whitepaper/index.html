@@ -56,26 +56,6 @@
   /* ============ cabecera ============ */
   .top{position:fixed;top:0;left:0;right:0;z-index:50}
 
-  .utility{
-    display:flex;justify-content:space-between;align-items:center;gap:20px;
-    padding:9px var(--pad);
-    border-bottom:1px solid var(--hair-soft);
-    color:var(--ink-3);
-    background:rgba(0,0,0,.72);
-    backdrop-filter:blur(10px);
-  }
-  .status{display:flex;align-items:center;gap:9px}
-  .dot{width:5px;height:5px;border-radius:50%;background:var(--blue);flex:none;position:relative}
-  .dot::after{
-    content:'';position:absolute;inset:-4px;border-radius:50%;
-    border:1px solid var(--blue);
-    animation:ping 2.8s var(--ease) infinite;
-  }
-  @keyframes ping{
-    0%{transform:scale(.6);opacity:.9}
-    70%,100%{transform:scale(1.9);opacity:0}
-  }
-
   nav{
     display:flex;align-items:center;justify-content:space-between;gap:24px;
     padding:18px var(--pad);
@@ -119,7 +99,7 @@
   /* ============ hero ============ */
   .stage{position:relative;min-height:100svh;display:flex;flex-direction:column;background:#000;overflow:hidden}
   #grid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-  .layer{position:relative;z-index:2;display:flex;flex-direction:column;flex:1;padding-top:106px}
+  .layer{position:relative;z-index:2;display:flex;flex-direction:column;flex:1;padding-top:74px}
 
   .hero{
     flex:1;display:grid;
@@ -207,7 +187,6 @@
   }
   @media (max-width:780px){
     .menu{display:none}
-    .utility .status span:not(.dot){display:none}
   }
 
   @media (prefers-reduced-motion:reduce){
@@ -225,10 +204,6 @@
 <div class="progress" id="progress"></div>
 
 <header class="top">
-  <div class="utility mono">
-    <span>Sectora Foundation &middot; Illinois, United States</span>
-    <span class="status"><span class="dot"></span><span>Protocol status: operational</span></span>
-  </div>
   <nav>
     <a class="brand" href="/">
       <svg class="brand-mark" viewBox="56.8 34.4 86.4 134.4" width="18" height="28" aria-hidden="true"><defs><linearGradient id="brandTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f5f6f7"/></linearGradient><linearGradient id="brandMid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eef0f2"/><stop offset="1" stop-color="#dde0e3"/></linearGradient><linearGradient id="brandBot" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4d6da"/><stop offset="1" stop-color="#c0c3c8"/></linearGradient></defs><path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z M82.0 68.0 L82.0 104.8 L58.5 86.4 Z" fill="url(#brandTop)" fill-rule="evenodd"/><path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z M114.4 126.0 L114.4 89.2 L142.4 107.6 Z" fill="url(#brandMid)" fill-rule="evenodd"/><path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z M117.9 126.0 L117.9 89.2 L141.4 107.6 Z" fill="url(#brandBot)" fill-rule="evenodd"/></svg>
