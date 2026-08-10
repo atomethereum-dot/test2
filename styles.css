@@ -1644,6 +1644,17 @@ img {
   .exec-story-dots {
     right: 16px;
   }
+
+  /* The section is now full-screen tall on mobile, so the bars need to
+     stretch to match instead of leaving a big empty gap under the text. */
+  .exec-story-sticky .exec-bars {
+    height: 92%;
+    bottom: 20px;
+  }
+
+  .exec-story-sticky .exec-content {
+    padding-top: 40px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
