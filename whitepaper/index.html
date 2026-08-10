@@ -209,6 +209,39 @@
     .eyebrow i{width:30px}
     .rule{width:74px}
   }
+
+  /* ============ custom cursor ============ */
+  .cursor-light{
+    display:none;position:fixed;top:0;left:0;width:520px;height:520px;margin:-260px 0 0 -260px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(170,210,255,.85) 0%, rgba(21,105,255,.4) 28%, rgba(21,105,255,.12) 55%, rgba(21,105,255,0) 75%);
+    mix-blend-mode:screen;pointer-events:none;z-index:9999;opacity:0;
+    transform:translate(-1000px,-1000px);
+    transition:opacity .25s ease,transform .12s ease-out;
+    will-change:transform;
+  }
+  .cursor-dot,.cursor-ring{
+    display:none;position:fixed;top:0;left:0;border-radius:50%;pointer-events:none;z-index:10000;opacity:0;
+    mix-blend-mode:difference;transition:opacity .2s ease;
+  }
+  .cursor-dot{width:8px;height:8px;background:#fff}
+  .cursor-ring{
+    width:34px;height:34px;border:1.5px solid rgba(255,255,255,.75);
+    transition:opacity .2s var(--ease),width .25s var(--ease),height .25s var(--ease),background .25s var(--ease);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .cursor-ring--hover{width:52px;height:52px}
+  .cursor-ring--label{width:76px;height:76px;background:rgba(255,255,255,.95);border-color:transparent;mix-blend-mode:normal}
+  .cursor-ring-label{
+    opacity:0;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:1px;
+    text-transform:uppercase;color:#000;transition:opacity .2s var(--ease);white-space:nowrap;
+  }
+  .cursor-ring--label .cursor-ring-label{opacity:1}
+
+  @media (hover:hover) and (pointer:fine){
+    .cursor-light,.cursor-dot,.cursor-ring{display:block}
+    html,body,a,button,.btn,input,textarea,select,[role="button"]{cursor:none}
+  }
 </style>
 </head>
 <body>
@@ -461,5 +494,10 @@
   if(reduce){ draw(); } else { requestAnimationFrame(frame); }
 })();
 </script>
+
+<div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"><span class="cursor-ring-label" id="cursorLabel"></span></div>
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<script src="/cursor.js?v=20260808h"></script>
 </body>
 </html>
