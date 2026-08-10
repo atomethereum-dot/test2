@@ -423,25 +423,6 @@ img {
   padding: 40px 24px;
 }
 
-.hero-badge {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 22px 8px 14px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 999px;
-}
-
-.hero-badge-word {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 4px;
-  color: rgba(255, 255, 255, 0.85);
-}
-
 .hero-heading {
   position: relative;
   z-index: 1;
@@ -524,15 +505,10 @@ img {
     padding-top: 56px;
   }
 
-  .hero-badge,
   .hero-heading,
   .hero-subtitle,
   .hero-cta-row {
     align-self: flex-start;
-  }
-
-  .hero-badge {
-    display: none;
   }
 
   .hero-heading {
@@ -547,10 +523,6 @@ img {
   .hero-subtitle {
     font-size: 12.5px;
     max-width: 250px;
-  }
-
-  .hero-badge-word {
-    font-size: 12px;
   }
 
   .hero-cta-row {
