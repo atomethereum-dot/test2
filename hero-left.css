@@ -10,10 +10,6 @@
   padding-right: 60px;
 }
 
-.hero-left .hero-badge {
-  margin-right: auto;
-}
-
 .hero-left .hero-heading {
   text-align: left;
   font-size: clamp(45px, 7.5vw, 78px);
