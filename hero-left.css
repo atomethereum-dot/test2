@@ -1,0 +1,30 @@
+/* Portada preview — hero text aligned left. Scoped to .hero-left only, never touches the live homepage hero. */
+
+.hero-left {
+  text-align: left;
+}
+
+.hero-left .hero-main {
+  align-items: flex-start;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+.hero-left .hero-badge {
+  margin-right: auto;
+}
+
+.hero-left .hero-heading {
+  text-align: left;
+}
+
+.hero-left .hero-cta-row {
+  justify-content: flex-start;
+}
+
+@media (max-width: 720px) {
+  .hero-left .hero-main {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
