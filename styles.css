@@ -1583,12 +1583,16 @@ img {
 .exec-story {
   position: relative;
   background: var(--black);
-  height: calc(clamp(460px, 58vw, 640px) * 5);
+  height: calc((100dvh - var(--announce-h) - var(--nav-h)) * 5);
 }
 
 .exec-story-sticky {
   position: sticky;
   top: calc(var(--announce-h) + var(--nav-h));
+}
+
+.exec-story-sticky .exec {
+  height: calc(100dvh - var(--announce-h) - var(--nav-h));
 }
 
 .exec-bars[data-stage] {
@@ -1637,14 +1641,6 @@ img {
 }
 
 @media (max-width: 720px) {
-  .exec-story-sticky .exec {
-    height: calc(100dvh - var(--announce-h) - var(--nav-h));
-  }
-
-  .exec-story {
-    height: calc((100dvh - var(--announce-h) - var(--nav-h)) * 5);
-  }
-
   .exec-story-dots {
     right: 16px;
   }
