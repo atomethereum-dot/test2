@@ -814,3 +814,71 @@
     break-inside: avoid;
   }
 }
+
+/* ---------- Supply & Market Cap: recolor shared component to whitepaper blue ---------- */
+
+#marketcap .supply-heading strong,
+#marketcap .supply-implied,
+#marketcap .supply-mobile-implied-value,
+#marketcap .supply-calc-result--accent .supply-calc-result-value {
+  color: #468ce6;
+}
+
+#marketcap .supply-row--sectora td,
+#marketcap .supply-mobile-row--sectora {
+  background: #eaf2fc;
+  border-top: 1px solid rgba(70, 140, 230, 0.28);
+}
+
+#marketcap .supply-row--sectora .supply-coin-dot,
+#marketcap .supply-mobile-row--sectora .supply-coin-dot,
+#marketcap .supply-coin-dot.live {
+  background: #468ce6;
+  box-shadow: 0 0 8px rgba(70, 140, 230, 0.55);
+}
+
+#marketcap .supply-status-dot--live {
+  background: #468ce6;
+  box-shadow: 0 0 0 0 rgba(70, 140, 230, 0.55);
+  animation: wp-supply-pulse-ring 2s ease-out infinite;
+}
+
+@keyframes wp-supply-pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(70, 140, 230, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(70, 140, 230, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(70, 140, 230, 0);
+  }
+}
+
+#marketcap .supply-calc-pill:focus-visible,
+#marketcap .supply-calc-slider:focus-visible {
+  outline-color: #468ce6;
+}
+
+#marketcap .supply-calc-pill.is-active {
+  background: #468ce6;
+  border-color: #468ce6;
+}
+
+#marketcap .supply-calc-slider {
+  background: linear-gradient(90deg, #1a5fd6, #468ce6);
+}
+
+#marketcap .supply-calc-slider::-webkit-slider-thumb,
+#marketcap .supply-calc-slider::-moz-range-thumb {
+  border-color: #468ce6;
+}
+
+#marketcap .supply-calc-input-wrap:focus-within {
+  border-color: #468ce6;
+}
+
+#marketcap .exec-dot {
+  background: #468ce6;
+  box-shadow: 0 0 8px rgba(70, 140, 230, 0.9);
+}
