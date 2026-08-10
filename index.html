@@ -302,6 +302,54 @@
     </div>
   </section>
 
+  <section class="dexlive" id="dex-live">
+    <div class="dexlive-inner">
+      <div class="dexlive-head reveal">
+        <div class="dexlive-head-text">
+          <span class="eyebrow eyebrow-dot"><span class="exec-dot"></span><span data-i18n="dexLive.eyebrow">Sectora DEX</span></span>
+          <h2 class="display display-md" data-i18n="dexLive.heading">Live Markets</h2>
+          <span class="dexlive-status" id="dexLiveStatus" data-i18n="dexLive.connecting">Connecting to live prices&hellip;</span>
+        </div>
+        <a class="dexlive-cta magnetic" href="dex-cover.html">
+          <span data-i18n="dexLive.cta">Open the DEX</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="dexlive-grid reveal-stagger" id="dexLiveGrid">
+        <div class="dexlive-card" data-id="bitcoin">
+          <div class="dexlive-card-top"><span class="dexlive-sym">BTC</span><span class="dexlive-name">Bitcoin</span></div>
+          <canvas class="dexlive-spark" width="240" height="56" aria-hidden="true"></canvas>
+          <div class="dexlive-card-bottom"><span class="dexlive-price">&mdash;</span><span class="dexlive-chg">&mdash;</span></div>
+        </div>
+        <div class="dexlive-card" data-id="ethereum">
+          <div class="dexlive-card-top"><span class="dexlive-sym">ETH</span><span class="dexlive-name">Ethereum</span></div>
+          <canvas class="dexlive-spark" width="240" height="56" aria-hidden="true"></canvas>
+          <div class="dexlive-card-bottom"><span class="dexlive-price">&mdash;</span><span class="dexlive-chg">&mdash;</span></div>
+        </div>
+        <div class="dexlive-card" data-id="solana">
+          <div class="dexlive-card-top"><span class="dexlive-sym">SOL</span><span class="dexlive-name">Solana</span></div>
+          <canvas class="dexlive-spark" width="240" height="56" aria-hidden="true"></canvas>
+          <div class="dexlive-card-bottom"><span class="dexlive-price">&mdash;</span><span class="dexlive-chg">&mdash;</span></div>
+        </div>
+        <div class="dexlive-card" data-id="ripple">
+          <div class="dexlive-card-top"><span class="dexlive-sym">XRP</span><span class="dexlive-name">XRP</span></div>
+          <canvas class="dexlive-spark" width="240" height="56" aria-hidden="true"></canvas>
+          <div class="dexlive-card-bottom"><span class="dexlive-price">&mdash;</span><span class="dexlive-chg">&mdash;</span></div>
+        </div>
+        <div class="dexlive-card" data-id="sui">
+          <div class="dexlive-card-top"><span class="dexlive-sym">SUI</span><span class="dexlive-name">Sui</span></div>
+          <canvas class="dexlive-spark" width="240" height="56" aria-hidden="true"></canvas>
+          <div class="dexlive-card-bottom"><span class="dexlive-price">&mdash;</span><span class="dexlive-chg">&mdash;</span></div>
+        </div>
+        <div class="dexlive-card" data-id="hyperliquid">
+          <div class="dexlive-card-top"><span class="dexlive-sym">HYPE</span><span class="dexlive-name">Hyperliquid</span></div>
+          <canvas class="dexlive-spark" width="240" height="56" aria-hidden="true"></canvas>
+          <div class="dexlive-card-bottom"><span class="dexlive-price">&mdash;</span><span class="dexlive-chg">&mdash;</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="supply" id="supply">
     <div class="supply-top">
       <div class="supply-top-inner reveal">
@@ -1454,6 +1502,7 @@
 <script src="choropleth.js?v=20260808h"></script>
 <script src="roadmap.js?v=20260808h"></script>
 <script src="exec.js?v=20260808h"></script>
+<script src="dex-live.js?v=20260810a"></script>
 <script src="supply.js?v=20260808h"></script>
 <script src="supply-scenarios.js?v=20260808h"></script>
 <script src="supply-calc.js?v=20260808h"></script>

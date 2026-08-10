@@ -1537,6 +1537,176 @@ img {
   }
 }
 
+/* ---------- DEX live markets ---------- */
+
+.dexlive {
+  position: relative;
+  background: var(--black);
+  padding: 96px 0;
+}
+
+.dexlive-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.dexlive-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.dexlive-head-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.dexlive-status {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.dexlive-status.is-live {
+  color: #14e0a0;
+}
+
+.dexlive-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 24px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.dexlive-cta:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.dexlive-cta svg {
+  width: 15px;
+  height: 15px;
+}
+
+.dexlive-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 980px) {
+  .dexlive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .dexlive-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dexlive-card {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.dexlive-card:hover {
+  border-color: rgba(20, 224, 160, 0.4);
+  transform: translateY(-3px);
+}
+
+.dexlive-card-top {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.dexlive-sym {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--white);
+}
+
+.dexlive-name {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dexlive-spark {
+  display: block;
+  width: 100%;
+  height: 56px;
+}
+
+.dexlive-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dexlive-price {
+  font-family: var(--font-mono);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--white);
+  font-variant-numeric: tabular-nums;
+}
+
+.dexlive-chg {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+
+.dexlive-chg.is-up {
+  color: #14e0a0;
+  background: rgba(20, 224, 160, 0.12);
+}
+
+.dexlive-chg.is-down {
+  color: #ff5c5c;
+  background: rgba(255, 92, 92, 0.12);
+}
+
+@media (max-width: 640px) {
+  .dexlive {
+    padding: 72px 0;
+  }
+
+  .dexlive-head {
+    align-items: flex-start;
+  }
+}
+
 /* ---------- RWA growth chart ---------- */
 
 .growth {
