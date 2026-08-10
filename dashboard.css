@@ -1420,6 +1420,123 @@
 .stake-value { font-family: var(--font-mono); font-size: 21px; font-weight: 450; color: var(--db-num); }
 .stake-sub { font-family: var(--font-sans); font-size: 12px; color: var(--db-text-dim); margin-top: 6px; }
 
+/* ---- stake calculator (15% APY) ---- */
+.dstake-calc { margin-top: 16px; padding: 26px; max-width: 520px; }
+.dstake-calc-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.dstake-calc-title { font-family: var(--font-sans); font-size: 17px; font-weight: 600; color: var(--db-text); margin: 2px 0 0; }
+.dstake-apy-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex: none;
+  padding: 8px 16px;
+  border-radius: var(--db-radius-sm);
+  background: var(--db-green-dim);
+  border: 1px solid rgba(20, 224, 160, 0.28);
+}
+.dstake-apy-value { font-family: var(--font-mono); font-size: 22px; font-weight: 600; color: var(--db-green); line-height: 1.1; }
+.dstake-apy-unit { font-family: var(--font-sans); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--db-green); opacity: 0.85; }
+
+.dstake-calc-body { display: flex; flex-direction: column; gap: 20px; }
+
+.dstake-input-row { position: relative; display: flex; align-items: center; }
+.dstake-input { width: 100%; padding-right: 68px; font-family: var(--font-mono); font-size: 15px; -moz-appearance: textfield; }
+.dstake-input::-webkit-outer-spin-button,
+.dstake-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.dstake-input-suffix {
+  position: absolute;
+  right: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--db-text-faint);
+  pointer-events: none;
+}
+.dstake-presets { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.dstake-preset-btn {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--db-text-dim);
+  background: var(--db-panel-hover);
+  border: 1px solid var(--db-border);
+  border-radius: 999px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: border-color 0.2s var(--db-ease), color 0.2s var(--db-ease);
+}
+.dstake-preset-btn:hover { color: var(--db-text); border-color: var(--db-border-strong); }
+
+.dstake-period {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--db-panel-hover);
+  border: 1px solid var(--db-border);
+  border-radius: var(--db-radius-sm);
+}
+.dstake-period-btn {
+  flex: 1;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--db-text-dim);
+  background: none;
+  border: none;
+  border-radius: 7px;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: background 0.2s var(--db-ease), color 0.2s var(--db-ease);
+}
+.dstake-period-btn:hover { color: var(--db-text); }
+.dstake-period-btn.is-active { background: var(--db-panel); color: var(--db-text); box-shadow: 0 0 0 1px var(--db-border-strong); }
+
+.dstake-results {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.dstake-result {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+  border: 1px solid var(--db-border);
+  border-radius: var(--db-radius-sm);
+}
+.dstake-result--accent {
+  grid-column: 1 / -1;
+  background: var(--db-blue-dim);
+  border-color: rgba(70, 140, 230, 0.28);
+}
+.dstake-result-label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--db-text-faint); }
+.dstake-result--accent .dstake-result-label { color: var(--db-blue); }
+.dstake-result-value { font-family: var(--font-mono); font-size: 17px; font-weight: 500; color: var(--db-num); }
+.dstake-result-value small { font-family: var(--font-sans); font-size: 11px; font-weight: 500; color: var(--db-text-faint); }
+.dstake-result-usd { font-family: var(--font-mono); font-size: 12px; color: var(--db-text-dim); }
+
+.dstake-cta {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 13px 14px;
+}
+.dstake-cta small { font-family: var(--font-sans); font-size: 9.5px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.55; }
+
+.dstake-disclaimer { font-family: var(--font-sans); font-size: 11px; line-height: 1.5; color: var(--db-text-faint); margin: 0; }
+
+@media (max-width: 640px) {
+  .dstake-calc { max-width: none; padding: 20px; }
+  .dstake-calc-head { flex-direction: column; }
+  .dstake-apy-badge { align-items: flex-start; }
+}
+
 /* ---- hash market: buy hash, become a validator ---- */
 .dhm-card { padding: 26px; margin-bottom: 36px; display: flex; flex-direction: column; gap: 22px; }
 
