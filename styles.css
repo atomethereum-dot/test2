@@ -2849,63 +2849,16 @@ img {
 }
 
 .dev-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
-}
-
-@media (min-width: 800px) {
-  .dev-grid {
-    display: flex;
-    grid-template-columns: none;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: 24px;
-    -webkit-overflow-scrolling: touch;
-    gap: 24px;
-    margin: 0 -24px;
-    padding: 4px 24px 16px;
-    scrollbar-width: none;
-  }
-
-  .dev-grid::-webkit-scrollbar {
-    display: none;
-  }
-
-  .dev-grid .dev-card {
-    flex: 0 0 calc(33.333% - 16px);
-    scroll-snap-align: start;
-  }
-}
-
-@media (max-width: 799px) {
-  .dev-grid {
-    display: flex;
-    grid-template-columns: none;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: 24px;
-    -webkit-overflow-scrolling: touch;
-    gap: 16px;
-    margin: 0 -24px;
-    padding: 4px 24px 12px;
-    scrollbar-width: none;
-  }
-
-  .dev-grid::-webkit-scrollbar {
-    display: none;
-  }
-
-  .dev-card {
-    flex: 0 0 82%;
-    scroll-snap-align: start;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 96px;
 }
 
 .dev-card {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 100%;
   color: inherit;
 }
 
@@ -2914,19 +2867,24 @@ img {
   aspect-ratio: 16 / 10;
   border-radius: 0;
   overflow: hidden;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  background-size: cover;
-  background-position: center;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  margin-bottom: 4px;
-  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease);
+  margin-bottom: 20px;
+  transition: border-color 0.3s var(--ease);
 }
 
 .dev-card:hover .dev-banner {
-  transform: translateY(-4px);
   border-color: rgba(0, 0, 0, 0.22);
+}
+
+.dev-banner-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -12%;
+  height: 124%;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
 }
 
 .dev-banner--protocol {
@@ -2961,8 +2919,8 @@ img {
   .dev-banner {
     transition: none;
   }
-  .dev-card:hover .dev-banner {
-    transform: none;
+  .dev-banner-bg {
+    transform: none !important;
   }
 }
 
@@ -3047,7 +3005,7 @@ img {
 
 .dev-category {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -3056,15 +3014,19 @@ img {
 
 .dev-card h3 {
   color: #2c2c31;
-  font-size: clamp(17px, 1.6vw, 20px);
+  font-size: clamp(24px, 3vw, 38px);
   font-weight: 400;
-  line-height: 1.3;
+  line-height: 1.2;
+  margin-top: 8px;
+  max-width: 720px;
 }
 
 .dev-card p {
   color: var(--zinc-600);
-  font-size: 13px;
-  line-height: 1.55;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.6;
+  max-width: 640px;
+  margin-top: 4px;
 }
 
 .dev-byline {
