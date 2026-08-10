@@ -17,8 +17,8 @@
 .wp-progress-fill {
   height: 100%;
   width: 0%;
-  background: #14e0a0;
-  box-shadow: 0 0 8px rgba(20, 224, 160, 0.6);
+  background: #468ce6;
+  box-shadow: 0 0 8px rgba(70, 140, 230, 0.6);
   transition: width 0.1s linear;
 }
 
@@ -135,7 +135,7 @@
   max-width: 720px;
   max-height: 720px;
   transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(20, 224, 160, 0.16) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(70, 140, 230, 0.16) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -170,8 +170,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #14e0a0;
-  box-shadow: 0 0 8px rgba(20, 224, 160, 0.9);
+  background: #468ce6;
+  box-shadow: 0 0 8px rgba(70, 140, 230, 0.9);
 }
 
 .wp-cover-word {
@@ -191,7 +191,7 @@
   font-weight: 500;
   letter-spacing: 8px;
   text-transform: uppercase;
-  color: #0a8f5c;
+  color: #468ce6;
 }
 
 .wp-cover-sub {
@@ -301,12 +301,12 @@
 
 .wp-toc a.is-active {
   color: #09090b;
-  border-left-color: #14e0a0;
-  background: rgba(20, 224, 160, 0.06);
+  border-left-color: #468ce6;
+  background: rgba(70, 140, 230, 0.06);
 }
 
 .wp-toc a.is-active .wp-toc-num {
-  color: #0a8f5c;
+  color: #468ce6;
 }
 
 .wp-content {
@@ -335,7 +335,7 @@
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #0a8f5c;
+  color: #468ce6;
   margin-bottom: 14px;
 }
 
@@ -378,7 +378,7 @@
 .wp-quote {
   margin-top: 28px;
   padding: 4px 0 4px 24px;
-  border-left: 2px solid #14e0a0;
+  border-left: 2px solid #468ce6;
   font-size: clamp(18px, 2.2vw, 22px);
   line-height: 1.5;
   font-weight: 500;
@@ -414,7 +414,7 @@
 }
 
 .wp-stat-value--accent {
-  color: #0a8f5c;
+  color: #468ce6;
 }
 
 .wp-stat-label {
@@ -445,9 +445,9 @@
 }
 
 .wp-flow-node--accent {
-  color: #071a12;
-  background: #14e0a0;
-  border-color: #14e0a0;
+  color: #ffffff;
+  background: #468ce6;
+  border-color: #468ce6;
 }
 
 .wp-flow-arrow {
@@ -498,7 +498,7 @@
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #0a8f5c;
+  color: #468ce6;
 }
 
 .wp-card p {
@@ -543,7 +543,7 @@
   height: 9px;
   border-radius: 50%;
   background: #f7f7f5;
-  border: 2px solid #14e0a0;
+  border: 2px solid #468ce6;
 }
 
 .wp-timeline-date {
@@ -552,7 +552,7 @@
   font-size: 11.5px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #0a8f5c;
+  color: #468ce6;
   margin-bottom: 6px;
 }
 
@@ -626,16 +626,16 @@
 }
 
 .wp-cta--solid {
-  background: #14e0a0;
-  border-color: #14e0a0;
-  color: #071a12;
+  background: #468ce6;
+  border-color: #468ce6;
+  color: #ffffff;
   font-weight: 600;
 }
 
 .wp-cta--solid:hover {
-  background: #2be9b2;
-  border-color: #2be9b2;
-  color: #071a12;
+  background: #1a5fd6;
+  border-color: #1a5fd6;
+  color: #ffffff;
 }
 
 /* ---------- Doc footer ---------- */
@@ -693,8 +693,8 @@
   }
 
   .wp-toc a.is-active {
-    border-color: #14e0a0;
-    background: rgba(20, 224, 160, 0.1);
+    border-color: #468ce6;
+    background: rgba(70, 140, 230, 0.1);
   }
 
   .wp-toc a span:not(.wp-toc-num) {
