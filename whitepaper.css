@@ -150,7 +150,7 @@
 
 .wp-cover-mark {
   margin-bottom: 24px;
-  filter: drop-shadow(0 14px 22px rgba(9, 9, 11, 0.14));
+  opacity: 0.9;
 }
 
 .wp-cover-eyebrow {
