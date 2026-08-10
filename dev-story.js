@@ -1,7 +1,8 @@
 /* ---- "Our Developments" mobile scrollytelling: below the dev-grid's own
-   mobile breakpoint (799px) the card stack pins while scrolling and cards
-   cross-fade in one at a time instead of swiping sideways. Desktop is
-   untouched — the wrapper elements are display:contents there. ---- */
+   mobile breakpoint (799px) the card stack pins full-screen while
+   scrolling and cards cross-fade in one at a time instead of swiping
+   sideways. Desktop is untouched — the wrapper elements are
+   display:contents there. ---- */
 (() => {
   const wrap = document.getElementById("devStory");
   if (!wrap) return;
@@ -25,37 +26,11 @@
     dotEls.forEach((dot, i) => dot.classList.toggle("is-active", i === index));
   }
 
-  function measureCardHeight() {
-    let maxH = 0;
-    cards.forEach((card) => {
-      const prevPosition = card.style.position;
-      const prevOpacity = card.style.opacity;
-      card.style.position = "static";
-      card.style.opacity = "1";
-      maxH = Math.max(maxH, card.offsetHeight);
-      card.style.position = prevPosition;
-      card.style.opacity = prevOpacity;
-    });
-    return maxH;
-  }
-
-  function layout() {
-    if (!mq.matches) {
-      grid.style.height = "";
-      wrap.style.height = "";
-      return;
-    }
-    const cardH = measureCardHeight();
-    if (!cardH) return;
-    grid.style.height = cardH + "px";
-    wrap.style.height = cardH * cards.length + "px";
-  }
-
   function stickyTopOffset() {
     const root = getComputedStyle(document.documentElement);
     const announce = parseFloat(root.getPropertyValue("--announce-h")) || 0;
     const nav = parseFloat(root.getPropertyValue("--nav-h")) || 0;
-    return announce + nav + 16;
+    return announce + nav;
   }
 
   function onScroll() {
@@ -92,24 +67,19 @@
   }
 
   function init() {
-    layout();
     currentStage = -1;
     applyStage(0);
     onScroll();
   }
 
   window.addEventListener("scroll", requestTick, { passive: true });
-  window.addEventListener("resize", () => {
-    layout();
-    requestTick();
-  });
-  window.addEventListener("load", layout);
+  window.addEventListener("resize", requestTick);
   if (mq.addEventListener) {
     mq.addEventListener("change", init);
   } else if (mq.addListener) {
     mq.addListener(init);
   }
-  document.addEventListener("sectora:langchange", () => window.setTimeout(layout, 60));
+  document.addEventListener("sectora:langchange", () => window.setTimeout(onScroll, 60));
 
   if (reduced) {
     applyStage(0);
