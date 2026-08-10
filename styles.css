@@ -1583,7 +1583,7 @@ img {
 .exec-story {
   position: relative;
   background: var(--black);
-  height: calc((100svh - var(--announce-h) - var(--nav-h)) * 5);
+  height: calc((100lvh - var(--announce-h) - var(--nav-h)) * 5);
 }
 
 .exec-story-sticky {
@@ -1592,7 +1592,7 @@ img {
 }
 
 .exec-story-sticky .exec {
-  height: calc(100svh - var(--announce-h) - var(--nav-h));
+  height: calc(100lvh - var(--announce-h) - var(--nav-h));
 }
 
 /* The section is full-screen tall on every breakpoint now, so the bars
@@ -3247,7 +3247,7 @@ img {
   .dev-story {
     display: block;
     position: relative;
-    height: calc((100svh - var(--announce-h) - var(--nav-h)) * 6);
+    height: calc((100lvh - var(--announce-h) - var(--nav-h)) * 6);
   }
 
   .dev-story-sticky {
@@ -3255,7 +3255,7 @@ img {
     position: sticky;
     top: calc(var(--announce-h) + var(--nav-h));
     z-index: 1;
-    height: calc(100svh - var(--announce-h) - var(--nav-h));
+    height: calc(100lvh - var(--announce-h) - var(--nav-h));
     background: var(--white, #fff);
     overflow: hidden;
   }
