@@ -2941,6 +2941,10 @@ img {
   background-image: url("images/dev-security.png");
 }
 
+.dev-banner--exchange {
+  background-image: url("images/dev-exchange.png");
+}
+
 .dev-banner--nodes {
   background-image: url("images/dev-nodes.png");
 }
