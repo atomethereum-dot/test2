@@ -1429,6 +1429,12 @@ img {
   background: #ff5c6c;
 }
 
+/* Same equalizer glow as the default green bars, recolored blue. */
+.exec-bars--blue .exec-bar {
+  background: linear-gradient(to top, #4da6ff, rgba(77, 166, 255, 0.2));
+  box-shadow: 0 0 3px rgba(77, 166, 255, 0.55);
+}
+
 .exec-fade {
   position: absolute;
   inset: 0;
