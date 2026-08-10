@@ -9,7 +9,8 @@
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260809a" />
-<link rel="stylesheet" href="explorer.css?v=20260810a" />
+<link rel="stylesheet" href="explorer.css?v=20260810b" />
+<script>(function(){try{var t=localStorage.getItem("sectorascanTheme");if(t==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
 </head>
 <body>
 
@@ -57,6 +58,10 @@
           <span>Back to site</span>
         </a>
         <button class="ex-signin" type="button" aria-disabled="true">Sign In <small>Coming Soon</small></button>
+        <button class="ex-theme-toggle" id="exThemeToggle" type="button" aria-label="Switch to dark mode" title="Light / Dark">
+          <span class="ex-theme-icon ex-theme-icon--sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></span>
+          <span class="ex-theme-icon ex-theme-icon--moon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
+        </button>
         <button class="ex-nav-toggle" id="exNavToggle" aria-label="Open menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
@@ -105,6 +110,6 @@
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
 <script src="cursor.js?v=20260808h"></script>
-<script src="explorer.js?v=20260809a"></script>
+<script src="explorer.js?v=20260810a"></script>
 </body>
 </html>

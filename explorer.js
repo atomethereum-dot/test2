@@ -986,6 +986,22 @@
       }));
     }
 
+    const themeToggle = document.getElementById("exThemeToggle");
+    if (themeToggle) {
+      const syncLabel = () => {
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+      };
+      syncLabel();
+      themeToggle.addEventListener("click", () => {
+        const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
+        else document.documentElement.removeAttribute("data-theme");
+        try { localStorage.setItem("sectorascanTheme", next); } catch (e) {}
+        syncLabel();
+      });
+    }
+
     window.addEventListener("hashchange", render);
   }
 
