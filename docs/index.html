@@ -6,18 +6,18 @@
 <title>Sectora Whitepaper v1.0 | Verification &amp; Custody Layer for Tokenized Assets</title>
 <meta name="description" content="The Sectora whitepaper: a Layer 3 network for the verification, custody and exchange of tokenized real-world assets. Architecture, $SECT tokenomics, supply policy and roadmap." />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%2756.8%2034.4%2086.4%20134.4%27%3E%3Cpath%20d%3D%27M85.6%2034.4%20L56.8%2052.0%20L56.8%20122.4%20L85.6%20104.8%20Z%20M82.0%2068.0%20L82.0%20104.8%20L58.5%2086.4%20Z%27%20fill%3D%27%23ffffff%27%20fill-rule%3D%27evenodd%27%2F%3E%3Cpath%20d%3D%27M114.4%2052.0%20L141.6%2068.0%20L141.6%20120.8%20L114.4%20135.2%20L85.6%20120.8%20L85.6%2068.0%20Z%20M114.4%20126.0%20L114.4%2089.2%20L142.4%20107.6%20Z%27%20fill%3D%27%23e3e5e8%27%20fill-rule%3D%27evenodd%27%2F%3E%3Cpath%20d%3D%27M114.4%20159.6%20L143.2%20142.0%20L143.2%2071.6%20L114.4%2089.2%20Z%20M117.9%20126.0%20L117.9%2089.2%20L141.4%20107.6%20Z%27%20fill%3D%27%23c0c3c8%27%20fill-rule%3D%27evenodd%27%2F%3E%3C%2Fsvg%3E" />
-<link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="fonts/SoraLight.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="styles.css?v=20260810x" />
-<link rel="stylesheet" href="whitepaper.css?v=20260810j" />
+<link rel="preload" href="/fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/SoraLight.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/styles.css?v=20260810x" />
+<link rel="stylesheet" href="/whitepaper.css?v=20260810j" />
 </head>
 <body class="wp-body">
 
 <div class="wp-progress" aria-hidden="true"><div class="wp-progress-fill" id="wpProgressFill"></div></div>
 
 <header class="wp-topbar">
-  <a class="wp-topbar-logo" href="index.html">
+  <a class="wp-topbar-logo" href="/">
     <span class="wp-topbar-mark" aria-hidden="true">
       <svg viewBox="56.8 34.4 86.4 134.4" width="18" height="28"><defs><linearGradient id="wpNavTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f5f6f7"/></linearGradient><linearGradient id="wpNavMid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eef0f2"/><stop offset="1" stop-color="#dde0e3"/></linearGradient><linearGradient id="wpNavBot" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4d6da"/><stop offset="1" stop-color="#c0c3c8"/></linearGradient></defs><path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z M82.0 68.0 L82.0 104.8 L58.5 86.4 Z" fill="url(#wpNavTop)" fill-rule="evenodd"/><path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z M114.4 126.0 L114.4 89.2 L142.4 107.6 Z" fill="url(#wpNavMid)" fill-rule="evenodd"/><path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z M117.9 126.0 L117.9 89.2 L141.4 107.6 Z" fill="url(#wpNavBot)" fill-rule="evenodd"/></svg>
     </span>
@@ -29,7 +29,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
       <span>Save as PDF</span>
     </button>
-    <a class="wp-back" href="index.html">
+    <a class="wp-back" href="/">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
       <span>Back to site</span>
     </a>
@@ -111,13 +111,13 @@
       <p class="wp-kicker">§04 &middot; Validator Network</p>
       <h2 class="wp-h2">Security by Distribution</h2>
       <p class="wp-body-text">Every transaction on Sectora &mdash; transfers, custody attestations, and DEX settlement alike &mdash; is secured by a distributed validator network. Validators stake $SECT to participate, propose and attest blocks in epoch-based rounds, and are economically accountable for the verification checks they perform.</p>
-      <p class="wp-body-text">This is the same security model reflected in the network's live Node Map and Epoch History views on the <a class="wp-inline-link" href="dashboard.html">Dashboard</a>, where validator distribution, uptime, and staking activity are visible in real time across the Americas, Asia-Pacific, and Europe/Africa regions.</p>
+      <p class="wp-body-text">This is the same security model reflected in the network's live Node Map and Epoch History views on the <a class="wp-inline-link" href="/dashboard.html">Dashboard</a>, where validator distribution, uptime, and staking activity are visible in real time across the Americas, Asia-Pacific, and Europe/Africa regions.</p>
     </section>
 
     <section class="wp-section" id="dex">
       <p class="wp-kicker">§05 &middot; Sectora DEX</p>
       <h2 class="wp-h2">A Single Markets Layer</h2>
-      <p class="wp-body-text">The <a class="wp-inline-link" href="dex-cover.html">Sectora DEX</a> is the network's markets layer: a single venue to trade, swap, and go P2P across live-quoted crypto, tokenized metals, and index-tracked assets. Rather than isolating tokenized real-world assets in a separate venue from native crypto pairs, Sectora settles both through the same custody-verified infrastructure, with every price refreshed in real time.</p>
+      <p class="wp-body-text">The <a class="wp-inline-link" href="/dex-cover.html">Sectora DEX</a> is the network's markets layer: a single venue to trade, swap, and go P2P across live-quoted crypto, tokenized metals, and index-tracked assets. Rather than isolating tokenized real-world assets in a separate venue from native crypto pairs, Sectora settles both through the same custody-verified infrastructure, with every price refreshed in real time.</p>
       <p class="wp-body-text">Because tokenized assets on Sectora carry a live, verifiable custody record, the DEX can list them alongside crypto pairs without asking traders to trust a separate, off-chain attestation.</p>
     </section>
 
@@ -532,15 +532,15 @@
       <h2 class="wp-h2">Network Infrastructure</h2>
       <p class="wp-body-text">Three tools give the network's activity a public, verifiable surface.</p>
       <div class="wp-cards">
-        <a class="wp-card" href="dashboard.html">
+        <a class="wp-card" href="/dashboard.html">
           <span class="wp-card-label">Dashboard</span>
           <p>Real-time network health: the validator node map, epoch history and uptime, live throughput and TPS, block fullness, gas price, and staking totals.</p>
         </a>
-        <a class="wp-card" href="explorer.html">
+        <a class="wp-card" href="/explorer.html">
           <span class="wp-card-label">Sectorascan</span>
           <p>The network's block explorer &mdash; blocks, transactions, addresses and tokenized assets, in an interface familiar to anyone who has used a mainstream chain explorer.</p>
         </a>
-        <a class="wp-card" href="dashboard.html#hash-market">
+        <a class="wp-card" href="/dashboard.html#hash-market">
           <span class="wp-card-label">Hash Market</span>
           <p>A dedicated view within the Dashboard for validator hash economics and staking yield &mdash; a live read on network-wide return before committing stake.</p>
         </a>
@@ -629,9 +629,9 @@
       <p class="wp-body-text">Sectora's premise is simple: tokenized real-world assets deserve infrastructure built around verification, not around trust. A dedicated Layer 3 network, a validator set that secures every custody attestation, a native exchange that settles crypto and real-world assets through the same verified rails, and a supply policy tied to real usage rather than speculation &mdash; together, these are the pieces of a network designed to hold institutional-grade capital.</p>
       <p class="wp-body-text">The testnet is live today. The Dashboard, Sectorascan, and the DEX are open to explore now, ahead of the mainnet launch outlined in the roadmap above.</p>
       <div class="wp-cta-row">
-        <a class="wp-cta wp-cta--solid" href="dashboard.html">Open Dashboard</a>
-        <a class="wp-cta" href="dex-cover.html">Enter the DEX</a>
-        <a class="wp-cta" href="explorer.html">View Explorer</a>
+        <a class="wp-cta wp-cta--solid" href="/dashboard.html">Open Dashboard</a>
+        <a class="wp-cta" href="/dex-cover.html">Enter the DEX</a>
+        <a class="wp-cta" href="/explorer.html">View Explorer</a>
       </div>
     </section>
 
@@ -642,9 +642,9 @@
   </main>
 </div>
 
-<script src="supply-scenarios.js?v=20260808h"></script>
-<script src="supply-calc.js?v=20260808h"></script>
-<script src="reveal.js?v=20260808h"></script>
-<script src="whitepaper.js?v=20260810a"></script>
+<script src="/supply-scenarios.js?v=20260808h"></script>
+<script src="/supply-calc.js?v=20260808h"></script>
+<script src="/reveal.js?v=20260808h"></script>
+<script src="/whitepaper.js?v=20260810a"></script>
 </body>
 </html>
