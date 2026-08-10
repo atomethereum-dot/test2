@@ -9,7 +9,7 @@
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260808i" />
-<link rel="stylesheet" href="dashboard.css?v=2026081002" />
+<link rel="stylesheet" href="dashboard.css?v=2026081001" />
 </head>
 <body>
 
@@ -44,10 +44,6 @@
         <a class="dash-sidebar-link" href="#staking">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           <span data-i18n="dashboard.sidebar.staking">Staking</span>
-        </a>
-        <a class="dash-sidebar-link" href="#stake-calculator">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/><path d="M17 7 7 17"/></svg>
-          <span data-i18n="dashboard.sidebar.stakeCalc">Earn</span>
         </a>
       </nav>
       <div class="dash-sidebar-foot">
@@ -606,14 +602,12 @@
       </div>
     </div>
 
-    <!-- ---- stake calculator (15% APY) ---- -->
-    <div class="dash-section-head" id="stake-calculator">
-      <span class="dash-section-title" data-i18n="dashboard.stakeCalc.title">Stake #SECT</span>
-      <span class="dash-section-hint" data-i18n="dashboard.stakeCalc.sectionHint">Fixed APY</span>
-    </div>
     <div class="dcard dstake-calc reveal">
       <div class="dstake-calc-head">
-        <div class="dcard-label" data-i18n="dashboard.stakeCalc.label">Sectora Staking</div>
+        <div>
+          <div class="dcard-label" data-i18n="dashboard.stakeCalc.label">Sectora Staking</div>
+          <h3 class="dstake-calc-title" data-i18n="dashboard.stakeCalc.title">Stake #SECT</h3>
+        </div>
         <div class="dstake-apy-badge">
           <span class="dstake-apy-value">15.00%</span>
           <span class="dstake-apy-unit" data-i18n="dashboard.stakeCalc.apyUnit">APY</span>
@@ -779,7 +773,7 @@
 <div class="dcursor-ring" id="dCursorRing" aria-hidden="true"></div>
 <div class="dcursor-dot" id="dCursorDot" aria-hidden="true"></div>
 
-<script src="translations.js?v=20260810b"></script>
+<script src="translations.js?v=20260810a"></script>
 <script src="i18n.js?v=20260808h"></script>
 <script src="dashboard-map-topology.js?v=20260808c"></script>
 <script src="dashboard.js?v=20260810a"></script>
