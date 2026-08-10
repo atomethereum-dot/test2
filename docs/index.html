@@ -10,9 +10,36 @@
 <link rel="preload" href="/fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/fonts/SoraLight.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="/styles.css?v=20260810x" />
-<link rel="stylesheet" href="/whitepaper.css?v=20260810k" />
+<link rel="stylesheet" href="/whitepaper.css?v=20260810l" />
 </head>
 <body class="wp-body">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="wpDiaTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f5f6f7"/></linearGradient>
+    <linearGradient id="wpDiaMid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eef0f2"/><stop offset="1" stop-color="#dde0e3"/></linearGradient>
+    <linearGradient id="wpDiaBot" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4d6da"/><stop offset="1" stop-color="#c0c3c8"/></linearGradient>
+    <symbol id="wpDiamondUnit" viewBox="56.8 34.4 86.4 134.4">
+      <path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z M82.0 68.0 L82.0 104.8 L58.5 86.4 Z" fill="url(#wpDiaTop)" fill-rule="evenodd"/>
+      <path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z M114.4 126.0 L114.4 89.2 L142.4 107.6 Z" fill="url(#wpDiaMid)" fill-rule="evenodd"/>
+      <path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z M117.9 126.0 L117.9 89.2 L141.4 107.6 Z" fill="url(#wpDiaBot)" fill-rule="evenodd"/>
+    </symbol>
+    <pattern id="wpSceneDots" width="140" height="140" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="18" r="1.1" fill="#ffffff" opacity="0.4"/>
+      <circle cx="36" cy="54" r="0.7" fill="#ffffff" opacity="0.25"/>
+      <circle cx="64" cy="12" r="0.9" fill="#ffffff" opacity="0.3"/>
+      <circle cx="92" cy="40" r="1.2" fill="#ffffff" opacity="0.45"/>
+      <circle cx="118" cy="20" r="0.6" fill="#ffffff" opacity="0.2"/>
+      <circle cx="22" cy="88" r="0.8" fill="#ffffff" opacity="0.3"/>
+      <circle cx="52" cy="104" r="1.0" fill="#ffffff" opacity="0.35"/>
+      <circle cx="80" cy="78" r="0.6" fill="#ffffff" opacity="0.22"/>
+      <circle cx="108" cy="98" r="0.9" fill="#ffffff" opacity="0.3"/>
+      <circle cx="132" cy="66" r="1.1" fill="#ffffff" opacity="0.4"/>
+      <circle cx="6" cy="126" r="0.7" fill="#ffffff" opacity="0.25"/>
+      <circle cx="46" cy="130" r="0.6" fill="#ffffff" opacity="0.2"/>
+    </pattern>
+  </defs>
+</svg>
 
 <div class="wp-progress" aria-hidden="true"><div class="wp-progress-fill" id="wpProgressFill"></div></div>
 
@@ -81,6 +108,17 @@
     <section class="wp-section" id="abstract">
       <p class="wp-kicker">§00 &middot; Abstract</p>
       <h2 class="wp-h2">Abstract</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 100 150"><use href="#wpDiamondUnit" x="16" y="22.1" width="68" height="105.8"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;00 &middot; Abstract</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">Sectora is a Layer 3 network purpose-built for the verification, custody, and exchange of tokenized real-world assets. Where general-purpose chains treat asset tokenization as something built on top of the chain, Sectora treats verification as a protocol-level guarantee: every custodied asset is anchored to a dedicated attestation layer, secured by a distributed validator set, and made liquid through a native exchange.</p>
       <p class="wp-body-text">This document describes the network's architecture, its verification and custody protocol, the $SECT token and its supply policy, the buyback mechanism that ties token scarcity to real usage, and the roadmap carrying Sectora from its current testnet phase to mainnet launch and cross-chain expansion.</p>
     </section>
@@ -88,6 +126,17 @@
     <section class="wp-section" id="introduction">
       <p class="wp-kicker">§01 &middot; Introduction</p>
       <h2 class="wp-h2">Introduction</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 110 130"><use href="#wpDiamondUnit" x="18" y="37.4" width="60" height="93.3" opacity="0.32"/><use href="#wpDiamondUnit" x="26" y="25.4" width="60" height="93.3"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;01 &middot; Introduction</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">Real-world assets moving on-chain today generally rely on off-chain custody with an on-chain claim layered on top of it &mdash; a bridge of trust rather than a proof. Holders are asked to believe an attestation instead of verifying one. That gap is tolerable for low-stakes use cases; it is not tolerable for institutional capital.</p>
       <p class="wp-body-text">Sectora starts from a different premise: verification should be a primitive of the network, not a feature bolted onto it after the fact. Custody, attestation, and settlement are handled by infrastructure designed for that single purpose, rather than shared with unrelated general-purpose activity.</p>
       <blockquote class="wp-quote">The question &ldquo;is this asset actually backed?&rdquo; has a cryptographic answer &mdash; not an institutional one.</blockquote>
@@ -96,6 +145,17 @@
     <section class="wp-section" id="network">
       <p class="wp-kicker">§02 &middot; The Sectora Network</p>
       <h2 class="wp-h2">Layer 3 Architecture</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 200 150"><path d="M40,90 L100,35 L160,100 Z" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1"/><use href="#wpDiamondUnit" x="23" y="63.5" width="34" height="52.9"/><use href="#wpDiamondUnit" x="83" y="8.6" width="34" height="52.9"/><use href="#wpDiamondUnit" x="143" y="73.5" width="34" height="52.9"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;02 &middot; The Sectora Network</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">Sectora runs as a Layer 3 network, settling above a general-purpose base layer to inherit its security and finality while executing custody and verification logic in an environment purpose-built for that workload. Separating the execution layer from general-purpose blockspace means custody attestations never compete for throughput with unrelated activity, and the verification logic that matters most to institutional users can evolve independently of base-layer governance.</p>
       <p class="wp-body-text">The network is currently <strong>live on testnet</strong>, open to validators, security researchers, and early integration partners ahead of its mainnet launch.</p>
     </section>
@@ -103,6 +163,17 @@
     <section class="wp-section" id="protocol">
       <p class="wp-kicker">§03 &middot; Verification &amp; Custody</p>
       <h2 class="wp-h2">The Sectora Protocol</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 120 160"><path d="M60 14 L96 28 L96 88 Q96 122 60 146 Q24 122 24 88 L24 28 Z" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.4"/><use href="#wpDiamondUnit" x="33" y="42" width="54" height="84"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;03 &middot; Verification &amp; Custody</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">The Sectora Protocol is the network's verification layer: native infrastructure to audit, protect, and tokenize real-world assets through cryptographic verification, distributed custody, and institutional-grade security by design.</p>
       <p class="wp-body-text">Custodied assets are represented on-chain only after passing through a verification cycle &mdash; an auditable process that ties the on-chain instrument to its off-chain backing at defined intervals, rather than at issuance alone. The result is a continuously-verifiable claim rather than a one-time attestation, giving holders and counterparties a live cryptographic record instead of a static certificate.</p>
     </section>
@@ -110,6 +181,17 @@
     <section class="wp-section" id="validators">
       <p class="wp-kicker">§04 &middot; Validator Network</p>
       <h2 class="wp-h2">Security by Distribution</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 200 140"><line x1="28" y1="120" x2="66" y2="55" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/><line x1="66" y1="55" x2="96" y2="25" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/><line x1="96" y1="25" x2="150" y2="45" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/><line x1="66" y1="55" x2="112" y2="115" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/><line x1="112" y1="115" x2="178" y2="105" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/><line x1="150" y1="45" x2="178" y2="105" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/><use href="#wpDiamondUnit" x="18" y="104.4" width="20" height="31.1"/><use href="#wpDiamondUnit" x="56" y="39.4" width="20" height="31.1"/><use href="#wpDiamondUnit" x="102" y="99.4" width="20" height="31.1"/><use href="#wpDiamondUnit" x="140" y="29.4" width="20" height="31.1"/><use href="#wpDiamondUnit" x="168" y="89.4" width="20" height="31.1"/><use href="#wpDiamondUnit" x="86" y="9.4" width="20" height="31.1"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;04 &middot; Validator Network</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">Every transaction on Sectora &mdash; transfers, custody attestations, and DEX settlement alike &mdash; is secured by a distributed validator network. Validators stake $SECT to participate, propose and attest blocks in epoch-based rounds, and are economically accountable for the verification checks they perform.</p>
       <p class="wp-body-text">This is the same security model reflected in the network's live Node Map and Epoch History views on the <a class="wp-inline-link" href="/dashboard.html">Dashboard</a>, where validator distribution, uptime, and staking activity are visible in real time across the Americas, Asia-Pacific, and Europe/Africa regions.</p>
     </section>
@@ -117,6 +199,17 @@
     <section class="wp-section" id="dex">
       <p class="wp-kicker">§05 &middot; Sectora DEX</p>
       <h2 class="wp-h2">A Single Markets Layer</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 210 140"><use href="#wpDiamondUnit" x="21" y="32.6" width="48" height="74.7"/><use href="#wpDiamondUnit" x="141" y="32.6" width="48" height="74.7"/><line x1="93" y1="70" x2="117" y2="70" stroke="rgba(255,255,255,0.35)" stroke-width="1.4"/><path d="M99,64 L91,70 L99,76" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M111,64 L119,70 L111,76" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;05 &middot; Sectora DEX</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">The <a class="wp-inline-link" href="/dex-cover.html">Sectora DEX</a> is the network's markets layer: a single venue to trade, swap, and go P2P across live-quoted crypto, tokenized metals, and index-tracked assets. Rather than isolating tokenized real-world assets in a separate venue from native crypto pairs, Sectora settles both through the same custody-verified infrastructure, with every price refreshed in real time.</p>
       <p class="wp-body-text">Because tokenized assets on Sectora carry a live, verifiable custody record, the DEX can list them alongside crypto pairs without asking traders to trust a separate, off-chain attestation.</p>
     </section>
@@ -124,6 +217,17 @@
     <section class="wp-section" id="tokenization">
       <p class="wp-kicker">§06 &middot; RWA Tokenization</p>
       <h2 class="wp-h2">Real-World Assets &amp; USD-SEC</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 190 140"><use href="#wpDiamondUnit" x="27" y="31.5" width="56" height="87.1"/><path d="M104,53 L120,60 L102,68 Z" fill="#ffffff" opacity="0.45"/><path d="M136,38 L148,44 L134,50 Z" fill="#ffffff" opacity="0.32"/><path d="M160,24 L169,28 L158,33 Z" fill="#ffffff" opacity="0.2"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;06 &middot; RWA Tokenization</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">The Asset Tokenization Network is where real-world assets are verified, custodied, and represented as on-chain instruments &mdash; the substrate the rest of the protocol builds on. Tokenized positions can generate yield: current tokenized real-world-asset pools return an estimated <strong>15.2% APY</strong>, sourced from the underlying assets rather than emissions.</p>
       <p class="wp-body-text"><strong>USD-SEC</strong> is Sectora's fully-collateralized stablecoin, used as the unit of account for custody attestations and DEX settlement across the network &mdash; a stable base against which both crypto and tokenized real-world assets are priced and settled.</p>
     </section>
@@ -131,6 +235,17 @@
     <section class="wp-section" id="tokenomics">
       <p class="wp-kicker">§07 &middot; $SECT Tokenomics</p>
       <h2 class="wp-h2">The $SECT Token</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="62" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.2" stroke-dasharray="4 6"/><use href="#wpDiamondUnit" x="48" y="33" width="54" height="84"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;07 &middot; $SECT Tokenomics</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">$SECT is the network's native asset: validators stake it to secure the protocol, it is the reference collateral behind network fee capture, and it is the instrument through which the buyback engine ties token scarcity to real usage.</p>
       <div class="wp-stats">
         <div class="wp-stat">
@@ -155,6 +270,17 @@
     <section class="wp-section" id="supply">
       <p class="wp-kicker">§08 &middot; Supply &amp; Buyback</p>
       <h2 class="wp-h2">Supply Policy &amp; the Buyback Engine</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 150 150"><path d="M75,17 A58,58 0 1 1 24,52" fill="none" stroke="rgba(70,140,230,0.45)" stroke-width="1.4"/><path d="M15,46 L24,52 L30,42" fill="none" stroke="rgba(70,140,230,0.45)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><use href="#wpDiamondUnit" x="50" y="36.1" width="50" height="77.8"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;08 &middot; Supply &amp; Buyback</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">Sectora's supply policy is deliberately conservative: rather than an open-ended emission schedule, the network commits to a one-time <strong>Strategic Supply Reduction in December 2026</strong>, cutting total supply by 50% &mdash; from 50,000,000 to 25,000,000 $SECT &mdash; to align circulating supply with actual network usage rather than a fixed issuance curve decided in advance.</p>
       <p class="wp-body-text">The <strong>Buyback Engine</strong> reinforces that alignment on an ongoing basis: a share of network fee revenue generated by validators flows into a buyback pool, which purchases $SECT on the open market. Token scarcity is therefore a function of network activity &mdash; validators, custody volume, and DEX usage &mdash; rather than speculative demand alone.</p>
       <div class="wp-flow" aria-hidden="true">
@@ -168,6 +294,17 @@
 
     <section class="wp-section" id="marketcap">
       <p class="wp-kicker">&sect;09 &middot; Supply &amp; Market Cap</p>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 170 140"><rect x="15" y="105" width="14" height="25" fill="#ffffff" opacity="0.14"/><rect x="34" y="88" width="14" height="42" fill="#ffffff" opacity="0.18"/><rect x="53" y="66" width="14" height="64" fill="#ffffff" opacity="0.22"/><use href="#wpDiamondUnit" x="94" y="34.5" width="52" height="80.9"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;09 &middot; Supply &amp; Market Cap</p>
+          </div>
+        </div>
+      </div>
       <div class="supply-scenarios-block reveal" id="supply-scenarios">
       <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span><span data-i18n="supplyScenarios.eyebrow">Supply &amp; Market Cap</span></span>
       <h2 class="display display-md dark-text supply-heading" data-i18n="supplyScenarios.heading" data-i18n-html>What a <strong>25,000,000</strong><br>token supply implies<br>at other networks&rsquo; market<br>caps</h2>
@@ -485,6 +622,17 @@
     <section class="wp-section" id="contract">
       <p class="wp-kicker">§10 &middot; Token Contract</p>
       <h2 class="wp-h2">$SECT Token Contract</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 180 140"><use href="#wpDiamondUnit" x="29" y="34.5" width="52" height="80.9"/><path d="M120,40 H150 L160,50 V94 H120 Z" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.2"/><path d="M150,40 V50 H160" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.2"/><line x1="128" y1="62" x2="152" y2="62" stroke="rgba(255,255,255,0.28)" stroke-width="1"/><line x1="128" y1="72" x2="152" y2="72" stroke="rgba(255,255,255,0.28)" stroke-width="1"/><line x1="128" y1="82" x2="144" y2="82" stroke="rgba(255,255,255,0.28)" stroke-width="1"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;10 &middot; Token Contract</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">$SECT is a standard ERC-20 token deployed on the Ethereum network. Ownership of the contract has been renounced, permanently removing any privileged address capable of altering its core parameters after deployment.</p>
       <div class="wp-legal-table">
         <div class="wp-legal-row">
@@ -530,6 +678,17 @@
     <section class="wp-section" id="infrastructure">
       <p class="wp-kicker">§11 &middot; Infrastructure</p>
       <h2 class="wp-h2">Network Infrastructure</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 160 150"><use href="#wpDiamondUnit" x="53" y="18" width="54" height="84"/><line x1="20" y1="130" x2="140" y2="130" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="40" y1="122" x2="40" y2="138" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="60" y1="122" x2="60" y2="138" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="80" y1="122" x2="80" y2="138" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="100" y1="122" x2="100" y2="138" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="120" y1="122" x2="120" y2="138" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><circle cx="40" cy="130" r="2" fill="rgba(70,140,230,0.5)"/><circle cx="80" cy="130" r="2" fill="rgba(70,140,230,0.5)"/><circle cx="120" cy="130" r="2" fill="rgba(70,140,230,0.5)"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;11 &middot; Infrastructure</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">Three tools give the network's activity a public, verifiable surface.</p>
       <div class="wp-cards">
         <a class="wp-card" href="/dashboard.html">
@@ -550,6 +709,17 @@
     <section class="wp-section" id="roadmap">
       <p class="wp-kicker">§12 &middot; Roadmap</p>
       <h2 class="wp-h2">What's Next</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 210 130"><use href="#wpDiamondUnit" x="16" y="32.6" width="48" height="74.7"/><path d="M70,70 Q120,40 190,70" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" stroke-dasharray="1 6" stroke-linecap="round"/><circle cx="110" cy="52" r="2.6" fill="rgba(255,255,255,0.4)"/><circle cx="150" cy="50" r="2.8" fill="rgba(255,255,255,0.55)"/><circle cx="190" cy="70" r="3.2" fill="#468ce6"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;12 &middot; Roadmap</p>
+          </div>
+        </div>
+      </div>
       <div class="wp-timeline">
         <div class="wp-timeline-item">
           <span class="wp-timeline-date">Q1 2026</span>
@@ -587,6 +757,17 @@
     <section class="wp-section" id="governance">
       <p class="wp-kicker">§13 &middot; Governance &amp; Risk</p>
       <h2 class="wp-h2">Governance, Foundation &amp; Risk Disclosure</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 150 160"><path d="M75,18 L128.7,49 L128.7,111 L75,142 L21.3,111 L21.3,49 Z" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.3"/><use href="#wpDiamondUnit" x="49" y="39.5" width="52" height="80.9"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;13 &middot; Governance &amp; Risk</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">During the network's bootstrap phase, the Sectora Foundation IL stewards protocol development, treasury, and the roadmap outlined in this document. As validator participation and $SECT distribution mature, governance is intended to progressively decentralize toward the network's stakeholders.</p>
       <div class="wp-disclaimer">
         <p class="wp-disclaimer-title">Risk Disclosure</p>
@@ -597,6 +778,17 @@
     <section class="wp-section" id="legal">
       <p class="wp-kicker">§14 &middot; Location &amp; Legal Documents</p>
       <h2 class="wp-h2">Location &amp; Legal Documents</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 180 130"><use href="#wpDiamondUnit" x="29" y="37.5" width="52" height="80.9"/><path d="M140,35 C151,35 160,44 160,55 C160,72 140,95 140,95 C140,95 120,72 120,55 C120,44 129,35 140,35 Z" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.3"/><circle cx="140" cy="55" r="7" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.1"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;14 &middot; Location &amp; Legal Documents</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">Sectora is operated by the entity below. Verification details and complete legal documentation will be published to this section as they become available.</p>
       <div class="wp-legal-table">
         <div class="wp-legal-row">
@@ -626,6 +818,17 @@
     <section class="wp-section" id="conclusion">
       <p class="wp-kicker">§15 &middot; Conclusion</p>
       <h2 class="wp-h2">Conclusion</h2>
+      <div class="wp-scene">
+        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
+        <div class="wp-scene-glow" aria-hidden="true"></div>
+        <div class="wp-scene-inner">
+          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 150 150"><line x1="133.0" y1="75.0" x2="147.0" y2="75.0" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="116.0" y1="116.0" x2="125.9" y2="125.9" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="75.0" y1="133.0" x2="75.0" y2="147.0" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="34.0" y1="116.0" x2="24.1" y2="125.9" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="17.0" y1="75.0" x2="3.0" y2="75.0" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="34.0" y1="34.0" x2="24.1" y2="24.1" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="75.0" y1="17.0" x2="75.0" y2="3.0" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="116.0" y1="34.0" x2="125.9" y2="24.1" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><use href="#wpDiamondUnit" x="47" y="31.5" width="56" height="87.1"/></svg></span>
+          <div class="wp-scene-text">
+            <p class="wp-scene-eyebrow">Welcome to</p>
+            <p class="wp-scene-title">&sect;15 &middot; Conclusion</p>
+          </div>
+        </div>
+      </div>
       <p class="wp-body-text">Sectora's premise is simple: tokenized real-world assets deserve infrastructure built around verification, not around trust. A dedicated Layer 3 network, a validator set that secures every custody attestation, a native exchange that settles crypto and real-world assets through the same verified rails, and a supply policy tied to real usage rather than speculation &mdash; together, these are the pieces of a network designed to hold institutional-grade capital.</p>
       <p class="wp-body-text">The testnet is live today. The Dashboard, Sectorascan, and the DEX are open to explore now, ahead of the mainnet launch outlined in the roadmap above.</p>
       <div class="wp-cta-row">

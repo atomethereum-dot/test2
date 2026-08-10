@@ -816,6 +816,138 @@
   }
 }
 
+/* ---------- Section scene banners (dark divider with faceted-diamond icon) ---------- */
+
+.wp-scene {
+  position: relative;
+  margin: 0 0 32px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0c;
+  border: 1px solid rgba(9, 9, 11, 0.14);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.wp-scene-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 62%;
+  height: 160%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(70, 140, 230, 0.22) 0%, transparent 68%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wp-scene-dots {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+.wp-scene-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 0 40px;
+  max-width: 100%;
+}
+
+.wp-scene-icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.55));
+}
+
+.wp-scene-icon svg {
+  display: block;
+  height: 120px;
+  width: auto;
+  max-width: 220px;
+  overflow: visible;
+}
+
+.wp-scene-text {
+  flex: none;
+  text-align: left;
+}
+
+.wp-scene-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 8px;
+}
+
+.wp-scene-title {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .wp-scene {
+    height: 180px;
+  }
+
+  .wp-scene-inner {
+    gap: 20px;
+    padding: 0 26px;
+  }
+
+  .wp-scene-icon svg {
+    height: 88px;
+    max-width: 170px;
+  }
+
+  .wp-scene-eyebrow {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+  }
+
+  .wp-scene-title {
+    font-size: 12.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wp-scene {
+    height: 156px;
+  }
+
+  .wp-scene-icon svg {
+    height: 68px;
+    max-width: 130px;
+  }
+
+  .wp-scene-inner {
+    gap: 16px;
+    padding: 0 20px;
+  }
+}
+
+@media print {
+  .wp-scene {
+    display: none !important;
+  }
+}
+
 /* ---------- Supply & Market Cap: recolor shared component to whitepaper blue ---------- */
 
 #marketcap .supply-heading strong,
