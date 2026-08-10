@@ -563,6 +563,62 @@
   max-width: 560px;
 }
 
+/* ---------- Location & legal documents ---------- */
+
+.wp-legal-table {
+  margin-top: 28px;
+  border-top: 1px solid rgba(9, 9, 11, 0.14);
+  max-width: 640px;
+}
+
+.wp-legal-row {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(9, 9, 11, 0.14);
+}
+
+.wp-legal-label {
+  flex: 0 0 220px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  color: rgba(9, 9, 11, 0.5);
+}
+
+.wp-legal-value {
+  flex: 1;
+  font-size: 14.5px;
+  color: #09090b;
+}
+
+.wp-legal-value--blank {
+  display: inline-block;
+  align-self: stretch;
+  min-height: 1px;
+  border-bottom: 1px dashed rgba(9, 9, 11, 0.3);
+}
+
+.wp-legal-note {
+  margin-top: 16px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(9, 9, 11, 0.42);
+  max-width: 560px;
+}
+
+@media (max-width: 560px) {
+  .wp-legal-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .wp-legal-label {
+    flex: none;
+  }
+}
+
 /* ---------- Risk disclaimer box ---------- */
 
 .wp-disclaimer {
