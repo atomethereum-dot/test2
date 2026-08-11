@@ -83,8 +83,9 @@
 /* ---- banner ---- */
 
 .dx-banner {
-  position: relative;
-  z-index: 3;
+  position: sticky;
+  top: 0;
+  z-index: 21;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,7 +112,7 @@
 
 .dx-topbar {
   position: sticky;
-  top: 0;
+  top: var(--dx-banner-h);
   z-index: 20;
   background: rgba(4, 4, 5, 0.92);
   backdrop-filter: blur(10px);
