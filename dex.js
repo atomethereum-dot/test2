@@ -1482,7 +1482,14 @@
 
   function init() {
     seedAssetsFromDefs();
-    dataReady = true;
+    // dataReady flips true in onFirstReadyOrTick(), once the first real
+    // price poll resolves — this lets pollCrypto's isFirstLoad check see
+    // that first real load and re-seed candle history from the true price
+    // (see applyPriceMap) instead of leaving it anchored to the rough
+    // placeholder prices in COIN_DEFS/METAL_DEFS, which for lower-cap
+    // assets (e.g. SUI, XRP, HYPE, PAXG, KAG) can be far enough off the
+    // live price to render as one giant outlier candle against a flat
+    // synthetic history.
     if (!BY_ID[activeSymbol] && ASSETS[0]) activeSymbol = ASSETS[0].id;
 
     renderMarketTable();
