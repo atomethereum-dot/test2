@@ -259,6 +259,19 @@
     });
   }
 
+  // Re-seeds an asset's candle history from its *real* price exactly once
+  // -- the first time a real price (poll, fallback snapshot, or Binance
+  // WS tick) lands for it -- so the synthetic 90-candle backfill built
+  // from the rough COIN_DEFS/METAL_DEFS placeholder never has to absorb a
+  // large one-time jump as a single outlier candle. Returns true if it
+  // reseeded (caller should skip pushTick for this same update).
+  function seedCandlesOnce(asset) {
+    if (asset.candlesReal) return false;
+    seedCandles(asset);
+    asset.candlesReal = true;
+    return true;
+  }
+
   function pushTick(asset, price) {
     const now = Date.now();
     Object.keys(TIMEFRAMES).forEach((tf) => {
@@ -423,7 +436,7 @@
   }
 
   // idPriceMap: { [coinId]: { usd, usd_24h_change, usd_24h_vol, usd_market_cap } }
-  function applyPriceMap(idPriceMap, isFirstLoad) {
+  function applyPriceMap(idPriceMap) {
     const ids = Object.keys(idPriceMap || {});
     if (!ids.length) return false;
     const touched = [];
@@ -432,12 +445,9 @@
       if (asset) touched.push(asset);
     });
     if (!touched.length) return false;
-    if (isFirstLoad) {
-      touched.sort((a, b) => (a.rank || 9999) - (b.rank || 9999));
-      touched.forEach(seedCandles);
-    } else {
-      touched.forEach((a) => pushTick(a, a.price));
-    }
+    touched.forEach((a) => {
+      if (!seedCandlesOnce(a)) pushTick(a, a.price);
+    });
     return true;
   }
 
@@ -480,10 +490,9 @@
   // the DEX never sits on stale numbers because of one unreachable
   // provider.
   function pollCrypto() {
-    const isFirstLoad = !dataReady;
     return fetchJsonResilient(SIMPLE_PRICE_URL)
       .then((idPriceMap) => {
-        if (!applyPriceMap(idPriceMap, isFirstLoad)) throw new Error("empty_response");
+        if (!applyPriceMap(idPriceMap)) throw new Error("empty_response");
         lastFetchErrorText = "";
         return true;
       })
@@ -492,7 +501,7 @@
         console.warn("[dex] CoinGecko /simple/price failed (" + errText + "), trying Binance fallback");
         return fetchBinanceFallback()
           .then((fallbackMap) => {
-            if (!applyPriceMap(fallbackMap, isFirstLoad)) throw new Error("binance_empty_response");
+            if (!applyPriceMap(fallbackMap)) throw new Error("binance_empty_response");
             lastFetchErrorText = "";
             return true;
           })
@@ -500,7 +509,7 @@
             console.warn("[dex] Binance fallback failed (" + String(binErr.message || binErr) + "), trying local snapshot");
             return fetchLocalSnapshot()
               .then((snap) => {
-                const ok = applyPriceMap((snap && snap.coins) || {}, isFirstLoad);
+                const ok = applyPriceMap((snap && snap.coins) || {});
                 lastFetchErrorText = ok ? "" : errText;
                 return ok;
               })
@@ -591,7 +600,7 @@
     const quoteVol = parseFloat(data.q);
     if (isFinite(quoteVol)) asset.vol24h = quoteVol;
     asset.tier = tierOf(asset);
-    pushTick(asset, price);
+    if (!seedCandlesOnce(asset)) pushTick(asset, price);
   }
 
   let binanceWs = null;
