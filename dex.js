@@ -741,24 +741,40 @@
   // Chart (canvas candlesticks, self-hosted, no external lib)
   // ---------------------------------------------------------------------
 
-  const chartCanvas = document.getElementById("dexChart");
-  const chartCtx = chartCanvas ? chartCanvas.getContext("2d") : null;
-
-  function resizeChart() {
-    if (!chartCanvas) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const w = chartCanvas.clientWidth;
-    const h = chartCanvas.clientHeight;
-    if (!w || !h) return;
-    chartCanvas.width = Math.round(w * dpr);
-    chartCanvas.height = Math.round(h * dpr);
-    chartCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  function createChartController(canvasId, getAsset, getTf) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas ? canvas.getContext("2d") : null;
+    function resize() {
+      if (!canvas) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      if (!w || !h) return;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function draw() {
+      if (!ctx) return;
+      const asset = getAsset();
+      const tf = getTf();
+      const candles = asset && asset.candles[tf];
+      renderCandles(ctx, canvas, asset, candles);
+    }
+    return { canvas, ctx, resize, draw };
   }
 
-  function drawChart() {
+  const tradeChart = createChartController("dexChart", () => BY_ID[activeSymbol], () => activeTf);
+  function resizeChart() { tradeChart.resize(); }
+  function drawChart() { tradeChart.draw(); }
+
+  let perpSymbol = "bitcoin", perpTf = "1m";
+  let futSymbol = "bitcoin", futTf = "1m";
+  const perpChart = createChartController("dexPerpChart", () => BY_ID[perpSymbol], () => perpTf);
+  const futChart = createChartController("dexFutChart", () => BY_ID[futSymbol], () => futTf);
+
+  function renderCandles(chartCtx, chartCanvas, asset, candles) {
     if (!chartCtx) return;
-    const asset = BY_ID[activeSymbol];
-    const candles = asset && asset.candles[activeTf];
     const w = chartCanvas.clientWidth;
     const h = chartCanvas.clientHeight;
     if (!asset || !w || !h || !candles || !candles.length) return;
@@ -1216,6 +1232,20 @@
       drawChart();
     });
   });
+  root.querySelectorAll("#dexPerpTfGroup [data-tf]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      perpTf = btn.dataset.tf;
+      root.querySelectorAll("#dexPerpTfGroup [data-tf]").forEach((b) => b.classList.toggle("is-active", b === btn));
+      perpChart.draw();
+    });
+  });
+  root.querySelectorAll("#dexFutTfGroup [data-tf]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      futTf = btn.dataset.tf;
+      root.querySelectorAll("#dexFutTfGroup [data-tf]").forEach((b) => b.classList.toggle("is-active", b === btn));
+      futChart.draw();
+    });
+  });
 
   const bookViewEl = document.getElementById("dexBookView");
   const tradesViewEl = document.getElementById("dexTradesView");
@@ -1244,6 +1274,9 @@
         p.classList.toggle("is-active", p.dataset.panel === tab);
       });
       if (tab === "trade") { resizeChart(); drawChart(); }
+      if (tab === "perps") { perpChart.resize(); perpChart.draw(); renderPerpPositions(); }
+      if (tab === "futures") { futChart.resize(); futChart.draw(); renderFutPositions(); }
+      if (tab === "bot") { renderBotStrategies(); renderActiveBots(); }
     });
   });
 
@@ -1435,6 +1468,453 @@
   }
 
   // ---------------------------------------------------------------------
+  // Perpetuals + Futures (shared helpers: liq price, PnL, funding, expiry)
+  // ---------------------------------------------------------------------
+
+  function estLiqPrice(entry, lev, side) {
+    const move = (1 / lev) * 0.9;
+    return side === "long" ? entry * (1 - move) : entry * (1 + move);
+  }
+  function positionPnl(p, asset) {
+    if (!asset || asset.price == null) return 0;
+    const dir = p.side === "long" ? 1 : -1;
+    return (asset.price - p.entry) * dir * p.size;
+  }
+  function positionPnlPct(p, asset) {
+    const pnl = positionPnl(p, asset);
+    const margin = (p.entry * p.size) / p.lev;
+    return margin ? (pnl / margin) * 100 : 0;
+  }
+  function nextFundingBoundary(now) {
+    now = now || Date.now();
+    const period = 8 * 3600000;
+    return Math.ceil((now + 1) / period) * period;
+  }
+  function fundingRateFor(asset) {
+    const boundary = nextFundingBoundary();
+    if (asset._fundingBoundary !== boundary) {
+      asset._fundingBoundary = boundary;
+      asset._funding = rand(-0.015, 0.02);
+    }
+    return asset._funding;
+  }
+  function nextFundingCountdown() {
+    const ms = nextFundingBoundary() - Date.now();
+    const h = Math.floor(ms / 3600000);
+    const m = Math.floor((ms % 3600000) / 60000);
+    return h + "h " + m + "m";
+  }
+  function openInterestFor(asset) {
+    if (asset._oi == null) {
+      const tier = tierOf(asset);
+      asset._oi = tier === 1 ? rand(40e6, 260e6) : tier === 2 ? rand(4e6, 40e6) : rand(200e3, 4e6);
+    }
+    return asset._oi;
+  }
+  function quarterlyExpiries() {
+    const now = new Date();
+    const year = now.getUTCFullYear();
+    const months = [2, 5, 8, 11];
+    const dates = [];
+    [year, year + 1].forEach((y) => {
+      months.forEach((m) => {
+        const d = new Date(Date.UTC(y, m + 1, 0));
+        const offset = (d.getUTCDay() - 5 + 7) % 7;
+        d.setUTCDate(d.getUTCDate() - offset);
+        dates.push(d);
+      });
+    });
+    return dates.sort((a, b) => a - b);
+  }
+  function nextExpiry() {
+    const list = quarterlyExpiries();
+    const now = new Date();
+    return list.find((d) => d > now) || list[list.length - 1];
+  }
+  function contractLabel(d) {
+    const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    return months[d.getUTCMonth()] + String(d.getUTCFullYear()).slice(-2);
+  }
+  function fmtExpiryCountdown(d) {
+    const ms = d.getTime() - Date.now();
+    if (ms <= 0) return "—";
+    const days = Math.floor(ms / 86400000);
+    const hours = Math.floor((ms % 86400000) / 3600000);
+    return days + "d " + hours + "h";
+  }
+  function futuresPriceFor(asset, expiry) {
+    const days = Math.max(0, (expiry.getTime() - Date.now()) / 86400000);
+    const premium = 1 + (0.04 * days) / 365;
+    return asset.price * premium;
+  }
+
+  function renderPositionsRows(list, containerId, withExpiry, onClose) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    if (!list.length) {
+      el.innerHTML = '<div class="dx-positions-empty">' + t("dex.perps.positions.empty", "No open positions yet.") + "</div>";
+      return;
+    }
+    el.innerHTML = list.map((p, i) => {
+      const asset = BY_ID[p.id];
+      if (!asset || asset.price == null) return "";
+      const pnl = positionPnl(p, asset);
+      const pnlPct = positionPnlPct(p, asset);
+      const up = pnl >= 0;
+      const lastCol = withExpiry ? fmtExpiryCountdown(p.expiry) : displayPricePlain(asset, estLiqPrice(p.entry, p.lev, p.side));
+      return (
+        '<div class="dx-positions-row">' +
+        '<span class="dx-positions-symbol">' + iconHTML(asset, 20) +
+        '<span>' + asset.ticker + '</span><span class="dx-positions-side is-' + p.side + '">' + p.side + " " + p.lev + "&times;</span></span>" +
+        '<span class="mono">' + fmtAmt(p.size, 4) + "</span>" +
+        '<span class="mono">' + displayPricePlain(asset, p.entry) + "</span>" +
+        '<span class="mono">' + displayPricePlain(asset, asset.price) + "</span>" +
+        '<span class="mono dx-positions-pnl is-' + (up ? "up" : "down") + '">' + (up ? "+$" : "-$") + fmtAmt(Math.abs(pnl), 2) + " (" + fmtPct(pnlPct) + ")</span>" +
+        '<span class="mono">' + lastCol + "</span>" +
+        '<button type="button" class="dx-positions-close" data-close="' + i + '">' + t("dex.perps.positions.close", "Close") + "</button>" +
+        "</div>"
+      );
+    }).join("");
+    el.querySelectorAll("[data-close]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        list.splice(parseInt(btn.dataset.close, 10), 1);
+        onClose();
+      });
+    });
+  }
+  function renderPerpPositions() { renderPositionsRows(perpPositions, "dexPerpPositions", false, renderPerpPositions); }
+  function renderFutPositions() { renderPositionsRows(futPositions, "dexFutPositions", true, renderFutPositions); }
+
+  let perpPositions = [];
+  let futPositions = [];
+  function seedPositions() {
+    const btc = BY_ID["bitcoin"], eth = BY_ID["ethereum"];
+    if (!perpPositions.length && btc && btc.price != null && eth && eth.price != null) {
+      perpPositions = [
+        { id: "bitcoin", side: "long", size: 0.15, entry: btc.price * 0.97, lev: 10 },
+        { id: "ethereum", side: "short", size: 2.4, entry: eth.price * 1.02, lev: 8 },
+      ];
+    }
+    if (!futPositions.length && btc && btc.price != null) {
+      futPositions = [{ id: "bitcoin", side: "long", size: 0.08, entry: btc.price * 0.985, lev: 5, expiry: nextExpiry() }];
+    }
+  }
+
+  // ---- perps form ----
+
+  let perpSide = "long", perpMargin = "cross", perpLev = 10;
+
+  function renderPerpHeader() {
+    const a = BY_ID[perpSymbol];
+    if (!a || a.price == null) return;
+    const iconEl = document.getElementById("dexPerpSymbolIcon");
+    const pairEl = document.getElementById("dexPerpSymbolPair");
+    const fullEl = document.getElementById("dexPerpSymbolFull");
+    const markEl = document.getElementById("dexPerpMark");
+    const indexEl = document.getElementById("dexPerpIndex");
+    const fundingEl = document.getElementById("dexPerpFunding");
+    const nextFundingEl = document.getElementById("dexPerpNextFunding");
+    const oiEl = document.getElementById("dexPerpOI");
+    if (iconEl) iconEl.innerHTML = iconHTML(a, 30);
+    if (pairEl) pairEl.textContent = a.ticker + "-PERP";
+    if (fullEl) fullEl.textContent = a.subLabel || a.name;
+    if (markEl) markEl.textContent = displayPrice(a, a.price);
+    if (indexEl) indexEl.textContent = displayPrice(a, a.price * (1 + rand(-0.0006, 0.0006)));
+    if (fundingEl) {
+      const funding = fundingRateFor(a);
+      fundingEl.textContent = fmtPct(funding * 100);
+      fundingEl.className = "dx-stat-value mono " + (funding >= 0 ? "is-up" : "is-down");
+    }
+    if (nextFundingEl) nextFundingEl.textContent = nextFundingCountdown();
+    if (oiEl) oiEl.textContent = fmtCompactUSD(openInterestFor(a));
+    updatePerpFormTotals();
+  }
+  function updatePerpFormTotals() {
+    const a = BY_ID[perpSymbol];
+    const amtEl = document.getElementById("dexPerpAmountInput");
+    const posSizeEl = document.getElementById("dexPerpPosSize");
+    const marginEl = document.getElementById("dexPerpMargin");
+    const liqEl = document.getElementById("dexPerpLiqPrice");
+    if (!a || a.price == null) return;
+    const amt = parseFloat(((amtEl && amtEl.value) || "0").replace(/,/g, "")) || 0;
+    if (posSizeEl) posSizeEl.textContent = fmtAmt((amt * perpLev) / a.price, 5) + " " + a.ticker;
+    if (marginEl) marginEl.textContent = fmtAmt(amt, 2) + " " + QUOTE;
+    if (liqEl) liqEl.textContent = amt > 0 ? displayPricePlain(a, estLiqPrice(a.price, perpLev, perpSide)) : "—";
+  }
+  root.querySelectorAll("[data-pside]").forEach((b) => b.addEventListener("click", () => {
+    perpSide = b.dataset.pside;
+    root.querySelectorAll("[data-pside]").forEach((x) => x.classList.toggle("is-active", x === b));
+    const submitEl = document.getElementById("dexPerpSubmitBtn");
+    if (submitEl) { submitEl.classList.toggle("is-buy", perpSide === "long"); submitEl.classList.toggle("is-sell", perpSide === "short"); }
+    updatePerpFormTotals();
+  }));
+  root.querySelectorAll("[data-pmargin]").forEach((b) => b.addEventListener("click", () => {
+    perpMargin = b.dataset.pmargin;
+    root.querySelectorAll("[data-pmargin]").forEach((x) => x.classList.toggle("is-active", x === b));
+  }));
+  const perpLevRange = document.getElementById("dexPerpLevRange");
+  const perpLevValueEl = document.getElementById("dexPerpLevValue");
+  if (perpLevRange) perpLevRange.addEventListener("input", () => {
+    perpLev = parseInt(perpLevRange.value, 10) || 1;
+    if (perpLevValueEl) perpLevValueEl.textContent = perpLev + "×";
+    updatePerpFormTotals();
+  });
+  const perpAmountInput = document.getElementById("dexPerpAmountInput");
+  const perpAmountRange = document.getElementById("dexPerpAmountRange");
+  if (perpAmountInput) perpAmountInput.addEventListener("input", updatePerpFormTotals);
+  if (perpAmountRange) perpAmountRange.addEventListener("input", () => {
+    const pct = parseInt(perpAmountRange.value, 10) || 0;
+    if (perpAmountInput) perpAmountInput.value = fmtAmt((SIM_BALANCE_QUOTE * pct) / 100, 2);
+    updatePerpFormTotals();
+  });
+  const dexPerpSymbolBtn = document.getElementById("dexPerpSymbolBtn");
+  if (dexPerpSymbolBtn) dexPerpSymbolBtn.addEventListener("click", (e) => {
+    openPicker(e.currentTarget, (id) => { perpSymbol = id; renderPerpHeader(); perpChart.resize(); perpChart.draw(); });
+  });
+
+  // ---- futures form ----
+
+  let futSide = "long", futLev = 5;
+  const futContracts = quarterlyExpiries().filter((d) => d.getTime() > Date.now()).slice(0, 4);
+  let futContractIdx = 0;
+  const futContractSelectEl = document.getElementById("dexFutContractSelect");
+  if (futContractSelectEl) {
+    futContractSelectEl.innerHTML = futContracts.map((d, i) => '<option value="' + i + '">' + contractLabel(d) + "</option>").join("");
+    futContractSelectEl.addEventListener("change", (e) => {
+      futContractIdx = parseInt(e.target.value, 10) || 0;
+      renderFutHeader();
+    });
+  }
+  function renderFutHeader() {
+    const a = BY_ID[futSymbol];
+    if (!a || a.price == null) return;
+    const expiry = futContracts[futContractIdx] || nextExpiry();
+    const iconEl = document.getElementById("dexFutSymbolIcon");
+    const pairEl = document.getElementById("dexFutSymbolPair");
+    const fullEl = document.getElementById("dexFutSymbolFull");
+    const priceEl = document.getElementById("dexFutPrice");
+    const indexEl = document.getElementById("dexFutIndex");
+    const basisEl = document.getElementById("dexFutBasis");
+    const expiryEl = document.getElementById("dexFutExpiry");
+    if (iconEl) iconEl.innerHTML = iconHTML(a, 30);
+    if (pairEl) pairEl.textContent = a.ticker + "-" + contractLabel(expiry);
+    if (fullEl) fullEl.textContent = a.subLabel || a.name;
+    const futPrice = futuresPriceFor(a, expiry);
+    if (priceEl) priceEl.textContent = displayPrice(a, futPrice);
+    if (indexEl) indexEl.textContent = displayPrice(a, a.price);
+    if (basisEl) {
+      const basis = ((futPrice - a.price) / a.price) * 100;
+      basisEl.textContent = fmtPct(basis);
+      basisEl.className = "dx-stat-value mono " + (basis >= 0 ? "is-up" : "is-down");
+    }
+    if (expiryEl) expiryEl.textContent = fmtExpiryCountdown(expiry);
+    updateFutFormTotals();
+  }
+  function updateFutFormTotals() {
+    const a = BY_ID[futSymbol];
+    const amtEl = document.getElementById("dexFutAmountInput");
+    const posSizeEl = document.getElementById("dexFutPosSize");
+    const marginEl = document.getElementById("dexFutMargin");
+    const liqEl = document.getElementById("dexFutLiqPrice");
+    if (!a || a.price == null) return;
+    const amt = parseFloat(((amtEl && amtEl.value) || "0").replace(/,/g, "")) || 0;
+    if (posSizeEl) posSizeEl.textContent = fmtAmt((amt * futLev) / a.price, 5) + " " + a.ticker;
+    if (marginEl) marginEl.textContent = fmtAmt(amt, 2) + " " + QUOTE;
+    if (liqEl) liqEl.textContent = amt > 0 ? displayPricePlain(a, estLiqPrice(a.price, futLev, futSide)) : "—";
+  }
+  root.querySelectorAll("[data-fside]").forEach((b) => b.addEventListener("click", () => {
+    futSide = b.dataset.fside;
+    root.querySelectorAll("[data-fside]").forEach((x) => x.classList.toggle("is-active", x === b));
+    const submitEl = document.getElementById("dexFutSubmitBtn");
+    if (submitEl) { submitEl.classList.toggle("is-buy", futSide === "long"); submitEl.classList.toggle("is-sell", futSide === "short"); }
+    updateFutFormTotals();
+  }));
+  const futLevRange = document.getElementById("dexFutLevRange");
+  const futLevValueEl = document.getElementById("dexFutLevValue");
+  if (futLevRange) futLevRange.addEventListener("input", () => {
+    futLev = parseInt(futLevRange.value, 10) || 1;
+    if (futLevValueEl) futLevValueEl.textContent = futLev + "×";
+    updateFutFormTotals();
+  });
+  const futAmountInput = document.getElementById("dexFutAmountInput");
+  const futAmountRange = document.getElementById("dexFutAmountRange");
+  if (futAmountInput) futAmountInput.addEventListener("input", updateFutFormTotals);
+  if (futAmountRange) futAmountRange.addEventListener("input", () => {
+    const pct = parseInt(futAmountRange.value, 10) || 0;
+    if (futAmountInput) futAmountInput.value = fmtAmt((SIM_BALANCE_QUOTE * pct) / 100, 2);
+    updateFutFormTotals();
+  });
+  const dexFutSymbolBtn = document.getElementById("dexFutSymbolBtn");
+  if (dexFutSymbolBtn) dexFutSymbolBtn.addEventListener("click", (e) => {
+    openPicker(e.currentTarget, (id) => { futSymbol = id; renderFutHeader(); futChart.resize(); futChart.draw(); });
+  });
+
+  // ---------------------------------------------------------------------
+  // AI Bot: strategy cards, grid bot builder, active bots
+  // ---------------------------------------------------------------------
+
+  const BOT_STRATEGIES = [
+    {
+      id: "grid", nameKey: "dex.bot.strategies.grid.name", nameFallback: "Grid Trading",
+      descKey: "dex.bot.strategies.grid.desc", descFallback: "Automatically buy low and sell high within a set price range.",
+      apy: "12–38%",
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>',
+    },
+    {
+      id: "dca", nameKey: "dex.bot.strategies.dca.name", nameFallback: "DCA",
+      descKey: "dex.bot.strategies.dca.desc", descFallback: "Invest a fixed amount on a schedule to smooth out entry price.",
+      apy: "6–18%",
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+    },
+    {
+      id: "trend", nameKey: "dex.bot.strategies.trend.name", nameFallback: "Trend Following",
+      descKey: "dex.bot.strategies.trend.desc", descFallback: "Ride sustained moves using momentum signals, exit on reversal.",
+      apy: "10–30%",
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>',
+    },
+    {
+      id: "arb", nameKey: "dex.bot.strategies.arb.name", nameFallback: "Arbitrage Scanner",
+      descKey: "dex.bot.strategies.arb.desc", descFallback: "Scan spreads across markets and flag low-risk arbitrage windows.",
+      apy: "4–12%",
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>',
+    },
+  ];
+  function renderBotStrategies() {
+    const el = document.getElementById("dexBotStrategies");
+    if (!el) return;
+    el.innerHTML = BOT_STRATEGIES.map((s) =>
+      '<div class="dx-bot-card' + (s.id === "grid" ? " is-active" : "") + '">' +
+      '<span class="dx-bot-card-icon">' + s.icon + "</span>" +
+      '<span class="dx-bot-card-name">' + t(s.nameKey, s.nameFallback) + "</span>" +
+      '<span class="dx-bot-card-desc">' + t(s.descKey, s.descFallback) + "</span>" +
+      '<span class="dx-bot-card-foot"><span class="dx-bot-card-apy">' + t("dex.bot.strategies.apy", "Avg. APY") + " <strong>" + s.apy + "</strong></span>" +
+      '<button type="button" class="dx-bot-card-cta" data-strategy="' + s.id + '">' +
+      (s.id === "grid" ? t("dex.bot.strategies.active", "Active") : t("dex.bot.strategies.use", "Use")) +
+      "</button></span></div>"
+    ).join("");
+    el.querySelectorAll("[data-strategy]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.dataset.strategy !== "grid") { openModal(); return; }
+        const card = document.getElementById("dexGridBotCard");
+        if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
+  }
+
+  let botSymbol = "bitcoin";
+  function renderBotSymbol() {
+    const a = BY_ID[botSymbol];
+    if (!a || a.price == null) return;
+    const iconEl = document.getElementById("dexBotSymbolIcon");
+    const pairEl = document.getElementById("dexBotSymbolPair");
+    const fullEl = document.getElementById("dexBotSymbolFull");
+    const lowerEl = document.getElementById("dexBotLowerInput");
+    const upperEl = document.getElementById("dexBotUpperInput");
+    if (iconEl) iconEl.innerHTML = iconHTML(a, 22);
+    if (pairEl) pairEl.textContent = a.ticker + "-" + QUOTE;
+    if (fullEl) fullEl.textContent = a.subLabel || a.name;
+    if (lowerEl && !lowerEl.dataset.userEdited) lowerEl.value = displayPricePlain(a, a.price * 0.9).replace(/,/g, "");
+    if (upperEl && !upperEl.dataset.userEdited) upperEl.value = displayPricePlain(a, a.price * 1.1).replace(/,/g, "");
+    computeGridBot();
+  }
+  function computeGridBot() {
+    const a = BY_ID[botSymbol];
+    const lowerEl = document.getElementById("dexBotLowerInput");
+    const upperEl = document.getElementById("dexBotUpperInput");
+    const investEl = document.getElementById("dexBotInvestInput");
+    const gridsEl = document.getElementById("dexBotGridsRange");
+    const stepEl = document.getElementById("dexBotGridStep");
+    const profitEl = document.getElementById("dexBotGridProfit");
+    const lower = parseFloat(((lowerEl && lowerEl.value) || "0").replace(/,/g, "")) || 0;
+    const upper = parseFloat(((upperEl && upperEl.value) || "0").replace(/,/g, "")) || 0;
+    const invest = parseFloat(((investEl && investEl.value) || "0").replace(/,/g, "")) || 0;
+    const grids = parseInt((gridsEl && gridsEl.value) || "1", 10) || 1;
+    if (!a || upper <= lower) {
+      if (stepEl) stepEl.textContent = "—";
+      if (profitEl) profitEl.textContent = "—";
+      return;
+    }
+    const step = (upper - lower) / grids;
+    const profitPct = step / lower;
+    const profitPerGrid = (invest / grids) * profitPct;
+    if (stepEl) stepEl.textContent = displayPricePlain(a, step);
+    if (profitEl) profitEl.textContent = invest > 0 ? "+$" + fmtAmt(profitPerGrid, 3) + " (" + fmtPct(profitPct * 100) + ")" : "—";
+  }
+  ["dexBotLowerInput", "dexBotUpperInput", "dexBotInvestInput"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", () => { el.dataset.userEdited = "1"; computeGridBot(); });
+  });
+  const botGridsRange = document.getElementById("dexBotGridsRange");
+  const botGridsValueEl = document.getElementById("dexBotGridsValue");
+  if (botGridsRange) botGridsRange.addEventListener("input", () => {
+    if (botGridsValueEl) botGridsValueEl.textContent = botGridsRange.value;
+    computeGridBot();
+  });
+  const dexBotSymbolBtn = document.getElementById("dexBotSymbolBtn");
+  if (dexBotSymbolBtn) dexBotSymbolBtn.addEventListener("click", (e) => {
+    openPicker(e.currentTarget, (id) => {
+      botSymbol = id;
+      const lowerEl = document.getElementById("dexBotLowerInput");
+      const upperEl = document.getElementById("dexBotUpperInput");
+      if (lowerEl) delete lowerEl.dataset.userEdited;
+      if (upperEl) delete upperEl.dataset.userEdited;
+      renderBotSymbol();
+    });
+  });
+
+  let activeBots = [];
+  function seedActiveBots() {
+    if (activeBots.length) return;
+    if (!BY_ID["bitcoin"] || !BY_ID["ethereum"] || !BY_ID["solana"]) return;
+    if (BY_ID["bitcoin"].price == null || BY_ID["ethereum"].price == null || BY_ID["solana"].price == null) return;
+    activeBots = [
+      { id: "bitcoin", strategyKey: "dex.bot.strategies.grid.name", strategyFallback: "Grid Trading", invested: 1200, startedAt: Date.now() - 36 * 3600000, status: "running", pnl: 0 },
+      { id: "ethereum", strategyKey: "dex.bot.strategies.dca.name", strategyFallback: "DCA", invested: 800, startedAt: Date.now() - 180 * 3600000, status: "running", pnl: 0 },
+      { id: "solana", strategyKey: "dex.bot.strategies.trend.name", strategyFallback: "Trend Following", invested: 500, startedAt: Date.now() - 12 * 3600000, status: "paused", pnl: 0 },
+    ];
+  }
+  function tickActiveBots() {
+    activeBots.forEach((b) => { if (b.status === "running") b.pnl += b.invested * rand(-0.004, 0.006); });
+  }
+  function fmtRuntime(startedAt) {
+    const h = Math.floor((Date.now() - startedAt) / 3600000);
+    return h < 24 ? h + "h" : Math.floor(h / 24) + "d " + (h % 24) + "h";
+  }
+  function renderActiveBots() {
+    seedActiveBots();
+    const el = document.getElementById("dexActiveBots");
+    if (!el) return;
+    if (!activeBots.length) {
+      el.innerHTML = '<div class="dx-botlist-empty">' + t("dex.bot.active.empty", "No active bots yet. Create one above.") + "</div>";
+      return;
+    }
+    el.innerHTML = activeBots.map((b, i) => {
+      const a = BY_ID[b.id];
+      const up = b.pnl >= 0;
+      return (
+        '<div class="dx-botlist-row">' +
+        '<span class="dx-botlist-name"><span class="dx-botlist-icon">#' + (i + 1) + "</span>" + t(b.strategyKey, b.strategyFallback) + "</span>" +
+        '<span class="mono">' + a.ticker + "-" + QUOTE + "</span>" +
+        '<span class="mono">' + fmtAmt(b.invested, 2) + " " + QUOTE + "</span>" +
+        '<span class="mono dx-botlist-pnl is-' + (up ? "up" : "down") + '">' + (up ? "+$" : "-$") + fmtAmt(Math.abs(b.pnl), 2) + "</span>" +
+        '<span class="mono">' + fmtRuntime(b.startedAt) + "</span>" +
+        '<span class="dx-botlist-status is-' + b.status + '">' + (b.status === "running" ? t("dex.bot.active.statusRunning", "Running") : t("dex.bot.active.statusPaused", "Paused")) + "</span>" +
+        '<button type="button" class="dx-botlist-stop' + (b.status === "running" ? "" : " is-resume") + '" data-stopbot="' + i + '">' + (b.status === "running" ? t("dex.bot.active.pause", "Pause") : t("dex.bot.active.resume", "Resume")) + "</button>" +
+        "</div>"
+      );
+    }).join("");
+    el.querySelectorAll("[data-stopbot]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const idx = parseInt(btn.dataset.stopbot, 10);
+        activeBots[idx].status = activeBots[idx].status === "running" ? "paused" : "running";
+        renderActiveBots();
+      });
+    });
+  }
+  const dexBotCreateBtn = document.getElementById("dexBotCreateBtn");
+  if (dexBotCreateBtn) dexBotCreateBtn.addEventListener("click", openModal);
+
+  // ---------------------------------------------------------------------
   // Modal (disclaimer for every action button)
   // ---------------------------------------------------------------------
 
@@ -1456,7 +1936,10 @@
   if (modalOverlay) modalOverlay.addEventListener("click", (e) => { if (e.target === modalOverlay) closeModal(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
-  [document.getElementById("dexConnectBtn"), submitBtn, document.getElementById("dexSwapBtn")].forEach((btn) => {
+  [
+    document.getElementById("dexConnectBtn"), submitBtn, document.getElementById("dexSwapBtn"),
+    document.getElementById("dexPerpSubmitBtn"), document.getElementById("dexFutSubmitBtn"),
+  ].forEach((btn) => {
     if (btn) btn.addEventListener("click", openModal);
   });
 
@@ -1475,11 +1958,22 @@
     }
     renderP2p();
     renderSwapSides();
+
+    seedPositions();
+    if (BY_ID[perpSymbol] && BY_ID[perpSymbol].price != null) { renderPerpHeader(); perpChart.draw(); renderPerpPositions(); }
+    if (BY_ID[futSymbol] && BY_ID[futSymbol].price != null) { renderFutHeader(); futChart.draw(); renderFutPositions(); }
+    if (BY_ID[botSymbol] && BY_ID[botSymbol].price != null) renderBotSymbol();
+    tickActiveBots();
+    renderActiveBots();
   }
 
   window.addEventListener("resize", () => {
     resizeChart();
     drawChart();
+    perpChart.resize();
+    perpChart.draw();
+    futChart.resize();
+    futChart.draw();
   });
 
   document.addEventListener("sectora:langchange", () => {
@@ -1487,6 +1981,10 @@
     renderTrades();
     renderP2p();
     setMarketLive(cryptoFailures === 0);
+    renderPerpPositions();
+    renderFutPositions();
+    renderBotStrategies();
+    renderActiveBots();
   });
 
   function init() {
@@ -1505,6 +2003,7 @@
     renderTicker();
     renderTrades();
     renderSwapFeed();
+    renderBotStrategies();
     onDataChanged();
 
     tick();
@@ -1518,6 +2017,8 @@
     setInterval(() => { if (dataReady) pushSimSwap(); }, 5200);
 
     resizeChart();
+    perpChart.resize();
+    futChart.resize();
   }
 
   if (document.readyState === "loading") {

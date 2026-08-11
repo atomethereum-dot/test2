@@ -9,7 +9,7 @@
 <link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260810x" />
-<link rel="stylesheet" href="dex.css?v=20260809g" />
+<link rel="stylesheet" href="dex.css?v=20260811a" />
 </head>
 <body>
 
@@ -42,6 +42,18 @@
         <button class="dx-tab" type="button" data-tab="swap" aria-selected="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
           <span data-i18n="dex.tabs.swap">Swap</span>
+        </button>
+        <button class="dx-tab" type="button" data-tab="perps" aria-selected="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>
+          <span data-i18n="dex.tabs.perps">Perps</span>
+        </button>
+        <button class="dx-tab" type="button" data-tab="futures" aria-selected="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
+          <span data-i18n="dex.tabs.futures">Futures</span>
+        </button>
+        <button class="dx-tab" type="button" data-tab="bot" aria-selected="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="16" height="11" rx="2"/><circle cx="9" cy="14.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="14.5" r="1.2" fill="currentColor" stroke="none"/><path d="M12 9V5"/><circle cx="12" cy="3.5" r="1.5"/><path d="M2 13h2"/><path d="M20 13h2"/></svg>
+          <span data-i18n="dex.tabs.bot">Bot AI</span>
         </button>
       </nav>
 
@@ -335,6 +347,340 @@
       </div>
     </section>
 
+    <!-- ================= PERPETUALS ================= -->
+    <section class="dx-panel" id="dexPerps" data-panel="perps" hidden>
+      <div class="dx-trade-grid dx-lev-grid">
+
+        <div class="dx-trade-main">
+          <div class="dx-symbol-card">
+            <div class="dx-symbol-head">
+              <button class="dx-symbol-select" id="dexPerpSymbolBtn" type="button">
+                <span class="dx-symbol-icon" id="dexPerpSymbolIcon" aria-hidden="true"></span>
+                <span class="dx-symbol-name">
+                  <span class="dx-symbol-pair" id="dexPerpSymbolPair">BTC-PERP</span>
+                  <span class="dx-symbol-full" id="dexPerpSymbolFull">Bitcoin</span>
+                </span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="dx-symbol-stats">
+                <div class="dx-stat">
+                  <span class="dx-stat-label" data-i18n="dex.perps.stats.mark">Mark</span>
+                  <span class="dx-stat-value mono" id="dexPerpMark">—</span>
+                </div>
+                <div class="dx-stat">
+                  <span class="dx-stat-label" data-i18n="dex.perps.stats.index">Index Price</span>
+                  <span class="dx-stat-value mono" id="dexPerpIndex">—</span>
+                </div>
+                <div class="dx-stat">
+                  <span class="dx-stat-label" data-i18n="dex.perps.stats.funding">Funding Rate</span>
+                  <span class="dx-stat-value mono" id="dexPerpFunding">—</span>
+                </div>
+                <div class="dx-stat">
+                  <span class="dx-stat-label" data-i18n="dex.perps.stats.nextFunding">Next Funding</span>
+                  <span class="dx-stat-value mono" id="dexPerpNextFunding">—</span>
+                </div>
+                <div class="dx-stat">
+                  <span class="dx-stat-label" data-i18n="dex.perps.stats.oi">Open Interest</span>
+                  <span class="dx-stat-value mono" id="dexPerpOI">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dx-chart-card">
+            <div class="dx-chart-toolbar">
+              <div class="dx-tf-group" id="dexPerpTfGroup">
+                <button class="dx-tf is-active" type="button" data-tf="1m">1m</button>
+                <button class="dx-tf" type="button" data-tf="5m">5m</button>
+                <button class="dx-tf" type="button" data-tf="15m">15m</button>
+                <button class="dx-tf" type="button" data-tf="1h">1h</button>
+              </div>
+              <span class="dx-chart-live"><span class="dx-live-dot" aria-hidden="true"></span><span data-i18n="dex.trade.chart.live">LIVE</span></span>
+            </div>
+            <canvas class="dx-chart-canvas" id="dexPerpChart"></canvas>
+          </div>
+
+          <div class="dx-market-card dx-positions-card">
+            <div class="dx-market-card-head"><span data-i18n="dex.perps.positions.title">Positions</span></div>
+            <div class="dx-positions-head">
+              <span data-i18n="dex.perps.positions.symbol">Symbol</span>
+              <span data-i18n="dex.perps.positions.size">Size</span>
+              <span data-i18n="dex.perps.positions.entry">Entry</span>
+              <span data-i18n="dex.perps.positions.mark">Mark</span>
+              <span data-i18n="dex.perps.positions.pnl">PnL</span>
+              <span data-i18n="dex.perps.positions.liq">Liq. Price</span>
+              <span></span>
+            </div>
+            <div class="dx-positions-table" id="dexPerpPositions"></div>
+          </div>
+        </div>
+
+        <div class="dx-trade-form dx-lev-form">
+          <div class="dx-form-side">
+            <button class="dx-side-btn is-buy is-active" type="button" data-pside="long" data-i18n="dex.perps.form.long">Long</button>
+            <button class="dx-side-btn is-sell" type="button" data-pside="short" data-i18n="dex.perps.form.short">Short</button>
+          </div>
+
+          <div class="dx-form-type" id="dexPerpMarginToggle">
+            <button class="dx-type-btn is-active" type="button" data-pmargin="cross" data-i18n="dex.perps.form.cross">Cross</button>
+            <button class="dx-type-btn" type="button" data-pmargin="isolated" data-i18n="dex.perps.form.isolated">Isolated</button>
+          </div>
+
+          <div class="dx-lev-block">
+            <div class="dx-lev-head">
+              <span data-i18n="dex.perps.form.leverage">Leverage</span>
+              <span class="dx-lev-value mono" id="dexPerpLevValue">10&times;</span>
+            </div>
+            <input type="range" min="1" max="50" value="10" id="dexPerpLevRange" />
+            <div class="dx-amount-ticks"><span>1&times;</span><span>10&times;</span><span>25&times;</span><span>50&times;</span></div>
+          </div>
+
+          <label class="dx-field">
+            <span class="dx-field-label" data-i18n="dex.trade.form.amount">Amount</span>
+            <span class="dx-field-input">
+              <input type="text" inputmode="decimal" id="dexPerpAmountInput" placeholder="0.00" />
+              <span class="dx-field-suffix">USDX</span>
+            </span>
+          </label>
+
+          <div class="dx-amount-slider">
+            <input type="range" min="0" max="100" value="0" id="dexPerpAmountRange" />
+            <div class="dx-amount-ticks"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+          </div>
+
+          <div class="dx-form-rows">
+            <div class="dx-form-row">
+              <span data-i18n="dex.perps.form.posSize">Position Size</span>
+              <span class="mono" id="dexPerpPosSize">0.00 USDX</span>
+            </div>
+            <div class="dx-form-row">
+              <span data-i18n="dex.perps.form.margin">Margin Required</span>
+              <span class="mono" id="dexPerpMargin">0.00 USDX</span>
+            </div>
+            <div class="dx-form-row">
+              <span data-i18n="dex.perps.form.liqPrice">Est. Liquidation Price</span>
+              <span class="mono" id="dexPerpLiqPrice">—</span>
+            </div>
+            <div class="dx-form-row">
+              <span data-i18n="dex.trade.form.fee">Fee</span>
+              <span class="mono">0.05%</span>
+            </div>
+          </div>
+
+          <button class="dx-submit-btn is-buy" type="button" id="dexPerpSubmitBtn">
+            <span data-i18n="dex.common.connectWallet">Connect Wallet</span>
+          </button>
+
+          <p class="dx-form-note" data-i18n="dex.perps.form.note">Simulated position &mdash; development preview, no funds move.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= FUTURES ================= -->
+    <section class="dx-panel" id="dexFutures" data-panel="futures" hidden>
+      <div class="dx-trade-grid dx-lev-grid">
+
+        <div class="dx-trade-main">
+          <div class="dx-symbol-card">
+            <div class="dx-symbol-head">
+              <button class="dx-symbol-select" id="dexFutSymbolBtn" type="button">
+                <span class="dx-symbol-icon" id="dexFutSymbolIcon" aria-hidden="true"></span>
+                <span class="dx-symbol-name">
+                  <span class="dx-symbol-pair" id="dexFutSymbolPair">BTC-FUT</span>
+                  <span class="dx-symbol-full" id="dexFutSymbolFull">Bitcoin</span>
+                </span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <select class="dx-p2p-select dx-contract-select" id="dexFutContractSelect" data-i18n-attr="aria-label:dex.futures.contract" aria-label="Contract"></select>
+              <div class="dx-symbol-stats">
+                <div class="dx-stat">
+                  <span class="dx-stat-label" data-i18n="dex.futures.stats.futPrice">Futures Price</span>
+                  <span class="dx-stat-value mono" id="dexFutPrice">—</span>
+                </div>
+                <div class="dx-stat">
+                  <span class="dx-stat-label" data-i18n="dex.futures.stats.index">Index Price</span>
+                  <span class="dx-stat-value mono" id="dexFutIndex">—</span>
+                </div>
+                <div class="dx-stat">
+                  <span class="dx-stat-label" data-i18n="dex.futures.stats.basis">Basis</span>
+                  <span class="dx-stat-value mono" id="dexFutBasis">—</span>
+                </div>
+                <div class="dx-stat">
+                  <span class="dx-stat-label" data-i18n="dex.futures.stats.expiry">Expires In</span>
+                  <span class="dx-stat-value mono" id="dexFutExpiry">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dx-chart-card">
+            <div class="dx-chart-toolbar">
+              <div class="dx-tf-group" id="dexFutTfGroup">
+                <button class="dx-tf is-active" type="button" data-tf="1m">1m</button>
+                <button class="dx-tf" type="button" data-tf="5m">5m</button>
+                <button class="dx-tf" type="button" data-tf="15m">15m</button>
+                <button class="dx-tf" type="button" data-tf="1h">1h</button>
+              </div>
+              <span class="dx-chart-live"><span class="dx-live-dot" aria-hidden="true"></span><span data-i18n="dex.trade.chart.live">LIVE</span></span>
+            </div>
+            <canvas class="dx-chart-canvas" id="dexFutChart"></canvas>
+          </div>
+
+          <div class="dx-market-card dx-positions-card">
+            <div class="dx-market-card-head"><span data-i18n="dex.perps.positions.title">Positions</span></div>
+            <div class="dx-positions-head">
+              <span data-i18n="dex.perps.positions.symbol">Symbol</span>
+              <span data-i18n="dex.perps.positions.size">Size</span>
+              <span data-i18n="dex.perps.positions.entry">Entry</span>
+              <span data-i18n="dex.perps.positions.mark">Mark</span>
+              <span data-i18n="dex.perps.positions.pnl">PnL</span>
+              <span data-i18n="dex.futures.positions.expiry">Expiry</span>
+              <span></span>
+            </div>
+            <div class="dx-positions-table" id="dexFutPositions"></div>
+          </div>
+        </div>
+
+        <div class="dx-trade-form dx-lev-form">
+          <div class="dx-form-side">
+            <button class="dx-side-btn is-buy is-active" type="button" data-fside="long" data-i18n="dex.perps.form.long">Long</button>
+            <button class="dx-side-btn is-sell" type="button" data-fside="short" data-i18n="dex.perps.form.short">Short</button>
+          </div>
+
+          <div class="dx-lev-block">
+            <div class="dx-lev-head">
+              <span data-i18n="dex.perps.form.leverage">Leverage</span>
+              <span class="dx-lev-value mono" id="dexFutLevValue">5&times;</span>
+            </div>
+            <input type="range" min="1" max="20" value="5" id="dexFutLevRange" />
+            <div class="dx-amount-ticks"><span>1&times;</span><span>5&times;</span><span>10&times;</span><span>20&times;</span></div>
+          </div>
+
+          <label class="dx-field">
+            <span class="dx-field-label" data-i18n="dex.trade.form.amount">Amount</span>
+            <span class="dx-field-input">
+              <input type="text" inputmode="decimal" id="dexFutAmountInput" placeholder="0.00" />
+              <span class="dx-field-suffix">USDX</span>
+            </span>
+          </label>
+
+          <div class="dx-amount-slider">
+            <input type="range" min="0" max="100" value="0" id="dexFutAmountRange" />
+            <div class="dx-amount-ticks"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+          </div>
+
+          <div class="dx-form-rows">
+            <div class="dx-form-row">
+              <span data-i18n="dex.perps.form.posSize">Position Size</span>
+              <span class="mono" id="dexFutPosSize">0.00 USDX</span>
+            </div>
+            <div class="dx-form-row">
+              <span data-i18n="dex.perps.form.margin">Margin Required</span>
+              <span class="mono" id="dexFutMargin">0.00 USDX</span>
+            </div>
+            <div class="dx-form-row">
+              <span data-i18n="dex.perps.form.liqPrice">Est. Liquidation Price</span>
+              <span class="mono" id="dexFutLiqPrice">—</span>
+            </div>
+            <div class="dx-form-row">
+              <span data-i18n="dex.trade.form.fee">Fee</span>
+              <span class="mono">0.08%</span>
+            </div>
+          </div>
+
+          <button class="dx-submit-btn is-buy" type="button" id="dexFutSubmitBtn">
+            <span data-i18n="dex.common.connectWallet">Connect Wallet</span>
+          </button>
+
+          <p class="dx-form-note" data-i18n="dex.perps.form.note">Simulated position &mdash; development preview, no funds move.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= AI BOT ================= -->
+    <section class="dx-panel" id="dexBot" data-panel="bot" hidden>
+      <div class="dx-p2p-head">
+        <div>
+          <h1 class="dx-panel-title" data-i18n="dex.bot.title">AI Trading Bots</h1>
+          <p class="dx-panel-sub" data-i18n="dex.bot.subtitle">Automate a strategy on live market data. Simulated preview &mdash; no funds are ever managed or moved.</p>
+        </div>
+      </div>
+
+      <div class="dx-bot-grid" id="dexBotStrategies"></div>
+
+      <div class="dx-gridbot-card" id="dexGridBotCard">
+        <div class="dx-market-card-head">
+          <span data-i18n="dex.bot.builder.title">Grid Bot Builder</span>
+          <span class="dx-fixed-badge" data-i18n="dex.bot.strategies.grid.name">Grid Trading</span>
+        </div>
+        <div class="dx-gridbot-body">
+          <button class="dx-symbol-select" id="dexBotSymbolBtn" type="button">
+            <span class="dx-symbol-icon" id="dexBotSymbolIcon" aria-hidden="true"></span>
+            <span class="dx-symbol-name">
+              <span class="dx-symbol-pair" id="dexBotSymbolPair">BTC-USDX</span>
+              <span class="dx-symbol-full" id="dexBotSymbolFull">Bitcoin</span>
+            </span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+
+          <div class="dx-gridbot-fields">
+            <label class="dx-field">
+              <span class="dx-field-label" data-i18n="dex.bot.builder.lower">Lower Price</span>
+              <span class="dx-field-input"><input type="text" inputmode="decimal" id="dexBotLowerInput" placeholder="0.00" /><span class="dx-field-suffix">USDX</span></span>
+            </label>
+            <label class="dx-field">
+              <span class="dx-field-label" data-i18n="dex.bot.builder.upper">Upper Price</span>
+              <span class="dx-field-input"><input type="text" inputmode="decimal" id="dexBotUpperInput" placeholder="0.00" /><span class="dx-field-suffix">USDX</span></span>
+            </label>
+            <label class="dx-field">
+              <span class="dx-field-label" data-i18n="dex.bot.builder.investment">Investment</span>
+              <span class="dx-field-input"><input type="text" inputmode="decimal" id="dexBotInvestInput" placeholder="0.00" /><span class="dx-field-suffix">USDX</span></span>
+            </label>
+          </div>
+
+          <div class="dx-lev-block">
+            <div class="dx-lev-head">
+              <span data-i18n="dex.bot.builder.grids">Grid Count</span>
+              <span class="dx-lev-value mono" id="dexBotGridsValue">20</span>
+            </div>
+            <input type="range" min="4" max="60" value="20" id="dexBotGridsRange" />
+          </div>
+
+          <div class="dx-form-rows">
+            <div class="dx-form-row">
+              <span data-i18n="dex.bot.builder.step">Grid Step</span>
+              <span class="mono" id="dexBotGridStep">—</span>
+            </div>
+            <div class="dx-form-row">
+              <span data-i18n="dex.bot.builder.profitPerGrid">Est. Profit / Grid</span>
+              <span class="mono" id="dexBotGridProfit">—</span>
+            </div>
+          </div>
+
+          <button class="dx-submit-btn is-buy" type="button" id="dexBotCreateBtn">
+            <span data-i18n="dex.bot.builder.create">Create Bot</span>
+          </button>
+          <p class="dx-form-note" data-i18n="dex.bot.builder.note">Simulated bot &mdash; development preview, no funds are managed.</p>
+        </div>
+      </div>
+
+      <div class="dx-market-card dx-botlist-card">
+        <div class="dx-market-card-head"><span data-i18n="dex.bot.active.title">Active Bots</span></div>
+        <div class="dx-botlist-head">
+          <span data-i18n="dex.bot.active.bot">Bot</span>
+          <span data-i18n="dex.bot.active.market">Market</span>
+          <span data-i18n="dex.bot.active.invested">Invested</span>
+          <span data-i18n="dex.bot.active.pnl">PnL</span>
+          <span data-i18n="dex.bot.active.runtime">Runtime</span>
+          <span data-i18n="dex.bot.active.status">Status</span>
+          <span></span>
+        </div>
+        <div class="dx-botlist-table" id="dexActiveBots"></div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="dx-footer">
@@ -390,9 +736,9 @@
 <div class="cursor-ring" id="cursorRing" aria-hidden="true"><span class="cursor-ring-label" id="cursorLabel"></span></div>
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
-<script src="translations.js?v=20260810i"></script>
+<script src="translations.js?v=20260811a"></script>
 <script src="i18n.js?v=20260808h"></script>
 <script src="cursor.js?v=20260808h"></script>
-<script src="dex.js?v=20260809l"></script>
+<script src="dex.js?v=20260811a"></script>
 </body>
 </html>
