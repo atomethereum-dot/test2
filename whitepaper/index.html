@@ -57,7 +57,7 @@
   .top{position:fixed;top:0;left:0;right:0;z-index:50}
 
   nav{
-    display:flex;align-items:center;justify-content:space-between;gap:24px;
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:12px 24px;
     padding:18px var(--pad);
     border-bottom:1px solid var(--hair);
     background:rgba(0,0,0,.72);
@@ -97,6 +97,7 @@
   .docs:hover::before,.docs:focus-visible::before{transform:translateY(0)}
 
   /* ============ selector de idioma ============ */
+  .nav-right-group{display:flex;align-items:center;gap:12px;flex:none;margin-left:auto}
   .wpc-lang-switch-wrap{display:flex;align-items:center;flex:none}
   .wpc-lang-switch{
     appearance:none;-webkit-appearance:none;
@@ -119,8 +120,15 @@
     .docs-label-short{display:inline}
   }
   @media (max-width:480px){
-    .wpc-lang-switch{padding:8px 26px 8px 10px;font-size:11px}
-    .brand span{display:none}
+    nav{gap:12px}
+    .brand{letter-spacing:.1em;font-size:15px;gap:6px}
+    .nav-right-group{gap:8px}
+    .wpc-lang-switch{padding:7px 24px 7px 8px;font-size:11px}
+    .docs{padding:8px 12px}
+    /* the nav can wrap to two rows here (long language labels on narrow
+       screens); reserve enough space so the fixed header never covers
+       the hero content whether it wraps or not */
+    .layer{padding-top:122px}
   }
 
   /* ============ hero ============ */
@@ -289,13 +297,15 @@
       <a href="/#blog" data-i18n="nav.blog">Blog</a>
       <a href="/#contact" data-i18n="nav.contact">Contact</a>
     </div>
-    <div class="wpc-lang-switch-wrap">
-      <select class="wpc-lang-switch lang-switch mono" id="wpcLangSwitch" data-i18n-attr="aria-label:nav.langLabel" aria-label="Language"></select>
+    <div class="nav-right-group">
+      <div class="wpc-lang-switch-wrap">
+        <select class="wpc-lang-switch lang-switch mono" id="wpcLangSwitch" data-i18n-attr="aria-label:nav.langLabel" aria-label="Language"></select>
+      </div>
+      <a class="docs mono" href="/docs/#legal">
+        <span class="docs-label-full" data-i18n="wpcover.legalDocuments">Legal documents</span>
+        <span class="docs-label-short" data-i18n="wpcover.legalDocsShort">Legal Docs</span>
+      </a>
     </div>
-    <a class="docs mono" href="/docs/#legal">
-      <span class="docs-label-full" data-i18n="wpcover.legalDocuments">Legal documents</span>
-      <span class="docs-label-short" data-i18n="wpcover.legalDocsShort">Legal Docs</span>
-    </a>
   </nav>
 </header>
 
