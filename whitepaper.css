@@ -211,7 +211,13 @@
 
 .wp-cover-mark {
   margin-bottom: 24px;
-  opacity: 0.9;
+  filter: drop-shadow(0 2px 10px rgba(9, 9, 11, 0.12));
+}
+
+.wp-cover-mark path {
+  stroke: rgba(9, 9, 11, 0.16);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
 }
 
 .wp-cover-eyebrow {
