@@ -21,7 +21,15 @@
   const AUTO_DETECT_EXCLUDE = new Set(["es"]);
 
   function dict() {
-    return (window.SECTORA_I18N && window.SECTORA_I18N) || {};
+    const base = window.SECTORA_I18N || {};
+    const extra = window.SECTORA_I18N_EXTRA;
+    if (!extra) return base;
+    const merged = {};
+    const langs = new Set([...Object.keys(base), ...Object.keys(extra)]);
+    langs.forEach((l) => {
+      merged[l] = Object.assign({}, base[l], extra[l]);
+    });
+    return merged;
   }
 
   function detectInitialLang() {

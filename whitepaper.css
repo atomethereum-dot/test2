@@ -82,6 +82,67 @@
   transition: border-color 0.2s ease, color 0.2s ease;
 }
 
+.wp-lang-switch-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.wp-lang-switch-wrap .lang-switch {
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(9,9,11,0.55)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  border-color: rgba(9, 9, 11, 0.18);
+  color: rgba(9, 9, 11, 0.75);
+  font-family: var(--font-mono);
+}
+
+.wp-lang-switch-wrap .lang-switch:hover {
+  border-color: rgba(9, 9, 11, 0.5);
+  color: #09090b;
+}
+
+.wp-lang-switch-wrap .lang-switch:focus-visible {
+  outline-color: rgba(9, 9, 11, 0.5);
+}
+
+.wp-lang-switch-wrap .lang-switch option {
+  color: #09090b;
+  background: #ffffff;
+}
+
+[dir="rtl"] .wp-lang-switch-wrap .lang-switch {
+  background-position: left 12px center;
+  padding: 8px 14px 8px 30px;
+}
+
+@media (max-width: 480px) {
+  .wp-lang-switch-wrap .lang-switch {
+    padding: 8px 26px 8px 10px;
+    font-size: 11px;
+  }
+}
+
+/* styles.css hides .lang-switch-wrap (without --mobile) below 720px for the
+   main site's nav, which has a dedicated mobile menu slot for it; the
+   whitepaper topbar has no such menu, so keep it visible here. */
+@media (max-width: 720px) {
+  .wp-topbar .wp-lang-switch-wrap {
+    display: flex;
+  }
+}
+
+/* ---------- RTL support ---------- */
+
+/* Purely numeric fields stay left-to-right and isolated from surrounding
+   RTL text so digits and punctuation never get bidi-reordered. Fields that
+   mix numbers with translated prose (legal table values, the topbar tag)
+   are left to the default bidi algorithm so the translated words keep
+   their own reading direction. */
+[dir="rtl"] .wp-stat-value,
+[dir="rtl"] .wp-timeline-date {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
 .wp-print-btn svg,
 .wp-back svg {
   width: 14px;

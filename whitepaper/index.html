@@ -96,6 +96,26 @@
   .docs:hover,.docs:focus-visible{border-color:var(--blue)}
   .docs:hover::before,.docs:focus-visible::before{transform:translateY(0)}
 
+  /* ============ selector de idioma ============ */
+  .wpc-lang-switch-wrap{display:flex;align-items:center}
+  .wpc-lang-switch{
+    appearance:none;-webkit-appearance:none;
+    background-color:rgba(255,255,255,.04);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;background-size:11px;
+    border:1px solid var(--hair);border-radius:999px;color:var(--ink);
+    font-size:12px;font-weight:500;letter-spacing:1px;
+    padding:8px 30px 8px 14px;cursor:pointer;
+    transition:border-color .2s ease,color .2s ease;
+  }
+  .wpc-lang-switch:hover{border-color:var(--blue)}
+  .wpc-lang-switch:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .wpc-lang-switch option{color:#000;background:#fff}
+  [dir="rtl"] .wpc-lang-switch{background-position:left 12px center;padding:8px 14px 8px 30px}
+  @media (max-width:480px){
+    .wpc-lang-switch{padding:8px 26px 8px 10px;font-size:11px}
+  }
+
   /* ============ hero ============ */
   .stage{position:relative;min-height:100svh;display:flex;flex-direction:column;background:#000;overflow:hidden}
   #grid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
@@ -255,14 +275,17 @@
       <span>SECTORA</span>
     </a>
     <div class="menu mono">
-      <a href="/#protocol">Protocol</a>
-      <a href="/#roadmap">Roadmap</a>
-      <a href="/#about">About</a>
-      <a href="/#backers">Backers</a>
-      <a href="/#blog">Blog</a>
-      <a href="/#contact">Contact</a>
+      <a href="/#protocol" data-i18n="nav.protocol">Protocol</a>
+      <a href="/#roadmap" data-i18n="nav.roadmap">Roadmap</a>
+      <a href="/#about" data-i18n="nav.about">About</a>
+      <a href="/#backers" data-i18n="nav.backers">Backers</a>
+      <a href="/#blog" data-i18n="nav.blog">Blog</a>
+      <a href="/#contact" data-i18n="nav.contact">Contact</a>
     </div>
-    <a class="docs mono" href="/docs/#legal"><span>Legal documents</span></a>
+    <div class="wpc-lang-switch-wrap">
+      <select class="wpc-lang-switch lang-switch mono" id="wpcLangSwitch" data-i18n-attr="aria-label:nav.langLabel" aria-label="Language"></select>
+    </div>
+    <a class="docs mono" href="/docs/#legal"><span data-i18n="wpcover.legalDocuments">Legal documents</span></a>
   </nav>
 </header>
 
@@ -272,20 +295,20 @@
   <div class="layer">
     <main class="hero">
       <div>
-        <p class="eyebrow mono lift" style="--d:.05s"><i></i>Official publication &middot; Sectora Foundation, Illinois US</p>
-        <h1 class="mask" style="--d:.2s">Whitepaper Official <b>Sectora Foundation</b></h1>
+        <p class="eyebrow mono lift" style="--d:.05s"><i></i><span data-i18n="wpcover.eyebrow">Official publication &middot; Sectora Foundation, Illinois US</span></p>
+        <h1 class="mask" style="--d:.2s" data-i18n="wpcover.title" data-i18n-html>Whitepaper Official <b>Sectora Foundation</b></h1>
         <div class="rule"></div>
-        <p class="lede lift" style="--d:.6s">
+        <p class="lede lift" style="--d:.6s" data-i18n="wpcover.lede">
           This document is published by Sectora Foundation for informational and
           technical purposes only. It is not a prospectus, an offer of securities or
           a solicitation to invest, and it has not been reviewed or approved by any
           financial regulator in any jurisdiction.
         </p>
         <div class="actions mono lift" style="--d:.72s">
-          <a class="btn btn-primary" href="/docs/"><span>View the whitepaper</span><span class="arrow">&rarr;</span></a>
-          <a class="btn btn-ghost" href="/docs/#legal"><span>Read the legal notice</span><span class="arrow">&rarr;</span></a>
+          <a class="btn btn-primary" href="/docs/"><span data-i18n="wpcover.viewBtn">View the whitepaper</span><span class="arrow">&rarr;</span></a>
+          <a class="btn btn-ghost" href="/docs/#legal"><span data-i18n="wpcover.legalBtn">Read the legal notice</span><span class="arrow">&rarr;</span></a>
         </div>
-        <p class="status mono lift" style="--d:.85s"><span class="dot"></span>Protocol status: operational</p>
+        <p class="status mono lift" style="--d:.85s"><span class="dot"></span><span data-i18n="wpcover.status">Protocol status: operational</span></p>
       </div>
 
     </main>
@@ -293,7 +316,7 @@
 </div>
 
 
-<p class="disclosure">
+<p class="disclosure" data-i18n="wpcover.disclosure">
   Information on this page is provided for general purposes and does not constitute an offer to sell,
   a solicitation to buy, or investment, legal or tax advice. Digital assets carry risk, including total
   loss of capital. Availability may be restricted in certain jurisdictions.
@@ -498,6 +521,9 @@
 <div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
 <div class="cursor-ring" id="cursorRing" aria-hidden="true"><span class="cursor-ring-label" id="cursorLabel"></span></div>
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<script src="/translations.js?v=20260810i"></script>
+<script src="/whitepaper-translations.js?v=20260811a"></script>
+<script src="/i18n.js?v=20260811a"></script>
 <script src="/cursor.js?v=20260808h"></script>
 </body>
 </html>
