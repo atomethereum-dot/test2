@@ -1382,8 +1382,8 @@
   .rwa{position:relative;height:680vh;background:#f2f2ef}
   .rwa-pin{
     position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
-    display:flex;align-items:center;
-    padding:clamp(40px,7vh,90px) var(--pad);
+    display:flex;align-items:stretch;
+    padding:clamp(34px,5.4vh,74px) var(--pad);
     background:#f2f2ef;isolation:isolate;
   }
   /* misma reticula de 54px que en Our projects; con mezcla difference se
@@ -1416,7 +1416,7 @@
   .rwa-inner{
     position:relative;z-index:1;width:100%;max-width:1320px;margin:0 auto;
     display:grid;grid-template-columns:minmax(0,1.62fr) minmax(0,1fr);
-    gap:clamp(30px,5vw,88px);align-items:start;
+    gap:clamp(30px,5vw,88px);align-items:stretch;
     mix-blend-mode:difference;color:#fff;
   }
 
@@ -1429,7 +1429,12 @@
     letter-spacing:-.03em;margin:14px 0 clamp(30px,5vh,52px);max-width:14ch;
   }
 
-  .rwa-rows{display:flex;flex-direction:column;gap:clamp(9px,1.5vh,15px)}
+  /* la columna se reparte de arriba abajo: titular, grafico y fuente
+     quedan repartidos en toda la altura en lugar de agrupados al centro */
+  .rwa-left{display:flex;flex-direction:column;justify-content:space-between;min-height:0}
+  .rwa-rows{display:flex;flex-direction:column;justify-content:space-evenly;
+    flex:1;min-height:0;gap:clamp(8px,1.4vh,15px);padding:clamp(10px,2vh,22px) 0}
+  .rwa-stat{display:flex;flex-direction:column;justify-content:center}
   .rwa-row{
     display:grid;grid-template-columns:58px minmax(0,1fr) 78px;
     gap:clamp(12px,2vw,22px);align-items:center;
@@ -1486,6 +1491,8 @@
   @media (max-width:900px){
     .rwa{height:520vh}
     .rwa-pin{padding:clamp(20px,3.4vh,52px) var(--pad)}
+    .rwa-left{justify-content:center;gap:22px}
+    .rwa-rows{flex:0 1 auto;justify-content:flex-start;padding:0}
     .rwa-inner{grid-template-columns:1fr;gap:26px}
     .rwa-title{margin:12px 0 clamp(20px,3.4vh,34px)}
     .rwa-stat{padding-top:clamp(20px,3.6vh,44px)}
@@ -1858,6 +1865,19 @@
     mask-image:radial-gradient(90% 78% at 50% 8%,#000,transparent 88%);
   }
   /* luz que se derrama desde la costura superior */
+  /* rejilla viva: las mismas celdas de la cubierta, aqui muy contenidas
+     para que no compitan con los enlaces */
+  #ft-cells{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.85}
+
+  /* masas de luz derivando bajo la costura */
+  .ft-aurora{position:absolute;left:0;right:0;top:-14vh;height:46vh;z-index:0;
+    pointer-events:none;overflow:hidden}
+  .ft-aurora span{position:absolute;top:0;border-radius:50%;filter:blur(80px)}
+  .ft-aurora span:nth-child(1){left:-6%;width:52vw;height:34vh;background:rgba(21,105,255,.16);
+    animation:driftIzq 26s ease-in-out infinite}
+  .ft-aurora span:nth-child(2){right:-6%;width:52vw;height:34vh;background:rgba(21,105,255,.16);
+    animation:driftDer 26s ease-in-out infinite}
+
   /* puntos en los cruces de la reticula: textura fina, no ruido */
   .ft-dots{
     position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -1874,6 +1894,11 @@
       transparent 0 96px, rgba(110,170,255,.055) 96px 97px);
     -webkit-mask-image:radial-gradient(50% 50% at 50% 50%,#000,transparent 74%);
     mask-image:radial-gradient(50% 50% at 50% 50%,#000,transparent 74%);
+    animation:ftRings 14s ease-in-out infinite;
+  }
+  @keyframes ftRings{
+    0%,100%{transform:scale(1);opacity:1}
+    50%{transform:scale(1.06);opacity:.6}
   }
   /* cruces de registro, como en la cubierta */
   .ft-marks{position:absolute;inset:clamp(16px,2.2vw,30px);z-index:1;pointer-events:none}
@@ -2010,6 +2035,18 @@
     transform:translateX(-50%);white-space:nowrap;
     font-size:19vw;font-weight:200;letter-spacing:-.045em;line-height:.8;
     color:#fff;opacity:.038;
+    -webkit-background-clip:text;background-clip:text;
+  }
+  /* un reflejo recorre la marca de agua cada 12s */
+  .ft-word::after{
+    content:'SECTORA';position:absolute;left:0;top:0;
+    background:linear-gradient(104deg,transparent 42%,rgba(120,180,255,.9) 50%,transparent 58%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:ftShine 12s cubic-bezier(.5,0,.2,1) infinite;
+  }
+  @keyframes ftShine{
+    0%{background-position:-140% 0}
+    55%,100%{background-position:240% 0}
   }
 
   @media (max-width:760px){
@@ -3000,9 +3037,11 @@
     <div class="rwa-grid" aria-hidden="true"></div>
     <div class="rwa-inner">
 
-      <div>
+      <div class="rwa-left">
+        <div>
         <p class="rwa-eyebrow">Market opportunity</p>
         <h2 class="rwa-title">RWA industry projected growth</h2>
+        </div>
 
         <div class="rwa-rows" id="rwa-rows">
         <div class="rwa-row" data-v="3.1"><span class="rwa-year">2025</span><span class="rwa-track"><i></i></span><span class="rwa-val">$3.1T</span></div>
@@ -3120,6 +3159,8 @@
 </section>
 
 <footer class="ft" id="footer">
+  <canvas id="ft-cells" aria-hidden="true"></canvas>
+  <div class="ft-aurora" aria-hidden="true"><span></span><span></span></div>
   <div class="ft-dots" aria-hidden="true"></div>
   <div class="ft-rings" aria-hidden="true"></div>
   <div class="ft-glow" aria-hidden="true"></div>
@@ -5103,6 +5144,125 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     clearTimeout(b._t);
     b._t = setTimeout(() => { b.textContent = 'Copy'; b.classList.remove('ok'); }, 1800);
   });
+
+
+  /* ---- rejilla viva del pie ----
+     mismas celdas de 54px que la cubierta, con caminantes y destellos
+     sueltos, pero a un tercio de intensidad: el pie tiene que respirar
+     sin robarle atencion a los enlaces. Solo dibuja si esta a la vista. */
+  (function(){
+    const cv = document.getElementById('ft-cells');
+    if(!cv) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ctx = cv.getContext('2d');
+    const CELL = 54;
+    let W=0, H=0, cols=0, rows=0, heat=null, tono=null, andantes=[];
+
+    function medir(){
+      const w = ft.clientWidth, h = ft.clientHeight;
+      if(w < 1 || h < 1) return;
+      W = w; H = h;
+      const dpr = window.SECT_DPR ? window.SECT_DPR() : 1.5;
+      cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      cols = Math.ceil(W/CELL); rows = Math.ceil(H/CELL);
+      heat = new Float32Array(cols*rows);
+      tono = new Float32Array(cols*rows);
+      for(let i=0;i<tono.length;i++) tono[i] = Math.abs(Math.sin(i*12.9898)*43758.5453 % 1);
+      const n = W < 700 ? 2 : 4;
+      andantes = [];
+      for(let i=0;i<n;i++) andantes.push({c:(Math.random()*cols)|0, r:(Math.random()*rows)|0,
+                                          dc:Math.random()<.5?1:-1, dr:0, next:0});
+    }
+    const idx = (c,r) => r*cols + c;
+
+    function pasos(t){
+      for(const w of andantes){
+        if(t < w.next) continue;
+        w.next = t + 240 + Math.random()*320;
+        if(Math.random() < .3){
+          if(w.dc !== 0){ w.dr = Math.random()<.5?1:-1; w.dc = 0; }
+          else          { w.dc = Math.random()<.5?1:-1; w.dr = 0; }
+        }
+        w.c += w.dc; w.r += w.dr;
+        if(w.c < 0){ w.c = 0; w.dc = 1; }
+        if(w.c >= cols){ w.c = cols-1; w.dc = -1; }
+        if(w.r < 0){ w.r = 0; w.dr = 1; }
+        if(w.r >= rows){ w.r = rows-1; w.dr = -1; }
+        heat[idx(w.c,w.r)] = .5;
+      }
+    }
+
+    let sigPop = 0;
+    function pops(t){
+      if(t < sigPop) return;
+      sigPop = t + 180 + Math.random()*260;
+      const n = 1 + ((Math.random()*2)|0);
+      for(let k=0;k<n;k++){
+        const i = idx((Math.random()*cols)|0, (Math.random()*rows)|0);
+        const v = .35 + Math.random()*.35;
+        if(heat[i] < v) heat[i] = v;
+      }
+    }
+
+    // barrido diagonal lento, como un repaso periodico
+    let barrido = -1;
+    function sweep(t){
+      if(barrido < 0){ barrido = t + 4000; return; }
+      const f = t - barrido;
+      if(f < 0) return;
+      if(f > 2400){ barrido = t + 9000; return; }
+      const frente = (f/2400) * (cols + rows);
+      for(let r=0;r<rows;r++){
+        const c0 = Math.round(frente - r);
+        for(let k=-1;k<=1;k++){
+          const c = c0 + k;
+          if(c >= 0 && c < cols){
+            const v = .22 * (1 - Math.abs(k)/1.6);
+            const i = idx(c,r);
+            if(heat[i] < v) heat[i] = v;
+          }
+        }
+      }
+    }
+
+    function pintar(){
+      ctx.clearRect(0,0,W,H);
+      for(let r=0;r<rows;r++){
+        for(let c=0;c<cols;c++){
+          const i = idx(c,r);
+          const v = heat[i];
+          if(v > .015){
+            const g = tono[i];
+            const R = (12 + 62*g)|0, G = (74 + 96*g)|0, B = (198 + 57*g)|0;
+            ctx.fillStyle = 'rgba('+R+','+G+','+B+','+(Math.min(v,1)*.30).toFixed(3)+')';
+            ctx.fillRect(c*CELL, r*CELL, CELL-1, CELL-1);
+          }
+        }
+      }
+    }
+
+    let raf = 0, last = 0;
+    function ciclo(t){
+      raf = visible ? requestAnimationFrame(ciclo) : 0;
+      if(!visible || document.hidden || !heat){ last = t; return; }
+      const dt = Math.min(t-last, 50); last = t;
+      pasos(t); pops(t); sweep(t);
+      const caida = Math.pow(.945, dt/16.7);
+      for(let i=0;i<heat.length;i++) heat[i] *= caida;
+      pintar();
+    }
+
+    let rt;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(medir, 140); });
+    medir();
+    if(reduce){ pintar(); return; }
+    // arranca y se detiene con la visibilidad del pie
+    const io = new IntersectionObserver(es => {
+      if(es[0].isIntersecting && !raf) raf = requestAnimationFrame(ciclo);
+    }, {rootMargin:'25% 0px'});
+    io.observe(ft);
+  })();
 
   // ---- vuelta arriba ----
   const up = document.getElementById('ft-up');
