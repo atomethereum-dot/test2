@@ -1896,8 +1896,8 @@
   try{ corto = sessionStorage.getItem('sect_intro') === '1'; }catch(e){}
   const F = corto ? .45 : 1;
 
-  const T_SWEEP = 900*F, T_RING = 1150*F, T_LAP = 420*F,
-        T_SNAP = 720*F, T_LOCK = 520*F, T_HOLD = 420*F, T_EXIT = 1350*F;
+  const T_SWEEP = 640*F, T_RING = 780*F, T_LAP = 300*F,
+        T_SNAP = 500*F, T_LOCK = 360*F, T_HOLD = 240*F, T_EXIT = 900*F;
   const T0_RING = T_SWEEP*.7;
   const T0_LAP  = T0_RING + T_RING;
   const T0_SNAP = T0_LAP  + T_LAP;
@@ -1908,7 +1908,7 @@
   const AZUL  = '#1569ff';
   const CIAN  = '52,231,255';     // neon principal: filos, haz, descargas
   const VIOL  = '168,85,247';     // contrapunto en la separacion cromatica
-  const SCAN_T = 2400;                  // una pasada completa, de abajo arriba
+  const SCAN_T = 1600;                  // una pasada completa, de abajo arriba
   // el haz recorre algo mas que la pantalla para entrar y salir fuera de cuadro
   const scanY = t => H*1.12 - ((t % SCAN_T)/SCAN_T) * (H*1.24);
 
@@ -2191,8 +2191,8 @@
   function estallar(){
     trozos = aro.map(q => ({
       x: q.tx, y: q.ty,
-      vx: Math.cos(q.dir) * (1.7 + q.sem*2.7),
-      vy: Math.sin(q.dir) * (1.7 + q.sem*2.7),
+      vx: Math.cos(q.dir) * (8.0 + q.sem*5.5),
+      vy: Math.sin(q.dir) * (8.0 + q.sem*5.5),
       s: Math.max(3, CELL*.16) * (.8 + q.sem*1.1),
       rot: q.sem*6.28,
       vr: (q.sem-.5)*.34
@@ -2226,7 +2226,7 @@
     for(let i=0;i<trozos.length;i++){
       const p = trozos[i];
       p.x += p.vx; p.y += p.vy; p.rot += p.vr;
-      p.vx *= 1.011; p.vy *= 1.011;
+      p.vx *= 1.030; p.vy *= 1.030;
       const a = 1 - f;
       if(a <= .02) continue;
       ctx.save();
@@ -2273,7 +2273,7 @@
       if(estado===0 && t > T0_LOCK){ estado=1; rotulo('Signal locked'); }
       if(estado===1 && p >= 1){ estado=2; rotulo('Ready'); if(est) est.classList.add('ok'); }
 
-      if((t >= T_TOTAL && cargado) || t > 9500){ saliendo = true; tSal = now; }
+      if((t >= T_TOTAL && cargado) || t > 6800){ saliendo = true; tSal = now; }
     } else {
       if(!preparado){
         preparado = true;
@@ -2929,7 +2929,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const arranque = window.SECT_INTRO || Promise.resolve();
   const fuentes  = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
   Promise.all([fuentes, arranque]).then(play);
-  setTimeout(play, 11000);
+  setTimeout(play, 8000);
 
   let titleRT;
   window.addEventListener('resize', () => {
