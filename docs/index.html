@@ -1,861 +1,2065 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sectora Whitepaper v1.0 | Verification &amp; Custody Layer for Tokenized Assets</title>
-<meta name="description" content="The Sectora whitepaper: a Layer 3 network for the verification, custody and exchange of tokenized real-world assets. Architecture, $SECT tokenomics, supply policy and roadmap." />
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='9' ry='9' fill='%231569ff'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%23fff' stroke-width='11'/%3E%3C/svg%3E" />
-<link rel="preload" href="/fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="/fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="/fonts/SoraLight.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="/styles.css?v=20260810x" />
-<link rel="stylesheet" href="/whitepaper.css?v=20260810n" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f6f6f4">
+<title>Whitepaper v1.0 — Sectora Foundation</title>
+<meta name="description" content="A verification and custody layer for tokenized real-world assets, built on a dedicated Layer 3 network. Architecture, $SECT tokenomics, supply policy and roadmap.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Whitepaper v1.0 — Sectora Foundation">
+<meta property="og:description" content="A verification and custody layer for tokenized real-world assets, built on a dedicated Layer 3 network.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Crect%20width%3D%27100%27%20height%3D%27100%27%20rx%3D%279%27%20fill%3D%27%231569ff%27%2F%3E%3Ccircle%20cx%3D%2750%27%20cy%3D%2750%27%20r%3D%2730%27%20fill%3D%27none%27%20stroke%3D%27%23ffffff%27%20stroke-width%3D%2711%27%2F%3E%3C%2Fsvg%3E">
+<link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'IBM Plex Sans';src:url("/fonts/IBMPlexSans.woff2") format("woff2");font-weight:200 500;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url("/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url("/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap;}
+/* =====================================================================
+   Sectora — Whitepaper v1.0
+   Tres voces tipograficas: IBM Plex Sans en peso 200 para el titular,
+   300 para la lectura, IBM Plex Mono para la de la maquina.
+   ===================================================================== */
+:root{
+  --paper:#f4f4f2;
+  --surface:#fff;
+  --ink:#0a0c0f;
+  --ink-2:#454b54;
+  --ink-3:#878d96;
+  --ink-4:#b3b8bf;
+  --rule:#e0e2e5;
+  --rule-soft:#eceef0;
+  --blue:#1569ff;
+  --blue-deep:#0d3fb0;
+  --live:#128a5a;
+  --rail:210px;
+  --note:150px;
+  --pad:clamp(20px,4vw,56px);
+  --ease:cubic-bezier(.22,.72,.24,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;background:var(--paper)}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:300;
+  font-size:15.5px;line-height:1.78;
+  -webkit-font-smoothing:antialiased;overflow-x:clip;
+}
+/* grano de papel: fijo, sin animar */
+body::before{
+  content:'';position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.028;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+.tab{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ---------- barra de lectura ---------- */
+.bar{position:fixed;top:0;left:0;right:0;height:2px;z-index:70;background:transparent}
+.bar i{display:block;height:100%;width:0;background:var(--blue)}
+
+/* ---------- cabecera ---------- */
+.top{
+  position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:18px;
+  padding:13px var(--pad);background:rgba(246,246,244,.86);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+}
+.top-mark{display:inline-flex;align-items:center;margin-right:auto;line-height:0}
+.top-mark svg{display:block;width:26px;height:26px;border-radius:3px}
+
+.top-meta{color:var(--ink-3)}
+.top-live{display:inline-flex;align-items:center;gap:7px;color:var(--live)}
+.top-live i{width:5px;height:5px;border-radius:50%;background:var(--live);
+  box-shadow:0 0 0 3px rgba(18,138,90,.14)}
+.top-btn{
+  border:1px solid var(--rule);background:var(--surface);cursor:pointer;color:var(--ink-2);
+  padding:8px 13px;border-radius:2px;white-space:nowrap;
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  transition:border-color .3s var(--ease),color .3s var(--ease);
+}
+.top-btn:hover{border-color:var(--ink);color:var(--ink)}
+
+/* ---------- portada ---------- */
+.cover{
+  position:relative;padding:clamp(60px,14vh,150px) var(--pad) clamp(50px,10vh,110px);
+  border-bottom:1px solid var(--rule);overflow:hidden;min-height:clamp(540px,80vh,860px);
+  display:flex;flex-direction:column;justify-content:center;
+}
+/* rejilla de 54px encendiendose, la misma de la web pero sobre papel */
+#grid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+/* marco de documento con cruces de registro */
+.frame{position:absolute;inset:clamp(14px,2vw,26px);z-index:1;pointer-events:none}
+.frame span{position:absolute;background:var(--rule)}
+.frame span:nth-child(1){left:0;right:0;top:0;height:1px;transform:scaleX(0);transform-origin:0 50%}
+.frame span:nth-child(2){left:0;right:0;bottom:0;height:1px;transform:scaleX(0);transform-origin:100% 50%}
+.frame span:nth-child(3){top:0;bottom:0;left:0;width:1px;transform:scaleY(0);transform-origin:50% 100%}
+.frame span:nth-child(4){top:0;bottom:0;right:0;width:1px;transform:scaleY(0);transform-origin:50% 0}
+.on .frame span:nth-child(1),.on .frame span:nth-child(2){transform:scaleX(1);
+  transition:transform 1.1s var(--ease) .2s}
+.on .frame span:nth-child(3),.on .frame span:nth-child(4){transform:scaleY(1);
+  transition:transform 1.1s var(--ease) .35s}
+.frame i{position:absolute;width:11px;height:11px;opacity:0}
+.on .frame i{opacity:1;transition:opacity .6s var(--ease) 1s}
+.frame i::before,.frame i::after{content:'';position:absolute;background:var(--ink-4)}
+.frame i::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-.5px)}
+.frame i::after{top:50%;left:0;right:0;height:1px;transform:translateY(-.5px)}
+.frame i:nth-child(5){left:-6px;top:-6px}
+.frame i:nth-child(6){right:-6px;top:-6px}
+.frame i:nth-child(7){left:-6px;bottom:-6px}
+.frame i:nth-child(8){right:-6px;bottom:-6px}
+
+/* cursor de coordenadas, solo sobre la portada */
+.ret{position:fixed;z-index:45;pointer-events:none;opacity:0;transition:opacity .45s var(--ease)}
+.ret.on{opacity:1}
+.ret i{position:fixed;background:var(--blue);opacity:.20}
+.ret .x{left:0;right:0;height:1px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent)}
+.ret .y{top:0;bottom:0;width:1px;
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 22%,#000 78%,transparent);
+  mask-image:linear-gradient(180deg,transparent,#000 22%,#000 78%,transparent)}
+.read{position:fixed;z-index:46;pointer-events:none;opacity:0;
+  transform:translate3d(-200px,-200px,0);color:var(--ink-3);
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;
+  padding:11px 0 0 15px;transition:opacity .45s var(--ease);will-change:transform}
+.read.on{opacity:1}
+.read::before{content:'';position:absolute;left:0;top:0;width:9px;height:9px;
+  border-left:1px solid var(--blue);border-top:1px solid var(--blue)}
+@media (pointer:coarse){.ret,.read{display:none}}
+.cover-rule{position:absolute;left:var(--pad);right:var(--pad);top:0;height:1px;background:var(--blue);
+  transform:scaleX(0);transform-origin:0 50%}
+.cover-in{position:relative;z-index:1;max-width:1180px;margin:0 auto}
+.cover-ref{display:flex;align-items:baseline;gap:10px 22px;flex-wrap:wrap;
+  color:var(--ink-4);font-size:9.5px;letter-spacing:.2em;
+  padding-bottom:13px;border-bottom:1px solid var(--rule);
+  margin-bottom:clamp(20px,3.2vh,34px)}
+.cover-ref span:last-child{margin-left:auto;color:var(--ink-3)}
+@media (max-width:620px){.cover-ref span:last-child{margin-left:0}}
+.cover-kick{
+  display:flex;align-items:center;gap:13px;color:var(--ink-3);
+  margin-bottom:clamp(16px,2.4vh,26px);font-size:9.5px;
+}
+.cover-kick i{display:block;width:0;height:1px;background:var(--blue);flex:none}
+.on .cover-kick i{width:30px;transition:width .8s var(--ease) .5s}
+.cover-h1{
+  font-weight:200;font-size:clamp(34px,5.4vw,74px);
+  line-height:1.04;letter-spacing:-.032em;max-width:15ch;
+}
+.cover-h1 b{font-weight:400}
+.cover-h1 .w{display:inline-block}
+.cover-h1 .ln{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.cover-h1 .ln>span{display:block;transform:translateY(110%)}
+.on .cover-h1 .ln>span{transform:none;
+  transition:transform 1.05s cubic-bezier(.16,1,.3,1) calc(var(--i,0)*.09s + .15s)}
+.cover-hair{width:100%;max-width:520px;height:1px;background:var(--rule);
+  margin:clamp(26px,4vh,40px) 0 clamp(22px,3.4vh,32px);
+  transform:scaleX(0);transform-origin:0 50%}
+.on .cover-hair{transform:scaleX(1);transition:transform 1.1s var(--ease) .8s}
+.cover-sub{
+  max-width:54ch;font-weight:300;
+  font-size:clamp(15px,1.35vw,17.5px);line-height:1.78;color:var(--ink-2);
+}
+.cover-facts{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));
+  gap:0 clamp(20px,3vw,44px);margin-top:clamp(34px,5.5vh,60px);
+  max-width:640px;border-top:1px solid var(--rule);padding-top:18px;
+}
+.fact dt{color:var(--ink-4);margin-bottom:7px;font-size:9.5px}
+.fact dd{font-weight:300;font-size:15px;letter-spacing:-.006em;color:var(--ink)}
+.cover-cue{display:inline-flex;align-items:center;gap:12px;margin-top:clamp(34px,5vh,56px);
+  color:var(--ink-3);font-size:9.5px;transition:color .3s var(--ease)}
+.cover-cue:hover{color:var(--ink)}
+.cover-cue i{display:block;width:38px;height:1px;background:var(--blue);
+  transition:width .4s var(--ease)}
+.cover-cue:hover i{width:52px}
+
+/* ---------- reticula del documento ---------- */
+.doc{
+  display:grid;grid-template-columns:var(--rail) minmax(0,1fr) var(--note);
+  gap:0 clamp(26px,4vw,64px);
+  max-width:1180px;margin:0 auto;padding:0 var(--pad);
+  align-items:start;
+}
+
+/* ---------- indice lateral ---------- */
+.rail{position:sticky;top:78px;align-self:start;padding:clamp(40px,7vh,80px) 0;
+  max-height:calc(100vh - 100px);overflow:auto}
+.rail-h{color:var(--ink-4);padding-bottom:14px;border-bottom:1px solid var(--rule);margin-bottom:6px}
+.rail a{
+  display:grid;grid-template-columns:15px 26px 1fr;gap:9px;align-items:center;
+  padding:7px 0;color:var(--ink-3);font-size:13px;line-height:1.35;
+  transition:color .3s var(--ease);
+}
+.rail a:hover{color:var(--ink-2)}
+.rail a.on{color:var(--ink)}
+/* marca de lectura: se rellena al pasar la seccion */
+.rail a .mk{
+  width:8px;height:8px;border:1px solid var(--ink-4);
+  transition:background .35s var(--ease),border-color .35s var(--ease),transform .35s var(--ease);
+}
+.rail a.seen .mk{background:var(--ink-4);border-color:var(--ink-4)}
+.rail a.on .mk{background:var(--blue);border-color:var(--blue);transform:scale(1.18)}
+.rail a .n{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--ink-4)}
+.rail a.on .n{color:var(--blue)}
+
+/* ---------- cuerpo ---------- */
+.main{position:relative;min-width:0;padding:clamp(40px,7vh,80px) 0 clamp(60px,10vh,120px)}
+/* espina de lectura: se rellena conforme avanzas por el documento */
+.spine{position:absolute;left:-22px;top:clamp(40px,7vh,80px);bottom:clamp(60px,10vh,120px);
+  width:1px;background:var(--rule-soft)}
+.spine i{position:absolute;left:0;top:0;width:1px;height:0;background:var(--blue)}
+.spine b{position:absolute;left:-2.5px;width:6px;height:6px;background:var(--blue);
+  border-radius:50%;transform:translateY(-3px);box-shadow:0 0 0 3px var(--paper)}
+@media (max-width:1080px){.spine{display:none}}
+.sec{padding:clamp(36px,6vh,68px) 0;border-top:1px solid var(--rule-soft);scroll-margin-top:96px}
+.sec:first-child{border-top:0;padding-top:0}
+.sec-ref{display:flex;align-items:center;gap:14px;color:var(--ink-4);
+  font-size:9.5px;margin-bottom:18px}
+.sec-ref span:first-child{opacity:0;transform:scale(.86)}
+.rv.in .sec-ref span:first-child{opacity:1;transform:none;
+  transition:opacity .5s var(--ease),transform .5s cubic-bezier(.34,1.4,.5,1)}
+.sec-ref span:last-child{opacity:0}
+.rv.in .sec-ref span:last-child{opacity:1;transition:opacity .7s var(--ease) .45s}
+.sec-ref i{flex:1;height:1px;background:var(--rule);transform:scaleX(0);transform-origin:0 50%;
+  transition:transform 1s var(--ease)}
+.rv.in .sec-ref i{transform:scaleX(1)}
+h2{
+  font-weight:200;font-size:clamp(23px,3vw,38px);line-height:1.14;letter-spacing:-.026em;
+  max-width:24ch;margin-bottom:clamp(16px,2.6vh,26px);
+}
+h2 .ln{display:block;overflow:hidden;padding-bottom:.09em;margin-bottom:-.09em}
+h2 .ln>span{display:block;transform:translateY(112%)}
+.rv.in h2 .ln>span{transform:none;
+  transition:transform .95s cubic-bezier(.16,1,.3,1) calc(var(--i,0)*.075s + .08s)}
+h3{font-size:15px;font-weight:500;letter-spacing:-.004em;margin:24px 0 8px}
+p{max-width:66ch;margin-bottom:16px;color:var(--ink-2)}
+p strong{color:var(--ink);font-weight:500}
+.lead{font-weight:300;font-size:clamp(16.5px,1.5vw,19px);line-height:1.68;
+  letter-spacing:-.008em;color:var(--ink);max-width:52ch}
+.lnk{position:relative;color:var(--ink);border-bottom:1px solid var(--rule)}
+.lnk::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--blue);
+  transform:scaleX(0);transform-origin:0 50%;transition:transform .42s var(--ease)}
+.lnk:hover::after,.lnk:focus-visible::after{transform:scaleX(1)}
+blockquote{
+  position:relative;margin:clamp(26px,4vh,40px) 0;padding-left:24px;
+  font-weight:200;font-size:clamp(18px,2vw,23px);line-height:1.42;
+  letter-spacing:-.02em;color:var(--ink);max-width:32ch;
+}
+blockquote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
+  background:var(--blue);transform:scaleY(0);transform-origin:50% 0;
+  transition:transform 1s var(--ease) .2s}
+.rv.in blockquote::before{transform:scaleY(1)}
+
+/* ---------- anotaciones al margen ---------- */
+.note{position:sticky;top:78px;align-self:start;padding:clamp(40px,7vh,80px) 0;color:var(--ink-4)}
+.note p{color:var(--ink-4);max-width:none;margin:0 0 10px;
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;line-height:1.8}
+.note b{display:block;color:var(--ink-3);font-weight:500}
+
+
+/* ---------- tarjetas: negro mate con el objeto y la tipografia dentro ----------
+   el objeto no es una imagen: se calcula por raymarching en la GPU, asi que
+   es nitido a cualquier densidad de pantalla y pesa cero. */
+.card{
+  position:relative;overflow:hidden;isolation:isolate;
+  margin:clamp(30px,5vh,56px) 0;background:#000;border:1px solid #17191d;
+  aspect-ratio:5/2;min-height:230px;
+  /* un unico margen para el texto, el logo y las cruces: asi comparten eje */
+  --m:clamp(26px,3.8vw,52px);
+}
+.card-glow{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(58% 78% at 82% 30%, rgba(255,255,255,.055), transparent 66%),
+             radial-gradient(70% 90% at 12% 108%, rgba(21,105,255,.07), transparent 60%)}
+/* reticula de 54px: la misma del sitio, aqui como textura de fondo */
+.card-grid{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:54px 54px;
+  -webkit-mask-image:radial-gradient(72% 86% at 84% 34%,#000,transparent 82%);
+  mask-image:radial-gradient(72% 86% at 84% 34%,#000,transparent 82%)}
+.card-vig{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(122% 102% at 52% 42%, transparent 52%, rgba(0,0,0,.5) 100%)}
+.card-in{position:relative;z-index:3;height:100%;display:flex;flex-direction:column;
+  justify-content:center;max-width:min(66%,620px);
+  padding:var(--m);
+  /* la franja inferior queda reservada para la marca y la referencia */
+  padding-bottom:clamp(52px,5vw,74px)}
+.card-eyebrow{display:inline-flex;align-items:center;gap:9px;margin-bottom:16px;
+  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.24em;
+  text-transform:uppercase;color:rgba(255,255,255,.42)}
+.card-eyebrow i{width:5px;height:5px;border-radius:50%;background:var(--blue);
+  box-shadow:0 0 8px 1px rgba(21,105,255,.9)}
+.card h3{margin:0;font-weight:200;color:#fff;
+  /* una sola curva para todos los anchos: al redimensionar no da saltos */
+  font-size:clamp(20px,2.6vw,32px);line-height:1.1;letter-spacing:-.03em}
+.card h3 b{font-weight:400}
+.card-sub{margin:14px 0 0;max-width:46ch;color:rgba(255,255,255,.54);
+  font-size:13.5px;line-height:1.72}
+.card-mark{position:absolute;z-index:3;display:inline-flex;align-items:center;gap:10px;
+  /* al lado de la cruz inferior izquierda y a su misma altura:
+     la cruz mide 9px y esta a 14px del fondo, su centro cae en 18.5px */
+  left:calc(var(--m) + 16px);bottom:10px}
+.card-mark svg{display:block;width:17px;height:17px;border-radius:2px}
+.card-mark span{font-size:11px;font-weight:400;letter-spacing:.24em;color:rgba(255,255,255,.7)}
+.card-meta{position:absolute;z-index:3;right:calc(var(--m) + 16px);top:12px;
+  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(255,255,255,.38)}
+.card-ref{position:absolute;z-index:3;right:calc(var(--m) + 16px);bottom:12px;
+  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(255,255,255,.3)}
+.card-plus{position:absolute;z-index:3;pointer-events:none;
+  top:14px;bottom:14px;
+  /* menos media cruz, para que su centro caiga justo en el margen */
+  left:calc(var(--m) - 4.5px);right:calc(var(--m) - 4.5px)}
+.card-plus i{position:absolute;width:9px;height:9px;opacity:.32}
+.card-plus i::before,.card-plus i::after{content:'';position:absolute;background:#fff}
+.card-plus i::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-.5px)}
+.card-plus i::after{top:50%;left:0;right:0;height:1px;transform:translateY(-.5px)}
+.card-plus i:nth-child(1){left:0;top:0}
+.card-plus i:nth-child(2){right:0;top:0}
+.card-plus i:nth-child(3){left:0;bottom:0}
+.card-plus i:nth-child(4){right:0;bottom:0}
+.card-cap{margin-top:12px;color:var(--ink-3);font-size:12.5px;line-height:1.65;
+  font-family:'IBM Plex Mono',monospace;letter-spacing:.04em}
+@media (max-width:700px){
+  /* 16/9, la proporcion de las tarjetas de referencia */
+  .card{aspect-ratio:16/9;min-height:0}
+  .card-glow{background:radial-gradient(74% 64% at 62% 50%, rgba(120,140,175,.10), transparent 70%)}
+  .card-vig{background:radial-gradient(130% 108% at 42% 46%, transparent 22%, rgba(0,0,0,.76) 100%)}
+
+  /* el bloque arranca arriba y deja libre la franja de la marca */
+  .card{--m:clamp(18px,4.6vw,26px)}
+  .card-in{max-width:none;justify-content:flex-start;overflow:hidden;
+    padding:clamp(30px,8vw,40px) var(--m) clamp(40px,10vw,48px)}
+  .card-eyebrow{margin-bottom:8px;font-size:8px;letter-spacing:.2em;gap:7px}
+  .card-eyebrow i{width:4px;height:4px}
+  /* el apoyo se recorta por lineas en vez de desbordar la tarjeta */
+  .card-sub{margin-top:9px;max-width:none;font-size:12px;line-height:1.6;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+
+  .card-mark{left:calc(var(--m) + 12.5px);bottom:6px;gap:8px}
+  .card-mark svg{width:13px;height:13px}
+  .card-mark span{font-size:9px;letter-spacing:.2em}
+  .card-ref{right:calc(var(--m) + 12.5px);bottom:7px;font-size:7.5px;letter-spacing:.16em}
+  .card-meta{right:calc(var(--m) + 12.5px);top:7px;font-size:7.5px;letter-spacing:.18em}
+  .card-plus{top:9px;bottom:9px;left:calc(var(--m) - 3.5px);right:calc(var(--m) - 3.5px)}
+  .card-plus i{width:7px;height:7px}
+}
+@media (max-width:400px){
+  /* en pantallas muy estrechas el apoyo baja a dos lineas: cabe todo */
+  .card-sub{-webkit-line-clamp:2}
+  .card-in{padding-top:clamp(28px,8vw,36px)}
+}
+
+  /* ---------- cabecera del documento: titulo y ficha, como un pliego ---------- */
+  .cover-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(240px,.65fr);
+    gap:clamp(28px,5vw,72px);align-items:end}
+  .cover-file{border-top:1px solid var(--ink);padding-top:14px}
+  .cover-file div{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;align-items:baseline;
+    padding:9px 0;border-bottom:1px solid var(--rule-soft)}
+  .cover-file dt{color:var(--ink-4);font-family:'IBM Plex Mono',monospace;font-size:9px;
+    letter-spacing:.18em;text-transform:uppercase;white-space:nowrap}
+  .cover-file dd{text-align:right;font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums}
+  .cover-file dd.live{color:var(--live)}
+  @media (max-width:820px){.cover-grid{grid-template-columns:1fr;gap:34px}}
+
+  /* ---------- indice: avance por seccion y tiempo de lectura ---------- */
+  .rail a{position:relative}
+  .rail a .bar{position:absolute;left:-13px;top:6px;bottom:6px;width:1px;background:transparent;
+    overflow:hidden}
+  .rail a .bar span{position:absolute;left:0;top:0;width:1px;height:0;background:var(--blue)}
+  .rail a.on .bar{background:var(--rule)}
+  .rail a .tm{grid-column:3;font-family:'IBM Plex Mono',monospace;font-size:8.5px;
+    letter-spacing:.1em;color:var(--ink-4);opacity:0;transition:opacity .3s var(--ease)}
+  .rail a.on .tm,.rail a:hover .tm{opacity:1}
+  .rail-foot{margin-top:16px;padding-top:12px;border-top:1px solid var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-4);line-height:1.9}
+  .rail-foot b{color:var(--ink-3);font-weight:500}
+
+  /* ---------- enlace permanente en cada titular ---------- */
+  .sec-ref a.anchor{margin-left:auto;color:var(--ink-4);opacity:0;
+    font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;
+    transition:opacity .3s var(--ease),color .3s var(--ease)}
+  .sec:hover .anchor{opacity:1}
+  .sec-ref a.anchor:hover{color:var(--blue)}
+  .sec-ref a.anchor.ok{opacity:1;color:var(--live)}
+
+  /* ---------- marginalia: la cifra clave de cada seccion ---------- */
+  .note-key{margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--rule-soft)}
+  .note-key b{display:block;color:var(--ink);font-family:'IBM Plex Sans',sans-serif;
+    font-size:20px;font-weight:200;letter-spacing:-.02em;margin-bottom:5px;
+    font-variant-numeric:tabular-nums}
+  .note-key span{display:block;font-family:'IBM Plex Mono',monospace;font-size:8.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-4);line-height:1.7}
+
+  /* ---------- control del documento ---------- */
+  .ctrl{margin-top:clamp(40px,7vh,76px);padding-top:clamp(28px,4.4vh,44px);
+    border-top:1px solid var(--ink)}
+  .ctrl h2{font-size:clamp(19px,2.2vw,26px);margin-bottom:22px}
+  .ctrl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:0 clamp(24px,4vw,56px)}
+  .ctrl-grid > div{border-top:1px solid var(--rule);padding-top:14px}
+  .ctrl-grid dt{color:var(--ink-4);font-family:'IBM Plex Mono',monospace;font-size:9px;
+    letter-spacing:.18em;text-transform:uppercase;margin-bottom:7px}
+  .ctrl-grid dd{font-size:14px;color:var(--ink-2);line-height:1.7;margin-bottom:14px}
+  .ctrl-grid dd b{color:var(--ink);font-weight:400}
+
+  /* ---------- navegacion con teclado ---------- */
+  .keys{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(14px);
+    z-index:65;display:flex;align-items:center;gap:12px;
+    padding:9px 15px;background:rgba(255,255,255,.94);border:1px solid var(--rule);
+    border-radius:2px;box-shadow:0 8px 30px -14px rgba(10,12,15,.35);
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-3);
+    opacity:0;pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease)}
+  .keys.on{opacity:1;transform:translateX(-50%)}
+  .keys kbd{font-family:inherit;border:1px solid var(--rule);border-radius:2px;
+    padding:2px 6px;color:var(--ink)}
+  @media (pointer:coarse){.keys{display:none}}
+
+/* ---------- datos ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin:clamp(22px,4vh,34px) 0}
+.cell{background:var(--surface);padding:20px}
+.cell dt{color:var(--ink-3);margin-bottom:10px}
+.cell dd{font-weight:200;font-size:clamp(22px,2.5vw,30px);
+  letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.cell dd small{display:block;margin-top:8px;font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-4)}
+.cell--key dd{color:var(--blue-deep)}
+
+/* ---------- la reduccion de supply ---------- */
+.cut{margin:clamp(28px,5vh,48px) 0;padding:clamp(24px,4vh,38px);
+  background:var(--surface);border:1px solid var(--rule)}
+.cut-h{display:flex;align-items:baseline;justify-content:space-between;gap:16px;color:var(--ink-3);margin-bottom:22px}
+.cut-track{position:relative;height:34px;background:var(--rule-soft)}
+.cut-fill{position:absolute;left:0;top:0;bottom:0;width:100%;
+  background:linear-gradient(90deg,var(--blue),#5f9bff);
+  transform-origin:0 50%;transition:transform 1.5s cubic-bezier(.22,.72,.24,1)}
+.cut-half{position:absolute;left:50%;top:-8px;bottom:-8px;width:1px;background:var(--ink);opacity:.35}
+.cut-half::after{content:'50%';position:absolute;left:8px;top:-16px;
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--ink-3)}
+.cut-legend{display:flex;justify-content:space-between;margin-top:12px;color:var(--ink-3)}
+.cut-legend b{color:var(--ink);font-weight:500}
+
+/* ---------- tabla de referencia ---------- */
+.tab-wrap{margin:clamp(22px,4vh,34px) 0;border-top:1px solid var(--ink)}
+.row{position:relative;display:grid;grid-template-columns:minmax(0,1.5fr) .8fr 1fr .8fr;
+  gap:10px 18px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--rule-soft)}
+/* la barra dice la escala real: sin ella la tabla son solo cifras */
+.row .cap{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--rule-soft)}
+.row .cap i{display:block;height:100%;width:100%;background:var(--blue);opacity:.5;
+  transform:scaleX(0);transform-origin:0 50%;
+  transition:transform 1.1s var(--ease) var(--d,0s)}
+.rv.in .row .cap i{transform:scaleX(var(--w,0))}
+.row.self .cap i{opacity:.9}
+.row.head{color:var(--ink-4);padding:10px 0;border-bottom:1px solid var(--rule)}
+.row .r{text-align:right;font-variant-numeric:tabular-nums}
+.row b{font-weight:400}
+.row .t{color:var(--ink-4);font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em}
+.row.self{background:rgba(21,105,255,.045)}
+.row.self b{color:var(--blue-deep);font-weight:500}
+.fine{margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;
+  letter-spacing:.05em;line-height:1.9;color:var(--ink-4);max-width:none}
+
+/* ---------- linea de tiempo ---------- */
+.tl{position:relative;padding-left:30px;margin:clamp(22px,4vh,34px) 0}
+.tl::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:1px;background:var(--rule-soft)}
+/* el trazo azul avanza al ritmo del scroll, no de una sola vez */
+.tl::after{content:'';position:absolute;left:0;top:8px;width:1px;height:calc(100% - 16px);
+  background:var(--blue);transform:scaleY(var(--p,0));transform-origin:50% 0}
+.tl-i{position:relative;padding-bottom:clamp(22px,3.6vh,34px)}
+.tl-i:last-child{padding-bottom:0}
+.tl-i::before{content:'';position:absolute;left:-34px;top:9px;width:7px;height:7px;
+  background:var(--paper);border:1px solid var(--ink-4);transition:background .4s var(--ease),border-color .4s var(--ease)}
+.tl-i.done::before{background:var(--blue);border-color:var(--blue)}
+.tl-q{color:var(--blue-deep);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em}
+.tl-i h3{margin:7px 0 5px}
+.tl-i p{font-size:15px;margin:0;max-width:58ch}
+
+/* ---------- ficha ---------- */
+.dl{border-top:1px solid var(--rule);margin:clamp(22px,4vh,34px) 0}
+.dl div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 24px;align-items:baseline;
+  padding:12px 0;border-bottom:1px solid var(--rule-soft)}
+.dl dt{color:var(--ink-3);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase}
+.dl dd{text-align:right;font-size:15px;font-variant-numeric:tabular-nums}
+.dl dd.pend{color:var(--ink-4)}
+.dl dd.ok{color:var(--live)}
+
+/* ---------- avisos ---------- */
+.warn{margin:clamp(24px,4vh,38px) 0;padding:24px;border:1px solid var(--rule);background:var(--surface)}
+.warn h3{margin:0 0 12px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-3);font-weight:500}
+.warn p{font-size:14px;line-height:1.85;color:var(--ink-3);margin:0}
+
+/* ---------- salidas ---------- */
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin:clamp(26px,4vh,42px) 0 0}
+.cta a{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;
+  border:1px solid var(--rule);background:var(--surface);color:var(--ink);
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  transition:border-color .3s var(--ease),background .3s var(--ease)}
+.cta a:hover{border-color:var(--ink)}
+.cta a.key{background:var(--blue);border-color:var(--blue);color:#fff}
+.cta a.key:hover{background:var(--blue-deep);border-color:var(--blue-deep)}
+
+/* ---------- pie ---------- */
+.foot{border-top:1px solid var(--rule);margin-top:clamp(40px,7vh,80px);
+  padding:clamp(30px,5vh,54px) var(--pad);background:var(--paper)}
+.foot-in{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:16px;
+  align-items:center;justify-content:space-between;color:var(--ink-4)}
+
+
+/* ---------- propiedades tipadas: permiten animar lo que antes no se podia ---------- */
+@property --p{ syntax:'<number>'; inherits:false; initial-value:0 }
+@property --fill{ syntax:'<percentage>'; inherits:false; initial-value:0% }
+
+/* ---------- tema: claro por defecto, oscuro si el sistema lo pide ---------- */
+:root{ color-scheme:light }
+html[data-tema="dark"]{
+  color-scheme:dark;
+  --paper:#0a0b0d; --surface:#111316;
+  --ink:#f2f3f5; --ink-2:#b8bec7; --ink-3:#7f8894; --ink-4:#525a66;
+  --rule:#22262b; --rule-soft:#1a1d21;
+  --blue:#4d8dff; --blue-deep:#8ab4ff; --live:#3ecf8e;
+}
+/* el papel es el estado por defecto, con independencia del sistema:
+   el oscuro solo llega si el lector lo pide con el boton */
+html[data-tema="dark"] body::before{opacity:.055}
+html[data-tema="dark"] .top{background:rgba(10,11,13,.82)}
+html[data-tema="dark"] .card{border-color:#20242a}
+html[data-tema="dark"] .keys{background:rgba(17,19,22,.95)}
+html[data-tema="dark"] .cover-glow{opacity:.55}
+
+.tema{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:32px;flex:none;cursor:pointer;
+  background:var(--surface);border:1px solid var(--rule);border-radius:2px;color:var(--ink-3);
+  transition:color .3s var(--ease),border-color .3s var(--ease);
+}
+.tema:hover{color:var(--ink);border-color:var(--ink-3)}
+.tema svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6}
+.tema .luna{display:none}
+html[data-tema="dark"] .tema .sol{display:none}
+html[data-tema="dark"] .tema .luna{display:block}
+
+/* ---------- rendimiento: el navegador salta lo que no se ve ---------- */
+.sec{content-visibility:auto;contain-intrinsic-size:auto 720px}
+
+/* ---------- animacion ligada al scroll, nativa donde exista ---------- */
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
+    .rv{animation:entrar linear both;animation-timeline:view();animation-range:entry 8% cover 22%}
+    .rv.in{opacity:1;transform:none}
+    @keyframes entrar{ from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+    .bar i{animation:leer linear;animation-timeline:scroll(root block)}
+    @keyframes leer{ from{width:0} to{width:100%} }
+  }
+}
+
+/* ---------- paleta de comandos ---------- */
+.cmd{
+  position:fixed;inset:0;z-index:90;display:none;
+  align-items:flex-start;justify-content:center;padding:12vh 20px 20px;
+  background:color-mix(in srgb, var(--paper) 62%, transparent);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.cmd.on{display:flex}
+.cmd-box{
+  width:min(620px,100%);background:var(--surface);border:1px solid var(--rule);
+  border-radius:3px;box-shadow:0 30px 80px -30px rgba(0,0,0,.5);overflow:hidden;
+  animation:cmdIn .24s var(--ease)
+}
+@keyframes cmdIn{from{opacity:0;transform:translateY(-8px) scale(.99)}to{opacity:1;transform:none}}
+.cmd-in{display:flex;align-items:center;gap:12px;padding:15px 18px;border-bottom:1px solid var(--rule)}
+.cmd-in svg{width:15px;height:15px;fill:none;stroke:var(--ink-4);stroke-width:1.6;flex:none}
+.cmd-in input{
+  flex:1;border:0;outline:0;background:transparent;color:var(--ink);
+  font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:300;
+}
+.cmd-in input::placeholder{color:var(--ink-4)}
+.cmd-in kbd{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;
+  color:var(--ink-4);border:1px solid var(--rule);border-radius:2px;padding:3px 6px}
+.cmd-list{max-height:min(52vh,420px);overflow:auto;padding:6px}
+.cmd-list button{
+  display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:baseline;
+  width:100%;text-align:left;cursor:pointer;border:0;background:transparent;
+  padding:11px 12px;border-radius:2px;color:var(--ink-2);
+  font-family:'IBM Plex Sans',sans-serif;font-size:14px;
+}
+.cmd-list button:hover,.cmd-list button.sel{background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--ink)}
+.cmd-list button .n{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--ink-4)}
+.cmd-list button.sel .n{color:var(--blue)}
+.cmd-list button .sn{display:block;margin-top:3px;font-size:12px;color:var(--ink-4);line-height:1.5}
+.cmd-list button mark{background:transparent;color:var(--blue);font-weight:400}
+.cmd-list button .tm{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ink-4)}
+.cmd-none{padding:26px 18px;color:var(--ink-4);font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;text-align:center}
+.cmd-foot{display:flex;gap:16px;padding:11px 18px;border-top:1px solid var(--rule);
+  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-4)}
+.cmd-foot b{color:var(--ink-3);font-weight:500}
+
+/* ---------- definiciones al vuelo ---------- */
+.term{
+  border-bottom:1px dotted var(--ink-4);cursor:help;color:inherit;
+  background:transparent;border-left:0;border-right:0;border-top:0;padding:0;
+  font:inherit;
+}
+.term:hover{border-bottom-color:var(--blue);color:var(--ink)}
+.def{
+  max-width:300px;padding:15px 16px;border:1px solid var(--rule);border-radius:3px;
+  background:var(--surface);color:var(--ink-2);
+  font-family:'IBM Plex Sans',sans-serif;font-size:13px;line-height:1.65;font-weight:300;
+  box-shadow:0 18px 50px -22px rgba(0,0,0,.45);
+}
+.def b{display:block;margin-bottom:7px;color:var(--ink);font-weight:500;
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase}
+.def::backdrop{background:transparent}
+
+/* ---------- retomar la lectura ---------- */
+.resume{
+  position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(14px);
+  z-index:66;display:flex;align-items:center;gap:14px;
+  padding:11px 16px;background:var(--surface);border:1px solid var(--rule);border-radius:2px;
+  box-shadow:0 12px 40px -18px rgba(0,0,0,.4);
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);
+  opacity:0;pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease);
+}
+.resume.on{opacity:1;transform:translateX(-50%);pointer-events:auto}
+.resume button{border:0;background:transparent;cursor:pointer;color:var(--blue);font:inherit;
+  text-transform:uppercase;letter-spacing:.14em}
+.resume .x{color:var(--ink-4);cursor:pointer}
+
+/* ---------- entrada ---------- */
+.rv{opacity:0;transform:translateY(16px)}
+.rv.in{opacity:1;transform:none;
+  transition:opacity .85s var(--ease) var(--d,0s),transform .85s var(--ease) var(--d,0s)}
+
+@media (max-width:1080px){
+  .doc{grid-template-columns:var(--rail) minmax(0,1fr)}
+  .note{display:none}
+}
+@media (max-width:700px){
+  /* la cabecera se queda con logo, estado y boton: la version ya esta en
+     la portada del documento, asi que aqui es informacion repetida */
+  .top{gap:12px;padding:11px var(--pad)}
+  .top-meta{display:none}
+  .top-btn{padding:7px 11px;letter-spacing:.12em}
+  .top-live{font-size:9.5px;letter-spacing:.13em}
+  .top-mark svg{width:24px;height:24px}
+}
+@media (max-width:820px){
+  .doc{grid-template-columns:1fr}
+  .rail{
+    position:sticky;top:53px;z-index:40;display:flex;gap:2px;overflow-x:auto;
+    padding:10px 0;margin:0 calc(var(--pad)*-1);padding-left:var(--pad);padding-right:var(--pad);
+    max-height:none;background:rgba(246,246,244,.94);border-bottom:1px solid var(--rule);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  }
+  .rail-h{display:none}
+  .rail a{grid-template-columns:auto;padding:6px 9px;white-space:nowrap;border:1px solid transparent}
+  .rail a .mk,.rail a .tx{display:none}
+  .rail a.on{border-color:var(--blue)}
+  .rail a .n{font-size:11px}
+  .row{grid-template-columns:minmax(0,1.3fr) 1fr .9fr}
+  .row .hide{display:none}
+}
+@media print{
+  body{background:#fff}
+  body::before,.bar,.top,.rail,.note,.cover-cue,.cta{display:none!important}
+  .doc{grid-template-columns:1fr;max-width:none}
+  .rv{opacity:1!important;transform:none!important}
+  .sec{break-inside:avoid;border-color:#ddd}
+  .cut-fill{transform:scaleX(.5)!important}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9px;color:#666}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+  .rv{opacity:1;transform:none}
+  .cover-h1 .ln>span{transform:none}
+}
+</style>
+<script>
+/* se aplica antes del primer pintado: si se dejara al script del final,
+   un lector con el oscuro guardado veria un fogonazo blanco */
+try{
+  document.documentElement.dataset.tema =
+    localStorage.getItem('sect_tema') === 'dark' ? 'dark' : 'light';
+}catch(e){ document.documentElement.dataset.tema = 'light'; }
+</script>
 </head>
-<body class="wp-body">
+<body>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <defs>
-    <symbol id="sectoraMark" viewBox="0 0 100 100">
-      <circle cx="50" cy="50" r="41.5" fill="none" stroke="#1569ff" stroke-width="10"/>
-    </symbol>
-    <pattern id="wpSceneDots" width="140" height="140" patternUnits="userSpaceOnUse">
-      <circle cx="10" cy="18" r="1.1" fill="#ffffff" opacity="0.4"/>
-      <circle cx="36" cy="54" r="0.7" fill="#ffffff" opacity="0.25"/>
-      <circle cx="64" cy="12" r="0.9" fill="#ffffff" opacity="0.3"/>
-      <circle cx="92" cy="40" r="1.2" fill="#ffffff" opacity="0.45"/>
-      <circle cx="118" cy="20" r="0.6" fill="#ffffff" opacity="0.2"/>
-      <circle cx="22" cy="88" r="0.8" fill="#ffffff" opacity="0.3"/>
-      <circle cx="52" cy="104" r="1.0" fill="#ffffff" opacity="0.35"/>
-      <circle cx="80" cy="78" r="0.6" fill="#ffffff" opacity="0.22"/>
-      <circle cx="108" cy="98" r="0.9" fill="#ffffff" opacity="0.3"/>
-      <circle cx="132" cy="66" r="1.1" fill="#ffffff" opacity="0.4"/>
-      <circle cx="6" cy="126" r="0.7" fill="#ffffff" opacity="0.25"/>
-      <circle cx="46" cy="130" r="0.6" fill="#ffffff" opacity="0.2"/>
-    </pattern>
-  </defs>
-</svg>
+<div class="bar" aria-hidden="true"><i id="bar"></i></div>
+<div class="ret" id="ret" aria-hidden="true"><i class="x"></i><i class="y"></i></div>
+<div class="read" id="read" aria-hidden="true">00 · 00</div>
 
-<div class="wp-progress" aria-hidden="true"><div class="wp-progress-fill" id="wpProgressFill"></div></div>
-
-<header class="wp-topbar">
-  <a class="wp-topbar-logo" href="/" aria-label="Sectora Foundation">
-    <span class="wp-topbar-mark" aria-hidden="true">
-      <svg viewBox="0 0 100 100" role="img" aria-hidden="true">
-        <rect width="100" height="100" rx="9" ry="9" fill="#1569ff"/>
-        <circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/>
-      </svg>
-    </span>
+<header class="top">
+  <a class="top-mark" href="https://sectoraorg.com">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect width="100" height="100" rx="9" fill="#1569ff"/>
+      <circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/>
+    </svg>
+    <span class="sr">Sectora Foundation</span>
   </a>
-  <div class="wp-topbar-right">
-    <span class="wp-topbar-tag">v1.0 &middot; <span data-i18n="wp.topbar.testnet">Testnet</span></span>
-    <div class="lang-switch-wrap wp-lang-switch-wrap">
-      <select class="lang-switch" id="wpLangSwitch" data-i18n-attr="aria-label:nav.langLabel" aria-label="Language"></select>
-    </div>
-    <button class="wp-print-btn" id="wpPrintBtn" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
-      <span data-i18n="wp.topbar.print">Save as PDF</span>
-    </button>
-    <a class="wp-back" href="/">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-      <span data-i18n="wp.topbar.back">Back to site</span>
-    </a>
-  </div>
+  <span class="mono top-meta">Whitepaper v1.0</span>
+  <span class="mono top-live"><i></i>Testnet live</span>
+  <button type="button" class="tema" id="tema" aria-label="Switch theme" aria-pressed="false" title="Theme">
+    <svg class="sol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg>
+    <svg class="luna" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.2 8.2 0 1 0 10.2 10.2z"/></svg>
+  </button>
+  <button type="button" class="top-btn" id="pdf">Save as PDF</button>
 </header>
 
-<section class="wp-cover">
-  <div class="wp-cover-grid" aria-hidden="true"></div>
-  <div class="wp-cover-glow" aria-hidden="true"></div>
-  <div class="wp-cover-inner">
-    <span class="wp-cover-mark" aria-hidden="true">
-      <svg viewBox="56.8 34.4 86.4 134.4" width="18" height="28"><defs><linearGradient id="wpCoverTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f5f6f7"/></linearGradient><linearGradient id="wpCoverMid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eef0f2"/><stop offset="1" stop-color="#dde0e3"/></linearGradient><linearGradient id="wpCoverBot" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4d6da"/><stop offset="1" stop-color="#c0c3c8"/></linearGradient></defs><path d="M85.6 34.4 L56.8 52.0 L56.8 122.4 L85.6 104.8 Z M82.0 68.0 L82.0 104.8 L58.5 86.4 Z" fill="url(#wpCoverTop)" fill-rule="evenodd"/><path d="M114.4 52.0 L141.6 68.0 L141.6 120.8 L114.4 135.2 L85.6 120.8 L85.6 68.0 Z M114.4 126.0 L114.4 89.2 L142.4 107.6 Z" fill="url(#wpCoverMid)" fill-rule="evenodd"/><path d="M114.4 159.6 L143.2 142.0 L143.2 71.6 L114.4 89.2 Z M117.9 126.0 L117.9 89.2 L141.4 107.6 Z" fill="url(#wpCoverBot)" fill-rule="evenodd"/></svg>
-    </span>
-    <p class="wp-cover-eyebrow"><span class="wp-cover-dot" aria-hidden="true"></span><span data-i18n="wp.cover.eyebrow">Sectora Foundation IL</span></p>
-    <h1 class="wp-cover-label" data-i18n="wp.cover.label">Whitepaper</h1>
-    <p class="wp-cover-sub" data-i18n="wp.cover.sub">A verification and custody layer for tokenized real-world assets, built on a dedicated Layer&nbsp;3 network.</p>
-    <div class="wp-cover-meta">
-      <span>v1.0</span><span class="wp-cover-meta-sep" aria-hidden="true"></span><span>Q1 2026</span><span class="wp-cover-meta-sep" aria-hidden="true"></span><span data-i18n="wp.cover.statusLive">Testnet Live</span>
-    </div>
+<section class="cover" id="top">
+  <span class="cover-rule" id="crule" aria-hidden="true"></span>
+  <canvas id="grid" aria-hidden="true"></canvas>
+  <div class="frame" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+    <i></i><i></i><i></i><i></i>
   </div>
-  <a class="wp-cover-scroll" href="#abstract" data-i18n-attr="aria-label:wp.cover.scroll" aria-label="Scroll to read">
-    <span class="wp-cover-scroll-line" aria-hidden="true"></span>
-    <span data-i18n="wp.cover.scroll">Scroll to read</span>
-  </a>
+  <div class="cover-in">
+    <p class="cover-ref mono">
+      <span>Sectora Foundation IL</span>
+      <span>Chicago, Illinois</span>
+      <span>SF·WP·001</span>
+    </p>
+
+    <div class="cover-grid">
+      <div>
+        <p class="cover-kick mono"><i></i>Official whitepaper · Version 1.0</p>
+
+        <h1 class="cover-h1" id="h1">A verification layer for <b>tokenized real-world assets</b></h1>
+
+        <span class="cover-hair" aria-hidden="true"></span>
+
+        <p class="cover-sub">Sectora is a Layer&nbsp;3 network purpose-built for the verification,
+          custody and exchange of real-world assets on-chain. This document sets out its
+          architecture, the $SECT supply policy and the roadmap to mainnet.</p>
+      </div>
+
+      <dl class="cover-file">
+        <div><dt>Document</dt><dd>SF·WP·001</dd></div>
+        <div><dt>Version</dt><dd>1.0</dd></div>
+        <div><dt>Issued</dt><dd>Q1 2026</dd></div>
+        <div><dt>Issuer</dt><dd>Sectora Foundation IL</dd></div>
+        <div><dt>Jurisdiction</dt><dd>Illinois, US</dd></div>
+        <div><dt>Network</dt><dd class="live">Testnet live</dd></div>
+        <div><dt>Sections</dt><dd id="cnt-sec">16</dd></div>
+        <div><dt>Reading time</dt><dd id="cnt-min">—</dd></div>
+      </dl>
+    </div>
+
+
+    <a class="cover-cue mono" href="#s00"><i></i>Begin reading</a>
+  </div>
 </section>
 
-<div class="wp-body-wrap">
-  <nav class="wp-toc" id="wpToc" data-i18n-attr="aria-label:wp.toc.ariaLabel" aria-label="Table of contents">
-    <a href="#abstract" data-toc="abstract"><span class="wp-toc-num">00</span><span data-i18n="wp.toc.abstract">Abstract</span></a>
-    <a href="#introduction" data-toc="introduction"><span class="wp-toc-num">01</span><span data-i18n="wp.toc.introduction">Introduction</span></a>
-    <a href="#network" data-toc="network"><span class="wp-toc-num">02</span><span data-i18n="wp.toc.network">The Sectora Network</span></a>
-    <a href="#protocol" data-toc="protocol"><span class="wp-toc-num">03</span><span data-i18n="wp.toc.protocol">Verification &amp; Custody</span></a>
-    <a href="#validators" data-toc="validators"><span class="wp-toc-num">04</span><span data-i18n="wp.toc.validators">Validator Network</span></a>
-    <a href="#dex" data-toc="dex"><span class="wp-toc-num">05</span><span data-i18n="wp.toc.dex">Sectora DEX</span></a>
-    <a href="#tokenization" data-toc="tokenization"><span class="wp-toc-num">06</span><span data-i18n="wp.toc.tokenization">RWA Tokenization</span></a>
-    <a href="#tokenomics" data-toc="tokenomics"><span class="wp-toc-num">07</span><span data-i18n="wp.toc.tokenomics">$SECT Tokenomics</span></a>
-    <a href="#supply" data-toc="supply"><span class="wp-toc-num">08</span><span data-i18n="wp.toc.supply">Supply &amp; Buyback</span></a>
-    <a href="#marketcap" data-toc="marketcap"><span class="wp-toc-num">09</span><span data-i18n="wp.toc.marketcap">Supply &amp; Market Cap</span></a>
-    <a href="#contract" data-toc="contract"><span class="wp-toc-num">10</span><span data-i18n="wp.toc.contract">Token Contract</span></a>
-    <a href="#infrastructure" data-toc="infrastructure"><span class="wp-toc-num">11</span><span data-i18n="wp.toc.infrastructure">Infrastructure</span></a>
-    <a href="#roadmap" data-toc="roadmap"><span class="wp-toc-num">12</span><span data-i18n="wp.toc.roadmap">Roadmap</span></a>
-    <a href="#governance" data-toc="governance"><span class="wp-toc-num">13</span><span data-i18n="wp.toc.governance">Governance &amp; Risk</span></a>
-    <a href="#legal" data-toc="legal"><span class="wp-toc-num">14</span><span data-i18n="wp.toc.legal">Location &amp; Legal</span></a>
-    <a href="#conclusion" data-toc="conclusion"><span class="wp-toc-num">15</span><span data-i18n="wp.toc.conclusion">Conclusion</span></a>
+<div class="doc">
+
+  <nav class="rail" id="rail" aria-label="Contents">
+    <p class="rail-h mono">Contents</p>
   </nav>
 
-  <main class="wp-content">
+  <main class="main">
+    <div class="spine" aria-hidden="true"><i id="spine"></i><b id="spinedot"></b></div>
 
-    <section class="wp-section" id="abstract">
-      <p class="wp-kicker" data-i18n="wp.abstract.kicker">§00 &middot; Abstract</p>
-      <h2 class="wp-h2" data-i18n="wp.abstract.h2">Abstract</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 100 150"><use href="#sectoraMark" x="7.59" y="32.59" width="84.82" height="84.82"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.abstract.kicker">&sect;00 &middot; Abstract</p>
-          </div>
+    <section class="sec rv" id="s00" data-k="L3" data-kl="Dedicated execution layer" data-t="Abstract">
+      <p class="sec-ref mono"><span>§00</span><i></i><span>Abstract</span><a class="anchor" href="#s00" data-a="s00">¶ link</a></p>
+      <h2>Verification as a protocol guarantee</h2>
+      <p class="lead">Sectora is a Layer 3 network purpose-built for the verification,
+        custody and exchange of tokenized real-world assets.</p>
+      <p>Where general-purpose chains treat asset tokenization as something built on top
+        of the chain, Sectora treats verification as a protocol-level guarantee: every
+        custodied asset is anchored to a dedicated attestation layer, secured by a
+        distributed validator set, and made liquid through a native exchange.</p>
+      <p>This document describes the network's architecture, its verification and custody
+        protocol, the $SECT token and its supply policy, the buyback mechanism that ties
+        token scarcity to real usage, and the roadmap carrying Sectora from its current
+        testnet phase to mainnet launch and cross-chain expansion.</p>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">Ring · closed cycle</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Abstract</p>
+          <h3>The mark</h3>
+          <p class="card-sub">Verification treated as a protocol guarantee, not a service layered on top.</p>
         </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.abstract.p1">Sectora is a Layer 3 network purpose-built for the verification, custody, and exchange of tokenized real-world assets. Where general-purpose chains treat asset tokenization as something built on top of the chain, Sectora treats verification as a protocol-level guarantee: every custodied asset is anchored to a dedicated attestation layer, secured by a distributed validator set, and made liquid through a native exchange.</p>
-      <p class="wp-body-text" data-i18n="wp.abstract.p2">This document describes the network's architecture, its verification and custody protocol, the $SECT token and its supply policy, the buyback mechanism that ties token scarcity to real usage, and the roadmap carrying Sectora from its current testnet phase to mainnet launch and cross-chain expansion.</p>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 00·A · Plate 00</span>
+      </figure>
     </section>
 
-    <section class="wp-section" id="introduction">
-      <p class="wp-kicker" data-i18n="wp.introduction.kicker">§01 &middot; Introduction</p>
-      <h2 class="wp-h2" data-i18n="wp.introduction.h2">Introduction</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 110 130"><use href="#sectoraMark" x="10.59" y="46.64" width="74.82" height="74.82" opacity="0.32"/><use href="#sectoraMark" x="18.59" y="34.64" width="74.82" height="74.82"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.introduction.kicker">&sect;01 &middot; Introduction</p>
-          </div>
+    <section class="sec rv" id="s01" data-k="01" data-kl="Verification as a primitive" data-t="Introduction">
+      <p class="sec-ref mono"><span>§01</span><i></i><span>Introduction</span><a class="anchor" href="#s01" data-a="s01">¶ link</a></p>
+      <h2>A bridge of trust, not a proof</h2>
+      <p>Real-world assets moving on-chain today generally rely on off-chain custody with
+        an on-chain claim layered on top of it. Holders are asked to believe an attestation
+        instead of verifying one. That gap is tolerable for low-stakes use cases; it is not
+        tolerable for institutional capital.</p>
+      <p>Sectora starts from a different premise: verification should be a primitive of the
+        network, not a feature bolted onto it after the fact. Custody, attestation and
+        settlement are handled by infrastructure designed for that single purpose, rather
+        than shared with unrelated general-purpose activity.</p>
+      <blockquote>“Is this asset actually backed?” has a cryptographic answer — not an
+        institutional one.</blockquote>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">Span · unclosed</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Introduction</p>
+          <h3>A bridge that does not close</h3>
+          <p class="card-sub">Off-chain custody with an on-chain claim laid over it: two spans that never meet.</p>
         </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.introduction.p1">Real-world assets moving on-chain today generally rely on off-chain custody with an on-chain claim layered on top of it &mdash; a bridge of trust rather than a proof. Holders are asked to believe an attestation instead of verifying one. That gap is tolerable for low-stakes use cases; it is not tolerable for institutional capital.</p>
-      <p class="wp-body-text" data-i18n="wp.introduction.p2">Sectora starts from a different premise: verification should be a primitive of the network, not a feature bolted onto it after the fact. Custody, attestation, and settlement are handled by infrastructure designed for that single purpose, rather than shared with unrelated general-purpose activity.</p>
-      <blockquote class="wp-quote" data-i18n="wp.introduction.quote">The question &ldquo;is this asset actually backed?&rdquo; has a cryptographic answer &mdash; not an institutional one.</blockquote>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 01·A · Plate 01</span>
+      </figure>
     </section>
 
-    <section class="wp-section" id="network">
-      <p class="wp-kicker" data-i18n="wp.network.kicker">§02 &middot; The Sectora Network</p>
-      <h2 class="wp-h2" data-i18n="wp.network.h2">Layer 3 Architecture</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 200 150"><path d="M40,90 L100,35 L160,100 Z" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1"/><use href="#sectoraMark" x="18.8" y="68.75" width="42.41" height="42.41"/><use href="#sectoraMark" x="78.8" y="13.85" width="42.41" height="42.41"/><use href="#sectoraMark" x="138.8" y="78.75" width="42.41" height="42.41"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.network.kicker">&sect;02 &middot; The Sectora Network</p>
-          </div>
+    <section class="sec rv" id="s02" data-k="Testnet" data-kl="Live today" data-t="The network">
+      <p class="sec-ref mono"><span>§02</span><i></i><span>The Sectora Network</span><a class="anchor" href="#s02" data-a="s02">¶ link</a></p>
+      <h2>Layer 3 architecture</h2>
+      <p>Sectora runs as a Layer 3 network, settling above a general-purpose base layer to
+        inherit its security and finality while executing custody and verification logic in
+        an environment purpose-built for that workload.</p>
+      <p>Separating the execution layer from general-purpose blockspace means custody
+        attestations never compete for throughput with unrelated activity, and the
+        verification logic that matters most to institutional users can evolve independently
+        of base-layer governance.</p>
+      <p>The network is currently <strong>live on testnet</strong>, open to validators,
+        security researchers and early integration partners ahead of its mainnet launch.</p>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">L3 · execution</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>The Sectora Network</p>
+          <h3>Layer 3 architecture</h3>
+          <p class="card-sub">Execution separated from settlement, so custody never competes for blockspace.</p>
         </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.network.p1">Sectora runs as a Layer 3 network, settling above a general-purpose base layer to inherit its security and finality while executing custody and verification logic in an environment purpose-built for that workload. Separating the execution layer from general-purpose blockspace means custody attestations never compete for throughput with unrelated activity, and the verification logic that matters most to institutional users can evolve independently of base-layer governance.</p>
-      <p class="wp-body-text" data-i18n="wp.network.p2" data-i18n-html>The network is currently <strong>live on testnet</strong>, open to validators, security researchers, and early integration partners ahead of its mainnet launch.</p>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 02·A · Plate 02</span>
+      </figure>
     </section>
 
-    <section class="wp-section" id="protocol">
-      <p class="wp-kicker" data-i18n="wp.protocol.kicker">§03 &middot; Verification &amp; Custody</p>
-      <h2 class="wp-h2" data-i18n="wp.protocol.h2">The Sectora Protocol</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 120 160"><path d="M60 14 L96 28 L96 88 Q96 122 60 146 Q24 122 24 88 L24 28 Z" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.4"/><use href="#sectoraMark" x="26.33" y="50.33" width="67.35" height="67.35"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.protocol.kicker">&sect;03 &middot; Verification &amp; Custody</p>
-          </div>
+    <section class="sec rv" id="s03" data-k="Continuous" data-kl="Re-verified at intervals" data-t="Verification">
+      <p class="sec-ref mono"><span>§03</span><i></i><span>Verification &amp; Custody</span><a class="anchor" href="#s03" data-a="s03">¶ link</a></p>
+      <h2>The Sectora Protocol</h2>
+      <p>The Sectora Protocol is the network's verification layer: native infrastructure to
+        audit, protect and tokenize real-world assets through cryptographic verification,
+        distributed custody and institutional-grade security by design.</p>
+      <p>Custodied assets are represented on-chain only after passing through a verification
+        cycle — an auditable process that ties the on-chain instrument to its off-chain
+        backing at defined intervals, rather than at issuance alone.</p>
+      <p>The result is a continuously verifiable claim rather than a one-time attestation,
+        giving holders and counterparties a live cryptographic record instead of a static
+        certificate.</p>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">Cycle · continuous</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Verification &amp; Custody</p>
+          <h3>The verification cycle</h3>
+          <p class="card-sub">Each asset re-enters verification at defined intervals: the claim stays live.</p>
         </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.protocol.p1">The Sectora Protocol is the network's verification layer: native infrastructure to audit, protect, and tokenize real-world assets through cryptographic verification, distributed custody, and institutional-grade security by design.</p>
-      <p class="wp-body-text" data-i18n="wp.protocol.p2">Custodied assets are represented on-chain only after passing through a verification cycle &mdash; an auditable process that ties the on-chain instrument to its off-chain backing at defined intervals, rather than at issuance alone. The result is a continuously-verifiable claim rather than a one-time attestation, giving holders and counterparties a live cryptographic record instead of a static certificate.</p>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 03·A · Plate 03</span>
+      </figure>
     </section>
 
-    <section class="wp-section" id="validators">
-      <p class="wp-kicker" data-i18n="wp.validators.kicker">§04 &middot; Validator Network</p>
-      <h2 class="wp-h2" data-i18n="wp.validators.h2">Security by Distribution</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 200 140"><line x1="28" y1="120" x2="66" y2="55" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/><line x1="66" y1="55" x2="96" y2="25" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/><line x1="96" y1="25" x2="150" y2="45" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/><line x1="66" y1="55" x2="112" y2="115" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/><line x1="112" y1="115" x2="178" y2="105" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/><line x1="150" y1="45" x2="178" y2="105" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/><use href="#sectoraMark" x="15.53" y="107.48" width="24.94" height="24.94"/><use href="#sectoraMark" x="53.53" y="42.48" width="24.94" height="24.94"/><use href="#sectoraMark" x="99.53" y="102.48" width="24.94" height="24.94"/><use href="#sectoraMark" x="137.53" y="32.48" width="24.94" height="24.94"/><use href="#sectoraMark" x="165.53" y="92.48" width="24.94" height="24.94"/><use href="#sectoraMark" x="83.53" y="12.48" width="24.94" height="24.94"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.validators.kicker">&sect;04 &middot; Validator Network</p>
-          </div>
+    <section class="sec rv" id="s04" data-k="3 regions" data-kl="Validator distribution" data-t="Validators">
+      <p class="sec-ref mono"><span>§04</span><i></i><span>Validator Network</span><a class="anchor" href="#s04" data-a="s04">¶ link</a></p>
+      <h2>Security by distribution</h2>
+      <p>Every transaction on Sectora — transfers, custody attestations and DEX settlement
+        alike — is secured by a distributed validator network. Validators stake $SECT to
+        participate, propose and attest blocks in epoch-based rounds, and are economically
+        accountable for the verification checks they perform.</p>
+      <p>This is the same security model reflected in the network's live Node Map and Epoch
+        History views on the <a class="lnk" href="https://sectoraorg.com/dashboard.html">Dashboard</a>,
+        where validator distribution, uptime and staking activity are visible in real time
+        across the Americas, Asia-Pacific and Europe/Africa regions.</p>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">Nodes · distributed</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Validator Network</p>
+          <h3>Distributed validator set</h3>
+          <p class="card-sub">No single point of custody. Every attestation signed by a staked set.</p>
         </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.validators.p1">Every transaction on Sectora &mdash; transfers, custody attestations, and DEX settlement alike &mdash; is secured by a distributed validator network. Validators stake $SECT to participate, propose and attest blocks in epoch-based rounds, and are economically accountable for the verification checks they perform.</p>
-      <p class="wp-body-text" data-i18n="wp.validators.p2" data-i18n-html>This is the same security model reflected in the network's live Node Map and Epoch History views on the <a class="wp-inline-link" href="/dashboard.html">Dashboard</a>, where validator distribution, uptime, and staking activity are visible in real time across the Americas, Asia-Pacific, and Europe/Africa regions.</p>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 04·A · Plate 04</span>
+      </figure>
     </section>
 
-    <section class="wp-section" id="dex">
-      <p class="wp-kicker" data-i18n="wp.dex.kicker">§05 &middot; Sectora DEX</p>
-      <h2 class="wp-h2" data-i18n="wp.dex.h2">A Single Markets Layer</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 210 140"><use href="#sectoraMark" x="15.06" y="40.01" width="59.88" height="59.88"/><use href="#sectoraMark" x="135.06" y="40.01" width="59.88" height="59.88"/><line x1="93" y1="70" x2="117" y2="70" stroke="rgba(255,255,255,0.35)" stroke-width="1.4"/><path d="M99,64 L91,70 L99,76" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M111,64 L119,70 L111,76" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.dex.kicker">&sect;05 &middot; Sectora DEX</p>
-          </div>
+    <section class="sec rv" id="s05" data-k="1 venue" data-kl="Crypto and RWA together" data-t="DEX">
+      <p class="sec-ref mono"><span>§05</span><i></i><span>Sectora DEX</span><a class="anchor" href="#s05" data-a="s05">¶ link</a></p>
+      <h2>A single markets layer</h2>
+      <p>The <a class="lnk" href="https://sectoraorg.com/dex-cover.html">Sectora DEX</a> is the
+        network's markets layer: a single venue to trade, swap and go peer-to-peer across
+        live-quoted crypto, tokenized metals and index-tracked assets.</p>
+      <p>Rather than isolating tokenized real-world assets in a separate venue from native
+        crypto pairs, Sectora settles both through the same custody-verified infrastructure,
+        with every price refreshed in real time. Because tokenized assets carry a live,
+        verifiable custody record, the DEX can list them alongside crypto pairs without
+        asking traders to trust a separate, off-chain attestation.</p>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">Two rails · one venue</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Sectora DEX</p>
+          <h3>A single markets layer</h3>
+          <p class="card-sub">Crypto and tokenized assets settling through the same verified rails.</p>
         </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.dex.p1" data-i18n-html>The <a class="wp-inline-link" href="/dex-cover.html">Sectora DEX</a> is the network's markets layer: a single venue to trade, swap, and go P2P across live-quoted crypto, tokenized metals, and index-tracked assets. Rather than isolating tokenized real-world assets in a separate venue from native crypto pairs, Sectora settles both through the same custody-verified infrastructure, with every price refreshed in real time.</p>
-      <p class="wp-body-text" data-i18n="wp.dex.p2">Because tokenized assets on Sectora carry a live, verifiable custody record, the DEX can list them alongside crypto pairs without asking traders to trust a separate, off-chain attestation.</p>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 05·A · Plate 05</span>
+      </figure>
     </section>
 
-    <section class="wp-section" id="tokenization">
-      <p class="wp-kicker" data-i18n="wp.tokenization.kicker">§06 &middot; RWA Tokenization</p>
-      <h2 class="wp-h2" data-i18n="wp.tokenization.h2">Real-World Assets &amp; USD-SEC</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 190 140"><use href="#sectoraMark" x="20.08" y="40.13" width="69.84" height="69.84"/><path d="M104,53 L120,60 L102,68 Z" fill="#ffffff" opacity="0.45"/><path d="M136,38 L148,44 L134,50 Z" fill="#ffffff" opacity="0.32"/><path d="M160,24 L169,28 L158,33 Z" fill="#ffffff" opacity="0.2"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.tokenization.kicker">&sect;06 &middot; RWA Tokenization</p>
-          </div>
+    <section class="sec rv" id="s06" data-k="15.2%" data-kl="Estimated RWA pool APY" data-t="Tokenization">
+      <p class="sec-ref mono"><span>§06</span><i></i><span>RWA Tokenization</span><a class="anchor" href="#s06" data-a="s06">¶ link</a></p>
+      <h2>Real-world assets and USD-SEC</h2>
+      <p>The Asset Tokenization Network is where real-world assets are verified, custodied
+        and represented as on-chain instruments — the substrate the rest of the protocol
+        builds on. Tokenized positions can generate yield: current pools return an estimated
+        <strong>15.2% APY</strong>, sourced from the underlying assets rather than emissions.</p>
+      <p><strong>USD-SEC</strong> is Sectora's fully collateralized stablecoin, used as the
+        unit of account for custody attestations and DEX settlement across the network — a
+        stable base against which both crypto and tokenized real-world assets are priced
+        and settled.</p>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">Custody · enclosed</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>RWA Tokenization</p>
+          <h3>Asset under custody</h3>
+          <p class="card-sub">The off-chain asset held inside a verifiable on-chain enclosure.</p>
         </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.tokenization.p1" data-i18n-html>The Asset Tokenization Network is where real-world assets are verified, custodied, and represented as on-chain instruments &mdash; the substrate the rest of the protocol builds on. Tokenized positions can generate yield: current tokenized real-world-asset pools return an estimated <strong>15.2% APY</strong>, sourced from the underlying assets rather than emissions.</p>
-      <p class="wp-body-text" data-i18n="wp.tokenization.p2" data-i18n-html><strong>USD-SEC</strong> is Sectora's fully-collateralized stablecoin, used as the unit of account for custody attestations and DEX settlement across the network &mdash; a stable base against which both crypto and tokenized real-world assets are priced and settled.</p>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 06·A · Plate 06</span>
+      </figure>
     </section>
 
-    <section class="wp-section" id="tokenomics">
-      <p class="wp-kicker" data-i18n="wp.tokenomics.kicker">§07 &middot; $SECT Tokenomics</p>
-      <h2 class="wp-h2" data-i18n="wp.tokenomics.h2">The $SECT Token</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="62" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.2" stroke-dasharray="4 6"/><use href="#sectoraMark" x="41.33" y="41.33" width="67.35" height="67.35"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.tokenomics.kicker">&sect;07 &middot; $SECT Tokenomics</p>
-          </div>
+    <section class="sec rv" id="s07" data-k="50,000,000" data-kl="Initial $SECT supply" data-t="Tokenomics">
+      <p class="sec-ref mono"><span>§07</span><i></i><span>$SECT Tokenomics</span><a class="anchor" href="#s07" data-a="s07">¶ link</a></p>
+      <h2>The $SECT token</h2>
+      <p>$SECT is the network's native asset: validators stake it to secure the protocol, it
+        is the reference collateral behind network fee capture, and it is the instrument
+        through which the buyback engine ties token scarcity to real usage.</p>
+      <dl class="grid" id="stats">
+        <div class="cell"><dt class="mono">Initial supply</dt>
+          <dd class="tab" data-n="50000000">50,000,000</dd></div>
+        <div class="cell cell--key"><dt class="mono">After reduction</dt>
+          <dd class="tab" data-n="25000000">25,000,000<small>December 2026</small></dd></div>
+        <div class="cell"><dt class="mono">Fully diluted valuation</dt>
+          <dd class="tab" data-n="5000000" data-p="$">$5,000,000</dd></div>
+        <div class="cell"><dt class="mono">Initial liquidity</dt>
+          <dd class="tab" data-n="1000000" data-p="$">$1,000,000<small>Locked</small></dd></div>
+      </dl>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">$SECT · ERC-20</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>$SECT Tokenomics</p>
+          <h3>The native asset</h3>
+          <p class="card-sub">Staked by validators, the reference collateral behind fee capture.</p>
         </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.tokenomics.p1">$SECT is the network's native asset: validators stake it to secure the protocol, it is the reference collateral behind network fee capture, and it is the instrument through which the buyback engine ties token scarcity to real usage.</p>
-      <div class="wp-stats">
-        <div class="wp-stat">
-          <span class="wp-stat-value">50,000,000</span>
-          <span class="wp-stat-label" data-i18n="wp.tokenomics.stat1Label">Initial supply</span>
-        </div>
-        <div class="wp-stat">
-          <span class="wp-stat-value">$5,000,000</span>
-          <span class="wp-stat-label" data-i18n="wp.tokenomics.stat2Label">Fully diluted valuation</span>
-        </div>
-        <div class="wp-stat">
-          <span class="wp-stat-value">$1,000,000</span>
-          <span class="wp-stat-label" data-i18n="wp.tokenomics.stat3Label">Initial liquidity (locked)</span>
-        </div>
-        <div class="wp-stat">
-          <span class="wp-stat-value wp-stat-value--accent">25,000,000</span>
-          <span class="wp-stat-label" data-i18n="wp.tokenomics.stat4Label">Supply after Dec 2026 reduction</span>
-        </div>
-      </div>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 07·A · Plate 07</span>
+      </figure>
     </section>
 
-    <section class="wp-section" id="supply">
-      <p class="wp-kicker" data-i18n="wp.supply.kicker">§08 &middot; Supply &amp; Buyback</p>
-      <h2 class="wp-h2" data-i18n="wp.supply.h2">Supply Policy &amp; the Buyback Engine</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 150 150"><path d="M75,17 A58,58 0 1 1 24,52" fill="none" stroke="rgba(70,140,230,0.45)" stroke-width="1.4"/><path d="M15,46 L24,52 L30,42" fill="none" stroke="rgba(70,140,230,0.45)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><use href="#sectoraMark" x="43.82" y="43.82" width="62.37" height="62.37"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.supply.kicker">&sect;08 &middot; Supply &amp; Buyback</p>
-          </div>
+    <section class="sec rv" id="s08" data-k="−50%" data-kl="December 2026 reduction" data-t="Supply policy">
+      <p class="sec-ref mono"><span>§08</span><i></i><span>Supply &amp; Buyback</span><a class="anchor" href="#s08" data-a="s08">¶ link</a></p>
+      <h2>A supply that moves once</h2>
+      <p>Sectora's supply policy is deliberately conservative. Rather than an open-ended
+        emission schedule, the network commits to a one-time
+        <strong>Strategic Supply Reduction in December 2026</strong>, cutting total supply by
+        half to align circulating supply with actual network usage rather than a fixed
+        issuance curve decided in advance.</p>
+
+      <div class="cut" id="cut">
+        <p class="cut-h mono"><span>Total supply</span><span>One-time reduction · Dec 2026</span></p>
+        <div class="cut-track">
+          <span class="cut-fill" id="cutfill"></span>
+          <span class="cut-half" aria-hidden="true"></span>
         </div>
+        <p class="cut-legend mono"><span><b>50,000,000</b> before</span><span><b>25,000,000</b> after</span></p>
       </div>
-      <p class="wp-body-text" data-i18n="wp.supply.p1" data-i18n-html>Sectora's supply policy is deliberately conservative: rather than an open-ended emission schedule, the network commits to a one-time <strong>Strategic Supply Reduction in December 2026</strong>, cutting total supply by 50% &mdash; from 50,000,000 to 25,000,000 $SECT &mdash; to align circulating supply with actual network usage rather than a fixed issuance curve decided in advance.</p>
-      <p class="wp-body-text" data-i18n="wp.supply.p2" data-i18n-html>The <strong>Buyback Engine</strong> reinforces that alignment on an ongoing basis: a share of network fee revenue generated by validators flows into a buyback pool, which purchases $SECT on the open market. Token scarcity is therefore a function of network activity &mdash; validators, custody volume, and DEX usage &mdash; rather than speculative demand alone.</p>
-      <div class="wp-flow" aria-hidden="true">
-        <span class="wp-flow-node" data-i18n="wp.supply.flowValidators">Validators</span>
-        <span class="wp-flow-arrow"></span>
-        <span class="wp-flow-node" data-i18n="wp.supply.flowPool">Buyback Pool</span>
-        <span class="wp-flow-arrow"></span>
-        <span class="wp-flow-node wp-flow-node--accent" data-i18n="wp.supply.flowMarket">Open Market</span>
-      </div>
+
+      <p>The <strong>Buyback Engine</strong> reinforces that alignment on an ongoing basis: a
+        share of network fee revenue generated by validators flows into a buyback pool, which
+        purchases $SECT on the open market. Token scarcity is therefore a function of network
+        activity — validators, custody volume and DEX usage — rather than speculative demand
+        alone.</p>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">50M &rarr; 25M</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Supply &amp; Buyback</p>
+          <h3>Strategic supply reduction</h3>
+          <p class="card-sub">One cut in December 2026, then fixed. Supply never moves again.</p>
+        </div>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 08·A · Plate 08</span>
+      </figure>
     </section>
 
-    <section class="wp-section" id="marketcap">
-      <p class="wp-kicker" data-i18n="wp.marketcap.kicker">&sect;09 &middot; Supply &amp; Market Cap</p>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 170 140"><rect x="15" y="105" width="14" height="25" fill="#ffffff" opacity="0.14"/><rect x="34" y="88" width="14" height="42" fill="#ffffff" opacity="0.18"/><rect x="53" y="66" width="14" height="64" fill="#ffffff" opacity="0.22"/><use href="#sectoraMark" x="87.57" y="42.52" width="64.86" height="64.86"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.marketcap.kicker">&sect;09 &middot; Supply &amp; Market Cap</p>
-          </div>
-        </div>
-      </div>
-      <div class="supply-scenarios-block reveal" id="supply-scenarios">
-      <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span><span data-i18n="supplyScenarios.eyebrow">Supply &amp; Market Cap</span></span>
-      <h2 class="display display-md dark-text supply-heading" data-i18n="supplyScenarios.heading" data-i18n-html>What a <strong>25,000,000</strong><br>token supply implies<br>at other networks&rsquo; market<br>caps</h2>
-      <p class="supply-lede" data-i18n="supplyScenarios.lede" data-i18n-html>
-        Sectora's circulating supply settles at <strong>25,000,000 #SECT</strong> after the December
-        2026 reduction. Below, the price and market capitalization of several established networks
-        &mdash; each paired with what #SECT would be priced at if Sectora
-        reached just 5% of that network's market cap, a conservative scenario.
-      </p>
+    <section class="sec rv" id="s09" data-k="25,000,000" data-kl="Fixed supply after cut" data-t="Market cap">
+      <p class="sec-ref mono"><span>§09</span><i></i><span>Supply &amp; Market Cap</span><a class="anchor" href="#s09" data-a="s09">¶ link</a></p>
+      <h2>What 25,000,000 tokens imply at other networks' valuations</h2>
+      <p>Below, the market capitalization of several established networks, each paired with
+        what $SECT would be priced at if Sectora reached just 5% of that network's market
+        cap — a deliberately conservative reference point.</p>
 
-      <div class="supply-status-badge" id="supplyStatusBadge">
-        <span class="supply-status-dot" id="supplyStatusDot" aria-hidden="true"></span>
-        <span id="supplyStatusText" data-i18n="supplyScenarios.statusConnecting">Connecting to live prices&hellip;</span>
+      <div class="tab-wrap">
+        <div class="row head mono">
+          <span>Asset</span><span class="r hide">Price</span><span class="r">Market cap</span><span class="r">$SECT @ 5%</span>
+        </div>
+        <div class="row"><span><b>Bitcoin</b> <span class="t">BTC</span></span><span class="r hide">$64,940</span><span class="r">$1.30T</span><span class="r">$2,600</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row"><span><b>Ethereum</b> <span class="t">ETH</span></span><span class="r hide">$1,897</span><span class="r">$227.64B</span><span class="r">$455.28</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row"><span><b>XRP</b> <span class="t">XRP</span></span><span class="r hide">$2.85</span><span class="r">$168.15B</span><span class="r">$336.30</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row"><span><b>Solana</b> <span class="t">SOL</span></span><span class="r hide">$73.80</span><span class="r">$42.88B</span><span class="r">$85.76</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row"><span><b>Sui</b> <span class="t">SUI</span></span><span class="r hide">$3.40</span><span class="r">$19.38B</span><span class="r">$38.76</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row"><span><b>Hyperliquid</b> <span class="t">HYPE</span></span><span class="r hide">$28.50</span><span class="r">$12.83B</span><span class="r">$25.66</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row"><span><b>Bitcoin Cash</b> <span class="t">BCH</span></span><span class="r hide">$216.69</span><span class="r">$4.31B</span><span class="r">$8.62</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row"><span><b>Litecoin</b> <span class="t">LTC</span></span><span class="r hide">$45.69</span><span class="r">$3.54B</span><span class="r">$7.08</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row self"><span><b>Sectora</b> <span class="t">$SECT</span></span><span class="r hide">$0.10</span><span class="r">$5.00M</span><span class="r"><b>$0.10</b> <span class="t">listing</span></span><span class="cap" aria-hidden="true"><i></i></span></div>
       </div>
 
-      <div class="supply-table-wrap">
-        <table class="supply-table">
-          <thead>
-            <tr>
-              <th data-i18n="supplyScenarios.tableAsset">Asset</th>
-              <th class="num" data-i18n="supplyScenarios.tablePrice">Price</th>
-              <th class="num" data-i18n="supplyScenarios.tableSupply">Circulating Supply</th>
-              <th class="num supply-bar-col" data-i18n="supplyScenarios.tableMcap">Market Cap</th>
-              <th class="num" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% Cap</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr data-asset="bitcoin">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Bitcoin <span class="supply-coin-ticker">BTC</span></span></td>
-              <td class="num mono" data-el="price">$64,940</td>
-              <td class="num mono">20.1M</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$1.30T</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="100"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="2607" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="ethereum">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Ethereum <span class="supply-coin-ticker">ETH</span></span></td>
-              <td class="num mono" data-el="price">$1,897</td>
-              <td class="num mono">120M</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$227.64B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="73"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="455.28" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="bitcoin-cash">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Bitcoin Cash <span class="supply-coin-ticker">BCH</span></span></td>
-              <td class="num mono" data-el="price">$216.69</td>
-              <td class="num mono">19.9M</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$4.31B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="11"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="8.61" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="solana">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Solana <span class="supply-coin-ticker">SOL</span></span></td>
-              <td class="num mono" data-el="price">$73.80</td>
-              <td class="num mono">581M</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$42.88B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="47"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="85.76" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="litecoin">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Litecoin <span class="supply-coin-ticker">LTC</span></span></td>
-              <td class="num mono" data-el="price">$45.69</td>
-              <td class="num mono">77.5M</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$3.54B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="8"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="7.08" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="ripple">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>XRP <span class="supply-coin-ticker">XRP</span></span></td>
-              <td class="num mono" data-el="price">$2.85</td>
-              <td class="num mono">59.0B</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$168.15B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="68"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="336.30" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="sui">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Sui <span class="supply-coin-ticker">SUI</span></span></td>
-              <td class="num mono" data-el="price">$3.40</td>
-              <td class="num mono">5.7B</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$19.38B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="35"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="38.76" data-prefix="$">$0</td>
-            </tr>
-            <tr data-asset="hyperliquid">
-              <td><span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Hyperliquid <span class="supply-coin-ticker">HYPE</span></span></td>
-              <td class="num mono" data-el="price">$28.50</td>
-              <td class="num mono">450M</td>
-              <td class="num supply-bar-col">
-                <div class="mono supply-mcap" data-el="mcap">$12.83B</div>
-                <div class="supply-bar-track"><div class="supply-bar-fill" data-el="bar" data-pct="28"></div></div>
-              </td>
-              <td class="num mono supply-implied" data-el="implied5" data-count data-target="25.65" data-prefix="$">$0</td>
-            </tr>
-            <tr class="supply-row--sectora">
-              <td><span class="supply-coin"><span class="supply-coin-dot" aria-hidden="true"></span>Sectora <span class="supply-coin-ticker">#SECT</span></span></td>
-              <td class="num mono">$0.10</td>
-              <td class="num mono">50.0M</td>
-              <td class="num mono supply-bar-col">$5.00M</td>
-              <td class="num mono">&mdash;</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="supply-mobile-list">
-        <div class="supply-mobile-row" data-asset="bitcoin">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Bitcoin <span class="supply-coin-ticker">BTC</span></span>
-            <span class="mono" data-el="price">$64,940</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">20.1M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$1.30T</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="2607" data-prefix="$">$0</span>
-          </div>
+      <p class="fine">Illustrative only, not a price prediction or financial advice. The
+        $SECT @ 5% column divides 5% of each reference asset's market cap by Sectora's fixed
+        25,000,000 supply. Sectora's own row shows its initial listing price of $0.10, not a
+        scenario. It assumes valuation parity with each network, which is not guaranteed, and
+        ignores differences in token utility, unlock schedules and liquidity depth. Reference
+        figures are a fixed snapshot — CoinGecko and CoinMarketCap, 7–8 August 2026.</p>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">Log scale</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Supply &amp; Market Cap</p>
+          <h3>Orders of magnitude</h3>
+          <p class="card-sub">What a fixed supply of 25,000,000 implies at the valuations of established networks.</p>
         </div>
-        <div class="supply-mobile-row" data-asset="ethereum">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Ethereum <span class="supply-coin-ticker">ETH</span></span>
-            <span class="mono" data-el="price">$1,897</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">120M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$227.64B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="455.28" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="bitcoin-cash">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Bitcoin Cash <span class="supply-coin-ticker">BCH</span></span>
-            <span class="mono" data-el="price">$216.69</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">19.9M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$4.31B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="8.61" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="solana">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Solana <span class="supply-coin-ticker">SOL</span></span>
-            <span class="mono" data-el="price">$73.80</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">581M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$42.88B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="85.76" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="litecoin">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Litecoin <span class="supply-coin-ticker">LTC</span></span>
-            <span class="mono" data-el="price">$45.69</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">77.5M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$3.54B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="7.08" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="ripple">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>XRP <span class="supply-coin-ticker">XRP</span></span>
-            <span class="mono" data-el="price">$2.85</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">59.0B</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$168.15B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="336.30" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="sui">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Sui <span class="supply-coin-ticker">SUI</span></span>
-            <span class="mono" data-el="price">$3.40</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">5.7B</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$19.38B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="38.76" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row" data-asset="hyperliquid">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" data-el="dot" aria-hidden="true"></span>Hyperliquid <span class="supply-coin-ticker">HYPE</span></span>
-            <span class="mono" data-el="price">$28.50</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">450M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono" data-el="mcap">$12.83B</span>
-          </div>
-          <div class="supply-mobile-implied">
-            <span class="supply-mobile-implied-label" data-i18n="supplyScenarios.tableImplied">#SECT @ 5% cap</span>
-            <span class="supply-mobile-implied-value mono" data-el="implied5" data-count data-target="25.65" data-prefix="$">$0</span>
-          </div>
-        </div>
-        <div class="supply-mobile-row supply-mobile-row--sectora">
-          <div class="supply-mobile-top">
-            <span class="supply-coin"><span class="supply-coin-dot" aria-hidden="true"></span>Sectora <span class="supply-coin-ticker">#SECT</span></span>
-            <span class="mono">$0.10</span>
-          </div>
-          <div class="supply-mobile-meta">
-            <span data-i18n="supplyScenarios.supplyLabel">Supply</span> <span class="mono">50.0M</span>
-            <span data-i18n="supplyScenarios.mcapLabel">Market cap</span> <span class="mono">$5.00M</span>
-          </div>
-        </div>
-      </div>
-
-      <p class="supply-disclaimer">
-        <span data-i18n="supplyScenarios.disclaimer" data-i18n-html>Illustrative only, not a price prediction or financial advice. The #SECT @ 5% cap column
-        divides 5% of each reference asset's market cap by Sectora's fixed 25,000,000 #SECT supply.
-        It assumes valuation parity with each network, which is not guaranteed, and ignores
-        differences in token utility, unlock schedules, and liquidity depth. Circulating supply
-        figures are fixed reference snapshots; price and market cap refresh from
-        live market data roughly every 10 seconds.</span>
-        <span class="supply-stamp" id="supplyStamp" data-i18n="supplyScenarios.stampStatic">SOURCE: STATIC SNAPSHOT &mdash; COINGECKO, COINMARKETCAP &mdash; AS OF AUGUST 7&ndash;8, 2026</span>
-      </p>
-
-      <div class="supply-calc reveal" id="supplyCalc">
-        <div class="supply-calc-head">
-          <span class="eyebrow eyebrow-dot dark-text"><span class="exec-dot"></span><span data-i18n="calc.eyebrow">#SECT Price Calculator</span></span>
-          <h3 class="supply-calc-title" data-i18n="calc.heading">Model Your Own Scenario</h3>
-          <p class="supply-calc-lede" data-i18n="calc.lede">Pick a reference network, choose what share of its market cap #SECT could reach, and see the implied price and what your investment would be worth.</p>
-        </div>
-
-        <div class="supply-calc-body">
-          <div class="supply-calc-controls">
-            <div class="supply-calc-field">
-              <span class="supply-calc-label" data-i18n="calc.assetLabel">Reference Network</span>
-              <div class="supply-calc-pills" id="calcAssetPills" role="radiogroup" aria-label="Reference network">
-                <button type="button" class="supply-calc-pill is-active" data-asset="bitcoin" role="radio" aria-checked="true">Bitcoin</button>
-                <button type="button" class="supply-calc-pill" data-asset="ethereum" role="radio" aria-checked="false">Ethereum</button>
-                <button type="button" class="supply-calc-pill" data-asset="bitcoin-cash" role="radio" aria-checked="false">Bitcoin Cash</button>
-                <button type="button" class="supply-calc-pill" data-asset="solana" role="radio" aria-checked="false">Solana</button>
-                <button type="button" class="supply-calc-pill" data-asset="litecoin" role="radio" aria-checked="false">Litecoin</button>
-                <button type="button" class="supply-calc-pill" data-asset="ripple" role="radio" aria-checked="false">XRP</button>
-                <button type="button" class="supply-calc-pill" data-asset="sui" role="radio" aria-checked="false">Sui</button>
-                <button type="button" class="supply-calc-pill" data-asset="hyperliquid" role="radio" aria-checked="false">Hyperliquid</button>
-              </div>
-            </div>
-
-            <div class="supply-calc-field">
-              <label class="supply-calc-label" for="calcPctSlider" data-i18n="calc.pctLabel">Share of Market Cap</label>
-              <div class="supply-calc-slider-row">
-                <input type="range" id="calcPctSlider" class="supply-calc-slider" min="0.1" max="100" step="0.1" value="5" />
-                <span class="supply-calc-pct-value mono" id="calcPctValue">5.0%</span>
-              </div>
-            </div>
-
-            <div class="supply-calc-field">
-              <label class="supply-calc-label" for="calcInvestInput" data-i18n="calc.investLabel">Your Investment</label>
-              <div class="supply-calc-input-wrap">
-                <span class="supply-calc-input-prefix mono">$</span>
-                <input type="number" id="calcInvestInput" class="supply-calc-input mono" value="1000" min="0" step="100" inputmode="decimal" />
-              </div>
-            </div>
-          </div>
-
-          <div class="supply-calc-results">
-            <div class="supply-calc-result">
-              <span class="supply-calc-result-label" data-i18n="calc.impliedMcap">Implied #SECT Market Cap</span>
-              <span class="supply-calc-result-value mono" id="calcMcapOut">$0</span>
-            </div>
-            <div class="supply-calc-result supply-calc-result--accent">
-              <span class="supply-calc-result-label" data-i18n="calc.impliedPrice">Implied #SECT Price</span>
-              <span class="supply-calc-result-value supply-calc-result-value--big mono" id="calcPriceOut">$0</span>
-            </div>
-            <div class="supply-calc-result">
-              <span class="supply-calc-result-label" data-i18n="calc.tokensOut">#SECT You&rsquo;d Hold</span>
-              <span class="supply-calc-result-value mono" id="calcTokensOut">0</span>
-            </div>
-          </div>
-        </div>
-
-        <p class="supply-calc-note" data-i18n="calc.note">Illustrative only &mdash; same assumptions as the table above. Not financial advice.</p>
-      </div>
-    </div>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 09·A · Plate 09</span>
+      </figure>
     </section>
 
-    <section class="wp-section" id="contract">
-      <p class="wp-kicker" data-i18n="wp.contract.kicker">§10 &middot; Token Contract</p>
-      <h2 class="wp-h2" data-i18n="wp.contract.h2">$SECT Token Contract</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 180 140"><use href="#sectoraMark" x="22.57" y="42.52" width="64.86" height="64.86"/><path d="M120,40 H150 L160,50 V94 H120 Z" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.2"/><path d="M150,40 V50 H160" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.2"/><line x1="128" y1="62" x2="152" y2="62" stroke="rgba(255,255,255,0.28)" stroke-width="1"/><line x1="128" y1="72" x2="152" y2="72" stroke="rgba(255,255,255,0.28)" stroke-width="1"/><line x1="128" y1="82" x2="144" y2="82" stroke="rgba(255,255,255,0.28)" stroke-width="1"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.contract.kicker">&sect;10 &middot; Token Contract</p>
-          </div>
+    <section class="sec rv" id="s10" data-k="0% / 3%" data-kl="Buy and sell tax" data-t="Contract">
+      <p class="sec-ref mono"><span>§10</span><i></i><span>Token Contract</span><a class="anchor" href="#s10" data-a="s10">¶ link</a></p>
+      <h2>$SECT token contract</h2>
+      <p>$SECT is a standard ERC-20 token deployed on the Ethereum network. Ownership of the
+        contract has been renounced, permanently removing any privileged address capable of
+        altering its core parameters after deployment.</p>
+      <dl class="dl">
+        <div><dt>Network</dt><dd>Ethereum — ERC-20</dd></div>
+        <div><dt>Contract ownership</dt><dd class="ok">Renounced</dd></div>
+        <div><dt>Initial supply</dt><dd class="tab">50,000,000 $SECT</dd></div>
+        <div><dt>Final supply</dt><dd class="tab">25,000,000 $SECT</dd></div>
+        <div><dt>Buy tax</dt><dd class="tab">0%</dd></div>
+        <div><dt>Sell tax</dt><dd class="tab">3%</dd></div>
+        <div><dt>Contract address</dt><dd class="pend">Pending deployment</dd></div>
+        <div><dt>Etherscan verification</dt><dd class="pend">Pending deployment</dd></div>
+      </dl>
+      <p class="fine">The contract address, the Etherscan verification link and the ownership
+        renouncement transaction will be published here once the token is deployed to
+        Ethereum mainnet.</p>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">Renounced</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Token Contract</p>
+          <h3>Sealed contract</h3>
+          <p class="card-sub">Ownership renounced: no privileged address can alter its parameters.</p>
         </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.contract.p1">$SECT is a standard ERC-20 token deployed on the Ethereum network. Ownership of the contract has been renounced, permanently removing any privileged address capable of altering its core parameters after deployment.</p>
-      <div class="wp-legal-table">
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.contract.rowNetwork">Network</span>
-          <span class="wp-legal-value" data-i18n="wp.contract.valNetwork">Ethereum &mdash; ERC-20</span>
-        </div>
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.contract.rowOwnership">Contract Ownership</span>
-          <span class="wp-legal-value" data-i18n="wp.contract.valOwnership">Renounced</span>
-        </div>
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.contract.rowRenounceVerif">Renouncement Verification</span>
-          <span class="wp-legal-value wp-legal-value--blank" data-i18n-attr="aria-label:wp.common.toBeAdded" aria-label="To be added"></span>
-        </div>
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.contract.rowInitialSupply">Initial Supply</span>
-          <span class="wp-legal-value">50,000,000 $SECT</span>
-        </div>
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.contract.rowFinalSupply">Final Supply</span>
-          <span class="wp-legal-value" data-i18n="wp.contract.valFinalSupply" data-i18n-html>25,000,000 $SECT &mdash; after the December 2026 burn</span>
-        </div>
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.contract.rowBuyTax">Buy Tax</span>
-          <span class="wp-legal-value">0%</span>
-        </div>
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.contract.rowSellTax">Sell Tax</span>
-          <span class="wp-legal-value">3%</span>
-        </div>
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.contract.rowContractAddress">Contract Address</span>
-          <span class="wp-legal-value wp-legal-value--blank" data-i18n-attr="aria-label:wp.common.toBeAdded" aria-label="To be added"></span>
-        </div>
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.contract.rowEtherscan">Etherscan</span>
-          <span class="wp-legal-value wp-legal-value--blank" data-i18n-attr="aria-label:wp.common.toBeAdded" aria-label="To be added"></span>
-        </div>
-      </div>
-      <p class="wp-legal-note" data-i18n="wp.contract.note">Contract address, Etherscan verification link, and the ownership renouncement transaction link will be added here once the token is deployed to Ethereum mainnet.</p>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 10·A · Plate 10</span>
+      </figure>
     </section>
 
-    <section class="wp-section" id="infrastructure">
-      <p class="wp-kicker" data-i18n="wp.infrastructure.kicker">§11 &middot; Infrastructure</p>
-      <h2 class="wp-h2" data-i18n="wp.infrastructure.h2">Network Infrastructure</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 160 150"><use href="#sectoraMark" x="46.33" y="26.33" width="67.35" height="67.35"/><line x1="20" y1="130" x2="140" y2="130" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="40" y1="122" x2="40" y2="138" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="60" y1="122" x2="60" y2="138" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="80" y1="122" x2="80" y2="138" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="100" y1="122" x2="100" y2="138" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><line x1="120" y1="122" x2="120" y2="138" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><circle cx="40" cy="130" r="2" fill="rgba(70,140,230,0.5)"/><circle cx="80" cy="130" r="2" fill="rgba(70,140,230,0.5)"/><circle cx="120" cy="130" r="2" fill="rgba(70,140,230,0.5)"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.infrastructure.kicker">&sect;11 &middot; Infrastructure</p>
-          </div>
+    <section class="sec rv" id="s11" data-k="3 tools" data-kl="Dashboard · Scan · Market" data-t="Infrastructure">
+      <p class="sec-ref mono"><span>§11</span><i></i><span>Infrastructure</span><a class="anchor" href="#s11" data-a="s11">¶ link</a></p>
+      <h2>Three public surfaces</h2>
+      <p>Three tools give the network's activity a public, verifiable surface.</p>
+      <h3>Dashboard</h3>
+      <p>Real-time network health: the validator node map, epoch history and uptime, live
+        throughput and TPS, block fullness, gas price and staking totals.</p>
+      <h3>Sectorascan</h3>
+      <p>The network's block explorer — blocks, transactions, addresses and tokenized assets,
+        in an interface familiar to anyone who has used a mainstream chain explorer.</p>
+      <h3>Hash Market</h3>
+      <p>A dedicated view within the Dashboard for validator hash economics and staking
+        yield — a live read on network-wide return before committing stake.</p>
+      <div class="cta">
+        <a href="https://sectoraorg.com/dashboard.html">Dashboard</a>
+        <a href="https://sectoraorg.com/explorer.html">Sectorascan</a>
+        <a href="https://sectoraorg.com/dashboard.html#hash-market">Hash Market</a>
+      </div>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">3 tools · live</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Infrastructure</p>
+          <h3>Three public surfaces</h3>
+          <p class="card-sub">Dashboard, block explorer and hash market — three distinct instruments, open before mainnet.</p>
         </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.infrastructure.p1">Three tools give the network's activity a public, verifiable surface.</p>
-      <div class="wp-cards">
-        <a class="wp-card" href="/dashboard.html">
-          <span class="wp-card-label" data-i18n="wp.infrastructure.card1Label">Dashboard</span>
-          <p data-i18n="wp.infrastructure.card1Desc">Real-time network health: the validator node map, epoch history and uptime, live throughput and TPS, block fullness, gas price, and staking totals.</p>
-        </a>
-        <a class="wp-card" href="/explorer.html">
-          <span class="wp-card-label" data-i18n="wp.infrastructure.card2Label">Sectorascan</span>
-          <p data-i18n="wp.infrastructure.card2Desc">The network's block explorer &mdash; blocks, transactions, addresses and tokenized assets, in an interface familiar to anyone who has used a mainstream chain explorer.</p>
-        </a>
-        <a class="wp-card" href="/dashboard.html#hash-market">
-          <span class="wp-card-label" data-i18n="wp.infrastructure.card3Label">Hash Market</span>
-          <p data-i18n="wp.infrastructure.card3Desc">A dedicated view within the Dashboard for validator hash economics and staking yield &mdash; a live read on network-wide return before committing stake.</p>
-        </a>
-      </div>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 11·A · Plate 11</span>
+      </figure>
     </section>
 
-    <section class="wp-section" id="roadmap">
-      <p class="wp-kicker" data-i18n="wp.roadmap.kicker">§12 &middot; Roadmap</p>
-      <h2 class="wp-h2" data-i18n="roadmap.heading">What's Next</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 210 130"><use href="#sectoraMark" x="10.06" y="40.01" width="59.88" height="59.88"/><path d="M70,70 Q120,40 190,70" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" stroke-dasharray="1 6" stroke-linecap="round"/><circle cx="110" cy="52" r="2.6" fill="rgba(255,255,255,0.4)"/><circle cx="150" cy="50" r="2.8" fill="rgba(255,255,255,0.55)"/><circle cx="190" cy="70" r="3.2" fill="#468ce6"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.roadmap.kicker">&sect;12 &middot; Roadmap</p>
-          </div>
-        </div>
+    <section class="sec rv" id="s12" data-k="6 milestones" data-kl="Q1 2026 — Q2 2027" data-t="Roadmap">
+      <p class="sec-ref mono"><span>§12</span><i></i><span>Roadmap</span><a class="anchor" href="#s12" data-a="s12">¶ link</a></p>
+      <h2>From audit to cross-chain</h2>
+      <div class="tl" id="tl">
+        <div class="tl-i"><span class="tl-q">Q1 2026</span>
+          <h3>Security audit completion</h3>
+          <p>Third-party audit cycle covering smart contracts, custody logic and the
+            verification layer.</p></div>
+        <div class="tl-i"><span class="tl-q">Q2 2026</span>
+          <h3>Testnet launch</h3>
+          <p>The testnet opens to security researchers and early partners to stress-test
+            custody and tokenization flows.</p></div>
+        <div class="tl-i"><span class="tl-q">Q3 2026</span>
+          <h3>Custody network genesis</h3>
+          <p>The first wave of validators and custody nodes onboard, moving Sectora from
+            development to an active, distributed network.</p></div>
+        <div class="tl-i"><span class="tl-q">Q4 2026</span>
+          <h3>Mainnet launch</h3>
+          <p>Verifiable tokenization and institutional-grade custody in production. Total
+            supply reduces to 25,000,000 in December.</p></div>
+        <div class="tl-i"><span class="tl-q">Q1 2027</span>
+          <h3>Institutional integrations</h3>
+          <p>First integrations with custody partners and exchanges, expanding access to
+            tokenized real-world assets.</p></div>
+        <div class="tl-i"><span class="tl-q">Q2 2027</span>
+          <h3>Cross-chain expansion</h3>
+          <p>Verification and custody coverage extended to additional chains, under the same
+            audited security model.</p></div>
       </div>
-      <div class="wp-timeline">
-        <div class="wp-timeline-item">
-          <span class="wp-timeline-date" data-i18n="roadmap.q1_2026.date">Q1 2026</span>
-          <span class="wp-timeline-title" data-i18n="roadmap.q1_2026.title">Security Audit Completion</span>
-          <p data-i18n="roadmap.q1_2026.desc">Sectora Protocol completes its third-party security audit cycle, covering smart contracts, custody logic, and the verification layer.</p>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">Q1 26 — Q2 27</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Roadmap</p>
+          <h3>From audit to cross-chain</h3>
+          <p class="card-sub">Six milestones carrying the network from audit to multi-chain coverage.</p>
         </div>
-        <div class="wp-timeline-item">
-          <span class="wp-timeline-date" data-i18n="roadmap.q2_2026.date">Q2 2026</span>
-          <span class="wp-timeline-title" data-i18n="roadmap.q2_2026.title">Testnet Launch</span>
-          <p data-i18n="roadmap.q2_2026.desc">The Sectora testnet opens to security researchers and early partners to stress-test custody and tokenization flows.</p>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 12·A · Plate 12</span>
+      </figure>
+    </section>
+
+    <section class="sec rv" id="s13" data-k="Foundation" data-kl="Bootstrap governance" data-t="Governance">
+      <p class="sec-ref mono"><span>§13</span><i></i><span>Governance &amp; Risk</span><a class="anchor" href="#s13" data-a="s13">¶ link</a></p>
+      <h2>Governance, foundation and risk</h2>
+      <p>During the network's bootstrap phase, the Sectora Foundation IL stewards protocol
+        development, treasury and the roadmap outlined in this document. As validator
+        participation and $SECT distribution mature, governance is intended to progressively
+        decentralize toward the network's stakeholders.</p>
+      <div class="warn">
+        <h3>Risk disclosure</h3>
+        <p>This document is provided for informational purposes only and does not constitute
+          an offer or solicitation to buy or sell any security or financial instrument, nor
+          investment, legal or tax advice. Sectora is in active development: testnet features,
+          metrics and figures referenced here are simulated or subject to change and should
+          not be relied upon as production data. Statements about future features, timelines
+          or network performance are forward-looking and involve risk and uncertainty,
+          including smart contract risk, regulatory risk and market risk. $SECT may lose some
+          or all of its value. Prospective participants should conduct independent research
+          and consult professional advisors before interacting with the protocol.</p>
+      </div>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">Foundation</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Governance &amp; Risk</p>
+          <h3>Bootstrap governance</h3>
+          <p class="card-sub">Foundation stewardship now, progressive decentralization as the set matures.</p>
         </div>
-        <div class="wp-timeline-item">
-          <span class="wp-timeline-date" data-i18n="roadmap.q3_2026.date">Q3 2026</span>
-          <span class="wp-timeline-title" data-i18n="roadmap.q3_2026.title">Custody Network Genesis</span>
-          <p data-i18n="roadmap.q3_2026.desc">The first wave of validators and custody nodes onboard, moving Sectora from development to an active, distributed network.</p>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 13·A · Plate 13</span>
+      </figure>
+    </section>
+
+    <section class="sec rv" id="s14" data-k="Chicago, IL" data-kl="Registered jurisdiction" data-t="Legal">
+      <p class="sec-ref mono"><span>§14</span><i></i><span>Location &amp; Legal</span><a class="anchor" href="#s14" data-a="s14">¶ link</a></p>
+      <h2>The entity behind the protocol</h2>
+      <p>Sectora is operated by the entity below. Verification details and complete legal
+        documentation will be published to this section as they become available.</p>
+      <dl class="dl">
+        <div><dt>Legal name</dt><dd>Sectora Foundation IL</dd></div>
+        <div><dt>Location</dt><dd>Chicago, Illinois, United States</dd></div>
+        <div><dt>Registration number</dt><dd class="pend">Pending publication</dd></div>
+        <div><dt>State registry verification</dt><dd class="pend">Pending publication</dd></div>
+        <div><dt>Legal documents</dt><dd class="pend">Pending publication</dd></div>
+      </dl>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">Chicago, IL</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Location &amp; Legal</p>
+          <h3>The registered seal</h3>
+          <p class="card-sub">Operated by an entity incorporated in Illinois, United States.</p>
         </div>
-        <div class="wp-timeline-item">
-          <span class="wp-timeline-date" data-i18n="roadmap.q4_2026.date">Q4 2026</span>
-          <span class="wp-timeline-title" data-i18n="roadmap.q4_2026.title">Mainnet Launch</span>
-          <p data-i18n="roadmap.q4_2026.desc">Sectora Protocol goes live on mainnet, enabling verifiable tokenization and institutional-grade custody in production.</p>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 14·A · Plate 14</span>
+      </figure>
+    </section>
+
+    <section class="sec rv" id="s15" data-k="Live now" data-kl="Testnet open to explore" data-t="Conclusion">
+      <p class="sec-ref mono"><span>§15</span><i></i><span>Conclusion</span><a class="anchor" href="#s15" data-a="s15">¶ link</a></p>
+      <h2>Infrastructure built around verification</h2>
+      <p class="lead">Tokenized real-world assets deserve infrastructure built around
+        verification, not around trust.</p>
+      <p>A dedicated Layer 3 network, a validator set that secures every custody attestation,
+        a native exchange that settles crypto and real-world assets through the same verified
+        rails, and a supply policy tied to real usage rather than speculation — together,
+        these are the pieces of a network designed to hold institutional-grade capital.</p>
+      <p>The testnet is live today. The Dashboard, Sectorascan and the DEX are open to explore
+        now, ahead of the mainnet launch outlined in the roadmap above.</p>
+      <div class="cta">
+        <a class="key" href="https://sectoraorg.com/dashboard.html">Open Dashboard</a>
+        <a href="https://sectoraorg.com/dex-cover.html">Enter the DEX</a>
+        <a href="https://sectoraorg.com/explorer.html">View Explorer</a>
+      </div>
+    
+      <figure class="card">
+        <span class="card-glow" aria-hidden="true"></span>
+        <span class="card-grid" aria-hidden="true"></span>
+        <span class="card-vig" aria-hidden="true"></span>
+        <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="card-meta">Assembled</span>
+        <div class="card-in">
+          <p class="card-eyebrow"><i></i>Conclusion</p>
+          <h3>The pieces, assembled</h3>
+          <p class="card-sub">Network, validators, exchange and supply policy resolved into a single structure.</p>
         </div>
-        <div class="wp-timeline-item">
-          <span class="wp-timeline-date" data-i18n="roadmap.q1_2027.date">Q1 2027</span>
-          <span class="wp-timeline-title" data-i18n="roadmap.q1_2027.title">Institutional Integrations</span>
-          <p data-i18n="roadmap.q1_2027.desc">First integrations with custody partners and exchanges, expanding access to tokenized real-world assets.</p>
+        <span class="card-mark">
+          <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+          <span>SECTORA</span>
+        </span>
+        <span class="card-ref">Fig. 15·A · Plate 15</span>
+      </figure>
+    </section>
+
+    <section class="ctrl rv">
+      <p class="sec-ref mono"><span>§—</span><i></i><span>Document control</span></p>
+      <h2>Control and revision</h2>
+      <div class="ctrl-grid">
+        <div>
+          <dl>
+            <dt>Reference</dt><dd><b>SF·WP·001</b></dd>
+            <dt>Version</dt><dd>1.0 — first public release</dd>
+            <dt>Status</dt><dd>Living document, revised as the protocol develops</dd>
+          </dl>
         </div>
-        <div class="wp-timeline-item">
-          <span class="wp-timeline-date" data-i18n="roadmap.q2_2027.date">Q2 2027</span>
-          <span class="wp-timeline-title" data-i18n="roadmap.q2_2027.title">Cross-Chain Expansion</span>
-          <p data-i18n="roadmap.q2_2027.desc">Sectora extends verification and custody coverage to additional chains, following the same audited security model.</p>
+        <div>
+          <dl>
+            <dt>Issued by</dt><dd><b>Sectora Foundation IL</b><br>Chicago, Illinois, United States</dd>
+            <dt>Registration</dt><dd>Pending publication</dd>
+          </dl>
+        </div>
+        <div>
+          <dl>
+            <dt>Contact</dt>
+            <dd><a class="lnk" href="mailto:support@sectoraorg.com">support@sectoraorg.com</a><br>
+                <a class="lnk" href="mailto:marketing@sectoraorg.com">marketing@sectoraorg.com</a></dd>
+            <dt>Canonical copy</dt><dd><a class="lnk" href="https://sectoraorg.com/docs">sectoraorg.com/docs</a></dd>
+          </dl>
         </div>
       </div>
     </section>
-
-    <section class="wp-section" id="governance">
-      <p class="wp-kicker" data-i18n="wp.governance.kicker">§13 &middot; Governance &amp; Risk</p>
-      <h2 class="wp-h2" data-i18n="wp.governance.h2">Governance, Foundation &amp; Risk Disclosure</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 150 160"><path d="M75,18 L128.7,49 L128.7,111 L75,142 L21.3,111 L21.3,49 Z" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.3"/><use href="#sectoraMark" x="42.57" y="47.52" width="64.86" height="64.86"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.governance.kicker">&sect;13 &middot; Governance &amp; Risk</p>
-          </div>
-        </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.governance.p1">During the network's bootstrap phase, the Sectora Foundation IL stewards protocol development, treasury, and the roadmap outlined in this document. As validator participation and $SECT distribution mature, governance is intended to progressively decentralize toward the network's stakeholders.</p>
-      <div class="wp-disclaimer">
-        <p class="wp-disclaimer-title" data-i18n="wp.governance.disclaimerTitle">Risk Disclosure</p>
-        <p data-i18n="wp.governance.disclaimerText">This document is provided for informational purposes only and does not constitute an offer or solicitation to buy or sell any security or financial instrument, nor investment, legal, or tax advice. Sectora is in active development: testnet features, metrics, and figures referenced in this document are simulated or subject to change and should not be relied upon as production data. Statements about future features, timelines, or network performance are forward-looking and involve risk and uncertainty, including but not limited to smart contract risk, regulatory risk, and market risk. $SECT may lose some or all of its value. Prospective participants should conduct independent research and consult professional advisors before interacting with the protocol.</p>
-      </div>
-    </section>
-
-    <section class="wp-section" id="legal">
-      <p class="wp-kicker" data-i18n="wp.legal.kicker">§14 &middot; Location &amp; Legal Documents</p>
-      <h2 class="wp-h2" data-i18n="wp.legal.h2">Location &amp; Legal Documents</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 180 130"><use href="#sectoraMark" x="22.57" y="45.52" width="64.86" height="64.86"/><path d="M140,35 C151,35 160,44 160,55 C160,72 140,95 140,95 C140,95 120,72 120,55 C120,44 129,35 140,35 Z" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.3"/><circle cx="140" cy="55" r="7" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.1"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.legal.kicker">&sect;14 &middot; Location &amp; Legal Documents</p>
-          </div>
-        </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.legal.p1">Sectora is operated by the entity below. Verification details and complete legal documentation will be published to this section as they become available.</p>
-      <div class="wp-legal-table">
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.legal.rowLegalName">Legal Name</span>
-          <span class="wp-legal-value">Sectora Foundation IL</span>
-        </div>
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.legal.rowLocation">Location</span>
-          <span class="wp-legal-value" data-i18n="wp.legal.valLocation">Chicago, Illinois, United States</span>
-        </div>
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.legal.rowRegNumber">Company Registration Number</span>
-          <span class="wp-legal-value wp-legal-value--blank" data-i18n-attr="aria-label:wp.common.toBeAdded" aria-label="To be added"></span>
-        </div>
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.legal.rowVerification">Verification</span>
-          <span class="wp-legal-value wp-legal-value--blank" data-i18n-attr="aria-label:wp.common.toBeAdded" aria-label="To be added"></span>
-        </div>
-        <div class="wp-legal-row">
-          <span class="wp-legal-label" data-i18n="wp.legal.rowLegalDocs">Legal Documents</span>
-          <span class="wp-legal-value wp-legal-value--blank" data-i18n-attr="aria-label:wp.common.toBeAdded" aria-label="To be added"></span>
-        </div>
-      </div>
-      <p class="wp-legal-note" data-i18n="wp.legal.note">Registration number, the verification link to the Illinois Secretary of State business search, and legal documents will be added here once available.</p>
-    </section>
-
-    <section class="wp-section" id="conclusion">
-      <p class="wp-kicker" data-i18n="wp.conclusion.kicker">§15 &middot; Conclusion</p>
-      <h2 class="wp-h2" data-i18n="wp.conclusion.h2">Conclusion</h2>
-      <div class="wp-scene">
-        <svg class="wp-scene-dots" aria-hidden="true"><rect width="100%" height="100%" fill="url(#wpSceneDots)"/></svg>
-        <div class="wp-scene-glow" aria-hidden="true"></div>
-        <div class="wp-scene-inner">
-          <span class="wp-scene-icon" aria-hidden="true"><svg viewBox="0 0 150 150"><line x1="133.0" y1="75.0" x2="147.0" y2="75.0" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="116.0" y1="116.0" x2="125.9" y2="125.9" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="75.0" y1="133.0" x2="75.0" y2="147.0" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="34.0" y1="116.0" x2="24.1" y2="125.9" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="17.0" y1="75.0" x2="3.0" y2="75.0" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="34.0" y1="34.0" x2="24.1" y2="24.1" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="75.0" y1="17.0" x2="75.0" y2="3.0" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><line x1="116.0" y1="34.0" x2="125.9" y2="24.1" stroke="rgba(255,255,255,0.18)" stroke-width="1"/><use href="#sectoraMark" x="40.08" y="40.13" width="69.84" height="69.84"/></svg></span>
-          <div class="wp-scene-text">
-            <p class="wp-scene-eyebrow" data-i18n="wp.scene.welcome">Welcome to</p>
-            <p class="wp-scene-title" data-i18n="wp.conclusion.kicker">&sect;15 &middot; Conclusion</p>
-          </div>
-        </div>
-      </div>
-      <p class="wp-body-text" data-i18n="wp.conclusion.p1">Sectora's premise is simple: tokenized real-world assets deserve infrastructure built around verification, not around trust. A dedicated Layer 3 network, a validator set that secures every custody attestation, a native exchange that settles crypto and real-world assets through the same verified rails, and a supply policy tied to real usage rather than speculation &mdash; together, these are the pieces of a network designed to hold institutional-grade capital.</p>
-      <p class="wp-body-text" data-i18n="wp.conclusion.p2">The testnet is live today. The Dashboard, Sectorascan, and the DEX are open to explore now, ahead of the mainnet launch outlined in the roadmap above.</p>
-      <div class="wp-cta-row">
-        <a class="wp-cta wp-cta--solid" href="/dashboard.html" data-i18n="wp.conclusion.ctaDashboard">Open Dashboard</a>
-        <a class="wp-cta" href="/dex-cover.html" data-i18n="wp.conclusion.ctaDex">Enter the DEX</a>
-        <a class="wp-cta" href="/explorer.html" data-i18n="wp.conclusion.ctaExplorer">View Explorer</a>
-      </div>
-    </section>
-
-    <footer class="wp-doc-footer">
-      <p class="wp-doc-footer-copy" data-i18n="wp.footer.copy">&copy; 2026 Sectora Foundation IL. All rights reserved. This whitepaper is a living document and may be revised as the protocol develops.</p>
-    </footer>
 
   </main>
+
+  <aside class="note" id="note" aria-hidden="true"></aside>
+
 </div>
 
-<div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
-<div class="cursor-ring" id="cursorRing" aria-hidden="true"><span class="cursor-ring-label" id="cursorLabel"></span></div>
-<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<div class="cmd" id="cmd" role="dialog" aria-modal="true" aria-label="Search the document">
+  <div class="cmd-box">
+    <div class="cmd-in">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+      <input id="cmd-q" type="text" placeholder="Search sections and content…" autocomplete="off" spellcheck="false">
+      <kbd>ESC</kbd>
+    </div>
+    <div class="cmd-list" id="cmd-list"></div>
+    <div class="cmd-foot">
+      <span><b>↑↓</b> Move</span><span><b>↵</b> Go</span><span><b>⌘K</b> Toggle</span>
+    </div>
+  </div>
+</div>
 
-<script src="/translations.js?v=20260810i"></script>
-<script src="/whitepaper-translations.js?v=20260811a"></script>
-<script src="/i18n.js?v=20260811a"></script>
-<script src="/supply-scenarios.js?v=20260808h"></script>
-<script src="/supply-calc.js?v=20260808h"></script>
-<script src="/reveal.js?v=20260808h"></script>
-<script src="/whitepaper.js?v=20260810a"></script>
-<script src="/cursor.js?v=20260808h"></script>
+<div class="resume" id="resume">
+  <span>You left off at <b id="resume-s">§00</b></span>
+  <button type="button" id="resume-go">Continue</button>
+  <span class="x" id="resume-x" role="button" tabindex="0" aria-label="Dismiss">×</span>
+</div>
+
+<div class="keys" id="keys" aria-hidden="true">
+  <span>Navigate</span><kbd>J</kbd><kbd>K</kbd><span>Section</span><kbd>⌘K</kbd><span>Search</span>
+</div>
+
+<footer class="foot">
+  <div class="foot-in mono">
+    <span>© <span id="yr">2026</span> Sectora Foundation IL · Chicago, Illinois</span>
+    <span>SF·WP·001 · v1.0 · <a class="lnk" href="#top">Back to top</a></span>
+  </div>
+</footer>
+<script>
+
+
+/* ===== whitepaper =====
+   Un solo observador gobierna el indice lateral, las anotaciones al margen
+   y la entrada de cada bloque. Todo se detiene fuera de pantalla. */
+(function(){
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const secs = [...document.querySelectorAll('.sec')];
+  const rail = document.getElementById('rail');
+  const note = document.getElementById('note');
+  const bar  = document.getElementById('bar');
+  const yr   = document.getElementById('yr');
+  if(yr) yr.textContent = new Date().getFullYear();
+
+  /* ---------- indice lateral, construido desde las secciones ---------- */
+  const enlaces = secs.map((s, i) => {
+    const a = document.createElement('a');
+    a.href = '#' + s.id;
+    // tiempo de lectura real, a partir del texto de la seccion
+    const pal = (s.textContent || '').trim().split(/\s+/).length;
+    const min = Math.max(1, Math.round(pal / 210));
+    s.dataset.min = min;
+    a.innerHTML = '<span class="bar" aria-hidden="true"><span></span></span>'
+                + '<i class="mk" aria-hidden="true"></i>'
+                + '<span class="n">' + String(i).padStart(2,'0') + '</span>'
+                + '<span class="tx">' + (s.dataset.t || '') + '</span>'
+                + '<span class="tm">' + min + "'</span>";
+    rail.appendChild(a);
+    return a;
+  });
+
+  /* ---------- anotaciones al margen: referencia de la seccion activa ---------- */
+  function anotar(i){
+    if(!note) return;
+    const s = secs[i];
+    const k = s.dataset.k, kl = s.dataset.kl;
+    note.innerHTML =
+      (k ? '<div class="note-key"><b>' + k + '</b><span>' + (kl||'') + '</span></div>' : '')
+      + '<p><b>§' + String(i).padStart(2,'0') + '</b>' + (s.dataset.t||'') + '</p>'
+      + '<p>' + (i+1) + ' / ' + secs.length + '</p>'
+      + '<p>' + (s.dataset.min||'') + " min read</p>";
+  }
+
+  /* declaradas aqui porque marcar() las usa y se ejecuta antes de que el
+     bloque de avance quede definido mas abajo */
+  let activo = -1, urlT = 0, puedeUrl = true;
+
+  function marcar(i){
+    if(i === activo) return;
+    activo = i;
+    enlaces.forEach((a, k) => {
+      a.classList.toggle('on', k === i);
+      a.classList.toggle('seen', k < i);
+    });
+    anotar(i);
+    url(i);
+    // el indice horizontal de movil sigue a la seccion activa
+    if(window.innerWidth <= 820 && enlaces[i]){
+      const r = enlaces[i].getBoundingClientRect(), rr = rail.getBoundingClientRect();
+      if(r.left < rr.left + 20 || r.right > rr.right - 20)
+        rail.scrollTo({left: rail.scrollLeft + (r.left - rr.left) - 60, behavior:'smooth'});
+    }
+  }
+
+  /* la banda de deteccion va en el tercio superior: marca la seccion que
+     se esta leyendo, no la que asoma por abajo */
+  /* la banda de deteccion va en el tercio superior: marca la seccion que
+     se esta leyendo, no la que asoma por abajo */
+  const io = new IntersectionObserver(es => {
+    const vis = es.filter(e => e.isIntersecting)
+                  .sort((a,b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    if(vis.length) marcar(secs.indexOf(vis[0].target));
+  }, {rootMargin:'-12% 0px -70% 0px', threshold:0});
+  secs.forEach(s => io.observe(s));
+  marcar(0);
+
+  /* ---------- avance dentro de la seccion activa ---------- */
+  function avance(){
+    if(activo < 0 || !enlaces[activo]) return;
+    const s = secs[activo];
+    const b = enlaces[activo].querySelector('.bar span');
+    if(!b) return;
+    const r = s.getBoundingClientRect();
+    let p = (window.innerHeight*0.3 - r.top) / Math.max(r.height, 1);
+    p = p < 0 ? 0 : p > 1 ? 1 : p;
+    b.style.height = (p*100).toFixed(1) + '%';
+  }
+
+  /* la url refleja donde estas: al copiar el enlace, apunta a la seccion */
+  /* en un iframe aislado o al abrir el archivo desde disco, replaceState
+     lanza SecurityError. Se comprueba una vez y, si no se puede, se deja
+     de intentar: la lectura no depende de ello. */
+  function url(i){
+    if(!puedeUrl) return;
+    clearTimeout(urlT);
+    urlT = setTimeout(() => {
+      try{
+        const h = '#' + secs[i].id;
+        if(location.hash !== h && history.replaceState) history.replaceState(null, '', h);
+      }catch(err){ puedeUrl = false; }
+    }, 320);
+  }
+
+  /* ---------- entrada de cada bloque ---------- */
+  const rv = new IntersectionObserver(es => {
+    for(const e of es) if(e.isIntersecting){ e.target.classList.add('in'); rv.unobserve(e.target); }
+  }, {threshold:.12, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.rv').forEach(el => rv.observe(el));
+
+  /* ---------- barra de lectura ---------- */
+  let tick = false;
+  function leer(){
+    if(tick) return;
+    tick = true;
+    requestAnimationFrame(() => {
+      tick = false;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if(bar) bar.style.width = (max > 0 ? (window.scrollY/max)*100 : 0).toFixed(2) + '%';
+    });
+  }
+  window.addEventListener('scroll', leer, {passive:true});
+  leer();
+
+  /* ---------- portada: el titular entra por lineas ---------- */
+  const h1 = document.getElementById('h1');
+  const crule = document.getElementById('crule');
+  const H1HTML = h1 ? h1.innerHTML : '';
+
+  /* el titular se parte por lineas reales, midiendo donde cae cada palabra
+     una vez cargada la fuente. Siempre desde el marcado original. */
+  function trocear(){
+    if(!h1) return;
+    h1.innerHTML = H1HTML;
+    const pal = [];
+    h1.childNodes.forEach(n => {
+      if(n.nodeType === 3) n.textContent.trim().split(/\s+/).filter(Boolean).forEach(w => pal.push({w, c:''}));
+      else if(n.nodeType === 1){ const c = n.tagName === 'B' ? 'b' : '';
+        n.textContent.trim().split(/\s+/).filter(Boolean).forEach(w => pal.push({w, c})); }
+    });
+    h1.innerHTML = pal.map(o => '<span class="w '+o.c+'">'+o.w+'</span>').join(' ');
+    const sp = [...h1.querySelectorAll('.w')];
+    const lns = []; let top = null;
+    sp.forEach(x => {
+      const t = Math.round(x.offsetTop);
+      if(top === null || t !== top){ lns.push([]); top = t; }
+      lns[lns.length-1].push(x);
+    });
+    h1.innerHTML = lns.map((ln,i) =>
+      '<span class="ln" style="--i:'+i+'"><span>' +
+      ln.map(x => x.className.includes('b') ? '<b>'+x.textContent+'</b>' : x.textContent).join(' ') +
+      '</span></span>').join('');
+  }
+  function abrir(){
+    if(document.body.classList.contains('on')) return;
+    if(h1 && !reduce) trocear();
+    if(!reduce) partirTitulares();
+    document.body.classList.add('on');
+    if(crule) requestAnimationFrame(() => {
+      crule.style.transition = 'transform 1.3s cubic-bezier(.16,1,.3,1) .1s';
+      crule.style.transform = 'scaleX(1)';
+    });
+  }
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(abrir); setTimeout(abrir, 1600); }
+  else abrir();
+
+  /* ---------- las cifras se componen al entrar ---------- */
+  const fmt = n => n.toLocaleString('en-US');
+  const cifras = [...document.querySelectorAll('[data-n]')];
+  const ioN = new IntersectionObserver(es => {
+    for(const e of es){
+      if(!e.isIntersecting) continue;
+      ioN.unobserve(e.target);
+      const el = e.target, fin = +el.dataset.n, pre = el.dataset.p || '';
+      // el primer hijo es el nodo de texto de la cifra; si no lo fuera,
+      // se deja el valor escrito en el marcado y no se anima
+      const txt = el.firstChild;
+      if(reduce || !txt || txt.nodeType !== 3 || !isFinite(fin)) continue;
+      const t0 = performance.now(), dur = 1100;
+      (function paso(now){
+        let k = Math.min(1, (now - t0)/dur);
+        k = 1 - Math.pow(1-k, 3);
+        txt.nodeValue = pre + fmt(Math.round(fin * k));
+        if(k < 1) requestAnimationFrame(paso);
+      })(performance.now());
+    }
+  }, {threshold:.4});
+  cifras.forEach(c => ioN.observe(c));
+
+  /* ---------- la reduccion de supply: la barra se parte por la mitad ---------- */
+  const cut = document.getElementById('cut'), fill = document.getElementById('cutfill');
+  if(cut && fill){
+    new IntersectionObserver((es, obs) => {
+      if(!es[0].isIntersecting) return;
+      obs.disconnect();
+      if(reduce){ fill.style.transform = 'scaleX(.5)'; return; }
+      setTimeout(() => { fill.style.transform = 'scaleX(.5)'; }, 420);
+    }, {threshold:.5}).observe(cut);
+  }
+
+  /* ---------- hitos del roadmap ---------- */
+  const hitos = [...document.querySelectorAll('.tl-i')];
+  const ioT = new IntersectionObserver(es => {
+    for(const e of es) if(e.isIntersecting){ e.target.classList.add('done'); ioT.unobserve(e.target); }
+  }, {threshold:.6});
+  hitos.forEach(h => ioT.observe(h));
+
+
+  /* ---------- rejilla de la portada ----------
+     misma mecanica que la web: cascada diagonal al cargar, caminantes y
+     destellos sueltos. Sobre papel las celdas van en azul muy diluido para
+     no competir con el texto. */
+  (function(){
+    const cv = document.getElementById('grid');
+    const cover = document.querySelector('.cover');
+    if(!cv || !cover) return;
+    const ctx = cv.getContext('2d');
+    const CELL = 54;
+    let W=0, H=0, cols=0, rows=0, heat=null, tono=null, andantes=[], dpr=1;
+
+    const lineas = document.createElement('canvas');
+    const lctx = lineas.getContext('2d');
+
+    function trazar(){
+      lctx.setTransform(dpr,0,0,dpr,0,0);
+      lctx.clearRect(0,0,W,H);
+      lctx.lineWidth = 1;
+      lctx.strokeStyle = 'rgba(10,12,15,.045)';
+      lctx.beginPath();
+      for(let c=0;c<=cols;c++){ lctx.moveTo(c*CELL+.5,0); lctx.lineTo(c*CELL+.5,H); }
+      for(let r=0;r<=rows;r++){ lctx.moveTo(0,r*CELL+.5); lctx.lineTo(W,r*CELL+.5); }
+      lctx.stroke();
+    }
+
+    function medir(){
+      const w = cover.clientWidth, h = cover.clientHeight;
+      if(w < 1 || h < 1) return;
+      W = w; H = h;
+      dpr = Math.min(window.devicePixelRatio || 1, w < 900 ? 1.5 : 2);
+      cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      cols = Math.ceil(W/CELL); rows = Math.ceil(H/CELL);
+      heat = new Float32Array(cols*rows);
+      tono = new Float32Array(cols*rows);
+      for(let i=0;i<tono.length;i++) tono[i] = Math.abs(Math.sin(i*12.9898)*43758.5453 % 1);
+      lineas.width = cv.width; lineas.height = cv.height;
+      trazar();
+      const n = W < 700 ? 3 : 6;
+      andantes = [];
+      for(let i=0;i<n;i++) andantes.push({c:(Math.random()*cols)|0, r:(Math.random()*rows)|0,
+                                          dc:Math.random()<.5?1:-1, dr:0, next:0});
+    }
+    const idx = (c,r) => r*cols + c;
+
+    let t0 = 0;
+    const CASCADA = 1200;
+    function cascada(t){
+      const e = t - t0;
+      if(e > CASCADA) return;
+      const p = e / CASCADA;
+      const frente = p * (cols + rows + 6);
+      for(let r=0;r<rows;r++){
+        const c0 = Math.round(frente - r);
+        for(let k=-2;k<=2;k++){
+          const c = c0 + k;
+          if(c >= 0 && c < cols){
+            const v = (1 - Math.abs(k)/2.7) * (1 - p*.3);
+            const i = idx(c,r);
+            if(heat[i] < v) heat[i] = v;
+          }
+        }
+      }
+    }
+
+    function pasos(t, rapido){
+      for(const w of andantes){
+        if(t < w.next) continue;
+        w.next = t + (rapido ? 70 + Math.random()*70 : 130 + Math.random()*170);
+        if(Math.random() < .3){
+          if(w.dc !== 0){ w.dr = Math.random()<.5?1:-1; w.dc = 0; }
+          else          { w.dc = Math.random()<.5?1:-1; w.dr = 0; }
+        }
+        w.c += w.dc; w.r += w.dr;
+        if(w.c < 0){ w.c = 0; w.dc = 1; }
+        if(w.c >= cols){ w.c = cols-1; w.dc = -1; }
+        if(w.r < 0){ w.r = 0; w.dr = 1; }
+        if(w.r >= rows){ w.r = rows-1; w.dr = -1; }
+        heat[idx(w.c,w.r)] = rapido ? .75 : .45;
+      }
+    }
+
+    let sigPop = 0;
+    function pops(t){
+      if(t < sigPop) return;
+      sigPop = t + 130 + Math.random()*180;
+      const n = 1 + ((Math.random()*3)|0);
+      for(let k=0;k<n;k++){
+        const i = idx((Math.random()*cols)|0, (Math.random()*rows)|0);
+        const v = .4 + Math.random()*.4;
+        if(heat[i] < v) heat[i] = v;
+      }
+    }
+
+    function pintar(){
+      ctx.clearRect(0,0,W,H);
+      for(let r=0;r<rows;r++){
+        for(let c=0;c<cols;c++){
+          const i = idx(c,r);
+          const v = heat[i];
+          if(v > .015){
+            const g = tono[i];
+            const R = (21 + 90*g)|0, G = (105 + 80*g)|0, B = 255;
+            ctx.fillStyle = 'rgba('+R+','+G+','+B+','+(Math.min(v,1)*.11).toFixed(3)+')';
+            ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
+          }
+        }
+      }
+      if(lineas.width > 1) ctx.drawImage(lineas, 0, 0, W, H);
+    }
+
+    /* ---- cursor de coordenadas, anclado a la celda ---- */
+    const ret = document.getElementById('ret'), read = document.getElementById('read');
+    if(ret && read && !reduce){
+      const rx = ret.querySelector('.x'), ry = ret.querySelector('.y');
+      window.addEventListener('pointermove', e => {
+        const b = cv.getBoundingClientRect();
+        const dentro = e.clientX >= b.left && e.clientX <= b.right
+                    && e.clientY >= b.top  && e.clientY <= b.bottom;
+        if(!dentro){ ret.classList.remove('on'); read.classList.remove('on'); return; }
+        const c = ((e.clientX - b.left)/CELL)|0, r = ((e.clientY - b.top)/CELL)|0;
+        if(heat && c>=0 && r>=0 && c<cols && r<rows) heat[idx(c,r)] = 1;
+        const gx = b.left + c*CELL, gy = b.top + r*CELL;
+        read.style.transform = 'translate3d('+gx+'px,'+gy+'px,0)';
+        read.textContent = String(c).padStart(2,'0') + ' · ' + String(r).padStart(2,'0');
+        rx.style.transform = 'translate3d(0,'+gy+'px,0)';
+        ry.style.transform = 'translate3d('+gx+'px,0,0)';
+        ret.classList.add('on'); read.classList.add('on');
+      }, {passive:true});
+      window.addEventListener('pointerleave', () => {
+        ret.classList.remove('on'); read.classList.remove('on');
+      });
+    }
+
+    let last = 0, visible = true, raf = 0;
+    new IntersectionObserver(es => {
+      visible = es[0].isIntersecting;
+      if(visible && !raf) raf = requestAnimationFrame(ciclo);
+    }, {rootMargin:'10% 0px'}).observe(cover);
+
+    function ciclo(t){
+      raf = visible ? requestAnimationFrame(ciclo) : 0;
+      if(!visible || document.hidden || !heat){ last = t; return; }
+      const dt = Math.min(t-last, 50); last = t;
+      if(!t0) t0 = t;
+      const enCascada = (t - t0) < CASCADA;
+      cascada(t);
+      pasos(t, enCascada);
+      if(!enCascada) pops(t);
+      const caida = Math.pow(enCascada ? .93 : .945, dt/16.7);
+      for(let i=0;i<heat.length;i++) heat[i] *= caida;
+      pintar();
+    }
+
+    let rt;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(medir, 140); });
+    medir();
+    if(reduce) pintar(); else raf = requestAnimationFrame(ciclo);
+  })();
+
+
+  /* ---------- los titulares entran por lineas, como la portada ---------- */
+  function partirTitulares(){
+    document.querySelectorAll('.sec h2').forEach(h => {
+      if(h.dataset.split) return;
+      const txt = h.textContent.trim();
+      h.dataset.split = '1';
+      h.innerHTML = txt.split(/\s+/).map(w => '<span class="w">'+w+'</span>').join(' ');
+      const sp = [...h.querySelectorAll('.w')];
+      const lns = []; let top = null;
+      sp.forEach(x => {
+        const t = Math.round(x.offsetTop);
+        if(top === null || t !== top){ lns.push([]); top = t; }
+        lns[lns.length-1].push(x);
+      });
+      h.innerHTML = lns.map((ln,i) =>
+        '<span class="ln" style="--i:'+i+'"><span>'+ln.map(x=>x.textContent).join(' ')+'</span></span>'
+      ).join('');
+    });
+  }
+
+  /* ---------- espina de lectura ---------- */
+  const spine = document.getElementById('spine'), sdot = document.getElementById('spinedot');
+  const main = document.querySelector('.main');
+  function espina(){
+    if(!spine || !main) return;
+    const r = main.getBoundingClientRect();
+    const alto = r.height - window.innerHeight*.2;
+    let p = (window.innerHeight*.35 - r.top) / Math.max(alto,1);
+    p = p < 0 ? 0 : p > 1 ? 1 : p;
+    const h = p * 100;
+    spine.style.height = h.toFixed(2) + '%';
+    if(sdot) sdot.style.top = h.toFixed(2) + '%';
+  }
+
+  /* ---------- barras de la tabla comparativa ---------- */
+  (function(){
+    const filas = [...document.querySelectorAll('.tab-wrap .row:not(.head)')];
+    if(!filas.length) return;
+    const caps = [1.30e12,227.64e9,168.15e9,42.88e9,19.38e9,12.83e9,4.31e9,3.54e9,5.0e6];
+    // escala logaritmica: en lineal todo lo que no sea Bitcoin desaparece
+    const lo = Math.log10(Math.min(...caps)) - .4, hi = Math.log10(Math.max(...caps));
+    filas.forEach((f, i) => {
+      const c = caps[i];
+      if(c === undefined) return;
+      const w = Math.max(.02, Math.min(1, (Math.log10(c) - lo) / (hi - lo)));
+      f.style.setProperty('--w', w.toFixed(4));
+      f.style.setProperty('--d', (i*.06).toFixed(2)+'s');
+    });
+  })();
+
+  /* ---------- la linea del roadmap se traza con el scroll ---------- */
+  const tl = document.getElementById('tl');
+  function linea(){
+    if(!tl) return;
+    const r = tl.getBoundingClientRect();
+    let p = (window.innerHeight*.72 - r.top) / Math.max(r.height,1);
+    p = p < 0 ? 0 : p > 1 ? 1 : p;
+    tl.style.setProperty('--p', p.toFixed(4));
+  }
+
+  /* ---------- paralaje leve de la portada al salir ---------- */
+  const coverIn = document.querySelector('.cover-in');
+  function paralaje(){
+    if(!coverIn || reduce) return;
+    const y = Math.min(window.scrollY, window.innerHeight);
+    coverIn.style.transform = 'translateY(' + (y*.12).toFixed(1) + 'px)';
+    coverIn.style.opacity = (1 - Math.min(1, y/(window.innerHeight*.85))*.85).toFixed(3);
+  }
+
+  let t2 = false;
+  function marco(){
+    if(t2) return;
+    t2 = true;
+    requestAnimationFrame(() => { t2 = false; espina(); linea(); paralaje(); avance(); });
+  }
+  window.addEventListener('scroll', marco, {passive:true});
+  window.addEventListener('resize', marco);
+  marco();
+
+
+
+  /* ---------- tema: sigue al sistema salvo que el lector decida ---------- */
+  (function(){
+    const b = document.getElementById('tema');
+    if(!b) return;
+    // claro por defecto; solo se recuerda lo que el lector haya elegido
+    let elegido = null;
+    try{ elegido = localStorage.getItem('sect_tema'); }catch(e){}
+    document.documentElement.dataset.tema = elegido === 'dark' ? 'dark' : 'light';
+    b.addEventListener('click', () => {
+      const nue = document.documentElement.dataset.tema === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.tema = nue;
+      b.setAttribute('aria-pressed', nue === 'dark' ? 'true' : 'false');
+      try{ localStorage.setItem('sect_tema', nue); }catch(e){}
+    });
+  })();
+
+  /* ---------- paleta de comandos ----------
+     en un documento de dieciseis secciones, buscar es mas rapido que
+     recorrer el indice. Indexa titulos y cuerpo, y salta al resultado. */
+  (function(){
+    const caja = document.getElementById('cmd');
+    const inp  = document.getElementById('cmd-q');
+    const lista= document.getElementById('cmd-list');
+    if(!caja || !inp || !lista) return;
+
+    const indice = secs.map((s, i) => ({
+      id: s.id, n: String(i).padStart(2,'0'),
+      t: (s.dataset.t || ''),
+      h: (s.querySelector('h2')?.textContent || '').trim(),
+      min: s.dataset.min || '',
+      texto: (s.textContent || '').replace(/\s+/g,' ').trim()
+    }));
+
+    let sel = 0, res = [];
+
+    function esc(x){ return x.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+    function resalta(txt, q){
+      if(!q) return esc(txt);
+      const i = txt.toLowerCase().indexOf(q);
+      if(i < 0) return esc(txt);
+      return esc(txt.slice(0,i)) + '<mark>' + esc(txt.slice(i,i+q.length)) + '</mark>' + esc(txt.slice(i+q.length));
+    }
+    function fragmento(txt, q){
+      const i = txt.toLowerCase().indexOf(q);
+      if(i < 0) return '';
+      const a = Math.max(0, i - 42), b = Math.min(txt.length, i + q.length + 78);
+      return (a ? '…' : '') + resalta(txt.slice(a,b), q) + (b < txt.length ? '…' : '');
+    }
+
+    function pintar(){
+      const q = inp.value.trim().toLowerCase();
+      res = !q ? indice.slice() : indice.filter(x =>
+        x.t.toLowerCase().includes(q) || x.h.toLowerCase().includes(q) ||
+        x.n.includes(q) || x.texto.toLowerCase().includes(q));
+      sel = 0;
+      if(!res.length){ lista.innerHTML = '<p class="cmd-none">No matches</p>'; return; }
+      lista.innerHTML = res.map((x, k) =>
+        '<button type="button" data-i="' + k + '" class="' + (k===0?'sel':'') + '">' +
+          '<span class="n">§' + x.n + '</span>' +
+          '<span>' + resalta(x.h || x.t, q) +
+            (q && !((x.h||x.t).toLowerCase().includes(q)) ? '<span class="sn">' + fragmento(x.texto, q) + '</span>' : '') +
+          '</span>' +
+          '<span class="tm">' + x.min + "'</span>" +
+        '</button>').join('');
+    }
+
+    function mover(d){
+      const bs = [...lista.querySelectorAll('button')];
+      if(!bs.length) return;
+      bs[sel]?.classList.remove('sel');
+      sel = (sel + d + bs.length) % bs.length;
+      bs[sel].classList.add('sel');
+      bs[sel].scrollIntoView({block:'nearest'});
+    }
+    function ir(k){
+      const x = res[k];
+      if(!x) return;
+      cerrar();
+      const d = document.getElementById(x.id);
+      if(d) d.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
+    }
+    function abrir(){
+      caja.classList.add('on');
+      inp.value = ''; pintar();
+      setTimeout(() => inp.focus(), 30);
+    }
+    function cerrar(){ caja.classList.remove('on'); }
+
+    inp.addEventListener('input', pintar);
+    lista.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if(b) ir(+b.dataset.i);
+    });
+    caja.addEventListener('click', e => { if(e.target === caja) cerrar(); });
+    document.addEventListener('keydown', e => {
+      const abierta = caja.classList.contains('on');
+      if((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')){
+        e.preventDefault(); abierta ? cerrar() : abrir(); return;
+      }
+      if(!abierta) return;
+      if(e.key === 'Escape'){ e.preventDefault(); cerrar(); }
+      else if(e.key === 'ArrowDown'){ e.preventDefault(); mover(1); }
+      else if(e.key === 'ArrowUp'){ e.preventDefault(); mover(-1); }
+      else if(e.key === 'Enter'){ e.preventDefault(); ir(sel); }
+    });
+    window.__SECT_CMD = abrir;
+  })();
+
+  /* ---------- definiciones al vuelo ----------
+     los terminos del documento se explican donde aparecen, sin sacar al
+     lector del texto. Usa la api nativa de popover. */
+  (function(){
+    if(!HTMLElement.prototype.hasOwnProperty('popover')) return;
+    const glosario = [
+      ['Layer 3', 'A network settling above a general-purpose base chain, inheriting its security while running its own execution logic.'],
+      ['attestation', 'A signed statement that a custodied asset matches its on-chain representation at a given point in time.'],
+      ['validator', 'A participant that stakes $SECT, proposes and attests blocks, and is economically accountable for the checks it performs.'],
+      ['custody', 'Holding of the underlying real-world asset, tied to its on-chain claim through the verification cycle.'],
+      ['ERC-20', 'The Ethereum standard for fungible tokens: a fixed interface for transfers, balances and approvals.'],
+      ['buyback', 'Purchase of $SECT on the open market with a share of network fee revenue, tying scarcity to real usage.']
+    ];
+    let n = 0;
+    for(const [termino, texto] of glosario){
+      const re = new RegExp('\\\\b(' + termino.replace(/[.*+?^${}()|[\]\\\\]/g,'\\\\$&') + ')\\\\b', 'i');
+      // solo la primera aparicion en el cuerpo, y nunca dentro de un enlace
+      const parrafos = [...document.querySelectorAll('.sec > p')];
+      for(const par of parrafos){
+        if(par.querySelector('.term')) continue;
+        const nodos = [...par.childNodes].filter(x => x.nodeType === 3 && re.test(x.textContent));
+        if(!nodos.length) continue;
+        const nodo = nodos[0];
+        const m = nodo.textContent.match(re);
+        const id = 'def-' + (++n);
+        const antes = document.createTextNode(nodo.textContent.slice(0, m.index));
+        const desp  = document.createTextNode(nodo.textContent.slice(m.index + m[0].length));
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'term'; b.textContent = m[0];
+        b.setAttribute('popovertarget', id);
+        const d = document.createElement('div');
+        d.className = 'def'; d.id = id; d.popover = 'auto';
+        d.innerHTML = '<b>' + termino + '</b>' + texto;
+        par.insertBefore(antes, nodo);
+        par.insertBefore(b, nodo);
+        par.insertBefore(d, nodo);
+        par.insertBefore(desp, nodo);
+        par.removeChild(nodo);
+        break;
+      }
+    }
+  })();
+
+  /* ---------- retomar la lectura ---------- */
+  (function(){
+    const caja = document.getElementById('resume');
+    const et = document.getElementById('resume-s');
+    const go = document.getElementById('resume-go');
+    const x  = document.getElementById('resume-x');
+    if(!caja || !go) return;
+
+    let guardado = null;
+    try{ guardado = sessionStorage.getItem('sect_wp_pos'); }catch(e){}
+
+    function ocultar(){ caja.classList.remove('on'); }
+    if(guardado && +guardado > 0 && window.scrollY < 40){
+      const i = Math.min(secs.length-1, +guardado);
+      if(et) et.textContent = '§' + String(i).padStart(2,'0');
+      setTimeout(() => caja.classList.add('on'), 1400);
+      setTimeout(ocultar, 12000);
+      go.addEventListener('click', () => {
+        ocultar();
+        secs[i].scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
+      });
+    }
+    if(x){ x.addEventListener('click', ocultar); }
+
+    let gt;
+    window.addEventListener('scroll', () => {
+      clearTimeout(gt);
+      gt = setTimeout(() => {
+        try{ if(activo >= 0) sessionStorage.setItem('sect_wp_pos', String(activo)); }catch(e){}
+      }, 600);
+    }, {passive:true});
+  })();
+
+  /* ---------- guardar como PDF ---------- */
+  const pdf = document.getElementById('pdf');
+  if(pdf) pdf.addEventListener('click', () => window.print());
+})();
+</script>
 </body>
 </html>
