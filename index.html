@@ -8,10 +8,10 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231569ff'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%23fff' stroke-width='11'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<title>Website Official Sectora Foundation</title>
+<title>Official Website Sectora Foundation</title>
 <meta name="description" content="Sectora Foundation — security infrastructure for tokenized real-world assets: contract auditing, custody controls and continuous on-chain monitoring.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Website Official Sectora Foundation">
+<meta property="og:title" content="Official Website Sectora Foundation">
 <meta property="og:description" content="Security infrastructure for tokenized real-world assets. Informational document, not an offer of securities.">
 <link rel="preload" href="fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -1886,8 +1886,9 @@
   try{ corto = sessionStorage.getItem('sect_intro') === '1'; }catch(e){}
   const F = corto ? .42 : 1;              // las visitas repetidas se acortan
 
-  const T_SWEEP = 760*F, T_RING = 900*F, T_SNAP = 380*F, T_OPEN = 900*F;
-  const T_TOTAL = T_SWEEP*.7 + T_RING + T_SNAP;
+  const T_SWEEP = 1100*F, T_RING = 1250*F, T_SNAP = 520*F,
+        T_HOLD = 420*F, T_OPEN = 1150*F;
+  const T_TOTAL = T_SWEEP*.7 + T_RING + T_SNAP + T_HOLD;
 
   document.documentElement.classList.add('intro-lock');
   document.body.classList.add('intro-lock');
@@ -2010,7 +2011,7 @@
       }
 
       if(t >= T_TOTAL && cargado){ abriendo = true; tAbre = now; }
-      if(t > 6000){ abriendo = true; tAbre = now; }   // salvaguarda
+      if(t > 8500){ abriendo = true; tAbre = now; }   // salvaguarda
     } else {
       let k = (now - tAbre) / T_OPEN;
       k = cl(k);
@@ -2086,7 +2087,7 @@
     <main class="hero">
       <div>
         <p class="eyebrow mono lift" style="--d:.05s"><i></i>Official publication · Sectora Foundation, Illinois US</p>
-        <h1 id="title">Website Official <span class="b">Sectora Foundation</span></h1>
+        <h1 id="title">Official Website <span class="b">Sectora Foundation</span></h1>
         <div class="rule"></div>
         <p class="lede lift" style="--d:.6s">
           Sectora builds the security layer for tokenized real-world assets:
@@ -2671,7 +2672,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const arranque = window.SECT_INTRO || Promise.resolve();
   const fuentes  = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
   Promise.all([fuentes, arranque]).then(play);
-  setTimeout(play, 6000);
+  setTimeout(play, 9500);
 
   let titleRT;
   window.addEventListener('resize', () => {
