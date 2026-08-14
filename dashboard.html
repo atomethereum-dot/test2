@@ -85,6 +85,14 @@ svg{display:block}
   font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--ink3);white-space:nowrap}
 .pill.live{border-color:rgba(62,207,142,.3);color:var(--live)}
+select.lang-switch{appearance:none;-webkit-appearance:none;background-color:var(--surf2);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;background-size:10px;
+  border:1px solid var(--hair);border-radius:999px;color:var(--ink2);
+  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;
+  padding:8px 26px 8px 13px;cursor:pointer;transition:border-color .3s var(--ease)}
+select.lang-switch:hover,select.lang-switch:focus-visible{border-color:var(--blue2)}
+.lang-switch option{color:#0a0d13;background:#fff}
 .dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none;
   box-shadow:0 0 8px 1px currentColor;animation:lat 2s ease-in-out infinite}
 @keyframes lat{0%,100%{opacity:1}50%{opacity:.4}}
