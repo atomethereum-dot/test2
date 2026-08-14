@@ -154,9 +154,9 @@ svg{display:block}
 /* ---------- cabecera de estado ---------- */
 .band{position:relative;overflow:hidden;border-bottom:1px solid var(--hair);
   padding:clamp(26px,5vh,52px) var(--pad);isolation:isolate;background:var(--bg);
-  min-height:calc(100svh - var(--toph));display:flex;flex-direction:column;
-  justify-content:flex-start;padding-top:clamp(30px,11vh,104px)}
-@supports not (height:100svh){.band{min-height:calc(100vh - var(--toph))}}
+  margin-top:calc(-1 * var(--toph));min-height:100svh;display:flex;flex-direction:column;
+  justify-content:flex-start;padding-top:calc(clamp(30px,11vh,104px) + var(--toph))}
+@supports not (height:100svh){.band{min-height:100vh}}
 /* indicador de scroll al pie de la portada */
 .band-scroll{position:absolute;left:var(--pad);bottom:clamp(16px,2.6vh,26px);z-index:4;
   display:inline-flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;
@@ -628,7 +628,7 @@ svg{display:block}
 @media (max-width:900px){
   /* el globo vuelve a ser arrastrable con el dedo, sin secuestrar el scroll */
   .band-globe{pointer-events:auto;opacity:.9;touch-action:pan-y}
-  .band{min-height:calc(100svh - var(--toph));padding-top:clamp(22px,6vh,54px)}
+  .band{min-height:100svh;padding-top:calc(clamp(22px,6vh,54px) + var(--toph))}
   .band h1{font-size:clamp(26px,7vw,38px);max-width:15ch;letter-spacing:-.026em}
   .band>.band-in>p:not(.eyebrow){font-size:13.5px;line-height:1.68;max-width:42ch;
     margin-top:14px;margin-bottom:clamp(24px,4.5vh,40px)}
@@ -2300,13 +2300,7 @@ globe.add(new THREE.Mesh(
   })
 ));
 
-/* varios ya cruzando al abrir; el resto va entrando */
-const AFORO = movil ? 3 : 6;
-if (!reduceMotion){
-  nacePlaneta(0.22); nacePlaneta(0.55); nacePlaneta(0.78);
-  if (!movil) nacePlaneta(0.40);
-  setInterval(() => { if (PLANETAS.length < AFORO) nacePlaneta(0); }, 11000);
-}
+/* fondo del globo sin planetas de paso: solo estrellas y el globo propio */
 
 /* ===== Nodos ===== */
 const D = Math.PI / 180;
