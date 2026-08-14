@@ -1028,7 +1028,7 @@
     font-family:'IBM Plex Mono',monospace;color:var(--ink-4);margin-top:6px}
 
   /* --- linea de tiempo --- */
-  .tl{position:relative;padding-left:30px}
+  .tl-list .tl,.plate .tl,.rsm .tl{position:relative;padding-left:30px}
   .tl::before{
     content:'';position:absolute;left:0;top:6px;bottom:6px;width:1px;
     background:linear-gradient(180deg,var(--blue),rgba(21,105,255,.12));
@@ -1798,15 +1798,17 @@
   .intro-hud .bl{left:0;bottom:0;display:inline-flex;align-items:center;gap:9px}
   /* registro de arranque: lineas que van apareciendo, como una consola */
   .intro-log{
-    position:absolute;left:0;bottom:22px;z-index:4;pointer-events:none;
+    position:absolute;left:0;bottom:26px;z-index:4;pointer-events:none;
     font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;
     text-transform:uppercase;line-height:1.85;
   }
-  .intro-log span{display:block;opacity:0;color:rgba(255,255,255,.55);
+  /* position:static anula el absolute que heredan de .intro-hud span:
+     sin esto las cuatro lineas se apilan en el mismo punto */
+  .intro-log span{position:static;display:block;opacity:0;color:rgba(255,255,255,.55);
     transform:translateY(4px);transition:opacity .3s var(--ease),transform .3s var(--ease)}
   .intro-log span.on{opacity:1;transform:none}
   .intro-log span.hi{color:rgba(52,231,255,.95)}
-  @media (max-width:700px){ .intro-log{display:none} }
+  @media (max-width:700px){ /* el registro tambien se ve en movil: reglas propias mas abajo */ }
   .intro-hud .br{right:0;bottom:0;font-variant-numeric:tabular-nums}
   .intro-hud .led{width:5px;height:5px;border-radius:50%;background:#34e7ff;box-shadow:0 0 9px rgba(52,231,255,.95);
     animation:introBlink 1s steps(2) infinite}
@@ -2151,6 +2153,82 @@
    asi que el aviso se invierte con modo diferencia igual que el titular */
 .zoom-cue.cue-iris{mix-blend-mode:difference;color:#fff}
 .zoom-cue.cue-iris svg{stroke-width:1.7}
+
+/* ---------- indice del whitepaper en el pie ---------- */
+
+
+
+.ft-wp-all{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--blue);text-decoration:none;
+  border-bottom:1px solid transparent;transition:border-color .25s ease}
+.ft-wp-all:hover{border-bottom-color:var(--blue)}
+
+
+
+
+
+@media (max-width:560px){
+  
+  
+}
+
+/* enlaces aun sin destino: conservan su forma pero no navegan, para que
+   la vista previa no salte a una pagina inexistente */
+a.pend{cursor:default;opacity:.55;pointer-events:none}
+
+/* tira de enlaces del pie, bajo el indice del whitepaper */
+.ft-social{display:flex;flex-wrap:wrap;gap:10px 26px;padding:clamp(24px,3.4vh,36px) 0;
+  border-bottom:1px solid rgba(255,255,255,.08)}
+.ft-social a{color:#aab2c2;text-decoration:none;font-size:13.5px;
+  display:inline-flex;align-items:baseline;gap:6px;transition:color .25s ease}
+.ft-social a:hover{color:#fff}
+.ft-social a em{font-style:normal;font-size:11px;opacity:.6}
+.ft-social a.ft-wp-all{color:var(--blue);font-family:'IBM Plex Mono',monospace;
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin-left:auto}
+.ft-col a b{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;
+  color:var(--ink-4);font-weight:500;margin-right:9px;transition:color .25s ease}
+.ft-col a:hover b{color:var(--blue)}
+
+/* enlace al documento, encima de las columnas y alineado a la izquierda */
+a.ft-wp-all{display:inline-flex;align-items:center;gap:7px;margin-bottom:clamp(20px,2.6vh,30px);
+  color:var(--blue);text-decoration:none;
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;border-bottom:1px solid transparent;
+  transition:border-color .25s ease}
+a.ft-wp-all:hover{border-bottom-color:var(--blue)}
+a.ft-wp-all em{font-style:normal;font-size:11px;opacity:.7}
+
+/* la escena termina abriendo a blanco: el aviso se invierte con el fondo */
+.zoom-cue.cue-jiris{mix-blend-mode:difference;color:#fff}
+.zoom-cue.cue-jiris svg{stroke-width:1.7}
+
+/* ---------- registro de la intro en movil ----------
+   se muestra con cuerpo menor y anclado por encima del estado, de modo
+   que las cuatro lineas y "Initializing" nunca compartan altura */
+@media (max-width:700px){
+  .intro-log{display:block;bottom:34px;font-size:8px;letter-spacing:.1em;
+    max-width:70%;line-height:1.45}
+  .intro-log span{position:static;display:block;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis}
+}
+@media (max-width:400px){
+  .intro-log{bottom:30px;font-size:7px;letter-spacing:.08em;max-width:76%}
+}
+
+/* ---------- rotulos superiores de la intro ----------
+   antes cada uno se anclaba por separado con position:absolute y los
+   margenes no coincidian. En una sola fila quedan simetricos por
+   construccion: uno al principio y otro al final del mismo ancho. */
+.intro-top{position:absolute;left:0;right:0;top:0;display:flex;
+  align-items:flex-start;justify-content:space-between;gap:16px}
+.intro-hud .intro-top .tl,
+.intro-hud .intro-top .tr{position:static;left:auto;right:auto;top:auto;
+  max-width:47%;flex:0 1 auto}
+.intro-hud .intro-top .tl{text-align:left}
+.intro-hud .intro-top .tr{text-align:right}
+
+/* el rotulo de la intro no debe heredar el sangrado de la linea de tiempo */
+.intro-hud .tl{padding-left:0;padding-right:0;text-indent:0}
 </style>
 </head>
 <body>
@@ -2159,8 +2237,10 @@
   <canvas id="intro-grid"></canvas>
   <div class="intro-frame"><i></i><i></i><i></i><i></i></div>
   <div class="intro-hud">
-    <span class="tl">Sectora Foundation IL</span>
-    <span class="tr">Security layer · Build 1.0</span>
+        <div class="intro-top">
+      <span class="tl">Sectora Foundation IL</span>
+      <span class="tr">Security layer &middot; Build 1.0</span>
+    </div>
     <div class="intro-log" id="intro-log">
       <span data-t="0">Grid 54px · raster ok</span>
       <span data-t="1">Assembling mark · 360°</span>
@@ -2641,7 +2721,7 @@
   
   <nav>
     <div class="brand">
-      <a href="#" aria-label="Sectora Foundation — inicio">
+      <a href="https://sectoraorg.com" aria-label="Sectora Foundation — inicio">
         <svg viewBox="0 0 100 100" role="img" aria-hidden="true">
           <rect width="100" height="100" rx="9" ry="9" fill="var(--blue)"/>
           <circle class="ring" cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/>
@@ -2750,7 +2830,7 @@
         <span class="mono">01</span>
         <h3>Contract audit</h3>
         <p>The SECT contract has been reviewed by an independent security firm. The full report is published, including any findings and their resolution.</p>
-        <a class="m-link mono" href="#" target="_blank" rel="noopener noreferrer">Read the audit <i>↗</i></a>
+        <a class="m-link mono pend" aria-disabled="true">Read the audit <i>↗</i></a>
       </article>
       <article class="m-card reveal" style="--d:.18s">
         <span class="mono">02</span>
@@ -2851,7 +2931,7 @@
         <span class="p-name">DEX</span>
         <div class="p-meta">
           <span class="p-desc">A decentralised exchange where the assets issued on the protocol can be traded and priced.</span>
-          <a class="p-live" href="#" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
+          <a class="p-live pend" aria-disabled="true"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
         </div>
       </div>
       <div class="p-row reveal" style="--d:0.30s">
@@ -3130,6 +3210,7 @@
       <p>The network is open</p>
       <h2>Join <b>Sectora</b></h2>
     </div>
+      <div class="zoom-cue cue-jiris" id="jiris-cue" aria-hidden="true"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
   </div>
 </section>
 
@@ -3181,7 +3262,7 @@
       </a>
 
       <!-- sustituir por el enlace real de Telegram -->
-      <a class="jc reveal" style="--d:.30s" href="#" target="_blank" rel="noopener noreferrer">
+      <a class="jc reveal pend" aria-disabled="true" style="--d:.30s">
         <span class="jc-i" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span class="jc-num">04</span>
         <span class="jc-row">
@@ -3222,45 +3303,42 @@
       </div>
     </div>
 
-    <nav class="ft-cols" aria-label="Footer">
+    <a class="ft-wp-all" href="https://sectoraorg.com/docs">Read the whitepaper in full <em>&#8599;</em></a>
+    <nav class="ft-cols" aria-label="Whitepaper index">
       <div class="ft-col reveal" style="--d:.04s">
-        <h4>Foundation</h4>
-        <a href="https://sectoraorg.com/#protocol">Protocol</a>
-        <a href="https://sectoraorg.com/#roadmap">Roadmap</a>
-        <a href="https://sectoraorg.com/#about">About</a>
-        <a href="https://sectoraorg.com/#backers">Backers</a>
-        <a href="https://sectoraorg.com/#blog">Blog</a>
-        <a href="https://sectoraorg.com/#contact">Contact</a>
+        <h4>Protocol</h4>
+        <a href="https://sectoraorg.com/docs#s00"><b>00</b>Abstract</a>
+        <a href="https://sectoraorg.com/docs#s01"><b>01</b>Introduction</a>
+        <a href="https://sectoraorg.com/docs#s02"><b>02</b>The Sectora Network</a>
+        <a href="https://sectoraorg.com/docs#s03"><b>03</b>Verification &amp; Custody</a>
+        <a href="https://sectoraorg.com/docs#s04"><b>04</b>Hash Rate &amp; Validation</a>
       </div>
-
       <div class="ft-col reveal" style="--d:.10s">
         <h4>Products</h4>
-        <a href="https://sectoraorg.com/sectorascan" target="_blank" rel="noopener noreferrer"><i class="dot"></i>Blockchain Layer 3 <em>&#8599;</em></a>
-        <!-- pendiente: testnet de tokenizacion de activos -->
-        <a href="#"><i class="soon"></i>Asset tokenization</a>
-        <a href="https://sectoraorg.com/dash" target="_blank" rel="noopener noreferrer"><i class="dot"></i>Security node validation <em>&#8599;</em></a>
-        <a href="https://sectoraorg.com/dex-cover.html" target="_blank" rel="noopener noreferrer"><i class="dot"></i>DEX <em>&#8599;</em></a>
-        <a href="#"><i class="soon"></i>Stablecoin USD-SEC</a>
+        <a href="https://sectoraorg.com/docs#s05"><b>05</b>Sectora DEX</a>
+        <a href="https://sectoraorg.com/docs#s06"><b>06</b>RWA Tokenization</a>
+        <a href="https://sectoraorg.com/docs#s07"><b>07</b>$SECT Tokenomics</a>
+        <a href="https://sectoraorg.com/docs#s08"><b>08</b>Supply &amp; Buyback</a>
       </div>
-
       <div class="ft-col reveal" style="--d:.16s">
-        <h4>Resources</h4>
-        <a href="https://sectoraorg.com/docs">Whitepaper</a>
-        <a href="https://www.sectoraorg.com/legal">Legal documents</a>
-        <!-- pendiente: informe de auditoria -->
-        <a href="#">Audit report</a>
-        <a href="https://www.sectoraorg.com/legal">Illinois registry</a>
-        <a href="https://dexscreener.com" target="_blank" rel="noopener noreferrer">Market data <em>&#8599;</em></a>
+        <h4>Economics</h4>
+        <a href="https://sectoraorg.com/docs#s09"><b>09</b>Supply &amp; Market Cap</a>
+        <a href="https://sectoraorg.com/docs#s10"><b>10</b>Token Contract</a>
+        <a href="https://sectoraorg.com/docs#s11"><b>11</b>Infrastructure</a>
+        <a href="https://sectoraorg.com/docs#s12"><b>12</b>Roadmap</a>
+        <a href="https://sectoraorg.com/docs#s13"><b>13</b>Governance &amp; Risk</a>
       </div>
-
       <div class="ft-col reveal" style="--d:.22s">
-        <h4>Community</h4>
-        <a href="https://x.com/sectoraorg" target="_blank" rel="noopener noreferrer">X <em>&#8599;</em></a>
-        <!-- pendiente: enlace de Telegram -->
-        <a href="#">Telegram <em>&#8599;</em></a>
-        <a href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer">Buy #SECT on Uniswap <em>&#8599;</em></a>
+        <h4>Company</h4>
+        <a href="https://sectoraorg.com/docs#s14"><b>14</b>Location &amp; Legal</a>
+        <a href="https://sectoraorg.com/docs#s15"><b>15</b>Conclusion</a>
+        <a href="https://sectoraorg.com/docs#s16"><b>16</b>Exchange Listings</a>
+        <a href="https://sectoraorg.com/docs#s17"><b>17</b>NYSE &amp; Public Markets</a>
+        <a href="https://sectoraorg.com/docs#s18"><b>18</b>Why Hold $SECT</a>
       </div>
     </nav>
+
+      
 
     <div class="ft-mails reveal" style="--d:.06s">
       <div class="ft-mail">
@@ -3641,6 +3719,9 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   });
 
   function draw(){
+    // si el lienzo medía 0 al iniciarse, resize() salio antes de reservar el
+    // bufer: sin esta guarda se lee heat[0] sobre null
+    if(!heat) return;
     ctx.clearRect(0,0,W,H);
     for(let r=0;r<rows;r++){
       for(let c=0;c<cols;c++){
@@ -3787,6 +3868,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   }
 
   function draw(){
+    if(!heat) return;
     dx.clearRect(0,0,W,H); lx.clearRect(0,0,W,H);
     for(let r=0;r<rows;r++){
       for(let c=0;c<cols;c++){
@@ -4998,6 +5080,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const sec   = document.getElementById('jiris');
   const panel = document.getElementById('jiris-panel');
   const edge  = document.getElementById('jiris-edge');
+  const jCue  = document.getElementById('jiris-cue');
   if(!sec || !panel) return;
 
   let queued = false;
@@ -5013,6 +5096,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
       let p = (-r.top) / span;
       p = p < 0 ? 0 : p > 1 ? 1 : p;
+
+      if(jCue) jCue.classList.toggle('off', p > .93);
 
       // arranca en el 55%: primero se abren las cortinas de luz, y solo
       // despues el circulo blanco toma la pantalla
