@@ -114,14 +114,7 @@
   /* cabecera estatica: forma parte del flujo y se va con el scroll */
   .top{position:relative;z-index:50}
 
-  .utility{
-    display:flex;justify-content:space-between;align-items:center;gap:20px;
-    padding:9px var(--pad);
-    border-bottom:1px solid var(--hair-soft);
-    color:var(--ink-3);
-    background:rgba(0,0,0,.72);
-    backdrop-filter:blur(10px);
-  }
+  
   .status{display:flex;align-items:center;gap:9px}
   .dot{width:5px;height:5px;border-radius:50%;background:var(--blue);flex:none;position:relative}
   .dot::after{
@@ -487,8 +480,7 @@
     font-size:clamp(15px,1.5vw,22px);font-weight:300;line-height:1.5;
     letter-spacing:-.01em;text-align:center;text-wrap:balance;
   }
-  .iris-hint{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);z-index:3;
-    mix-blend-mode:difference;color:#fff;opacity:.45}
+  
 
   /* ============ mandatos, tarjetas de cristal ============ */
   .mandates{
@@ -2107,7 +2099,7 @@
   }
   @media (max-width:780px){
     .menu{display:none}
-    .utility .status span:not(.dot){display:none}
+    
   }
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -2117,6 +2109,48 @@
     .eyebrow i{width:30px}
     .rule{width:74px}
   }
+
+/* ---------- cabecera de la intro en movil ----------
+   los dos rotulos van anclados a las esquinas con white-space:nowrap:
+   al estrecharse la pantalla se montaban uno sobre otro */
+@media (max-width:680px){
+  .intro-hud{font-size:8.5px;letter-spacing:.14em}
+  .intro-hud span{white-space:normal}
+  .intro-hud .tl{left:0;top:0;right:auto;max-width:46%}
+  .intro-hud .tr{right:0;top:0;left:auto;max-width:46%;text-align:right}
+  .intro-hud .bl{max-width:52%}
+  .intro-hud .br{max-width:44%;text-align:right}
+}
+@media (max-width:400px){
+  .intro-hud{font-size:7.5px;letter-spacing:.1em;inset:22px}
+  .intro-hud .tl,.intro-hud .tr{max-width:44%}
+}
+
+/* ---------- aviso de seguir bajando en la seccion del supply ----------
+   vive dentro del bloque fijo y se desvanece cuando la animacion avanza */
+.zoom-cue{position:absolute;left:50%;bottom:clamp(58px,9vh,86px);z-index:6;
+  transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;
+  pointer-events:none;color:rgba(255,255,255,.55);
+  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.24em;
+  text-transform:uppercase;transition:opacity .5s ease}
+.zoom-cue svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round;animation:zoomCue 1.9s ease-in-out infinite}
+.zoom-cue.off{opacity:0;transition:opacity .8s ease}
+@keyframes zoomCue{
+  0%,100%{transform:translateY(-3px);opacity:.5}
+  50%{transform:translateY(4px);opacity:1}
+}
+@media (prefers-reduced-motion:reduce){ .zoom-cue svg{animation:none} }
+
+/* el fondo de .wipe-pin es blanco: el aviso en blanco no se veia.
+   Con modo diferencia se invierte contra cualquier fondo, igual que el titular. */
+.zoom-cue.cue-wipe{mix-blend-mode:difference;color:#fff}
+.zoom-cue.cue-wipe svg{stroke-width:1.7}
+
+/* primera transicion: el fondo cambia de claro a oscuro durante la escena,
+   asi que el aviso se invierte con modo diferencia igual que el titular */
+.zoom-cue.cue-iris{mix-blend-mode:difference;color:#fff}
+.zoom-cue.cue-iris svg{stroke-width:1.7}
 </style>
 </head>
 <body>
@@ -2604,10 +2638,7 @@
 <div class="readout" id="readout" aria-hidden="true">00 · 00</div>
 
 <header class="top">
-  <div class="utility mono">
-    <span>Sectora Foundation · Illinois, United States</span>
-    <span class="status"><span class="dot"></span><span>Protocol status: operational</span></span>
-  </div>
+  
   <nav>
     <div class="brand">
       <a href="#" aria-label="Sectora Foundation — inicio">
@@ -2625,7 +2656,7 @@
       <a href="https://sectoraorg.com/#blog">Blog</a>
       <a href="https://sectoraorg.com/#contact">Contact</a>
     </div>
-    <a class="docs mono" href="#"><span>Legal documents</span></a>
+    <a class="docs mono" href="https://www.sectoraorg.com/legal"><span>Legal documents</span></a>
   </nav>
 </header>
 
@@ -2693,7 +2724,7 @@
       <h2 class="iris-title">Sectora <b>Foundation IL</b></h2>
       <p class="iris-sub">Milestones and a New Era of Verifiable Security</p>
     </div>
-    <p class="iris-hint mono">Scroll</p>
+    <div class="zoom-cue cue-iris" id="iris-cue" aria-hidden="true"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
   </div>
 </section>
 
@@ -2725,7 +2756,7 @@
         <span class="mono">02</span>
         <h3>Registered company</h3>
         <p>Sectora Foundation is a company incorporated in Illinois, United States. Its filing is a matter of public record and can be checked with the state registry.</p>
-        <a class="m-link mono" href="#" target="_blank" rel="noopener noreferrer">Check the registry <i>↗</i></a>
+        <a class="m-link mono" href="https://www.sectoraorg.com/legal" target="_blank" rel="noopener noreferrer">Check the registry <i>↗</i></a>
       </article>
       <article class="m-card reveal" style="--d:.26s">
         <span class="mono">03</span>
@@ -2760,6 +2791,8 @@
       <span class="wipe-rail"><i id="wipe-fill"></i></span>
       <span class="wipe-pct"><b id="wipe-pct">0</b>%</span>
     </div>
+  
+    <div class="zoom-cue cue-wipe" id="wipe-cue" aria-hidden="true"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
   </div>
 </section>
 
@@ -2859,6 +2892,8 @@
       <h2 class="plate-name" id="plate-name">Security audit completion</h2>
       <p class="plate-sub" id="plate-sub">Contracts · Custody logic · Verification layer</p>
     </div>
+  
+    <div class="zoom-cue cue-plate" id="plate-cue" aria-hidden="true"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
   </div>
 </section>
 
@@ -2937,6 +2972,10 @@
     <div class="zoom-note" id="zoom-note">
       <span>Reduction · December 2026</span>
       <span id="zoom-tag">50,000,000 · pre-reduction</span>
+    </div>
+    <div class="zoom-cue" id="zoom-cue" aria-hidden="true">
+      <span>Keep scrolling</span>
+      <svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg>
     </div>
   </div>
 </section>
@@ -3207,12 +3246,10 @@
       <div class="ft-col reveal" style="--d:.16s">
         <h4>Resources</h4>
         <a href="https://sectoraorg.com/docs">Whitepaper</a>
-        <!-- pendiente: documentos legales -->
-        <a href="#">Legal documents</a>
+        <a href="https://www.sectoraorg.com/legal">Legal documents</a>
         <!-- pendiente: informe de auditoria -->
         <a href="#">Audit report</a>
-        <!-- pendiente: expediente del registro de Illinois -->
-        <a href="#">Illinois registry</a>
+        <a href="https://www.sectoraorg.com/legal">Illinois registry</a>
         <a href="https://dexscreener.com" target="_blank" rel="noopener noreferrer">Market data <em>&#8599;</em></a>
       </div>
 
@@ -3366,6 +3403,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const iris = document.getElementById('iris');
   const irisPanel = document.getElementById('iris-panel');
   const irisEdge = document.getElementById('iris-edge');
+  const irisCue = document.getElementById('iris-cue');
   let irisQueued = false;
 
   function paintIris(){
@@ -3380,6 +3418,9 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
       let p = (-r.top) / span;
       p = p < 0 ? 0 : p > 1 ? 1 : p;
+
+      // el aviso acompana toda la escena y se retira al entrar en la siguiente
+      if(irisCue) irisCue.classList.toggle('off', p > .93);
 
       let k = (p - .18) / .64;
       k = k < 0 ? 0 : k > 1 ? 1 : k;
@@ -3840,9 +3881,12 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     return p < 0 ? 0 : p > 1 ? 1 : p;
   }
 
+  const cueW = document.getElementById('wipe-cue');
+
   function paint(){
     if(!thr) return;
     const p0 = progress();
+    if(cueW) cueW.classList.toggle('off', p0 > .93);
     // el barrido ocupa el 15%-90% del recorrido: entra y sale con calma
     let p = (p0 - .15) / .75;
     p = p < 0 ? 0 : p > 1 ? 1 : p;
@@ -4086,9 +4130,12 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     ctx.restore();
   }
 
+  const cueP = document.getElementById('plate-cue');
+
   function paint(){
     if(!W) return;
     const p = progress();
+    if(cueP) cueP.classList.toggle('off', p > .93);
     const t = p * (N - 1);
     const k = Math.min(N-2, Math.floor(t));
     const raw = t - k;
@@ -4253,10 +4300,17 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     return p < 0 ? 0 : p > 1 ? 1 : p;
   }
 
+  const cue = document.getElementById('zoom-cue');
+
   function paint(){
     if(!W) return;
     const p = progress();
     const txt = p < SWAP ? BEFORE : AFTER;
+
+    /* el aviso acompana toda la escena y solo se retira al final, cuando
+       el paso a la seccion siguiente ya esta ocurriendo: quien no conoce
+       este tipo de scroll no sabe que la pagina sigue avanzando */
+    if(cue) cue.classList.toggle('off', p > .93);
 
     if(txt !== lastTxt){
       lastTxt = txt;
