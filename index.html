@@ -318,7 +318,7 @@
   .iris-pin{
     /* dvh sigue a las barras del navegador; svh dejaba una franja negra
        al ocultarse la barra inferior en movil */
-    position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
+    position:absolute;top:0;left:0;right:0;width:100%;height:100vh;height:100dvh;overflow:hidden;
     display:grid;place-items:center;isolation:isolate;
     background:
       radial-gradient(70% 55% at 50% 52%, rgba(21,105,255,.13), transparent 62%),
@@ -586,7 +586,7 @@
      scroll, con el filo encendido en azul */
   .wipe{position:relative;height:460vh;background:#000}
   .wipe-pin{
-    position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
+    position:absolute;top:0;left:0;right:0;width:100%;height:100vh;height:100dvh;overflow:hidden;
     display:grid;place-items:center;isolation:isolate;
     background:
       radial-gradient(80% 60% at 50% 40%, #ffffff, transparent 72%),
@@ -1077,7 +1077,7 @@
      siguiente sale de dentro del propio numero. */
   .zoom{position:relative;height:400vh;background:#000}
   .zoom-pin{
-    position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;background:#000;
+    position:absolute;top:0;left:0;right:0;width:100%;height:100vh;height:100dvh;overflow:hidden;background:#000;
   }
   /* aros de sonar: identicos a los del iris, mismo ciclo y desfase */
   .zoom-rings{
@@ -1381,7 +1381,7 @@
      Un unico valor animado gobierna toda la escena. */
   .rwa{position:relative;height:680vh;background:#f2f2ef}
   .rwa-pin{
-    position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
+    position:absolute;top:0;left:0;right:0;width:100%;height:100vh;height:100dvh;overflow:hidden;
     display:flex;align-items:stretch;
     padding:clamp(34px,5.4vh,74px) var(--pad);
     background:#f2f2ef;isolation:isolate;
@@ -1507,7 +1507,7 @@
      abre desde el centro con el scroll y desemboca en la seccion final. */
   .jiris{position:relative;height:490vh;background:#000}
   .jiris-pin{
-    position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
+    position:absolute;top:0;left:0;right:0;width:100%;height:100vh;height:100dvh;overflow:hidden;
     display:grid;place-items:center;isolation:isolate;
     background:
       radial-gradient(66% 54% at 50% 48%, rgba(21,105,255,.15), transparent 64%),
@@ -3438,6 +3438,24 @@ html[dir="rtl"] body{direction:ltr}
    descartando la pagina. A 1.5 baja a 24 MB sin perdida apreciable. */
 window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
                                  window.innerWidth < 900 ? 1.5 : 2);
+
+/* pin manual con fixed/absolute para las secciones "scrollytelling": html
+   tiene overflow-x:clip y body overflow-x:hidden, y ese recorte de un solo
+   eje en un ancestro es la causa clasica de que position:sticky deje de
+   pegarse en Safari de iOS (se ve bien en cualquier Chromium, incluidos
+   los emuladores movil, asi que pasa desapercibido hasta probarlo en un
+   iPhone real). Fixed/absolute no depende de ese comportamiento. */
+window.SECT_pinLayout = (sec, pin) => {
+  const r = sec.getBoundingClientRect();
+  const vh = window.innerHeight;
+  if(r.top > 0){
+    pin.style.position = 'absolute'; pin.style.top = '0';
+  }else if(r.bottom < vh){
+    pin.style.position = 'absolute'; pin.style.top = Math.max(0, sec.offsetHeight - vh) + 'px';
+  }else{
+    pin.style.position = 'fixed'; pin.style.top = '0';
+  }
+};
 </script>
 <script>
 (function(){
@@ -3549,6 +3567,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
   /* ========== iris: el recorte sigue al scroll ========== */
   const iris = document.getElementById('iris');
+  const irisPin = document.querySelector('.iris-pin');
   const irisPanel = document.getElementById('iris-panel');
   const irisEdge = document.getElementById('iris-edge');
   const irisCue = document.getElementById('iris-cue');
@@ -3559,6 +3578,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     irisQueued = true;
     requestAnimationFrame(() => {
       irisQueued = false;
+      if(irisPin) window.SECT_pinLayout(iris, irisPin);
       const r = iris.getBoundingClientRect();
       const vh = window.innerHeight;
       const span = r.height - vh;
@@ -4037,6 +4057,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
   function paint(){
     if(!thr) return;
+    window.SECT_pinLayout(sec, pin);
     const p0 = progress();
     if(cueW) cueW.classList.toggle('off', p0 > .93);
     // el barrido ocupa el 15%-90% del recorrido: entra y sale con calma
@@ -4475,6 +4496,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
   function paint(){
     if(!W) return;
+    window.SECT_pinLayout(sec, pin);
     const p = progress();
     const txt = p < SWAP ? BEFORE : AFTER;
 
@@ -4872,6 +4894,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   let queued = false, lastYr = '';
 
   function paint(){
+    window.SECT_pinLayout(sec, pin);
     const p = progress();
 
     // el fondo vira en el tramo central: al principio se lee en claro y al
@@ -5139,6 +5162,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(!visible || document.hidden || !W) return;
     if(cv.width <= 1 || cv.height <= 1) return;   // lienzo liberado
 
+    window.SECT_pinLayout(sec, pin);
     const inten = intensidad(scrollProg());
     const t = (now - t0) / 1000;
 
