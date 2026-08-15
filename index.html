@@ -883,8 +883,7 @@
      tipografica. Sin efectos: precision. */
   .plate{position:relative;height:820vh;background:#000}
   .plate-pin{
-    position:absolute;top:0;left:0;right:0;width:100%;
-    height:100vh;height:100dvh;overflow:hidden;isolation:isolate;
+    position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;isolation:isolate;
     background:
       radial-gradient(66% 54% at 50% 46%, rgba(21,105,255,.17), transparent 64%),
       radial-gradient(130% 80% at 50% 112%, rgba(13,60,150,.22), transparent 62%),
@@ -4199,25 +4198,6 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     return p < 0 ? 0 : p > 1 ? 1 : p;
   }
 
-  /* pin manual con fixed/absolute en vez de position:sticky: en Safari de
-     iOS, sticky deja de "pegarse" cuando algun ancestro (aqui html/body)
-     recorta el overflow en un solo eje, y la lamina desaparece durante
-     todo el scroll. Fixed no depende de ese comportamiento. */
-  function pinLayout(){
-    const r = sec.getBoundingClientRect();
-    const vh = window.innerHeight;
-    if(r.top > 0){
-      pin.style.position = 'absolute';
-      pin.style.top = '0';
-    }else if(r.bottom < vh){
-      pin.style.position = 'absolute';
-      pin.style.top = Math.max(0, sec.offsetHeight - vh) + 'px';
-    }else{
-      pin.style.position = 'fixed';
-      pin.style.top = '0';
-    }
-  }
-
   const lerp = (a,b,t) => a + (b-a)*t;
   const ease = t => t<.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2;
 
@@ -4304,7 +4284,6 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
   function paint(){
     if(!W) return;
-    pinLayout();
     const p = progress();
     if(cueP) cueP.classList.toggle('off', p > .93);
     const t = p * (N - 1);
