@@ -5245,8 +5245,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(!fino || reduce) return;
 
-  const FACTOR = 0.55;   // cuanto avanza cada golpe de rueda (1 = nativo)
-  const SUAVE  = 0.11;   // cuanto se acerca por fotograma (mas bajo = mas lento)
+  const FACTOR = 1;      // cuanto avanza cada golpe de rueda (1 = nativo)
+  const SUAVE  = 0.4;    // cuanto se acerca por fotograma (mas bajo = mas lento)
 
   let destino = window.scrollY, actual = window.scrollY, raf = 0, propio = false;
   const tope = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
