@@ -853,6 +853,15 @@ html.booting,body.booting{overflow:hidden}
 @media (prefers-reduced-motion:reduce){
   .boot-mark,.boot-word,.boot-bar,.boot-foot{opacity:1;animation:none}
 }
+/* pantalla de carga: un poco más grande solo en desktop; en movil queda igual */
+@media (min-width:901px){
+  .boot-in{width:min(410px,100%)}
+  .boot-mark{width:46px;height:46px;border-radius:9px;margin-bottom:20px}
+  .boot-mark i{width:23px;height:23px;border-width:3.4px}
+  .boot-word{font-size:15px;letter-spacing:.3em;margin-bottom:30px}
+  .boot-bar{height:1.5px}
+  .boot-foot{font-size:12.5px;margin-top:16px}
+}
 
 </style>
 </head>
