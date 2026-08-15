@@ -3100,6 +3100,7 @@ window.__SECT_TR = {
           if(t === 'SCRIPT' || t === 'STYLE' || t === 'CANVAS' || t === 'SVG' || t === 'OPTION') continue;
           if(n.id === 'lang') continue;
           if(typeof n.closest === 'function' && n.closest('#cmd-list')) continue;
+          if(typeof n.closest === 'function' && n.closest('.card')) continue;
           recoger(n);
         }
       }
