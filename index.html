@@ -979,8 +979,11 @@
   .plate-meta b{font-weight:500;color:var(--ink-3);font-variant-numeric:tabular-nums}
 
   @media (max-width:700px){
-    .plate{height:640vh}
-    .plate-meta.tr,.plate-meta.br{display:none}
+    /* la lamina grabada es una pieza de escritorio: en movil depende de
+       sticky + blend-modes + canvas atado al scroll, una combinacion que
+       falla en Safari de iOS y deja un tramo negro vacio. El roadmap ya
+       se lee completo en la linea de tiempo de arriba, asi que aqui se omite. */
+    .plate{display:none}
   }
 
   /* ============ roadmap ============ */
