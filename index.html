@@ -4723,7 +4723,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       set('[data-cap]',   big(a.cap));
       const b = el.querySelector('.cap-bar i');
       if(b) b.style.transform = 'scaleX(' + (fill ? bar(a.cap) : 0) + ')';
-      set('[data-out]', self ? '—' : money(a.cap * (pct/100) / SUPPLY));
+      set('[data-out]', self ? money(a.price) : money(a.cap * (pct/100) / SUPPLY));
     });
   }
 
