@@ -861,10 +861,28 @@ html[data-tema="dark"] .tema .luna{display:block}
   .row .hide{display:none}
 }
 @media print{
+  /* el modo oscuro deja --ink casi blanco: sobre el fondo blanco forzado
+     de la impresion, el texto quedaba invisible. Se fuerzan aqui los
+     valores de tema claro sin importar el tema activo en pantalla. */
+  html[data-tema="dark"], :root{
+    --paper:#fff; --surface:#fff;
+    --ink:#0a0c0f; --ink-2:#454b54; --ink-3:#878d96; --ink-4:#b3b8bf;
+    --rule:#d7dade; --rule-soft:#eceef0;
+    --blue:#1569ff; --blue-deep:#0d3fb0; --live:#128a5a;
+  }
   body{background:#fff}
-  body::before,.bar,.top,.rail,.note,.cover-cue,.cta{display:none!important}
+  body::before,.bar,.top,.rail,.note,.cover-cue,.cta,.ret,.read{display:none!important}
+  #grid,.cover-wash,.cover-glow,.frame,.part-grid,.card-glow,.card-vig{display:none!important}
   .doc{grid-template-columns:1fr;max-width:none}
   .rv{opacity:1!important;transform:none!important}
+  /* la portada se revela con una animacion disparada por JS (al cargar
+     las fuentes o a los 1600ms): si se imprime antes de que corra, el
+     titulo y los adornos quedan invisibles. Se fuerza aqui su estado
+     final, sin depender de esa clase. */
+  .cover-kick i{width:30px!important}
+  .cover-h1 .ln>span{transform:none!important}
+  .cover-hair{transform:scaleX(1)!important}
+  .cover-edge{transform:scaleX(1)!important}
   .sec{break-inside:avoid;border-color:#ddd}
   .cut-fill{transform:scaleX(.8)!important}
   a[href^="http"]::after{content:" (" attr(href) ")";font-size:9px;color:#666}
