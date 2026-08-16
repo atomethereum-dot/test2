@@ -4670,7 +4670,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     ? '$' + v.toLocaleString('en-US',{maximumFractionDigits:0})
     : v >= 1
       ? '$' + v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})
-      : '$' + v.toLocaleString('en-US',{minimumFractionDigits:4,maximumFractionDigits:4});
+      : '$' + v.toFixed(4).replace(/0+$/,'').replace(/\.$/,'');
 
   const big = v =>
     v >= 1e12 ? '$' + (v/1e12).toFixed(2) + 'T' :
