@@ -4641,11 +4641,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     {id:'dogecoin',     n:'Dogecoin',     t:'DOGE'},
     {id:'cardano',      n:'Cardano',      t:'ADA'},
     {id:'tron',         n:'TRON',         t:'TRX'},
-    {id:'bitcoin-cash', n:'Bitcoin Cash', t:'BCH'},
-    {id:'sui',          n:'Sui',          t:'SUI'},
-    {id:'chainlink',    n:'Chainlink',    t:'LINK'},
-    {id:'avalanche-2',  n:'Avalanche',    t:'AVAX'},
-    {id:'litecoin',     n:'Litecoin',     t:'LTC'}
+    {id:'chainlink',    n:'Chainlink',    t:'LINK'}
   ];
   // reserva: ultima instantanea conocida, por si la API no responde
   const FALLBACK = {
@@ -4655,11 +4651,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     dogecoin:{price:0.15,    cap:21.90e9,   sup:146e9},
     cardano:{price:0.40,     cap:14.00e9,   sup:35.0e9},
     tron:{price:0.16,        cap:13.50e9,   sup:86.0e9},
-    'bitcoin-cash':{price:211.89, cap:4.21e9, sup:19.9e6},
-    sui:{price:0.68,         cap:3.87e9,    sup:5.7e9},
-    chainlink:{price:14.87,  cap:9.71e9,    sup:653e6},
-    'avalanche-2':{price:18.40, cap:7.54e9, sup:410e6},
-    litecoin:{price:45.23,   cap:3.50e9,    sup:77.5e6}
+    chainlink:{price:14.87,  cap:9.71e9,    sup:653e6}
   };
   const SELF = {n:'Sectora', t:'#SECT', price:0.10, sup:'50.0M → 25.0M', cap:5.00e6};
 

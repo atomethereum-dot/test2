@@ -1533,14 +1533,10 @@ try{
         <div class="row"><span><b>XRP</b> <span class="t">XRP</span></span><span class="r hide">$2.85</span><span class="r">$168.15B</span><span class="r">$336.30</span><span class="cap" aria-hidden="true"><i></i></span></div>
         <div class="row"><span><b>Solana</b> <span class="t">SOL</span></span><span class="r hide">$73.80</span><span class="r">$42.88B</span><span class="r">$85.76</span><span class="cap" aria-hidden="true"><i></i></span></div>
         <div class="row"><span><b>Dogecoin</b> <span class="t">DOGE</span></span><span class="r hide">$0.15</span><span class="r">$21.90B</span><span class="r">$43.80</span><span class="cap" aria-hidden="true"><i></i></span></div>
-        <div class="row"><span><b>Sui</b> <span class="t">SUI</span></span><span class="r hide">$3.40</span><span class="r">$19.38B</span><span class="r">$38.76</span><span class="cap" aria-hidden="true"><i></i></span></div>
         <div class="row"><span><b>Cardano</b> <span class="t">ADA</span></span><span class="r hide">$0.40</span><span class="r">$14.00B</span><span class="r">$28.00</span><span class="cap" aria-hidden="true"><i></i></span></div>
         <div class="row"><span><b>TRON</b> <span class="t">TRX</span></span><span class="r hide">$0.16</span><span class="r">$13.50B</span><span class="r">$27.00</span><span class="cap" aria-hidden="true"><i></i></span></div>
         <div class="row"><span><b>Hyperliquid</b> <span class="t">HYPE</span></span><span class="r hide">$28.50</span><span class="r">$12.83B</span><span class="r">$25.66</span><span class="cap" aria-hidden="true"><i></i></span></div>
         <div class="row"><span><b>Chainlink</b> <span class="t">LINK</span></span><span class="r hide">$14.87</span><span class="r">$9.71B</span><span class="r">$19.42</span><span class="cap" aria-hidden="true"><i></i></span></div>
-        <div class="row"><span><b>Avalanche</b> <span class="t">AVAX</span></span><span class="r hide">$18.40</span><span class="r">$7.54B</span><span class="r">$15.08</span><span class="cap" aria-hidden="true"><i></i></span></div>
-        <div class="row"><span><b>Bitcoin Cash</b> <span class="t">BCH</span></span><span class="r hide">$216.69</span><span class="r">$4.31B</span><span class="r">$8.62</span><span class="cap" aria-hidden="true"><i></i></span></div>
-        <div class="row"><span><b>Litecoin</b> <span class="t">LTC</span></span><span class="r hide">$45.69</span><span class="r">$3.54B</span><span class="r">$7.08</span><span class="cap" aria-hidden="true"><i></i></span></div>
         <div class="row self"><span><b>Sectora</b> <span class="t">$SECT</span></span><span class="r hide">$0.10</span><span class="r">$5.00M</span><span class="r">$0.10</span><span class="cap" aria-hidden="true"><i></i></span></div>
       </div>
 
@@ -2915,7 +2911,7 @@ window.__SECT_TR = {
   (function(){
     const filas = [...document.querySelectorAll('.tab-wrap .row:not(.head)')];
     if(!filas.length) return;
-    const caps = [168.15e9,42.88e9,21.90e9,19.38e9,14.00e9,13.50e9,12.83e9,9.71e9,7.54e9,4.31e9,3.54e9,5.0e6];
+    const caps = [168.15e9,42.88e9,21.90e9,14.00e9,13.50e9,12.83e9,9.71e9,5.0e6];
     // escala logaritmica: en lineal todo lo que no sea Bitcoin desaparece
     const lo = Math.log10(Math.min(...caps)) - .4, hi = Math.log10(Math.max(...caps));
     filas.forEach((f, i) => {
