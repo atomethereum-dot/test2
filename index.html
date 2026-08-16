@@ -1045,6 +1045,8 @@
     transition:background .45s var(--ease),box-shadow .45s var(--ease);
   }
   .tl-item.done::before{background:var(--blue);box-shadow:0 0 11px 1px rgba(21,105,255,.75)}
+  .tl-item.status-done::before{border-color:#3ecf8e}
+  .tl-item.status-done.done::before{background:#3ecf8e;box-shadow:0 0 11px 1px rgba(62,207,142,.75)}
   .tl-q{
     font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--blue);
@@ -3040,7 +3042,7 @@ html[dir="rtl"] body{direction:ltr}
     </div></div>
 
     <div class="tl">
-      <div class="tl-item reveal" style="--d:.06s">
+      <div class="tl-item status-done reveal" style="--d:.06s">
         <span class="tl-q">Aug 2026 · Phase 1</span>
         <h3>Foundation &amp; audit</h3>
         <ul class="tl-ml">
@@ -3050,7 +3052,7 @@ html[dir="rtl"] body{direction:ltr}
           <li>Legal registration completed in Illinois</li>
         </ul>
       </div>
-      <div class="tl-item reveal" style="--d:.12s">
+      <div class="tl-item status-done reveal" style="--d:.12s">
         <span class="tl-q">Aug 2026 · Phase 2</span>
         <h3>Testnet &amp; staking live</h3>
         <ul class="tl-ml">
