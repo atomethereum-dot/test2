@@ -892,7 +892,18 @@ html[data-tema="dark"] .tema .luna{display:block}
   .cover-h1 .ln>span{transform:none!important}
   .cover-hair{transform:scaleX(1)!important}
   .cover-edge{transform:scaleX(1)!important}
-  .sec{break-inside:avoid;border-color:#ddd}
+  /* la portada y las secciones usan relleno pensado para una pantalla
+     completa (vh grandes, min-height de hero): en papel eso deja hojas
+     casi en blanco. Se compacta todo para impresion. */
+  .cover{min-height:auto!important;padding:22px var(--pad) 18px!important}
+  .cover-kick{margin-bottom:10px!important}
+  .cover-hair{margin:14px 0 12px!important}
+  .cover-grid{gap:28px!important}
+  .main{padding:0!important}
+  .sec{padding:14px 0!important;break-inside:avoid;border-color:#ddd}
+  .cut{margin:12px 0!important;padding:14px!important}
+  .tl{margin:10px 0!important}
+  .tl-i{padding-bottom:10px!important}
   .cut-fill{transform:scaleX(.8)!important}
   a[href^="http"]::after{content:" (" attr(href) ")";font-size:9px;color:#666}
 }
