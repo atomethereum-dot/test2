@@ -1530,8 +1530,6 @@ try{
         <div class="row head mono">
           <span>Asset</span><span class="r hide">Price</span><span class="r">Market cap</span><span class="r">$SECT @ 5%</span>
         </div>
-        <div class="row"><span><b>Bitcoin</b> <span class="t">BTC</span></span><span class="r hide">$64,940</span><span class="r">$1.30T</span><span class="r">$2,600</span><span class="cap" aria-hidden="true"><i></i></span></div>
-        <div class="row"><span><b>Ethereum</b> <span class="t">ETH</span></span><span class="r hide">$1,897</span><span class="r">$227.64B</span><span class="r">$455.28</span><span class="cap" aria-hidden="true"><i></i></span></div>
         <div class="row"><span><b>XRP</b> <span class="t">XRP</span></span><span class="r hide">$2.85</span><span class="r">$168.15B</span><span class="r">$336.30</span><span class="cap" aria-hidden="true"><i></i></span></div>
         <div class="row"><span><b>Solana</b> <span class="t">SOL</span></span><span class="r hide">$73.80</span><span class="r">$42.88B</span><span class="r">$85.76</span><span class="cap" aria-hidden="true"><i></i></span></div>
         <div class="row"><span><b>Dogecoin</b> <span class="t">DOGE</span></span><span class="r hide">$0.15</span><span class="r">$21.90B</span><span class="r">$43.80</span><span class="cap" aria-hidden="true"><i></i></span></div>
@@ -2917,7 +2915,7 @@ window.__SECT_TR = {
   (function(){
     const filas = [...document.querySelectorAll('.tab-wrap .row:not(.head)')];
     if(!filas.length) return;
-    const caps = [1.30e12,227.64e9,168.15e9,42.88e9,21.90e9,19.38e9,14.00e9,13.50e9,12.83e9,9.71e9,7.54e9,4.31e9,3.54e9,5.0e6];
+    const caps = [168.15e9,42.88e9,21.90e9,19.38e9,14.00e9,13.50e9,12.83e9,9.71e9,7.54e9,4.31e9,3.54e9,5.0e6];
     // escala logaritmica: en lineal todo lo que no sea Bitcoin desaparece
     const lo = Math.log10(Math.min(...caps)) - .4, hi = Math.log10(Math.max(...caps));
     filas.forEach((f, i) => {
