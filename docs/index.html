@@ -2812,23 +2812,29 @@ window.__SECT_TR = {
       if(lineas.width > 1) ctx.drawImage(lineas, 0, 0, W, H);
     }
 
-    /* ---- cursor de coordenadas, anclado a la celda ---- */
+    /* ---- cursor de coordenadas, anclado a la celda ----
+       la retícula (.ret/.read) es position:fixed, asi que se ancla a la
+       ventana y funciona en todo el documento; solo el resplandor del
+       heatmap queda limitado al lienzo de la portada, que es donde existe */
     const ret = document.getElementById('ret'), read = document.getElementById('read');
     if(ret && read && !reduce){
       const rx = ret.querySelector('.x'), ry = ret.querySelector('.y');
       window.addEventListener('pointermove', e => {
-        const b = cv.getBoundingClientRect();
-        const dentro = e.clientX >= b.left && e.clientX <= b.right
-                    && e.clientY >= b.top  && e.clientY <= b.bottom;
-        if(!dentro){ ret.classList.remove('on'); read.classList.remove('on'); return; }
-        const c = ((e.clientX - b.left)/CELL)|0, r = ((e.clientY - b.top)/CELL)|0;
-        if(heat && c>=0 && r>=0 && c<cols && r<rows) heat[idx(c,r)] = 1;
-        const gx = b.left + c*CELL, gy = b.top + r*CELL;
+        const c = (e.clientX/CELL)|0, r = (e.clientY/CELL)|0;
+        const gx = c*CELL, gy = r*CELL;
         read.style.transform = 'translate3d('+gx+'px,'+gy+'px,0)';
         read.textContent = String(c).padStart(2,'0') + ' · ' + String(r).padStart(2,'0');
         rx.style.transform = 'translate3d(0,'+gy+'px,0)';
         ry.style.transform = 'translate3d('+gx+'px,0,0)';
         ret.classList.add('on'); read.classList.add('on');
+
+        const b = cv.getBoundingClientRect();
+        const dentro = e.clientX >= b.left && e.clientX <= b.right
+                    && e.clientY >= b.top  && e.clientY <= b.bottom;
+        if(dentro){
+          const cc = ((e.clientX - b.left)/CELL)|0, rr = ((e.clientY - b.top)/CELL)|0;
+          if(heat && cc>=0 && rr>=0 && cc<cols && rr<rows) heat[idx(cc,rr)] = 1;
+        }
       }, {passive:true});
       window.addEventListener('pointerleave', () => {
         ret.classList.remove('on'); read.classList.remove('on');
