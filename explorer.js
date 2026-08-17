@@ -463,7 +463,10 @@
       '<p>Sectora is a ' + CHAIN.layer + ' network purpose-built to mint, settle and track on-chain representations of off-chain assets &mdash; metals, indices and more &mdash; anchored to ' + CHAIN.settlesTo + '.</p>' +
       "</div>" +
       '<div class="ex-rwa-grid">' + cards + "</div>" +
+      '<div class="ex-rwa-links">' +
       '<a class="ex-rwa-more" href="#/tokens">View all tokens ' + ICO.arrowRight + "</a>" +
+      '<a class="ex-rwa-more" href="#/tokenize">Tokenize an asset ' + ICO.arrowRight + "</a>" +
+      "</div>" +
       "</section>"
     );
   }
@@ -759,12 +762,192 @@
       detailRow("Total Supply", fmtAmount(t.supply, 0) + " " + esc(t.symbol)) +
       detailRow("Holders", fmtInt(t.holders)) +
       detailRow("Decimals", "18") +
+      (t.custodian ? detailRow("Custodian", esc(t.custodian)) : "") +
+      (t.desc ? detailRow("Description", "<p>" + esc(t.desc) + "</p>") : "") +
       "</div>" +
       '<div class="ex-tabs2">' +
       '<a class="ex-tab2' + (tab !== "holders" ? " is-active" : "") + '" href="#/token/' + addr + '?tab=transfers">Transfers (' + transfers.length + ")</a>" +
       '<a class="ex-tab2' + (tab === "holders" ? " is-active" : "") + '" href="#/token/' + addr + '?tab=holders">Holders (' + t.holders + ")</a>" +
       "</div>" + body
     );
+  }
+
+  /* ============================================================
+     Tokenize an asset
+     ============================================================ */
+  const ASSET_CLASSES = [
+    { id: "real-estate", label: "Real Estate", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg>' },
+    { id: "metals", label: "Precious Metals", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="20" height="9" rx="1.5"/><path d="M6 9V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"/></svg>' },
+    { id: "bonds", label: "Bonds &amp; Treasuries", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10"/><path d="M7 13h10"/><path d="M7 17h6"/></svg>' },
+    { id: "credit", label: "Private Credit", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg>' },
+    { id: "commodities", label: "Commodities", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></svg>' },
+    { id: "equity", label: "Private Equity", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-4 4"/></svg>' },
+    { id: "collectibles", label: "Art &amp; Collectibles", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>' },
+    { id: "other", label: "Other Asset", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 3.5"/><path d="M12 17h.01"/></svg>' },
+  ];
+  const ASSET_CLASS_BY_ID = new Map(ASSET_CLASSES.map((c) => [c.id, c]));
+  const TOKZ_COLORS = ["#468ce6", "#14e0a0", "#6c5ce7", "#d4af37", "#ff8a3d", "#d1293b", "#0f9d68", "#b5892c"];
+
+  function renderTokenize() {
+    const classCards = ASSET_CLASSES
+      .map((c, i) => (
+        '<button type="button" class="ex-tokz-class' + (i === 0 ? " is-selected" : "") + '" data-class="' + c.id + '">' + c.icon + "<span>" + c.label + "</span></button>"
+      ))
+      .join("");
+    return (
+      pageHeader("Tokenize a Real-World Asset", "Mint an on-chain token backed by an off-chain asset and list it on Sectorascan.") +
+      '<p class="ex-tokz-intro">Fill in the asset details below to originate a new tokenized asset on the Sectora ' + CHAIN.layer + ' testnet. Once submitted, the token is minted, assigned a contract address and listed alongside the network’s other tracked real-world assets.</p>' +
+      '<form class="ex-tokz-layout" id="exTokenizeForm">' +
+      '<div class="ex-tokz-card">' +
+      '<p class="ex-tokz-step-label">1 &middot; Asset class</p>' +
+      '<div class="ex-tokz-classes" id="exTokzClasses">' + classCards + "</div>" +
+      '<input type="hidden" id="exTokzClassInput" value="' + ASSET_CLASSES[0].id + '">' +
+
+      '<p class="ex-tokz-step-label">2 &middot; Asset details</p>' +
+      '<div class="ex-tokz-grid2">' +
+      '<div class="ex-tokz-field ex-tokz-field--full">' +
+      '<label class="ex-tokz-label" for="exTokzName">Asset name</label>' +
+      '<input class="ex-tokz-input" id="exTokzName" placeholder="e.g. 200 Park Avenue — Floor 14" required maxlength="80">' +
+      "</div>" +
+      '<div class="ex-tokz-field ex-tokz-field--full">' +
+      '<label class="ex-tokz-label" for="exTokzDesc">Description</label>' +
+      '<textarea class="ex-tokz-textarea" id="exTokzDesc" placeholder="Location, provenance, custody arrangement and anything else a holder should know." maxlength="400"></textarea>' +
+      "</div>" +
+      '<div class="ex-tokz-field">' +
+      '<label class="ex-tokz-label" for="exTokzValue">Total appraised value <small>(USD)</small></label>' +
+      '<input class="ex-tokz-input" id="exTokzValue" type="number" min="1" step="0.01" placeholder="2500000" required>' +
+      "</div>" +
+      '<div class="ex-tokz-field">' +
+      '<label class="ex-tokz-label" for="exTokzSupply">Total token supply</label>' +
+      '<input class="ex-tokz-input" id="exTokzSupply" type="number" min="1" step="1" placeholder="1000" required>' +
+      "</div>" +
+      '<div class="ex-tokz-field">' +
+      '<label class="ex-tokz-label" for="exTokzSymbol">Token symbol <small>(max 6 chars)</small></label>' +
+      '<div class="ex-tokz-prefix"><span>x</span><input class="ex-tokz-input" id="exTokzSymbol" placeholder="PARKAVE" maxlength="6" required></div>' +
+      "</div>" +
+      '<div class="ex-tokz-field">' +
+      '<label class="ex-tokz-label" for="exTokzCustodian">Custodian / jurisdiction</label>' +
+      '<input class="ex-tokz-input" id="exTokzCustodian" placeholder="e.g. Sectora Custody LLC — Delaware">' +
+      "</div>" +
+      "</div>" +
+
+      '<p class="ex-tokz-step-label">3 &middot; Supporting documentation</p>' +
+      '<label class="ex-tokz-drop" id="exTokzDrop" for="exTokzFile">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m6 10 6-6 6 6"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>' +
+      '<span id="exTokzDropText"><b>Upload</b> proof of ownership, appraisal or title documents</span>' +
+      '<input type="file" id="exTokzFile" hidden multiple>' +
+      "</label>" +
+
+      '<div class="ex-tokz-note">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>' +
+      "<span>Sectorascan is a testnet preview. This form mints a simulated demo token for evaluation purposes — no real assets, documents or funds are transmitted.</span>" +
+      "</div>" +
+
+      '<button type="submit" class="ex-tokz-submit" id="exTokzSubmit">Mint tokenized asset</button>' +
+      "</div>" +
+
+      '<div class="ex-tokz-preview">' +
+      '<div class="ex-tokz-preview-head"><span id="exTokzPreviewSymbol">x&mdash;</span></div>' +
+      '<dl>' +
+      '<div class="ex-tokz-preview-row"><dt>Asset class</dt><dd id="exTokzPvClass">' + ASSET_CLASSES[0].label + "</dd></div>" +
+      '<div class="ex-tokz-preview-row"><dt>Total value</dt><dd id="exTokzPvValue">&mdash;</dd></div>' +
+      '<div class="ex-tokz-preview-row"><dt>Token supply</dt><dd id="exTokzPvSupply">&mdash;</dd></div>' +
+      '<div class="ex-tokz-preview-row"><dt>Price / token</dt><dd id="exTokzPvPrice">&mdash;</dd></div>' +
+      "</dl>" +
+      "</div>" +
+      "</form>"
+    );
+  }
+
+  function wireTokenizeForm() {
+    const form = document.getElementById("exTokenizeForm");
+    if (!form) return;
+
+    const classInput = document.getElementById("exTokzClassInput");
+    const pvClass = document.getElementById("exTokzPvClass");
+    document.getElementById("exTokzClasses").addEventListener("click", (e) => {
+      const btn = e.target.closest(".ex-tokz-class");
+      if (!btn) return;
+      document.querySelectorAll(".ex-tokz-class").forEach((b) => b.classList.toggle("is-selected", b === btn));
+      const id = btn.getAttribute("data-class");
+      classInput.value = id;
+      pvClass.textContent = ASSET_CLASS_BY_ID.get(id).label.replace("&amp;", "&");
+    });
+
+    const symbolInput = document.getElementById("exTokzSymbol");
+    const valueInput = document.getElementById("exTokzValue");
+    const supplyInput = document.getElementById("exTokzSupply");
+    const pvSymbol = document.getElementById("exTokzPreviewSymbol");
+    const pvValue = document.getElementById("exTokzPvValue");
+    const pvSupply = document.getElementById("exTokzPvSupply");
+    const pvPrice = document.getElementById("exTokzPvPrice");
+
+    function refreshPreview() {
+      const sym = symbolInput.value.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+      pvSymbol.textContent = "x" + (sym || "—");
+      const value = parseFloat(valueInput.value);
+      const supply = parseFloat(supplyInput.value);
+      pvValue.textContent = value > 0 ? fmtUsd(value) : "—";
+      pvSupply.textContent = supply > 0 ? fmtInt(supply) + " tokens" : "—";
+      pvPrice.textContent = value > 0 && supply > 0 ? "$" + fmtAmount(value / supply, 4) : "—";
+    }
+    [symbolInput, valueInput, supplyInput].forEach((el) => el.addEventListener("input", refreshPreview));
+
+    const fileInput = document.getElementById("exTokzFile");
+    const drop = document.getElementById("exTokzDrop");
+    const dropText = document.getElementById("exTokzDropText");
+    fileInput.addEventListener("change", () => {
+      const n = fileInput.files.length;
+      drop.classList.toggle("has-file", n > 0);
+      dropText.innerHTML = n > 0 ? "<b>" + n + (n === 1 ? " file" : " files") + " attached</b> — ready to submit" : "<b>Upload</b> proof of ownership, appraisal or title documents";
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById("exTokzSubmit");
+      const name = document.getElementById("exTokzName").value.trim();
+      const value = parseFloat(valueInput.value);
+      const supply = parseFloat(supplyInput.value);
+      let symbol = symbolInput.value.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (!name || !(value > 0) || !(supply > 0) || !symbol) return;
+      symbol = "x" + symbol;
+      let unique = symbol, n = 2;
+      while (TOKEN_BY_SYMBOL.has(unique.toLowerCase())) unique = symbol + n++;
+      symbol = unique;
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="ex-tokz-spin" aria-hidden="true"></span> Verifying documentation…';
+
+      const payload = {
+        name, symbol, value, supply,
+        classId: classInput.value,
+        desc: document.getElementById("exTokzDesc").value.trim(),
+        custodian: document.getElementById("exTokzCustodian").value.trim(),
+      };
+      setTimeout(() => mintAsset(payload), 1150);
+    });
+  }
+
+  function mintAsset(p) {
+    const cls = ASSET_CLASS_BY_ID.get(p.classId) || ASSET_CLASSES[0];
+    const addr = makeKnown("Sectora: " + p.name + " Vault");
+    const t = {
+      symbol: p.symbol,
+      name: p.name,
+      kind: "RWA · " + cls.label.replace("&amp;", "&"),
+      color: pick(TOKZ_COLORS),
+      price: p.value / p.supply,
+      supply: p.supply,
+      holders: 1,
+      addr,
+      desc: p.desc,
+      custodian: p.custodian,
+    };
+    t.baseline = t.price;
+    TOKENS.push(t);
+    TOKEN_BY_SYMBOL.set(t.symbol.toLowerCase(), t);
+    TOKEN_BY_ADDR.set(t.addr.toLowerCase(), t);
+    location.hash = "#/token/" + t.addr;
   }
 
   function renderGasTracker() {
@@ -888,6 +1071,9 @@
       case "charts":
         html = renderCharts();
         break;
+      case "tokenize":
+        html = renderTokenize();
+        break;
       default:
         html = notFound("Page", view);
     }
@@ -896,6 +1082,7 @@
     updateNavActive(view);
     if (!preserveScroll) window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
     updateAges();
+    if (view === "tokenize") wireTokenizeForm();
   }
 
   function updateNavActive(view) {
