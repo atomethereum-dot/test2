@@ -163,7 +163,11 @@ h1{font-size:clamp(32px,5.4vw,58px);color:var(--ink);margin-bottom:22px}
 .ft-links a:hover{color:var(--ink)}
 
 @media (max-width:760px){
-  .top{padding:13px 16px;flex-wrap:wrap}
+  .top{padding:13px 16px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none}
+  .top::-webkit-scrollbar{display:none}
+  .top-l,.top-r{flex:none;flex-wrap:nowrap}
+  .brand,.pill,.btn.ghost{flex:none;white-space:nowrap}
   .crumb{display:none}
   .strip{grid-template-columns:repeat(2,1fr)}
   .res-row{grid-template-columns:1fr;gap:8px;text-align:left}
