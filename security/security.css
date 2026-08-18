@@ -168,5 +168,9 @@ h1{font-size:clamp(32px,5.4vw,58px);color:var(--ink);margin-bottom:22px}
   .strip{grid-template-columns:repeat(2,1fr)}
   .res-row{grid-template-columns:1fr;gap:8px;text-align:left}
   .res-val{text-align:left}
-  .ft-in{flex-direction:column;align-items:flex-start}
+  .ft-in{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;font-size:11px}
+  .ft-in::-webkit-scrollbar{display:none}
+  .ft-in>span{flex:none}
+  .ft-links{flex-wrap:nowrap;gap:14px}
 }
