@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sectora Shield — Quantum-Resistant Cybersecurity Engine</title>
+<meta name="description" content="Sectora Shield: the post-quantum cybersecurity engine protecting custody, trading and data across every Sectora product — and available to license beyond the network.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='9' ry='9' fill='%231569ff'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%23fff' stroke-width='11'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#05070b">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preload" href="fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="security.css">
+</head>
+<body>
+<div class="vig" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="top-l">
+    <a class="brand" href="index.html">
+      <span class="mark" aria-hidden="true"><i></i></span>
+      <span class="word">SECTORA</span>
+    </a>
+    <span class="crumb">Cybersecurity Software</span>
+  </div>
+  <div class="top-r">
+    <span class="pill live"><i class="dot"></i>Live monitoring</span>
+    <span class="pill">Post-quantum</span>
+    <a class="btn ghost" href="index.html">← Main site</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="hero-in">
+      <p class="eyebrow"><i></i>Cybersecurity Software · §11</p>
+      <h1>The security engine <br>beneath every product.</h1>
+      <p class="lead">Sectora Shield is the quantum-resistant cybersecurity layer that protects
+        custody, trading and live data across the entire Sectora network — the same engine
+        that secures the DEX, the hash market and the dashboard's on-chain feeds.</p>
+      <div class="strip">
+        <div><span class="lbl">Threats blocked</span><span class="big num" id="sThreats">0</span><span class="sub">Since page load</span></div>
+        <div><span class="lbl">Products protected</span><span class="big num" id="sProducts">7</span><span class="sub">Across the network</span></div>
+        <div><span class="lbl">Custody integrity</span><span class="big num" id="sIntegrity">100.000%</span><span class="sub">Records verified</span></div>
+        <div><span class="lbl">Engine uptime</span><span class="big">100.00%</span><span class="sub">Testnet to date</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect" id="feed">
+    <div class="head">
+      <h2>Live threat monitor</h2>
+      <span>Simulated preview feed — testnet traffic, illustrative of the engine's detection surface</span>
+    </div>
+    <div class="feed-box">
+      <div class="feed-list" id="feedList"></div>
+    </div>
+  </section>
+
+  <section class="sect" id="products">
+    <div class="head">
+      <h2>What Shield protects</h2>
+      <span>One engine, applied at every layer of the network</span>
+    </div>
+    <div class="grid7" id="prodGrid"></div>
+  </section>
+
+  <section class="sect" id="pqc">
+    <div class="head">
+      <h2>Built on standardized post-quantum cryptography</h2>
+      <span>NIST finalized these algorithm families in 2024 (FIPS 203/204/205) — Shield is built on that same foundation</span>
+    </div>
+    <div class="grid3">
+      <div class="pqc-card">
+        <span class="pqc-tag">FIPS 203 · ML-KEM</span>
+        <h3>Key encapsulation</h3>
+        <p>Lattice-based key exchange (CRYSTALS-Kyber family) secures every session and message
+          between validators, custody records and the network's live data feeds.</p>
+      </div>
+      <div class="pqc-card">
+        <span class="pqc-tag">FIPS 204 · ML-DSA</span>
+        <h3>Digital signatures</h3>
+        <p>Lattice-based signatures (CRYSTALS-Dilithium family) authenticate custody transfers
+          and validator actions — built to remain unforgeable even against quantum attacks.</p>
+      </div>
+      <div class="pqc-card">
+        <span class="pqc-tag">FIPS 205 · SLH-DSA</span>
+        <h3>Hash-based signatures</h3>
+        <p>A stateless hash-based signature scheme (SPHINCS+ family) backs long-horizon custody
+          records — the class of asset that has to stay verifiable for decades.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect" id="resilience">
+    <div class="head">
+      <h2>Why this matters for tokenized assets</h2>
+      <span>Custody records for real-world assets have to stay valid for as long as the property does — often decades</span>
+    </div>
+    <div class="res-box">
+      <div class="res-row">
+        <span class="res-lbl">Classical encryption <em>(e.g. RSA-2048)</em></span>
+        <div class="res-bar"><i style="--w:9%"></i></div>
+        <span class="res-val">Not quantum-resistant</span>
+      </div>
+      <div class="res-row on">
+        <span class="res-lbl">Sectora Shield <em>post-quantum stack</em></span>
+        <div class="res-bar"><i style="--w:96%"></i></div>
+        <span class="res-val">Built for the post-quantum transition</span>
+      </div>
+      <p class="res-note">Illustrative comparison, not a benchmark. NIST recommends migrating
+        long-lived records to standardized post-quantum algorithms ahead of any
+        cryptographically-relevant quantum computer — Shield is built on that guidance from day one.</p>
+    </div>
+  </section>
+
+  <section class="sect" id="ledger">
+    <div class="head">
+      <h2>Integrity ledger</h2>
+      <span>Every custody record is checked against tampering on a continuous loop</span>
+    </div>
+    <div class="ledger-box">
+      <div class="ledger-list" id="ledgerList"></div>
+    </div>
+  </section>
+
+  <section class="sect license">
+    <div class="license-box">
+      <div class="license-txt">
+        <p class="eyebrow"><i></i>Built to be shared</p>
+        <h2>Available beyond Sectora</h2>
+        <p>Post-quantum cryptography is moving from research to requirement industry-wide —
+          firms like IBM, Google and Microsoft are already investing in it for their own
+          infrastructure. Sectora Shield is built to be licensed the same way: technology
+          companies and high-level cryptographic projects can adopt this class of protection
+          without building it from scratch — a security engine as a second product line
+          alongside the network itself.</p>
+        <a class="btn primary" href="mailto:support@sectoraorg.com?subject=Sectora%20Shield%20—%20enterprise%20access">Request enterprise access</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="ft">
+  <div class="ft-in">
+    <span>© 2026 Sectora Foundation IL · Illinois, United States · Testnet preview</span>
+    <span class="ft-links">
+      <a href="index.html">Main site</a>
+      <a href="https://sectoraorg.com/docs">Whitepaper</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="explorer.html">Explorer</a>
+      <a href="https://www.sectoraorg.com/legal">Legal</a>
+      <a href="mailto:support@sectoraorg.com">Support</a>
+    </span>
+  </div>
+</footer>
+
+<script src="security.js"></script>
+</body>
+</html>
