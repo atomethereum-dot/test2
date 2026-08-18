@@ -1051,6 +1051,14 @@
     font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--blue);
   }
+  .tl-tag{
+    display:inline-flex;align-items:center;gap:6px;margin-left:10px;padding:3px 8px;
+    border:1px solid rgba(62,207,142,.32);border-radius:2px;
+    font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:#3ecf8e;vertical-align:2px;
+  }
+  .tl-tag::before{content:'';width:5px;height:5px;border-radius:50%;background:#3ecf8e;
+    box-shadow:0 0 6px 1px rgba(62,207,142,.7)}
   .tl-item h3{font-size:clamp(17px,1.7vw,22px);font-weight:400;margin:10px 0 8px;letter-spacing:-.012em}
   .tl-item p{font-size:14px;line-height:1.7;color:var(--ink-3);max-width:44ch}
   .tl-item .tl-ml{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;max-width:46ch}
@@ -2810,7 +2818,9 @@ html[dir="rtl"] body{direction:ltr}
         <div class="actions mono lift" style="--d:.72s">
           <a class="btn btn-primary" href="https://sectoraorg.com/docs"><span>Download the whitepaper</span><span class="arrow">→</span></a>
           <!-- sustituir el href por el enlace del pool de Uniswap cuando lo tengas -->
+          <!-- HIDDEN-BY-REQUEST
           <a class="btn btn-ghost" href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer"><span>Buy SECT on Uniswap</span><span class="arrow">↗</span></a>
+          HIDDEN-BY-REQUEST -->
         </div>
       </div>
 
@@ -2877,24 +2887,28 @@ html[dir="rtl"] body{direction:ltr}
     </div></div>
 
     <div class="m-list">
+      <!-- HIDDEN-BY-REQUEST
       <article class="m-card reveal" style="--d:.10s">
         <span class="mono">01</span>
         <h3>Contract audit</h3>
         <p>The SECT contract has been reviewed by an independent security firm. The full report is published, including any findings and their resolution.</p>
         <a class="m-link mono pend" aria-disabled="true">Read the audit <i>↗</i></a>
       </article>
+      HIDDEN-BY-REQUEST -->
       <article class="m-card reveal" style="--d:.18s">
         <span class="mono">02</span>
         <h3>Registered company</h3>
         <p>Sectora Foundation is a company incorporated in Illinois, United States. Its filing is a matter of public record and can be checked with the state registry.</p>
         <a class="m-link mono" href="https://www.sectoraorg.com/legal" target="_blank" rel="noopener noreferrer">Check the registry <i>↗</i></a>
       </article>
+      <!-- HIDDEN-BY-REQUEST
       <article class="m-card reveal" style="--d:.26s">
         <span class="mono">03</span>
         <h3>Open market data</h3>
         <p>Liquidity, holders and every transaction are visible on Dexscreener in real time. Nothing about the token has to be taken on our word.</p>
         <a class="m-link mono" href="https://dexscreener.com" target="_blank" rel="noopener noreferrer">View on Dexscreener <i>↗</i></a>
       </article>
+      HIDDEN-BY-REQUEST -->
     </div>
   </div>
 </section>
@@ -3063,10 +3077,10 @@ html[dir="rtl"] body{direction:ltr}
         </ul>
       </div>
       <div class="tl-item status-done reveal" style="--d:.12s">
-        <span class="tl-q">Aug 2026 · Phase 2</span>
+        <span class="tl-q">Aug 2026 · Phase 2</span><span class="tl-tag">Testing Phase · Testnet</span>
         <h3>Testnet &amp; staking live</h3>
         <ul class="tl-ml">
-          <li>Live staking open to all holders</li>
+          <li>Testnet staking open to all holders</li>
           <li>Testnet infrastructure deployed: Sectora L3 blockchain, node validation, DEX</li>
         </ul>
       </div>
@@ -3320,6 +3334,7 @@ html[dir="rtl"] body{direction:ltr}
       </a>
 
       <!-- sustituir por el enlace real del pool de Uniswap -->
+      <!-- HIDDEN-BY-REQUEST
       <a class="jc key reveal" style="--d:.22s" href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer">
         <span class="jc-i" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span class="jc-num">02</span>
@@ -3330,6 +3345,7 @@ html[dir="rtl"] body{direction:ltr}
         <p>Ethereum ERC-20. Verify the contract address before trading.</p>
         <span class="jc-go">Uniswap <em>&#8599;</em></span>
       </a>
+      HIDDEN-BY-REQUEST -->
 
       <a class="jc reveal" style="--d:.26s" href="https://x.com/sectoraorg" target="_blank" rel="noopener noreferrer">
         <span class="jc-i" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
@@ -3343,6 +3359,7 @@ html[dir="rtl"] body{direction:ltr}
       </a>
 
       <!-- sustituir por el enlace real de Telegram -->
+      <!-- HIDDEN-BY-REQUEST
       <a class="jc reveal pend" aria-disabled="true" style="--d:.30s">
         <span class="jc-i" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span class="jc-num">04</span>
@@ -3353,6 +3370,7 @@ html[dir="rtl"] body{direction:ltr}
         <p>Direct line to the team and the builder community.</p>
         <span class="jc-go">Join <em>↗</em></span>
       </a>
+      HIDDEN-BY-REQUEST -->
     </div>
 
     <p class="join-fine reveal" style="--d:.38s">Sectora Foundation · Illinois, United States</p>
