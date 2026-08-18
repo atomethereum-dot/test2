@@ -56,9 +56,13 @@ svg,i{display:block}
 main{position:relative;z-index:1}
 
 /* ---------- hero ---------- */
-.hero{padding:clamp(56px,9vw,110px) var(--pad) clamp(40px,6vw,64px);
+.hero{position:relative;overflow:hidden;background:var(--bg);
+  padding:clamp(56px,9vw,110px) var(--pad) clamp(40px,6vw,64px);
   border-bottom:1px solid var(--hair)}
-.hero-in{max-width:900px}
+#secGrid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.hero-vig{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(118% 88% at 38% 40%,transparent 46%,rgba(5,7,11,.85) 100%)}
+.hero-in{position:relative;z-index:2;max-width:900px}
 .eyebrow{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;
   font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue2);margin-bottom:20px}
 .eyebrow i{width:20px;height:1px;background:var(--blue2)}
