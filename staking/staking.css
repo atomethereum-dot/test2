@@ -247,6 +247,41 @@ h1{font-size:clamp(38px,5.6vw,72px);color:var(--ink);font-weight:200;line-height
 .stake-card,.terms-card,.pqc-card,.stat-card{transition:border-color .3s var(--ease),transform .3s var(--ease)}
 .pqc-card:hover{border-color:rgba(21,105,255,.28);transform:translateY(-2px)}
 
+/* ---------- panel: the main site's engraved-plate card language ---------- */
+.panel{position:relative;isolation:isolate;overflow:hidden}
+.panel-glow{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(58% 78% at 82% 14%, rgba(255,255,255,.05), transparent 66%),
+             radial-gradient(70% 90% at 8% 108%, rgba(21,105,255,.12), transparent 60%)}
+.panel-grid{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:36px 36px;
+  -webkit-mask-image:radial-gradient(75% 90% at 84% 12%,#000,transparent 82%);
+  mask-image:radial-gradient(75% 90% at 84% 12%,#000,transparent 82%)}
+.panel-vig{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 30%, transparent 55%, rgba(0,0,0,.4) 100%)}
+.panel-plus{position:absolute;z-index:1;pointer-events:none;top:14px;bottom:14px;left:14px;right:14px}
+.panel-plus i{position:absolute;width:9px;height:9px;opacity:.3}
+.panel-plus i::before,.panel-plus i::after{content:'';position:absolute;background:var(--ink2)}
+.panel-plus i::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-.5px)}
+.panel-plus i::after{top:50%;left:0;right:0;height:1px;transform:translateY(-.5px)}
+.panel-plus i:nth-child(1){left:0;top:0}
+.panel-plus i:nth-child(2){right:0;top:0}
+.panel-plus i:nth-child(3){left:0;bottom:0}
+.panel-plus i:nth-child(4){right:0;bottom:0}
+.panel-in{position:relative;z-index:2}
+.panel-num{position:absolute;top:20px;right:22px;z-index:0;pointer-events:none;
+  font-family:'IBM Plex Mono',monospace;font-size:46px;font-weight:500;
+  color:rgba(255,255,255,.05);line-height:1}
+
+/* ---------- section aurora: soft drifting glow behind a section ---------- */
+.sect{position:relative}
+.sect-aura{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.sect-aura span{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5}
+.sect-aura span:nth-child(1){left:-6%;top:-4%;width:38vw;height:34vh;background:rgba(21,105,255,.16)}
+.sect-aura span:nth-child(2){right:-8%;bottom:-6%;width:34vw;height:32vh;background:rgba(232,180,92,.10)}
+.sect > *{position:relative;z-index:1}
+
 /* ---------- reveal on scroll ---------- */
 .reveal{opacity:0;transform:translateY(26px);
   transition:opacity .8s var(--ease) var(--d,0s),transform .8s var(--ease) var(--d,0s)}

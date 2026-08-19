@@ -54,7 +54,12 @@
         </div>
       </div>
 
-      <div class="stat-card">
+      <div class="stat-card panel">
+        <span class="panel-glow" aria-hidden="true"></span>
+        <span class="panel-grid" aria-hidden="true"></span>
+        <span class="panel-vig" aria-hidden="true"></span>
+        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <div class="panel-in">
         <div class="gauge-row">
           <div class="gauge-wrap">
             <canvas id="apyRing" width="152" height="152" aria-hidden="true"></canvas>
@@ -91,18 +96,25 @@
           <div><span class="lv-lbl">Total staked</span><b class="num" id="lvStaked">0</b></div>
           <div><span class="lv-lbl">Stakers</span><b class="num" id="lvStakers">0</b></div>
         </div>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="sect" id="stake">
+    <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
       <h2>Estimate your rewards</h2>
       <span>Illustrative of the target rate — rewards begin accruing once hash market revenue is live, not before</span>
     </div>
 
     <div class="stake-grid">
-      <div class="stake-card reveal">
+      <div class="stake-card panel reveal">
+        <span class="panel-glow" aria-hidden="true"></span>
+        <span class="panel-grid" aria-hidden="true"></span>
+        <span class="panel-vig" aria-hidden="true"></span>
+        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <div class="panel-in">
         <div class="stake-row">
           <label for="sectIn">You stake</label>
           <div class="input-wrap">
@@ -124,9 +136,15 @@
         </div>
         <button type="button" class="btn primary wide" id="connectBtn">Connect wallet</button>
         <p class="stake-note">No lockup · unstake anytime · rewards calculated at the 14.9% target rate</p>
+        </div>
       </div>
 
-      <div class="terms-card reveal" style="--d:.08s">
+      <div class="terms-card panel reveal" style="--d:.08s">
+        <span class="panel-glow" aria-hidden="true"></span>
+        <span class="panel-grid" aria-hidden="true"></span>
+        <span class="panel-vig" aria-hidden="true"></span>
+        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <div class="panel-in">
         <h3>Terms</h3>
         <ul class="terms-list">
           <li><span>Target APY</span><b>14.9%</b></li>
@@ -143,6 +161,7 @@
             <a href="https://sectoraorg.com/docs#s08" target="_blank" rel="noopener noreferrer">whitepaper</a>
             for the full mechanism.</p>
         </div>
+        </div>
       </div>
     </div>
   </section>
@@ -158,32 +177,54 @@
   </section>
 
   <section class="sect" id="verify">
+    <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
       <h2>Why this isn't just a promised number</h2>
       <span>The mechanism behind the 14.9% target, in three parts</span>
     </div>
     <div class="grid3">
-      <div class="pqc-card reveal" style="--d:0.00s">
+      <div class="pqc-card panel reveal" style="--d:0.00s">
+        <span class="panel-glow" aria-hidden="true"></span>
+        <span class="panel-grid" aria-hidden="true"></span>
+        <span class="panel-vig" aria-hidden="true"></span>
+        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <div class="panel-in">
+        <span class="panel-num" aria-hidden="true">01</span>
         <span class="pqc-tag">Revenue, not emissions</span>
         <h3>Funded by hash market sales</h3>
         <p>Every hash purchase splits by a fixed, published rule: 80% buys back and burns
           #SECT on the open market, 20% funds APY rewards, protocol expansion and the team.
           Nothing is minted to pay stakers.</p>
+        </div>
       </div>
-      <div class="pqc-card reveal" style="--d:0.08s">
+      <div class="pqc-card panel reveal" style="--d:0.08s">
+        <span class="panel-glow" aria-hidden="true"></span>
+        <span class="panel-grid" aria-hidden="true"></span>
+        <span class="panel-vig" aria-hidden="true"></span>
+        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <div class="panel-in">
+        <span class="panel-num" aria-hidden="true">02</span>
         <span class="pqc-tag">Deflationary by design</span>
         <h3>The other 80% shrinks supply</h3>
         <p>Every #SECT bought back with hash revenue is burned instantly — permanently
           removed from circulating supply. Staking rewards and supply reduction are funded
           by the same transaction, not competing budgets.</p>
+        </div>
       </div>
-      <div class="pqc-card reveal" style="--d:0.16s">
+      <div class="pqc-card panel reveal" style="--d:0.16s">
+        <span class="panel-glow" aria-hidden="true"></span>
+        <span class="panel-grid" aria-hidden="true"></span>
+        <span class="panel-vig" aria-hidden="true"></span>
+        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <div class="panel-in">
+        <span class="panel-num" aria-hidden="true">03</span>
         <span class="pqc-tag">Verify it yourself</span>
         <h3>Read from the chain</h3>
         <p>Buybacks, burns and reward payouts are on-chain events — check them in the
           Dashboard's Hash Market panel or directly on the explorer, instead of taking our
           word for it.</p>
         <a class="link-go" href="../dash/index.html" target="_blank" rel="noopener noreferrer">Open the Dashboard <em>↗</em></a>
+        </div>
       </div>
     </div>
   </section>
