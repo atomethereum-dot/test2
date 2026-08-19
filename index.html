@@ -2065,60 +2065,6 @@
     .ft-word{font-size:26vw;bottom:-3vw}
   }
 
-  /* ============ muro de palabras: firma de marca antes del footer ============ */
-  .brand-wall{
-    position:relative;overflow:hidden;background:#000;
-    border-top:1px solid var(--hair);
-    height:clamp(300px,34vw,460px);
-    display:flex;align-items:center;justify-content:center;
-  }
-  .bw-matrix{
-    position:absolute;inset:-24px 0 -24px 0;padding:0 var(--pad);
-    font-family:'IBM Plex Mono',monospace;font-weight:400;
-    font-size:clamp(10.5px,1vw,13px);line-height:2.3;letter-spacing:.01em;
-    color:rgba(255,255,255,.11);text-transform:lowercase;
-    user-select:none;z-index:0;
-  }
-  .bw-matrix b{font-weight:500;color:rgba(255,255,255,.44)}
-  .bw-sweep{
-    position:absolute;inset:0;z-index:1;pointer-events:none;
-    background:linear-gradient(100deg,transparent 40%,rgba(120,180,255,.55) 50%,transparent 60%);
-    background-size:220% 100%;mix-blend-mode:screen;
-    animation:bwSweep 9s cubic-bezier(.5,0,.2,1) infinite;
-  }
-  @keyframes bwSweep{
-    0%{background-position:-160% 0}
-    55%,100%{background-position:220% 0}
-  }
-  .bw-vignette{
-    position:absolute;inset:0;z-index:2;pointer-events:none;
-    background:radial-gradient(46% 78% at 50% 50%,#000 0%,rgba(0,0,0,.88) 46%,transparent 82%);
-  }
-  .bw-logo{
-    position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;gap:14px;
-  }
-  .bw-mark{
-    width:clamp(56px,7vw,84px);height:clamp(56px,7vw,84px);display:block;
-    animation:bwFloat 6s ease-in-out infinite;
-  }
-  .bw-mark svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 24px rgba(21,105,255,.55))}
-  @keyframes bwFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-  .bw-word{
-    font-family:'IBM Plex Mono',monospace;font-size:clamp(15px,2vw,20px);font-weight:500;
-    letter-spacing:.36em;color:var(--ink);text-transform:uppercase;
-    text-shadow:0 2px 16px rgba(0,0,0,.9),0 1px 2px rgba(0,0,0,1);
-  }
-  .bw-tag{
-    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.22em;
-    color:var(--ink-3);text-transform:uppercase;
-    text-shadow:0 2px 12px rgba(0,0,0,.9),0 1px 2px rgba(0,0,0,1);
-  }
-  @media (max-width:760px){
-    .brand-wall{height:clamp(280px,64vw,360px)}
-    .bw-matrix{font-size:9.5px;line-height:2.05}
-    .bw-vignette{background:radial-gradient(60% 84% at 50% 50%,#000 0%,rgba(0,0,0,.9) 48%,transparent 84%)}
-  }
-
   .disclosure{
     border-top:1px solid var(--hair);
     padding:20px var(--pad) 40px;
@@ -3425,19 +3371,6 @@ html[dir="rtl"] body{direction:ltr}
     </div>
 
     <p class="join-fine reveal" style="--d:.38s">Sectora Foundation · Illinois, United States</p>
-  </div>
-</section>
-
-<section class="brand-wall" aria-label="Sectora Foundation">
-  <div class="bw-matrix" aria-hidden="true">pool escrow queue <b>smart</b> <b>pending</b> key book contract merge api limit audit sync grant consensus threshold route commit verify settle depth <b>alert</b> peer seed scope gossip firewall <b>append</b> filter <b>topic</b> uptime testnet endpoint reorg migrate validator gas index dashboard fork abi derive dispute trade liquidity node monitor mainnet salt <b>merkle</b> timestamp <b>schema</b> tick <b>perimeter</b> ledger mnemonic revoke layer sla throttle custody checksum cold height <b>batch</b> interface proxy <b>encrypt</b> struct target insurance clear latency supply trail proof digest explorer amm <b>module</b> <b>emit</b> permission relay state webhook <b>delegate</b> auth refresh multisig failover sibling signature <b>backup</b> exploit shard proposal redundancy difficulty leaf order deploy quorum <b>governance</b> mempool registry keypair arbitration path <b>range</b> bytecode price match <b>calldata</b> <b>entropy</b> finality sign token immutable session <b>storage</b> trie diff patch redteam forensics wallet guard cache feed snapshot fill <b>hot</b> listener pentest policy indexed oracle replay random <b>enforce</b> spread bridge reward upgrade mapping ecdsa circulating disclosure rollback incident routing compile response cve throughput hash curve role block event vault vote <b>stake</b> rwa swap treasury <b>slash</b> <b>slot</b> <b>expire</b> confirm root branch opcode rlp chain fee build nonce parent <b>cancel</b> bandwidth epoch receipt bounty sandbox <b>log</b> checkpoint resolve burn <b>bloom</b> staking mint decrypt integrity event compile <b>bloom</b> gas multisig target seed hash reward <b>deploy</b> slot stake pentest <b>bounty</b> <b>fill</b> <b>digest</b> mainnet delegate tick epoch trail migrate merge custody salt topic sandbox guard <b>pool</b> append signature token monitor <b>storage</b> peer feed slash oracle bandwidth trade snapshot relay keypair queue finality ledger patch permission dispute indexed backup opcode curve <b>routing</b> scope throttle ecdsa <b>mempool</b> <b>consensus</b> schema timestamp random fork clear swap <b>mapping</b> <b>build</b> path alert amm limit grant gossip node mint parent treasury <b>latency</b> height bytecode api bridge staking cache merkle registry explorer encrypt block vote insurance escrow cancel supply order redteam vault <b>branch</b> session pending integrity perimeter <b>interface</b> nonce <b>wallet</b> incident state role spread diff validator redundancy sync book cold <b>batch</b> disclosure testnet shard module <b>rlp</b> difficulty immutable throughput checkpoint contract <b>failover</b> governance receipt auth root quorum rwa endpoint <b>exploit</b> <b>mnemonic</b> fee emit rollback <b>key</b> range response replay expire liquidity derive threshold sla firewall chain hot sibling trie revoke dashboard listener <b>reorg</b> enforce arbitration refresh depth struct forensics layer <b>webhook</b> cve calldata index <b>proposal</b> proof policy proxy <b>commit</b> confirm price uptime <b>settle</b> leaf filter smart verify <b>match</b> upgrade entropy burn <b>audit</b> sign log checksum resolve decrypt route abi circulating feed sign proposal vault route deploy enforce sync <b>struct</b> sibling dispute interface <b>emit</b> api ecdsa <b>mempool</b> keypair <b>grant</b> difficulty commit limit smart decrypt integrity rwa slot signature resolve <b>trail</b> escrow role hot throttle failover random hash book <b>scope</b> <b>routing</b> gas <b>testnet</b> staking digest <b>clear</b> threshold <b>derive</b> governance multisig token <b>treasury</b> mainnet bloom mnemonic <b>consensus</b> disclosure explorer abi mapping incident reorg parent trie build cancel session dashboard <b>range</b> supply stake checksum validator audit layer <b>cache</b> bounty compile forensics shard permission index <b>sla</b> entropy wallet diff alert uptime branch listener <b>backup</b> verify state batch response sandbox root amm <b>pool</b> bandwidth pentest price leaf auth slash block seed ledger upgrade guard finality <b>fork</b> bytecode topic quorum revoke reward opcode storage <b>monitor</b> <b>relay</b> <b>match</b> queue trade merkle vote <b>arbitration</b> curve contract <b>calldata</b> <b>circulating</b> exploit <b>cold</b> bridge schema height refresh key merge rlp <b>patch</b> perimeter salt <b>append</b> <b>snapshot</b> chain insurance liquidity encrypt nonce <b>latency</b> module redundancy order settle expire depth proxy mint checkpoint <b>event</b> policy timestamp filter <b>cve</b> log <b>spread</b> delegate webhook <b>immutable</b> epoch target oracle fee swap burn indexed path <b>migrate</b> confirm node custody <b>peer</b> endpoint rollback firewall registry tick fill <b>receipt</b> proof <b>replay</b> redteam pending gossip throughput order proof perimeter route deploy cache amm swap limit upgrade shard <b>audit</b> sign token event epoch expire api response encrypt permission trail dispute difficulty guard hash webhook topic patch digest random merge diff confirm bounty depth <b>latency</b> throughput <b>entropy</b> <b>ledger</b> <b>registry</b> target bridge <b>nonce</b> <b>mint</b> <b>snapshot</b> gossip validator emit book <b>checkpoint</b> insurance cold staking enforce salt <b>rollback</b> treasury uptime node <b>finality</b> replay <b>bytecode</b> <b>leaf</b> branch gas pentest smart multisig firewall <b>storage</b> <b>height</b> clear refresh resolve redteam <b>revoke</b> pool testnet build scope vault sibling parent derive burn <b>spread</b> monitor checksum wallet indexed incident stake supply layer <b>fee</b> rwa ecdsa <b>throttle</b> session settle path <b>commit</b> signature root log compile contract opcode bandwidth module consensus failover mainnet proposal proxy <b>timestamp</b> key <b>sla</b> fork peer filter policy mapping verify struct rlp <b>trie</b> sync <b>queue</b> vote role bloom pending match circulating listener curve tick auth slash exploit append routing relay custody threshold oracle redundancy block dashboard grant <b>decrypt</b> quorum interface merkle seed delegate reorg sandbox trade explorer slot immutable hot arbitration migrate batch schema mnemonic <b>cve</b> cancel <b>forensics</b> chain alert receipt fill endpoint</div>
-  <div class="bw-sweep" aria-hidden="true"></div>
-  <div class="bw-vignette" aria-hidden="true"></div>
-  <div class="bw-logo reveal" style="--d:.05s">
-    <span class="bw-mark" aria-hidden="true">
-      <svg viewBox="0 0 100 100" role="img" aria-hidden="true"><rect width="100" height="100" rx="9" ry="9" fill="var(--blue)"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
-    </span>
-    <span class="bw-word">Sectora</span>
-    <span class="bw-tag">Foundation &middot; Illinois, United States</span>
   </div>
 </section>
 
