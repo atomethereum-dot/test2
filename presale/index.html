@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sectora Foundation — #SECT Presale</title>
+<meta name="description" content="Sectora Foundation #SECT presale: fixed price, tiered bonuses, $2,000,000 cap. Informational preview, not an offer of securities.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='9' ry='9' fill='%231569ff'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%23fff' stroke-width='11'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#05070b">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="presale.css">
+</head>
+<body>
+<div class="vig" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="top-l">
+    <a class="brand" href="../index.html">
+      <span class="mark" aria-hidden="true"><i></i></span>
+      <span class="word">SECTORA</span>
+    </a>
+    <span class="crumb">Presale</span>
+  </div>
+  <div class="top-r">
+    <span class="pill live"><i class="dot"></i>Tier 1 open</span>
+    <span class="pill">Fixed price</span>
+    <span class="pill mono" id="topCountdown">--d --h --m</span>
+    <a class="btn ghost" href="../index.html">← Main site</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <canvas id="preGrid" aria-hidden="true"></canvas>
+    <span class="hero-vig" aria-hidden="true"></span>
+    <div class="hero-in">
+      <div class="hero-txt">
+        <p class="eyebrow"><i></i>#SECT Presale · Round 1</p>
+        <h1>Own the network<br>before it lists.</h1>
+        <p class="lead">A fixed-price allocation of #SECT ahead of the public Uniswap listing —
+          tiered early bonuses, capped at $2,000,000, closing the moment the cap is hit or the
+          clock runs out, whichever comes first.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="#buy">Join the presale <em>↓</em></a>
+          <a class="btn ghost" href="https://sectoraorg.com/docs" target="_blank" rel="noopener noreferrer">Read the whitepaper</a>
+        </div>
+      </div>
+
+      <div class="progress-card">
+        <div class="pc-top">
+          <span class="pc-lbl">Raised</span>
+          <span class="pc-lbl right">Goal</span>
+        </div>
+        <div class="pc-nums">
+          <span class="pc-big" id="pcRaised">$0</span>
+          <span class="pc-goal">/ $2,000,000</span>
+        </div>
+        <div class="pc-bar"><i id="pcFill" style="--w:0%"></i></div>
+        <div class="pc-meta">
+          <span><b id="pcPct">0.0%</b> filled</span>
+          <span id="pcBuyers">0 buyers</span>
+        </div>
+        <div class="pc-tiers">
+          <div class="tier on" id="tier1">
+            <span class="t-name">Tier 1</span>
+            <span class="t-bonus">+15%</span>
+            <span class="t-range">$0 – $500K</span>
+          </div>
+          <div class="tier" id="tier2">
+            <span class="t-name">Tier 2</span>
+            <span class="t-bonus">+8%</span>
+            <span class="t-range">$500K – $1.25M</span>
+          </div>
+          <div class="tier" id="tier3">
+            <span class="t-name">Tier 3</span>
+            <span class="t-bonus">+0%</span>
+            <span class="t-range">$1.25M – $2M</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect" id="buy">
+    <div class="head">
+      <h2>Reserve your allocation</h2>
+      <span>Fixed price for this round — settles on-chain once the presale closes</span>
+    </div>
+
+    <div class="buy-grid">
+      <div class="buy-card">
+        <div class="buy-row">
+          <label for="usdtIn">You pay</label>
+          <div class="input-wrap">
+            <input type="number" id="usdtIn" inputmode="decimal" min="50" max="25000" step="1" placeholder="0.00">
+            <span class="input-suffix">USDT</span>
+          </div>
+        </div>
+        <div class="buy-swap" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
+        <div class="buy-row">
+          <label>You receive</label>
+          <div class="input-wrap out">
+            <span class="out-val" id="sectOut">0.00</span>
+            <span class="input-suffix">#SECT</span>
+          </div>
+        </div>
+        <div class="buy-breakdown" id="buyBreakdown">
+          <div><span>Price</span><b>$0.07 / #SECT</b></div>
+          <div><span>Base allocation</span><b id="bBase">0.00 #SECT</b></div>
+          <div><span>Tier bonus</span><b id="bBonus">+0.00 #SECT</b></div>
+        </div>
+        <button type="button" class="btn primary wide" id="connectBtn">Connect wallet</button>
+        <p class="buy-note">Min $50 · Max $25,000 per wallet · Contract audited · Tokens claimable at TGE</p>
+      </div>
+
+      <div class="terms-card">
+        <h3>Terms of this round</h3>
+        <ul class="terms-list">
+          <li><span>Price</span><b>$0.07 per #SECT</b></li>
+          <li><span>Listing price</span><b>$0.10 per #SECT</b></li>
+          <li><span>Hard cap</span><b>$2,000,000 USDT</b></li>
+          <li><span>Min / max</span><b>$50 – $25,000</b></li>
+          <li><span>Accepted asset</span><b>USDT (ERC-20)</b></li>
+          <li><span>Vesting</span><b>25% at TGE, 75% linear / 60 days</b></li>
+          <li><span>Closes</span><b id="closesOn">—</b></li>
+        </ul>
+        <div class="terms-disclosure">
+          <p>Informational preview — not an offer of securities. Participation is subject to
+            final terms published at close and jurisdictional restrictions. Sectora Foundation
+            is registered in Illinois, United States. See the <a href="https://www.sectoraorg.com/legal">legal disclosure</a>
+            before participating.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect" id="feed">
+    <div class="head">
+      <h2>Live commitments</h2>
+      <span>Simulated preview feed — illustrative of round activity, not real transactions</span>
+    </div>
+    <div class="feed-box">
+      <div class="feed-list" id="feedList"></div>
+    </div>
+  </section>
+
+  <section class="sect" id="verify">
+    <div class="head">
+      <h2>Verify before you send anything</h2>
+      <span>Three independent records — none of them held by us</span>
+    </div>
+    <div class="grid3">
+      <div class="pqc-card">
+        <span class="pqc-tag">Contract audit</span>
+        <h3>Reviewed by an independent firm</h3>
+        <p>The #SECT contract has been audited. The full report is published, including any
+          findings and their resolution — check it before you commit funds.</p>
+        <a class="link-go" href="https://sectoraorg.com/docs#s02" target="_blank" rel="noopener noreferrer">Read the audit <em>↗</em></a>
+      </div>
+      <div class="pqc-card">
+        <span class="pqc-tag">Registered company</span>
+        <h3>Illinois, United States</h3>
+        <p>Sectora Foundation is a company incorporated in Illinois. Its filing is a matter of
+          public record and can be checked with the state registry.</p>
+        <a class="link-go" href="https://www.ilsos.gov" target="_blank" rel="noopener noreferrer">Check the registry <em>↗</em></a>
+      </div>
+      <div class="pqc-card">
+        <span class="pqc-tag">Escrow contract</span>
+        <h3>Funds held on-chain, not by the team</h3>
+        <p>Presale contributions settle to an escrow contract, not a team-controlled wallet.
+          Refund conditions and the release schedule are published alongside the contract.</p>
+        <a class="link-go" href="https://sectoraorg.com/docs" target="_blank" rel="noopener noreferrer">Read the whitepaper <em>↗</em></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect" id="faq">
+    <div class="head">
+      <h2>Frequently asked</h2>
+      <span>What to know before joining Round 1</span>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item" open>
+        <summary>When do I receive my #SECT tokens?</summary>
+        <p>25% unlocks at TGE (Token Generation Event, at listing). The remaining 75% vests
+          linearly over 60 days to keep early sell pressure controlled after listing.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What happens if the round doesn't fill?</summary>
+        <p>If the $2,000,000 cap isn't reached by the closing date, the round still finalizes at
+          whatever amount was raised — presale terms don't require hitting the cap to proceed.
+          Refund conditions, if any, are published in the final terms at close.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I participate from any country?</summary>
+        <p>No. Participation is restricted in certain jurisdictions, including the United States
+          for non-accredited participants, pending final terms. Check the legal disclosure
+          before connecting a wallet.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is this the same contract that lists on Uniswap?</summary>
+        <p>Yes — #SECT is a single ERC-20 contract. The presale allocates supply ahead of the
+          public listing at a fixed discount; it does not create a separate token.</p>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<footer class="ft">
+  <div class="ft-in">
+    <span>© 2026 Sectora Foundation IL · Illinois, United States · Informational preview, not an offer of securities</span>
+    <span class="ft-links">
+      <a href="../index.html">Main site</a>
+      <a href="https://sectoraorg.com/docs">Whitepaper</a>
+      <a href="../dashboard.html">Dashboard</a>
+      <a href="../security/index.html">Security</a>
+      <a href="https://www.sectoraorg.com/legal">Legal</a>
+      <a href="mailto:support@sectoraorg.com">Support</a>
+    </span>
+  </div>
+</footer>
+
+<script src="presale.js"></script>
+</body>
+</html>
