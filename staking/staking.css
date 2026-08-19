@@ -57,20 +57,33 @@ svg,i{display:block}
 
 main{position:relative;z-index:1}
 
-/* ---------- hero ---------- */
+/* ---------- hero: cover treatment, matches the main site's opening ---------- */
 .hero{position:relative;overflow:hidden;background:var(--bg);
-  padding:clamp(56px,9vw,110px) var(--pad) clamp(48px,7vw,80px);
+  min-height:calc(100vh - 61px);min-height:calc(100dvh - 61px);
+  display:flex;align-items:center;
+  padding:clamp(90px,11vw,130px) var(--pad) clamp(56px,8vw,90px);
   border-bottom:1px solid var(--hair)}
 #stkGrid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 .hero-vig{position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(118% 88% at 38% 40%,transparent 46%,rgba(5,7,11,.85) 100%)}
-.hero-in{position:relative;z-index:2;max-width:1280px;margin:0 auto;
-  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,72px);align-items:start}
+  background:radial-gradient(118% 88% at 38% 34%,transparent 42%,rgba(5,7,11,.9) 100%),
+             linear-gradient(0deg, var(--bg) 0%, transparent 22%)}
+.hero-marks{position:absolute;inset:clamp(20px,3.4vw,40px);z-index:2;pointer-events:none}
+.hero-marks i{position:absolute;width:11px;height:11px;opacity:.4}
+.hero-marks i::before,.hero-marks i::after{content:'';position:absolute;background:var(--ink3)}
+.hero-marks i::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-.5px)}
+.hero-marks i::after{top:50%;left:0;right:0;height:1px;transform:translateY(-.5px)}
+.hero-marks i:nth-child(1){left:0;top:0}
+.hero-marks i:nth-child(2){right:0;top:0}
+.hero-marks i:nth-child(3){left:0;bottom:0}
+.hero-marks i:nth-child(4){right:0;bottom:0}
+.hero-in{position:relative;z-index:3;max-width:1280px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,72px);align-items:center}
 .eyebrow{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;
-  font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue2);margin-bottom:20px}
+  font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue2);margin-bottom:24px}
 .eyebrow i{width:20px;height:1px;background:var(--blue2)}
-h1{font-size:clamp(32px,4.6vw,54px);color:var(--ink);margin-bottom:22px}
-.lead{font-size:clamp(15px,1.5vw,17px);color:var(--ink2);max-width:540px;margin-bottom:30px;font-weight:300}
+h1{font-size:clamp(38px,5.6vw,72px);color:var(--ink);font-weight:200;line-height:1.06;
+  letter-spacing:-.024em;margin-bottom:26px;text-wrap:balance}
+.lead{font-size:clamp(15px,1.5vw,17.5px);color:var(--ink2);max-width:540px;margin-bottom:34px;font-weight:300}
 .hero-cta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 
 /* ---------- stat card ---------- */
@@ -217,8 +230,17 @@ h1{font-size:clamp(32px,4.6vw,54px);color:var(--ink);margin-bottom:22px}
 @media (max-width:640px){
   .top{padding:13px 16px}
   .top-r .pill:not(.live){display:none}
-  .gauge-row{flex-direction:column;align-items:flex-start}
-  .split-row{flex-direction:column;align-items:flex-start}
+  .hero-in{text-align:center}
+  .hero-txt{display:flex;flex-direction:column;align-items:center}
+  .eyebrow{justify-content:center}
+  .hero-cta{justify-content:center}
+  .gauge-row{flex-direction:column;align-items:center;text-align:center}
+  .gauge-side{align-items:center;width:100%}
+  .gauge-side > div{align-items:center}
+  .stat-split{display:flex;flex-direction:column;align-items:center;text-align:center}
+  .split-row{flex-direction:column;align-items:center}
+  .sp-keys{align-items:center}
+  .stat-live{text-align:center}
 }
 
 /* ---------- card polish ---------- */
