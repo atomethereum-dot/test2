@@ -984,12 +984,8 @@
 
   /* ============ roadmap ============ */
   .rsm{
-    position:relative;z-index:2;background:#000;   /* igual que la seccion anterior */
+    position:relative;background:#000;   /* igual que la seccion anterior */
     padding:clamp(80px,13vh,150px) var(--pad) clamp(90px,14vh,160px);
-    /* la lamina de arriba libera su fijado con un viewport entero de scroll "muerto":
-       superponemos el roadmap ese mismo tramo para que entre mientras la lamina sale,
-       en vez de dejar un vacio negro entre ambas secciones */
-    margin-top:-100vh;margin-top:-100dvh;
   }
   .rsm::before{
     content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
