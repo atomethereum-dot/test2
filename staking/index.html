@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sectora Foundation — #SECT Staking</title>
+<meta name="description" content="Stake #SECT and earn protocol rewards funded by hash market revenue — 80% buys back and burns #SECT on the open market, 20% funds a target 14.9% APY, paid daily once revenue is live.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='9' ry='9' fill='%231569ff'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%23fff' stroke-width='11'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#05070b">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="staking.css">
+</head>
+<body>
+<div class="vig" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="top-l">
+    <a class="brand" href="../index.html">
+      <span class="mark" aria-hidden="true"><i></i></span>
+      <span class="word">SECTORA</span>
+    </a>
+    <span class="crumb">Staking</span>
+  </div>
+  <div class="top-r">
+    <span class="pill live"><i class="dot"></i>Staking open</span>
+    <span class="pill">14.9% target APY</span>
+    <span class="pill">Flexible · no lockup</span>
+    <a class="btn ghost" href="../index.html">← Main site</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <canvas id="stkGrid" aria-hidden="true"></canvas>
+    <span class="hero-vig" aria-hidden="true"></span>
+    <div class="hero-in">
+      <div class="hero-txt">
+        <p class="eyebrow"><i></i>#SECT Staking</p>
+        <h1>Put #SECT to work.</h1>
+        <p class="lead">Stake #SECT and earn a share of real network revenue — not token
+          emissions, not treasury spend. 80% of every hash market sale buys back and burns
+          #SECT on the open market; the other 20% funds staking rewards, targeting 14.9% APY,
+          paid daily once revenue is live.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="#stake">Stake #SECT <em>↓</em></a>
+          <a class="btn ghost" href="../dash/index.html">Open in Dashboard</a>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-row">
+          <div>
+            <span class="s-lbl">Target APY</span>
+            <span class="s-big">14.9<small>%</small></span>
+            <span class="s-note">Begins once hash market revenue is live</span>
+          </div>
+          <div>
+            <span class="s-lbl">Payout frequency</span>
+            <span class="s-big">Daily</span>
+            <span class="s-note">Accrues to your stake automatically</span>
+          </div>
+        </div>
+        <div class="stat-split">
+          <span class="sp-lbl">How each hash sale splits</span>
+          <div class="sp-bar">
+            <span class="sp-a" style="--w:80%">80%</span>
+            <span class="sp-b" style="--w:20%">20%</span>
+          </div>
+          <div class="sp-keys">
+            <span><i class="k a"></i>Buys back &amp; burns #SECT</span>
+            <span><i class="k b"></i>Funds APY, expansion, team</span>
+          </div>
+        </div>
+        <div class="stat-live">
+          <div><span class="lv-lbl">Total staked</span><b class="num" id="lvStaked">0</b></div>
+          <div><span class="lv-lbl">Stakers</span><b class="num" id="lvStakers">0</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect" id="stake">
+    <div class="head">
+      <h2>Estimate your rewards</h2>
+      <span>Illustrative of the target rate — rewards begin accruing once hash market revenue is live, not before</span>
+    </div>
+
+    <div class="stake-grid">
+      <div class="stake-card">
+        <div class="stake-row">
+          <label for="sectIn">You stake</label>
+          <div class="input-wrap">
+            <input type="number" id="sectIn" inputmode="decimal" min="0" step="1" placeholder="0.00">
+            <span class="input-suffix">#SECT</span>
+          </div>
+        </div>
+        <div class="stake-out">
+          <div><span>Daily</span><b id="outDay">0.00 #SECT</b></div>
+          <div><span>Monthly</span><b id="outMonth">0.00 #SECT</b></div>
+          <div><span>Yearly</span><b id="outYear">0.00 #SECT</b></div>
+        </div>
+        <button type="button" class="btn primary wide" id="connectBtn">Connect wallet</button>
+        <p class="stake-note">No lockup · unstake anytime · rewards calculated at the 14.9% target rate</p>
+      </div>
+
+      <div class="terms-card">
+        <h3>Terms</h3>
+        <ul class="terms-list">
+          <li><span>Target APY</span><b>14.9%</b></li>
+          <li><span>Payout</span><b>Daily, auto-compounding</b></li>
+          <li><span>Lockup</span><b>None — flexible</b></li>
+          <li><span>Unstake</span><b>Anytime, no penalty</b></li>
+          <li><span>Funding source</span><b>Hash market revenue</b></li>
+          <li><span>Rewards start</span><b>At revenue activation</b></li>
+        </ul>
+        <div class="terms-disclosure">
+          <p>14.9% is a target rate derived from projected hash market revenue, not a
+            guaranteed return. Rewards are paid only from real revenue — never from token
+            sales or treasury — so the realized rate moves with actual network usage. See the
+            <a href="https://sectoraorg.com/docs#s08" target="_blank" rel="noopener noreferrer">whitepaper</a>
+            for the full mechanism.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect" id="feed">
+    <div class="head">
+      <h2>Network staking activity</h2>
+      <span>Simulated preview feed — illustrative of staking activity, not real transactions</span>
+    </div>
+    <div class="feed-box">
+      <div class="feed-list" id="feedList"></div>
+    </div>
+  </section>
+
+  <section class="sect" id="verify">
+    <div class="head">
+      <h2>Why this isn't just a promised number</h2>
+      <span>The mechanism behind the 14.9% target, in three parts</span>
+    </div>
+    <div class="grid3">
+      <div class="pqc-card">
+        <span class="pqc-tag">Revenue, not emissions</span>
+        <h3>Funded by hash market sales</h3>
+        <p>Every hash purchase splits by a fixed, published rule: 80% buys back and burns
+          #SECT on the open market, 20% funds APY rewards, protocol expansion and the team.
+          Nothing is minted to pay stakers.</p>
+      </div>
+      <div class="pqc-card">
+        <span class="pqc-tag">Deflationary by design</span>
+        <h3>The other 80% shrinks supply</h3>
+        <p>Every #SECT bought back with hash revenue is burned instantly — permanently
+          removed from circulating supply. Staking rewards and supply reduction are funded
+          by the same transaction, not competing budgets.</p>
+      </div>
+      <div class="pqc-card">
+        <span class="pqc-tag">Verify it yourself</span>
+        <h3>Read from the chain</h3>
+        <p>Buybacks, burns and reward payouts are on-chain events — check them in the
+          Dashboard's Hash Market panel or directly on the explorer, instead of taking our
+          word for it.</p>
+        <a class="link-go" href="../dash/index.html" target="_blank" rel="noopener noreferrer">Open the Dashboard <em>↗</em></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect" id="faq">
+    <div class="head">
+      <h2>Frequently asked</h2>
+      <span>What to know before staking #SECT</span>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item" open>
+        <summary>Is the 14.9% APY active right now?</summary>
+        <p>Staking is open and your #SECT starts accruing from the moment hash market
+          revenue activates — the 14.9% is the target rate that revenue is projected to
+          support, published so you can hold it accountable, not a rate we're paying out of
+          thin air before there's real revenue behind it.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I unstake whenever I want?</summary>
+        <p>Yes. This is flexible staking — no lockup period, no early-unstake penalty. Your
+          principal is available on demand; only accrued rewards depend on revenue timing.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Where does the reward money actually come from?</summary>
+        <p>20% of every hash market sale, published and verifiable on-chain. It is not paid
+          from new token issuance, presale proceeds or the treasury — if hash market revenue
+          is zero, realized rewards are zero, regardless of what the target rate says.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How is this different from staking on the Dashboard?</summary>
+        <p>Same mechanism, same contract — this page is the dedicated place to understand
+          the mechanics and estimate rewards. Wallet connection and live position management
+          happen in the Dashboard.</p>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<footer class="ft">
+  <div class="ft-in">
+    <span>© 2026 Sectora Foundation IL · Illinois, United States · 14.9% is a target rate, not a guaranteed return</span>
+    <span class="ft-links">
+      <a href="../index.html">Main site</a>
+      <a href="https://sectoraorg.com/docs">Whitepaper</a>
+      <a href="../dash/index.html">Dashboard</a>
+      <a href="../security/index.html">Security</a>
+      <a href="https://www.sectoraorg.com/legal">Legal</a>
+      <a href="mailto:support@sectoraorg.com">Support</a>
+    </span>
+  </div>
+</footer>
+
+<script src="staking.js"></script>
+</body>
+</html>
