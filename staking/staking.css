@@ -280,6 +280,11 @@ h1{font-size:clamp(34px,5.2vw,66px);color:var(--ink);font-weight:200;line-height
   font-family:'IBM Plex Mono',monospace;font-size:46px;font-weight:500;
   color:rgba(255,255,255,.05);line-height:1}
 
+/* ---------- why panel: the treasury-funded-Year-1 explainer ---------- */
+.why-panel{max-width:900px;border-radius:8px;padding:clamp(24px,3.4vw,36px)}
+.why-panel p{font-size:15px;line-height:1.75;color:var(--ink2);max-width:74ch}
+.why-panel p+p{margin-top:16px}
+
 /* ---------- section aurora: soft drifting glow behind a section ---------- */
 .sect{position:relative}
 .sect-aura{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
