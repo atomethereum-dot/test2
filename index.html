@@ -2084,9 +2084,9 @@
   .played .eyebrow i{width:30px;transition:width .7s var(--ease) .15s}
   .played .rule{width:74px;transition:width .9s var(--ease) .55s}
 
-  .reveal{opacity:0;transform:translateY(22px)}
-  .reveal.in{opacity:1;transform:none;
-    transition:opacity .85s var(--ease) var(--d,0s),transform .85s var(--ease) var(--d,0s)}
+  .reveal{opacity:0;transform:translateY(64px) scale(.94);filter:blur(9px);will-change:opacity,transform,filter}
+  .reveal.in{opacity:1;transform:none;filter:blur(0);
+    transition:opacity 1.15s var(--ease-out) var(--d,0s),transform 1.15s var(--ease-out) var(--d,0s),filter 1.15s var(--ease-out) var(--d,0s)}
 
   @media (max-width:980px){
     .m-inner{grid-template-columns:1fr;gap:26px}
@@ -2122,7 +2122,7 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     *,*::before,*::after{transition:none!important;animation:none!important}
-    .lift,.reveal{opacity:1;transform:none}
+    .lift,.reveal{opacity:1;transform:none;filter:none}
     h1 .ln > span{transform:none}
     .eyebrow i{width:30px}
     .rule{width:74px}
