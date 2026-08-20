@@ -3206,7 +3206,7 @@ html[dir="rtl"] body{direction:ltr}
           <h3 class="reveal" style="--d:.06s">What #SECT would be priced at with a fraction of these networks.</h3>
           <p class="cap-lede reveal" style="--d:.12s">
             Each row takes the reference network's market capitalisation, applies the
-            selected share, and divides it by Sectora's fixed supply of 25,000,000 #SECT.
+            selected share, and divides it by Sectora's supply of <b id="cap-supply-label">25,000,000</b> #SECT.
             Prices and market caps update live. Bars are logarithmic — on a linear
             scale the smaller entries would be invisible.
           </p>
@@ -3216,6 +3216,10 @@ html[dir="rtl"] body{direction:ltr}
             <button type="button" data-pct="1">1%</button>
             <button type="button" data-pct="5" class="on">5%</button>
             <button type="button" data-pct="10">10%</button>
+          </div>
+          <div class="cap-seg" id="cap-supply-seg">
+            <button type="button" data-supply="50000000">50.0M</button>
+            <button type="button" data-supply="25000000" class="on">25.0M</button>
           </div>
           <span class="cap-live"><i class="led"></i><span id="cap-stamp">Reference snapshot</span></span>
         </div>
@@ -4638,13 +4642,15 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 (function(){
   const grid  = document.getElementById('cap-grid');
   const seg   = document.getElementById('cap-seg');
+  const supplySeg   = document.getElementById('cap-supply-seg');
+  const supplyLabel = document.getElementById('cap-supply-label');
   const pctEl = document.getElementById('cap-pct');
   const stamp = document.getElementById('cap-stamp');
   const led   = document.querySelector('.cap-live .led');
   if(!grid || !seg) return;
 
   const CG_KEY  = '';                 // <-- clave Demo de CoinGecko, opcional
-  const SUPPLY  = 25000000;           // supply fijo de #SECT tras la reduccion
+  let SUPPLY    = 25000000;           // supply de #SECT usado en el calculo: 50M inicial o 25M tras la reduccion
   const BASE_MS = 90000;              // sin clave, la via publica limita mucho
   const MAX_MS  = 600000;             // techo del retroceso ante fallos
   const MAX_FAIL= 3;                  // tras esto se deja de insistir
@@ -4814,6 +4820,15 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(!b) return;
     pct = parseFloat(b.dataset.pct);
     [...seg.querySelectorAll('button')].forEach(x => x.classList.toggle('on', x === b));
+    render(true);
+  });
+
+  if(supplySeg) supplySeg.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if(!b) return;
+    SUPPLY = parseFloat(b.dataset.supply);
+    [...supplySeg.querySelectorAll('button')].forEach(x => x.classList.toggle('on', x === b));
+    if(supplyLabel) supplyLabel.textContent = SUPPLY.toLocaleString('en-US');
     render(true);
   });
 
