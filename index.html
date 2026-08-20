@@ -183,7 +183,7 @@
 
   /* ============ hero ============ */
   .stage{position:relative;min-height:calc(100vh - var(--head-h,96px));min-height:calc(100dvh - var(--head-h,96px));display:flex;flex-direction:column;background:#000;overflow:hidden}
-  #grid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  #flowWave{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
   .vignette{
     position:absolute;inset:0;z-index:1;pointer-events:none;
     background:radial-gradient(118% 88% at 38% 46%,transparent 46%,rgba(0,0,0,.7) 100%);
@@ -201,8 +201,13 @@
   .sheet{
     color:var(--ink-3);
     border-left:1px solid var(--hair);
-    padding-left:clamp(18px,2vw,30px);
+    padding:16px clamp(18px,2vw,30px) 16px;
+    margin-left:-1px;
     min-width:190px;
+    background:rgba(3,6,12,.42);
+    backdrop-filter:blur(14px) saturate(120%);
+    -webkit-backdrop-filter:blur(14px) saturate(120%);
+    border-radius:0 4px 4px 0;
   }
   .sheet h2{
     font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;
@@ -2112,7 +2117,7 @@
     .m-lede{display:none}
     .hero{grid-template-columns:1fr;gap:44px;align-items:start}
     h1{max-width:none}
-    .sheet{border-left:0;border-top:1px solid var(--hair);padding:24px 0 0;min-width:0}
+    .sheet{border-left:0;border-top:1px solid var(--hair);margin-left:0;padding:24px 16px 16px;border-radius:0 0 4px 4px;min-width:0}
     .sheet h2{padding-bottom:12px}
   }
   @media (max-width:780px){
@@ -2287,6 +2292,14 @@ a.ft-wp-all em{font-style:normal;font-size:11px;opacity:.7}
    flujo visual se ancla de vuelta a ltr desde el body hacia abajo. */
 html[dir="rtl"] body{direction:ltr}
 </style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.143.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.143.0/examples/jsm/"
+  }
+}
+</script>
 </head>
 <body>
 
@@ -2799,7 +2812,7 @@ html[dir="rtl"] body{direction:ltr}
 </header>
 
 <div class="stage" id="stage">
-  <canvas id="grid" aria-hidden="true"></canvas>
+  <canvas id="flowWave" aria-hidden="true"></canvas>
   <div class="vignette" aria-hidden="true"></div>
 
   <div class="layer">
@@ -3621,137 +3634,11 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   window.addEventListener('resize', paintIris);
   paintIris();
 
-  /* ========== rejilla del hero ========== */
-  const canvas = document.getElementById('grid');
-  const ctx = canvas.getContext('2d');
+  /* ========== retícula global (lectura de coordenadas) ==========
+     la rejilla del hero ahora la pinta flowwave-hero.js (WebGL); esto que
+     queda es solo el instrumento de coordenadas que sigue al puntero por
+     toda la pagina, independiente de esa animacion */
   const CELL = 54;
-  let cols=0, rows=0, heat=null, tone=null, W=0, H=0, dpr=1;
-
-  const lineLayer = document.createElement('canvas');
-  const lctx = lineLayer.getContext('2d');
-
-  function paintLines(){
-    lctx.setTransform(dpr,0,0,dpr,0,0);
-    lctx.clearRect(0,0,W,H);
-    lctx.lineWidth = 1;
-    lctx.strokeStyle = 'rgba(255,255,255,.034)';
-    lctx.beginPath();
-    for(let c=0;c<=cols;c++){ lctx.moveTo(c*CELL+.5,0); lctx.lineTo(c*CELL+.5,H); }
-    for(let r=0;r<=rows;r++){ lctx.moveTo(0,r*CELL+.5); lctx.lineTo(W,r*CELL+.5); }
-    lctx.stroke();
-  }
-
-  function resize(){
-    const stage = document.getElementById('stage');
-    const w = stage.clientWidth, h = stage.clientHeight;
-    // si el elemento no esta en pantalla mide 0: reconstruir aqui dejaria
-    // el lienzo de lineas a 0x0 y drawImage fallaria en cada fotograma
-    if(w < 1 || h < 1) return;
-    W = w; H = h;
-    dpr = window.SECT_DPR();
-    canvas.width = W*dpr; canvas.height = H*dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    cols = Math.ceil(W/CELL); rows = Math.ceil(H/CELL);
-    heat = new Float32Array(cols*rows);
-    tone = new Float32Array(cols*rows);
-    for(let i=0;i<tone.length;i++) tone[i] = rnd(i % cols, (i / cols) | 0);
-    lineLayer.width = W*dpr; lineLayer.height = H*dpr;
-    paintLines();
-    seedWalkers();
-  }
-  const idx = (c,r) => r*cols + c;
-
-  /* ruido estable por celda: al recalcular por un cambio de alto (las
-     barras del navegador entrando y saliendo) el patron es el mismo,
-     asi que no se ve ningun rebarajado */
-  function rnd(c, r){
-    const x = Math.sin(c * 127.1 + r * 311.7) * 43758.5453;
-    return x - Math.floor(x);
-  }
-
-  let walkers = [];
-  function seedWalkers(){
-    const n = W < 700 ? 4 : 7;
-    walkers = [];
-    for(let i=0;i<n;i++) walkers.push({c:(Math.random()*cols)|0, r:(Math.random()*rows)|0,
-                                       dc:Math.random()<.5?1:-1, dr:0, next:0});
-  }
-  function stepWalkers(t, fast){
-    for(const w of walkers){
-      if(t < w.next) continue;
-      w.next = t + (fast ? 60 + Math.random()*60 : 105 + Math.random()*130);
-      if(Math.random() < .3){
-        if(w.dc !== 0){ w.dr = Math.random()<.5?1:-1; w.dc = 0; }
-        else          { w.dc = Math.random()<.5?1:-1; w.dr = 0; }
-      }
-      w.c += w.dc; w.r += w.dr;
-      if(w.c < 0){ w.c = 0; w.dc = 1; }
-      if(w.c >= cols){ w.c = cols-1; w.dc = -1; }
-      if(w.r < 0){ w.r = 0; w.dr = 1; }
-      if(w.r >= rows){ w.r = rows-1; w.dr = -1; }
-      heat[idx(w.c,w.r)] = fast ? .8 : .5;
-    }
-  }
-
-  let startT = 0;
-  const INTRO_MS = 1150;
-  function intro(t){
-    const e = t - startT;
-    if(e > INTRO_MS) return;
-    const p = e / INTRO_MS;
-    const front = p * (cols + rows + 6);
-    for(let r=0;r<rows;r++){
-      const c0 = Math.round(front - r);
-      for(let k=-2;k<=2;k++){
-        const c = c0 + k;
-        if(c >= 0 && c < cols){
-          const v = (1 - Math.abs(k)/2.7) * (1 - p*.3);
-          const i = idx(c,r);
-          if(heat[i] < v) heat[i] = v;
-        }
-      }
-    }
-    if(p < .88){
-      for(let n=0;n<6;n++){
-        const i = idx((Math.random()*cols)|0, (Math.random()*rows)|0);
-        const v = .5 + Math.random()*.4;
-        if(heat[i] < v) heat[i] = v;
-      }
-    }
-  }
-
-  let nextPop = 0;
-  function pops(t){
-    if(t < nextPop) return;
-    nextPop = t + 80 + Math.random()*90;
-    const n = 2 + ((Math.random()*3)|0);
-    for(let k=0;k<n;k++){
-      const i = idx((Math.random()*cols)|0, (Math.random()*rows)|0);
-      const v = .55 + Math.random()*.4;
-      if(heat[i] < v) heat[i] = v;
-    }
-  }
-
-  let sweepStart = -1, SWEEP_MS = 1900, SWEEP_GAP = 6500;
-  function sweep(t){
-    const phase = t - sweepStart;
-    if(phase < 0) return;
-    if(phase > SWEEP_MS){ sweepStart = t + SWEEP_GAP; return; }
-    const front = (phase / SWEEP_MS) * (cols + rows);
-    for(let r=0;r<rows;r++){
-      const c0 = Math.round(front - r);
-      for(let k=-1;k<=1;k++){
-        const c = c0 + k;
-        if(c >= 0 && c < cols){
-          const v = .34 * (1 - Math.abs(k)/1.6);
-          const i = idx(c,r);
-          if(heat[i] < v) heat[i] = v;
-        }
-      }
-    }
-  }
-
-  /* ---- puntero: celda, reticula y lectura de coordenadas ---- */
   const reticle = document.getElementById('reticle');
   const readout = document.getElementById('readout');
   const rx = reticle.querySelector('.rx');
@@ -3805,103 +3692,12 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     const cl2 = fondoClaro(e.clientX, e.clientY);
     reticle.classList.toggle('on-light', cl2);
     readout.classList.toggle('on-light', cl2);
-
-    // las celdas de la cubierta solo se encienden sobre la cubierta
-    if(heat){
-      const rect = canvas.getBoundingClientRect();
-      const c = ((e.clientX - rect.left)/CELL)|0;
-      const r = ((e.clientY - rect.top)/CELL)|0;
-      if(c>=0 && r>=0 && c<cols && r<rows &&
-         e.clientY >= rect.top && e.clientY <= rect.bottom) heat[idx(c,r)] = 1;
-    }
   }, {passive:true});
 
   window.addEventListener('pointerleave', () => {
     reticle.classList.remove('on');
     readout.classList.remove('on');
   });
-
-  function draw(){
-    // si el lienzo medía 0 al iniciarse, resize() salio antes de reservar el
-    // bufer: sin esta guarda se lee heat[0] sobre null
-    if(!heat) return;
-    ctx.clearRect(0,0,W,H);
-    for(let r=0;r<rows;r++){
-      for(let c=0;c<cols;c++){
-        const i = idx(c,r);
-        const v = heat[i];
-        if(v > .015){
-          const g = tone[i];
-          const R = (12 + 62*g)|0, G = (74 + 96*g)|0, B = (198 + 57*g)|0;
-          ctx.fillStyle = 'rgba(' + R + ',' + G + ',' + B + ',' + (Math.min(v,1)*.82).toFixed(3) + ')';
-          ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
-        }
-      }
-    }
-    if(lineLayer.width > 1) ctx.drawImage(lineLayer, 0, 0, W, H);
-  }
-
-  /* la intro llama a esto al abrirse: la rejilla de la cubierta se
-     enciende en un frente circular desde el centro, de modo que la energia
-     de la intro no se corta, pasa a la pagina */
-  let ignicion = -1;
-  /* la cascada diagonal de la cubierta corria bajo la intro y se agotaba
-     antes de verse: se reinicia justo cuando el azul empieza a deshacerse */
-  window.SECT_IGNITE = () => { ignicion = performance.now(); startT = 0; sweepStart = -1; };
-
-  let last = 0, tabVisible = true, heroVisible = true;
-  document.addEventListener('visibilitychange', () => { tabVisible = !document.hidden; });
-
-  /* sin esta guarda, la rejilla de la cubierta seguia repintandose a
-     pantalla completa durante todo el documento, incluso a diez
-     secciones de distancia */
-  new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; },
-    {rootMargin:'10% 0px'}).observe(document.getElementById('stage'));
-
-  function frame(t){
-    requestAnimationFrame(frame);
-    if(!tabVisible || !heroVisible){ last = t; return; }
-    // vuelve a medir si aun no hay lienzo: cubre el caso de arrancar oculto
-    if(!lineLayer.width){ resize(); if(!lineLayer.width){ last = t; return; } }
-    const dt = Math.min(t-last, 50); last = t;
-    if(!startT){ startT = t; sweepStart = t + INTRO_MS + 4500; }
-    const intoIntro = (t - startT) < INTRO_MS;
-    intro(t);
-
-    // frente circular heredado de la intro
-    if(ignicion > 0){
-      const e = (performance.now() - ignicion) / 620;
-      if(e >= 1.2) ignicion = -1;
-      else {
-        const rect = canvas.getBoundingClientRect();
-        const ccx = (W/2)/CELL, ccy = (rect.height/2)/CELL;
-        const frente = e * (Math.hypot(cols, rows) * .62);
-        for(let r=0;r<rows;r++){
-          for(let c=0;c<cols;c++){
-            const d = Math.hypot(c-ccx, r-ccy);
-            const v = 1 - Math.abs(d - frente) / 1.6;
-            if(v > 0){
-              const i = idx(c,r);
-              const a = v * (1 - e*.55);
-              if(heat[i] < a) heat[i] = a;
-            }
-          }
-        }
-      }
-    }
-
-    stepWalkers(t, intoIntro);
-    if(!intoIntro) pops(t);
-    sweep(t);
-    const decay = Math.pow(intoIntro ? .915 : .922, dt/16.7);
-    for(let i=0;i<heat.length;i++) heat[i] *= decay;
-    draw();
-  }
-
-  let rt;
-  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 120); });
-  resize();
-  if(reduce){ draw(); } else { requestAnimationFrame(frame); }
 })();
 
 /* ===== celdas azules de la seccion del iris =====
@@ -5651,5 +5447,6 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   window.__SECT_IDIOMA = aplicar;
 })();
 </script>
+<script type="module" src="flowwave-hero.js"></script>
 </body>
 </html>
