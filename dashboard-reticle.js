@@ -36,15 +36,16 @@
 
   window.addEventListener("pointermove", (e) => {
     if (reduced) return;
-    const gx = Math.floor((e.clientX + window.scrollX) / CELL) * CELL - window.scrollX;
-    const gy = Math.floor((e.clientY + window.scrollY) / CELL) * CELL - window.scrollY;
+    // el dashboard no tiene la cuadricula de fondo que si tienen la
+    // portada y security: aqui la cruz sigue al cursor pixel a pixel en
+    // vez de saltar de celda en celda, para que se sienta fluida
     const cc = Math.floor((e.clientX + window.scrollX) / CELL);
     const cr = Math.floor((e.clientY + window.scrollY) / CELL);
 
-    readout.style.transform = "translate3d(" + gx + "px," + gy + "px,0)";
+    readout.style.transform = "translate3d(" + e.clientX + "px," + e.clientY + "px,0)";
     readout.textContent = String(Math.abs(cc) % 100).padStart(2, "0") + " · " + String(Math.abs(cr) % 100).padStart(2, "0");
-    rx.style.transform = "translate3d(0," + gy + "px,0)";
-    ry.style.transform = "translate3d(" + gx + "px,0,0)";
+    rx.style.transform = "translate3d(0," + e.clientY + "px,0)";
+    ry.style.transform = "translate3d(" + e.clientX + "px,0,0)";
     reticle.classList.add("on");
     readout.classList.add("on");
 
