@@ -597,6 +597,9 @@ blockquote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
 .cap-live{display:inline-flex;align-items:center;gap:8px;padding:0 4px;
   font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
 .cap-live .led{width:5px;height:5px;border-radius:50%;background:#9aa0ab;flex:none;transition:background .3s var(--ease)}
+.cap-hint{margin:18px 0 14px;font-family:'IBM Plex Mono',monospace;font-size:10px;
+  letter-spacing:.06em;line-height:1.7;color:var(--ink-3);max-width:560px}
+.cap-hint b{color:var(--ink);font-weight:600}
 .cap-seg{display:flex;border:1px solid var(--rule);border-radius:2px;overflow:hidden}
 .cap-seg button{appearance:none;border:0;background:transparent;cursor:pointer;
   padding:9px 15px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;
@@ -1397,6 +1400,10 @@ try{
       <p>Below, the market capitalization of several established networks, each paired with
         what $SECT would be priced at if Sectora reached a selected share of that network's
         market cap — a deliberately conservative reference point.</p>
+
+      <p class="cap-hint">Pick the assumed share of each network's market cap — <b>1%, 5% or 10%</b> —
+        and the $SECT price column recalculates instantly. Prices and market caps update live,
+        refreshed every second from the same feed used across sectoraorg.com.</p>
 
       <div class="cta">
         <div class="cap-seg" id="cap-seg">
