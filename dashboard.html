@@ -863,9 +863,41 @@ html.booting,body.booting{overflow:hidden}
   .boot-foot{font-size:12.5px;margin-top:16px}
 }
 
+/* ---------- coordinate cursor: ported from the main site ---------- */
+.reticle{position:fixed;z-index:9990;pointer-events:none;opacity:0;transition:opacity .5s var(--ease)}
+.reticle.on{opacity:1}
+.reticle .rx,.reticle .ry{position:fixed;background:var(--blue);opacity:.22;
+  transition:background .3s var(--ease),opacity .3s var(--ease)}
+.reticle.on-light .rx,.reticle.on-light .ry{background:#0d4fd8;opacity:.3}
+.reticle .rx{left:0;right:0;height:1px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent)}
+.reticle .ry{top:0;bottom:0;width:1px;
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 22%,#000 78%,transparent);
+  mask-image:linear-gradient(180deg,transparent,#000 22%,#000 78%,transparent)}
+.readout{
+  position:fixed;z-index:9991;pointer-events:none;
+  transform:translate3d(-200px,-200px,0);
+  color:var(--ink3);font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;letter-spacing:.14em;padding:12px 0 0 16px;
+  will-change:transform;
+  opacity:0;transition:opacity .35s var(--ease),color .3s var(--ease);
+}
+.readout.on{opacity:1}
+.readout::before{
+  content:'';position:absolute;left:0;top:0;width:9px;height:9px;
+  border-left:1px solid var(--blue);border-top:1px solid var(--blue);opacity:.9;
+  transition:border-color .3s var(--ease);
+}
+.readout.on-light{color:#6b7280}
+.readout.on-light::before{border-left-color:#0d4fd8;border-top-color:#0d4fd8}
+@media (pointer:coarse){.reticle,.readout{display:none}}
+
 </style>
 </head>
 <body>
+<div class="reticle" id="reticle" aria-hidden="true"><span class="rx"></span><span class="ry"></span></div>
+<div class="readout" id="readout" aria-hidden="true">00 · 00</div>
 <div class="boot" id="boot" role="status" aria-label="Loading Sectora">
   <div class="boot-in">
     <span class="boot-mark" aria-hidden="true"><i></i></span>
@@ -1179,6 +1211,7 @@ html.booting,body.booting{overflow:hidden}
 <script src="translations.js"></script>
 <script src="dashboard-i18n-extra.js"></script>
 <script src="i18n.js"></script>
+<script src="dashboard-reticle.js?v=20260820a"></script>
 <script>
 (function(){
 'use strict';
