@@ -594,7 +594,7 @@ blockquote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
 .cta button:hover{border-color:var(--ink)}
 .cta button.on{background:var(--blue);border-color:var(--blue);color:#fff}
 .cta button.on:hover{background:var(--blue-deep);border-color:var(--blue-deep)}
-.cap-live{display:inline-flex;align-items:center;gap:8px;padding:0 4px;
+.cap-live{display:inline-flex;align-items:center;gap:8px;padding:0 4px;flex:0 0 100%;order:-1;
   font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
 .cap-live .led{width:5px;height:5px;border-radius:50%;background:#9aa0ab;flex:none;transition:background .3s var(--ease)}
 .cap-hint{margin:18px 0 14px;font-family:'IBM Plex Mono',monospace;font-size:10px;
@@ -1406,13 +1406,13 @@ try{
         refreshed every second from the same feed used across sectoraorg.com.</p>
 
       <div class="cta">
+        <span class="cap-live" id="cap-live"><i class="led" aria-hidden="true"></i><span id="cap-stamp">Reference snapshot</span></span>
         <div class="cap-seg" id="cap-seg">
           <button type="button" data-pct="1">1%</button>
           <button type="button" data-pct="5" class="on">5%</button>
           <button type="button" data-pct="10">10%</button>
         </div>
         <button type="button" class="ext" id="cap-toggle" aria-pressed="false">Compare at 25,000,000 (post-reduction)</button>
-        <span class="cap-live" id="cap-live"><i class="led" aria-hidden="true"></i><span id="cap-stamp">Reference snapshot</span></span>
       </div>
 
       <div class="tab-wrap" id="cap-tab-wrap">
