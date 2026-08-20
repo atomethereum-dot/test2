@@ -40,6 +40,7 @@
 
   <section class="hero">
     <canvas id="stakeGrid" aria-hidden="true"></canvas>
+    <canvas id="stakeCoin" aria-hidden="true"></canvas>
     <span class="hero-vig" aria-hidden="true"></span>
     <div class="hero-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <div class="hero-in">
@@ -62,6 +63,7 @@
         <span class="panel-grid" aria-hidden="true"></span>
         <span class="panel-vig" aria-hidden="true"></span>
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <div class="gauge-row">
           <div class="gauge-wrap">
@@ -120,6 +122,7 @@
         <span class="panel-grid" aria-hidden="true"></span>
         <span class="panel-vig" aria-hidden="true"></span>
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
           <span class="handoff-yr">Year 1</span>
           <span class="handoff-src">Treasury funded</span>
@@ -137,6 +140,7 @@
         <span class="panel-grid" aria-hidden="true"></span>
         <span class="panel-vig" aria-hidden="true"></span>
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
           <span class="handoff-yr">Year 2+</span>
           <span class="handoff-src">Revenue funded</span>
@@ -162,6 +166,7 @@
         <span class="panel-grid" aria-hidden="true"></span>
         <span class="panel-vig" aria-hidden="true"></span>
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <div class="stake-row">
           <label for="sectIn">You stake</label>
@@ -192,6 +197,7 @@
         <span class="panel-grid" aria-hidden="true"></span>
         <span class="panel-vig" aria-hidden="true"></span>
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <h3>Terms</h3>
         <ul class="terms-list">
@@ -239,6 +245,7 @@
         <span class="panel-grid" aria-hidden="true"></span>
         <span class="panel-vig" aria-hidden="true"></span>
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">01</span>
         <span class="pqc-tag">Guaranteed for Year 1</span>
@@ -253,6 +260,7 @@
         <span class="panel-grid" aria-hidden="true"></span>
         <span class="panel-vig" aria-hidden="true"></span>
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">02</span>
         <span class="pqc-tag">Revenue, not emissions</span>
@@ -267,6 +275,7 @@
         <span class="panel-grid" aria-hidden="true"></span>
         <span class="panel-vig" aria-hidden="true"></span>
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">03</span>
         <span class="pqc-tag">Deflationary by design</span>
@@ -281,6 +290,7 @@
         <span class="panel-grid" aria-hidden="true"></span>
         <span class="panel-vig" aria-hidden="true"></span>
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">04</span>
         <span class="pqc-tag">Verify it yourself</span>
@@ -419,6 +429,8 @@
   <div class="ft-word" aria-hidden="true" id="ft-word">SECTORA</div>
 </footer>
 
+<script src="../three.min.js"></script>
+<script src="staking-coin.js?v=20260820a"></script>
 <script src="staking.js?v=20260820b"></script>
 </body>
 </html>

@@ -77,27 +77,41 @@ svg,i{display:block}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:2px;
   font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
-  white-space:nowrap;transition:background .25s var(--ease),border-color .25s var(--ease),color .25s var(--ease)}
+  white-space:nowrap;transition:background .3s var(--ease),border-color .3s var(--ease),
+  color .3s var(--ease),transform .3s var(--ease),box-shadow .3s var(--ease)}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
 .btn.ghost{border:1px solid var(--hair);color:var(--ink2)}
 .btn.ghost:hover{border-color:var(--blue2);color:var(--ink)}
-.btn.primary{background:var(--blue);color:#fff;padding:13px 22px;font-size:10.5px}
-.btn.primary:hover{background:var(--blued)}
+.btn.primary{background:var(--blue);color:#fff;padding:13px 22px;font-size:10.5px;
+  box-shadow:0 0 0 rgba(21,105,255,0)}
+.btn.primary:hover{background:var(--blued);box-shadow:0 8px 24px -6px rgba(21,105,255,.55)}
 .btn.wide{width:100%;justify-content:center;padding:15px 22px;font-size:11px}
 .btn em{font-style:normal}
 
 main{position:relative;z-index:1}
 
 /* ---------- hero: cover treatment, matches the main site's opening ---------- */
-.hero{position:relative;overflow:hidden;
+.hero{position:relative;overflow:hidden;--px:0;--py:0;
   min-height:calc(100vh - 61px);min-height:calc(100dvh - 61px);
   display:flex;align-items:center;
   padding:clamp(90px,11vw,130px) var(--pad) clamp(56px,8vw,90px);
   border-bottom:1px solid var(--hair)}
-#stakeGrid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-.hero-vig{position:absolute;inset:0;z-index:1;pointer-events:none;
+#stakeGrid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;
+  transform:translate3d(calc(var(--px) * -8px),calc(var(--py) * -8px),0);
+  transition:transform .6s var(--ease)}
+#stakeCoin{position:absolute;z-index:1;pointer-events:none;
+  right:clamp(2%,5vw,8%);top:clamp(8px,2.4vw,26px);
+  width:clamp(150px,15vw,220px);height:clamp(150px,15vw,220px);
+  transform:translate3d(calc(var(--px) * 20px),calc(var(--py) * 20px),0);
+  transition:transform .6s var(--ease);
+  filter:drop-shadow(0 18px 40px rgba(21,105,255,.35))}
+.hero-vig{position:absolute;inset:0;z-index:2;pointer-events:none;
   background:radial-gradient(118% 88% at 38% 34%,transparent 42%,rgba(5,7,11,.9) 100%),
              linear-gradient(0deg, var(--bg) 0%, transparent 22%)}
-.hero-marks{position:absolute;inset:clamp(20px,3.4vw,40px);z-index:2;pointer-events:none}
+.hero-marks{position:absolute;inset:clamp(20px,3.4vw,40px);z-index:3;pointer-events:none;
+  transform:translate3d(calc(var(--px) * 5px),calc(var(--py) * 5px),0);
+  transition:transform .6s var(--ease)}
 .hero-marks i{position:absolute;width:11px;height:11px;opacity:.4}
 .hero-marks i::before,.hero-marks i::after{content:'';position:absolute;background:var(--ink3)}
 .hero-marks i::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-.5px)}
@@ -106,8 +120,12 @@ main{position:relative;z-index:1}
 .hero-marks i:nth-child(2){right:0;top:0}
 .hero-marks i:nth-child(3){left:0;bottom:0}
 .hero-marks i:nth-child(4){right:0;bottom:0}
-.hero-in{position:relative;z-index:3;max-width:1280px;margin:0 auto;width:100%;
+.hero-in{position:relative;z-index:4;max-width:1280px;margin:0 auto;width:100%;
   display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,72px);align-items:start}
+@media (max-width:820px){#stakeCoin{display:none}}
+@media (prefers-reduced-motion:reduce){
+  #stakeGrid,#stakeCoin,.hero-marks{transform:none!important}
+}
 .eyebrow{display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',monospace;
   font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:30px}
 .eyebrow i{width:20px;height:1px;background:var(--blue2);flex:none}
@@ -517,9 +535,29 @@ h1{font-size:clamp(34px,5.2vw,66px);color:var(--ink);font-weight:200;line-height
 .sect > *{position:relative;z-index:1}
 
 /* ---------- reveal on scroll ---------- */
-.reveal{opacity:0;transform:translateY(26px);
-  transition:opacity .8s var(--ease) var(--d,0s),transform .8s var(--ease) var(--d,0s)}
+.reveal{opacity:0;transform:translateY(30px) scale(.975);
+  transition:opacity .9s var(--ease) var(--d,0s),transform .9s var(--ease) var(--d,0s)}
 .reveal.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   .reveal{opacity:1!important;transform:none!important;transition:none!important}
+}
+
+/* ---------- 3D tilt: applied to every .panel card via pointer-tracked
+   perspective rotation (JS sets --rx/--ry/--mx/--my), plus a glare sweep
+   and a deeper, direction-aware shadow ---------- */
+.panel{--rx:0deg;--ry:0deg;--mx:50%;--my:50%;
+  transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style:preserve-3d;will-change:transform;
+  box-shadow:0 1px 0 rgba(255,255,255,.03) inset,0 18px 40px -22px rgba(0,0,0,.6);
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.panel.tilting{transition:transform .08s linear,box-shadow .3s var(--ease)}
+.panel.tilting{box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 30px 60px -22px rgba(0,0,0,.7),
+  0 0 40px -12px rgba(21,105,255,.25)}
+.panel-shine{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;
+  background:radial-gradient(340px circle at var(--mx) var(--my),rgba(255,255,255,.14),transparent 60%);
+  transition:opacity .4s var(--ease)}
+.panel.tilting .panel-shine{opacity:1}
+@media (pointer:coarse),(prefers-reduced-motion:reduce){
+  .panel{transform:none!important}
+  .panel-shine{display:none}
 }

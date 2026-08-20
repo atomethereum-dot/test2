@@ -284,6 +284,60 @@
     ctx.shadowBlur = 0;
   }
 
+  // ---- 3D tilt on every panel card: pointer-tracked perspective rotation
+  // plus a glare sweep, matching a premium fintech "hover depth" feel ----
+  if (!reduced && !window.matchMedia("(pointer:coarse)").matches) {
+    const TILT_MAX = 7; // degrees
+    document.querySelectorAll(".panel").forEach((card) => {
+      let raf = 0;
+      function onMove(e) {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width;
+          const py = (e.clientY - r.top) / r.height;
+          const ry = (px - 0.5) * TILT_MAX * 2;
+          const rx = (0.5 - py) * TILT_MAX * 2;
+          card.style.setProperty("--rx", rx.toFixed(2) + "deg");
+          card.style.setProperty("--ry", ry.toFixed(2) + "deg");
+          card.style.setProperty("--mx", (px * 100).toFixed(1) + "%");
+          card.style.setProperty("--my", (py * 100).toFixed(1) + "%");
+        });
+      }
+      card.addEventListener("pointerenter", () => card.classList.add("tilting"));
+      card.addEventListener("pointermove", onMove, { passive: true });
+      card.addEventListener("pointerleave", () => {
+        card.classList.remove("tilting");
+        card.style.setProperty("--rx", "0deg");
+        card.style.setProperty("--ry", "0deg");
+      });
+    });
+  }
+
+  // ---- hero parallax: background layers drift at different rates as the
+  // pointer moves, giving the cover a sense of depth ----
+  (() => {
+    const hero = document.querySelector(".hero");
+    if (!hero || reduced || window.matchMedia("(pointer:coarse)").matches) return;
+    let raf = 0, tx = 0, ty = 0;
+    hero.addEventListener("pointermove", (e) => {
+      const r = hero.getBoundingClientRect();
+      tx = (e.clientX - r.left) / r.width - 0.5;
+      ty = (e.clientY - r.top) / r.height - 0.5;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        hero.style.setProperty("--px", tx.toFixed(3));
+        hero.style.setProperty("--py", ty.toFixed(3));
+      });
+    }, { passive: true });
+    hero.addEventListener("pointerleave", () => {
+      hero.style.setProperty("--px", "0");
+      hero.style.setProperty("--py", "0");
+    });
+  })();
+
   // ---- reveal on scroll ----
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver((entries) => {
