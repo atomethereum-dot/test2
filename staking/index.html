@@ -14,8 +14,17 @@
 <link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="staking.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.143.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.143.0/examples/jsm/"
+  }
+}
+</script>
 </head>
 <body>
+<canvas id="flowWave" aria-hidden="true"></canvas>
 <div class="vig" aria-hidden="true"></div>
 
 <header class="top">
@@ -37,7 +46,6 @@
 <main>
 
   <section class="hero">
-    <canvas id="stkGrid" aria-hidden="true"></canvas>
     <span class="hero-vig" aria-hidden="true"></span>
     <div class="hero-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <div class="hero-in">
@@ -327,5 +335,6 @@
 </footer>
 
 <script src="staking.js"></script>
+<script type="module" src="flowwave.js"></script>
 </body>
 </html>

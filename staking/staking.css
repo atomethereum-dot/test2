@@ -58,12 +58,12 @@ svg,i{display:block}
 main{position:relative;z-index:1}
 
 /* ---------- hero: cover treatment, matches the main site's opening ---------- */
-.hero{position:relative;overflow:hidden;background:var(--bg);
+.hero{position:relative;overflow:hidden;
   min-height:calc(100vh - 61px);min-height:calc(100dvh - 61px);
   display:flex;align-items:center;
   padding:clamp(90px,11vw,130px) var(--pad) clamp(56px,8vw,90px);
   border-bottom:1px solid var(--hair)}
-#stkGrid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#flowWave{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;background:var(--bg)}
 .hero-vig{position:absolute;inset:0;z-index:1;pointer-events:none;
   background:radial-gradient(118% 88% at 38% 34%,transparent 42%,rgba(5,7,11,.9) 100%),
              linear-gradient(0deg, var(--bg) 0%, transparent 22%)}
