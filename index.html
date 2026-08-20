@@ -130,6 +130,31 @@
     70%,100%{transform:scale(1.9);opacity:0}
   }
 
+  /* ============ banner: Uniswap live ============ */
+  .uni-banner{
+    background:rgba(37,211,102,.06);
+    border-bottom:1px solid rgba(37,211,102,.16);
+  }
+  .uni-banner a{
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    padding:9px var(--pad);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink-3);text-decoration:none;
+    transition:color .3s var(--ease);
+  }
+  .uni-banner a:hover,.uni-banner a:focus-visible{color:var(--ink)}
+  .uni-banner b{font-weight:500;color:var(--ink)}
+  .uni-banner .led{
+    position:relative;width:6px;height:6px;border-radius:50%;
+    background:#25d366;flex:none;
+    box-shadow:0 0 10px 1px rgba(37,211,102,.65);
+  }
+  .uni-banner .led::after{
+    content:'';position:absolute;inset:-4px;border-radius:50%;
+    border:1px solid #25d366;
+    animation:ping 2.6s var(--ease) infinite;
+  }
+
   nav{
     display:flex;align-items:center;justify-content:space-between;gap:24px;
     padding:18px var(--pad);
@@ -2775,7 +2800,11 @@ html[dir="rtl"] body{direction:ltr}
 <div class="readout" id="readout" aria-hidden="true">00 · 00</div>
 
 <header class="top">
-  
+  <div class="uni-banner">
+    <a href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer">
+      <i class="led" aria-hidden="true"></i><b>Uniswap</b> Live
+    </a>
+  </div>
   <nav>
     <div class="brand">
       <a href="https://sectoraorg.com" aria-label="Sectora Foundation — inicio">
