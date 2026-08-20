@@ -103,12 +103,14 @@
       if (lineLayer.width > 1) ctx.drawImage(lineLayer, 0, 0, W, H);
     }
 
-    let last = 0, visible = true;
+    // solo se detiene si la portada sale del viewport por scroll; sigue
+    // corriendo aunque se cambie de pestana (setInterval, a diferencia de
+    // requestAnimationFrame, el navegador no lo suspende en segundo plano)
+    let last = performance.now(), visible = true;
     new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { rootMargin: "10% 0px" }).observe(hero);
-    document.addEventListener("visibilitychange", () => { visible = visible && !document.hidden; });
 
-    function frame(t) {
-      requestAnimationFrame(frame);
+    function frame() {
+      const t = performance.now();
       if (!visible) { last = t; return; }
       if (!lineLayer.width) { resize(); if (!lineLayer.width) { last = t; return; } }
       const dt = Math.min(t - last, 50); last = t;
@@ -122,7 +124,7 @@
     let rt;
     window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(resize, 120); });
     resize();
-    if (reduced) { draw(); } else { requestAnimationFrame(frame); }
+    if (reduced) { draw(); } else { setInterval(frame, 16); }
 
     // ---- pointer: lights up the exact cell under the cursor, same effect
     // the main site's cover used to have ----
