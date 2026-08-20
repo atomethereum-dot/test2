@@ -4634,11 +4634,14 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 })();
 
 /* ===== tabla comparativa con datos en vivo =====
-   fuente: CoinGecko /coins/markets, una sola llamada para precio, market
-   cap y supply circulante de los ocho activos. Funciona sin clave; si
-   pones una clave Demo en CG_KEY se anade como parametro y sube el limite.
-   Si la peticion falla se mantiene la ultima lectura buena y, si no hay
-   ninguna, la instantanea de reserva. */
+   fuente: dex-prices.json, una instantanea que un bot en GitHub Actions
+   refresca desde CoinGecko cada 5 minutos y publica en el propio sitio
+   (scripts/fetch_dex_prices.py + .github/workflows/update-dex-prices.yml).
+   Pedirle esto al navegador de cada visitante en vez de llamar a CoinGecko
+   directamente evita el limite de peticiones de la via publica (la causa
+   real de que la tabla se quedara pegada en la instantanea de reserva) y,
+   como es un archivo estatico servido por GitHub Pages, se puede consultar
+   cada segundo sin coste ni limite. */
 (function(){
   const grid  = document.getElementById('cap-grid');
   const seg   = document.getElementById('cap-seg');
@@ -4649,13 +4652,9 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const led   = document.querySelector('.cap-live .led');
   if(!grid || !seg) return;
 
-  const CG_KEY  = '';                 // <-- clave Demo de CoinGecko, opcional
   let SUPPLY    = 25000000;           // supply de #SECT usado en el calculo: 50M inicial o 25M tras la reduccion
-  const BASE_MS = 90000;              // sin clave, la via publica limita mucho
-  const MAX_MS  = 600000;             // techo del retroceso ante fallos
-  const MAX_FAIL= 3;                  // tras esto se deja de insistir
-  const CACHE_K = 'sect_mkt_v1';
-  const CACHE_MS= 300000;             // 5 min: una recarga no vuelve a pedir
+  const POLL_MS = 1000;               // archivo estatico: se puede pedir cada segundo sin problema
+  let updatedAt = 0;                  // hora (del bot) del ultimo dato bueno recibido
 
   const COINS = [
     {id:'ripple',       n:'XRP',          t:'XRP'},
@@ -4680,22 +4679,6 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
   let pct = 5, live = false, rows = [];
   let data = COINS.map(c => Object.assign({}, c, FALLBACK[c.id]));
-  let espera = BASE_MS, fallos = 0, timer = null;
-
-  /* cache de sesion: sin esto, cada recarga lanza una peticion nueva y la
-     via sin clave devuelve 429, que el navegador registra en consola como
-     error aunque el codigo lo capture */
-  function leerCache(){
-    try{
-      const raw = sessionStorage.getItem(CACHE_K);
-      if(!raw) return null;
-      const o = JSON.parse(raw);
-      return (Date.now() - o.t < CACHE_MS) ? o : null;
-    }catch(e){ return null; }
-  }
-  function guardarCache(d){
-    try{ sessionStorage.setItem(CACHE_K, JSON.stringify({t:Date.now(), d})); }catch(e){}
-  }
 
   const money = v => v >= 1000
     ? '$' + v.toLocaleString('en-US',{maximumFractionDigits:0})
@@ -4758,11 +4741,18 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     });
   }
 
+  function agoLabel(ms){
+    const s = Math.max(0, Math.round((Date.now() - ms) / 1000));
+    if(s < 60) return s + 's ago';
+    const m = Math.round(s / 60);
+    if(m < 60) return m + 'm ago';
+    return Math.round(m / 60) + 'h ago';
+  }
+
   function setStatus(){
     if(!stamp) return;
     if(live){
-      const t = new Date().toLocaleTimeString('en-US',{hour12:false});
-      stamp.textContent = 'Live · CoinGecko · ' + t;
+      stamp.textContent = 'Live · updated ' + agoLabel(updatedAt);
       if(led) led.style.background = '#25d366';
     } else {
       stamp.textContent = 'Reference snapshot';
@@ -4771,48 +4761,30 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   }
 
   async function fetchLive(){
-    const url = 'https://api.coingecko.com/api/v3/coins/markets'
-      + '?vs_currency=usd&ids=' + COINS.map(c => c.id).join(',')
-      + '&order=market_cap_desc&per_page=' + COINS.length + '&page=1&sparkline=false'
-      + (CG_KEY ? '&x_cg_demo_api_key=' + CG_KEY : '');
     try{
-      const r = await fetch(url, {cache:'no-store'});
+      const r = await fetch('dex-prices.json?t=' + Date.now(), {cache:'no-store'});
       if(!r.ok) throw new Error(r.status);
       const j = await r.json();
-      if(!Array.isArray(j) || !j.length) throw new Error('vacio');
+      const coins = j && j.coins;
+      if(!coins) throw new Error('vacio');
 
       data = COINS.map(c => {
-        const m = j.find(x => x.id === c.id);
+        const m = coins[c.id];
         const fb = FALLBACK[c.id];
         return Object.assign({}, c, m ? {
-          price: m.current_price,
-          cap:   m.market_cap,
-          sup:   m.circulating_supply || fb.sup
+          price: m.usd,
+          cap:   m.usd_market_cap,
+          sup:   fb.sup
         } : fb);
       });
       live = true;
-      fallos = 0;
-      espera = BASE_MS;
-      guardarCache(data.map(d => ({id:d.id, price:d.price, cap:d.cap, sup:d.sup})));
+      updatedAt = j.updatedAt || Date.now();
     }catch(e){
-      live = false;                    // se conserva la ultima lectura buena
-      fallos++;
-      espera = Math.min(espera * 2, MAX_MS);   // retroceso exponencial
-      if(fallos >= MAX_FAIL) stop();           // deja de insistir en esta sesion
-      else reprograma();
-      setStatus(); build(); render(true);
-      return;
+      // se conserva la ultima lectura buena; el siguiente sondeo (1s) lo reintenta
     }
-    reprograma();
     setStatus();
     build();
     render(true);
-  }
-
-  function reprograma(){
-    stop();
-    if(fallos >= MAX_FAIL) return;
-    timer = setTimeout(() => { if(!document.hidden && verTabla) fetchLive(); }, espera);
   }
 
   seg.addEventListener('click', e => {
@@ -4836,27 +4808,13 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   render(false);
   setStatus();
 
-  // solo consulta cuando la tabla esta en pantalla y la pestana activa
-  let seen = false, verTabla = false, arrancado = false;
-  function stop(){ if(timer){ clearTimeout(timer); timer = null; } }
-
+  // solo sondea mientras la tabla esta en pantalla y la pestana activa
+  let seen = false, verTabla = false, timer = null;
+  function stop(){ if(timer){ clearInterval(timer); timer = null; } }
   function start(){
-    if(arrancado || fallos >= MAX_FAIL) return;
-    arrancado = true;
-
-    const c = leerCache();
-    if(c){
-      // lectura reciente en la propia sesion: nada de red
-      data = COINS.map(x => {
-        const m = c.d.find(y => y.id === x.id) || FALLBACK[x.id];
-        return Object.assign({}, x, m);
-      });
-      live = true;
-      setStatus(); build(); render(true);
-      reprograma();
-      return;
-    }
+    if(timer) return;
     fetchLive();
+    timer = setInterval(() => { if(!document.hidden && verTabla) fetchLive(); }, POLL_MS);
   }
 
   new IntersectionObserver(es => {

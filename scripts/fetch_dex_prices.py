@@ -12,6 +12,7 @@ import urllib.request
 COIN_IDS = [
     "bitcoin", "ethereum", "bitcoin-cash", "solana", "litecoin",
     "ripple", "sui", "hyperliquid", "pax-gold", "kinesis-silver",
+    "dogecoin", "cardano", "tron", "chainlink",
 ]
 INDEX_SYMBOLS = ["^DJI", "^GSPC", "^IXIC"]
 OUT_PATH = "dex-prices.json"
