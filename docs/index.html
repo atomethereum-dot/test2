@@ -597,6 +597,16 @@ blockquote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
 .cap-live{display:inline-flex;align-items:center;gap:8px;padding:0 4px;
   font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
 .cap-live .led{width:5px;height:5px;border-radius:50%;background:#9aa0ab;flex:none;transition:background .3s var(--ease)}
+.cap-seg{display:flex;border:1px solid var(--rule);border-radius:2px;overflow:hidden}
+.cap-seg button{appearance:none;border:0;background:transparent;cursor:pointer;
+  padding:9px 15px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+  border-right:1px solid var(--rule);
+  transition:background .25s var(--ease),color .25s var(--ease)}
+.cap-seg button:last-child{border-right:0}
+.cap-seg button:hover{color:var(--ink)}
+.cap-seg button.on{background:var(--blue);color:#fff}
+.cap-seg button.on:hover{background:var(--blue-deep)}
 .cap-live.live .led{background:var(--live);box-shadow:0 0 0 3px rgba(18,138,90,.14)}
 
 /* ---------- pie ---------- */
@@ -1385,17 +1395,22 @@ try{
       <p class="sec-ref mono"><span>§06</span><i></i><span>Comparison - Market Cap</span><a class="anchor" href="#s06" data-a="s06">¶ link</a></p>
       <h2>What 50,000,000 tokens imply at other networks' valuations</h2>
       <p>Below, the market capitalization of several established networks, each paired with
-        what $SECT would be priced at if Sectora reached just 5% of that network's market
-        cap — a deliberately conservative reference point.</p>
+        what $SECT would be priced at if Sectora reached a selected share of that network's
+        market cap — a deliberately conservative reference point.</p>
 
       <div class="cta">
+        <div class="cap-seg" id="cap-seg">
+          <button type="button" data-pct="1">1%</button>
+          <button type="button" data-pct="5" class="on">5%</button>
+          <button type="button" data-pct="10">10%</button>
+        </div>
         <button type="button" class="ext" id="cap-toggle" aria-pressed="false">Compare at 25,000,000 (post-reduction)</button>
         <span class="cap-live" id="cap-live"><i class="led" aria-hidden="true"></i><span id="cap-stamp">Reference snapshot</span></span>
       </div>
 
       <div class="tab-wrap" id="cap-tab-wrap">
         <div class="row head mono">
-          <span>Asset</span><span class="r hide">Price</span><span class="r">Market cap</span><span class="r">$SECT @ 5%</span>
+          <span>Asset</span><span class="r hide">Price</span><span class="r">Market cap</span><span class="r">$SECT @ <b id="cap-pct">5%</b></span>
         </div>
         <div class="row" data-coin="ripple"><span><b>XRP</b> <span class="t">XRP</span></span><span class="r hide" data-price>$1.10</span><span class="r" data-cap>$69.08B</span><span class="r sect5" data-out>$138.15</span><span class="cap" aria-hidden="true"><i></i></span></div>
         <div class="row" data-coin="solana"><span><b>Solana</b> <span class="t">SOL</span></span><span class="r hide" data-price>$84.85</span><span class="r" data-cap>$49.46B</span><span class="r sect5" data-out>$98.93</span><span class="cap" aria-hidden="true"><i></i></span></div>
@@ -1408,8 +1423,8 @@ try{
       </div>
 
       <p class="fine">Illustrative only, not a price prediction or financial advice. The
-        $SECT @ 5% column divides 5% of each reference asset's market cap by Sectora's initial
-        50,000,000 supply. Sectora's own row shows its initial price of $0.10, not a scenario. It assumes valuation parity with each network, which is not guaranteed, and
+        $SECT @ <b id="cap-pct-fine">5%</b> column divides the selected share of each reference asset's market cap by Sectora's
+        supply at the selected reduction stage. Sectora's own row shows its initial price of $0.10, not a scenario. It assumes valuation parity with each network, which is not guaranteed, and
         ignores differences in token utility, unlock schedules and liquidity depth. Reference
         prices and market caps update live from the same feed used across sectoraorg.com.</p>
     
@@ -2871,6 +2886,9 @@ window.__SECT_TR = {
   (function(){
     const wrap  = document.getElementById('cap-tab-wrap');
     const btn   = document.getElementById('cap-toggle');
+    const seg   = document.getElementById('cap-seg');
+    const pctEl = document.getElementById('cap-pct');
+    const pctFineEl = document.getElementById('cap-pct-fine');
     const liveEl= document.getElementById('cap-live');
     const stamp = document.getElementById('cap-stamp');
     if(!wrap) return;
@@ -2888,7 +2906,7 @@ window.__SECT_TR = {
       chainlink:{price:14.87,   cap:9.71e9}
     };
     const SELF_CAP = 5.0e6;
-    let SUPPLY = 50000000, reducido = false;
+    let SUPPLY = 50000000, reducido = false, pct = 5;
     let data = rows.map(r => Object.assign({id:r.dataset.coin}, FALLBACK[r.dataset.coin]));
     let liveOk = false, updatedAt = 0;
 
@@ -2934,12 +2952,14 @@ window.__SECT_TR = {
         const outEl   = r.querySelector('[data-out]');
         if(priceEl) priceEl.textContent = money(d.price);
         if(capEl)   capEl.textContent   = big(d.cap);
-        if(outEl)   outEl.textContent   = money(d.cap * 0.05 / SUPPLY);
+        if(outEl)   outEl.textContent   = money(d.cap * (pct/100) / SUPPLY);
         r.style.setProperty('--w', barW(d.cap).toFixed(4));
         r.style.setProperty('--d', (i*.06).toFixed(2)+'s');
       });
       const selfRow = wrap.querySelector('.row.self');
       if(selfRow) selfRow.style.setProperty('--w', barW(SELF_CAP).toFixed(4));
+      if(pctEl) pctEl.textContent = pct + '%';
+      if(pctFineEl) pctFineEl.textContent = pct + '%';
     }
 
     async function fetchLive(){
@@ -2971,6 +2991,14 @@ window.__SECT_TR = {
         : 'Compare at 25,000,000 (post-reduction)';
       btn.classList.toggle('on', reducido);
       btn.setAttribute('aria-pressed', String(reducido));
+      render();
+    });
+
+    if(seg) seg.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if(!b) return;
+      pct = parseFloat(b.dataset.pct);
+      [...seg.querySelectorAll('button')].forEach(x => x.classList.toggle('on', x === b));
       render();
     });
 
