@@ -594,6 +594,10 @@ blockquote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
 .cta button:hover{border-color:var(--ink)}
 .cta button.on{background:var(--blue);border-color:var(--blue);color:#fff}
 .cta button.on:hover{background:var(--blue-deep);border-color:var(--blue-deep)}
+.cap-live{display:inline-flex;align-items:center;gap:8px;padding:0 4px;
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.cap-live .led{width:5px;height:5px;border-radius:50%;background:#9aa0ab;flex:none;transition:background .3s var(--ease)}
+.cap-live.live .led{background:var(--live);box-shadow:0 0 0 3px rgba(18,138,90,.14)}
 
 /* ---------- pie ---------- */
 /* el pie se acerca al bloque de control: antes sumaba margen y relleno
@@ -1386,19 +1390,20 @@ try{
 
       <div class="cta">
         <button type="button" class="ext" id="cap-toggle" aria-pressed="false">Compare at 25,000,000 (post-reduction)</button>
+        <span class="cap-live" id="cap-live"><i class="led" aria-hidden="true"></i><span id="cap-stamp">Reference snapshot</span></span>
       </div>
 
-      <div class="tab-wrap">
+      <div class="tab-wrap" id="cap-tab-wrap">
         <div class="row head mono">
           <span>Asset</span><span class="r hide">Price</span><span class="r">Market cap</span><span class="r">$SECT @ 5%</span>
         </div>
-        <div class="row"><span><b>XRP</b> <span class="t">XRP</span></span><span class="r hide">$2.85</span><span class="r">$168.15B</span><span class="r sect5" data-v50="168.15" data-v25="336.30">$168.15</span><span class="cap" aria-hidden="true"><i></i></span></div>
-        <div class="row"><span><b>Solana</b> <span class="t">SOL</span></span><span class="r hide">$73.80</span><span class="r">$42.88B</span><span class="r sect5" data-v50="42.88" data-v25="85.76">$42.88</span><span class="cap" aria-hidden="true"><i></i></span></div>
-        <div class="row"><span><b>Dogecoin</b> <span class="t">DOGE</span></span><span class="r hide">$0.15</span><span class="r">$21.90B</span><span class="r sect5" data-v50="21.90" data-v25="43.80">$21.90</span><span class="cap" aria-hidden="true"><i></i></span></div>
-        <div class="row"><span><b>Cardano</b> <span class="t">ADA</span></span><span class="r hide">$0.40</span><span class="r">$14.00B</span><span class="r sect5" data-v50="14.00" data-v25="28.00">$14.00</span><span class="cap" aria-hidden="true"><i></i></span></div>
-        <div class="row"><span><b>TRON</b> <span class="t">TRX</span></span><span class="r hide">$0.16</span><span class="r">$13.50B</span><span class="r sect5" data-v50="13.50" data-v25="27.00">$13.50</span><span class="cap" aria-hidden="true"><i></i></span></div>
-        <div class="row"><span><b>Hyperliquid</b> <span class="t">HYPE</span></span><span class="r hide">$28.50</span><span class="r">$12.83B</span><span class="r sect5" data-v50="12.83" data-v25="25.66">$12.83</span><span class="cap" aria-hidden="true"><i></i></span></div>
-        <div class="row"><span><b>Chainlink</b> <span class="t">LINK</span></span><span class="r hide">$14.87</span><span class="r">$9.71B</span><span class="r sect5" data-v50="9.71" data-v25="19.42">$9.71</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row" data-coin="ripple"><span><b>XRP</b> <span class="t">XRP</span></span><span class="r hide" data-price>$1.10</span><span class="r" data-cap>$69.08B</span><span class="r sect5" data-out>$138.15</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row" data-coin="solana"><span><b>Solana</b> <span class="t">SOL</span></span><span class="r hide" data-price>$84.85</span><span class="r" data-cap>$49.46B</span><span class="r sect5" data-out>$98.93</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row" data-coin="dogecoin"><span><b>Dogecoin</b> <span class="t">DOGE</span></span><span class="r hide" data-price>$0.15</span><span class="r" data-cap>$21.90B</span><span class="r sect5" data-out>$43.80</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row" data-coin="cardano"><span><b>Cardano</b> <span class="t">ADA</span></span><span class="r hide" data-price>$0.40</span><span class="r" data-cap>$14.00B</span><span class="r sect5" data-out>$28.00</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row" data-coin="tron"><span><b>TRON</b> <span class="t">TRX</span></span><span class="r hide" data-price>$0.16</span><span class="r" data-cap>$13.50B</span><span class="r sect5" data-out>$27.00</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row" data-coin="hyperliquid"><span><b>Hyperliquid</b> <span class="t">HYPE</span></span><span class="r hide" data-price>$70.91</span><span class="r" data-cap>$15.78B</span><span class="r sect5" data-out>$31.56</span><span class="cap" aria-hidden="true"><i></i></span></div>
+        <div class="row" data-coin="chainlink"><span><b>Chainlink</b> <span class="t">LINK</span></span><span class="r hide" data-price>$14.87</span><span class="r" data-cap>$9.71B</span><span class="r sect5" data-out>$19.42</span><span class="cap" aria-hidden="true"><i></i></span></div>
         <div class="row self"><span><b>Sectora</b> <span class="t">$SECT</span></span><span class="r hide">$0.10</span><span class="r">$5.00M</span><span class="r">$0.10</span><span class="cap" aria-hidden="true"><i></i></span></div>
       </div>
 
@@ -1406,7 +1411,7 @@ try{
         $SECT @ 5% column divides 5% of each reference asset's market cap by Sectora's initial
         50,000,000 supply. Sectora's own row shows its initial price of $0.10, not a scenario. It assumes valuation parity with each network, which is not guaranteed, and
         ignores differences in token utility, unlock schedules and liquidity depth. Reference
-        figures are a fixed snapshot — CoinGecko and CoinMarketCap, 7–8 August 2026.</p>
+        prices and market caps update live from the same feed used across sectoraorg.com.</p>
     
       <figure class="card">
         <span class="card-glow" aria-hidden="true"></span>
@@ -2858,36 +2863,132 @@ window.__SECT_TR = {
     if(sdot) sdot.style.top = h.toFixed(2) + '%';
   }
 
-  /* ---------- barras de la tabla comparativa ---------- */
+  /* ---------- tabla comparativa: datos en vivo desde dex-prices.json ----------
+     misma fuente que usa la portada: un bot en GitHub Actions refresca
+     dex-prices.json desde CoinGecko cada 5 minutos y lo publica en el propio
+     sitio (scripts/fetch_dex_prices.py). Al ser un archivo estatico no tiene
+     limite de peticiones, asi que aqui se sondea cada segundo. */
   (function(){
-    const filas = [...document.querySelectorAll('.tab-wrap .row:not(.head)')];
-    if(!filas.length) return;
-    const caps = [168.15e9,42.88e9,21.90e9,14.00e9,13.50e9,12.83e9,9.71e9,5.0e6];
-    // escala logaritmica: en lineal todo lo que no sea Bitcoin desaparece
-    const lo = Math.log10(Math.min(...caps)) - .4, hi = Math.log10(Math.max(...caps));
-    filas.forEach((f, i) => {
-      const c = caps[i];
-      if(c === undefined) return;
-      const w = Math.max(.02, Math.min(1, (Math.log10(c) - lo) / (hi - lo)));
-      f.style.setProperty('--w', w.toFixed(4));
-      f.style.setProperty('--d', (i*.06).toFixed(2)+'s');
-    });
-  })();
+    const wrap  = document.getElementById('cap-tab-wrap');
+    const btn   = document.getElementById('cap-toggle');
+    const liveEl= document.getElementById('cap-live');
+    const stamp = document.getElementById('cap-stamp');
+    if(!wrap) return;
 
-  /* ---------- alternar la tabla comparativa entre 50M y 25M ---------- */
-  (function(){
-    const btn = document.getElementById('cap-toggle');
-    const celdas = [...document.querySelectorAll('.tab-wrap .r.sect5')];
-    if(!btn || !celdas.length) return;
-    let reducido = false;
-    btn.addEventListener('click', () => {
-      reducido = !reducido;
-      celdas.forEach(c => {
-        c.textContent = '$' + (reducido ? c.dataset.v25 : c.dataset.v50);
+    const rows = [...wrap.querySelectorAll('.row[data-coin]')];
+    if(!rows.length) return;
+
+    const FALLBACK = {
+      ripple:{price:1.10,       cap:69.08e9},
+      solana:{price:84.85,      cap:49.46e9},
+      dogecoin:{price:0.15,     cap:21.90e9},
+      cardano:{price:0.40,      cap:14.00e9},
+      tron:{price:0.16,         cap:13.50e9},
+      hyperliquid:{price:70.91, cap:15.78e9},
+      chainlink:{price:14.87,   cap:9.71e9}
+    };
+    const SELF_CAP = 5.0e6;
+    let SUPPLY = 50000000, reducido = false;
+    let data = rows.map(r => Object.assign({id:r.dataset.coin}, FALLBACK[r.dataset.coin]));
+    let liveOk = false, updatedAt = 0;
+
+    const money = v => v >= 1000
+      ? '$' + v.toLocaleString('en-US',{maximumFractionDigits:0})
+      : v >= 1
+        ? '$' + v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})
+        : '$' + v.toFixed(4).replace(/0+$/,'').replace(/\.$/,'');
+    const big = v =>
+      v >= 1e12 ? '$' + (v/1e12).toFixed(2) + 'T' :
+      v >= 1e9  ? '$' + (v/1e9 ).toFixed(2) + 'B' :
+      v >= 1e6  ? '$' + (v/1e6 ).toFixed(2) + 'M' : money(v);
+
+    function agoLabel(ms){
+      const s = Math.max(0, Math.round((Date.now() - ms) / 1000));
+      if(s < 60) return s + 's ago';
+      const m = Math.round(s / 60);
+      if(m < 60) return m + 'm ago';
+      return Math.round(m / 60) + 'h ago';
+    }
+
+    function setStatus(){
+      if(!stamp) return;
+      if(liveOk){
+        stamp.textContent = 'Live · updated ' + agoLabel(updatedAt);
+        if(liveEl) liveEl.classList.add('live');
+      } else {
+        stamp.textContent = 'Reference snapshot';
+        if(liveEl) liveEl.classList.remove('live');
+      }
+    }
+
+    function render(){
+      const caps = data.map(d => d.cap).concat([SELF_CAP]);
+      // escala logaritmica: en lineal todo lo que no sea Bitcoin desaparece
+      const lo = Math.log10(Math.min(...caps)) - .4, hi = Math.log10(Math.max(...caps));
+      const barW = c => Math.max(.02, Math.min(1, (Math.log10(c) - lo) / (hi - lo)));
+
+      rows.forEach((r, i) => {
+        const d = data[i];
+        const priceEl = r.querySelector('[data-price]');
+        const capEl   = r.querySelector('[data-cap]');
+        const outEl   = r.querySelector('[data-out]');
+        if(priceEl) priceEl.textContent = money(d.price);
+        if(capEl)   capEl.textContent   = big(d.cap);
+        if(outEl)   outEl.textContent   = money(d.cap * 0.05 / SUPPLY);
+        r.style.setProperty('--w', barW(d.cap).toFixed(4));
+        r.style.setProperty('--d', (i*.06).toFixed(2)+'s');
       });
+      const selfRow = wrap.querySelector('.row.self');
+      if(selfRow) selfRow.style.setProperty('--w', barW(SELF_CAP).toFixed(4));
+    }
+
+    async function fetchLive(){
+      try{
+        const r = await fetch('/dex-prices.json?t=' + Date.now(), {cache:'no-store'});
+        if(!r.ok) throw new Error(r.status);
+        const j = await r.json();
+        const coins = j && j.coins;
+        if(!coins) throw new Error('vacio');
+        data = rows.map(row => {
+          const id = row.dataset.coin;
+          const m = coins[id];
+          return m ? {id, price:m.usd, cap:m.usd_market_cap} : Object.assign({id}, FALLBACK[id]);
+        });
+        liveOk = true;
+        updatedAt = j.updatedAt || Date.now();
+      }catch(e){
+        // se conserva la ultima lectura buena; el siguiente sondeo (1s) lo reintenta
+      }
+      setStatus();
+      render();
+    }
+
+    if(btn) btn.addEventListener('click', () => {
+      reducido = !reducido;
+      SUPPLY = reducido ? 25000000 : 50000000;
+      btn.textContent = reducido
+        ? 'Compare at 50,000,000 (pre-reduction)'
+        : 'Compare at 25,000,000 (post-reduction)';
       btn.classList.toggle('on', reducido);
       btn.setAttribute('aria-pressed', String(reducido));
+      render();
     });
+
+    render();
+    setStatus();
+
+    // solo sondea mientras la tabla esta en pantalla y la pestana activa
+    let verTabla = false, timer = null;
+    function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+    function start(){
+      if(timer) return;
+      fetchLive();
+      timer = setInterval(() => { if(!document.hidden && verTabla) fetchLive(); }, 1000);
+    }
+    new IntersectionObserver(es => {
+      verTabla = es[0].isIntersecting;
+      if(verTabla) start(); else stop();
+    }, {threshold:.1, rootMargin:'200px'}).observe(wrap);
   })();
 
   /* ---------- la linea del roadmap se traza con el scroll ---------- */
