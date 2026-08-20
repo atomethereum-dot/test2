@@ -1,5 +1,143 @@
 (() => {
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---- hero pixel grid: same ambient cell system as the main site's cover
+  // and the security page (walkers + random pops + decay), recolored to gray ----
+  (() => {
+    const canvas = document.getElementById("stakeGrid");
+    if (!canvas) return;
+    const hero = canvas.closest(".hero");
+    const ctx = canvas.getContext("2d");
+    const CELL = 54;
+    let cols = 0, rows = 0, heat = null, tone = null, W = 0, H = 0, dpr = 1;
+
+    const lineLayer = document.createElement("canvas");
+    const lctx = lineLayer.getContext("2d");
+
+    function paintLines() {
+      lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      lctx.clearRect(0, 0, W, H);
+      lctx.lineWidth = 1;
+      lctx.strokeStyle = "rgba(255,255,255,.034)";
+      lctx.beginPath();
+      for (let c = 0; c <= cols; c++) { lctx.moveTo(c * CELL + 0.5, 0); lctx.lineTo(c * CELL + 0.5, H); }
+      for (let r = 0; r <= rows; r++) { lctx.moveTo(0, r * CELL + 0.5); lctx.lineTo(W, r * CELL + 0.5); }
+      lctx.stroke();
+    }
+
+    function rnd(c, r) {
+      const x = Math.sin(c * 127.1 + r * 311.7) * 43758.5453;
+      return x - Math.floor(x);
+    }
+
+    function resize() {
+      const w = hero.clientWidth, h = hero.clientHeight;
+      if (w < 1 || h < 1) return;
+      W = w; H = h;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cols = Math.ceil(W / CELL); rows = Math.ceil(H / CELL);
+      heat = new Float32Array(cols * rows);
+      tone = new Float32Array(cols * rows);
+      for (let i = 0; i < tone.length; i++) tone[i] = rnd(i % cols, (i / cols) | 0);
+      lineLayer.width = W * dpr; lineLayer.height = H * dpr;
+      paintLines();
+      seedWalkers();
+    }
+    const idx = (c, r) => r * cols + c;
+
+    let walkers = [];
+    function seedWalkers() {
+      const n = W < 700 ? 4 : 7;
+      walkers = [];
+      for (let i = 0; i < n; i++) walkers.push({
+        c: (Math.random() * cols) | 0, r: (Math.random() * rows) | 0,
+        dc: Math.random() < 0.5 ? 1 : -1, dr: 0, next: 0,
+      });
+    }
+    function stepWalkers(t) {
+      for (const w of walkers) {
+        if (t < w.next) continue;
+        w.next = t + 105 + Math.random() * 130;
+        if (Math.random() < 0.3) {
+          if (w.dc !== 0) { w.dr = Math.random() < 0.5 ? 1 : -1; w.dc = 0; }
+          else { w.dc = Math.random() < 0.5 ? 1 : -1; w.dr = 0; }
+        }
+        w.c += w.dc; w.r += w.dr;
+        if (w.c < 0) { w.c = 0; w.dc = 1; }
+        if (w.c >= cols) { w.c = cols - 1; w.dc = -1; }
+        if (w.r < 0) { w.r = 0; w.dr = 1; }
+        if (w.r >= rows) { w.r = rows - 1; w.dr = -1; }
+        heat[idx(w.c, w.r)] = 0.5;
+      }
+    }
+
+    let nextPop = 0;
+    function pops(t) {
+      if (t < nextPop) return;
+      nextPop = t + 80 + Math.random() * 90;
+      const n = 2 + ((Math.random() * 3) | 0);
+      for (let k = 0; k < n; k++) {
+        const i = idx((Math.random() * cols) | 0, (Math.random() * rows) | 0);
+        const v = 0.55 + Math.random() * 0.4;
+        if (heat[i] < v) heat[i] = v;
+      }
+    }
+
+    function draw() {
+      if (!heat) return;
+      ctx.clearRect(0, 0, W, H);
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const i = idx(c, r);
+          const v = heat[i];
+          if (v > 0.015) {
+            const g = tone[i];
+            const s = (100 + 70 * g) | 0;
+            ctx.fillStyle = "rgba(" + s + "," + s + "," + s + "," + (Math.min(v, 1) * 0.5).toFixed(3) + ")";
+            ctx.fillRect(c * CELL, r * CELL, CELL, CELL);
+          }
+        }
+      }
+      if (lineLayer.width > 1) ctx.drawImage(lineLayer, 0, 0, W, H);
+    }
+
+    // solo se detiene si la portada sale del viewport por scroll; sigue
+    // corriendo aunque se cambie de pestana (setInterval, a diferencia de
+    // requestAnimationFrame, el navegador no lo suspende en segundo plano)
+    let last = performance.now(), visible = true;
+    new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { rootMargin: "10% 0px" }).observe(hero);
+
+    function frame() {
+      const t = performance.now();
+      if (!visible) { last = t; return; }
+      if (!lineLayer.width) { resize(); if (!lineLayer.width) { last = t; return; } }
+      const dt = Math.min(t - last, 50); last = t;
+      stepWalkers(t);
+      pops(t);
+      const decay = Math.pow(0.922, dt / 16.7);
+      for (let i = 0; i < heat.length; i++) heat[i] *= decay;
+      draw();
+    }
+
+    let rt;
+    window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(resize, 120); });
+    resize();
+    if (reduced) { draw(); } else { setInterval(frame, 16); }
+
+    // ---- pointer: lights up the exact cell under the cursor, same effect
+    // used across the site's other grid covers ----
+    window.addEventListener("pointermove", (e) => {
+      if (!heat) return;
+      const rect = canvas.getBoundingClientRect();
+      const c = ((e.clientX - rect.left) / CELL) | 0;
+      const r = ((e.clientY - rect.top) / CELL) | 0;
+      if (c >= 0 && r >= 0 && c < cols && r < rows &&
+          e.clientY >= rect.top && e.clientY <= rect.bottom) heat[idx(c, r)] = 1;
+    }, { passive: true });
+  })();
+
   function rand(min, max) { return min + Math.random() * (max - min); }
   function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
   function randHex(len) {
@@ -432,5 +570,66 @@
   if (up) up.addEventListener("click", () => {
     const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
+  });
+})();
+
+/* ===== coordinate cursor: reticle + readout, same system used on the main
+   site, security and dashboard — a thin crosshair plus a coordinate readout
+   that follows the pointer, snapped to the same 54px cell grid, switching to
+   a darker tone over light backgrounds. ===== */
+(() => {
+  const reticle = document.getElementById("reticle");
+  const readout = document.getElementById("readout");
+  if (!reticle || !readout) return;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const rx = reticle.querySelector(".rx");
+  const ry = reticle.querySelector(".ry");
+  const CELL = 54;
+
+  let claro = false, ultimaLum = 0;
+  function fondoClaro(x, y) {
+    if (performance.now() - ultimaLum < 140) return claro;
+    ultimaLum = performance.now();
+    let el = document.elementFromPoint(x, y);
+    let n = 0;
+    while (el && n < 6) {
+      const bg = getComputedStyle(el).backgroundColor;
+      const m = bg && bg.match(/rgba?\(([^)]+)\)/);
+      if (m) {
+        const v = m[1].split(",").map(parseFloat);
+        const a = v.length > 3 ? v[3] : 1;
+        if (a > 0.35) {
+          const L = (0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]) / 255;
+          claro = L > 0.5;
+          return claro;
+        }
+      }
+      el = el.parentElement; n++;
+    }
+    return claro;
+  }
+
+  window.addEventListener("pointermove", (e) => {
+    if (reduced) return;
+    const gx = Math.floor((e.clientX + window.scrollX) / CELL) * CELL - window.scrollX;
+    const gy = Math.floor((e.clientY + window.scrollY) / CELL) * CELL - window.scrollY;
+    const cc = Math.floor((e.clientX + window.scrollX) / CELL);
+    const cr = Math.floor((e.clientY + window.scrollY) / CELL);
+
+    readout.style.transform = "translate3d(" + gx + "px," + gy + "px,0)";
+    readout.textContent = String(Math.abs(cc) % 100).padStart(2, "0") + " · " + String(Math.abs(cr) % 100).padStart(2, "0");
+    rx.style.transform = "translate3d(0," + gy + "px,0)";
+    ry.style.transform = "translate3d(" + gx + "px,0,0)";
+    reticle.classList.add("on");
+    readout.classList.add("on");
+
+    const cl2 = fondoClaro(e.clientX, e.clientY);
+    reticle.classList.toggle("on-light", cl2);
+    readout.classList.toggle("on-light", cl2);
+  }, { passive: true });
+
+  window.addEventListener("pointerleave", () => {
+    reticle.classList.remove("on");
+    readout.classList.remove("on");
   });
 })();

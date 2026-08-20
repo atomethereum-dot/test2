@@ -13,19 +13,12 @@
 <link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="staking.css?v=20260820a">
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://unpkg.com/three@0.143.0/build/three.module.js",
-    "three/addons/": "https://unpkg.com/three@0.143.0/examples/jsm/"
-  }
-}
-</script>
+<link rel="stylesheet" href="staking.css?v=20260820b">
 </head>
 <body>
-<canvas id="flowWave" aria-hidden="true"></canvas>
 <div class="vig" aria-hidden="true"></div>
+<div class="reticle" id="reticle" aria-hidden="true"><span class="rx"></span><span class="ry"></span></div>
+<div class="readout" id="readout" aria-hidden="true">00 · 00</div>
 
 <header class="top">
   <div class="top-l">
@@ -46,6 +39,7 @@
 <main>
 
   <section class="hero">
+    <canvas id="stakeGrid" aria-hidden="true"></canvas>
     <span class="hero-vig" aria-hidden="true"></span>
     <div class="hero-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <div class="hero-in">
@@ -425,7 +419,6 @@
   <div class="ft-word" aria-hidden="true" id="ft-word">SECTORA</div>
 </footer>
 
-<script src="staking.js?v=20260820a"></script>
-<script type="module" src="flowwave.js?v=20260820a"></script>
+<script src="staking.js?v=20260820b"></script>
 </body>
 </html>
