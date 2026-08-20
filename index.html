@@ -141,10 +141,19 @@
     font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:500;
     letter-spacing:.24em;text-transform:uppercase;
     color:var(--ink-4);text-decoration:none;
-    transition:color .35s var(--ease),gap .35s var(--ease);
+    transition:color .35s var(--ease);
   }
-  .uni-banner a:hover,.uni-banner a:focus-visible{color:var(--ink-2);gap:12px}
-  .uni-banner b{font-weight:500;color:var(--blue)}
+  .uni-banner a:hover,.uni-banner a:focus-visible{color:var(--ink-2)}
+  .uni-banner .ub-inner{position:relative;display:inline-flex;align-items:center;gap:9px}
+  .uni-banner .ub-inner::after{
+    content:'';position:absolute;left:0;right:0;bottom:-5px;height:1px;
+    background:var(--ink-4);transform:scaleX(0);transform-origin:0 50%;
+    transition:transform .45s var(--ease);
+  }
+  .uni-banner a:hover .ub-inner::after,.uni-banner a:focus-visible .ub-inner::after{
+    transform:scaleX(1);
+  }
+  .uni-banner b{font-weight:500;color:var(--ink)}
   .uni-banner .sep{color:var(--ink-4);opacity:.45;font-weight:400}
   .uni-banner .led{
     position:relative;width:5px;height:5px;border-radius:50%;
@@ -158,10 +167,11 @@
   }
   .uni-banner .arrow{
     width:7px;height:7px;flex:none;color:var(--ink-4);
-    transition:transform .35s var(--ease),color .35s var(--ease);
+    opacity:0;transform:translateX(-3px);
+    transition:opacity .35s var(--ease),transform .35s var(--ease),color .35s var(--ease);
   }
   .uni-banner a:hover .arrow,.uni-banner a:focus-visible .arrow{
-    transform:translateX(2px);color:var(--ink-2);
+    opacity:1;transform:translateX(0);color:var(--ink-2);
   }
 
   nav{
@@ -2811,7 +2821,9 @@ html[dir="rtl"] body{direction:ltr}
 <header class="top">
   <div class="uni-banner">
     <a href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer">
-      <b>Uniswap</b><span class="sep" aria-hidden="true">·</span>Live<i class="led" aria-hidden="true"></i>
+      <span class="ub-inner">
+        <b>Uniswap</b><span class="sep" aria-hidden="true">·</span>Live<i class="led" aria-hidden="true"></i>
+      </span>
       <svg class="arrow" viewBox="0 0 10 10" aria-hidden="true"><path d="M2.2 1.6l4.6 3.4-4.6 3.4" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
   </div>
