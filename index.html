@@ -4217,7 +4217,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const codeEl = document.getElementById('plate-code');
 
   const M = [
-    {q:'Aug 2026 · Phase 1', n:'Foundation & audit',                     s:'Contract renounced · Audit approved · Illinois registered',                 c:'SF·RM·P1·26', k:5.07,  d:1.35, l:3, done:true},
+    {q:'Aug 2026 · Phase 1', n:'Foundation & audit',                     s:'Contract renounced · Audit approved · Illinois registered',                 c:'SF·RM·P1·26', k:5.07,  d:1.35, l:3},
     {q:'Aug 2026 · Phase 2', n:'Testnet & staking live',                 s:'Sectora L3 blockchain · Node validation · DEX · Staking open',              c:'SF·RM·P2·26', k:6.69,  d:1.25, l:3},
     {q:'15 Mar 2027 · Phase 3', n:'Supply reduction & exchange listings',   s:'50% supply reduction · Exchange listings',                                  c:'SF·RM·P3·27', k:8.31,  d:1.14, l:3},
     {q:'2027 · Phase 4',     n:'Mainnet infrastructure launch',          s:'L3 RWA blockchain · Hash Nodes',                                             c:'SF·RM·P4·27', k:11.55, d:0.93, l:4},
@@ -4307,60 +4307,15 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     for(let i=0;i<N;i++){
       const rad = (i*(360/N) - 90) * Math.PI/180;
-      const complete = !!M[i].done;
-      const passed = i <= idx;
+      const done = i <= idx;
       const rr = R*1.14 + 26;
-      const lx = cx + Math.cos(rad)*rr, ly = cy + Math.sin(rad)*rr;
-      ctx.fillStyle = passed ? 'rgba(21,105,255,.95)' : 'rgba(255,255,255,.22)';
-      ctx.fillText(M[i].q, lx, ly);
+      ctx.fillStyle = done ? 'rgba(21,105,255,.95)' : 'rgba(255,255,255,.22)';
+      ctx.fillText(M[i].q, cx + Math.cos(rad)*rr, cy + Math.sin(rad)*rr);
 
       ctx.beginPath();
-      ctx.arc(cx + Math.cos(rad)*R*1.14, cy + Math.sin(rad)*R*1.14, passed ? 3 : 2, 0, Math.PI*2);
-      ctx.fillStyle = passed ? '#1569ff' : 'rgba(255,255,255,.3)';
+      ctx.arc(cx + Math.cos(rad)*R*1.14, cy + Math.sin(rad)*R*1.14, done ? 3 : 2, 0, Math.PI*2);
+      ctx.fillStyle = done ? '#1569ff' : 'rgba(255,255,255,.3)';
       ctx.fill();
-
-      // insignia "Completed": aparece progresivamente segun avanza el scroll,
-      // no de golpe, para que se sienta parte de la misma revelacion. Mismo
-      // verde y forma cuadrada que .tl-tag en la lista lineal, sin relleno
-      // (el relleno translucido se veia borroso). Los colores llevan el
-      // alfa ya calculado en el propio string (en vez de ctx.globalAlpha)
-      // porque combinar globalAlpha con fill+stroke en Safari/iOS desvia
-      // el verde hacia un tono morado.
-      if(complete){
-        const badgeAlpha = Math.min(1, p / 0.12);
-        if(badgeAlpha > 0.02){
-          const label = 'COMPLETED';
-          const tw = ctx.measureText(M[i].q).width;
-          ctx.font = "500 9.5px 'IBM Plex Mono', monospace";
-          const labelW = ctx.measureText(label).width;
-          const dotR = 2.5, gap = 6, padX = 8;
-          const bh = 17;
-          const bw = padX*2 + dotR*2 + gap + labelW;
-          const bx = lx + tw/2 + 8, by = ly - bh/2;
-          const blink = reduce ? 1 : ((performance.now() % 1100) < 550 ? 1 : 0.28);
-
-          ctx.save();
-          ctx.strokeStyle = 'rgba(62,207,142,' + (0.4*badgeAlpha).toFixed(3) + ')';
-          ctx.lineWidth = 1;
-          ctx.strokeRect(bx + 0.5, by + 0.5, bw, bh);
-
-          const dotX = bx + padX + dotR, dotY = by + bh/2;
-          ctx.shadowColor = 'rgba(62,207,142,' + (0.8*badgeAlpha*blink).toFixed(3) + ')';
-          ctx.shadowBlur = 5;
-          ctx.beginPath();
-          ctx.arc(dotX, dotY, dotR, 0, Math.PI*2);
-          ctx.fillStyle = 'rgba(62,207,142,' + (badgeAlpha*blink).toFixed(3) + ')';
-          ctx.fill();
-          ctx.shadowBlur = 0;
-
-          ctx.fillStyle = 'rgba(62,207,142,' + badgeAlpha.toFixed(3) + ')';
-          ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-          ctx.fillText(label, dotX + dotR + gap, by + bh/2 + 0.5);
-          ctx.restore();
-          ctx.font = "500 9.5px 'IBM Plex Mono', monospace";
-          ctx.textAlign = 'center';
-        }
-      }
     }
 
     // arco de avance
@@ -4455,22 +4410,6 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 140); });
   resize();
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(resize);
-
-  // el punto de la insignia "Completed" parpadea con el tiempo, no con el
-  // scroll: hace falta un pequeno bucle propio, activo solo mientras la
-  // seccion este a la vista.
-  if(!reduce){
-    let blinking = false;
-    function blinkLoop(){
-      if(!blinking) return;
-      paint();
-      requestAnimationFrame(blinkLoop);
-    }
-    new IntersectionObserver(es => {
-      blinking = es[0].isIntersecting;
-      if(blinking) blinkLoop();
-    }, {threshold:0}).observe(sec);
-  }
 })();
 
 /* ===== zoom tipografico =====
