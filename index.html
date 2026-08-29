@@ -4320,29 +4320,45 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       ctx.fill();
 
       // insignia "Completed": aparece progresivamente segun avanza el scroll,
-      // no de golpe, para que se sienta parte de la misma revelacion.
-      // Los colores llevan el alfa ya calculado en el propio string (en vez
-      // de ctx.globalAlpha) porque combinar globalAlpha con fill+stroke en
-      // Safari/iOS desvia el verde hacia un tono morado.
+      // no de golpe, para que se sienta parte de la misma revelacion. Mismo
+      // verde y forma cuadrada que .tl-tag en la lista lineal, sin relleno
+      // (el relleno translucido se veia borroso). Los colores llevan el
+      // alfa ya calculado en el propio string (en vez de ctx.globalAlpha)
+      // porque combinar globalAlpha con fill+stroke en Safari/iOS desvia
+      // el verde hacia un tono morado.
       if(complete){
         const badgeAlpha = Math.min(1, p / 0.12);
         if(badgeAlpha > 0.02){
+          const label = 'COMPLETED';
           const tw = ctx.measureText(M[i].q).width;
-          const bw = 78, bh = 16;
+          ctx.font = "600 9px 'IBM Plex Mono', monospace";
+          const labelW = ctx.measureText(label).width;
+          const dotR = 2.5, gap = 6, padX = 8;
+          const bh = 17;
+          const bw = padX*2 + dotR*2 + gap + labelW;
           const bx = lx + tw/2 + 8, by = ly - bh/2;
+          const blink = reduce ? 1 : ((performance.now() % 1100) < 550 ? 1 : 0.28);
+
           ctx.save();
-          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          ctx.fillStyle = 'rgba(9,20,16,' + (0.85*badgeAlpha).toFixed(3) + ')';
-          ctx.beginPath();
-          ctx.roundRect(bx, by, bw, bh, 8);
-          ctx.fill();
-          ctx.strokeStyle = 'rgba(62,207,142,' + (0.65*badgeAlpha).toFixed(3) + ')';
+          ctx.strokeStyle = 'rgba(62,207,142,' + (0.4*badgeAlpha).toFixed(3) + ')';
           ctx.lineWidth = 1;
-          ctx.stroke();
+          ctx.strokeRect(bx + 0.5, by + 0.5, bw, bh);
+
+          const dotX = bx + padX + dotR, dotY = by + bh/2;
+          ctx.shadowColor = 'rgba(62,207,142,' + (0.8*badgeAlpha*blink).toFixed(3) + ')';
+          ctx.shadowBlur = 5;
+          ctx.beginPath();
+          ctx.arc(dotX, dotY, dotR, 0, Math.PI*2);
+          ctx.fillStyle = 'rgba(62,207,142,' + (badgeAlpha*blink).toFixed(3) + ')';
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
           ctx.fillStyle = 'rgba(62,207,142,' + badgeAlpha.toFixed(3) + ')';
-          ctx.font = "600 8.5px 'IBM Plex Mono', monospace";
-          ctx.fillText('COMPLETED', bx + bw/2, by + bh/2 + 0.5);
+          ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+          ctx.fillText(label, dotX + dotR + gap, by + bh/2 + 0.5);
           ctx.restore();
+          ctx.font = "500 9.5px 'IBM Plex Mono', monospace";
+          ctx.textAlign = 'center';
         }
       }
     }
@@ -4439,6 +4455,22 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 140); });
   resize();
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(resize);
+
+  // el punto de la insignia "Completed" parpadea con el tiempo, no con el
+  // scroll: hace falta un pequeno bucle propio, activo solo mientras la
+  // seccion este a la vista.
+  if(!reduce){
+    let blinking = false;
+    function blinkLoop(){
+      if(!blinking) return;
+      paint();
+      requestAnimationFrame(blinkLoop);
+    }
+    new IntersectionObserver(es => {
+      blinking = es[0].isIntersecting;
+      if(blinking) blinkLoop();
+    }, {threshold:0}).observe(sec);
+  }
 })();
 
 /* ===== zoom tipografico =====
