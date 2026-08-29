@@ -3105,7 +3105,7 @@ html[dir="rtl"] body{direction:ltr}
         </ul>
       </div>
       <div class="tl-item reveal" style="--d:.24s">
-        <span class="tl-q">2027 · Phase 4</span><span class="tl-tag">Target · Mar 22, 2027</span>
+        <span class="tl-q">2027 · Phase 4</span><span class="tl-tag">Launch · Mar 22, 2027</span>
         <h3>Mainnet infrastructure launch</h3>
         <ul class="tl-ml">
           <li>Public mainnet launch of the Sectora L3 RWA blockchain</li>
@@ -4217,7 +4217,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const codeEl = document.getElementById('plate-code');
 
   const M = [
-    {q:'Aug 2026 · Phase 1', n:'Foundation & audit',                     s:'Contract renounced · Audit approved · Illinois registered',                 c:'SF·RM·P1·26', k:5.07,  d:1.35, l:3},
+    {q:'Aug 2026 · Phase 1', n:'Foundation & audit',                     s:'Contract renounced · Audit approved · Illinois registered',                 c:'SF·RM·P1·26', k:5.07,  d:1.35, l:3, done:true},
     {q:'Aug 2026 · Phase 2', n:'Testnet & staking live',                 s:'Sectora L3 blockchain · Node validation · DEX · Staking open',              c:'SF·RM·P2·26', k:6.69,  d:1.25, l:3},
     {q:'15 Mar 2027 · Phase 3', n:'Supply reduction & exchange listings',   s:'50% supply reduction · Exchange listings',                                  c:'SF·RM·P3·27', k:8.31,  d:1.14, l:3},
     {q:'2027 · Phase 4',     n:'Mainnet infrastructure launch',          s:'L3 RWA blockchain · Hash Nodes',                                             c:'SF·RM·P4·27', k:11.55, d:0.93, l:4},
@@ -4307,15 +4307,20 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     for(let i=0;i<N;i++){
       const rad = (i*(360/N) - 90) * Math.PI/180;
-      const done = i <= idx;
+      const complete = !!M[i].done;
+      const passed = i <= idx;
       const rr = R*1.14 + 26;
-      ctx.fillStyle = done ? 'rgba(21,105,255,.95)' : 'rgba(255,255,255,.22)';
+      ctx.fillStyle = complete ? 'rgba(62,207,142,.95)' : passed ? 'rgba(21,105,255,.95)' : 'rgba(255,255,255,.22)';
       ctx.fillText(M[i].q, cx + Math.cos(rad)*rr, cy + Math.sin(rad)*rr);
 
+      const dx = cx + Math.cos(rad)*R*1.14, dy = cy + Math.sin(rad)*R*1.14;
+      ctx.save();
+      if(complete){ ctx.shadowColor = 'rgba(62,207,142,.9)'; ctx.shadowBlur = 10; }
       ctx.beginPath();
-      ctx.arc(cx + Math.cos(rad)*R*1.14, cy + Math.sin(rad)*R*1.14, done ? 3 : 2, 0, Math.PI*2);
-      ctx.fillStyle = done ? '#1569ff' : 'rgba(255,255,255,.3)';
+      ctx.arc(dx, dy, complete || passed ? 3 : 2, 0, Math.PI*2);
+      ctx.fillStyle = complete ? '#3ecf8e' : passed ? '#1569ff' : 'rgba(255,255,255,.3)';
       ctx.fill();
+      ctx.restore();
     }
 
     // arco de avance
