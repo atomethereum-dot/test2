@@ -4321,21 +4321,25 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
       // insignia "Completed": aparece progresivamente segun avanza el scroll,
       // no de golpe, para que se sienta parte de la misma revelacion.
+      // Los colores llevan el alfa ya calculado en el propio string (en vez
+      // de ctx.globalAlpha) porque combinar globalAlpha con fill+stroke en
+      // Safari/iOS desvia el verde hacia un tono morado.
       if(complete){
         const badgeAlpha = Math.min(1, p / 0.12);
         if(badgeAlpha > 0.02){
+          const tw = ctx.measureText(M[i].q).width;
           const bw = 78, bh = 16;
-          const bx = lx - bw/2, by = ly + 14;
+          const bx = lx + tw/2 + 8, by = ly - bh/2;
           ctx.save();
-          ctx.globalAlpha = badgeAlpha;
-          ctx.fillStyle = 'rgba(62,207,142,.14)';
-          ctx.strokeStyle = 'rgba(62,207,142,.65)';
-          ctx.lineWidth = 1;
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillStyle = 'rgba(9,20,16,' + (0.85*badgeAlpha).toFixed(3) + ')';
           ctx.beginPath();
           ctx.roundRect(bx, by, bw, bh, 8);
           ctx.fill();
+          ctx.strokeStyle = 'rgba(62,207,142,' + (0.65*badgeAlpha).toFixed(3) + ')';
+          ctx.lineWidth = 1;
           ctx.stroke();
-          ctx.fillStyle = '#3ecf8e';
+          ctx.fillStyle = 'rgba(62,207,142,' + badgeAlpha.toFixed(3) + ')';
           ctx.font = "600 8.5px 'IBM Plex Mono', monospace";
           ctx.fillText('COMPLETED', bx + bw/2, by + bh/2 + 0.5);
           ctx.restore();
