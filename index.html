@@ -1069,6 +1069,8 @@
   }
   .tl-tag::before{content:'';width:5px;height:5px;border-radius:50%;background:#3ecf8e;
     box-shadow:0 0 6px 1px rgba(62,207,142,.7)}
+  .tl-tag.date{border-color:rgba(21,105,255,.34);color:var(--blue)}
+  .tl-tag.date::before{background:var(--blue);box-shadow:0 0 6px 1px rgba(21,105,255,.7)}
   .tl-item h3{font-size:clamp(17px,1.7vw,22px);font-weight:400;margin:10px 0 8px;letter-spacing:-.012em}
   .tl-item p{font-size:14px;line-height:1.7;color:var(--ink-3);max-width:44ch}
   .tl-item .tl-ml{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;max-width:46ch}
@@ -3105,7 +3107,7 @@ html[dir="rtl"] body{direction:ltr}
         </ul>
       </div>
       <div class="tl-item reveal" style="--d:.24s">
-        <span class="tl-q">2027 · Phase 4</span>
+        <span class="tl-q">2027 · Phase 4</span><span class="tl-tag date">Target · Mar 22, 2027</span>
         <h3>Mainnet infrastructure launch</h3>
         <ul class="tl-ml">
           <li>Public mainnet launch of the Sectora L3 RWA blockchain</li>

@@ -577,6 +577,8 @@ blockquote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
   text-transform:uppercase;color:var(--live);vertical-align:2px}
 .tl-tag::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--live);
   box-shadow:0 0 6px 1px rgba(62,207,142,.6)}
+.tl-tag.date{border-color:rgba(21,105,255,.36);color:var(--blue)}
+.tl-tag.date::before{background:var(--blue);box-shadow:0 0 6px 1px rgba(21,105,255,.6)}
 .tl-i h3{margin:7px 0 5px}
 .tl-i p{font-size:15px;margin:0;max-width:58ch}
 .tl-i .tl-ml{list-style:none;margin:0;padding:0;max-width:58ch;display:flex;flex-direction:column;gap:6px}
@@ -1998,7 +2000,7 @@ try{
             <li>Strategic supply reduction — 50%</li>
             <li>Exchange listing process begins</li>
           </ul></div>
-        <div class="tl-i"><span class="tl-q">2027 · Phase 4</span>
+        <div class="tl-i"><span class="tl-q">2027 · Phase 4</span><span class="tl-tag date">Target · Mar 22, 2027</span>
           <h3>Mainnet infrastructure launch</h3>
           <ul class="tl-ml">
             <li>Public mainnet launch of the Sectora L3 RWA blockchain</li>
