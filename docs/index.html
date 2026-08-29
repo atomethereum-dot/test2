@@ -568,7 +568,15 @@ blockquote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
 .tl-i::before{content:'';position:absolute;left:-34px;top:9px;width:7px;height:7px;
   background:var(--paper);border:1px solid var(--ink-4);transition:background .4s var(--ease),border-color .4s var(--ease)}
 .tl-i.done::before{background:var(--blue);border-color:var(--blue)}
+.tl-i.status-done::before{border-color:var(--live)}
+.tl-i.status-done.done::before{background:var(--live);box-shadow:0 0 11px 1px rgba(62,207,142,.5)}
 .tl-q{color:var(--blue-deep);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em}
+.tl-tag{display:inline-flex;align-items:center;gap:6px;margin-left:10px;padding:3px 8px;
+  border:1px solid rgba(62,207,142,.34);border-radius:2px;
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--live);vertical-align:2px}
+.tl-tag::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--live);
+  box-shadow:0 0 6px 1px rgba(62,207,142,.6)}
 .tl-i h3{margin:7px 0 5px}
 .tl-i p{font-size:15px;margin:0;max-width:58ch}
 .tl-i .tl-ml{list-style:none;margin:0;padding:0;max-width:58ch;display:flex;flex-direction:column;gap:6px}
@@ -1970,7 +1978,7 @@ try{
       <p class="sec-ref mono"><span>§15</span><i></i><span>Roadmap</span><a class="anchor" href="#s15" data-a="s15">¶ link</a></p>
       <h2>From testnet to public markets</h2>
       <div class="tl" id="tl">
-        <div class="tl-i"><span class="tl-q">Aug 2026 · Phase 1</span>
+        <div class="tl-i status-done"><span class="tl-q">Aug 2026 · Phase 1</span><span class="tl-tag">Completed</span>
           <h3>Foundation &amp; audit</h3>
           <ul class="tl-ml">
             <li>Contract deployed — ownership renounced</li>
