@@ -1123,20 +1123,11 @@
     z-index:2;text-align:center;padding:0 var(--pad);pointer-events:none;
     transition:opacity .3s var(--ease);
   }
-  .zoom-top .eyebrow{justify-content:center;margin-bottom:16px}
+  .zoom-top .eyebrow{justify-content:center;margin-bottom:16px;will-change:transform,opacity}
   .zoom-top h3{
-    position:relative;font-size:clamp(19px,2.4vw,28px);font-weight:200;letter-spacing:-.02em;
+    font-size:clamp(19px,2.4vw,28px);font-weight:200;letter-spacing:-.02em;
     line-height:1.32;color:var(--ink);max-width:24ch;margin:0 auto;
-  }
-  /* mismo barrido de luz que usa la cifra al encajar: aparece una sola vez,
-     justo cuando este titular termina de asentarse, y liga visualmente
-     ambos momentos de la escena */
-  .zoom-top h3::after{
-    content:'';position:absolute;inset:-16% -8%;pointer-events:none;
-    background:linear-gradient(104deg,transparent 40%,rgba(255,255,255,.85) 50%,transparent 60%);
-    mix-blend-mode:overlay;
-    opacity:calc(var(--tsw,0) * (1 - var(--tsw,0)) * 3.4);
-    transform:translateX(calc(var(--tsw,0) * 240% - 120%));
+    will-change:transform,opacity;
   }
   .zoom-cap{
     position:absolute;left:0;right:0;top:calc(50% - clamp(96px,13vh,150px));
@@ -3161,8 +3152,8 @@ html[dir="rtl"] body{direction:ltr}
     <div class="zoom-rings b" aria-hidden="true"></div>
     <canvas id="zoom-canvas"></canvas>
     <div class="zoom-top" id="zoom-top" aria-hidden="true">
-      <p class="eyebrow mono"><i></i>Tokenomics · #SECT</p>
-      <h3>One number the whole protocol protects.</h3>
+      <p class="eyebrow mono" id="zoom-top-eyebrow"><i></i>Tokenomics · #SECT</p>
+      <h3 id="zoom-top-h">One number the whole protocol protects.</h3>
     </div>
     <p class="zoom-cap" id="zoom-cap">Circulating supply</p>
     <div class="zoom-land" id="zoom-land" aria-hidden="true">
@@ -4451,6 +4442,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const ctx  = cv.getContext('2d');
   const cap  = document.getElementById('zoom-cap');
   const top  = document.getElementById('zoom-top');
+  const topEyebrow = document.getElementById('zoom-top-eyebrow');
+  const topHead     = document.getElementById('zoom-top-h');
   const note = document.getElementById('zoom-note');
   const tag  = document.getElementById('zoom-tag');
   const land = document.getElementById('zoom-land');
@@ -4582,11 +4575,20 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     // la rotulacion se retira cuando el numero deja de leerse
     const fade = 1 - Math.max(0, Math.min(1, (p - .30) / .18));
     if(cap)  cap.style.opacity = fade.toFixed(2);
-    if(top){
-      top.style.opacity = fade.toFixed(2);
-      // barrido de luz sobre el titular, una sola vez, apenas se abre la escena
-      const tsw = Math.max(0, Math.min(1, p / .09));
-      top.style.setProperty('--tsw', tsw.toFixed(3));
+    if(top) top.style.opacity = fade.toFixed(2);
+
+    // el titular entra en dos tiempos, subiendo y enfocando con el scroll:
+    // primero la etiqueta, despues la frase — no aparecen de golpe.
+    const easeIn = t => { t = t < 0 ? 0 : t > 1 ? 1 : t; return t*t*(3-2*t); };
+    if(topEyebrow){
+      const e1 = easeIn(p / .045);
+      topEyebrow.style.opacity = e1.toFixed(3);
+      topEyebrow.style.transform = 'translateY(' + ((1-e1)*16).toFixed(1) + 'px)';
+    }
+    if(topHead){
+      const e2 = easeIn((p - .025) / .07);
+      topHead.style.opacity = e2.toFixed(3);
+      topHead.style.transform = 'translateY(' + ((1-e2)*20).toFixed(1) + 'px)';
     }
     if(note) note.style.opacity = fade.toFixed(2);
 
