@@ -2186,6 +2186,10 @@
 .zoom-cue.cue-wipe{mix-blend-mode:difference;color:#fff}
 .zoom-cue.cue-wipe svg{stroke-width:1.7}
 
+/* el fondo de esta escena pasa de negro a blanco antes de que este aviso
+   se retire: en modo diferencia queda legible en ambos, igual que arriba */
+.zoom-cue.cue-zoom{mix-blend-mode:difference;color:#fff}
+
 /* primera transicion: el fondo cambia de claro a oscuro durante la escena,
    asi que el aviso se invierte con modo diferencia igual que el titular */
 .zoom-cue.cue-iris{mix-blend-mode:difference;color:#fff}
@@ -3174,7 +3178,7 @@ html[dir="rtl"] body{direction:ltr}
       <span>Reduction · March 15, 2027</span>
       <span id="zoom-tag">50,000,000 · pre-reduction</span>
     </div>
-    <div class="zoom-cue" id="zoom-cue" aria-hidden="true">
+    <div class="zoom-cue cue-zoom" id="zoom-cue" aria-hidden="true">
       <span>Keep scrolling</span>
       <svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg>
     </div>
