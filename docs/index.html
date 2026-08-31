@@ -596,6 +596,10 @@ blockquote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
   color:var(--ink-4)}
 .dl dd.pend{color:var(--ink-4)}
 .dl dd.ok{color:var(--live)}
+.dl dd a.dl-link{color:var(--live);text-decoration:underline;text-underline-offset:3px;
+  text-decoration-thickness:1px;text-decoration-color:rgba(62,207,142,.5)}
+.dl dd a.dl-link i{font-style:normal}
+.dl dd a.dl-link:hover{color:var(--blue);text-decoration-color:currentColor}
 
 /* ---------- salidas ---------- */
 .cta{display:flex;flex-wrap:wrap;gap:12px;margin:clamp(26px,4vh,42px) 0 0}
@@ -1229,19 +1233,20 @@ try{
         <div class="part-in">
           <p class="part-k">Section 03</p>
           <b class="part-n">03</b>
-          <h2 class="part-h">Contract #SECT</h2>
+          <h2 class="part-h">Audit Contract - SECT</h2>
           <span class="part-rule"></span>
         </div>
         <span class="part-down"><i></i><svg viewBox="0 0 24 24"><path d="M12 4v14M6.5 12.5L12 18.5l5.5-6"/></svg></span>
       </div>
     </section>
 
-<section class="sec rv" id="s03" data-k="0%" data-kl="Buy and sell tax" data-t="Contract #SECT">
-      <p class="sec-ref mono"><span>§03</span><i></i><span>Contract #SECT</span><a class="anchor" href="#s03" data-a="s03">¶ link</a></p>
+<section class="sec rv" id="s03" data-k="0%" data-kl="Buy and sell tax" data-t="Audit Contract - SECT">
+      <p class="sec-ref mono"><span>§03</span><i></i><span>Audit Contract - SECT</span><a class="anchor" href="#s03" data-a="s03">¶ link</a></p>
       <h2>$SECT token contract</h2>
       <p>$SECT is a standard ERC-20 token deployed on the Ethereum network. Ownership of the
         contract has been renounced, permanently removing any privileged address capable of
-        altering its core parameters after deployment.</p>
+        altering its core parameters after deployment, and the contract has been independently
+        audited by Cyberscope to verify it.</p>
       <dl class="dl">
         <div><dt>Network</dt><dd>Ethereum — ERC-20</dd></div>
         <div><dt>Contract ownership</dt><dd class="ok">Renounced</dd></div>
@@ -1249,24 +1254,10 @@ try{
         <div><dt>Final supply</dt><dd class="tab">25,000,000 $SECT</dd></div>
         <div><dt>Buy tax</dt><dd class="tab">0%</dd></div>
         <div><dt>Sell tax</dt><dd class="tab">0%</dd></div>
-        <div><dt>Security audit</dt><dd class="ok">Verified — Cyberscope</dd></div>
+        <div><dt>Security audit</dt><dd class="ok"><a class="dl-link" href="https://www.cyberscope.io/audits/sect" target="_blank" rel="noopener noreferrer">Verified — Cyberscope <i>↗</i></a></dd></div>
         <div><dt>Contract address</dt><dd class="pend">Pending deployment</dd></div>
         <div><dt>Etherscan verification</dt><dd class="pend">Pending deployment</dd></div>
       </dl>
-
-      <h3>Contract audit</h3>
-      <p>$SECT has been independently audited by Cyberscope, a third-party smart-contract
-        security firm. The audit reviews the deployed source code line by line, confirms the
-        ownership renouncement itself — verifying that no address retains privileged control
-        over the contract — and checks for the vulnerability classes that most commonly put
-        holder funds at risk, including hidden mint functions, transfer restrictions and
-        upgradeable logic. None were found. Combined with the renounced ownership, this makes
-        $SECT a fully non-custodial contract: fixed on deployment, verified independently, and
-        with no address, including the Sectora Foundation's, able to alter it afterward.</p>
-
-      <div class="cta">
-        <a class="key" href="https://www.cyberscope.io/audits/sect" target="_blank" rel="noopener noreferrer">Read the audit report</a>
-      </div>
 
       <p class="fine">The contract address, the Etherscan verification link and the ownership
         renouncement transaction will be published here once the token is deployed to
@@ -1279,7 +1270,7 @@ try{
         <span class="card-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span class="card-meta">Renounced</span>
         <div class="card-in">
-          <p class="card-eyebrow"><i></i>Contract #SECT</p>
+          <p class="card-eyebrow"><i></i>Audit Contract - SECT</p>
           <h3>Sealed contract</h3>
           <p class="card-sub">Ownership renounced: no privileged address can alter its parameters.</p>
         </div>
