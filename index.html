@@ -126,7 +126,9 @@
 
   /* ============ cabecera ============ */
   /* cabecera estatica: forma parte del flujo y se va con el scroll */
-  .top{position:relative;z-index:50}
+  /* fuera del flujo y anclada arriba del todo: asi la primera pantalla
+     empieza en el borde y su animacion corre tambien por detras */
+  .top{position:absolute;top:0;left:0;right:0;z-index:50}
 
   
   .status{display:flex;align-items:center;gap:9px}
@@ -141,12 +143,11 @@
     70%,100%{transform:scale(1.9);opacity:0}
   }
 
+  /* la cabecera no lleva fondo propio: va montada sobre la portada y
+     deja pasar la rejilla viva que hay debajo */
   nav{
     display:flex;align-items:center;justify-content:space-between;gap:24px;
     padding:18px var(--pad);
-    border-bottom:1px solid var(--hair);
-    background:rgba(0,0,0,.72);
-    backdrop-filter:blur(10px);
   }
   /* el logo va como SVG en linea: escala sin perder filo, no pide un
      archivo aparte y hereda el color en el estado activo */
@@ -179,13 +180,16 @@
   .docs:hover::before,.docs:focus-visible::before{transform:translateY(0)}
 
   /* ============ hero ============ */
-  .stage{position:relative;min-height:calc(100vh - var(--head-h,96px));min-height:calc(100dvh - var(--head-h,96px));display:flex;flex-direction:column;background:#000;overflow:hidden}
+  .stage{position:relative;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;background:#000;overflow:hidden}
   #grid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
   .vignette{
     position:absolute;inset:0;z-index:1;pointer-events:none;
     background:radial-gradient(118% 88% at 38% 46%,transparent 46%,rgba(0,0,0,.7) 100%);
   }
-  .layer{position:relative;z-index:2;display:flex;flex-direction:column;flex:1;padding-top:clamp(16px,4vh,44px)}
+  /* el hueco de la cabecera lo reserva el contenido, no la escena:
+     el lienzo llega hasta arriba del todo */
+  .layer{position:relative;z-index:2;display:flex;flex-direction:column;flex:1;
+    padding-top:calc(var(--head-h,96px) + clamp(16px,4vh,44px))}
 
   .hero{
     flex:1;display:grid;
@@ -530,11 +534,12 @@
   }
 
   .of-inner{position:relative;z-index:1;max-width:1280px;color:var(--of-ink)}
-  /* el titular y el cuerpo se alinean por abajo: el bloque de texto
-     cuelga del mismo renglon que cierra el titular */
+  /* el rotulo va fuera de las columnas, encabezando la seccion entera:
+     dentro empujaba el cuerpo hacia abajo y lo descuadraba del titular.
+     Fuera, los dos arrancan en el mismo renglon */
   .of-top{
     display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);
-    gap:clamp(36px,5vw,92px);align-items:end;
+    gap:clamp(36px,5vw,92px);align-items:start;
   }
 
   .offer .eyebrow{color:var(--of-ink-3);margin-bottom:clamp(24px,3.6vh,38px)}
@@ -3147,11 +3152,9 @@ html[dir="rtl"] body{direction:ltr}
   <div class="of-halo" aria-hidden="true"></div>
   <canvas class="cells-soft" data-cells aria-hidden="true"></canvas>
   <div class="of-inner">
+    <p class="eyebrow mono"><i></i>Distribution</p>
     <div class="of-top">
-      <div>
-        <p class="eyebrow mono"><i></i>Distribution</p>
-        <div class="of-hw"><h2>No presale. No rounds. Only the open market.</h2></div>
-      </div>
+      <div class="of-hw"><h2>No presale. No rounds. Only the open market.</h2></div>
       <div>
         <p class="of-lede">Sectora has never sold #SECT ahead of its listing. There was no presale, no private round, no seed allocation and no venture financing, so no one is holding tokens bought at a price the public was never offered.</p>
         <p class="of-lede">The token lives entirely on the open market. Liquidity is live on Uniswap, where anyone can buy or sell #SECT at any moment, at the price the market sets — with no allowlist, no minimum, no lock-up and no permission from the foundation.</p>
@@ -3891,8 +3894,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   onScroll();
 
   /* ========== altura real de la cabecera ==========
-     la primera pantalla la descuenta, para que el hero siga cerrando
-     justo en el borde inferior aunque la cabecera cambie de alto */
+     la cabecera va superpuesta, asi que el hueco lo reserva el
+     contenido del hero aunque ella cambie de alto */
   const head = document.querySelector('.top');
   function measureHead(){
     document.documentElement.style.setProperty('--head-h', head.offsetHeight + 'px');
