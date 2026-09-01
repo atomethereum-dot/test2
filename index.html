@@ -488,11 +488,17 @@
      lo lleva la tipografia, no una caja. Una sola clase (#offer.on)
      gobierna la coreografia. */
   .offer{
-    --of-bg:#f2f2ef;--of-ink:#07080a;--of-ink-2:#3c414c;--of-ink-3:#6b7280;--of-ink-4:#9aa0ab;
+    --of-ink:#07080a;--of-ink-2:#3c414c;--of-ink-3:#6b7280;--of-ink-4:#9aa0ab;
     --of-line:rgba(0,0,0,.11);--of-live:#0f8f52;
-    position:relative;background:var(--of-bg);isolation:isolate;overflow:clip;
-    padding:clamp(92px,15vh,164px) var(--pad) clamp(80px,12vh,132px);
+    position:relative;isolation:isolate;overflow:clip;
+    padding:clamp(84px,13vh,148px) var(--pad) clamp(56px,8vh,92px);
     border-bottom:1px solid rgba(0,0,0,.08);
+    /* tres capas en vez de un plano: una luz azul arriba a la derecha,
+       otra mas floja abajo a la izquierda y el papel virando de tono */
+    background:
+      radial-gradient(1180px 620px at 80% 2%,rgba(21,105,255,.11),transparent 62%),
+      radial-gradient(920px 540px at 4% 98%,rgba(21,105,255,.07),transparent 66%),
+      linear-gradient(180deg,#f6f6f4 0%,#edeeea 54%,#f2f2ef 100%);
   }
   .offer::before{
     content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -502,27 +508,15 @@
     -webkit-mask-image:radial-gradient(85% 92% at 50% 45%,#000,transparent 88%);
     mask-image:radial-gradient(85% 92% at 50% 45%,#000,transparent 88%);
   }
-  /* dos halos que derivan a distinto ritmo: dan aire sin dibujar nada */
-  .of-halo{position:absolute;z-index:0;pointer-events:none;border-radius:50%;filter:blur(30px)}
-  .of-halo.a{
-    width:min(820px,96vw);aspect-ratio:1;top:-34%;right:-16%;
-    background:radial-gradient(circle,rgba(21,105,255,.17),transparent 66%);
-    animation:ofDriftA 25s var(--ease) infinite alternate;
+  /* un halo que deriva despacio: basta para que el fondo nunca este
+     del todo quieto sin que se note de donde viene */
+  .of-halo{
+    position:absolute;z-index:0;pointer-events:none;border-radius:50%;filter:blur(34px);
+    width:min(760px,92vw);aspect-ratio:1;top:-30%;right:-14%;
+    background:radial-gradient(circle,rgba(21,105,255,.12),transparent 66%);
+    animation:ofDrift 27s var(--ease) infinite alternate;
   }
-  .of-halo.b{
-    width:min(560px,80vw);aspect-ratio:1;bottom:-30%;left:-14%;
-    background:radial-gradient(circle,rgba(21,105,255,.1),transparent 68%);
-    animation:ofDriftB 31s var(--ease) infinite alternate;
-  }
-  @keyframes ofDriftA{to{transform:translate3d(-6%,6%,0) scale(1.12)}}
-  @keyframes ofDriftB{to{transform:translate3d(8%,-7%,0) scale(1.09)}}
-
-  .of-marks{position:absolute;inset:clamp(14px,2.2vw,30px);z-index:1;pointer-events:none}
-  .of-marks i{position:absolute;width:9px;height:9px;border:0 solid rgba(0,0,0,.2)}
-  .of-marks i:nth-child(1){top:0;left:0;border-top-width:1px;border-left-width:1px}
-  .of-marks i:nth-child(2){top:0;right:0;border-top-width:1px;border-right-width:1px}
-  .of-marks i:nth-child(3){bottom:0;left:0;border-bottom-width:1px;border-left-width:1px}
-  .of-marks i:nth-child(4){bottom:0;right:0;border-bottom-width:1px;border-right-width:1px}
+  @keyframes ofDrift{to{transform:translate3d(-6%,7%,0) scale(1.13)}}
 
   .of-inner{position:relative;z-index:1;max-width:1280px;color:var(--of-ink)}
   /* el titular y el cuerpo se alinean por abajo: el bloque de texto
@@ -563,10 +557,24 @@
   #offer.on .of-lede:nth-of-type(1){transition-delay:.26s}
   #offer.on .of-lede:nth-of-type(2){transition-delay:.34s}
 
-  /* ---- el acta, a todo el ancho ---- */
-  .of-ledger{
-    margin:clamp(52px,8vh,96px) 0 0;border-top:1px solid var(--of-line);
+  /* ---- el acta, sobre cristal claro ----
+     El mismo material que las tarjetas de la seccion de abajo: un
+     panel blanco translucido levanta el bloque del fondo sin
+     oscurecer nada. */
+  .of-panel{
+    position:relative;margin:clamp(46px,7vh,82px) 0 0;
+    padding:clamp(6px,.8vw,14px) clamp(22px,2.8vw,44px) clamp(22px,2.6vw,32px);
+    background:rgba(255,255,255,.6);
+    border:1px solid rgba(0,0,0,.09);border-radius:3px;
+    backdrop-filter:blur(16px) saturate(1.4);
+    -webkit-backdrop-filter:blur(16px) saturate(1.4);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.92),
+               0 26px 64px -36px rgba(7,8,10,.26);
+    opacity:0;transform:translateY(22px);
+    transition:opacity 1s var(--ease-out) .4s,transform 1s var(--ease-out) .4s;
   }
+  #offer.on .of-panel{opacity:1;transform:none}
+  .of-ledger{margin:0}
   .of-row{
     position:relative;display:grid;
     grid-template-columns:minmax(0,1fr) auto;
@@ -642,10 +650,12 @@
     animation:ping 2.6s var(--ease) infinite;
   }
 
+  /* el boton cierra el panel: el acta y lo que se puede hacer con
+     ella son una sola pieza */
   .of-cta{
-    margin-top:clamp(42px,6vh,64px);
-    opacity:0;transform:translateY(18px);
-    transition:opacity .9s var(--ease-out) .74s,transform .9s var(--ease-out) .74s,
+    margin-top:clamp(22px,2.8vh,30px);
+    opacity:0;transform:translateY(16px);
+    transition:opacity .9s var(--ease-out) .9s,transform .9s var(--ease-out) .9s,
                border-color .3s var(--ease),color .3s var(--ease);
   }
   #offer.on .of-cta{opacity:1;transform:none}
@@ -2278,7 +2288,8 @@
     .of-hw h2{font-size:clamp(28px,6.8vw,40px);max-width:18ch}
     .of-lede{font-size:16px;max-width:none}
     .of-lede + .of-lede{font-size:14.5px}
-    .of-ledger{margin-top:clamp(40px,6vh,56px)}
+    .of-panel{margin-top:clamp(38px,5.5vh,52px)}
+    .of-panel{padding:8px clamp(16px,4.4vw,22px) 22px}
     .of-k{font-size:16px;gap:14px}
     /* el filete guia sobra cuando el concepto ya ocupa el renglon entero */
     .of-k::after{display:none}
@@ -2318,7 +2329,7 @@
     .rule{width:74px}
     /* la seccion de distribucion nace oculta y la descubre una
        transicion: sin ella hay que dejarla puesta a mano */
-    .of-hw h2,.of-lede,.of-cta,.of-row{
+    .of-hw h2,.of-lede,.of-cta,.of-row,.of-panel{
       opacity:1!important;transform:none!important;filter:none!important}
     .of-row::after,.of-v.none span::after{transform:none!important}
     .offer .eyebrow i{width:30px}
@@ -3130,9 +3141,7 @@ html[dir="rtl"] body{direction:ltr}
 </section>
 
 <section class="offer" id="offer">
-  <div class="of-halo a" aria-hidden="true"></div>
-  <div class="of-halo b" aria-hidden="true"></div>
-  <div class="of-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="of-halo" aria-hidden="true"></div>
   <div class="of-inner">
     <div class="of-top">
       <div>
@@ -3145,14 +3154,15 @@ html[dir="rtl"] body{direction:ltr}
       </div>
     </div>
 
-    <dl class="of-ledger">
-      <div class="of-row"><dt class="of-k"><i>01</i>Presale</dt><dd class="of-v mono none"><span>None</span></dd></div>
-      <div class="of-row"><dt class="of-k"><i>02</i>Private round</dt><dd class="of-v mono none"><span>None</span></dd></div>
-      <div class="of-row"><dt class="of-k"><i>03</i>Seed or venture allocation</dt><dd class="of-v mono none"><span>None</span></dd></div>
-      <div class="of-row is-live"><dt class="of-k"><i>04</i>Public trading</dt><dd class="of-v mono"><i class="led"></i>Live on Uniswap</dd></div>
-    </dl>
-
-    <a class="btn btn-primary of-cta" href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer"><span>Buy or sell on Uniswap</span><span class="arrow">↗</span></a>
+    <div class="of-panel">
+      <dl class="of-ledger">
+        <div class="of-row"><dt class="of-k"><i>01</i>Presale</dt><dd class="of-v mono none"><span>None</span></dd></div>
+        <div class="of-row"><dt class="of-k"><i>02</i>Private round</dt><dd class="of-v mono none"><span>None</span></dd></div>
+        <div class="of-row"><dt class="of-k"><i>03</i>Seed or venture allocation</dt><dd class="of-v mono none"><span>None</span></dd></div>
+        <div class="of-row is-live"><dt class="of-k"><i>04</i>Public trading</dt><dd class="of-v mono"><i class="led"></i>Live on Uniswap</dd></div>
+      </dl>
+      <a class="btn btn-primary of-cta" href="https://app.uniswap.org" target="_blank" rel="noopener noreferrer"><span>Buy or sell on Uniswap</span><span class="arrow">↗</span></a>
+    </div>
   </div>
 </section>
 
