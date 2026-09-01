@@ -519,6 +519,16 @@
   }
   @keyframes ofDrift{to{transform:translate3d(-6%,7%,0) scale(1.13)}}
 
+  /* celdas vivas: el mismo fondo del resto del sitio (rejilla de 54px
+     que se enciende con caminantes y destellos), en su version clara y
+     a media intensidad para que no le robe atencion al texto. Lleva la
+     misma mascara que la rejilla, asi no deja cantos en los bordes. */
+  .cells-soft{
+    position:absolute;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;
+    -webkit-mask-image:radial-gradient(85% 92% at 50% 45%,#000,transparent 88%);
+    mask-image:radial-gradient(85% 92% at 50% 45%,#000,transparent 88%);
+  }
+
   .of-inner{position:relative;z-index:1;max-width:1280px;color:var(--of-ink)}
   /* el titular y el cuerpo se alinean por abajo: el bloque de texto
      cuelga del mismo renglon que cierra el titular */
@@ -3135,6 +3145,7 @@ html[dir="rtl"] body{direction:ltr}
 
 <section class="offer" id="offer">
   <div class="of-halo" aria-hidden="true"></div>
+  <canvas class="cells-soft" data-cells aria-hidden="true"></canvas>
   <div class="of-inner">
     <div class="of-top">
       <div>
@@ -3164,6 +3175,7 @@ html[dir="rtl"] body{direction:ltr}
     <div class="halo a"></div>
     <div class="halo b"></div>
   </div>
+  <canvas class="cells-soft" data-cells aria-hidden="true"></canvas>
   <div class="m-inner">
     <div class="m-col">
       <div class="m-sticky">
@@ -6016,6 +6028,125 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     }
   }, {rootMargin:'-10% 0px -14% 0px', threshold:0});
   io.observe(sec);
+})();
+</script>
+<script>
+/* ---------- celdas vivas en las secciones claras ----------
+   Mismo motor que el iris y el pie: una rejilla de 54px donde unos
+   caminantes van encendiendo casillas y unos destellos sueltos las
+   salpican, todo apagandose por decaimiento. Aqui va en su version
+   clara y a media intensidad, porque el texto se lee encima. */
+(function(){
+  const lienzos = document.querySelectorAll('canvas[data-cells]');
+  if(!lienzos.length) return;
+  const quieto = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const CELL = 54;
+
+  lienzos.forEach(function(cv){
+    const host = cv.parentElement;
+    const ctx  = cv.getContext('2d');
+    let W=0,H=0,cols=0,rows=0,heat=null,andantes=[],visible=false,last=0,anim=0;
+
+    const idx = (c,r) => r*cols + c;
+
+    function medir(){
+      const w = host.clientWidth, h = host.clientHeight;
+      if(w < 1 || h < 1) return false;
+      W = w; H = h;
+      const dpr = window.SECT_DPR ? window.SECT_DPR() : Math.min(window.devicePixelRatio||1, 1.5);
+      cv.width  = Math.round(W*dpr);
+      cv.height = Math.round(H*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      cols = Math.ceil(W/CELL); rows = Math.ceil(H/CELL);
+      heat = new Float32Array(cols*rows);
+      sembrar();
+      return true;
+    }
+
+    function sembrar(){
+      const n = W < 700 ? 2 : 4;
+      andantes = [];
+      for(let i=0;i<n;i++){
+        andantes.push({c:(Math.random()*cols)|0, r:(Math.random()*rows)|0,
+                       dc:Math.random()<.5?1:-1, dr:0, next:0});
+      }
+    }
+
+    function pasos(t){
+      for(const a of andantes){
+        if(t < a.next) continue;
+        a.next = t + 150 + Math.random()*190;
+        if(Math.random() < .3){
+          if(a.dc !== 0){ a.dr = Math.random()<.5?1:-1; a.dc = 0; }
+          else          { a.dc = Math.random()<.5?1:-1; a.dr = 0; }
+        }
+        a.c += a.dc; a.r += a.dr;
+        if(a.c < 0){ a.c = 0; a.dc = 1; }
+        if(a.c >= cols){ a.c = cols-1; a.dc = -1; }
+        if(a.r < 0){ a.r = 0; a.dr = 1; }
+        if(a.r >= rows){ a.r = rows-1; a.dr = -1; }
+        heat[idx(a.c,a.r)] = .58;
+      }
+    }
+
+    let proxima = 0;
+    function destellos(t){
+      if(t < proxima) return;
+      proxima = t + 130 + Math.random()*160;
+      const n = 1 + ((Math.random()*3)|0);
+      for(let k=0;k<n;k++){
+        const i = idx((Math.random()*cols)|0, (Math.random()*rows)|0);
+        const v = .45 + Math.random()*.4;
+        if(heat[i] < v) heat[i] = v;
+      }
+    }
+
+    function pintar(){
+      if(!heat) return;
+      ctx.clearRect(0,0,W,H);
+      for(let r=0;r<rows;r++){
+        for(let c=0;c<cols;c++){
+          const v = heat[idx(c,r)];
+          if(v > .015){
+            ctx.fillStyle = 'rgba(13,63,216,' + (Math.min(v,1)*.2).toFixed(3) + ')';
+            ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
+          }
+        }
+      }
+    }
+
+    function cuadro(t){
+      anim = requestAnimationFrame(cuadro);
+      if(!visible || document.hidden){ last = t; return; }
+      const dt = Math.min(t-last, 50); last = t;
+      pasos(t); destellos(t);
+      const caida = Math.pow(.93, dt/16.7);
+      for(let i=0;i<heat.length;i++) heat[i] *= caida;
+      pintar();
+    }
+
+    if(!medir()) return;
+
+    new IntersectionObserver(function(es){ visible = es[0].isIntersecting; })
+      .observe(host);
+
+    let rt;
+    window.addEventListener('resize', function(){
+      clearTimeout(rt);
+      rt = setTimeout(function(){ if(medir() && quieto) fija(); }, 140);
+    }, {passive:true});
+
+    /* sin movimiento: una sola pasada de destellos y a dormir */
+    function fija(){
+      for(let k=0;k<Math.max(6, (cols*rows)/26)|0;k++){
+        heat[idx((Math.random()*cols)|0, (Math.random()*rows)|0)] = .3 + Math.random()*.3;
+      }
+      pintar();
+    }
+
+    if(quieto) fija();
+    else anim = requestAnimationFrame(cuadro);
+  });
 })();
 </script>
 </body>
