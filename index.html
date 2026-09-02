@@ -1946,6 +1946,8 @@
   }
   @media (max-width:980px){
     @supports not (backdrop-filter: blur(1px)){
+      .m-sticky{background:#f2f2ef}
+      .mandates.dark .m-sticky{background:#05070c}
       .p-sticky,.rsm-sticky{background:#000}
       .sp-sticky{background:#f2f2ef}
     }
@@ -2324,11 +2326,20 @@
     .m-inner{grid-template-columns:1fr;gap:26px}
     .m-card{min-height:0}
 
-    /* en una sola columna el titular deja de ir fijo: anclado arriba
-       necesitaba fondo opaco y filete para que las tarjetas no lo
-       atravesaran, y eso se leia como un recuadro pegado encima.
-       Suelto, se va con el scroll y no hace falta ninguna de las dos */
-    .m-sticky{position:static;padding:0}
+    /* en una sola columna el sticky no va al lado, va arriba:
+       el titular se ancla al borde superior y las tarjetas pasan
+       por debajo. Necesita fondo propio, o se ve el contenido
+       atravesandolo */
+    .m-sticky{
+      position:sticky;
+      top:0;
+      z-index:3;
+      padding:20px 0 18px;
+      margin-inline:calc(var(--pad) * -1);
+      padding-inline:var(--pad);
+      background:var(--sec-bg);
+      border-bottom:1px solid var(--card-brd);
+    }
     .m-sticky .eyebrow{margin-bottom:16px}
     .mandates h2{margin-bottom:0;font-size:clamp(24px,6.4vw,34px);max-width:20ch}
     .m-count{display:none}
