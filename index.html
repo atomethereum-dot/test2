@@ -1439,13 +1439,14 @@
   /* apilado en estrecho: el filete de separacion sobra al cambiar de renglon */
   @media (max-width:680px){
     .zoom-seal{bottom:clamp(96px,15vh,150px)}
-    /* apilados: los puntos se alinean en una misma vertical y el bloque
-       entero se centra, o el borde izquierdo queda dentado */
+    /* en fila y ajustados: caben dos por renglon y el tercero centrado
+       debajo, un bloque compacto en vez de tres lineas sueltas */
     .zoom-seal .zs-fila{
-      flex-direction:column;align-items:flex-start;gap:11px;
-      width:fit-content;margin:0 auto;
+      flex-direction:row;flex-wrap:wrap;justify-content:center;
+      gap:9px 16px;max-width:34ch;margin:0 auto;
     }
-    .zoom-seal p{padding:0}
+    .zoom-seal p{padding:0;font-size:9px;letter-spacing:.13em;gap:7px}
+    /* el filete de separacion se lee mal en cuanto hay salto de renglon */
     .zoom-seal p + p{border-left:0}
   }
 
