@@ -515,10 +515,13 @@
   }
   /* un halo que deriva despacio: basta para que el fondo nunca este
      del todo quieto sin que se note de donde viene */
+  /* sin filter:blur a proposito: ya es un degradado radial suave, el
+     desenfoque no aportaba nada visible y era una capa borrosa mas
+     animandose sin parar, de las que ahogan el repintado */
   .of-halo{
-    position:absolute;z-index:0;pointer-events:none;border-radius:50%;filter:blur(34px);
+    position:absolute;z-index:0;pointer-events:none;border-radius:50%;
     width:min(760px,92vw);aspect-ratio:1;top:-30%;right:-14%;
-    background:radial-gradient(circle,rgba(21,105,255,.12),transparent 66%);
+    background:radial-gradient(circle,rgba(21,105,255,.13),transparent 68%);
     animation:ofDrift 27s var(--ease) infinite alternate;
   }
   @keyframes ofDrift{to{transform:translate3d(-6%,7%,0) scale(1.13)}}
@@ -529,8 +532,9 @@
      misma mascara que la rejilla, asi no deja cantos en los bordes. */
   .cells-soft{
     position:absolute;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;
-    -webkit-mask-image:radial-gradient(85% 92% at 50% 45%,#000,transparent 88%);
-    mask-image:radial-gradient(85% 92% at 50% 45%,#000,transparent 88%);
+    /* sin mascara CSS a proposito: una mascara sobre un lienzo que se
+       repinta obliga a recomponerlo entero cada fotograma. El
+       desvanecido de los bordes va horneado en el propio dibujo. */
   }
 
   .of-inner{position:relative;z-index:1;max-width:1280px;color:var(--of-ink)}
@@ -3156,7 +3160,7 @@ html[dir="rtl"] body{direction:ltr}
 
 <section class="offer" id="offer">
   <div class="of-halo" aria-hidden="true"></div>
-  <canvas class="cells-soft" data-cells aria-hidden="true"></canvas>
+  <canvas class="cells-soft" data-cells="0.30" aria-hidden="true"></canvas>
   <div class="of-inner">
     <p class="eyebrow mono"><i></i>Distribution</p>
     <div class="of-top">
@@ -3184,7 +3188,7 @@ html[dir="rtl"] body{direction:ltr}
     <div class="halo a"></div>
     <div class="halo b"></div>
   </div>
-  <canvas class="cells-soft" data-cells aria-hidden="true"></canvas>
+  <canvas class="cells-soft" data-cells="0.30" aria-hidden="true"></canvas>
   <div class="m-inner">
     <div class="m-col">
       <div class="m-sticky">
@@ -6041,20 +6045,32 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 </script>
 <script>
 /* ---------- celdas vivas en las secciones claras ----------
-   Mismo motor que el iris y el pie: una rejilla de 54px donde unos
-   caminantes van encendiendo casillas y unos destellos sueltos las
-   salpican, todo apagandose por decaimiento. Aqui va en su version
-   clara y a media intensidad, porque el texto se lee encima. */
+   Mismo motor que la cubierta, con sus mismos numeros: caminantes que
+   encienden casillas al desplazarse, destellos sueltos, una cascada
+   diagonal cada pocos segundos y el puntero encendiendo la casilla que
+   pisa. Solo cambia el color, que aqui va en azul sobre claro en lugar
+   de azul sobre negro. */
 (function(){
   const lienzos = document.querySelectorAll('canvas[data-cells]');
   if(!lienzos.length) return;
   const quieto = matchMedia('(prefers-reduced-motion:reduce)').matches;
   const CELL = 54;
 
+  /* ruido estable por casilla: al remedir por un cambio de alto el patron
+     de color es el mismo y no se ve ningun rebarajado */
+  function ruido(c, r){
+    const x = Math.sin(c * 127.1 + r * 311.7) * 43758.5453;
+    return x - Math.floor(x);
+  }
+
   lienzos.forEach(function(cv){
     const host = cv.parentElement;
     const ctx  = cv.getContext('2d');
-    let W=0,H=0,cols=0,rows=0,heat=null,andantes=[],visible=false,last=0,anim=0;
+    /* cada seccion puede pedir su propia fuerza con data-cells="0.42" */
+    const FUERZA = parseFloat(cv.getAttribute('data-cells')) || 0.42;
+
+    let W=0,H=0,cols=0,rows=0,heat=null,tono=null,velo=null,
+        andantes=[],visible=false,last=0,anim=0;
 
     const idx = (c,r) => r*cols + c;
 
@@ -6062,18 +6078,33 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       const w = host.clientWidth, h = host.clientHeight;
       if(w < 1 || h < 1) return false;
       W = w; H = h;
-      const dpr = window.SECT_DPR ? window.SECT_DPR() : Math.min(window.devicePixelRatio||1, 1.5);
-      cv.width  = Math.round(W*dpr);
-      cv.height = Math.round(H*dpr);
-      ctx.setTransform(dpr,0,0,dpr,0,0);
+      /* a 1x: son cuadrados planos alineados a 54px, no hay ningun detalle
+         que resolver, y estos lienzos son del alto de la seccion entera */
+      cv.width  = W;
+      cv.height = H;
+      ctx.setTransform(1,0,0,1,0,0);
       cols = Math.ceil(W/CELL); rows = Math.ceil(H/CELL);
       heat = new Float32Array(cols*rows);
+      tono = new Float32Array(cols*rows);
+      velo = new Float32Array(cols*rows);
+      for(let r=0;r<rows;r++){
+        for(let c=0;c<cols;c++){
+          const i = idx(c,r);
+          tono[i] = ruido(c, r);
+          /* las casillas llegan enteras hasta los lados, como en el panel
+             del iris; solo se apagan en las franjas de arriba y abajo para
+             que la costura con la seccion vecina no quede en corte seco */
+          const y = r*CELL + CELL/2;
+          const borde = Math.min(y, H - y);
+          velo[i] = borde >= 150 ? 1 : Math.max(0, borde/150);
+        }
+      }
       sembrar();
       return true;
     }
 
     function sembrar(){
-      const n = W < 700 ? 2 : 4;
+      const n = W < 700 ? 3 : 6;
       andantes = [];
       for(let i=0;i<n;i++){
         andantes.push({c:(Math.random()*cols)|0, r:(Math.random()*rows)|0,
@@ -6084,7 +6115,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     function pasos(t){
       for(const a of andantes){
         if(t < a.next) continue;
-        a.next = t + 150 + Math.random()*190;
+        a.next = t + 120 + Math.random()*150;
         if(Math.random() < .3){
           if(a.dc !== 0){ a.dr = Math.random()<.5?1:-1; a.dc = 0; }
           else          { a.dc = Math.random()<.5?1:-1; a.dr = 0; }
@@ -6094,30 +6125,78 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
         if(a.c >= cols){ a.c = cols-1; a.dc = -1; }
         if(a.r < 0){ a.r = 0; a.dr = 1; }
         if(a.r >= rows){ a.r = rows-1; a.dr = -1; }
-        heat[idx(a.c,a.r)] = .58;
+        heat[idx(a.c,a.r)] = .62;
       }
     }
 
     let proxima = 0;
     function destellos(t){
       if(t < proxima) return;
-      proxima = t + 130 + Math.random()*160;
-      const n = 1 + ((Math.random()*3)|0);
+      proxima = t + 95 + Math.random()*110;
+      const n = 2 + ((Math.random()*3)|0);
       for(let k=0;k<n;k++){
         const i = idx((Math.random()*cols)|0, (Math.random()*rows)|0);
-        const v = .45 + Math.random()*.4;
+        const v = .5 + Math.random()*.4;
         if(heat[i] < v) heat[i] = v;
       }
     }
 
+    /* la cascada diagonal: un frente que recorre la seccion de esquina a
+       esquina y vuelve a pasar cada pocos segundos */
+    let cascadaIni = -1;
+    const CASCADA_MS = 1900, CASCADA_PAUSA = 5200;
+    function cascada(t){
+      const fase = t - cascadaIni;
+      if(fase < 0) return;
+      if(fase > CASCADA_MS){ cascadaIni = t + CASCADA_PAUSA; return; }
+      const frente = (fase / CASCADA_MS) * (cols + rows);
+      for(let r=0;r<rows;r++){
+        const c0 = Math.round(frente - r);
+        for(let k=-1;k<=1;k++){
+          const c = c0 + k;
+          if(c >= 0 && c < cols){
+            const v = .34 * (1 - Math.abs(k)/1.6);
+            const i = idx(c,r);
+            if(heat[i] < v) heat[i] = v;
+          }
+        }
+      }
+    }
+
+    /* el puntero enciende la casilla que pisa, como en la cubierta */
+    if(!quieto){
+      window.addEventListener('pointermove', function(e){
+        if(!heat || !visible) return;
+        const caja = cv.getBoundingClientRect();
+        if(e.clientY < caja.top || e.clientY > caja.bottom) return;
+        const c = ((e.clientX - caja.left)/CELL)|0;
+        const r = ((e.clientY - caja.top)/CELL)|0;
+        if(c>=0 && r>=0 && c<cols && r<rows) heat[idx(c,r)] = 1;
+      }, {passive:true});
+    }
+
+    /* el lienzo cubre la seccion entera, que puede medir tres pantallas.
+       Repintarlo completo cada fotograma costaba mas de 100 ms, asi que
+       solo se toca la franja que cae dentro de la ventana, con dos filas
+       de margen para que un scroll rapido no deje un renglon viejo. */
+    function franja(){
+      const caja = cv.getBoundingClientRect();
+      const desde = Math.max(0, ((-caja.top)/CELL | 0) - 2);
+      const hasta = Math.min(rows, Math.ceil((-caja.top + window.innerHeight)/CELL) + 2);
+      return [desde, hasta];
+    }
+
     function pintar(){
       if(!heat) return;
-      ctx.clearRect(0,0,W,H);
-      for(let r=0;r<rows;r++){
+      const [r0, r1] = franja();
+      if(r1 <= r0) return;
+      ctx.clearRect(0, r0*CELL, W, (r1-r0)*CELL);
+      for(let r=r0;r<r1;r++){
         for(let c=0;c<cols;c++){
-          const v = heat[idx(c,r)];
-          if(v > .015){
-            ctx.fillStyle = 'rgba(13,63,216,' + (Math.min(v,1)*.2).toFixed(3) + ')';
+          const i = idx(c,r);
+          const a = Math.min(heat[i],1) * velo[i] * FUERZA;
+          if(a > .006){
+            ctx.fillStyle = 'rgba(13,63,216,' + a.toFixed(3) + ')';
             ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
           }
         }
@@ -6128,33 +6207,56 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       anim = requestAnimationFrame(cuadro);
       if(!visible || document.hidden){ last = t; return; }
       const dt = Math.min(t-last, 50); last = t;
-      pasos(t); destellos(t);
+      if(cascadaIni < 0) cascadaIni = t + 500;
+      pasos(t); destellos(t); cascada(t);
       const caida = Math.pow(.93, dt/16.7);
       for(let i=0;i<heat.length;i++) heat[i] *= caida;
       pintar();
     }
 
+    function arrancar(){ if(!anim && !quieto) anim = requestAnimationFrame(cuadro); }
+    function parar(){ if(anim){ cancelAnimationFrame(anim); anim = 0; } }
+
+    /* sin movimiento: una sola pasada de destellos y a dormir */
+    function fija(){
+      const n = Math.max(8, ((cols*rows)/22)|0);
+      for(let k=0;k<n;k++){
+        heat[idx((Math.random()*cols)|0, (Math.random()*rows)|0)] = .35 + Math.random()*.35;
+      }
+      /* sin animacion no hay repintado, asi que aqui si se dibuja entero */
+      ctx.clearRect(0,0,W,H);
+      for(let r=0;r<rows;r++){
+        for(let c=0;c<cols;c++){
+          const i = idx(c,r);
+          const a = Math.min(heat[i],1) * velo[i] * FUERZA;
+          if(a > .006){
+            ctx.fillStyle = 'rgba(13,63,216,'+a.toFixed(3)+')';
+            ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
+          }
+        }
+      }
+    }
+
     if(!medir()) return;
 
-    new IntersectionObserver(function(es){ visible = es[0].isIntersecting; })
-      .observe(host);
+    new IntersectionObserver(function(es){
+      visible = es[0].isIntersecting;
+      if(visible) arrancar(); else parar();
+    }, {rootMargin:'0px'}).observe(host);
 
     let rt;
     window.addEventListener('resize', function(){
       clearTimeout(rt);
-      rt = setTimeout(function(){ if(medir() && quieto) fija(); }, 140);
+      rt = setTimeout(function(){
+        parar();
+        if(medir()){
+          if(quieto) fija();
+          else if(visible) arrancar();
+        }
+      }, 160);
     }, {passive:true});
 
-    /* sin movimiento: una sola pasada de destellos y a dormir */
-    function fija(){
-      for(let k=0;k<Math.max(6, (cols*rows)/26)|0;k++){
-        heat[idx((Math.random()*cols)|0, (Math.random()*rows)|0)] = .3 + Math.random()*.3;
-      }
-      pintar();
-    }
-
     if(quieto) fija();
-    else anim = requestAnimationFrame(cuadro);
   });
 })();
 </script>
