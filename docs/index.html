@@ -599,6 +599,10 @@ blockquote::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
 .dl dd a.dl-link{color:var(--live);text-decoration:underline;text-underline-offset:3px;
   text-decoration-thickness:1px;text-decoration-color:rgba(62,207,142,.5)}
 .dl dd a.dl-link i{font-style:normal}
+/* la direccion completa mide 42 caracteres: en mono, mas pequena y
+   partible, o desborda la columna en pantallas estrechas */
+.dl dd a.mono-addr{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0;
+  word-break:break-all;text-align:right;display:inline-block}
 .dl dd a.dl-link:hover{color:var(--blue);text-decoration-color:currentColor}
 
 /* ---------- salidas ---------- */
@@ -1255,13 +1259,13 @@ try{
         <div><dt>Buy tax</dt><dd class="tab">0%</dd></div>
         <div><dt>Sell tax</dt><dd class="tab">0%</dd></div>
         <div><dt>Security audit</dt><dd class="ok"><a class="dl-link" href="https://www.cyberscope.io/audits/sect" target="_blank" rel="noopener noreferrer">Verified — Cyberscope <i>↗</i></a></dd></div>
-        <div><dt>Contract address</dt><dd class="pend">Pending deployment</dd></div>
-        <div><dt>Etherscan verification</dt><dd class="pend">Pending deployment</dd></div>
+        <div><dt>Contract address</dt><dd><a class="dl-link mono-addr" href="https://etherscan.io/token/0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener noreferrer">0x8C9984B06281f1CA9416e493c2E602AaB08513db <i>↗</i></a></dd></div>
+        <div><dt>Etherscan verification</dt><dd class="ok"><a class="dl-link" href="https://etherscan.io/token/0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener noreferrer">View on Etherscan <i>↗</i></a></dd></div>
       </dl>
 
-      <p class="fine">The contract address, the Etherscan verification link and the ownership
-        renouncement transaction will be published here once the token is deployed to
-        Ethereum mainnet.</p>
+      <p class="fine">The token is deployed on Ethereum mainnet at the address above. The contract
+        source, the holder list and every transaction can be read on Etherscan without asking
+        the foundation for anything.</p>
 
       <figure class="card">
         <span class="card-glow" aria-hidden="true"></span>
@@ -1311,7 +1315,7 @@ try{
         after them. Nothing about that is a forecast — it is simply where the calendar is.</p>
 
       <div class="cta">
-        <a class="key" href="https://app.uniswap.org">Buy on Uniswap</a>
+        <a class="key" href="https://app.uniswap.org/swap?chain=mainnet&outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db">Buy on Uniswap</a>
         <a class="key" href="https://sectoraorg.com">Website</a>
       </div>
 
@@ -2220,7 +2224,7 @@ try{
         — but the sequence itself is a matter of public record: open market first, reduction on
         March 15, 2027, listings after.</p>
       <div class="cta">
-        <a class="key" href="https://app.uniswap.org">Buy on Uniswap</a>
+        <a class="key" href="https://app.uniswap.org/swap?chain=mainnet&outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db">Buy on Uniswap</a>
         <a href="https://sectoraorg.com/dashboard.html">Open Dashboard</a>
       </div>
 
