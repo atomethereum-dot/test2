@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Borradores antiguos, no forman parte del sitio publicado
+Disallow: /v1test1/
+Disallow: /docstest1/
+Disallow: /dashtestv1/
+Disallow: /hero-left.html
+Disallow: /dashboard-v3.html
+
+Sitemap: https://sectoraorg.com/sitemap.xml
