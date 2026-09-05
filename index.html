@@ -503,9 +503,19 @@
      un lienzo donde las casillas llegan dispersas y se arman en el
      logo. Una sola clase (#what.on) gobierna la coreografia. */
   .what{
-    --w-ink:#07080a;--w-ink-2:#3c414c;--w-ink-3:#6b7280;
-    --rail-ink:#9aa0ab;--rail-fuerte:#3c414c;
-    --rail-line:rgba(0,0,0,.11);--rail-plate:#f4f4f1;
+    /* del papel a la noche: --noche va de 0 a 1 con el scroll y todos
+       los tonos de la seccion se interpolan con el. La paleta oscura es
+       la que ya tenia definida .mandates.dark */
+    --noche:0;--tinta:0;--refuerzo:0;
+    --w-ink:color-mix(in srgb,#07080a,#ffffff calc(var(--tinta,0)*100%));
+    --w-ink-2:color-mix(in srgb,color-mix(in srgb,#3c414c,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#e2e7f0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
+    --w-ink-3:color-mix(in srgb,color-mix(in srgb,#6b7280,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#b9c1cf,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
+    --rail-ink:color-mix(in srgb,color-mix(in srgb,#9aa0ab,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#97a0b0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
+    --rail-fuerte:color-mix(in srgb,color-mix(in srgb,#3c414c,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#e2e7f0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
+    --rail-line:color-mix(in srgb,rgba(0,0,0,.11),rgba(255,255,255,.13) calc(var(--noche,0)*100%));
+    --rail-plate:color-mix(in srgb,#f4f4f1,#05070c calc(var(--noche,0)*100%));
+    --papel-1:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*100%));
+    --papel-2:color-mix(in srgb,#f6f6f4,#05070c calc(var(--noche,0)*100%));
     position:relative;isolation:isolate;overflow:clip;
     /* el hueco de arriba no es aire de sobra: es donde se disuelve el
        azul del iris, y el rotulo no debe caer dentro de el */
@@ -522,11 +532,11 @@
         rgba(21,105,255,.20) 132px,
         rgba(21,105,255,0) 214px),
       radial-gradient(1020px 520px at 14% 46%,rgba(21,105,255,.10),transparent 64%),
-      linear-gradient(180deg,#f2f2ef 0%,#f6f6f4 46%,#f6f6f4 100%);
+      linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 46%,var(--papel-2) 100%);
   }
   .what::before{
     content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54'%3E%3Cpath d='M27 23v8M23 27h8' stroke='rgba(0,0,0,.10)' stroke-width='1'/%3E%3C/svg%3E"),
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54'%3E%3Cpath d='M27 23v8M23 27h8' stroke='rgba(124,138,160,.20)' stroke-width='1'/%3E%3C/svg%3E"),
                      linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),
                      linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px);
     background-size:54px 54px;
@@ -614,7 +624,7 @@
           rgba(21,105,255,.20) 78px,
           rgba(21,105,255,0) 132px),
         radial-gradient(760px 460px at 14% 26%,rgba(21,105,255,.10),transparent 64%),
-        linear-gradient(180deg,#f2f2ef 0%,#f6f6f4 46%,#f6f6f4 100%);
+        linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 46%,var(--papel-2) 100%);
     }
     .w-mark{max-width:250px}
   }
@@ -625,10 +635,20 @@
      lo lleva la tipografia, no una caja. Una sola clase (#offer.on)
      gobierna la coreografia. */
   .offer{
-    --of-ink:#07080a;--of-ink-2:#3c414c;--of-ink-3:#6b7280;--of-ink-4:#9aa0ab;
-    --of-line:rgba(0,0,0,.11);--of-live:#0f8f52;
-    --rail-ink:#9aa0ab;--rail-fuerte:#3c414c;
-    --rail-line:rgba(0,0,0,.11);--rail-plate:#f3f3f0;
+    --noche:0;--tinta:0;--refuerzo:0;
+    --of-ink:color-mix(in srgb,#07080a,#ffffff calc(var(--tinta,0)*100%));
+    --of-ink-2:color-mix(in srgb,color-mix(in srgb,#3c414c,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#e2e7f0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
+    --of-ink-3:color-mix(in srgb,color-mix(in srgb,#6b7280,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#b9c1cf,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
+    --of-ink-4:color-mix(in srgb,color-mix(in srgb,#9aa0ab,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#8b93a3,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
+    --of-line:color-mix(in srgb,rgba(0,0,0,.11),rgba(255,255,255,.13) calc(var(--tinta,0)*100%));
+    --of-live:color-mix(in srgb,#0f8f52,#3ddc97 calc(var(--tinta,0)*100%));
+    --rail-ink:color-mix(in srgb,color-mix(in srgb,#9aa0ab,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#97a0b0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
+    --rail-fuerte:color-mix(in srgb,color-mix(in srgb,#3c414c,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#e2e7f0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
+    --rail-line:color-mix(in srgb,rgba(0,0,0,.11),rgba(255,255,255,.13) calc(var(--noche,0)*100%));
+    --rail-plate:color-mix(in srgb,#f3f3f0,#05070c calc(var(--noche,0)*100%));
+    --papel-1:color-mix(in srgb,#f6f6f4,#05070c calc(var(--noche,0)*100%));
+    --papel-2:color-mix(in srgb,#edeeea,#04060a calc(var(--noche,0)*100%));
+    --papel-3:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*100%));
     position:relative;isolation:isolate;overflow:clip;
     padding:clamp(84px,13vh,148px) var(--pad) clamp(56px,8vh,92px);
     /* sin filete de cierre: el degradado termina en el mismo tono con
@@ -641,11 +661,11 @@
        anterior. Bajada al 30%, su desvanecido cae entero dentro */
     background:
       radial-gradient(1240px 560px at 82% 46%,rgba(21,105,255,.11),transparent 62%),
-      linear-gradient(180deg,#f6f6f4 0%,#edeeea 52%,#f2f2ef 88%);
+      linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 52%,var(--papel-3) 88%);
   }
   .offer::before{
     content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54'%3E%3Cpath d='M27 23v8M23 27h8' stroke='rgba(0,0,0,.10)' stroke-width='1'/%3E%3C/svg%3E"),
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54'%3E%3Cpath d='M27 23v8M23 27h8' stroke='rgba(124,138,160,.20)' stroke-width='1'/%3E%3C/svg%3E"),
                      linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),
                      linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px);
     background-size:54px 54px;
@@ -825,8 +845,9 @@
   .of-panel{
     position:relative;margin:clamp(46px,7vh,82px) 0 0;
     padding:clamp(6px,.8vw,14px) clamp(22px,2.8vw,44px) clamp(22px,2.6vw,32px);
-    background:rgba(255,255,255,.6);
-    border:1px solid rgba(0,0,0,.09);border-radius:3px;
+    background:color-mix(in srgb,rgba(255,255,255,.6),rgba(255,255,255,.05) calc(var(--tinta,0)*100%));
+    border:1px solid color-mix(in srgb,rgba(0,0,0,.09),rgba(255,255,255,.12) calc(var(--tinta,0)*100%));
+    border-radius:3px;
     backdrop-filter:blur(16px) saturate(1.4);
     -webkit-backdrop-filter:blur(16px) saturate(1.4);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.92),
@@ -923,10 +944,19 @@
 
   /* ============ mandatos, tarjetas de cristal ============ */
   .mandates{
-    --sec-bg:#f2f2ef;--sec-ink:#07080a;--sec-ink-2:#3c414c;--sec-ink-3:#6b7280;--sec-ink-4:#9aa0ab;
-    --card-bg:rgba(255,255,255,.58);--card-brd:rgba(0,0,0,.10);--card-top:rgba(255,255,255,.9);
-    --grid-line:rgba(0,0,0,.05);--halo-a:rgba(21,105,255,.16);--halo-b:rgba(21,105,255,.10);
-    --rail-ink:#9aa0ab;--rail-fuerte:#3c414c;
+    --noche:0;--tinta:0;--refuerzo:0;
+    --sec-bg:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*100%));
+    --sec-ink:color-mix(in srgb,#07080a,#ffffff calc(var(--tinta,0)*100%));
+    --sec-ink-2:color-mix(in srgb,color-mix(in srgb,#3c414c,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#e2e7f0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
+    --sec-ink-3:color-mix(in srgb,color-mix(in srgb,#6b7280,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#b9c1cf,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
+    --sec-ink-4:color-mix(in srgb,color-mix(in srgb,#9aa0ab,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#8b93a3,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
+    --card-bg:color-mix(in srgb,rgba(255,255,255,.58),rgba(255,255,255,.045) calc(var(--tinta,0)*100%));
+    --card-brd:color-mix(in srgb,rgba(0,0,0,.10),rgba(255,255,255,.13) calc(var(--tinta,0)*100%));
+    --card-top:color-mix(in srgb,rgba(255,255,255,.9),rgba(255,255,255,.22) calc(var(--tinta,0)*100%));
+    --grid-line:color-mix(in srgb,rgba(0,0,0,.05),rgba(255,255,255,.045) calc(var(--noche,0)*100%));
+    --halo-a:color-mix(in srgb,rgba(21,105,255,.16),rgba(21,105,255,.30) calc(var(--noche,0)*100%));
+    --halo-b:color-mix(in srgb,rgba(21,105,255,.10),rgba(21,105,255,.18) calc(var(--noche,0)*100%));
+    --rail-ink:color-mix(in srgb,color-mix(in srgb,#9aa0ab,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#97a0b0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));--rail-fuerte:#3c414c;
     --rail-line:rgba(0,0,0,.11);--rail-plate:#f2f2ef;
     position:relative;background:var(--sec-bg);isolation:isolate;
     padding:clamp(90px,15vh,170px) var(--pad) clamp(70px,12vh,130px);
@@ -942,7 +972,7 @@
   }
   .mandates::before{
     content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54'%3E%3Cpath d='M27 23v8M23 27h8' stroke='rgba(0,0,0,.10)' stroke-width='1'/%3E%3C/svg%3E"),
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54'%3E%3Cpath d='M27 23v8M23 27h8' stroke='rgba(124,138,160,.20)' stroke-width='1'/%3E%3C/svg%3E"),
                      linear-gradient(var(--grid-line) 1px,transparent 1px),
                      linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);
     background-size:54px 54px;
@@ -6384,6 +6414,87 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 })();
 </script>
 <script>
+/* ---------- del papel a la noche ----------
+   Las tres superficies claras no cambian de color cada una por su lado:
+   son una sola hoja que se va apagando conforme se recorre. --noche va
+   de 0 en lo alto de la primera a 1 en el pie de la ultima, y con el se
+   interpolan todos los tonos de las tres.
+
+   El bloque termina justo donde arranca la zona oscura del sitio, asi
+   que al salir de la ultima ya es negro y no hay salto que disimular.
+
+   La medida se toma con el centro de la ventana, que es por donde lee
+   la gente, y se escribe una sola vez por fotograma. Cambiar una
+   variable no rehace el diseno: solo repinta. */
+(function(){
+  const secs = ['what','offer','mandates']
+    .map(function(id){ return document.getElementById(id); })
+    .filter(Boolean);
+  if(secs.length < 2) return;
+
+  const primera = secs[0], ultima = secs[secs.length - 1];
+  let pendiente = false, previo = -1;
+
+  function medir(){
+    pendiente = false;
+    const arriba = primera.getBoundingClientRect().top + scrollY;
+    const abajo  = ultima.getBoundingClientRect().bottom + scrollY;
+    const largo  = abajo - arriba;
+    if(largo <= 0) return;
+
+    const ojo = scrollY + innerHeight * .5;
+    let t = (ojo - arriba) / largo;
+    t = t < 0 ? 0 : t > 1 ? 1 : t;
+    /* El apagado se concentra en el ultimo tercio. Un degradado repartido
+       por todo el bloque suena bien pero deja media lectura sobre gris de
+       en medio, y contra un gris no hay tipografia que se lea: el texto
+       tiene que ser casi negro o casi blanco, y ahi no puede ser ninguno
+       de los dos. Asi la mayor parte se lee sobre papel limpio, la noche
+       cae deprisa al final, y enlaza con la zona oscura que viene
+       justo despues. */
+    let a = (t - .55) / .33;
+    a = a < 0 ? 0 : a > 1 ? 1 : a;
+    const noche = a * a * (3 - 2 * a);
+
+    /* El texto NO puede seguir la misma curva: fondo y tinta cruzando a
+       la vez por el gris medio dejan el texto invisible. La tinta salta
+       de negro a blanco en una ventana estrecha alrededor de ese cruce,
+       asi el momento de poco contraste dura un pestaneo de scroll en
+       lugar de media seccion. La ventana es del 5% del bloque: a la
+       velocidad a la que se lee, es un parpadeo. */
+    let k = (t - .705) / .05;
+    k = k < 0 ? 0 : k > 1 ? 1 : k;
+    const tinta = k * k * (3 - 2 * k);
+
+    /* Cerca del cruce el fondo pasa por el gris de en medio, y contra un
+       gris no hay gris apagado que se lea: el problema no es la curva,
+       es la paleta. Asi que ahi los tonos secundarios se empujan a su
+       extremo, negro antes del cruce y blanco despues, y vuelven a su
+       gris de siempre cuando el fondo ya es claramente papel o noche. */
+    let d = 1 - Math.abs(t - .715) / .19;
+    d = d < 0 ? 0 : d > 1 ? 1 : d;
+    const refuerzo = d * d * (3 - 2 * d);
+
+    const v = Math.round(noche * 1000) / 1000;
+    if(v === previo) return;
+    previo = v;
+    for(const s of secs){
+      s.style.setProperty('--noche', v);
+      s.style.setProperty('--tinta', Math.round(tinta * 1000) / 1000);
+      s.style.setProperty('--refuerzo', Math.round(refuerzo * 1000) / 1000);
+    }
+  }
+
+  addEventListener('scroll', function(){
+    if(!pendiente){ pendiente = true; requestAnimationFrame(medir); }
+  }, {passive:true});
+  addEventListener('resize', function(){
+    if(!pendiente){ pendiente = true; requestAnimationFrame(medir); }
+  }, {passive:true});
+  medir();
+})();
+</script>
+<script>
 /* ---------- la regla del margen ----------
    El cursor de la regla marca donde estas dentro de la seccion, de 0 a
    100. No es un adorno con forma de grafico: lee la posicion real.
@@ -6865,8 +6976,19 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       return [desde, hasta];
     }
 
+    /* el azul de las celdas sobre papel es oscuro y sobre la noche no se
+       veria: se aclara con --noche. Se resuelve una vez por fotograma,
+       no en cada una de las miles de casillas */
+    let tinte = '13,63,216';
+    function leerTinte(){
+      const n = parseFloat(getComputedStyle(host).getPropertyValue('--noche')) || 0;
+      tinte = ((13 + (96-13)*n)|0) + ',' + ((63 + (152-63)*n)|0) + ',' +
+              ((216 + (255-216)*n)|0);
+    }
+
     function pintar(){
       if(!heat) return;
+      leerTinte();
       const [r0, r1] = franja();
       if(r1 <= r0) return;
       ctx.clearRect(0, r0*CELL, W, (r1-r0)*CELL);
@@ -6875,7 +6997,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
           const i = idx(c,r);
           const a = Math.min(heat[i],1) * velo[i] * FUERZA;
           if(a > .006){
-            ctx.fillStyle = 'rgba(13,63,216,' + a.toFixed(3) + ')';
+            ctx.fillStyle = 'rgba(' + tinte + ',' + a.toFixed(3) + ')';
             ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
           }
         }
@@ -6903,13 +7025,14 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
         heat[idx((Math.random()*cols)|0, (Math.random()*rows)|0)] = .35 + Math.random()*.35;
       }
       /* sin animacion no hay repintado, asi que aqui si se dibuja entero */
+      leerTinte();
       ctx.clearRect(0,0,W,H);
       for(let r=0;r<rows;r++){
         for(let c=0;c<cols;c++){
           const i = idx(c,r);
           const a = Math.min(heat[i],1) * velo[i] * FUERZA;
           if(a > .006){
-            ctx.fillStyle = 'rgba(13,63,216,'+a.toFixed(3)+')';
+            ctx.fillStyle = 'rgba(' + tinte + ',' + a.toFixed(3) + ')';
             ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
           }
         }
