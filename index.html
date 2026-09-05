@@ -739,8 +739,11 @@
     background:var(--rail-plate,#f4f4f1);
     font-weight:500;color:var(--rail-fuerte,#3c414c);letter-spacing:0;
   }
+  /* colgado a la derecha del filete, no centrado sobre el: con left:50%
+     sobre una caja de 1px la linea le cruzaba las letras. El indice si
+     se queda a caballo, que lleva placa opaca y lee como un nodo */
   .spine span{
-    position:absolute;top:38px;left:50%;transform:translateX(-50%);
+    position:absolute;top:38px;left:7px;
     writing-mode:vertical-rl;white-space:nowrap;
   }
   /* el cuadro azul del pie: el mismo sello que cierra cada bloque */
@@ -771,9 +774,14 @@
     opacity:0;transition:opacity .6s var(--ease-out);
     will-change:transform;
   }
+  /* la lectura, en vertical como el rotulo del lomo. En horizontal medía
+     unos 28px y el pasillo libre entre el contenido y la regla baja a 24
+     en 1240px, asi que se montaba encima del texto. En vertical ocupa 12
+     y cabe con holgura en todo el rango */
   .gauge u::after{
-    content:attr(data-v);position:absolute;right:14px;top:50%;
+    content:attr(data-v);position:absolute;right:15px;top:50%;
     transform:translateY(-50%);
+    writing-mode:vertical-rl;white-space:nowrap;
     color:var(--blue-deep);letter-spacing:.14em;
   }
   .gauge.on u{opacity:1}
