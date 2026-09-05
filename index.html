@@ -778,16 +778,12 @@
     opacity:0;transition:opacity .6s var(--ease-out);
     will-change:transform;
   }
-  /* la lectura, en vertical como el rotulo del lomo. En horizontal medía
-     unos 28px y el pasillo libre entre el contenido y la regla baja a 24
-     en 1240px, asi que se montaba encima del texto. En vertical ocupa 12
-     y cabe con holgura en todo el rango */
-  .gauge u::after{
-    content:attr(data-v);position:absolute;right:22px;top:50%;
-    transform:translateY(-50%);
-    writing-mode:vertical-rl;white-space:nowrap;
-    color:var(--blue-deep);letter-spacing:.14em;
-  }
+  /* sin lectura numerica. El cursor mide de verdad donde estas dentro de
+     la seccion, pero el porcentaje al lado lo vestia de instrumento y no
+     medía nada del proyecto: era el scroll, que ya cuenta la barra del
+     navegador. Quitarlo deja la marca de posicion, que si es cierta, y
+     de paso iguala el margen en movil y en escritorio: el numero era la
+     unica pieza que no cabia en un telefono */
   .gauge.on u{opacity:1}
 
   /* ---- el margen en pantallas estrechas ----
@@ -805,13 +801,8 @@
      unica parte del diseno que no comparte con cualquier otra web, y en
      un telefono es donde mas gente la va a ver.
 
-     La lectura de la regla es la unica que se queda fuera. Necesita
-     0.66*pad > 34 (el numero, mas los 9px que lo apartan del trazo del
-     cursor), o sea un carril de 52px, y eso ya son 104 de los 390 de un
-     telefono: se comeria la linea de texto. */
-  @media (max-width:1210px){
-    .gauge u::after{display:none}
-  }
+     Ya no hay nada que caiga por ancho: el margen es la misma pieza en
+     los 320px de un telefono y en los 1920 de un monitor. */
   /* hasta 895px: por encima de ese ancho el carril por defecto (4.4vw)
      ya pasa de 39px, que es lo que el rotulo necesita con holgura */
   @media (max-width:895px){
@@ -3571,7 +3562,7 @@ html[dir="rtl"] body{direction:ltr}
 <section class="what" id="what">
   <div class="w-halo" aria-hidden="true"></div>
   <div class="spine" aria-hidden="true"><em><b>01</b><span>What Sectora is</span></em><i></i></div>
-  <div class="gauge" aria-hidden="true"><u data-v="0%"></u></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="w-inner">
     <p class="eyebrow mono"><i></i>What Sectora is</p>
@@ -3591,7 +3582,7 @@ html[dir="rtl"] body{direction:ltr}
 <section class="offer" id="offer">
   <div class="of-halo" aria-hidden="true"></div>
   <div class="spine" aria-hidden="true"><em><b>02</b><span>Distribution</span></em><i></i></div>
-  <div class="gauge" aria-hidden="true"><u data-v="0%"></u></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="of-inner">
     <p class="eyebrow mono"><i></i>Distribution</p>
@@ -3620,7 +3611,7 @@ html[dir="rtl"] body{direction:ltr}
        lleva z-index y recorte para contener los halos, y dentro de el
        el lomo quedaba por debajo del velo del titulo fijo -->
   <div class="spine" aria-hidden="true"><em><b>03</b><span>Verification</span></em><i></i></div>
-  <div class="gauge" aria-hidden="true"><u data-v="0%"></u></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="m-bg" aria-hidden="true">
     <div class="halo a"></div>
     <div class="halo b"></div>
@@ -6606,7 +6597,9 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     return {el: el, cursor: el.querySelector('u'), sec: el.parentElement, v: -1};
   });
   if(!reglas.length) return;
-  if(!matchMedia('(min-width:1240px)').matches) return;
+  /* sin corte por ancho: el margen se ve en toda la escala, asi que el
+     cursor tiene que moverse en toda la escala. Con el corte en 1240 la
+     regla se quedaba en movil como cuatro marcas muertas */
 
   let pendiente = false;
 
@@ -6627,8 +6620,6 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       const t = (vh - c.top) / (vh + c.height);
       const p = Math.max(0, Math.min(1, t));
       r.cursor.style.transform = 'translateY(' + (p * c.height).toFixed(1) + 'px)';
-      const v = Math.round(p * 100);
-      if(v !== r.v){ r.v = v; r.cursor.setAttribute('data-v', v + '%'); }
     }
   }
 
