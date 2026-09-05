@@ -1443,6 +1443,19 @@
      trazadas con el scroll, bisel con las seis marcas y cartela
      tipografica. Sin efectos: precision. */
   .plate{position:relative;height:820vh;background:#000}
+  /* el cierre de la escena. El resplandor del horizonte va pegado al
+     borde de abajo del panel fijo y lo recorta el overflow de su propia
+     caja; mientras la escena esta anclada ese corte cae fuera de cuadro,
+     pero al terminar la seccion coincide con la frontera y el azul acaba
+     a cuchillo contra el negro del roadmap. El negro entra por el pie y
+     se come los ultimos 240px. Va fuera del panel fijo a proposito: si
+     va dentro se queda en pantalla en vez de irse con la frontera */
+  .plate::after{
+    content:'';position:absolute;left:0;right:0;bottom:0;height:240px;
+    z-index:3;pointer-events:none;
+    background:linear-gradient(0deg,#000 0,rgba(0,0,0,.78) 66px,
+                                     rgba(0,0,0,.34) 148px,transparent 240px);
+  }
   .plate-pin{
     position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;isolation:isolate;
     background:
