@@ -6627,10 +6627,18 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     let llegadas = 0;
 
     for(const p of piezas){
-      const bruto = ini < 0 ? 0 : (t - ini - p.esp) / DUR;
-      const q = bruto <= 0 ? 0 : bruto >= 1 ? 1 : suave(bruto);
+      /* ya montada: se dibuja entera y en su sitio, sin mirar el reloj.
+         Antes esto se hacia poniendo ini muy atras, pero el guardian de
+         abajo lee cualquier ini negativo como "todavia no ha empezado" y
+         el resultado era un lienzo en blanco */
+      let q, bruto;
+      if(montado){ q = 1; }
+      else{
+        bruto = ini < 0 ? 0 : (t - ini - p.esp) / DUR;
+        q = bruto <= 0 ? 0 : bruto >= 1 ? 1 : suave(bruto);
+        if(bruto >= 1) llegadas++;
+      }
       if(q <= 0) continue;
-      if(bruto >= 1) llegadas++;
 
       const x = p.x0 + (p.x - p.x0) * q;
       const y = p.y0 + (p.y - p.y0) * q;
@@ -6658,7 +6666,19 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(!montado && llegadas === piezas.length && piezas.length) montado = true;
   }
 
-  let last = 0;
+  let last = 0, terminado = false;
+
+  /* la marca se arma una sola vez por carga y se queda quieta.
+     Cuando el barrido de cierre acaba, se apaga el bucle para siempre:
+     ni destellos ni repintados. Volver a pasar por delante no la vuelve
+     a montar, que es lo que pasaba antes al subir de nuevo. */
+  function acabar(){
+    terminado = true;
+    if(anim){ cancelAnimationFrame(anim); anim = 0; }
+    for(const p of piezas) p.calor = 0;
+    fija();
+  }
+
   function cuadro(t){
     anim = requestAnimationFrame(cuadro);
     if(!visible || document.hidden){ last = t; return; }
@@ -6668,11 +6688,13 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     const caida = Math.pow(.94, dt / 16.7);
     for(const p of piezas) p.calor *= caida;
     pintar(t);
+    /* montada y con el barrido ya pasado: se congela */
+    if(montado && barridoIni > 0 && t > barridoIni + BARRIDO_MS * 1.3) acabar();
   }
 
-  /* sin movimiento: la marca ya montada, de una sola pasada */
+  /* la marca ya montada, dibujada de una sola pasada y sin animacion */
   function fija(){
-    ini = -1e9; montado = true;
+    montado = true;
     pintar(0);
   }
 
@@ -6683,17 +6705,21 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     clearTimeout(remedir);
     remedir = setTimeout(function(){
       const antes = montado;
+      /* medir() reasigna cv.width, y eso borra el lienzo: si ya estaba
+         montada hay que volver a dibujarla en el acto */
       if(!medir()) return;
       if(antes || quieto) fija();
     }, 160);
   }, {passive:true});
 
-  new IntersectionObserver(function(es){
+  const mirador = new IntersectionObserver(function(es){
     visible = es[0].isIntersecting;
     if(quieto){ if(visible) fija(); return; }
+    if(terminado){ mirador.disconnect(); return; }
     if(visible){ if(!anim) anim = requestAnimationFrame(cuadro); }
     else if(anim){ cancelAnimationFrame(anim); anim = 0; }
-  }, {rootMargin:'0px', threshold:.15}).observe(host);
+  }, {rootMargin:'0px', threshold:.15});
+  mirador.observe(host);
 })();
 </script>
 <script>
