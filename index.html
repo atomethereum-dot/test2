@@ -722,14 +722,20 @@
   .spine{left:calc(var(--pad) * .34);width:1px;background:var(--rail-line,rgba(0,0,0,.10))}
   /* dentro del borde, no a caballo sobre el: la seccion recorta y a
      medio salir solo se veia la mitad del numero */
+  /* el indice y el rotulo van pegados a la ventana mientras la seccion
+     esta en pantalla: anclados al inicio, en cuanto se scrollea un poco
+     el rotulo se corta por la mitad y se lee "TRIBUTION" */
+  .spine em{
+    position:sticky;top:120px;display:block;height:0;font-style:normal;
+  }
   .spine b{
-    position:absolute;top:30px;left:50%;transform:translateX(-50%);
+    position:absolute;top:0;left:50%;transform:translateX(-50%);
     width:19px;height:19px;display:grid;place-items:center;
     background:var(--rail-plate,#f4f4f1);
     font-weight:500;color:var(--rail-fuerte,#3c414c);letter-spacing:0;
   }
   .spine span{
-    position:absolute;top:68px;left:50%;transform:translateX(-50%);
+    position:absolute;top:38px;left:50%;transform:translateX(-50%);
     writing-mode:vertical-rl;white-space:nowrap;
   }
   /* el cuadro azul del pie: el mismo sello que cierra cada bloque */
@@ -3496,7 +3502,7 @@ html[dir="rtl"] body{direction:ltr}
 
 <section class="what" id="what">
   <div class="w-halo" aria-hidden="true"></div>
-  <div class="spine" aria-hidden="true"><b>01</b><span>What Sectora is</span><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>01</b><span>What Sectora is</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u data-v="0%"></u></div>
   <div class="lux" aria-hidden="true"></div>
   <canvas class="cells-soft" data-cells="0.30" aria-hidden="true"></canvas>
@@ -3517,7 +3523,7 @@ html[dir="rtl"] body{direction:ltr}
 
 <section class="offer" id="offer">
   <div class="of-halo" aria-hidden="true"></div>
-  <div class="spine" aria-hidden="true"><b>02</b><span>Distribution</span><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>02</b><span>Distribution</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u data-v="0%"></u></div>
   <div class="lux" aria-hidden="true"></div>
   <canvas class="cells-soft" data-cells="0.30" aria-hidden="true"></canvas>
@@ -3545,7 +3551,7 @@ html[dir="rtl"] body{direction:ltr}
 
 <section class="mandates" id="mandates">
   <div class="m-bg" aria-hidden="true">
-  <div class="spine" aria-hidden="true"><b>03</b><span>Verification</span><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>03</b><span>Verification</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u data-v="0%"></u></div>
     <div class="halo a"></div>
     <div class="halo b"></div>
@@ -6515,7 +6521,10 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     const vh = innerHeight;
     for(const r of reglas){
       const c = r.sec.getBoundingClientRect();
-      const dentro = c.bottom > 0 && c.top < vh;
+      /* solo se enciende la regla de la seccion que se esta leyendo. Con
+         dos o tres a la vez, sus lecturas flotaban a distintas alturas
+         del margen y aquello parecia ruido, no un instrumento */
+      const dentro = c.top < vh * .5 && c.bottom > vh * .5;
       r.el.classList.toggle('on', dentro);
       if(!dentro) continue;
       /* 0 cuando el borde de arriba toca el pie de la ventana, 100
