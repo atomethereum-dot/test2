@@ -516,6 +516,9 @@
     --rail-plate:color-mix(in srgb,#f4f4f1,#05070c calc(var(--noche,0)*100%));
     --papel-1:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*100%));
     --papel-2:color-mix(in srgb,#f6f6f4,#05070c calc(var(--noche,0)*100%));
+    /* el pie se oscurece a la mitad: una seccion ya de noche no debe
+       chocar en recto contra la que sigue en papel debajo */
+    --papel-pie:color-mix(in srgb,#f6f6f4,#05070c calc(var(--noche,0)*22%));
     position:relative;isolation:isolate;overflow:clip;
     /* el hueco de arriba no es aire de sobra: es donde se disuelve el
        azul del iris, y el rotulo no debe caer dentro de el */
@@ -532,7 +535,8 @@
         rgba(21,105,255,.20) 132px,
         rgba(21,105,255,0) 214px),
       radial-gradient(1020px 520px at 14% 46%,rgba(21,105,255,.10),transparent 64%),
-      linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 46%,var(--papel-2) 100%);
+      linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 46%,
+                             var(--papel-2) 74%,var(--papel-pie) 100%);
   }
   .what::before{
     content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -624,7 +628,8 @@
           rgba(21,105,255,.20) 78px,
           rgba(21,105,255,0) 132px),
         radial-gradient(760px 460px at 14% 26%,rgba(21,105,255,.10),transparent 64%),
-        linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 46%,var(--papel-2) 100%);
+        linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 46%,
+                             var(--papel-2) 74%,var(--papel-pie) 100%);
     }
     .w-mark{max-width:250px}
   }
@@ -649,6 +654,7 @@
     --papel-1:color-mix(in srgb,#f6f6f4,#05070c calc(var(--noche,0)*100%));
     --papel-2:color-mix(in srgb,#edeeea,#04060a calc(var(--noche,0)*100%));
     --papel-3:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*100%));
+    --papel-pie:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*22%));
     position:relative;isolation:isolate;overflow:clip;
     padding:clamp(84px,13vh,148px) var(--pad) clamp(56px,8vh,92px);
     /* sin filete de cierre: el degradado termina en el mismo tono con
@@ -661,7 +667,8 @@
        anterior. Bajada al 30%, su desvanecido cae entero dentro */
     background:
       radial-gradient(1240px 560px at 82% 46%,rgba(21,105,255,.11),transparent 62%),
-      linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 52%,var(--papel-3) 88%);
+      linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 52%,
+                             var(--papel-3) 74%,var(--papel-pie) 100%);
   }
   .offer::before{
     content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -946,6 +953,7 @@
   .mandates{
     --noche:0;--tinta:0;--refuerzo:0;
     --sec-bg:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*100%));
+    --sec-pie:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*22%));
     --sec-ink:color-mix(in srgb,#07080a,#ffffff calc(var(--tinta,0)*100%));
     --sec-ink-2:color-mix(in srgb,color-mix(in srgb,#3c414c,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#e2e7f0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
     --sec-ink-3:color-mix(in srgb,color-mix(in srgb,#6b7280,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#b9c1cf,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
@@ -958,7 +966,9 @@
     --halo-b:color-mix(in srgb,rgba(21,105,255,.10),rgba(21,105,255,.18) calc(var(--noche,0)*100%));
     --rail-ink:color-mix(in srgb,color-mix(in srgb,#9aa0ab,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#97a0b0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));--rail-fuerte:#3c414c;
     --rail-line:rgba(0,0,0,.11);--rail-plate:#f2f2ef;
-    position:relative;background:var(--sec-bg);isolation:isolate;
+    position:relative;isolation:isolate;
+    background:linear-gradient(180deg,var(--sec-bg) 0%,var(--sec-bg) 74%,
+                                      var(--sec-pie) 100%);
     padding:clamp(90px,15vh,170px) var(--pad) clamp(70px,12vh,130px);
   }
   /* anade la clase "dark" a la seccion para el fondo oscuro corporativo */
@@ -6414,74 +6424,63 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 })();
 </script>
 <script>
-/* ---------- del papel a la noche ----------
-   Las tres superficies claras no cambian de color cada una por su lado:
-   son una sola hoja que se va apagando conforme se recorre. --noche va
-   de 0 en lo alto de la primera a 1 en el pie de la ultima, y con el se
-   interpolan todos los tonos de las tres.
+/* ---------- cada seccion se apaga al quedar atras ----------
+   No es el bloque entero apagandose como una sola pieza: cada superficie
+   clara lleva su propia noche. Mientras la estas leyendo es papel; en
+   cuanto empieza a salir por arriba se va apagando, y cuando termina de
+   pasar ya es negra. La de abajo sigue en papel esperandote.
 
-   El bloque termina justo donde arranca la zona oscura del sitio, asi
-   que al salir de la ultima ya es negro y no hay salto que disimular.
+   La medida es el pie de la seccion cruzando la ventana: mientras esta
+   por debajo del pliegue queda algo por leer y no se toca nada; cuando
+   sube, la seccion se apaga a ese mismo ritmo.
 
-   La medida se toma con el centro de la ventana, que es por donde lee
-   la gente, y se escribe una sola vez por fotograma. Cambiar una
-   variable no rehace el diseno: solo repinta. */
+   Se escribe una vez por fotograma y solo si el valor cambia. Cambiar
+   una variable de color no rehace el diseno, solo repinta. */
 (function(){
   const secs = ['what','offer','mandates']
     .map(function(id){ return document.getElementById(id); })
-    .filter(Boolean);
-  if(secs.length < 2) return;
+    .filter(Boolean)
+    .map(function(el){ return {el: el, v: -1}; });
+  if(!secs.length) return;
 
-  const primera = secs[0], ultima = secs[secs.length - 1];
-  let pendiente = false, previo = -1;
+  let pendiente = false;
 
   function medir(){
     pendiente = false;
-    const arriba = primera.getBoundingClientRect().top + scrollY;
-    const abajo  = ultima.getBoundingClientRect().bottom + scrollY;
-    const largo  = abajo - arriba;
-    if(largo <= 0) return;
+    const vh = innerHeight;
 
-    const ojo = scrollY + innerHeight * .5;
-    let t = (ojo - arriba) / largo;
-    t = t < 0 ? 0 : t > 1 ? 1 : t;
-    /* El apagado se concentra en el ultimo tercio. Un degradado repartido
-       por todo el bloque suena bien pero deja media lectura sobre gris de
-       en medio, y contra un gris no hay tipografia que se lea: el texto
-       tiene que ser casi negro o casi blanco, y ahi no puede ser ninguno
-       de los dos. Asi la mayor parte se lee sobre papel limpio, la noche
-       cae deprisa al final, y enlaza con la zona oscura que viene
-       justo despues. */
-    let a = (t - .55) / .33;
-    a = a < 0 ? 0 : a > 1 ? 1 : a;
-    const noche = a * a * (3 - 2 * a);
-
-    /* El texto NO puede seguir la misma curva: fondo y tinta cruzando a
-       la vez por el gris medio dejan el texto invisible. La tinta salta
-       de negro a blanco en una ventana estrecha alrededor de ese cruce,
-       asi el momento de poco contraste dura un pestaneo de scroll en
-       lugar de media seccion. La ventana es del 5% del bloque: a la
-       velocidad a la que se lee, es un parpadeo. */
-    let k = (t - .705) / .05;
-    k = k < 0 ? 0 : k > 1 ? 1 : k;
-    const tinta = k * k * (3 - 2 * k);
-
-    /* Cerca del cruce el fondo pasa por el gris de en medio, y contra un
-       gris no hay gris apagado que se lea: el problema no es la curva,
-       es la paleta. Asi que ahi los tonos secundarios se empujan a su
-       extremo, negro antes del cruce y blanco despues, y vuelven a su
-       gris de siempre cuando el fondo ya es claramente papel o noche. */
-    let d = 1 - Math.abs(t - .715) / .19;
-    d = d < 0 ? 0 : d > 1 ? 1 : d;
-    const refuerzo = d * d * (3 - 2 * d);
-
-    const v = Math.round(noche * 1000) / 1000;
-    if(v === previo) return;
-    previo = v;
     for(const s of secs){
-      s.style.setProperty('--noche', v);
-      s.style.setProperty('--tinta', Math.round(tinta * 1000) / 1000);
-      s.style.setProperty('--refuerzo', Math.round(refuerzo * 1000) / 1000);
+      const c = s.el.getBoundingClientRect();
+
+      /* 0 mientras el pie sigue por debajo del pliegue, 1 cuando la
+         seccion ha terminado de salir por arriba */
+      let t = 1 - c.bottom / vh;
+      t = t < 0 ? 0 : t > 1 ? 1 : t;
+
+      const noche = t * t * (3 - 2 * t);
+
+      /* El texto no puede seguir la misma curva que el fondo: cruzando
+         los dos a la vez por el gris de en medio, el texto desaparece.
+         Salta de oscuro a claro en una ventana estrecha, que a la
+         velocidad a la que se pasa una seccion es un parpadeo. */
+      let k = (t - .40) / .08;
+      k = k < 0 ? 0 : k > 1 ? 1 : k;
+      const tinta = k * k * (3 - 2 * k);
+
+      /* Y alrededor de ese cruce los tonos apagados se empujan a su
+         extremo, negro antes y blanco despues: contra un fondo gris no
+         hay gris que se lea. Vuelven a su gris cuando el fondo ya es
+         claramente papel o claramente noche. */
+      let d = 1 - Math.abs(t - .44) / .30;
+      d = d < 0 ? 0 : d > 1 ? 1 : d;
+      const refuerzo = d * d * (3 - 2 * d);
+
+      const v = Math.round(noche * 1000) / 1000;
+      if(v === s.v) continue;
+      s.v = v;
+      s.el.style.setProperty('--noche', v);
+      s.el.style.setProperty('--tinta', Math.round(tinta * 1000) / 1000);
+      s.el.style.setProperty('--refuerzo', Math.round(refuerzo * 1000) / 1000);
     }
   }
 
