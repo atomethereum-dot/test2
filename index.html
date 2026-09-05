@@ -536,7 +536,7 @@
         rgba(21,105,255,0) 214px),
       radial-gradient(1020px 520px at 14% 46%,rgba(21,105,255,.10),transparent 64%),
       linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 46%,
-                             var(--papel-2) 74%,var(--papel-pie) 100%);
+                             var(--papel-2) 88%,var(--papel-pie) 100%);
   }
   .what::before{
     content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -629,7 +629,7 @@
           rgba(21,105,255,0) 132px),
         radial-gradient(760px 460px at 14% 26%,rgba(21,105,255,.10),transparent 64%),
         linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 46%,
-                             var(--papel-2) 74%,var(--papel-pie) 100%);
+                             var(--papel-2) 88%,var(--papel-pie) 100%);
     }
     .w-mark{max-width:250px}
   }
@@ -668,7 +668,7 @@
     background:
       radial-gradient(1240px 560px at 82% 46%,rgba(21,105,255,.11),transparent 62%),
       linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 52%,
-                             var(--papel-3) 74%,var(--papel-pie) 100%);
+                             var(--papel-3) 88%,var(--papel-pie) 100%);
   }
   .offer::before{
     content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -973,8 +973,11 @@
     --rail-ink:color-mix(in srgb,color-mix(in srgb,#9aa0ab,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#97a0b0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));--rail-fuerte:#3c414c;
     --rail-line:rgba(0,0,0,.11);--rail-plate:#f2f2ef;
     position:relative;isolation:isolate;
-    background:linear-gradient(180deg,var(--sec-bg) 0%,var(--sec-bg) 74%,
-                                      var(--sec-pie) 100%);
+    /* sin pie aclarado: debajo de esta seccion ya empieza la zona oscura
+       del sitio, asi que no hay nada claro contra lo que suavizar, y el
+       desnivel solo dejaba el titulo sobre lo mas negro y el pie casi
+       en papel */
+    background:var(--sec-bg);
     padding:clamp(90px,15vh,170px) var(--pad) clamp(70px,12vh,130px);
   }
   /* anade la clase "dark" a la seccion para el fondo oscuro corporativo */
@@ -6443,10 +6446,19 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
    Se escribe una vez por fotograma y solo si el valor cambia. Cambiar
    una variable de color no rehace el diseno, solo repinta. */
 (function(){
-  const secs = ['what','offer','mandates']
-    .map(function(id){ return document.getElementById(id); })
-    .filter(Boolean)
-    .map(function(el){ return {el: el, v: -1}; });
+  /* Cada seccion se apaga hasta donde tenga sentido segun lo que venga
+     detras. Las dos primeras entregan a otra superficie clara pero muy
+     por debajo del pliegue, asi que pueden llegar a negro. La tercera
+     entrega a "Our projects", que es papel (#ececeb) y se ve a la vez
+     que ella: si llegara a negro, el titulo quedaria carbon con papel
+     justo debajo. Se queda en un atenuado suave, y como su avance nunca
+     alcanza el punto de cruce, su texto sigue siendo oscuro. */
+  const secs = [['what',1], ['offer',1], ['mandates',.34]]
+    .map(function(par){
+      const el = document.getElementById(par[0]);
+      return el ? {el: el, tope: par[1], v: -1} : null;
+    })
+    .filter(Boolean);
   if(!secs.length) return;
 
   let pendiente = false;
@@ -6462,6 +6474,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
          seccion ha terminado de salir por arriba */
       let t = 1 - c.bottom / vh;
       t = t < 0 ? 0 : t > 1 ? 1 : t;
+      t *= s.tope;
 
       const noche = t * t * (3 - 2 * t);
 
