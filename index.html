@@ -505,11 +505,21 @@
   .what{
     --w-ink:#07080a;--w-ink-2:#3c414c;--w-ink-3:#6b7280;
     position:relative;isolation:isolate;overflow:clip;
-    padding:clamp(96px,15vh,168px) var(--pad) clamp(72px,10vh,112px);
-    /* arranca en el gris con el que cierra la seccion de abajo y sube
-       hacia el papel: asi la costura con #offer no existe */
+    /* el hueco de arriba no es aire de sobra: es donde se disuelve el
+       azul del iris, y el rotulo no debe caer dentro de el */
+    padding:clamp(200px,26vh,320px) var(--pad) clamp(72px,10vh,112px);
     background:
-      radial-gradient(1020px 560px at 14% 4%,rgba(21,105,255,.10),transparent 64%),
+      /* la costura. El panel del iris cierra en azul pleno y esta seccion
+         abria en papel: un corte recto de lado a lado. Ahora el mismo azul
+         entra por arriba y se apaga en 210px, asi que el panel parece
+         deshacerse en la hoja en vez de terminar de golpe. En pixeles y no
+         en porcentaje: la altura de la seccion cambia con el idioma */
+      linear-gradient(180deg,
+        rgba(21,105,255,.88) 0,
+        rgba(21,105,255,.60) 58px,
+        rgba(21,105,255,.20) 132px,
+        rgba(21,105,255,0) 214px),
+      radial-gradient(1020px 560px at 14% 24%,rgba(21,105,255,.10),transparent 64%),
       linear-gradient(180deg,#f2f2ef 0%,#f6f6f4 46%,#f6f6f4 100%);
   }
   .what::before{
@@ -589,7 +599,20 @@
     .w-hw h2{max-width:18ch}
   }
   @media (max-width:680px){
-    .what{padding:clamp(76px,11vh,110px) var(--pad) clamp(56px,8vh,80px)}
+    /* la franja de fundido se acorta con la pantalla: 214px de azul en
+       un movil se comen media portada. Y el hueco de arriba tiene que
+       seguir siendo mayor que ella, o el rotulo cae sobre el azul */
+    .what{
+      padding:clamp(178px,24vh,230px) var(--pad) clamp(56px,8vh,80px);
+      background:
+        linear-gradient(180deg,
+          rgba(21,105,255,.88) 0,
+          rgba(21,105,255,.60) 34px,
+          rgba(21,105,255,.20) 78px,
+          rgba(21,105,255,0) 132px),
+        radial-gradient(760px 460px at 14% 26%,rgba(21,105,255,.10),transparent 64%),
+        linear-gradient(180deg,#f2f2ef 0%,#f6f6f4 46%,#f6f6f4 100%);
+    }
     .w-mark{max-width:250px}
   }
 
@@ -607,9 +630,12 @@
        el que arranca la seccion de abajo, asi que la costura no se ve */
     /* dos capas en vez de un plano: una luz azul arriba a la derecha y
        el papel virando de tono. Nada de halo abajo: cualquier tinte que
-       siga vivo al llegar al borde se corta en seco y dibuja la costura */
+       siga vivo al llegar al borde se corta en seco y dibuja la costura.
+       La luz tampoco toca el borde de arriba: pegada al 2% su corte
+       dibujaba una raya azul a lo ancho, justo donde acaba la seccion
+       anterior. Bajada al 30%, su desvanecido cae entero dentro */
     background:
-      radial-gradient(1180px 620px at 80% 2%,rgba(21,105,255,.11),transparent 62%),
+      radial-gradient(1240px 700px at 82% 30%,rgba(21,105,255,.11),transparent 62%),
       linear-gradient(180deg,#f6f6f4 0%,#edeeea 52%,#f2f2ef 88%);
   }
   .offer::before{
@@ -637,6 +663,29 @@
      que se enciende con caminantes y destellos), en su version clara y
      a media intensidad para que no le robe atencion al texto. Lleva la
      misma mascara que la rejilla, asi no deja cantos en los bordes. */
+  /* ---- la luz que sigue al puntero ----
+     Lo que hacia planas las secciones claras es que el papel siempre
+     recibia la luz desde el mismo sitio. Esta capa la mueve: un foco
+     ancho y muy suave que sigue al cursor, de modo que la superficie
+     responde en vez de estar impresa.
+
+     Va con translate3d y no reposicionando un degradado: mover una capa
+     ya pintada lo resuelve el compositor, repintar un radial de 900px a
+     cada movimiento del raton no. En tactil no existe: no hay puntero
+     que seguir y seria una capa mas encendida para nada. */
+  .lux{
+    position:absolute;top:0;left:0;z-index:0;pointer-events:none;
+    width:900px;height:900px;margin:-450px 0 0 -450px;
+    background:radial-gradient(circle,
+      rgba(21,105,255,.13) 0,
+      rgba(21,105,255,.05) 38%,
+      transparent 66%);
+    opacity:0;transition:opacity 1s var(--ease-out);
+    will-change:transform;
+  }
+  .lux.on{opacity:1}
+  @media (hover:none),(prefers-reduced-motion:reduce){ .lux{display:none} }
+
   .cells-soft{
     position:absolute;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;
     /* sin mascara CSS a proposito: una mascara sobre un lienzo que se
@@ -3319,6 +3368,7 @@ html[dir="rtl"] body{direction:ltr}
 
 <section class="what" id="what">
   <div class="w-halo" aria-hidden="true"></div>
+  <div class="lux" aria-hidden="true"></div>
   <canvas class="cells-soft" data-cells="0.30" aria-hidden="true"></canvas>
   <div class="w-inner">
     <p class="eyebrow mono"><i></i>What Sectora is</p>
@@ -3337,6 +3387,7 @@ html[dir="rtl"] body{direction:ltr}
 
 <section class="offer" id="offer">
   <div class="of-halo" aria-hidden="true"></div>
+  <div class="lux" aria-hidden="true"></div>
   <canvas class="cells-soft" data-cells="0.30" aria-hidden="true"></canvas>
   <div class="of-inner">
     <p class="eyebrow mono"><i></i>Distribution</p>
@@ -6236,6 +6287,47 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     }
   }, {rootMargin:'-10% 0px -14% 0px', threshold:0});
   io.observe(sec);
+})();
+</script>
+<script>
+/* ---------- la luz que sigue al puntero ----------
+   Una sola escucha para las dos secciones claras. Se apunta la posicion
+   y se pinta en el siguiente fotograma: mover el raton dispara cientos
+   de eventos por segundo y no tiene sentido tocar el estilo en todos.
+   Solo trabaja la seccion que el puntero esta pisando. */
+(function(){
+  const luces = [...document.querySelectorAll('.lux')].map(function(el){
+    return {el: el, host: el.parentElement, x:0, y:0, on:false};
+  });
+  if(!luces.length) return;
+  if(!matchMedia('(hover:hover)').matches) return;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+
+  let pendiente = false;
+
+  function pintar(){
+    pendiente = false;
+    for(const l of luces){
+      l.el.style.transform = 'translate3d(' + l.x.toFixed(1) + 'px,' +
+                                              l.y.toFixed(1) + 'px,0)';
+      l.el.classList.toggle('on', l.on);
+    }
+  }
+
+  addEventListener('pointermove', function(e){
+    for(const l of luces){
+      const c = l.host.getBoundingClientRect();
+      const dentro = e.clientY >= c.top && e.clientY <= c.bottom;
+      l.on = dentro;
+      if(dentro){ l.x = e.clientX - c.left; l.y = e.clientY - c.top; }
+    }
+    if(!pendiente){ pendiente = true; requestAnimationFrame(pintar); }
+  }, {passive:true});
+
+  addEventListener('pointerleave', function(){
+    for(const l of luces) l.on = false;
+    if(!pendiente){ pendiente = true; requestAnimationFrame(pintar); }
+  }, {passive:true});
 })();
 </script>
 <script>
