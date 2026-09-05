@@ -2139,6 +2139,20 @@
      misma mecanica que el iris de la cubierta: un circulo claro que se
      abre desde el centro con el scroll y desemboca en la seccion final. */
   .jiris{position:relative;height:490vh;background:#000}
+  /* el cierre de la escena. Acaba en un gris azulado frio (215,223,235)
+     y debajo empieza el papel calido de #join (242,242,239): 27 puntos
+     de salto y ademas un cambio de temperatura, que se veia como una
+     raya. El papel entra por el pie y sube 210px.
+     z-index 1 y no mas: por encima del panel fijo, pero por debajo del
+     hilo punteado de #join, que cruza la frontera a proposito y no debe
+     quedar tapado */
+  .jiris::after{
+    content:'';position:absolute;left:0;right:0;bottom:0;height:210px;
+    z-index:1;pointer-events:none;
+    background:linear-gradient(0deg,#f2f2ef 0,rgba(242,242,239,.78) 54px,
+                                     rgba(242,242,239,.32) 128px,
+                                     rgba(242,242,239,0) 210px);
+  }
   .jiris-pin{
     position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
     display:grid;place-items:center;isolation:isolate;
