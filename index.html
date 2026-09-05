@@ -998,7 +998,9 @@
   .mandates{
     --noche:0;--tinta:0;--refuerzo:0;--nf:0;
     --sec-bg:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*100%));
-    --sec-pie:color-mix(in srgb,#f2f2ef,#05070c calc(var(--nf,0)*100%));
+    /* hacia negro puro, no hacia #05070c: debajo esta la escena del
+       suministro, que es #000, y esos 12 puntos de diferencia se veian */
+    --sec-pie:color-mix(in srgb,#f2f2ef,#000000 calc(var(--nf,0)*100%));
     --sec-ink:color-mix(in srgb,#07080a,#ffffff calc(var(--tinta,0)*100%));
     --sec-ink-2:color-mix(in srgb,color-mix(in srgb,#3c414c,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#e2e7f0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
     --sec-ink-3:color-mix(in srgb,color-mix(in srgb,#6b7280,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#b9c1cf,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
@@ -1117,6 +1119,16 @@
      los cuadros se llenan de negro en un frente diagonal ligado al
      scroll, con el filo encendido en azul */
   .wipe{position:relative;height:460vh;background:#000}
+  /* la union con lo de arriba: la escena abre en papel y ahora tiene el
+     roadmap, que es negro, justo encima. El negro entra por el borde y
+     se apaga en 260px. Va fuera del pin a proposito: el pin es fijo y se
+     queda en pantalla, mientras que esto tiene que irse con la frontera */
+  .wipe::after{
+    content:'';position:absolute;left:0;right:0;top:0;height:260px;
+    z-index:3;pointer-events:none;
+    background:linear-gradient(180deg,#000 0,rgba(0,0,0,.74) 68px,
+                                      rgba(0,0,0,.30) 152px,transparent 260px);
+  }
   .wipe-pin{
     position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
     display:grid;place-items:center;isolation:isolate;
@@ -3681,236 +3693,6 @@ html[dir="rtl"] body{direction:ltr}
 </section>
 
 
-<section class="wipe" id="wipe">
-  <div class="wipe-pin">
-    <div class="wipe-grid" aria-hidden="true"></div>
-    <div class="wipe-halo a" aria-hidden="true"></div>
-    <div class="wipe-halo b" aria-hidden="true"></div>
-    <canvas class="cells-soft" data-cells="0.30" aria-hidden="true"></canvas>
-    <canvas id="wipe-canvas" aria-hidden="true"></canvas>
-    <div class="wipe-horizon" id="wipe-horizon" aria-hidden="true"></div>
-    <div class="wipe-title" id="wipe-title">
-      <p>What we are building</p>
-      <h2>Our <b>projects</b></h2>
-      <div class="wipe-list" id="wipe-list">
-        <span>Layer 3</span><span>Tokenization</span><span>Node validation</span>
-        <span>Cybersecurity</span><span>Staking</span><span>DEX</span><span>USD-SEC</span>
-      </div>
-      <p class="wipe-count"><b id="wipe-n">00</b> / 07 products</p>
-    </div>
-
-    <div class="wipe-hud" aria-hidden="true">
-      <span class="wipe-state" id="wipe-state"><span class="led"></span><span id="wipe-state-t">Scanning</span></span>
-      <span class="wipe-rail"><i id="wipe-fill"></i></span>
-      <span class="wipe-pct"><b id="wipe-pct">0</b>%</span>
-    </div>
-  
-    <div class="zoom-cue cue-wipe" id="wipe-cue" aria-hidden="true"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
-  </div>
-</section>
-
-<section class="projects" id="projects">
-  <div class="p-glow" aria-hidden="true"></div>
-  <div class="p-thread" aria-hidden="true"></div>
-  <div class="p-inner">
-    <div class="p-col">
-      <div class="p-sticky">
-      <p class="eyebrow mono reveal"><i></i>Developments</p>
-      <h2 class="reveal" style="--d:.06s">Seven products on one security layer.</h2>
-      <p class="p-lede reveal" style="--d:.12s">
-        Each one runs on the same security layer, and four of them are already
-        open on testnet.
-      </p>
-      <p class="p-count mono reveal" style="--d:.18s">07 products · 06 live</p>
-
-      <div class="p-index reveal" style="--d:.24s" aria-hidden="true">
-        <span class="p-index-num" id="p-index-num">01</span>
-        <span class="p-rail" id="p-rail"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-        <span class="p-index-name" id="p-index-name">Blockchain Layer 3</span>
-      </div>
-    </div></div>
-
-    <div class="p-list">
-      <div class="p-row reveal" style="--d:0.06s">
-        <span class="p-mark"></span>
-        <span class="p-num">01</span>
-        <span class="p-name">Blockchain Layer 3</span>
-        <div class="p-meta">
-          <span class="p-desc">An execution layer built on top of existing settlement, tuned for the throughput tokenized assets require.</span>
-          <a class="p-live" href="https://sectoraorg.com/sectorascan" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
-        </div>
-          <div class="p-shot"><img src="images/proj-layer3.jpg" width="1400" height="603" alt="The Sectora Layer 3 explorer, showing live blocks, transactions and tokenized assets on testnet."
-               loading="lazy" decoding="async"></div>
-      </div>
-      <div class="p-row reveal" style="--d:0.12s">
-        <span class="p-mark"></span>
-        <span class="p-num">02</span>
-        <span class="p-name">Asset tokenization</span>
-        <div class="p-meta">
-          <span class="p-desc">Issuance and lifecycle management for real-world assets, with transfer policy separated from the ownership record.</span>
-          <a class="p-live" href="https://sectoraorg.com/sectorascan#/tokenize" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
-        </div>
-          <div class="p-shot"><img src="images/proj-tokenization.jpg" width="1400" height="731" alt="The tokenization form, where a real-world asset is described and minted on the Sectora testnet."
-               loading="lazy" decoding="async"></div>
-      </div>
-      <div class="p-row reveal" style="--d:0.18s">
-        <span class="p-mark"></span>
-        <span class="p-num">03</span>
-        <span class="p-name">Security node validation</span>
-        <div class="p-meta">
-          <span class="p-desc">A validator set that verifies contract behaviour continuously, not only at deployment.</span>
-          <a class="p-live" href="https://sectoraorg.com/dash" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
-        </div>
-          <div class="p-shot"><img src="images/proj-nodes.jpg" width="1400" height="829" alt="The validation dashboard, showing the validator set, hash power and the revenue that funds buybacks."
-               loading="lazy" decoding="async"></div>
-      </div>
-      <div class="p-row reveal" style="--d:0.24s">
-        <span class="p-mark"></span>
-        <span class="p-num">04</span>
-        <span class="p-name">Cybersecurity Software</span>
-        <div class="p-meta">
-          <span class="p-desc">A quantum-resistant security engine protecting custody, trading and data across every product on the network.</span>
-          <a class="p-live" href="https://sectoraorg.com/security" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
-        </div>
-          <div class="p-shot"><img src="images/proj-security.jpg" width="1400" height="568" alt="The Sectora Shield console, showing threats blocked and the products under its protection."
-               loading="lazy" decoding="async"></div>
-      </div>
-      <div class="p-row reveal" style="--d:0.30s">
-        <span class="p-mark"></span>
-        <span class="p-num">05</span>
-        <span class="p-name">Staking</span>
-        <div class="p-meta">
-          <span class="p-desc">Stake #SECT to earn protocol rewards funded by hash revenue, targeting 14.9% APY.</span>
-          <a class="p-live" href="https://sectoraorg.com/staking" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
-        </div>
-          <div class="p-shot"><img src="images/proj-staking.jpg" width="1400" height="788" alt="The staking page, showing the target APY, the payout schedule and how each hash sale is split."
-               loading="lazy" decoding="async"></div>
-      </div>
-      <div class="p-row reveal" style="--d:0.36s">
-        <span class="p-mark"></span>
-        <span class="p-num">06</span>
-        <span class="p-name">DEX</span>
-        <div class="p-meta">
-          <span class="p-desc">A decentralised exchange where the assets issued on the protocol can be traded and priced.</span>
-          <a class="p-live" href="https://sectoraorg.com/dex" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
-        </div>
-          <div class="p-shot"><img src="images/proj-dex.jpg" width="1400" height="700" alt="The Sectora exchange, showing the order book, the depth chart and the live markets list."
-               loading="lazy" decoding="async"></div>
-      </div>
-      <div class="p-row reveal" style="--d:0.42s">
-        <span class="p-mark"></span>
-        <span class="p-num">07</span>
-        <span class="p-name">Stablecoin USD-SEC</span>
-        <div class="p-meta">
-          <span class="p-desc">A dollar-denominated unit of account for settlement across the products above.</span>
-          <span class="p-soon"><span class="led"></span>In development</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-
-
-<section class="plate" id="plate">
-  <div class="plate-pin">
-    <div class="plate-grid" aria-hidden="true"></div>
-    <div class="plate-aura" aria-hidden="true"><span></span><span></span></div>
-    <div class="plate-halo" aria-hidden="true"></div>
-    <div class="plate-horizon" aria-hidden="true"><span></span><span></span></div>
-    <canvas id="plate-canvas"></canvas>
-    <div class="plate-sweep" aria-hidden="true"></div>
-    <div class="plate-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-
-    <div class="plate-meta tl">Sectora Foundation IL<br><b>Roadmap 2026 — 2027</b></div>
-    <div class="plate-meta tr">Plate<br><b id="plate-n">01</b> / 06</div>
-    <div class="plate-meta bl">Engraved series<br><b id="plate-code">SF·RM·P1·26</b></div>
-    <div class="plate-meta br">Verification layer<br><b>Sectora Protocol</b></div>
-
-    <div class="plate-card">
-      <p class="plate-q" id="plate-q">Aug 2026 · Phase 1</p>
-      <div class="plate-rule"></div>
-      <h2 class="plate-name" id="plate-name">Foundation, audit &amp; testnet live</h2>
-      <p class="plate-sub" id="plate-sub">Contract renounced · Audit in progress · Illinois registered · Testnet live</p>
-    </div>
-  
-    <div class="zoom-cue cue-plate" id="plate-cue" aria-hidden="true"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
-  </div>
-</section>
-
-<section class="rsm" id="roadmap">
-  <div class="rsm-glow" aria-hidden="true"></div>
-  <div class="rsm-inner">
-    <div class="rsm-col">
-      <div class="rsm-sticky">
-      <p class="eyebrow mono reveal"><i></i>Roadmap</p>
-      <h2 class="reveal" style="--d:.06s">From testnet to public markets.</h2>
-      <p class="rsm-lede reveal" style="--d:.12s">
-        Five phases carrying Sectora from its live testnet to IPO/NYSE readiness.
-        Each one gates the next: nothing ships before the layer below it is verified.
-      </p>
-      <p class="rsm-count mono reveal" style="--d:.18s">05 phases · Aug 2026 — Apr 2027</p>
-    </div></div>
-
-    <div class="tl">
-      <div class="tl-item status-done reveal" style="--d:.06s">
-        <span class="tl-q">Aug 2026 · Phase 1</span><span class="tl-tag">Completed</span>
-        <h3>Foundation &amp; audit</h3>
-        <ul class="tl-ml">
-          <li>Contract deployed — ownership renounced</li>
-          <li>Uniswap listing live, $1,000,000 initial liquidity locked</li>
-          <li>Security audit in progress</li>
-          <li>Legal registration completed in Illinois</li>
-        </ul>
-      </div>
-      <div class="tl-item status-done reveal" style="--d:.12s">
-        <span class="tl-q">Aug 2026 · Phase 2</span><span class="tl-tag">Testing Phase · Testnet</span>
-        <h3>Testnet</h3>
-        <ul class="tl-ml">
-          <li>Testnet staking open to all holders</li>
-          <li>Testnet infrastructure deployed: Sectora L3 blockchain, node validation, DEX</li>
-        </ul>
-      </div>
-      <div class="tl-item reveal" style="--d:.18s">
-        <span class="tl-q">15 Mar 2027 · Phase 3</span>
-        <h3>Supply reduction &amp; exchange listings</h3>
-        <ul class="tl-ml">
-          <li>Strategic supply reduction — 50%</li>
-          <li>Exchange listing process begins</li>
-        </ul>
-      </div>
-      <div class="tl-item reveal" style="--d:.24s">
-        <span class="tl-q">2027 · Phase 4</span><span class="tl-tag">Launch · Mar 22, 2027</span>
-        <h3>Mainnet infrastructure launch</h3>
-        <ul class="tl-ml">
-          <li>Public mainnet launch of the Sectora L3 RWA blockchain</li>
-          <li>Mainnet deployment of Hash Nodes</li>
-        </ul>
-      </div>
-      <div class="tl-item reveal" style="--d:.30s">
-        <span class="tl-q">2027 · Phase 5</span>
-        <h3>DEX, tokenization &amp; security software</h3>
-        <ul class="tl-ml">
-          <li>Multi-trade DEX mainnet launch</li>
-          <li>Tokenization of custodied RWA assets</li>
-          <li>Advanced Security Software released to the public and to technology companies</li>
-        </ul>
-      </div>
-      <div class="tl-item reveal" style="--d:.36s">
-        <span class="tl-q">2027 · Phase 6</span>
-        <h3>IPO / NYSE readiness</h3>
-        <ul class="tl-ml">
-          <li>Launch of the Sectora USD-SEC stablecoin</li>
-          <li>Requirements, compliance and solvency preparation for an IPO / NYSE listing</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-
 <section class="zoom" id="zoom">
   <div class="zoom-pin">
     <div class="zoom-pulse" aria-hidden="true"></div>
@@ -4093,6 +3875,236 @@ html[dir="rtl"] body{direction:ltr}
     <p class="rwa-hint"><i></i>Keep scrolling<i></i></p>
   </div>
 </section>
+
+
+<section class="plate" id="plate">
+  <div class="plate-pin">
+    <div class="plate-grid" aria-hidden="true"></div>
+    <div class="plate-aura" aria-hidden="true"><span></span><span></span></div>
+    <div class="plate-halo" aria-hidden="true"></div>
+    <div class="plate-horizon" aria-hidden="true"><span></span><span></span></div>
+    <canvas id="plate-canvas"></canvas>
+    <div class="plate-sweep" aria-hidden="true"></div>
+    <div class="plate-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+    <div class="plate-meta tl">Sectora Foundation IL<br><b>Roadmap 2026 — 2027</b></div>
+    <div class="plate-meta tr">Plate<br><b id="plate-n">01</b> / 06</div>
+    <div class="plate-meta bl">Engraved series<br><b id="plate-code">SF·RM·P1·26</b></div>
+    <div class="plate-meta br">Verification layer<br><b>Sectora Protocol</b></div>
+
+    <div class="plate-card">
+      <p class="plate-q" id="plate-q">Aug 2026 · Phase 1</p>
+      <div class="plate-rule"></div>
+      <h2 class="plate-name" id="plate-name">Foundation, audit &amp; testnet live</h2>
+      <p class="plate-sub" id="plate-sub">Contract renounced · Audit in progress · Illinois registered · Testnet live</p>
+    </div>
+  
+    <div class="zoom-cue cue-plate" id="plate-cue" aria-hidden="true"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
+  </div>
+</section>
+
+<section class="rsm" id="roadmap">
+  <div class="rsm-glow" aria-hidden="true"></div>
+  <div class="rsm-inner">
+    <div class="rsm-col">
+      <div class="rsm-sticky">
+      <p class="eyebrow mono reveal"><i></i>Roadmap</p>
+      <h2 class="reveal" style="--d:.06s">From testnet to public markets.</h2>
+      <p class="rsm-lede reveal" style="--d:.12s">
+        Five phases carrying Sectora from its live testnet to IPO/NYSE readiness.
+        Each one gates the next: nothing ships before the layer below it is verified.
+      </p>
+      <p class="rsm-count mono reveal" style="--d:.18s">05 phases · Aug 2026 — Apr 2027</p>
+    </div></div>
+
+    <div class="tl">
+      <div class="tl-item status-done reveal" style="--d:.06s">
+        <span class="tl-q">Aug 2026 · Phase 1</span><span class="tl-tag">Completed</span>
+        <h3>Foundation &amp; audit</h3>
+        <ul class="tl-ml">
+          <li>Contract deployed — ownership renounced</li>
+          <li>Uniswap listing live, $1,000,000 initial liquidity locked</li>
+          <li>Security audit in progress</li>
+          <li>Legal registration completed in Illinois</li>
+        </ul>
+      </div>
+      <div class="tl-item status-done reveal" style="--d:.12s">
+        <span class="tl-q">Aug 2026 · Phase 2</span><span class="tl-tag">Testing Phase · Testnet</span>
+        <h3>Testnet</h3>
+        <ul class="tl-ml">
+          <li>Testnet staking open to all holders</li>
+          <li>Testnet infrastructure deployed: Sectora L3 blockchain, node validation, DEX</li>
+        </ul>
+      </div>
+      <div class="tl-item reveal" style="--d:.18s">
+        <span class="tl-q">15 Mar 2027 · Phase 3</span>
+        <h3>Supply reduction &amp; exchange listings</h3>
+        <ul class="tl-ml">
+          <li>Strategic supply reduction — 50%</li>
+          <li>Exchange listing process begins</li>
+        </ul>
+      </div>
+      <div class="tl-item reveal" style="--d:.24s">
+        <span class="tl-q">2027 · Phase 4</span><span class="tl-tag">Launch · Mar 22, 2027</span>
+        <h3>Mainnet infrastructure launch</h3>
+        <ul class="tl-ml">
+          <li>Public mainnet launch of the Sectora L3 RWA blockchain</li>
+          <li>Mainnet deployment of Hash Nodes</li>
+        </ul>
+      </div>
+      <div class="tl-item reveal" style="--d:.30s">
+        <span class="tl-q">2027 · Phase 5</span>
+        <h3>DEX, tokenization &amp; security software</h3>
+        <ul class="tl-ml">
+          <li>Multi-trade DEX mainnet launch</li>
+          <li>Tokenization of custodied RWA assets</li>
+          <li>Advanced Security Software released to the public and to technology companies</li>
+        </ul>
+      </div>
+      <div class="tl-item reveal" style="--d:.36s">
+        <span class="tl-q">2027 · Phase 6</span>
+        <h3>IPO / NYSE readiness</h3>
+        <ul class="tl-ml">
+          <li>Launch of the Sectora USD-SEC stablecoin</li>
+          <li>Requirements, compliance and solvency preparation for an IPO / NYSE listing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="wipe" id="wipe">
+  <div class="wipe-pin">
+    <div class="wipe-grid" aria-hidden="true"></div>
+    <div class="wipe-halo a" aria-hidden="true"></div>
+    <div class="wipe-halo b" aria-hidden="true"></div>
+    <canvas class="cells-soft" data-cells="0.30" aria-hidden="true"></canvas>
+    <canvas id="wipe-canvas" aria-hidden="true"></canvas>
+    <div class="wipe-horizon" id="wipe-horizon" aria-hidden="true"></div>
+    <div class="wipe-title" id="wipe-title">
+      <p>What we are building</p>
+      <h2>Our <b>projects</b></h2>
+      <div class="wipe-list" id="wipe-list">
+        <span>Layer 3</span><span>Tokenization</span><span>Node validation</span>
+        <span>Cybersecurity</span><span>Staking</span><span>DEX</span><span>USD-SEC</span>
+      </div>
+      <p class="wipe-count"><b id="wipe-n">00</b> / 07 products</p>
+    </div>
+
+    <div class="wipe-hud" aria-hidden="true">
+      <span class="wipe-state" id="wipe-state"><span class="led"></span><span id="wipe-state-t">Scanning</span></span>
+      <span class="wipe-rail"><i id="wipe-fill"></i></span>
+      <span class="wipe-pct"><b id="wipe-pct">0</b>%</span>
+    </div>
+  
+    <div class="zoom-cue cue-wipe" id="wipe-cue" aria-hidden="true"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="p-glow" aria-hidden="true"></div>
+  <div class="p-thread" aria-hidden="true"></div>
+  <div class="p-inner">
+    <div class="p-col">
+      <div class="p-sticky">
+      <p class="eyebrow mono reveal"><i></i>Developments</p>
+      <h2 class="reveal" style="--d:.06s">Seven products on one security layer.</h2>
+      <p class="p-lede reveal" style="--d:.12s">
+        Each one runs on the same security layer, and four of them are already
+        open on testnet.
+      </p>
+      <p class="p-count mono reveal" style="--d:.18s">07 products · 06 live</p>
+
+      <div class="p-index reveal" style="--d:.24s" aria-hidden="true">
+        <span class="p-index-num" id="p-index-num">01</span>
+        <span class="p-rail" id="p-rail"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        <span class="p-index-name" id="p-index-name">Blockchain Layer 3</span>
+      </div>
+    </div></div>
+
+    <div class="p-list">
+      <div class="p-row reveal" style="--d:0.06s">
+        <span class="p-mark"></span>
+        <span class="p-num">01</span>
+        <span class="p-name">Blockchain Layer 3</span>
+        <div class="p-meta">
+          <span class="p-desc">An execution layer built on top of existing settlement, tuned for the throughput tokenized assets require.</span>
+          <a class="p-live" href="https://sectoraorg.com/sectorascan" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
+        </div>
+          <div class="p-shot"><img src="images/proj-layer3.jpg" width="1400" height="603" alt="The Sectora Layer 3 explorer, showing live blocks, transactions and tokenized assets on testnet."
+               loading="lazy" decoding="async"></div>
+      </div>
+      <div class="p-row reveal" style="--d:0.12s">
+        <span class="p-mark"></span>
+        <span class="p-num">02</span>
+        <span class="p-name">Asset tokenization</span>
+        <div class="p-meta">
+          <span class="p-desc">Issuance and lifecycle management for real-world assets, with transfer policy separated from the ownership record.</span>
+          <a class="p-live" href="https://sectoraorg.com/sectorascan#/tokenize" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
+        </div>
+          <div class="p-shot"><img src="images/proj-tokenization.jpg" width="1400" height="731" alt="The tokenization form, where a real-world asset is described and minted on the Sectora testnet."
+               loading="lazy" decoding="async"></div>
+      </div>
+      <div class="p-row reveal" style="--d:0.18s">
+        <span class="p-mark"></span>
+        <span class="p-num">03</span>
+        <span class="p-name">Security node validation</span>
+        <div class="p-meta">
+          <span class="p-desc">A validator set that verifies contract behaviour continuously, not only at deployment.</span>
+          <a class="p-live" href="https://sectoraorg.com/dash" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
+        </div>
+          <div class="p-shot"><img src="images/proj-nodes.jpg" width="1400" height="829" alt="The validation dashboard, showing the validator set, hash power and the revenue that funds buybacks."
+               loading="lazy" decoding="async"></div>
+      </div>
+      <div class="p-row reveal" style="--d:0.24s">
+        <span class="p-mark"></span>
+        <span class="p-num">04</span>
+        <span class="p-name">Cybersecurity Software</span>
+        <div class="p-meta">
+          <span class="p-desc">A quantum-resistant security engine protecting custody, trading and data across every product on the network.</span>
+          <a class="p-live" href="https://sectoraorg.com/security" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
+        </div>
+          <div class="p-shot"><img src="images/proj-security.jpg" width="1400" height="568" alt="The Sectora Shield console, showing threats blocked and the products under its protection."
+               loading="lazy" decoding="async"></div>
+      </div>
+      <div class="p-row reveal" style="--d:0.30s">
+        <span class="p-mark"></span>
+        <span class="p-num">05</span>
+        <span class="p-name">Staking</span>
+        <div class="p-meta">
+          <span class="p-desc">Stake #SECT to earn protocol rewards funded by hash revenue, targeting 14.9% APY.</span>
+          <a class="p-live" href="https://sectoraorg.com/staking" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
+        </div>
+          <div class="p-shot"><img src="images/proj-staking.jpg" width="1400" height="788" alt="The staking page, showing the target APY, the payout schedule and how each hash sale is split."
+               loading="lazy" decoding="async"></div>
+      </div>
+      <div class="p-row reveal" style="--d:0.36s">
+        <span class="p-mark"></span>
+        <span class="p-num">06</span>
+        <span class="p-name">DEX</span>
+        <div class="p-meta">
+          <span class="p-desc">A decentralised exchange where the assets issued on the protocol can be traded and priced.</span>
+          <a class="p-live" href="https://sectoraorg.com/dex" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
+        </div>
+          <div class="p-shot"><img src="images/proj-dex.jpg" width="1400" height="700" alt="The Sectora exchange, showing the order book, the depth chart and the live markets list."
+               loading="lazy" decoding="async"></div>
+      </div>
+      <div class="p-row reveal" style="--d:0.42s">
+        <span class="p-mark"></span>
+        <span class="p-num">07</span>
+        <span class="p-name">Stablecoin USD-SEC</span>
+        <div class="p-meta">
+          <span class="p-desc">A dollar-denominated unit of account for settlement across the products above.</span>
+          <span class="p-soon"><span class="led"></span>In development</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
 
 
 <section class="jiris" id="jiris">
@@ -6607,10 +6619,10 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
        siguiente. Las tres dejan de ser tres planos apilados y pasan a
        ser una sola superficie que se apaga por tramos.
 
-       Debajo de la ultima esta "Our projects", que es papel y no se
-       apaga: su pie tiende a 0. */
+       Debajo de la ultima esta ahora la escena del suministro, que abre
+       en negro y no cambia con el scroll: su pie va fijo a 1. */
     for(let i = 0; i < secs.length; i++){
-      const pie = i < secs.length - 1 ? secs[i+1].n : 0;
+      const pie = i < secs.length - 1 ? secs[i+1].n : 1;
       const rp = Math.round(pie * 1000) / 1000;
       if(rp !== secs[i].vf){ secs[i].vf = rp; secs[i].el.style.setProperty('--nf', rp); }
     }
