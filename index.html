@@ -795,40 +795,30 @@
      suma especificidad, asi que puesta antes no habria ganado ni una sola
      anchura.
 
-     El carril libre a cada lado mide exactamente --pad, que baja de 72px
-     a 20px. Cada pieza necesita su hueco, asi que cada una cae en el
-     ancho en que deja de caber, en vez de irse todas de golpe:
+     El carril libre a cada lado mide exactamente --pad. En un telefono
+     vale 20px y ahi no cabe ni el rotulo, asi que en vez de encoger las
+     piezas hasta que no se noten, el carril se ensancha: estas tres
+     secciones se dan su propio --pad y el margen entra tal cual, con la
+     misma geometria que en escritorio.
 
-       lectura de la regla  necesita 0.66*pad > 34  ->  hasta 1210px
-       rotulo del lomo      necesita 0.66*pad > 20  ->  hasta  720px
+     Cuesta unos 16px de columna de texto a cada lado. Los vale: es la
+     unica parte del diseno que no comparte con cualquier otra web, y en
+     un telefono es donde mas gente la va a ver.
 
-     La lectura pide 34 y no 20 porque ademas del ancho del numero hay
-     que dejarle los 9px que la apartan del trazo del cursor.
-
-     Por debajo quedan el filete, el indice y las marcas, que es lo que
-     lleva la identidad. El rotulo no se echa en falta: el ojo de buey de
-     la seccion dice lo mismo justo al lado. */
+     La lectura de la regla es la unica que se queda fuera. Necesita
+     0.66*pad > 34 (el numero, mas los 9px que lo apartan del trazo del
+     cursor), o sea un carril de 52px, y eso ya son 104 de los 390 de un
+     telefono: se comeria la linea de texto. */
   @media (max-width:1210px){
     .gauge u::after{display:none}
   }
-  @media (max-width:720px){
-    .spine span{display:none}
-    /* el filete se separa del borde: centrado sobre 0.34*pad el indice
-       se salia de la pantalla por la izquierda. A la mitad del carril
-       queda holgura por los dos lados */
-    .spine{left:calc(var(--pad) * .5);z-index:4}
-    /* fijo al hueco de cabecera en vez de pegado a la ventana: en un
-       carril de 20px el indice flotante caia a dos pixeles del cuerpo
-       de texto y leia como un choque, no como un margen. Arriba tiene
-       todo el aire del relleno para el solo */
-    .spine em{position:absolute;top:26px}
-    .spine b{width:15px;height:21px;font-size:8.5px}
-    .spine i{bottom:20px;width:4px;height:4px}
-    .gauge{width:8px}
-    .gauge::before{
-      background-size:8px 100%,4px 100%;
-      background-position:0 0,4px 0;
-    }
+  /* hasta 895px: por encima de ese ancho el carril por defecto (4.4vw)
+     ya pasa de 39px, que es lo que el rotulo necesita con holgura */
+  @media (max-width:895px){
+    .what,.offer,.mandates{--pad:clamp(36px,9.5vw,46px)}
+    /* por encima del velo del titulo fijo de #mandates, que es opaco y
+       va en z-index 3 */
+    .spine{z-index:4}
   }
 
   /* La cruz de registro en el centro de cada casilla va dentro de la
