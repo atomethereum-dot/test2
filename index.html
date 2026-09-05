@@ -973,11 +973,11 @@
     --rail-ink:color-mix(in srgb,color-mix(in srgb,#9aa0ab,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#97a0b0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));--rail-fuerte:#3c414c;
     --rail-line:rgba(0,0,0,.11);--rail-plate:#f2f2ef;
     position:relative;isolation:isolate;
-    /* sin pie aclarado: debajo de esta seccion ya empieza la zona oscura
-       del sitio, asi que no hay nada claro contra lo que suavizar, y el
-       desnivel solo dejaba el titulo sobre lo mas negro y el pie casi
-       en papel */
-    background:var(--sec-bg);
+    /* llega al mismo negro que las dos de arriba, pero con un pie corto
+       que se aclara: debajo esta "Our projects", que es papel y se ve a
+       la vez, y sin esa transicion el encuentro seria un corte recto */
+    background:linear-gradient(180deg,var(--sec-bg) 0%,var(--sec-bg) 90%,
+                                      var(--sec-pie) 100%);
     padding:clamp(90px,15vh,170px) var(--pad) clamp(70px,12vh,130px);
   }
   /* anade la clase "dark" a la seccion para el fondo oscuro corporativo */
@@ -6453,7 +6453,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
      que ella: si llegara a negro, el titulo quedaria carbon con papel
      justo debajo. Se queda en un atenuado suave, y como su avance nunca
      alcanza el punto de cruce, su texto sigue siendo oscuro. */
-  const secs = [['what',1], ['offer',1], ['mandates',.34]]
+  const secs = [['what',1], ['offer',1], ['mandates',1]]
     .map(function(par){
       const el = document.getElementById(par[0]);
       return el ? {el: el, tope: par[1], v: -1} : null;
@@ -6639,8 +6639,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   let N = 36;
   const SUB = 4;                /* submuestreo por casilla, para el canto */
   const HUECO = 0.84;           /* cuanto del paso ocupa el cuadro */
-  const DUR = 1050;             /* lo que tarda una casilla en llegar */
-  const ESCALONA = 1150;        /* diferencia entre la primera y la ultima */
+  const DUR = 620;              /* lo que tarda una casilla en llegar */
+  const ESCALONA = 560;         /* diferencia entre la primera y la ultima */
 
   let W=0, H=0, paso=0, lado=0, piezas=[], ini=-1, anim=0, visible=false, montado=false;
 
@@ -6704,7 +6704,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
           x:x, y:y,
           x0: ox + (n1 * 1.9 - .45) * lado,
           y0: oy + (n2 * 1.9 - .45) * lado,
-          esp: d * ESCALONA + ruido(c + 3, r + 11) * 240,
+          esp: d * ESCALONA + ruido(c + 3, r + 11) * 130,
           /* la opacidad lleva dos cosas: el canto de la figura y un
              grano leve, para que el plano no quede muerto */
           tono: cob * (.9 + ruido(c + 31, r + 7) * .1),
@@ -6737,7 +6737,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
      pieza no aparece y ya esta, se enciende. Es la misma cascada que
      recorre las celdas del resto del sitio, aqui una unica vez. */
   let barridoIni = -1;
-  const BARRIDO_MS = 1150;
+  const BARRIDO_MS = 780;
   function barrido(t){
     if(!montado) return;
     if(barridoIni < 0){ barridoIni = t + 90; return; }
@@ -6815,7 +6815,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     anim = requestAnimationFrame(cuadro);
     if(!visible || document.hidden){ last = t; return; }
     const dt = Math.min(t - last, 50); last = t;
-    if(ini < 0) ini = t + 120;
+    if(ini < 0) ini = t + 70;
     barrido(t); destellos(t);
     const caida = Math.pow(.94, dt / 16.7);
     for(const p of piezas) p.calor *= caida;
