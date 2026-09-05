@@ -721,7 +721,7 @@
     font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:400;
     letter-spacing:.2em;text-transform:uppercase;color:var(--rail-ink,#9aa0ab);
   }
-  @media (min-width:1240px){ .spine,.gauge{display:block} }
+  .spine,.gauge{display:block}
 
   /* ---- el lomo ---- */
   .spine{left:calc(var(--pad) * .34);width:1px;background:var(--rail-line,rgba(0,0,0,.10))}
@@ -735,7 +735,9 @@
   }
   .spine b{
     position:absolute;top:0;left:50%;transform:translateX(-50%);
-    width:19px;height:19px;display:grid;place-items:center;
+    /* mas alta que ancha a proposito: la placa tapa el filete, y con la
+       caja cuadrada la linea reaparecia pegada a los digitos */
+    width:19px;height:25px;display:grid;place-items:center;
     background:var(--rail-plate,#f4f4f1);
     font-weight:500;color:var(--rail-fuerte,#3c414c);letter-spacing:0;
   }
@@ -768,8 +770,10 @@
     background-repeat:repeat-y;
   }
   /* el cursor y su lectura: los mueve el scroll */
+  /* el trazo arranca dentro de la regla, no antes: sobresaliendo por la
+     izquierda llegaba a tocar la lectura y parecia tachada */
   .gauge u{
-    position:absolute;left:-3px;right:-3px;height:1px;top:0;
+    position:absolute;left:5px;right:-6px;height:1px;top:0;
     background:var(--blue);text-decoration:none;
     opacity:0;transition:opacity .6s var(--ease-out);
     will-change:transform;
@@ -779,12 +783,53 @@
      en 1240px, asi que se montaba encima del texto. En vertical ocupa 12
      y cabe con holgura en todo el rango */
   .gauge u::after{
-    content:attr(data-v);position:absolute;right:15px;top:50%;
+    content:attr(data-v);position:absolute;right:22px;top:50%;
     transform:translateY(-50%);
     writing-mode:vertical-rl;white-space:nowrap;
     color:var(--blue-deep);letter-spacing:.14em;
   }
   .gauge.on u{opacity:1}
+
+  /* ---- el margen en pantallas estrechas ----
+     Va despues de las reglas base a proposito: una consulta de medios no
+     suma especificidad, asi que puesta antes no habria ganado ni una sola
+     anchura.
+
+     El carril libre a cada lado mide exactamente --pad, que baja de 72px
+     a 20px. Cada pieza necesita su hueco, asi que cada una cae en el
+     ancho en que deja de caber, en vez de irse todas de golpe:
+
+       lectura de la regla  necesita 0.66*pad > 34  ->  hasta 1210px
+       rotulo del lomo      necesita 0.66*pad > 20  ->  hasta  720px
+
+     La lectura pide 34 y no 20 porque ademas del ancho del numero hay
+     que dejarle los 9px que la apartan del trazo del cursor.
+
+     Por debajo quedan el filete, el indice y las marcas, que es lo que
+     lleva la identidad. El rotulo no se echa en falta: el ojo de buey de
+     la seccion dice lo mismo justo al lado. */
+  @media (max-width:1210px){
+    .gauge u::after{display:none}
+  }
+  @media (max-width:720px){
+    .spine span{display:none}
+    /* el filete se separa del borde: centrado sobre 0.34*pad el indice
+       se salia de la pantalla por la izquierda. A la mitad del carril
+       queda holgura por los dos lados */
+    .spine{left:calc(var(--pad) * .5);z-index:4}
+    /* fijo al hueco de cabecera en vez de pegado a la ventana: en un
+       carril de 20px el indice flotante caia a dos pixeles del cuerpo
+       de texto y leia como un choque, no como un margen. Arriba tiene
+       todo el aire del relleno para el solo */
+    .spine em{position:absolute;top:26px}
+    .spine b{width:15px;height:21px;font-size:8.5px}
+    .spine i{bottom:20px;width:4px;height:4px}
+    .gauge{width:8px}
+    .gauge::before{
+      background-size:8px 100%,4px 100%;
+      background-position:0 0,4px 0;
+    }
+  }
 
   /* La cruz de registro en el centro de cada casilla va dentro de la
      regla de cada seccion, no en una compartida: las suyas se declaran
@@ -3581,9 +3626,12 @@ html[dir="rtl"] body{direction:ltr}
 </section>
 
 <section class="mandates" id="mandates">
-  <div class="m-bg" aria-hidden="true">
+  <!-- fuera de .m-bg, como en las otras dos secciones: ese envoltorio
+       lleva z-index y recorte para contener los halos, y dentro de el
+       el lomo quedaba por debajo del velo del titulo fijo -->
   <div class="spine" aria-hidden="true"><em><b>03</b><span>Verification</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u data-v="0%"></u></div>
+  <div class="m-bg" aria-hidden="true">
     <div class="halo a"></div>
     <div class="halo b"></div>
   </div>
