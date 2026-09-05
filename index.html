@@ -1343,6 +1343,32 @@
   .p-row.active .p-mark{transform:scaleY(1)}
   .p-desc{font-size:14px;line-height:1.7;color:var(--ink-3);max-width:44ch}
 
+  /* --- la captura de cada producto ---
+     Son pantallazos de interfaz y cada uno viene con una relacion
+     distinta, asi que se encajan enteros sobre el panel en vez de
+     recortarlos: recortando se pierden las tarjetas y las cifras de los
+     bordes, que es justo lo que hay que enseñar. El panel es del mismo
+     negro que el fondo, asi que las bandas no se ven.
+     La septima fila no lleva captura a proposito: esta en desarrollo y
+     no hay nada que enseñar todavia. */
+  .p-shot{
+    grid-column:2;margin-top:20px;width:100%;max-width:540px;
+    position:relative;aspect-ratio:2/1;overflow:hidden;
+    background:#05070c;border:1px solid var(--hair);border-radius:3px;
+  }
+  .p-shot img{
+    display:block;width:100%;height:100%;object-fit:contain;
+    opacity:.62;transition:opacity .55s var(--ease);
+  }
+  .p-row.active .p-shot img,.p-row:hover .p-shot img{opacity:1}
+  /* el filete de la fila en lectura se prolonga sobre la captura */
+  .p-shot::after{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    box-shadow:inset 0 0 0 1px transparent;
+    transition:box-shadow .55s var(--ease);
+  }
+  .p-row.active .p-shot::after{box-shadow:inset 0 0 0 1px rgba(21,105,255,.42)}
+
   /* estado en vivo: el punto verde es el unico verde de la pagina,
      reservado para "esto ya se puede tocar" */
   .p-live{
@@ -3710,6 +3736,8 @@ html[dir="rtl"] body{direction:ltr}
           <span class="p-desc">An execution layer built on top of existing settlement, tuned for the throughput tokenized assets require.</span>
           <a class="p-live" href="https://sectoraorg.com/sectorascan" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
         </div>
+          <div class="p-shot"><img src="images/proj-layer3.jpg" alt="The Sectora Layer 3 explorer, showing live blocks, transactions and tokenized assets on testnet."
+               loading="lazy" decoding="async"></div>
       </div>
       <div class="p-row reveal" style="--d:0.12s">
         <span class="p-mark"></span>
@@ -3719,6 +3747,8 @@ html[dir="rtl"] body{direction:ltr}
           <span class="p-desc">Issuance and lifecycle management for real-world assets, with transfer policy separated from the ownership record.</span>
           <a class="p-live" href="https://sectoraorg.com/sectorascan#/tokenize" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
         </div>
+          <div class="p-shot"><img src="images/proj-tokenization.jpg" alt="The tokenization form, where a real-world asset is described and minted on the Sectora testnet."
+               loading="lazy" decoding="async"></div>
       </div>
       <div class="p-row reveal" style="--d:0.18s">
         <span class="p-mark"></span>
@@ -3728,6 +3758,8 @@ html[dir="rtl"] body{direction:ltr}
           <span class="p-desc">A validator set that verifies contract behaviour continuously, not only at deployment.</span>
           <a class="p-live" href="https://sectoraorg.com/dash" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
         </div>
+          <div class="p-shot"><img src="images/proj-nodes.jpg" alt="The validation dashboard, showing the validator set, hash power and the revenue that funds buybacks."
+               loading="lazy" decoding="async"></div>
       </div>
       <div class="p-row reveal" style="--d:0.24s">
         <span class="p-mark"></span>
@@ -3737,6 +3769,8 @@ html[dir="rtl"] body{direction:ltr}
           <span class="p-desc">A quantum-resistant security engine protecting custody, trading and data across every product on the network.</span>
           <a class="p-live" href="https://sectoraorg.com/security" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
         </div>
+          <div class="p-shot"><img src="images/proj-security.jpg" alt="The Sectora Shield console, showing threats blocked and the products under its protection."
+               loading="lazy" decoding="async"></div>
       </div>
       <div class="p-row reveal" style="--d:0.30s">
         <span class="p-mark"></span>
@@ -3746,6 +3780,8 @@ html[dir="rtl"] body{direction:ltr}
           <span class="p-desc">Stake #SECT to earn protocol rewards funded by hash revenue, targeting 14.9% APY.</span>
           <a class="p-live" href="https://sectoraorg.com/staking" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
         </div>
+          <div class="p-shot"><img src="images/proj-staking.jpg" alt="The staking page, showing the target APY, the payout schedule and how each hash sale is split."
+               loading="lazy" decoding="async"></div>
       </div>
       <div class="p-row reveal" style="--d:0.36s">
         <span class="p-mark"></span>
@@ -3755,6 +3791,8 @@ html[dir="rtl"] body{direction:ltr}
           <span class="p-desc">A decentralised exchange where the assets issued on the protocol can be traded and priced.</span>
           <a class="p-live" href="https://sectoraorg.com/dex" target="_blank" rel="noopener noreferrer"><span class="led"></span>Click here — Testnet live <i>↗</i></a>
         </div>
+          <div class="p-shot"><img src="images/proj-dex.jpg" alt="The Sectora exchange, showing the order book, the depth chart and the live markets list."
+               loading="lazy" decoding="async"></div>
       </div>
       <div class="p-row reveal" style="--d:0.42s">
         <span class="p-mark"></span>
