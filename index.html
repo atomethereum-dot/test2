@@ -525,18 +525,20 @@
     position:relative;isolation:isolate;overflow:clip;
     /* el hueco de arriba no es aire de sobra: es donde se disuelve el
        azul del iris, y el rotulo no debe caer dentro de el */
-    padding:clamp(200px,26vh,320px) var(--pad) clamp(72px,10vh,112px);
+    padding:clamp(184px,19vh,214px) var(--pad) clamp(52px,7vh,80px);
     background:
       /* la costura. El panel del iris cierra en azul pleno y esta seccion
          abria en papel: un corte recto de lado a lado. Ahora el mismo azul
-         entra por arriba y se apaga en 210px, asi que el panel parece
+         entra por arriba y se apaga en 158px, asi que el panel parece
          deshacerse en la hoja en vez de terminar de golpe. En pixeles y no
-         en porcentaje: la altura de la seccion cambia con el idioma */
+         en porcentaje: la altura de la seccion cambia con el idioma.
+         El hueco de arriba va atado a esta cifra: si se acorta uno hay
+         que acortar el otro, o el rotulo cae dentro del azul */
       linear-gradient(180deg,
         rgba(21,105,255,.88) 0,
-        rgba(21,105,255,.60) 58px,
-        rgba(21,105,255,.20) 132px,
-        rgba(21,105,255,0) 214px),
+        rgba(21,105,255,.60) 44px,
+        rgba(21,105,255,.20) 98px,
+        rgba(21,105,255,0) 158px),
       radial-gradient(1020px 520px at 14% 46%,rgba(21,105,255,.10),transparent 64%),
       linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 46%,
                              var(--papel-2) 84%,var(--papel-pie) 100%);
@@ -558,7 +560,7 @@
   }
 
   .w-inner{position:relative;z-index:1;max-width:1280px;color:var(--w-ink)}
-  .what .eyebrow{color:var(--w-ink-3);margin-bottom:clamp(24px,3.6vh,38px)}
+  .what .eyebrow{color:var(--w-ink-3);margin-bottom:clamp(18px,2.6vh,28px)}
   .what .eyebrow i{width:0;background:var(--w-ink);transition:width .9s var(--ease-out) .1s}
   #what.on .eyebrow i{width:30px}
 
@@ -576,7 +578,7 @@
   /* ---- la marca que se arma ---- */
   .w-mark{
     position:relative;width:100%;max-width:400px;aspect-ratio:1;
-    margin:clamp(52px,7.5vh,96px) auto 0;
+    margin:clamp(34px,4.8vh,62px) auto 0;
   }
   .w-mark canvas{display:block;width:100%;height:100%}
   /* un resplandor detras que solo aparece cuando la marca ya esta
@@ -598,7 +600,7 @@
   #what.on .w-hw h2{transform:none}
 
   .w-lede{
-    margin:clamp(20px,2.8vh,30px) 0 0;max-width:50ch;text-wrap:pretty;
+    margin:clamp(15px,2vh,22px) 0 0;max-width:50ch;text-wrap:pretty;
     font-size:clamp(16px,1.3vw,19px);font-weight:300;line-height:1.62;
     letter-spacing:-.006em;color:var(--w-ink-2);
     opacity:0;transform:translateY(18px);
@@ -613,23 +615,23 @@
   #what.on .w-lede:nth-of-type(2){transition-delay:.34s}
 
   @media (max-width:980px){
-    .w-top{grid-template-columns:minmax(0,1fr);gap:clamp(22px,3.4vh,32px)}
+    .w-top{grid-template-columns:minmax(0,1fr);gap:clamp(16px,2.4vh,24px)}
     .w-body{padding-top:0}
-    .w-mark{max-width:300px;margin-top:clamp(44px,7vh,72px)}
+    .w-mark{max-width:300px;margin-top:clamp(28px,4.4vh,46px)}
     .w-hw h2{max-width:18ch}
   }
   @media (max-width:680px){
-    /* la franja de fundido se acorta con la pantalla: 214px de azul en
+    /* la franja de fundido se acorta con la pantalla: 158px de azul en
        un movil se comen media portada. Y el hueco de arriba tiene que
        seguir siendo mayor que ella, o el rotulo cae sobre el azul */
     .what{
-      padding:clamp(178px,24vh,230px) var(--pad) clamp(56px,8vh,80px);
+      padding:clamp(126px,17vh,160px) var(--pad) clamp(40px,5.6vh,58px);
       background:
         linear-gradient(180deg,
           rgba(21,105,255,.88) 0,
-          rgba(21,105,255,.60) 34px,
-          rgba(21,105,255,.20) 78px,
-          rgba(21,105,255,0) 132px),
+          rgba(21,105,255,.60) 26px,
+          rgba(21,105,255,.20) 58px,
+          rgba(21,105,255,0) 98px),
         radial-gradient(760px 460px at 14% 26%,rgba(21,105,255,.10),transparent 64%),
         linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 46%,
                              var(--papel-2) 84%,var(--papel-pie) 100%);
@@ -659,7 +661,7 @@
     --papel-3:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*100%));
     --papel-pie:color-mix(in srgb,#f2f2ef,#05070c calc(var(--nf,0)*100%));
     position:relative;isolation:isolate;overflow:clip;
-    padding:clamp(84px,13vh,148px) var(--pad) clamp(56px,8vh,92px);
+    padding:clamp(58px,9vh,100px) var(--pad) clamp(40px,5.6vh,64px);
     /* sin filete de cierre: el degradado termina en el mismo tono con
        el que arranca la seccion de abajo, asi que la costura no se ve */
     /* dos capas en vez de un plano: una luz azul arriba a la derecha y
@@ -823,7 +825,7 @@
      que lo baja lo justo para que las dos primeras lineas se lean a la par */
   .of-body{padding-top:clamp(10px,1.3vw,19px)}
 
-  .offer .eyebrow{color:var(--of-ink-3);margin-bottom:clamp(24px,3.6vh,38px)}
+  .offer .eyebrow{color:var(--of-ink-3);margin-bottom:clamp(18px,2.6vh,28px)}
   .offer .eyebrow i{width:0;background:var(--of-ink);transition:width .9s var(--ease-out) .1s}
   #offer.on .eyebrow i{width:30px}
   /* sube desde debajo de su propia caja: revelado limpio y sin trocear
@@ -859,8 +861,8 @@
      panel blanco translucido levanta el bloque del fondo sin
      oscurecer nada. */
   .of-panel{
-    position:relative;margin:clamp(46px,7vh,82px) 0 0;
-    padding:clamp(6px,.8vw,14px) clamp(22px,2.8vw,44px) clamp(22px,2.6vw,32px);
+    position:relative;margin:clamp(32px,4.8vh,56px) 0 0;
+    padding:clamp(6px,.8vw,14px) clamp(22px,2.8vw,44px) clamp(18px,2.2vw,26px);
     background:color-mix(in srgb,rgba(255,255,255,.6),rgba(255,255,255,.05) calc(var(--tinta,0)*100%));
     border:1px solid color-mix(in srgb,rgba(0,0,0,.09),rgba(255,255,255,.12) calc(var(--tinta,0)*100%));
     border-radius:3px;
@@ -877,7 +879,7 @@
     position:relative;display:grid;
     grid-template-columns:minmax(0,1fr) auto;
     align-items:baseline;gap:clamp(18px,3vw,44px);
-    padding:clamp(19px,2.5vh,27px) 2px;
+    padding:clamp(15px,1.9vh,21px) 2px;
     opacity:0;transform:translateY(14px);
     transition:opacity .85s var(--ease-out),transform .85s var(--ease-out);
   }
@@ -981,7 +983,7 @@
        la vez, y sin esa transicion el encuentro seria un corte recto */
     background:linear-gradient(180deg,var(--sec-bg) 0%,var(--sec-bg) 84%,
                                       var(--sec-pie) 100%);
-    padding:clamp(90px,15vh,170px) var(--pad) clamp(70px,12vh,130px);
+    padding:clamp(62px,10vh,114px) var(--pad) clamp(48px,8vh,88px);
   }
   /* anade la clase "dark" a la seccion para el fondo oscuro corporativo */
   .mandates.dark::before{background-image:
@@ -1026,26 +1028,28 @@
     height:fit-content;
   }
   .m-lede{
-    margin-top:26px;max-width:38ch;
+    margin-top:20px;max-width:38ch;
     font-size:14.5px;line-height:1.75;color:var(--sec-ink-2);
   }
   .m-count{
-    margin-top:34px;padding-top:18px;border-top:1px solid var(--card-brd);
+    margin-top:24px;padding-top:14px;border-top:1px solid var(--card-brd);
     color:var(--sec-ink-4);
   }
 
   /* la columna derecha se apila: es la que aporta el recorrido */
   .m-list{display:flex;flex-direction:column;gap:18px}
-  .mandates .eyebrow{color:var(--sec-ink-3);margin-bottom:clamp(26px,4vh,44px)}
+  .mandates .eyebrow{color:var(--sec-ink-3);margin-bottom:clamp(18px,2.8vh,30px)}
   .mandates .eyebrow i{width:30px;background:var(--sec-ink)}
   .mandates h2{
     font-size:clamp(28px,4.4vw,62px);font-weight:200;line-height:1.06;letter-spacing:-.03em;
-    max-width:16ch;margin-bottom:clamp(44px,7vh,84px);text-wrap:balance;color:var(--sec-ink);
+    max-width:16ch;margin-bottom:clamp(30px,4.8vh,56px);text-wrap:balance;color:var(--sec-ink);
   }
 
   .m-card{
-    position:relative;padding:clamp(30px,3.4vw,44px) clamp(26px,3vw,40px) clamp(34px,3.6vw,46px);
-    min-height:clamp(300px,42vh,380px);
+    position:relative;padding:clamp(24px,2.7vw,34px) clamp(26px,3vw,40px) clamp(26px,2.8vw,34px);
+    /* la tarjeta llevaba 380px de alto para unas 120 de texto: el resto
+       era hueco muerto que el filete del enlace no llegaba a cerrar */
+    min-height:clamp(228px,29vh,286px);
     display:flex;flex-direction:column;
     background:var(--card-bg);border:1px solid var(--card-brd);border-radius:3px;
     backdrop-filter:blur(16px) saturate(1.4);
@@ -1054,7 +1058,7 @@
     transition:transform .5s var(--ease),border-color .5s var(--ease);
   }
   .m-card:hover{transform:translateY(-3px);border-color:rgba(21,105,255,.5)}
-  .m-card span{display:block;color:var(--sec-ink-4);margin-bottom:22px}
+  .m-card span{display:block;color:var(--sec-ink-4);margin-bottom:16px}
   .m-card h3{font-size:clamp(19px,1.7vw,24px);font-weight:400;margin-bottom:14px;letter-spacing:-.012em;color:var(--sec-ink)}
   .m-card p{font-size:14.5px;line-height:1.75;color:var(--sec-ink-2);max-width:36ch}
   .m-card .m-link{margin-top:auto}
@@ -2644,22 +2648,22 @@
     transition:opacity 1.4s var(--ease-out) var(--d,0s),transform 1.4s var(--ease-out) var(--d,0s),filter 1.4s var(--ease-out) var(--d,0s)}
 
   @media (max-width:980px){
-    .of-top{grid-template-columns:1fr;gap:clamp(28px,4vh,38px);align-items:start}
+    .of-top{grid-template-columns:1fr;gap:clamp(20px,2.8vh,28px);align-items:start}
     /* apilados no hay nada con que emparejar: el ajuste optico sobra */
     .of-body{padding-top:0}
     .of-hw h2{font-size:clamp(28px,6.8vw,40px);max-width:18ch}
     .of-lede{font-size:16px;max-width:none}
     .of-lede + .of-lede{font-size:14.5px}
-    .of-panel{margin-top:clamp(38px,5.5vh,52px)}
+    .of-panel{margin-top:clamp(26px,3.8vh,36px)}
     /* las dos secciones se tocan: sobra la mitad del aire que habia */
-    .offer{padding-bottom:clamp(40px,5.5vh,62px)}
-    .mandates{padding-top:clamp(46px,6.5vh,78px)}
+    .offer{padding-bottom:clamp(28px,3.8vh,44px)}
+    .mandates{padding-top:clamp(32px,4.6vh,54px)}
     .of-panel{padding:8px clamp(16px,4.4vw,22px) 22px}
     .of-k{font-size:16px;gap:14px}
     /* el filete guia sobra cuando el concepto ya ocupa el renglon entero */
     .of-k::after{display:none}
     .of-cta{width:100%;justify-content:center}
-    .m-inner{grid-template-columns:1fr;gap:26px}
+    .m-inner{grid-template-columns:1fr;gap:18px}
     .m-card{min-height:0}
 
     /* en una sola columna el sticky no va al lado, va arriba: el titular
