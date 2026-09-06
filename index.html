@@ -2118,6 +2118,12 @@
      recortados rompe ese lenguaje. El hueco admite un <img> con las
      mismas medidas, asi que cambiar a fotos no toca la maqueta. */
   .team{
+    /* OCULTA A PROPOSITO hasta tener los nombres reales del equipo. El
+       marcado y el resto del diseño se quedan intactos: para volver a
+       publicarla basta con borrar esta linea. Ningun enlace apunta a
+       #team, asi que oculta no deja ninguna ancla rota. */
+    display:none;
+
     position:relative;background:#f2f2ef;color:#07080a;
     padding:clamp(84px,13vh,150px) var(--pad) clamp(80px,12vh,140px);
   }
