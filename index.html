@@ -2108,104 +2108,109 @@
 
 
   /* ============ equipo ============
-     Mismo esqueleto que el roadmap y que Developments: negro, reticula de
-     54px, columna fija a la izquierda y la lista a la derecha. Va entre la
-     escena del mercado y la cortina de "Join Sectora", y las dos vecinas
-     cierran y abren en negro, asi que aqui no hace falta ninguna costura.
+     Va entre la cortina de "Join Sectora" y la seccion de comunidad, y
+     las dos son papel, asi que esta tambien: mismo #f2f2ef y misma
+     reticula en negativo que .join. Al ir encajada entre dos claras no
+     hace falta ninguna costura.
 
-     La ficha lleva un monograma en lugar de foto. Es una decision, no un
-     apano: el sitio entero se sostiene en marcas de registro, filetes y
-     mono, y una galeria de retratos recortados rompe ese lenguaje. El
-     hueco del monograma admite un <img> con las mismas medidas, asi que
-     cambiar a fotos mas adelante no toca la maqueta. */
+     La ficha lleva monograma y no foto. El sitio entero se sostiene en
+     marcas de registro, filetes y mono, y una galeria de retratos
+     recortados rompe ese lenguaje. El hueco admite un <img> con las
+     mismas medidas, asi que cambiar a fotos no toca la maqueta. */
   .team{
-    position:relative;background:#000;
-    padding:clamp(80px,13vh,150px) var(--pad) clamp(90px,14vh,160px);
+    position:relative;background:#f2f2ef;color:#07080a;
+    padding:clamp(84px,13vh,150px) var(--pad) clamp(80px,12vh,140px);
   }
   .team::before{
     content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
-    background-image:linear-gradient(rgba(255,255,255,.032) 1px,transparent 1px),
-                     linear-gradient(90deg,rgba(255,255,255,.032) 1px,transparent 1px);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54'%3E%3Cpath d='M27 23v8M23 27h8' stroke='rgba(124,138,160,.20)' stroke-width='1'/%3E%3C/svg%3E"),
+                     linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px);
     background-size:54px 54px;
-    -webkit-mask-image:radial-gradient(85% 70% at 50% 28%,#000,transparent 88%);
-    mask-image:radial-gradient(85% 70% at 50% 28%,#000,transparent 88%);
+    -webkit-mask-image:radial-gradient(84% 68% at 50% 42%,#000,transparent 86%);
+    mask-image:radial-gradient(84% 68% at 50% 42%,#000,transparent 86%);
   }
-  /* arranca en el borde con opacidad cero: nada que recortar */
+  /* una sola masa de luz azul, muy contenida: el papel no debe teñirse */
   .tm-glow{
-    position:absolute;top:0;left:0;right:0;height:44vh;z-index:0;pointer-events:none;
-    background:radial-gradient(56% 60% at 50% 46%, rgba(21,105,255,.30), transparent 74%);
-    filter:blur(66px);
-    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 46%,#000 70%,transparent 100%);
-    mask-image:linear-gradient(180deg,transparent 0%,#000 46%,#000 70%,transparent 100%);
+    position:absolute;top:0;left:0;right:0;height:40vh;z-index:0;pointer-events:none;
+    background:radial-gradient(56% 60% at 50% 46%, rgba(21,105,255,.11), transparent 74%);
+    filter:blur(60px);
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 44%,#000 72%,transparent 100%);
+    mask-image:linear-gradient(180deg,transparent 0%,#000 44%,#000 72%,transparent 100%);
   }
   .tm-inner{
     position:relative;z-index:1;max-width:1280px;
-    --sticky-bg:rgba(0,0,0,.96);
+    --sticky-bg:rgba(242,242,239,.97);
     display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);
     gap:clamp(36px,5vw,104px);align-items:start;
   }
   .tm-col{position:relative;height:100%}
   .tm-sticky{position:sticky;top:clamp(30px,7vh,72px);align-self:start;height:fit-content}
+  .team .eyebrow{color:#6b7280;margin-bottom:clamp(20px,3vh,30px)}
+  .team .eyebrow i{width:30px;background:#0d4fd8}
   .team h2{
     font-size:clamp(28px,4.4vw,58px);font-weight:200;line-height:1.06;
-    letter-spacing:-.03em;max-width:14ch;text-wrap:balance;
+    letter-spacing:-.03em;max-width:14ch;text-wrap:balance;color:#07080a;
   }
-  .tm-lede{margin-top:24px;max-width:34ch;font-size:14.5px;line-height:1.75;color:var(--ink-3)}
+  .tm-lede{margin-top:24px;max-width:34ch;font-size:14.5px;line-height:1.75;color:#6b7280}
   .tm-count{
-    margin-top:32px;padding-top:18px;border-top:1px solid var(--hair);
-    color:var(--ink-4);
+    margin-top:32px;padding-top:18px;border-top:1px solid rgba(0,0,0,.11);
+    color:#9aa0ab;
   }
 
   .tm-list{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  /* mismo cristal claro que el acta de distribucion y que las tarjetas
+     de verificacion: blanco translucido, filete de un pixel y realce
+     interior arriba */
   .tm-card{
     position:relative;display:grid;
     grid-template-columns:auto minmax(0,1fr);
     gap:clamp(16px,1.6vw,22px);
     padding:clamp(22px,2.4vw,30px);
-    background:rgba(255,255,255,.035);
-    border:1px solid var(--hair);border-radius:3px;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+    background:rgba(255,255,255,.62);
+    border:1px solid rgba(0,0,0,.09);border-radius:3px;
+    backdrop-filter:blur(16px) saturate(1.4);
+    -webkit-backdrop-filter:blur(16px) saturate(1.4);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.92),
+               0 22px 54px -34px rgba(7,8,10,.24);
     transition:transform .5s var(--ease),border-color .5s var(--ease);
   }
   .tm-card:hover{transform:translateY(-3px);border-color:rgba(21,105,255,.45)}
-  /* el monograma: el mismo cuadro de registro que usa la lamina, con las
-     iniciales en mono. Si algun dia entran fotos, el <img> ocupa esta
-     misma caja y no se mueve nada */
+  /* el monograma es la propia placa de la marca: azul pleno, iniciales en
+     blanco. Las escuadras de registro son las del marco de la portada */
   .tm-mono{
     position:relative;width:64px;height:64px;flex:none;
     display:grid;place-items:center;border-radius:3px;
-    background:linear-gradient(150deg,rgba(21,105,255,.30),rgba(21,105,255,.08));
-    border:1px solid rgba(21,105,255,.36);
+    background:#1569ff;
     font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500;
     letter-spacing:.06em;color:#fff;
   }
-  .tm-mono img{width:100%;height:100%;object-fit:cover;border-radius:2px;display:block}
-  /* escuadras de registro en dos esquinas, como en el marco de la portada */
+  .tm-mono img{width:100%;height:100%;object-fit:cover;border-radius:3px;display:block}
   .tm-mono::before,.tm-mono::after{
     content:'';position:absolute;width:7px;height:7px;pointer-events:none;
-    border:1px solid rgba(255,255,255,.34);
+    border:1px solid rgba(7,8,10,.30);
   }
-  .tm-mono::before{left:-1px;top:-1px;border-right:0;border-bottom:0}
-  .tm-mono::after{right:-1px;bottom:-1px;border-left:0;border-top:0}
+  .tm-mono::before{left:-4px;top:-4px;border-right:0;border-bottom:0}
+  .tm-mono::after{right:-4px;bottom:-4px;border-left:0;border-top:0}
 
   .tm-body{min-width:0}
   .tm-card h3{
     font-size:clamp(17px,1.5vw,21px);font-weight:400;letter-spacing:-.012em;
-    color:var(--ink);margin:0 0 6px;
+    color:#07080a;margin:0 0 6px;
   }
   .tm-role{
     font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--blue);margin:0 0 12px;
+    text-transform:uppercase;color:#0d4fd8;margin:0 0 12px;
   }
-  .tm-bio{font-size:13.5px;line-height:1.7;color:var(--ink-3);margin:0;max-width:34ch}
+  .tm-bio{font-size:13.5px;line-height:1.7;color:#6b7280;margin:0;max-width:34ch}
   .tm-link{
     display:inline-flex;align-items:center;gap:8px;margin-top:14px;
     font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--ink-4);text-decoration:none;
+    text-transform:uppercase;color:#9aa0ab;text-decoration:none;
     transition:color .3s var(--ease);
   }
   .tm-link i{font-style:normal;transition:transform .38s var(--ease)}
-  .tm-link:hover{color:var(--ink)}
+  .tm-link:hover{color:#07080a}
   .tm-link:hover i{transform:translate(2px,-2px)}
 
   @media (max-width:980px){
@@ -2219,7 +2224,7 @@
       background:var(--sticky-bg);
       backdrop-filter:blur(16px) saturate(1.3);
       -webkit-backdrop-filter:blur(16px) saturate(1.3);
-      border-bottom:1px solid var(--hair);
+      border-bottom:1px solid rgba(0,0,0,.11);
     }
     .tm-sticky .eyebrow{margin-bottom:14px}
     .tm-list{grid-template-columns:1fr}
@@ -4200,13 +4205,28 @@ html[dir="rtl"] body{direction:ltr}
 </section>
 
 
-<!-- ============================================================
-     EQUIPO - DESACTIVADO A PROPOSITO
-     El diseno esta terminado y medido (costuras en 1 de 255), pero
-     los nombres son de muestra. No se publica gente inventada en la
-     web de un token. Para activarla: meter los datos reales, quitar
-     esta linea y la de abajo, y traducir los rotulos a los 11 idiomas.
-     ============================================================
+
+
+
+<section class="jiris" id="jiris">
+  <div class="jiris-pin">
+    <canvas id="jb-canvas" aria-hidden="true"></canvas>
+    <div class="jiris-grid" aria-hidden="true"></div>
+    <div class="jiris-rings" aria-hidden="true"></div>
+    <div class="jiris-rings b" aria-hidden="true"></div>
+    <div class="jiris-panel" id="jiris-panel" aria-hidden="true">
+      <div class="jiris-panel-grid"></div>
+    </div>
+    <div class="jiris-edge" id="jiris-edge" aria-hidden="true"></div>
+    <div class="jiris-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="jiris-card">
+      <p>The network is open</p>
+      <h2>Join <b>Sectora</b></h2>
+    </div>
+      <div class="zoom-cue cue-jiris" id="jiris-cue" aria-hidden="true"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
+  </div>
+</section>
+
 <section class="team" id="team">
   <div class="tm-glow" aria-hidden="true"></div>
   <div class="tm-inner">
@@ -4261,27 +4281,7 @@ html[dir="rtl"] body{direction:ltr}
     </div>
   </div>
 </section>
--->
 
-
-<section class="jiris" id="jiris">
-  <div class="jiris-pin">
-    <canvas id="jb-canvas" aria-hidden="true"></canvas>
-    <div class="jiris-grid" aria-hidden="true"></div>
-    <div class="jiris-rings" aria-hidden="true"></div>
-    <div class="jiris-rings b" aria-hidden="true"></div>
-    <div class="jiris-panel" id="jiris-panel" aria-hidden="true">
-      <div class="jiris-panel-grid"></div>
-    </div>
-    <div class="jiris-edge" id="jiris-edge" aria-hidden="true"></div>
-    <div class="jiris-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <div class="jiris-card">
-      <p>The network is open</p>
-      <h2>Join <b>Sectora</b></h2>
-    </div>
-      <div class="zoom-cue cue-jiris" id="jiris-cue" aria-hidden="true"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
-  </div>
-</section>
 
 <section class="join" id="join">
   <div class="join-thread" aria-hidden="true"></div>
