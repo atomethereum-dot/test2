@@ -2220,18 +2220,22 @@
     .tm-inner{grid-template-columns:1fr;gap:0}
     .tm-col{display:contents}
     .tm-lede,.tm-count{display:none}
-    /* misma placa que .join-head, declaracion por declaracion */
+    /* misma placa que .join-head, salvo que aqui el papel es opaco. Con el
+       97% de .join-head se colaba el doble que alli (8 de 255 frente a 4):
+       las fichas del equipo llevan un monograma azul macizo de 64px, y un
+       bloque de color saturado atraviesa ese 3% que a Join us, que no tiene
+       nada parecido cruzando, no se le nota. Opaco no deja pasar nada.
+
+       Al tapar del todo, el difuminado de fondo ya no pinta nada -- no hay
+       fondo que difuminar-- asi que se retira y con el la alternativa para
+       navegadores sin backdrop-filter, que deja de hacer falta. El canto
+       sigue midiendo 1 de 255 contra el papel: la placa no se ve. */
     .tm-sticky{
       position:sticky;top:0;z-index:2;
       margin:0 calc(var(--pad) * -1) 22px;
       padding:18px var(--pad) 16px;
-      background:var(--sticky-bg);
-      backdrop-filter:blur(16px) saturate(1.3);
-      -webkit-backdrop-filter:blur(16px) saturate(1.3);
+      background:#f2f2ef;
       border-bottom:1px solid rgba(0,0,0,.12);
-    }
-    @supports not (backdrop-filter: blur(1px)){
-      .tm-sticky{background:#f2f2ef}
     }
     .tm-sticky .eyebrow{margin-bottom:14px}
     .tm-list{grid-template-columns:1fr}
