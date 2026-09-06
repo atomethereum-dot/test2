@@ -2217,6 +2217,17 @@
   .tm-link:hover i{transform:translate(2px,-2px)}
 
   @media (max-width:980px){
+    /* el sustrato pasa a ser el mismo que el de Join us: solo la reticula
+       al 5% de negro. Las cruces de registro van al 20% de un gris azulado
+       y .tm-glow tiñe el papel, y la placa borra las dos de golpe -- de ahi
+       el rectangulo, con la textura viva arriba y abajo y muerta dentro.
+       Join us no tiene ni cruces ni luz, y por eso alli la misma placa no
+       se nota. En escritorio no hay placa, asi que alli se quedan. */
+    .team::before{
+      background-image:linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),
+                       linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px);
+    }
+    .tm-glow{display:none}
     .tm-inner{grid-template-columns:1fr;gap:0}
     .tm-col{display:contents}
     .tm-lede,.tm-count{display:none}
