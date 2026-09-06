@@ -1176,15 +1176,22 @@
 
     const themeToggle = document.getElementById("exThemeToggle");
     if (themeToggle) {
+      // la barra del navegador en movil se pinta con theme-color: si no se
+      // actualiza al cambiar de tema, se queda del color del tema anterior
+      const themeMeta = document.getElementById("exThemeColor");
       const syncLabel = () => {
         const isDark = document.documentElement.getAttribute("data-theme") === "dark";
         themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+        if (themeMeta) themeMeta.setAttribute("content", isDark ? "#0a0c10" : "#ffffff");
       };
       syncLabel();
       themeToggle.addEventListener("click", () => {
         const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
         if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
         else document.documentElement.removeAttribute("data-theme");
+        // se guarda siempre el valor elegido, tambien "light": es lo que
+        // distingue "el visitante quiere claro" de "aun no ha elegido nada",
+        // que ahora significa oscuro
         try { localStorage.setItem("sectorascanTheme", next); } catch (e) {}
         syncLabel();
       });
