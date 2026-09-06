@@ -2220,22 +2220,18 @@
     .tm-inner{grid-template-columns:1fr;gap:0}
     .tm-col{display:contents}
     .tm-lede,.tm-count{display:none}
-    /* sigue anclado arriba, pero sin placa detras: era la placa opaca --y
-       su filete-- lo que se leia como una franja cruzando la seccion. Se
-       queda el z-index para que el titular pase por encima de las fichas
-       y no al reves, que es lo unico que la placa hacia falta cubrir */
+    /* misma placa que .join-head, declaracion por declaracion */
     .tm-sticky{
       position:sticky;top:0;z-index:2;
       margin:0 calc(var(--pad) * -1) 22px;
-      padding:20px var(--pad) 18px;
+      padding:18px var(--pad) 16px;
+      background:var(--sticky-bg);
+      backdrop-filter:blur(16px) saturate(1.3);
+      -webkit-backdrop-filter:blur(16px) saturate(1.3);
+      border-bottom:1px solid rgba(0,0,0,.12);
     }
-    /* la placa protegia al titular de las fichas que le pasan por detras.
-       Sin ella hace falta algo, pero no una banda: el halo del color del
-       papel abre hueco solo alrededor de cada letra, asi que no hay ningun
-       borde recto que cruce la seccion -- que era el defecto de la placa */
-    .tm-sticky h2,.tm-sticky .eyebrow span,.tm-sticky .eyebrow{
-      text-shadow:0 0 10px #f2f2ef,0 0 10px #f2f2ef,
-                  0 0 20px #f2f2ef,0 0 20px #f2f2ef;
+    @supports not (backdrop-filter: blur(1px)){
+      .tm-sticky{background:#f2f2ef}
     }
     .tm-sticky .eyebrow{margin-bottom:14px}
     .tm-list{grid-template-columns:1fr}
