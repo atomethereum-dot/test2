@@ -2217,15 +2217,10 @@
     .tm-inner{grid-template-columns:1fr;gap:0}
     .tm-col{display:contents}
     .tm-lede,.tm-count{display:none}
-    .tm-sticky{
-      position:sticky;top:0;z-index:2;
-      margin:0 calc(var(--pad) * -1) 22px;
-      padding:20px var(--pad) 18px;
-      background:var(--sticky-bg);
-      backdrop-filter:blur(16px) saturate(1.3);
-      -webkit-backdrop-filter:blur(16px) saturate(1.3);
-      border-bottom:1px solid rgba(0,0,0,.11);
-    }
+    /* sin velo ni barra fija: el titular sube con el contenido. Anclado
+       arriba necesitaria una placa opaca para que las fichas no lo
+       atravesaran, y esa placa es justo lo que se veia como una franja */
+    .tm-sticky{position:static;margin-bottom:26px}
     .tm-sticky .eyebrow{margin-bottom:14px}
     .tm-list{grid-template-columns:1fr}
   }
@@ -6165,7 +6160,11 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       let p = (-r.top) / span;
       p = p < 0 ? 0 : p > 1 ? 1 : p;
 
-      if(jCue) jCue.classList.toggle('off', p > .93);
+      /* se apagaba en .93, pero el circulo blanco no termina de tomar la
+         pantalla hasta ~.97: el aviso desaparecia justo antes de que el
+         fondo se volviera blanco, que es cuando hace falta. Va en modo
+         diferencia, asi que sobre blanco se invierte a negro y se lee */
+      if(jCue) jCue.classList.toggle('off', p > .985);
 
       // arranca en el 55%: primero se abren las cortinas de luz, y solo
       // despues el circulo blanco toma la pantalla
