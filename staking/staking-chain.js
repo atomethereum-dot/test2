@@ -22,16 +22,17 @@
   "use strict";
 
   const CONTRACTS = {
-    chainId: "0xaa36a7", // Sepolia
-    token: "0x0000000000000000000000000000000000000000",
-    staking: "0x0000000000000000000000000000000000000000",
+    // MAINNET: aqui se mueve #SECT de verdad
+    chainId: "0x1", // Ethereum mainnet
+    token: "0x8C9984B06281f1CA9416e493c2E602AaB08513db", // #SECT
+    staking: "0x0000000000000000000000000000000000000000", // pendiente de desplegar
   };
 
   const TOKEN_ABI = [
     "function balanceOf(address) view returns (uint256)",
     "function allowance(address owner, address spender) view returns (uint256)",
     "function approve(address spender, uint256 amount) returns (bool)",
-    "function faucet()",
+    "function decimals() view returns (uint8)",
   ];
 
   const STAKING_ABI = [
@@ -84,10 +85,14 @@
   let elStaked = $("lvStaked");
   let elStakers = $("lvStakers");
 
+  // formatear y parsear SIEMPRE con los decimales reales del token. Dar 18
+  // por sentado y que fueran 6 seria equivocarse por un factor de 10^12, con
+  // dinero real de por medio.
   const fmt = (v, dec) =>
-    Number(ethers.formatEther(v)).toLocaleString("en-US", {
+    Number(ethers.formatUnits(v, decimales)).toLocaleString("en-US", {
       maximumFractionDigits: dec === undefined ? 2 : dec,
     });
+  const parse = (txt) => ethers.parseUnits(txt, decimales);
 
   function aviso(texto, error) {
     let caja = $("chainMsg");
@@ -122,6 +127,7 @@
   // ---------------------------------------------------------------
 
   let horaCadena = 0;
+  let decimales = 18;   // provisional hasta leerlo del token
 
   async function pintarPool() {
     try {
@@ -195,7 +201,7 @@
       aviso("Escribe una cantidad primero.", true);
       return;
     }
-    const cantidad = ethers.parseEther(txt);
+    const cantidad = parse(txt);
 
     const v = await staking.accountView(cuenta);
     if (v.walletBalance < cantidad) {
@@ -258,12 +264,19 @@
 
     const red = await eip1193.request({ method: "eth_chainId" });
     if (red !== CONTRACTS.chainId) {
-      aviso("Cambia la cartera a la red Sepolia.", true);
+      aviso("Cambia la cartera a la red Ethereum.", true);
       return;
     }
 
     token = new ethers.Contract(CONTRACTS.token, TOKEN_ABI, proveedor);
     staking = new ethers.Contract(CONTRACTS.staking, STAKING_ABI, proveedor);
+
+    try {
+      decimales = Number(await token.decimals());
+    } catch (e) {
+      aviso("No pude leer los decimales del token; no sigo.", true);
+      return;   // antes que arriesgarse a mover una cantidad mal escalada
+    }
 
     if (btn) btn.textContent = direccion.slice(0, 6) + "…" + direccion.slice(-4);
     montarAcciones();

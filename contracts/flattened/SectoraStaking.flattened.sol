@@ -868,9 +868,18 @@ abstract contract ReentrancyGuard {
 
 
 /// @title Sectora Staking
-/// @notice Stake the Sectora test token to earn rewards paid from a funded
-/// reward pool. The site advertises rewards "funded by hash revenue,
-/// targeting 14.9% APY", and this contract is built to mean that literally:
+/// @notice Stake #SECT to earn rewards paid from a funded reward pool. The
+/// staking token is whatever address is passed at construction, so the same
+/// contract serves the testnet token and mainnet #SECT.
+///
+/// ON MAINNET THIS HOLDS REAL VALUE. Two consequences shape the design:
+/// mainnet #SECT is renounced and has no mint function, so rewards can only
+/// ever come from tokens transferred in; and the owner key is a live attack
+/// surface, so its powers are bounded on purpose (see MAX_RATE_BPS,
+/// MAX_LOCK_PERIOD, and the fact that withdrawals are capped by rewardPool).
+///
+/// The site advertises rewards "funded by hash revenue, targeting 14.9%
+/// APY", and this contract is built to mean that literally:
 ///
 ///  - Rewards are NEVER minted. Every token paid out was transferred in
 ///    beforehand via fundRewards(), which is where hash revenue lands.
@@ -894,6 +903,10 @@ contract SectoraStaking is Ownable, ReentrancyGuard {
     /// bounds how fast a compromised or fat-fingered owner could drain the
     /// reward pool. 100% APY is far above anything the site advertises.
     uint256 public constant MAX_RATE_BPS = 10_000;
+
+    /// @dev Ceiling on the lock. With real money on the line an unbounded
+    /// lock is a hostage-taking primitive, even with the emergency exit.
+    uint256 public constant MAX_LOCK_PERIOD = 90 days;
 
     IERC20 public immutable stakingToken;
 
@@ -923,11 +936,17 @@ contract SectoraStaking is Ownable, ReentrancyGuard {
     /// nothing further accrues until it is refunded.
     bool public accrualPaused;
 
+    /// @notice Stops NEW deposits. Deliberately one-directional in what it
+    /// can do: withdrawing, claiming and the emergency exit stay open, so
+    /// this can never be used to lock anyone in.
+    bool public stakingPaused;
+
     struct Account {
         uint256 amount; // principal
         uint256 rewardDebt; // accumulator checkpoint, scaled by 1e18
         uint256 pending; // rewards earned and not yet claimed
         uint256 stakedAt; // timestamp of the last stake, for the lock
+        uint256 lockAtStake; // lock in force when the stake was made
     }
 
     mapping(address => Account) public accounts;
@@ -942,10 +961,12 @@ contract SectoraStaking is Ownable, ReentrancyGuard {
     event AccrualPaused(uint256 atTimestamp, uint256 poolRemaining);
     event AccrualResumed(uint256 atTimestamp, uint256 poolRemaining);
     event EmergencyWithdrawn(address indexed account, uint256 amount, uint256 forfeited);
+    event StakingPausedChanged(bool paused);
 
     constructor(address _stakingToken, uint256 _rateBps, uint256 _lockPeriod) Ownable(msg.sender) {
         require(_stakingToken != address(0), "SectoraStaking: token is zero");
         require(_rateBps <= MAX_RATE_BPS, "SectoraStaking: rate above max");
+        require(_lockPeriod <= MAX_LOCK_PERIOD, "SectoraStaking: lock above max");
         stakingToken = IERC20(_stakingToken);
         rateBps = _rateBps;
         lockPeriod = _lockPeriod;
@@ -1002,6 +1023,7 @@ contract SectoraStaking is Ownable, ReentrancyGuard {
     // ---------------------------------------------------------------
 
     function stake(uint256 amount) external nonReentrant {
+        require(!stakingPaused, "SectoraStaking: deposits paused");
         require(amount > 0, "SectoraStaking: amount is zero");
         _update();
         _settle(msg.sender);
@@ -1017,6 +1039,9 @@ contract SectoraStaking is Ownable, ReentrancyGuard {
         if (a.amount == 0) stakerCount += 1;
         a.amount += received;
         a.stakedAt = block.timestamp;
+        // se congela el bloqueo vigente: si el dueño lo sube despues, no
+        // puede alargar retroactivamente un deposito que ya estaba dentro
+        a.lockAtStake = lockPeriod;
         a.rewardDebt = (a.amount * accRewardPerToken) / 1e18;
         totalStaked += received;
 
@@ -1027,7 +1052,7 @@ contract SectoraStaking is Ownable, ReentrancyGuard {
         Account storage a = accounts[msg.sender];
         require(amount > 0, "SectoraStaking: amount is zero");
         require(a.amount >= amount, "SectoraStaking: amount above stake");
-        require(block.timestamp >= a.stakedAt + lockPeriod, "SectoraStaking: still locked");
+        require(block.timestamp >= a.stakedAt + a.lockAtStake, "SectoraStaking: still locked");
 
         _update();
         _settle(msg.sender);
@@ -1143,7 +1168,13 @@ contract SectoraStaking is Ownable, ReentrancyGuard {
         emit RateChanged(old, newRateBps);
     }
 
+    function setStakingPaused(bool paused) external onlyOwner {
+        stakingPaused = paused;
+        emit StakingPausedChanged(paused);
+    }
+
     function setLockPeriod(uint256 newLockPeriod) external onlyOwner {
+        require(newLockPeriod <= MAX_LOCK_PERIOD, "SectoraStaking: lock above max");
         uint256 old = lockPeriod;
         lockPeriod = newLockPeriod;
         emit LockPeriodChanged(old, newLockPeriod);
@@ -1182,7 +1213,7 @@ contract SectoraStaking is Ownable, ReentrancyGuard {
         Account storage a = accounts[who];
         staked = a.amount;
         pendingRewards = this.earned(who);
-        unlocksAt = a.amount == 0 ? 0 : a.stakedAt + lockPeriod;
+        unlocksAt = a.amount == 0 ? 0 : a.stakedAt + a.lockAtStake;
         walletBalance = stakingToken.balanceOf(who);
         allowance = stakingToken.allowance(who, address(this));
     }

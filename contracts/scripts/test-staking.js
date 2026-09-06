@@ -197,6 +197,33 @@ async function main() {
   await (await staking.setRate(2000n, GAS)).wait();
   ok((await staking.rateBps()) === 2000n, "el dueño si puede cambiar la tasa");
 
+  console.log("\n== proteccion del titular (mainnet) ==");
+  // el bloqueo se congela al depositar: subirlo despues no puede alargar
+  // retroactivamente un deposito que ya estaba dentro
+  await (await staking.setLockPeriod(0, GAS)).wait();
+  await (await token.connect(bob).approve(dir, E("100000"), GAS)).wait();
+  await (await staking.connect(bob).stake(E("100"), GAS)).wait();
+  await (await staking.setLockPeriod(60 * 24 * 3600, GAS)).wait();
+  await (await staking.connect(bob).unstake(E("100"), GAS)).wait();
+  ok(N((await staking.accounts(B)).amount) === 0,
+     "subir el bloqueo no alarga un deposito ya hecho");
+
+  await revierte(() => staking.setLockPeriod(120 * 24 * 3600, GAS),
+     "no se puede poner un bloqueo por encima de 90 dias");
+
+  // el freno de entrada para depositos nuevos no encierra a nadie
+  await (await staking.setLockPeriod(0, GAS)).wait();
+  await (await staking.connect(bob).stake(E("100"), GAS)).wait();
+  await (await staking.setStakingPaused(true, GAS)).wait();
+  await revierte(() => staking.connect(bob).stake(E("10"), GAS),
+     "con el freno puesto no entran depositos nuevos");
+  await (await staking.connect(bob).unstake(E("100"), GAS)).wait();
+  ok(N((await staking.accounts(B)).amount) === 0,
+     "pero se sigue pudiendo retirar con el freno puesto");
+  await revierte(() => staking.connect(alice).setStakingPaused(false, GAS),
+     "un cualquiera no puede quitar el freno");
+  await (await staking.setStakingPaused(false, GAS)).wait();
+
   console.log("\n== vistas para la interfaz ==");
   const av = await staking.accountView(A);
   ok(av.length === 5, "accountView devuelve los cinco campos");

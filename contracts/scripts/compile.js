@@ -11,6 +11,7 @@ const CONTRACT_FILES = [
   "SectoraHashMarket.sol",
   "ValidatorRegistry.sol",
   "SectoraStaking.sol",
+  "MockToken6.sol",   // solo pruebas
 ];
 
 function findImport(importPath) {

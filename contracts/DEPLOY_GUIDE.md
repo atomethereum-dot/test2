@@ -83,6 +83,17 @@ Andá a **https://remix.ethereum.org** (corre en tu navegador, sin cuenta).
 
 ## Paso 5 — Desplegar SectoraStaking
 
+> ### ⚠ ESTE VA A MAINNET, CON #SECT REAL
+>
+> Los cuatro pasos anteriores son testnet: si algo sale mal no se pierde
+> nada. **Este no.** Antes de desplegarlo, lee la sección "Antes de tocar
+> mainnet" al final de este documento. Hay tres cosas que decidir y una que
+> deberías hacer sí o sí (la auditoría).
+>
+> Cambia también el constructor: `_stakingToken` no es tSECT, es
+> **`0x8C9984B06281f1CA9416e493c2E602AaB08513db`**, y la red en Remix es
+> **Ethereum Mainnet**, no Sepolia.
+
 1. Archivo nuevo `SectoraStaking.sol`, pegá `SectoraStaking.flattened.sol`.
 2. Compilá igual (0.8.24, optimizador activado).
 3. Constructor:
@@ -151,3 +162,91 @@ Remix tiene un plugin "Contract Verification" (ícono de enchufe →
 cada contrato pegando el mismo `.flattened.sol` que usaste para desplegar.
 No es obligatorio, pero hace público el código fuente en
 https://sepolia.etherscan.io.
+
+
+---
+
+# Antes de tocar mainnet
+
+Con #SECT real de por medio, cuatro cosas que no son opinión.
+
+## 1. Auditoría — esto es lo importante
+
+Este contrato **no está auditado**. Lo escribí yo, lo probé yo (54 pruebas,
+todas pasando) y lo probé de punta a punta en un navegador. Nada de eso es
+una auditoría: mis pruebas comprueban lo que se me ocurrió comprobar.
+
+Pesa el doble en vuestro caso. La web dice, en grande, *"Security you can
+verify, not take on trust"* y vendéis auditoría de contratos como producto.
+Desplegar un contrato de staking sin auditar, que custodia el dinero de
+vuestros holders, es exactamente lo que decís que no hay que hacer. Si sale
+un fallo, el daño no es solo el dinero.
+
+Recomendación: auditoría externa antes de que entre un solo token. Mientras
+tanto, puedo hacerle una revisión de seguridad dedicada, que no sustituye a
+la auditoría pero encuentra cosas.
+
+## 2. La llave del dueño es superficie de ataque
+
+El principal de los usuarios está protegido por diseño: ninguna función del
+dueño puede tocarlo, y todo pago se comprueba contra `rewardPool`. Pero con
+la llave del dueño se puede:
+
+- vaciar el fondo de recompensas (`withdrawAllRewards`)
+- subir la tasa hasta el 100 % anual (`MAX_RATE_BPS`), lo que drena el fondo
+  mucho más rápido
+- parar depósitos nuevos (`setStakingPaused`)
+
+Si esa llave se compromete, los holders no pierden lo depositado, pero sí
+sus recompensas. Con dinero real eso pide, como mínimo, una **multifirma**
+como dueño, y idealmente un **timelock** sobre los cambios de tasa para que
+nadie pueda cambiarla sin preaviso público. No lo he montado porque es una
+decisión vuestra de gobernanza, no técnica.
+
+## 3. El fondo sale de la tesorería, y no es infinito
+
+#SECT en mainnet está renunciado y no tiene función de emisión. Bien: eso
+obliga a que las recompensas sean tokens reales apartados, y este contrato
+lo respeta. Pero significa que **cada token pagado sale de vuestra
+tesorería**, sobre un suministro fijo de 50M con una quema del 50 %
+programada.
+
+Haz la cuenta antes, no después:
+
+    tokens al año = total depositado × 0,149
+
+Con 1.000.000 #SECT depositados, el fondo se come 149.000 #SECT al año.
+`runwaySeconds()` te dice en cualquier momento cuánto aguanta el fondo al
+ritmo actual. Si se seca, el devengo se pausa solo — el contrato no promete
+lo que no puede pagar — pero en mainnet eso son holders enfadados. Vigilad
+esa cifra.
+
+## 4. Orden recomendado
+
+No despleguéis en mainnet primero. El mismo contrato sirve para las dos
+redes, así que:
+
+1. Desplegadlo en **Sepolia** contra tSECT y dejadlo correr con gente real
+   usándolo. Ahí un fallo no cuesta nada.
+2. Auditoría.
+3. Multifirma como dueño.
+4. Mainnet, con el fondo cargado y una tasa que la tesorería aguante.
+
+## Lo que ya está protegido en el contrato
+
+Para que sepas qué no tienes que revisar:
+
+- El principal de un usuario nunca puede pagarse como recompensa de otro:
+  `totalStaked` y `rewardPool` van separados y cada pago se comprueba contra
+  el fondo.
+- Si el fondo se seca, el devengo se pausa en el último segundo financiado
+  en vez de acumular deuda impagable.
+- El bloqueo se congela al depositar: subirlo después no alarga un depósito
+  que ya estaba dentro. Y hay tope de 90 días.
+- `emergencyWithdraw` devuelve el principal saltándose el bloqueo, para que
+  ni un fondo en pausa ni un bloqueo mal puesto encierren a nadie.
+- El freno de depósitos no puede usarse para encerrar: retirar, cobrar y la
+  salida de emergencia siguen abiertos con el freno puesto.
+- La cantidad recibida se mide, no se asume, por si el token cobrase comisión
+  en la transferencia.
+- `nonReentrant` en toda función que mueve tokens.
