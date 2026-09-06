@@ -48,6 +48,7 @@
     "function totalStaked() view returns (uint256)",
     "function rewardPool() view returns (uint256)",
     "function rateBps() view returns (uint256)",
+    "function stakingToken() view returns (address)",
   ];
 
   const ZERO = "0x0000000000000000000000000000000000000000";
@@ -85,9 +86,9 @@
   let elStaked = $("lvStaked");
   let elStakers = $("lvStakers");
 
-  // formatear y parsear SIEMPRE con los decimales reales del token. Dar 18
-  // por sentado y que fueran 6 seria equivocarse por un factor de 10^12, con
-  // dinero real de por medio.
+  // #SECT es de 18 decimales (confirmado). Aun asi se leen del token en vez
+  // de fijarlos: cuesta una llamada, da igual con cualquier valor, y si algun
+  // dia este modulo apunta a otro token no hay nada que recordar cambiar.
   const fmt = (v, dec) =>
     Number(ethers.formatUnits(v, decimales)).toLocaleString("en-US", {
       maximumFractionDigits: dec === undefined ? 2 : dec,
@@ -276,6 +277,23 @@
     } catch (e) {
       aviso("No pude leer los decimales del token; no sigo.", true);
       return;   // antes que arriesgarse a mover una cantidad mal escalada
+    }
+
+    // Esta es la comprobacion que de verdad protege al pegar direcciones: si
+    // el contrato de staking apunta a un token distinto del que tiene esta
+    // pagina, todo lo demas parece funcionar --saldos, aprobaciones-- y el
+    // usuario acabaria aprobando el token equivocado. Se para en seco.
+    try {
+      const suyo = await staking.stakingToken();
+      if (suyo.toLowerCase() !== CONTRACTS.token.toLowerCase()) {
+        aviso("Configuracion incorrecta: el contrato de staking usa otro token.", true);
+        console.error("[sectora] token esperado", CONTRACTS.token, "pero el staking usa", suyo);
+        staking = null;
+        return;
+      }
+    } catch (e) {
+      aviso("No pude verificar el token del contrato; no sigo.", true);
+      return;
     }
 
     if (btn) btn.textContent = direccion.slice(0, 6) + "…" + direccion.slice(-4);
