@@ -56,7 +56,7 @@ function flatten(entryFile) {
 }
 
 fs.mkdirSync(OUT_DIR, { recursive: true });
-for (const name of ["SectoraToken", "SectoraHashMarket", "ValidatorRegistry"]) {
+for (const name of ["SectoraToken", "SectoraHashMarket", "ValidatorRegistry", "SectoraStaking"]) {
   const out = flatten(path.join(CONTRACTS_DIR, name + ".sol"));
   fs.writeFileSync(path.join(OUT_DIR, name + ".flattened.sol"), out);
   console.log("Flattened", name, "->", "flattened/" + name + ".flattened.sol", `(${out.length} chars)`);
