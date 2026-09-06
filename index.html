@@ -2107,6 +2107,124 @@
   }
 
 
+  /* ============ equipo ============
+     Mismo esqueleto que el roadmap y que Developments: negro, reticula de
+     54px, columna fija a la izquierda y la lista a la derecha. Va entre la
+     escena del mercado y la cortina de "Join Sectora", y las dos vecinas
+     cierran y abren en negro, asi que aqui no hace falta ninguna costura.
+
+     La ficha lleva un monograma en lugar de foto. Es una decision, no un
+     apano: el sitio entero se sostiene en marcas de registro, filetes y
+     mono, y una galeria de retratos recortados rompe ese lenguaje. El
+     hueco del monograma admite un <img> con las mismas medidas, asi que
+     cambiar a fotos mas adelante no toca la maqueta. */
+  .team{
+    position:relative;background:#000;
+    padding:clamp(80px,13vh,150px) var(--pad) clamp(90px,14vh,160px);
+  }
+  .team::before{
+    content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.032) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(255,255,255,.032) 1px,transparent 1px);
+    background-size:54px 54px;
+    -webkit-mask-image:radial-gradient(85% 70% at 50% 28%,#000,transparent 88%);
+    mask-image:radial-gradient(85% 70% at 50% 28%,#000,transparent 88%);
+  }
+  /* arranca en el borde con opacidad cero: nada que recortar */
+  .tm-glow{
+    position:absolute;top:0;left:0;right:0;height:44vh;z-index:0;pointer-events:none;
+    background:radial-gradient(56% 60% at 50% 46%, rgba(21,105,255,.30), transparent 74%);
+    filter:blur(66px);
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 46%,#000 70%,transparent 100%);
+    mask-image:linear-gradient(180deg,transparent 0%,#000 46%,#000 70%,transparent 100%);
+  }
+  .tm-inner{
+    position:relative;z-index:1;max-width:1280px;
+    --sticky-bg:rgba(0,0,0,.96);
+    display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);
+    gap:clamp(36px,5vw,104px);align-items:start;
+  }
+  .tm-col{position:relative;height:100%}
+  .tm-sticky{position:sticky;top:clamp(30px,7vh,72px);align-self:start;height:fit-content}
+  .team h2{
+    font-size:clamp(28px,4.4vw,58px);font-weight:200;line-height:1.06;
+    letter-spacing:-.03em;max-width:14ch;text-wrap:balance;
+  }
+  .tm-lede{margin-top:24px;max-width:34ch;font-size:14.5px;line-height:1.75;color:var(--ink-3)}
+  .tm-count{
+    margin-top:32px;padding-top:18px;border-top:1px solid var(--hair);
+    color:var(--ink-4);
+  }
+
+  .tm-list{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .tm-card{
+    position:relative;display:grid;
+    grid-template-columns:auto minmax(0,1fr);
+    gap:clamp(16px,1.6vw,22px);
+    padding:clamp(22px,2.4vw,30px);
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--hair);border-radius:3px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+    transition:transform .5s var(--ease),border-color .5s var(--ease);
+  }
+  .tm-card:hover{transform:translateY(-3px);border-color:rgba(21,105,255,.45)}
+  /* el monograma: el mismo cuadro de registro que usa la lamina, con las
+     iniciales en mono. Si algun dia entran fotos, el <img> ocupa esta
+     misma caja y no se mueve nada */
+  .tm-mono{
+    position:relative;width:64px;height:64px;flex:none;
+    display:grid;place-items:center;border-radius:3px;
+    background:linear-gradient(150deg,rgba(21,105,255,.30),rgba(21,105,255,.08));
+    border:1px solid rgba(21,105,255,.36);
+    font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500;
+    letter-spacing:.06em;color:#fff;
+  }
+  .tm-mono img{width:100%;height:100%;object-fit:cover;border-radius:2px;display:block}
+  /* escuadras de registro en dos esquinas, como en el marco de la portada */
+  .tm-mono::before,.tm-mono::after{
+    content:'';position:absolute;width:7px;height:7px;pointer-events:none;
+    border:1px solid rgba(255,255,255,.34);
+  }
+  .tm-mono::before{left:-1px;top:-1px;border-right:0;border-bottom:0}
+  .tm-mono::after{right:-1px;bottom:-1px;border-left:0;border-top:0}
+
+  .tm-body{min-width:0}
+  .tm-card h3{
+    font-size:clamp(17px,1.5vw,21px);font-weight:400;letter-spacing:-.012em;
+    color:var(--ink);margin:0 0 6px;
+  }
+  .tm-role{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--blue);margin:0 0 12px;
+  }
+  .tm-bio{font-size:13.5px;line-height:1.7;color:var(--ink-3);margin:0;max-width:34ch}
+  .tm-link{
+    display:inline-flex;align-items:center;gap:8px;margin-top:14px;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-4);text-decoration:none;
+    transition:color .3s var(--ease);
+  }
+  .tm-link i{font-style:normal;transition:transform .38s var(--ease)}
+  .tm-link:hover{color:var(--ink)}
+  .tm-link:hover i{transform:translate(2px,-2px)}
+
+  @media (max-width:980px){
+    .tm-inner{grid-template-columns:1fr;gap:0}
+    .tm-col{display:contents}
+    .tm-lede,.tm-count{display:none}
+    .tm-sticky{
+      position:sticky;top:0;z-index:2;
+      margin:0 calc(var(--pad) * -1) 22px;
+      padding:20px var(--pad) 18px;
+      background:var(--sticky-bg);
+      backdrop-filter:blur(16px) saturate(1.3);
+      -webkit-backdrop-filter:blur(16px) saturate(1.3);
+      border-bottom:1px solid var(--hair);
+    }
+    .tm-sticky .eyebrow{margin-bottom:14px}
+    .tm-list{grid-template-columns:1fr}
+  }
+
   /* ============ apertura a blanco: Join us ============
      misma mecanica que el iris de la cubierta: un circulo claro que se
      abre desde el centro con el scroll y desemboca en la seccion final. */
@@ -4080,6 +4198,70 @@ html[dir="rtl"] body{direction:ltr}
     <p class="rwa-hint"><i></i>Keep scrolling<i></i></p>
   </div>
 </section>
+
+
+<!-- ============================================================
+     EQUIPO - DESACTIVADO A PROPOSITO
+     El diseno esta terminado y medido (costuras en 1 de 255), pero
+     los nombres son de muestra. No se publica gente inventada en la
+     web de un token. Para activarla: meter los datos reales, quitar
+     esta linea y la de abajo, y traducir los rotulos a los 11 idiomas.
+     ============================================================
+<section class="team" id="team">
+  <div class="tm-glow" aria-hidden="true"></div>
+  <div class="tm-inner">
+    <div class="tm-col">
+      <div class="tm-sticky">
+      <p class="eyebrow mono reveal"><i></i>Team</p>
+      <h2 class="reveal" style="--d:.06s">The people accountable for it.</h2>
+      <p class="tm-lede reveal" style="--d:.12s">
+        A registered company has names attached to it. These are the people
+        who answer for what the protocol does.
+      </p>
+      <p class="tm-count mono reveal" style="--d:.18s">04 members</p>
+    </div></div>
+
+    <div class="tm-list">
+      <article class="tm-card reveal" style="--d:.10s">
+        <span class="tm-mono" aria-hidden="true">AA</span>
+        <div class="tm-body">
+          <h3>Full name</h3>
+          <p class="tm-role">Role</p>
+          <p class="tm-bio">One line on what this person is accountable for.</p>
+          <a class="tm-link" href="https://sectoraorg.com" target="_blank" rel="noopener noreferrer">LinkedIn <i>↗</i></a>
+        </div>
+      </article>
+      <article class="tm-card reveal" style="--d:.16s">
+        <span class="tm-mono" aria-hidden="true">BB</span>
+        <div class="tm-body">
+          <h3>Full name</h3>
+          <p class="tm-role">Role</p>
+          <p class="tm-bio">One line on what this person is accountable for.</p>
+          <a class="tm-link" href="https://sectoraorg.com" target="_blank" rel="noopener noreferrer">LinkedIn <i>↗</i></a>
+        </div>
+      </article>
+      <article class="tm-card reveal" style="--d:.22s">
+        <span class="tm-mono" aria-hidden="true">CC</span>
+        <div class="tm-body">
+          <h3>Full name</h3>
+          <p class="tm-role">Role</p>
+          <p class="tm-bio">One line on what this person is accountable for.</p>
+          <a class="tm-link" href="https://sectoraorg.com" target="_blank" rel="noopener noreferrer">LinkedIn <i>↗</i></a>
+        </div>
+      </article>
+      <article class="tm-card reveal" style="--d:.28s">
+        <span class="tm-mono" aria-hidden="true">DD</span>
+        <div class="tm-body">
+          <h3>Full name</h3>
+          <p class="tm-role">Role</p>
+          <p class="tm-bio">One line on what this person is accountable for.</p>
+          <a class="tm-link" href="https://sectoraorg.com" target="_blank" rel="noopener noreferrer">LinkedIn <i>↗</i></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+-->
 
 
 <section class="jiris" id="jiris">
