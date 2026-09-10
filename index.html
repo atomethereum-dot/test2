@@ -367,11 +367,12 @@
     18%{opacity:.9}
     100%{transform:scale(1.5);opacity:0}
   }
+  /* sin filter:blur: el degradado radial ya llega suave a cero, y un
+     desenfoque encima solo cuesta relleno en cada fotograma */
   .iris-pulse{
     position:absolute;left:50%;top:50%;z-index:0;pointer-events:none;
     width:60vmax;height:60vmax;margin:-30vmax 0 0 -30vmax;border-radius:50%;
     background:radial-gradient(circle,rgba(21,105,255,.20),transparent 62%);
-    filter:blur(30px);
     animation:pulseOut 5.2s ease-out infinite;will-change:transform,opacity;
   }
   @keyframes pulseOut{
@@ -381,15 +382,21 @@
 
   /* aurora: horizonte vivo en lugar de una barra plana */
   .aurora{position:absolute;left:0;right:0;bottom:0;height:52vh;z-index:1;pointer-events:none;overflow:hidden}
-  .aurora span{position:absolute;bottom:-22vh;border-radius:50%;filter:blur(72px);will-change:transform}
+  /* la masa de luz se dibuja como degradado radial en vez de un disco
+     macizo desenfocado: mismo resultado a la vista y sin el coste de
+     rellenar un blur enorme en cada fotograma */
+  .aurora span{position:absolute;bottom:-22vh;will-change:transform}
   /* dos masas espejadas mas una central sin deriva lateral: el centro de
      gravedad de la luz queda clavado en el eje, pase lo que pase con las
      animaciones. Antes las tres derivaban libres y el conjunto se torcia */
-  .aurora span:nth-child(1){left:-8%;width:56vw;height:40vh;background:#1569ff;opacity:.85;
+  .aurora span:nth-child(1){left:-8%;width:56vw;height:40vh;opacity:.85;
+    background:radial-gradient(closest-side,#1569ff 0%,#1569ff 30%,transparent 100%);
     animation:driftIzq 22s ease-in-out infinite}
-  .aurora span:nth-child(2){right:-8%;width:56vw;height:40vh;background:#1569ff;opacity:.85;
+  .aurora span:nth-child(2){right:-8%;width:56vw;height:40vh;opacity:.85;
+    background:radial-gradient(closest-side,#1569ff 0%,#1569ff 30%,transparent 100%);
     animation:driftDer 22s ease-in-out infinite}
-  .aurora span:nth-child(3){left:50%;width:64vw;height:36vh;margin-left:-32vw;background:#3f86ff;opacity:.6;
+  .aurora span:nth-child(3){left:50%;width:64vw;height:36vh;margin-left:-32vw;opacity:.6;
+    background:radial-gradient(closest-side,#3f86ff 0%,#3f86ff 30%,transparent 100%);
     animation:driftCentro 17s ease-in-out infinite}
   /* espejadas exactas: lo que una hace a la derecha, la otra a la izquierda */
   @keyframes driftIzq{
@@ -1050,9 +1057,9 @@
   /* el recorte vive aqui, no en la seccion: asi las masas de luz se
      contienen sin romper el sticky del contenido */
   .m-bg{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-  .halo{position:absolute;z-index:0;pointer-events:none;border-radius:50%;filter:blur(90px);will-change:transform}
-  .halo.a{left:-6%;top:8%;width:52vw;height:46vh;background:var(--halo-a);animation:drift1 24s ease-in-out infinite}
-  .halo.b{right:-8%;bottom:-4%;width:70vw;height:44vh;background:var(--halo-b);animation:drift3 31s ease-in-out infinite}
+  .halo{position:absolute;z-index:0;pointer-events:none;will-change:transform}
+  .halo.a{left:-6%;top:8%;width:52vw;height:46vh;background:radial-gradient(closest-side,var(--halo-a) 0%,var(--halo-a) 30%,transparent 100%);animation:drift1 24s ease-in-out infinite}
+  .halo.b{right:-8%;bottom:-4%;width:70vw;height:44vh;background:radial-gradient(closest-side,var(--halo-b) 0%,var(--halo-b) 30%,transparent 100%);animation:drift3 31s ease-in-out infinite}
 
   .m-inner{
     position:relative;z-index:1;max-width:1280px;color:var(--sec-ink);
@@ -1142,10 +1149,12 @@
     -webkit-mask-image:radial-gradient(72% 66% at 50% 46%,#000,transparent 86%);
     mask-image:radial-gradient(72% 66% at 50% 46%,#000,transparent 86%);
   }
-  .wipe-halo{position:absolute;z-index:0;pointer-events:none;border-radius:50%;filter:blur(84px);will-change:transform}
-  .wipe-halo.a{left:-8%;bottom:-12%;width:58vw;height:44vh;background:rgba(21,105,255,.30);
+  .wipe-halo{position:absolute;z-index:0;pointer-events:none;will-change:transform}
+  .wipe-halo.a{left:-8%;bottom:-12%;width:58vw;height:44vh;
+    background:radial-gradient(closest-side,rgba(21,105,255,.30) 0%,rgba(21,105,255,.30) 30%,transparent 100%);
     animation:drift1 21s ease-in-out infinite}
-  .wipe-halo.b{right:-10%;top:-8%;width:52vw;height:42vh;background:rgba(21,105,255,.18);
+  .wipe-halo.b{right:-10%;top:-8%;width:52vw;height:42vh;
+    background:radial-gradient(closest-side,rgba(21,105,255,.18) 0%,rgba(21,105,255,.18) 30%,transparent 100%);
     animation:drift3 29s ease-in-out infinite}
   #wipe-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
 
@@ -1196,7 +1205,6 @@
     position:absolute;left:0;right:0;bottom:0;
     height:42vh;z-index:1;pointer-events:none;opacity:0;
     background:radial-gradient(58% 74% at 50% 58%, rgba(21,105,255,.58), transparent 72%);
-    filter:blur(58px);
     -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 48%,transparent 92%);
     mask-image:linear-gradient(180deg,#000 0%,#000 48%,transparent 92%);
   }
@@ -1209,7 +1217,6 @@
     position:absolute;top:-20vh;left:0;right:0;
     height:44vh;z-index:0;pointer-events:none;
     background:radial-gradient(58% 66% at 50% 42%, rgba(21,105,255,.42), transparent 72%);
-    filter:blur(64px);
     -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 30%,#000 60%,transparent 100%);
     mask-image:linear-gradient(180deg,transparent 0%,#000 30%,#000 60%,transparent 100%);
   }
@@ -1447,13 +1454,15 @@
   /* masas de luz derivando por detras de la plancha: sacan la escena
      del negro plano sin tocar la limpieza del grabado */
   .plate-aura{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-  .plate-aura span{position:absolute;border-radius:50%;filter:blur(92px);will-change:transform}
+  .plate-aura span{position:absolute;will-change:transform}
   .plate-aura span:nth-child(1){
-    left:2%;top:2%;width:48vw;height:46vh;background:rgba(21,105,255,.24);
+    left:2%;top:2%;width:48vw;height:46vh;
+    background:radial-gradient(closest-side,rgba(21,105,255,.24) 0%,rgba(21,105,255,.24) 30%,transparent 100%);
     animation:drift1 23s ease-in-out infinite;
   }
   .plate-aura span:nth-child(2){
-    right:-4%;bottom:-10%;width:54vw;height:48vh;background:rgba(21,105,255,.17);
+    right:-4%;bottom:-10%;width:54vw;height:48vh;
+    background:radial-gradient(closest-side,rgba(21,105,255,.17) 0%,rgba(21,105,255,.17) 30%,transparent 100%);
     animation:drift3 31s ease-in-out infinite;
   }
   /* halo central: la roseta queda dentro de un charco de luz */
@@ -1461,7 +1470,6 @@
     position:absolute;left:50%;top:50%;z-index:0;pointer-events:none;
     width:74vmin;height:74vmin;margin:-37vmin 0 0 -37vmin;border-radius:50%;
     background:radial-gradient(circle, rgba(96,156,255,.26), rgba(21,105,255,.10) 46%, transparent 68%);
-    filter:blur(46px);
     animation:plateBreathe 9s ease-in-out infinite;
   }
   @keyframes plateBreathe{
@@ -1479,9 +1487,9 @@
   }
   /* horizonte: las mismas masas de luz que cierran el iris */
   .plate-horizon{position:absolute;left:0;right:0;bottom:0;height:46vh;z-index:0;pointer-events:none;overflow:hidden}
-  .plate-horizon span{position:absolute;bottom:-20vh;border-radius:50%;filter:blur(74px);will-change:transform}
-  .plate-horizon span:nth-child(1){left:0;width:60vw;height:36vh;background:#1569ff;opacity:.5;animation:drift1 21s ease-in-out infinite}
-  .plate-horizon span:nth-child(2){right:0;width:54vw;height:34vh;background:#0b3ecb;opacity:.55;animation:drift3 29s ease-in-out infinite}
+  .plate-horizon span{position:absolute;bottom:-20vh;will-change:transform}
+  .plate-horizon span:nth-child(1){left:0;width:60vw;height:36vh;opacity:.5;background:radial-gradient(closest-side,#1569ff 0%,#1569ff 30%,transparent 100%);animation:drift1 21s ease-in-out infinite}
+  .plate-horizon span:nth-child(2){right:0;width:54vw;height:34vh;opacity:.55;background:radial-gradient(closest-side,#0b3ecb 0%,#0b3ecb 30%,transparent 100%);animation:drift3 29s ease-in-out infinite}
   /* barrido de luz, con mezcla superpuesta para que realce y no blanquee */
   .plate-sweep{
     position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.2;
@@ -1555,7 +1563,6 @@
   .rsm-glow{
     position:absolute;top:0;left:0;right:0;height:46vh;z-index:0;pointer-events:none;
     background:radial-gradient(58% 62% at 50% 46%, rgba(21,105,255,.34), transparent 74%);
-    filter:blur(66px);
     -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 46%,#000 70%,transparent 100%);
     mask-image:linear-gradient(180deg,transparent 0%,#000 46%,#000 70%,transparent 100%);
   }
@@ -1658,7 +1665,6 @@
     position:absolute;left:50%;top:50%;z-index:0;pointer-events:none;
     width:60vmax;height:60vmax;margin:-30vmax 0 0 -30vmax;border-radius:50%;
     background:radial-gradient(circle,rgba(21,105,255,.20),transparent 62%);
-    filter:blur(30px);
     animation:pulseOut 5.2s ease-out infinite;will-change:transform,opacity;
   }
 
@@ -1714,7 +1720,6 @@
     margin:-1px 0 0 0;transform:translate(-50%,-50%) scale(.7);
     border-radius:50%;pointer-events:none;opacity:0;
     background:radial-gradient(circle,rgba(21,105,255,.16),rgba(21,105,255,.05) 46%,transparent 70%);
-    filter:blur(34px);
   }
   /* barrido de luz que cruza la cifra al encajar */
   .zoom-land .n-wrap{position:relative;display:inline-block}
@@ -2149,7 +2154,6 @@
   .tm-glow{
     position:absolute;top:0;left:0;right:0;height:40vh;z-index:0;pointer-events:none;
     background:radial-gradient(56% 60% at 50% 46%, rgba(21,105,255,.11), transparent 74%);
-    filter:blur(60px);
     -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 44%,#000 72%,transparent 100%);
     mask-image:linear-gradient(180deg,transparent 0%,#000 44%,#000 72%,transparent 100%);
   }
@@ -2539,11 +2543,10 @@
     /* el reflejo giratorio se detiene en movil: el aro sigue brillando */
     .iris-edge::after,.jiris-edge::after{animation:none;opacity:.55}
 
-    /* desenfoques a la mitad: por encima de 45px el ojo apenas distingue */
-    .aurora span{filter:blur(46px)}
+    /* aqui se recortaban los desenfoques a la mitad. Ya no hace falta:
+       las masas de luz se dibujan como degradado radial y no llevan
+       ningun filter:blur, ni en movil ni en escritorio */
     .aurora span:nth-child(3){display:none}
-    .plate-aura span,.plate-horizon span,.wipe-halo,.halo,.zoom-pulse,.iris-pulse{filter:blur(44px)}
-    .plate-halo{filter:blur(30px)}
     .plate-aura span:nth-child(2){display:none}
     .plate-horizon span:nth-child(2){display:none}
 
@@ -2655,10 +2658,12 @@
   /* masas de luz derivando bajo la costura */
   .ft-aurora{position:absolute;left:0;right:0;top:-14vh;height:46vh;z-index:0;
     pointer-events:none;overflow:hidden}
-  .ft-aurora span{position:absolute;top:0;border-radius:50%;filter:blur(80px)}
-  .ft-aurora span:nth-child(1){left:-6%;width:52vw;height:34vh;background:rgba(21,105,255,.16);
+  .ft-aurora span{position:absolute;top:0}
+  .ft-aurora span:nth-child(1){left:-6%;width:52vw;height:34vh;
+    background:radial-gradient(closest-side,rgba(21,105,255,.16) 0%,rgba(21,105,255,.16) 30%,transparent 100%);
     animation:driftIzq 26s ease-in-out infinite}
-  .ft-aurora span:nth-child(2){right:-6%;width:52vw;height:34vh;background:rgba(21,105,255,.16);
+  .ft-aurora span:nth-child(2){right:-6%;width:52vw;height:34vh;
+    background:radial-gradient(closest-side,rgba(21,105,255,.16) 0%,rgba(21,105,255,.16) 30%,transparent 100%);
     animation:driftDer 26s ease-in-out infinite}
 
   /* puntos en los cruces de la reticula: textura fina, no ruido */
@@ -2697,7 +2702,6 @@
   .ft-glow{
     position:absolute;top:-16vh;left:0;right:0;height:36vh;z-index:0;pointer-events:none;
     background:radial-gradient(56% 62% at 50% 46%, rgba(21,105,255,.30), transparent 72%);
-    filter:blur(64px);
     -webkit-mask-image:linear-gradient(180deg,transparent,#000 40%,#000 66%,transparent);
     mask-image:linear-gradient(180deg,transparent,#000 40%,#000 66%,transparent);
   }
