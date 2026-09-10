@@ -3184,6 +3184,15 @@ html[dir="rtl"] body{direction:ltr}
 }
 .ck-no:hover,.ck-no:focus-visible{color:var(--ink);border-color:var(--ink-3)}
 .ck-no:hover::before,.ck-no:focus-visible::before{transform:translateY(0)}
+/* mismo motivo que la barra: el aviso es fijo y acompana el scroll hasta
+   que se cierra, asi que en movil su desenfoque de fondo se paga en cada
+   fotograma. El fondo ya estaba al 94%; pasa a opaco. */
+@media (max-width:900px){
+  .ck{
+    -webkit-backdrop-filter:none;backdrop-filter:none;
+    background:#06080d;
+  }
+}
 @media (max-width:560px){
   .ck{left:12px;right:12px;bottom:12px;width:auto;padding:20px}
   .ck-row{gap:8px}
@@ -3338,6 +3347,23 @@ a.nvp-item:hover,a.nvp-item:focus-visible{background:rgba(21,105,255,.1);border-
 .nvp-jump .nvp-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
 
 @media (max-width:900px){
+  /* EN MOVIL, SIN DESENFOQUE DE FONDO. Esta barra es fija y esta en
+     pantalla el cien por cien del recorrido: con backdrop-filter, el
+     navegador tiene que rehacer el desenfoque de la franja que hay
+     detras en CADA fotograma de scroll, durante las cuarenta pantallas.
+     En un movil eso es de lo mas caro que existe, y no se ve en las
+     metricas de CPU porque el coste esta en la composicion.
+
+     A cambio el fondo pasa a opaco. Sobre la portada oscura la
+     diferencia es inapreciable, y sobre las secciones claras la barra
+     ya se leia como una franja oscura maciza.
+
+     En escritorio se queda el desenfoque: alli hay tarjeta grafica de
+     sobra y la barra se ve mejor. */
+  .nvb,.nvp{
+    -webkit-backdrop-filter:none;backdrop-filter:none;
+    background:#06080d;
+  }
   .nvb-jumps{display:none}
   .nvb-more{display:none}
   .nvb-burger{display:inline-flex;align-items:center;gap:9px}
