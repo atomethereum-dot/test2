@@ -1411,8 +1411,11 @@
       margin:0 calc(var(--pad) * -1) 22px;
       padding:20px var(--pad) 18px;
       background:var(--sticky-bg);
-      backdrop-filter:blur(16px) saturate(1.3);
-      -webkit-backdrop-filter:blur(16px) saturate(1.3);
+      /* sin backdrop-filter a proposito: el fondo de arriba ya es opaco al
+         96-97%%, asi que el desenfoque aporta un 3-4%% de la imagen. A
+         cambio, este encabezado es sticky y se mueve en cada fotograma de
+         scroll, lo que obliga al navegador a rehacer el desenfoque del
+         fondo entero cada vez. Se quita: cuesta mucho y no se ve. */
       border-bottom:1px solid var(--hair);
     }
     .p-sticky .eyebrow{margin-bottom:14px}
@@ -1635,8 +1638,11 @@
       margin:0 calc(var(--pad) * -1) 26px;
       padding:20px var(--pad) 18px;
       background:var(--sticky-bg);
-      backdrop-filter:blur(16px) saturate(1.3);
-      -webkit-backdrop-filter:blur(16px) saturate(1.3);
+      /* sin backdrop-filter a proposito: el fondo de arriba ya es opaco al
+         96-97%%, asi que el desenfoque aporta un 3-4%% de la imagen. A
+         cambio, este encabezado es sticky y se mueve en cada fotograma de
+         scroll, lo que obliga al navegador a rehacer el desenfoque del
+         fondo entero cada vez. Se quita: cuesta mucho y no se ve. */
       border-bottom:1px solid var(--hair);
     }
   }
@@ -1880,8 +1886,11 @@
       position:sticky;top:0;z-index:2;
       margin:0 calc(var(--pad) * -1) 24px;padding:20px var(--pad) 18px;
       background:var(--sticky-bg);
-      backdrop-filter:blur(16px) saturate(1.3);
-      -webkit-backdrop-filter:blur(16px) saturate(1.3);
+      /* sin backdrop-filter a proposito: el fondo de arriba ya es opaco al
+         96-97%%, asi que el desenfoque aporta un 3-4%% de la imagen. A
+         cambio, este encabezado es sticky y se mueve en cada fotograma de
+         scroll, lo que obliga al navegador a rehacer el desenfoque del
+         fondo entero cada vez. Se quita: cuesta mucho y no se ve. */
       border-bottom:1px solid rgba(0,0,0,.12);
     }
   }
@@ -2485,8 +2494,11 @@
       margin:0 calc(var(--pad) * -1) 22px;
       padding:18px var(--pad) 16px;
       background:var(--sticky-bg);
-      backdrop-filter:blur(16px) saturate(1.3);
-      -webkit-backdrop-filter:blur(16px) saturate(1.3);
+      /* sin backdrop-filter a proposito: el fondo de arriba ya es opaco al
+         96-97%%, asi que el desenfoque aporta un 3-4%% de la imagen. A
+         cambio, este encabezado es sticky y se mueve en cada fotograma de
+         scroll, lo que obliga al navegador a rehacer el desenfoque del
+         fondo entero cada vez. Se quita: cuesta mucho y no se ve. */
       border-bottom:1px solid rgba(0,0,0,.12);
     }
     /* el titular del equipo va emparejado con este a todos los anchos, no
@@ -2917,7 +2929,11 @@
                                            para que el desvanecido caiga
                                            ya pasado el titular */
       background:color-mix(in srgb,var(--sec-bg),transparent 4%);
-      -webkit-backdrop-filter:blur(11px);backdrop-filter:blur(11px);
+      /* sin backdrop-filter a proposito: el fondo de arriba ya es opaco al
+         96-97%%, asi que el desenfoque aporta un 3-4%% de la imagen. A
+         cambio, este encabezado es sticky y se mueve en cada fotograma de
+         scroll, lo que obliga al navegador a rehacer el desenfoque del
+         fondo entero cada vez. Se quita: cuesta mucho y no se ve. */
       /* difuminado por los dos lados: sin canto recto en ningun momento,
          ni anclado ni todavia suelto dentro de la seccion */
       -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 15%,
@@ -3176,6 +3192,23 @@ html[dir="rtl"] body{direction:ltr}
 @media (prefers-reduced-motion:reduce){
   .ck{transition:opacity .2s linear,visibility .2s linear;transform:none}
   .ck-yes::before,.ck-no::before{transition:none}
+}
+
+/* ============ secciones fuera de pantalla ============
+   El documento tiene una quincena de animaciones infinitas repartidas por
+   sus escenas: masas de luz que derivan, pulsos, anillos, destellos. Todas
+   siguen recomponiendo sus capas aunque su seccion este a treinta
+   pantallas de distancia, y esa recomposicion compite con el scroll.
+
+   Se pausan, no se detienen: al volver a entrar siguen exactamente donde
+   estaban, asi que no hay ningun salto visible. Nadie puede ver una
+   animacion de una seccion que no esta en pantalla, de modo que el
+   aspecto no cambia en absoluto. */
+.fuera-de-vista,
+.fuera-de-vista *,
+.fuera-de-vista *::before,
+.fuera-de-vista *::after{
+  animation-play-state:paused !important;
 }
 
 /* ============ barra de navegacion ============
@@ -4070,8 +4103,11 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 <section class="wipe" id="wipe">
   <div class="wipe-pin">
     <div class="wipe-grid" aria-hidden="true"></div>
-    <div class="wipe-halo a" aria-hidden="true"></div>
-    <div class="wipe-halo b" aria-hidden="true"></div>
+    <!-- aqui iban los dos <div class="wipe-halo">: las manchas de luz azul
+         sobre el fondo claro. Retiradas a peticion. Se van las dos, no
+         solo la de abajo a la izquierda: son el mismo elemento espejado y
+         dejar una sola descuadraba la seccion. -->
+
     <!-- aqui iba <canvas class="cells-soft" data-cells="0.30">: las celdas
          que se encendian y apagaban sobre el fondo claro. Retiradas a
          peticion. La transicion diagonal del barrido no se toca: esa la
@@ -6968,6 +7004,24 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   window.SECTORA_openCookiePrefs = abrir;
   const pie = document.getElementById('ft-ck');
   if(pie) pie.addEventListener('click', abrir);
+})();
+</script>
+
+<script>
+/* ===== pausar lo que no se ve =====
+   Marca cada seccion que sale de pantalla para que el CSS le pause las
+   animaciones. El margen del observador las reanuda un poco antes de que
+   la seccion vuelva a entrar, asi que nunca se ve una escena arrancando.
+   Si el navegador no trae IntersectionObserver no se marca nada y todo
+   sigue como antes. */
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  const zonas = document.querySelectorAll('body > section, body > div.stage, body > footer');
+  if(!zonas.length) return;
+  const io = new IntersectionObserver(entradas => {
+    for(const e of entradas) e.target.classList.toggle('fuera-de-vista', !e.isIntersecting);
+  }, {rootMargin:'25% 0px'});
+  for(const z of zonas) io.observe(z);
 })();
 </script>
 
