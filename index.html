@@ -3687,7 +3687,7 @@ html[dir="rtl"] body{direction:ltr}
           continuous on-chain monitoring — governed by a foundation incorporated
           in Illinois, United States.
         </p>
-        <div class="actions mono lift" style="--d:.72s">
+        <div class="actions mono lift" id="hero-actions" style="--d:.72s">
           <a class="btn btn-primary" href="https://sectoraorg.com/docs"><span>Download the whitepaper</span><span class="arrow">→</span></a>
           <!-- sustituir el href por el enlace del pool de Uniswap cuando lo tengas -->
           <a class="btn btn-ghost" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&chain=ethereum" target="_blank" rel="noopener noreferrer"><span>Buy SECT on Uniswap</span><span class="arrow">↗</span></a>
@@ -6700,11 +6700,29 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     ob.observe(document.body, {attributes:true, attributeFilter:['class']});
   }
 
+  /* El panel va anclado abajo a la izquierda y mide mas que el hueco que
+     queda bajo los dos botones del encabezado: si sale con ellos en
+     pantalla los tapa y, al estar por encima en el apilado, se come el
+     clic. En movil los tapa enteros. Asi que el aviso espera a que el
+     bloque de acciones salga de la vista; si no existe o el navegador no
+     trae IntersectionObserver, sale sin esperar. La apertura manual desde
+     el pie no pasa por aqui: esa siempre abre. */
+  function cuandoDespejado(fn){
+    const zona = document.getElementById('hero-actions');
+    if(!zona || !('IntersectionObserver' in window)){ fn(); return; }
+    const ob = new IntersectionObserver(entradas => {
+      if(entradas.some(e => e.isIntersecting)) return;
+      ob.disconnect();
+      fn();
+    });
+    ob.observe(zona);
+  }
+
   const guardado = leer();
   if(guardado && guardado.estado){
     anunciar(guardado.estado);
   }else{
-    cuandoPase(() => setTimeout(abrir, 900));
+    cuandoPase(() => cuandoDespejado(() => setTimeout(abrir, 600)));
   }
 
   si.addEventListener('click', () => cerrar('all'));
