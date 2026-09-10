@@ -4879,6 +4879,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     irisQueued = true;
     requestAnimationFrame(() => {
       irisQueued = false;
+      /* fuera de pantalla no hay nada que pintar, y medirla cuesta igual */
+      if(iris.classList.contains('fuera-de-vista')) return;
       const r = iris.getBoundingClientRect();
       const vh = window.innerHeight;
       const span = r.height - vh;
@@ -5425,7 +5427,17 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   function onScroll(){
     if(queued) return;
     queued = true;
-    requestAnimationFrame(() => { queued = false; paint(); });
+    requestAnimationFrame(() => {
+      queued = false;
+      /* Con la seccion fuera de pantalla no hay nada que pintar, y medirla
+         cuesta igual: cada getBoundingClientRect en mitad del scroll obliga
+         al navegador a rehacer el diseno. Con ocho modulos haciendolo en
+         cada fotograma, ese recalculo forzado era el lag de fondo de toda
+         la pagina. La clase la pone el observador de secciones, con margen
+         por delante para que la escena llegue al dia antes de verse. */
+      if(sec.classList.contains('fuera-de-vista')) return;
+      paint();
+    });
   }
 
   let rt;
@@ -5675,7 +5687,17 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   function onScroll(){
     if(queued) return;
     queued = true;
-    requestAnimationFrame(() => { queued = false; paint(); });
+    requestAnimationFrame(() => {
+      queued = false;
+      /* Con la seccion fuera de pantalla no hay nada que pintar, y medirla
+         cuesta igual: cada getBoundingClientRect en mitad del scroll obliga
+         al navegador a rehacer el diseno. Con ocho modulos haciendolo en
+         cada fotograma, ese recalculo forzado era el lag de fondo de toda
+         la pagina. La clase la pone el observador de secciones, con margen
+         por delante para que la escena llegue al dia antes de verse. */
+      if(sec.classList.contains('fuera-de-vista')) return;
+      paint();
+    });
   }
 
   let rt;
@@ -5917,7 +5939,17 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   function onScroll(){
     if(queued) return;
     queued = true;
-    requestAnimationFrame(() => { queued = false; paint(); });
+    requestAnimationFrame(() => {
+      queued = false;
+      /* Con la seccion fuera de pantalla no hay nada que pintar, y medirla
+         cuesta igual: cada getBoundingClientRect en mitad del scroll obliga
+         al navegador a rehacer el diseno. Con ocho modulos haciendolo en
+         cada fotograma, ese recalculo forzado era el lag de fondo de toda
+         la pagina. La clase la pone el observador de secciones, con margen
+         por delante para que la escena llegue al dia antes de verse. */
+      if(sec.classList.contains('fuera-de-vista')) return;
+      paint();
+    });
   }
 
   let rt;
@@ -6185,7 +6217,17 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   function onScroll(){
     if(queued) return;
     queued = true;
-    requestAnimationFrame(() => { queued = false; paint(); });
+    requestAnimationFrame(() => {
+      queued = false;
+      /* Con la seccion fuera de pantalla no hay nada que pintar, y medirla
+         cuesta igual: cada getBoundingClientRect en mitad del scroll obliga
+         al navegador a rehacer el diseno. Con ocho modulos haciendolo en
+         cada fotograma, ese recalculo forzado era el lag de fondo de toda
+         la pagina. La clase la pone el observador de secciones, con margen
+         por delante para que la escena llegue al dia antes de verse. */
+      if(sec.classList.contains('fuera-de-vista')) return;
+      paint();
+    });
   }
 
   window.addEventListener('scroll', onScroll, {passive:true});
@@ -6458,6 +6500,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     queued = true;
     requestAnimationFrame(() => {
       queued = false;
+      /* fuera de pantalla no hay nada que pintar, y medirla cuesta igual */
+      if(sec.classList.contains('fuera-de-vista')) return;
       const r = sec.getBoundingClientRect();
       const vh = window.innerHeight;
       const span = r.height - vh;
@@ -7020,7 +7064,13 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   if(!zonas.length) return;
   const io = new IntersectionObserver(entradas => {
     for(const e of entradas) e.target.classList.toggle('fuera-de-vista', !e.isIntersecting);
-  }, {rootMargin:'25% 0px'});
+    /* Una pantalla entera de margen por arriba y por abajo. No es
+       decoracion: el observador entrega sus avisos al final del
+       fotograma, asi que en un scroll rapido de telefono va uno o dos
+       fotogramas por detras. Con margen justo, una escena podia entrar
+       en pantalla todavia marcada como oculta y quedarse sin pintar ese
+       instante. Con una pantalla de adelanto llega siempre al dia. */
+  }, {rootMargin:'100% 0px'});
   for(const z of zonas) io.observe(z);
 })();
 </script>
@@ -7133,6 +7183,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     const vh = innerHeight;
 
     for(const s of secs){
+      /* fuera de pantalla no hay nada que atenuar, y medirla cuesta igual */
+      if(s.el.classList.contains('fuera-de-vista')) continue;
       const c = s.el.getBoundingClientRect();
 
       /* 0 mientras el pie sigue por debajo del pliegue, 1 cuando la
@@ -7216,6 +7268,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     pendiente = false;
     const vh = innerHeight;
     for(const r of reglas){
+      /* fuera de pantalla la regla no se lee, y medirla cuesta igual */
+      if(r.sec.classList.contains('fuera-de-vista')){ r.el.classList.remove('on'); continue; }
       const c = r.sec.getBoundingClientRect();
       /* solo se enciende la regla de la seccion que se esta leyendo. Con
          dos o tres a la vez, sus lecturas flotaban a distintas alturas
