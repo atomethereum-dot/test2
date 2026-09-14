@@ -5,6 +5,7 @@ Allow: /
 Disallow: /v1test1/
 Disallow: /docstest1/
 Disallow: /dashtestv1/
+Disallow: /whitepaper/          # borrador con OTRO logo: confundia al buscador
 Disallow: /hero-left.html
 Disallow: /dashboard-v3.html
 
