@@ -4367,8 +4367,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         </div>
         <div class="cap-tools reveal" style="--d:.18s">
           <div class="cap-seg" id="cap-seg">
-            <button type="button" data-pct="1">1%</button>
-            <button type="button" data-pct="5" class="on">5%</button>
+            <button type="button" data-pct="1" class="on">1%</button>
+            <button type="button" data-pct="5">5%</button>
             <button type="button" data-pct="10">10%</button>
           </div>
           <div class="cap-seg" id="cap-supply-seg">
@@ -4385,7 +4385,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
           <span class="r hide-s">Price</span>
           <span class="r hide-s">Circulating</span>
           <span class="r">Market cap</span>
-          <span class="r">#SECT @ <b id="cap-pct">5%</b></span>
+          <span class="r">#SECT @ <b id="cap-pct">1%</b></span>
         </div>
       </div>
 
@@ -5946,7 +5946,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   };
   const SELF = {n:'Sectora', t:'#SECT', price:0.10, sup:'50.0M → 25.0M', cap:5.00e6};
 
-  let pct = 5, live = false, rows = [];
+  let pct = 1, live = false, rows = [];
   let data = COINS.map(c => Object.assign({}, c, FALLBACK[c.id]));
 
   const money = v => v >= 1000
