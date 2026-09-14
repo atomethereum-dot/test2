@@ -333,6 +333,27 @@
 
   /* ============ iris ligado al scroll ============ */
   .iris{position:relative;height:560vh;background:#000}
+  /* ---- costura con la seccion 01 ----
+     El iris termina en un azul CON TEXTURA -- celdas, rejilla, luces -- y
+     la seccion de abajo abre en un azul LISO. Dos superficies distintas
+     tocandose en recto: el ojo lee eso como una linea trazada con regla,
+     y por eso ajustar el tono no lo arreglaba. Medido, el salto era de 29
+     de media y llegaba a 121 en algunas columnas.
+
+     Esta banda ocupa el ultimo tramo del iris y lleva su textura hasta el
+     color exacto con el que abre la seccion siguiente, asi que cuando se
+     tocan ya valen lo mismo y no hay borde que ver. El color no es un
+     numero elegido a ojo: es el que resulta de componer el velo azul de
+     .what sobre su papel, medido en pantalla. */
+  .iris-costura{
+    position:absolute;left:0;right:0;bottom:0;height:220px;z-index:5;
+    pointer-events:none;
+    background:linear-gradient(180deg,
+      rgba(50,123,252,0) 0%,
+      rgba(50,123,252,.28) 42%,
+      rgba(50,123,252,.72) 76%,
+      rgb(50,123,252) 100%);
+  }
   .iris-pin{
     /* dvh sigue a las barras del navegador; svh dejaba una franja negra
        al ocultarse la barra inferior en movil */
@@ -3944,6 +3965,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 </div>
 
 <section class="iris" id="iris">
+  <div class="iris-costura" aria-hidden="true"></div>
   <div class="iris-pin">
     <div class="iris-grid" aria-hidden="true"></div>
     <div class="iris-pulse" aria-hidden="true"></div>
