@@ -2,11 +2,12 @@ User-agent: *
 Allow: /
 
 # Borradores antiguos, no forman parte del sitio publicado
-Disallow: /v1test1/
-Disallow: /docstest1/
-Disallow: /dashtestv1/
-Disallow: /whitepaper/          # borrador con OTRO logo: confundia al buscador
 Disallow: /hero-left.html
 Disallow: /dashboard-v3.html
+
+# /v1test1/, /docstest1/, /dashtestv1/ y /whitepaper/ estaban aqui bloqueados.
+# Se han BORRADO del repositorio: ahora devuelven 404. El Disallow se retira a
+# proposito, porque un Disallow impide que Google vuelva a entrar y por tanto
+# impide que se entere del 404 y las suelte del indice.
 
 Sitemap: https://sectoraorg.com/sitemap.xml
