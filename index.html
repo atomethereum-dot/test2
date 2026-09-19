@@ -5979,15 +5979,16 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     {id:'tron',         n:'TRON',         t:'TRX'},
     {id:'chainlink',    n:'Chainlink',    t:'LINK'}
   ];
-  // reserva: ultima instantanea conocida, por si la API no responde
+  // reserva: ultima instantanea conocida, por si la API no responde.
+  // cap = price x sup en cada fila, para que la tabla no se contradiga sola.
   const FALLBACK = {
-    ripple:{price:1.02,      cap:59.88e9,   sup:59.0e9},
-    solana:{price:75.17,     cap:43.67e9,   sup:581e6},
-    hyperliquid:{price:54.23,cap:24.40e9,   sup:450e6},
-    dogecoin:{price:0.15,    cap:21.90e9,   sup:146e9},
-    cardano:{price:0.40,     cap:14.00e9,   sup:35.0e9},
-    tron:{price:0.16,        cap:13.50e9,   sup:86.0e9},
-    chainlink:{price:14.87,  cap:9.71e9,    sup:653e6}
+    ripple:{price:1.43,      cap:90.05e9,   sup:62.97e9},
+    solana:{price:111.60,    cap:65.55e9,   sup:587e6},
+    tron:{price:0.3387,      cap:32.16e9,   sup:94.96e9},
+    hyperliquid:{price:92.83,cap:20.66e9,   sup:222.5e6},
+    dogecoin:{price:0.0893,  cap:13.93e9,   sup:156.0e9},
+    chainlink:{price:12.62,  cap:9.44e9,    sup:748e6},
+    cardano:{price:0.2283,   cap:8.57e9,    sup:37.52e9}
   };
   const SELF = {n:'Sectora', t:'#SECT', price:0.10, sup:'50.0M → 25.0M', cap:5.00e6};
 
@@ -6074,27 +6075,82 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     }
   }
 
-  async function fetchLive(){
+  /* Dos fuentes, por orden de frescura:
+       1. CoinGecko directo desde el navegador -> precio del momento.
+       2. dex-prices.json del repo -> lo escribe el cron de GitHub Actions, que
+          en la practica se retrasa horas, asi que solo sirve de red de seguridad
+          (CoinGecko caido, limite de peticiones, bloqueador, o sin red).
+     Si las dos fallan se conserva la ultima lectura buena y se reintenta. */
+  const CG_URL = 'https://api.coingecko.com/api/v3/simple/price?ids='
+    + COINS.map(c => c.id).join(',')
+    + '&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true';
+
+  const CG_VIGENCIA = 60000;   // un dato de CoinGecko vale 1 min
+  const ARCH_ESPERA = 20000;   // y el archivo no se relee mas rapido que esto
+  let cgVigenteHasta = 0, cgReintentoTras = 0, archReintentoTras = 0;
+
+  // el circulante se deriva del propio dato vivo (cap / precio); usar el de
+  // reserva dejaria la columna peleada con las otras dos
+  function aplicar(coins, sello){
+    data = COINS.map(c => {
+      const m  = coins[c.id];
+      const fb = FALLBACK[c.id];
+      if(!m || typeof m.usd !== 'number') return Object.assign({}, c, fb);
+      const cap = m.usd_market_cap || fb.cap;
+      return Object.assign({}, c, {
+        price: m.usd,
+        cap:   cap,
+        sup:   m.usd > 0 ? cap / m.usd : fb.sup
+      });
+    });
+    live = true;
+    updatedAt = sello;
+  }
+
+  async function desdeCoinGecko(){
+    const ctl = new AbortController();
+    const corte = setTimeout(() => ctl.abort(), 8000);
+    try{
+      const r = await fetch(CG_URL, {cache:'no-store', signal:ctl.signal});
+      if(!r.ok) throw new Error(r.status);          // incluye el 429 por limite
+      const j = await r.json();
+      if(!j || !j[COINS[0].id]) throw new Error('vacio');
+      aplicar(j, Date.now());
+      return true;
+    }catch(e){
+      return false;
+    }finally{ clearTimeout(corte); }
+  }
+
+  async function desdeArchivo(){
     try{
       const r = await fetch('dex-prices.json?t=' + Date.now(), {cache:'no-store'});
       if(!r.ok) throw new Error(r.status);
       const j = await r.json();
-      const coins = j && j.coins;
-      if(!coins) throw new Error('vacio');
+      if(!j || !j.coins) throw new Error('vacio');
+      aplicar(j.coins, j.updatedAt || Date.now());
+      return true;
+    }catch(e){ return false; }
+  }
 
-      data = COINS.map(c => {
-        const m = coins[c.id];
-        const fb = FALLBACK[c.id];
-        return Object.assign({}, c, m ? {
-          price: m.usd,
-          cap:   m.usd_market_cap,
-          sup:   fb.sup
-        } : fb);
-      });
-      live = true;
-      updatedAt = j.updatedAt || Date.now();
-    }catch(e){
-      // se conserva la ultima lectura buena; el siguiente sondeo (1s) lo reintenta
+  async function fetchLive(){
+    const ahora = Date.now();
+
+    // dato de CoinGecko todavia fresco: solo se refresca el "hace Xs"
+    if(ahora < cgVigenteHasta){ setStatus(); return; }
+
+    if(ahora >= cgReintentoTras){
+      cgReintentoTras = ahora + CG_VIGENCIA;
+      if(await desdeCoinGecko()){
+        cgVigenteHasta = Date.now() + CG_VIGENCIA;
+        setStatus(); build(); render(true);
+        return;
+      }
+    }
+
+    if(Date.now() >= archReintentoTras){
+      archReintentoTras = Date.now() + ARCH_ESPERA;
+      await desdeArchivo();
     }
     setStatus();
     build();
