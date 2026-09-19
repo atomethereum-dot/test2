@@ -2944,13 +2944,15 @@ window.__SECT_TR = {
     const rows = [...wrap.querySelectorAll('.row[data-coin]')];
     if(!rows.length) return;
 
+    // mismo conjunto de respaldo que la portada: si las dos tablas difieren,
+    // el lector ve dos cifras distintas para la misma afirmacion
     const FALLBACK = {
-      ripple:{price:1.10,       cap:69.08e9},
-      solana:{price:84.85,      cap:49.46e9},
+      ripple:{price:1.02,       cap:59.88e9},
+      solana:{price:75.17,      cap:43.67e9},
       dogecoin:{price:0.15,     cap:21.90e9},
       cardano:{price:0.40,      cap:14.00e9},
       tron:{price:0.16,         cap:13.50e9},
-      hyperliquid:{price:70.91, cap:15.78e9},
+      hyperliquid:{price:54.23, cap:24.40e9},
       chainlink:{price:14.87,   cap:9.71e9}
     };
     const SELF_CAP = 5.0e6;

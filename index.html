@@ -4417,8 +4417,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
             <button type="button" data-pct="10">10%</button>
           </div>
           <div class="cap-seg" id="cap-supply-seg">
-            <button type="button" data-supply="50000000">50.0M</button>
-            <button type="button" data-supply="25000000" class="on">25.0M</button>
+            <button type="button" data-supply="50000000" class="on">50.0M</button>
+            <button type="button" data-supply="25000000">25.0M</button>
           </div>
           <span class="cap-live"><i class="led"></i><span id="cap-stamp">Reference snapshot</span></span>
         </div>
@@ -5966,7 +5966,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const led   = document.querySelector('.cap-live .led');
   if(!grid || !seg) return;
 
-  let SUPPLY    = 25000000;           // supply de #SECT usado en el calculo: 50M inicial o 25M tras la reduccion
+  let SUPPLY    = 50000000;           // supply actual de #SECT. 25M es post-reduccion (15 mar 2027), no el de hoy
   const POLL_MS = 1000;               // archivo estatico: se puede pedir cada segundo sin problema
   let updatedAt = 0;                  // hora (del bot) del ultimo dato bueno recibido
 
