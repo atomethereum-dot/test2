@@ -2297,7 +2297,29 @@
      para que las dos no aterricen como un bloque */
   .ev-plate:nth-child(2){transform:scale(var(--s2));opacity:var(--o2)}
   .ev-plate picture{display:block;width:100%;height:100%}
-  .ev-plate img{width:100%;height:100%;object-fit:cover;display:block}
+  .ev-plate img{
+    width:100%;height:100%;object-fit:cover;display:block;
+    /* un punto de contraste y medio de saturacion menos: acerca dos fotos
+       de luz muy distinta (una magenta, otra azul) sin desteñirlas */
+    filter:saturate(.95) contrast(1.05);
+  }
+  /* Velo y grano. La fuente del Forum tiene 630px de detalle optico real,
+     asi que al mostrarla mas grande la interpolacion se nota. Un grano fino
+     fotografico la disimula mucho mejor que bajarle la opacidad, que solo
+     deslava la foto sin quitarle un solo artefacto. isolation:isolate
+     encierra la mezcla dentro de la plancha. */
+  .ev-plate{isolation:isolate}
+  .ev-plate::before,.ev-plate::after{
+    content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  }
+  .ev-plate::before{
+    background:linear-gradient(180deg,
+      rgba(10,12,18,.12) 0%, rgba(10,12,18,.03) 44%, rgba(10,12,18,.28) 100%);
+  }
+  .ev-plate::after{
+    background-image:url(images/grano.png);background-size:160px 160px;
+    opacity:.16;mix-blend-mode:overlay;
+  }
   .ev-plate figcaption{
     position:absolute;left:0;bottom:0;z-index:2;
     padding:9px 13px;border-top-right-radius:10px;background:rgba(6,8,12,.72);
