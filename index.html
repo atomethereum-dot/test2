@@ -2185,6 +2185,7 @@
     box-shadow:0 46px 130px rgba(0,0,0,.82), 0 0 0 1px rgba(255,255,255,.09);
     will-change:transform,opacity;
   }
+  .ev-frame picture{display:block;width:100%;height:100%}
   .ev-frame img{
     width:100%;height:100%;object-fit:cover;display:block;
     object-position:50% 44%;
@@ -2255,8 +2256,8 @@
       background:linear-gradient(180deg, rgba(0,0,0,.86) 0%, rgba(0,0,0,.44) 21%,
                                          rgba(0,0,0,.16) 40%, rgba(0,0,0,.60) 68%, rgba(0,0,0,.95));
     }
-    /* el recorte a lo alto deja una franja estrecha: se centra en el escenario */
-    .ev-frame img{object-position:52% 47%}
+    /* el archivo vertical ya viene recortado: aqui no hay que reencuadrar */
+    .ev-frame img{object-position:50% 50%}
     .ev-hud{max-width:none;right:var(--pad);top:clamp(80px,11vh,110px)}
     .ev-bar{
       flex-direction:column;align-items:flex-start;gap:18px;
@@ -4640,8 +4641,18 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     </div>
 
     <figure class="ev-frame" id="ev-frame">
-      <img src="images/consensus.jpg" width="1050" height="700" decoding="async" loading="lazy"
-           alt="Attendees walking across the show floor at a Consensus conference, between stands and overhead signage.">
+      <picture>
+        <!-- En vertical el navegador recortaba al 31% del ancho y ampliaba x3.6.
+             Aqui se sirve ese mismo recorte ya hecho y ya ampliado, para que
+             no lo haga su escalador. -->
+        <source media="(max-width:860px)" type="image/webp" srcset="images/consensus-mobile.webp">
+        <source media="(max-width:860px)" type="image/jpeg" srcset="images/consensus-mobile.jpg">
+        <source type="image/webp" srcset="images/consensus-1440.webp 1440w, images/consensus-2880.webp 2880w" sizes="100vw">
+        <img src="images/consensus-1440.jpg"
+             srcset="images/consensus-1440.jpg 1440w, images/consensus-2880.jpg 2880w" sizes="100vw"
+             width="2880" height="1920" decoding="async" loading="lazy"
+             alt="Attendees walking across the show floor at a Consensus conference, between stands and overhead signage.">
+      </picture>
       <span class="ev-shade" aria-hidden="true"></span>
       <span class="ev-veil" aria-hidden="true"></span>
       <figcaption class="ev-cap">Consensus show floor &middot; earlier edition</figcaption>
