@@ -2003,8 +2003,10 @@
   }
 
 
-  /* costura entre supply y RWA: las dos comparten fondo, asi que sin una
-     marca el salto se lee como un hueco vacio */
+  /* Costura delante de la seccion de RWA: comparte fondo con la que la
+     precede, asi que sin una marca el salto se lee como un hueco vacio.
+     Su rotulo anuncia la seccion QUE VIENE DETRAS, de modo que vive
+     pegada a ella y no al final de la anterior. */
   .seam{
     position:relative;background:#f2f2ef;
     display:grid;justify-items:center;gap:14px;
@@ -2172,14 +2174,38 @@
     --s:.18;--o:.30;--s2:.90;--o2:.16;--rx:8deg;--y:6vh;--r:82px;
     --hud:0;--l2:0;--l3:0;--fila:0;--sello:0;--avance:0;
     --tinta-2:#3d4350;--tinta-3:#767d8c;--filete:rgba(0,0,0,.14);
-    --y1:clamp(86px,12vh,118px);
-    --y2:64%;
-    --y3:calc(var(--y2) + clamp(118px,16vh,152px));
+    /* El reparto vertical cuelga del ANCHO de la plancha, no del alto de la
+       ventana. Atado al alto, la misma foto pasaba de 2.30:1 en un portatil
+       a casi cuadrada en un monitor de 1440 de alto, y en cada pantalla se
+       recortaba por un sitio distinto. Ahora la plancha mide siempre
+       ancho-de-columna / 1.5 (su proporcion nativa) con un tope de 40vh
+       para que en pantallas bajas no desborde, y el resto de la escena se
+       apoya en ese alto.
+
+       El segundo termino de --y1 centra el bloque cuando sobra ventana:
+       840px es lo que mide de y1 abajo con todos los clamps a tope, que es
+       justo el caso en el que sobra. */
+    --hueco:clamp(18px,2.2vw,34px);
+    --col:calc((min(var(--medida), 100vw - var(--pad) * 2) - var(--hueco)) / 2);
+    --alto:min(calc(var(--col) / 1.5), 34vh);
+    --y1:max(clamp(86px,12vh,118px), calc((100vh - 862px) / 2));
+    /* el titular ocupa dos lineas de hasta 52px a 1.08 de interlinea: la
+       banda de fotos tiene que arrancar por debajo de eso o se le monta */
+    --yp:calc(var(--y1) + clamp(160px,22vh,250px));
+    --y2:calc(var(--yp) + var(--alto) + clamp(20px,2.6vh,30px));
+    --y3:calc(var(--y2) + clamp(140px,18.5vh,186px));
+    /* Columna medida. Sin ella, en una pantalla de 2560 cada plancha se iba
+       a ~1190px de ancho y habia que servirle 2380 pixeles reales a una foto
+       que tiene 630 de detalle optico: el 75% de lo que se veia era relleno
+       calculado. Acotando la medida la foto se muestra cerca de su
+       resolucion real, que es lo unico que la hace verse nitida. */
+    --medida:1220px;
+    --lat:max(var(--pad), (100% - var(--medida)) / 2);
   }
 
   /* ---- filetes ---- */
   .ev-l{
-    position:absolute;left:var(--pad);right:var(--pad);height:1px;z-index:5;
+    position:absolute;left:var(--lat);right:var(--lat);height:1px;z-index:5;
     background:var(--filete);transform-origin:0 50%;
   }
   .ev-l.a{top:var(--y1)}
@@ -2187,11 +2213,20 @@
     content:'';position:absolute;inset:0;
     background:repeating-linear-gradient(90deg, rgba(0,0,0,.26) 0 1px, transparent 1px 25%);
   }
-  .ev-l.b{top:var(--y2);transform:scaleX(var(--l2));background:rgba(0,0,0,.22)}
+  /* Se parte en dos, una regla por acto, dejando limpio el canal central.
+     Una sola regla corrida fundia los dos registros en un bloque; partida,
+     cada acto se lee como su propia columna. */
+  .ev-l.b{
+    top:var(--y2);transform:scaleX(var(--l2));background:none;
+    background-image:linear-gradient(90deg,
+      rgba(0,0,0,.24) 0 calc(50% - var(--hueco) / 2),
+      transparent     0 calc(50% + var(--hueco) / 2),
+      rgba(0,0,0,.24) 0);
+  }
   .ev-l.c{top:var(--y3);transform:scaleX(var(--l3))}
   .ev-avance{
-    position:absolute;left:var(--pad);top:var(--y1);height:1px;z-index:7;
-    width:calc((100% - var(--pad) * 2) * var(--avance));
+    position:absolute;left:var(--lat);top:var(--y1);height:1px;z-index:7;
+    width:calc((100% - var(--lat) * 2) * var(--avance));
     background:var(--blue);box-shadow:0 0 10px rgba(21,105,255,.45);
   }
   .ev-avance::after{
@@ -2205,14 +2240,14 @@
     font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.28em;
     text-transform:uppercase;opacity:var(--hud);
   }
-  .ev-kick{left:var(--pad);color:#07080a;display:flex;align-items:center;gap:13px}
+  .ev-kick{left:var(--lat);color:#07080a;display:flex;align-items:center;gap:13px}
   .ev-kick u{display:block;width:26px;height:1px;background:var(--blue);text-decoration:none}
-  .ev-ref{right:var(--pad);color:var(--tinta-3)}
+  .ev-ref{right:var(--lat);color:var(--tinta-3)}
 
   .ev-type{
-    position:absolute;left:var(--pad);z-index:6;
+    position:absolute;left:var(--lat);z-index:6;
     top:calc(var(--y1) + clamp(44px,6.5vh,76px));
-    width:calc(100% - var(--pad) * 2);
+    width:calc(100% - var(--lat) * 2);
     display:flex;align-items:flex-end;justify-content:space-between;gap:40px;
   }
   .ev-h{
@@ -2222,15 +2257,22 @@
   }
   .ev-lede{
     margin:0;max-width:42ch;font-size:clamp(13px,1vw,15px);line-height:1.66;
-    color:var(--tinta-2);opacity:var(--fila);
+    /* entra con el titular, no con el registro: la cabecera tiene que estar
+       entera desde el primer fotograma */
+    color:var(--tinta-2);opacity:var(--hud);
   }
 
   /* ---- las dos planchas ---- */
   .ev-planchas{
-    position:absolute;left:var(--pad);right:var(--pad);z-index:4;
-    top:calc(var(--y1) + clamp(150px,21vh,240px));
-    bottom:calc(100% - var(--y2) + clamp(20px,2.6vh,30px));
-    display:grid;grid-template-columns:1.16fr .84fr;gap:clamp(18px,2.4vw,40px);
+    position:absolute;left:var(--lat);right:var(--lat);z-index:4;
+    top:var(--yp);height:var(--alto);
+    /* Las dos planchas son la MISMA caja. Antes iban 1.16fr/.84fr para
+       compensar que una foto trae menos detalle que la otra, y lo que se
+       leia no era una compensacion tecnica sino un descuadre. */
+    display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.2vw,34px);
+    /* Las planchas se apoyan en el filete de abajo. Lo que sobre de banda
+       queda como aire por arriba, que es donde no molesta. */
+    align-items:end;
     /* El acercamiento se aplica al PAR, no a cada plancha por separado. Si
        cada una escala por su propio centro, el hueco entre ambas se encoge
        tanto como ellas y a media llegada se leen como dos islas sueltas en
@@ -2241,6 +2283,13 @@
   }
   .ev-plate{
     position:relative;margin:0;overflow:hidden;background:#0a0c10;
+    /* 3:2 es la proporcion EXACTA de las dos fuentes, asi que a esa forma no
+       se tira ni un pixel por el recorte de object-fit. El max-height es el
+       tope de la banda: en una pantalla baja la plancha se queda mas
+       apaisada (recorte cinematografico) en vez de desbordar, y en una
+       pantalla alta no se estira hasta quedar casi cuadrada, que es lo que
+       pasaba antes a 2560x1440. */
+    aspect-ratio:3/2;width:100%;max-height:100%;
     opacity:var(--o);border-radius:var(--r);
     box-shadow:0 24px 60px rgba(8,12,20,.24), 0 0 0 1px rgba(0,0,0,.10);
   }
@@ -2258,21 +2307,24 @@
 
   /* ---- registro apoyado en el filete ---- */
   .ev-reg{
-    position:absolute;left:var(--pad);right:var(--pad);top:var(--y2);z-index:6;
-    display:grid;grid-template-columns:1.16fr .84fr;gap:clamp(18px,2.4vw,40px);
+    position:absolute;left:var(--lat);right:var(--lat);top:var(--y2);z-index:6;
+    display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.2vw,34px);
     padding-top:clamp(18px,2.4vh,26px);
   }
   .ev-ent{opacity:var(--fila);transform:translateY(calc((1 - var(--fila)) * 14px))}
   .ev-ent > b{
-    display:block;font-size:clamp(17px,1.6vw,24px);font-weight:200;
-    letter-spacing:-.018em;color:#07080a;margin:0 0 4px;
+    display:block;font-size:clamp(19px,1.85vw,29px);font-weight:200;
+    letter-spacing:-.022em;color:#07080a;margin:0 0 clamp(14px,1.9vh,22px);
   }
+  /* el indice va ENCIMA del nombre: indice, titulo, datos. Debajo era un
+     pie de foto perdido; encima ordena la lectura */
   .ev-ent > i{
     display:block;font-style:normal;font-family:'IBM Plex Mono',monospace;
     font-size:9px;letter-spacing:.24em;text-transform:uppercase;
-    color:var(--tinta-3);margin-bottom:clamp(12px,1.6vh,18px);
+    color:var(--tinta-3);margin:0 0 9px;
   }
-  .ev-ent dl{margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .ev-ent dl{margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,24px)}
+  .ev-ent dl > div{padding-top:10px;border-top:1px solid rgba(0,0,0,.09)}
   .ev-ent dt{
     font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.22em;
     text-transform:uppercase;color:var(--tinta-3);margin-bottom:7px;
@@ -2298,9 +2350,12 @@
     color:rgba(0,0,0,.5);font-size:10px;letter-spacing:.3em;mix-blend-mode:normal;
   }
   .ev .zoom-cue svg{width:18px;height:18px;stroke-width:1.5}
+  /* Va al final de la pista de avance, no al pie: el filete de cabecera ES
+     la barra de progreso, asi que su lectura pertenece a ese extremo. Al
+     pie costaba ~90px de alto que la escena no tiene en un portatil. */
   .ev-fase{
-    position:absolute;left:50%;transform:translateX(-50%);z-index:7;
-    top:calc(var(--y3) + clamp(78px,10.4vh,106px));margin:0;
+    position:absolute;right:var(--lat);z-index:7;
+    top:var(--y1);transform:translateY(12px);margin:0;
     font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.3em;
     text-transform:uppercase;color:var(--tinta-3);white-space:nowrap;
     display:flex;gap:12px;align-items:center;
@@ -2321,7 +2376,8 @@
     .ev{height:auto}
     .ev-pin{
       position:static;height:auto;overflow:visible;
-      padding:clamp(74px,10vh,100px) var(--pad) clamp(66px,9vh,90px);
+      /* el mismo aire que el resto de secciones de papel del sitio */
+      padding:clamp(84px,13vh,150px) var(--pad) clamp(80px,12vh,140px);
       display:grid;grid-template-columns:1fr auto;align-content:start;
       grid-template-areas:
         "kick ref"
@@ -2340,7 +2396,13 @@
     .ev-l.a {grid-area:la;margin:12px 0 clamp(26px,4vh,38px)}
     .ev-type{grid-area:type;flex-direction:column;align-items:flex-start;gap:16px;
              margin-bottom:clamp(26px,4vh,38px)}
-    .ev-planchas{grid-area:pla;grid-template-columns:1fr;gap:clamp(12px,2vh,18px)}
+    /* height:auto es imprescindible: .ev-pin > * repone top/left pero no la
+       altura, y la banda conservaba el alto de la escena anclada, con lo que
+       las dos fotos se apilaban encima del titular */
+    .ev-planchas{grid-area:pla;grid-template-columns:1fr;gap:clamp(12px,2vh,18px);
+                 height:auto;align-items:stretch}
+    /* con una sola columna el canal central no existe: filete corrido */
+    .ev-l.b{background-image:none;background:rgba(0,0,0,.22)}
     .ev-l.b {grid-area:lb;margin:clamp(22px,3.4vh,32px) 0 clamp(20px,3vh,28px)}
     .ev-reg {grid-area:reg;grid-template-columns:1fr;gap:clamp(24px,3.6vh,34px);padding-top:0}
     .ev-l.c {grid-area:lc;margin-top:clamp(24px,3.6vh,34px)}
@@ -2351,7 +2413,8 @@
        estiraria contra .ev entera, pintando cuatro barras verticales
        sobre toda la seccion. Se apagan. */
     .ev-avance,.ev .zoom-cue,.ev-fase,.ev-l.a::after{display:none}
-    .ev-plate{aspect-ratio:16/9;transform:none}
+    .ev-plate{aspect-ratio:3/2;max-height:none;transform:none}
+    .ev-plate:nth-child(2){transform:none;opacity:1}
     .ev-plate figcaption{font-size:8px;letter-spacing:.16em;padding:8px 11px}
     .ev-h{max-width:none;font-size:clamp(26px,7vw,38px)}
     .ev-lede{max-width:none;font-size:13.5px}
@@ -4669,11 +4732,6 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 </section>
 
 
-<div class="seam" aria-hidden="true">
-  <span>Market context</span>
-  <i></i>
-</div>
-
 <section class="ev" id="events">
   <div class="ev-pin" id="ev-pin">
     <i class="ev-l a" aria-hidden="true"></i>
@@ -4692,20 +4750,20 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     <div class="ev-planchas">
       <figure class="ev-plate">
         <picture>
-          <source type="image/webp" srcset="images/consensus-1440.webp 1440w, images/consensus-1920.webp 1920w, images/consensus-2880.webp 2880w" sizes="(max-width:980px) 46vw, 42vw">
-          <img src="images/consensus-1440.jpg"
-               srcset="images/consensus-1440.jpg 1440w, images/consensus-1920.jpg 1920w, images/consensus-2880.jpg 2880w" sizes="(max-width:980px) 52vw, 47vw"
-               width="1920" height="1280" decoding="async" loading="lazy"
+          <source type="image/webp" srcset="images/consensus-640.webp 640w, images/consensus-960.webp 960w, images/consensus-1280.webp 1280w, images/consensus-1600.webp 1600w" sizes="(max-width:980px) 90vw, (max-width:1340px) 44vw, 594px">
+          <img src="images/consensus-960.jpg"
+               srcset="images/consensus-640.jpg 640w, images/consensus-960.jpg 960w, images/consensus-1280.jpg 1280w, images/consensus-1600.jpg 1600w" sizes="(max-width:980px) 90vw, (max-width:1340px) 44vw, 594px"
+               width="1050" height="700" decoding="async" loading="lazy"
                alt="Attendees walking across the show floor at a Consensus conference, between stands and overhead signage.">
         </picture>
         <figcaption>Consensus &middot; earlier edition</figcaption>
       </figure>
       <figure class="ev-plate">
         <picture>
-          <source type="image/webp" srcset="images/forum-760.webp 760w, images/forum-1080.webp 1080w, images/forum-1600.webp 1600w, images/forum-2400.webp 2400w" sizes="(max-width:980px) 44vw, 34vw">
-          <img src="images/forum-1080.jpg"
-               srcset="images/forum-760.jpg 760w, images/forum-1080.jpg 1080w, images/forum-1600.jpg 1600w, images/forum-2400.jpg 2400w" sizes="(max-width:980px) 44vw, 34vw"
-               width="1600" height="1057" decoding="async" loading="lazy"
+          <source type="image/webp" srcset="images/forum-640.webp 640w, images/forum-960.webp 960w, images/forum-1280.webp 1280w, images/forum-1600.webp 1600w" sizes="(max-width:980px) 90vw, (max-width:1340px) 44vw, 594px">
+          <img src="images/forum-960.jpg"
+               srcset="images/forum-640.jpg 640w, images/forum-960.jpg 960w, images/forum-1280.jpg 1280w, images/forum-1600.jpg 1600w" sizes="(max-width:980px) 90vw, (max-width:1340px) 44vw, 594px"
+               width="1050" height="700" decoding="async" loading="lazy"
                alt="Audience facing the main stage at a Blockchain Forum edition, with the panel shown on a wide screen.">
         </picture>
         <figcaption>Blockchain Forum &middot; 2026 edition</figcaption>
@@ -4714,8 +4772,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 
     <div class="ev-reg">
       <div class="ev-ent">
-        <b>Consensus 2027</b>
         <i>Registration 01</i>
+        <b>Consensus 2027</b>
         <dl>
           <div><dt>Status</dt><dd><span class="ev-dot" aria-hidden="true"></span>Registered</dd></div>
           <div><dt>Dates</dt><dd>To be confirmed</dd></div>
@@ -4723,8 +4781,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         </dl>
       </div>
       <div class="ev-ent">
-        <b>Blockchain Forum 2027</b>
         <i>Registration 02</i>
+        <b>Blockchain Forum 2027</b>
         <dl>
           <div><dt>Status</dt><dd><span class="ev-dot" aria-hidden="true"></span>Registered</dd></div>
           <div><dt>Dates</dt><dd>April 28&ndash;29</dd></div>
@@ -4740,6 +4798,11 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     <p class="ev-fase" id="ev-fase" data-i="0" aria-hidden="true"><b id="ev-fase-n">1 / 3</b><span data-f="0">Arriving</span><span data-f="1">Plates set</span><span data-f="2">Registered</span></p>
   </div>
 </section>
+
+<div class="seam" aria-hidden="true">
+  <span>Market context</span>
+  <i></i>
+</div>
 
 <section class="rwa" id="rwa">
   <div class="rwa-pin" id="rwa-pin">
