@@ -5737,7 +5737,9 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
     /* el rotulo y el titular no esperan: ya estan al entrar */
     pin.style.setProperty('--hud', suave(tramo(p, 0, .03)).toFixed(3));
-    pin.style.setProperty('--l1',  Math.max(.12, suave(tramo(p, 0, .07))).toFixed(3));
+    /* la pista de avance existe entera desde el primer momento: una pista a
+       medio dibujar no puede indicar por donde vas */
+    pin.style.setProperty('--l1', '1');
     pin.style.setProperty('--l2',  suave(tramo(p, .30, .46)).toFixed(3));
     pin.style.setProperty('--l3',  suave(tramo(p, .46, .60)).toFixed(3));
     const f = suave(tramo(p, .40, .58));
