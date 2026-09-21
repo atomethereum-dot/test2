@@ -2154,233 +2154,242 @@
 
 
 
-  /* ============ eventos: carrusel sobre papel ============
-     Seccion clara entre supply y la oportunidad de mercado, con el mismo
-     #f2f2ef del resto de secciones claras.
+  /* ============ eventos: escena anclada al scroll ============
+     El carrusel deja de tener reloj propio: lo mueve el scroll. Cada acto
+     ocupa un tramo de recorrido y el frente de luz del shader cruza
+     mientras se pasa de uno al siguiente, asi que se puede ir y volver a
+     mitad de la transicion. Un carrusel automatico obliga a esperar; este
+     se obedece.
 
-     Deja de ser escena anclada al scroll y pasa a carrusel. Un carrusel
-     tiene su propio reloj: atarlo al scroll obliga al lector a desplazarse
-     para ver cada evento y le quita el control de cuando pasar. Aqui corre
-     solo, se para al pasar el raton o al recibir foco, y responde a los
-     mandos, a los segmentos, al teclado y al gesto.
+     Y la pieza se hace grande de verdad. Para eso, todo lo demas (rotulo,
+     titular, ficha del acto, pista) va SOBREIMPRESO sobre el propio plano,
+     con velos donde hace falta. Dejarlo fuera obligaria a repartir los
+     100vh del ancla entre texto e imagen, y la imagen es lo que se ha
+     pedido agrandar.
 
-     Las dos piezas de Blockchain Forum y Bitcoin 2027 son los carteles
-     OFICIALES de cada organizador, con su marca y sus cifras. Van enteros
-     y con su credito al pie: son su pieza, no material de Sectora, y las
-     cifras que llevan son del evento.
-
-     La transicion es un barrido con clip-path y paralaje: la diapositiva
-     que entra descubre por la derecha mientras su imagen se desplaza en
-     sentido contrario. Tres capas separadas para que no se pisen: el
-     recorte va en .ev-slide, el paralaje en .ev-par y el travelling lento
-     en la propia imagen. Una sola capa haciendo las tres cosas obliga a
-     mezclar transiciones y animacion sobre la misma propiedad. */
-  .ev{
-    position:relative;background:#f2f2ef;color:#07080a;
-    padding:clamp(84px,13vh,150px) var(--pad) clamp(80px,12vh,140px);
-    --tinta-2:#3d4350;--tinta-3:#767d8c;--filete:rgba(0,0,0,.14);
-    --espera:7s;          /* tiene que coincidir con ESPERA del script */
-    --curva:cubic-bezier(.76,0,.24,1);
+     El escenario es el mayor 16:9 que cabe: lo limita el ancho de la
+     ventana, el alto de la ventana o el tope de 1800px, lo que llegue
+     antes. El tope no es decorativo: los carteles tienen 1920px de detalle
+     real y por encima de ahi solo hay relleno calculado. */
+  .ev{position:relative;height:340vh;background:#07080a}
+  .ev-pin{
+    position:sticky;top:0;height:100vh;overflow:hidden;
+    display:grid;place-items:center;background:#07080a;color:#fff;
+    --filete:rgba(255,255,255,.16);
+    --tinta-2:#b9c2d2;--tinta-3:#7f8899;
+    --marco:clamp(26px,4.4vh,54px);
   }
-  .ev-in{max-width:1220px;margin:0 auto}
-
-  /* ---- cabecera ---- */
-  .ev-head{
-    position:relative;display:flex;align-items:center;justify-content:space-between;
-    gap:20px;padding-bottom:13px;border-bottom:1px solid var(--filete);
-  }
-  .ev-head::after{
-    content:'';position:absolute;left:0;bottom:-1px;width:34px;height:1px;background:var(--blue);
-  }
-  .ev-kick,.ev-ref{
-    margin:0;font-family:'IBM Plex Mono',monospace;font-size:10px;
-    letter-spacing:.28em;text-transform:uppercase;
-  }
-  .ev-kick{color:#07080a}
-  .ev-ref{color:var(--tinta-3)}
-
-  /* ---- titular ---- */
-  .ev-type{
-    display:flex;align-items:flex-end;justify-content:space-between;gap:40px;
-    margin:clamp(32px,4.6vh,56px) 0 clamp(24px,3.4vh,38px);
-  }
-  .ev-h{
-    margin:0;font-size:clamp(28px,3.6vw,52px);font-weight:200;line-height:1.08;
-    letter-spacing:-.026em;color:#07080a;max-width:16ch;text-wrap:balance;
-  }
-  .ev-lede{
-    margin:0;max-width:46ch;font-size:clamp(13px,1vw,15px);line-height:1.66;
-    color:var(--tinta-2);
-  }
-
-  /* ---- escenario ---- */
-  .ev-car{position:relative}
+  .ev-car{position:relative;display:block}
   .ev-stage{
-    position:relative;aspect-ratio:16/9;overflow:hidden;background:#05070c;
-    box-shadow:0 34px 90px rgba(8,12,20,.28), 0 0 0 1px rgba(0,0,0,.10);
+    position:relative;overflow:hidden;background:#05070c;
+    width:min(calc(100vw - var(--pad) * 2), calc((100vh - var(--marco) * 2) * 16 / 9), 1800px);
+    aspect-ratio:16/9;
+    box-shadow:0 40px 120px rgba(0,0,0,.6);
   }
-  .ev-slide{
-    position:absolute;inset:0;margin:0;
-    clip-path:inset(0 0 0 100%);
-    transition:clip-path .92s var(--curva);
-    will-change:clip-path;
-  }
-  .ev-slide.sale{clip-path:inset(0 100% 0 0)}
-  .ev-slide.on{clip-path:inset(0 0 0 0);z-index:2}
-  /* La diapositiva entra ampliada y se asienta a escala 1. Descansar por
-     encima de 1 no es opcion aqui: dos de las tres piezas son carteles, y
-     ampliarlos aunque sea un 2% les come el logotipo y el rotulo, que es
-     justo lo que un cartel tiene que enseñar. Por eso tampoco hay
-     travelling continuo: el movimiento lo da la entrada, no un zoom
-     permanente que recortaria la pieza todo el rato.
 
-     Y el desplazamiento de entrada va en ESCALA, no en traslacion. Una
-     traslacion obliga a agrandar la capa para que no se vea el canto, y
-     esa capa agrandada recorta la pieza incluso en reposo. */
-  .ev-par{
-    position:absolute;inset:0;
-    transform:scale(1.055);
-    transition:transform 1.05s var(--curva);
-    will-change:transform;
-  }
-  .ev-slide.on .ev-par{transform:scale(1)}
-  .ev-slide.sale .ev-par{transform:scale(1.03)}
+  /* ---- las piezas ---- */
+  .ev-slide{position:absolute;inset:0;margin:0;opacity:0}
+  .ev-slide.on{opacity:1}
+  .ev-par{position:absolute;inset:0}
   .ev-slide img{width:100%;height:100%;object-fit:cover;display:block}
-
-  /* El lienzo solo se pone por delante cuando el contexto existe y las
-     tres texturas estan cargadas (clase .gl). Hasta entonces, y si WebGL
-     falla, manda el carrusel de CSS que hay debajo. */
   .ev-gl{position:absolute;inset:0;z-index:2;display:block;width:100%;height:100%;opacity:0}
   .ev-car.gl .ev-gl{opacity:1}
   /* Se apaga la CAPA DE IMAGEN, no la diapositiva entera: dentro va el
-     credito del cartel, que tiene que seguir viendose. Apagar el padre no
-     deja resucitar al hijo, porque la opacidad del padre ya ha aplanado el
-     grupo. */
+     credito del cartel. Apagar el padre aplana el grupo y el hijo ya no
+     puede resucitar. */
   .ev-car.gl .ev-par{opacity:0}
-  .ev-car.gl .ev-slide{clip-path:none;z-index:3;pointer-events:none}
-  .ev-car.gl .ev-slide figcaption{transition:opacity .45s}
+  .ev-car.gl .ev-slide{opacity:1;z-index:3;pointer-events:none}
   .ev-car.gl .ev-slide:not(.on) figcaption{opacity:0}
-  /* grano y viñeta los pone ya el shader: repetirlos en CSS los duplica */
-  .ev-car.gl .ev-gr,.ev-car.gl .ev-vel{display:none}
-
+  .ev-slide figcaption{
+    position:absolute;left:0;bottom:0;z-index:5;transition:opacity .45s;
+    padding:9px 14px;border-top-right-radius:10px;background:rgba(6,8,12,.74);
+    font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:rgba(255,255,255,.78);
+  }
+  /* grano y viñeta los pone el shader; en respaldo los pone el CSS */
   .ev-vel{
     position:absolute;inset:0;z-index:3;pointer-events:none;
-    background:
-      radial-gradient(128% 96% at 50% 44%, rgba(0,0,0,0) 56%, rgba(0,0,0,.40) 100%),
-      linear-gradient(0deg, rgba(4,6,10,.52) 0%, rgba(4,6,10,0) 32%);
+    background:radial-gradient(130% 98% at 50% 44%, rgba(0,0,0,0) 56%, rgba(0,0,0,.42) 100%);
   }
-  /* el mismo grano de las planchas: unifica tres piezas de origen distinto
-     y disimula la interpolacion del cartel al ampliarse */
   .ev-gr{
     position:absolute;inset:0;z-index:4;pointer-events:none;
     background-image:url(images/grano.png);background-size:150px 150px;
     opacity:.13;mix-blend-mode:overlay;
   }
-  .ev-slide figcaption{
-    position:absolute;left:0;bottom:0;z-index:5;
-    padding:9px 14px;border-top-right-radius:10px;background:rgba(6,8,12,.74);
-    font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.2em;
-    text-transform:uppercase;color:rgba(255,255,255,.78);
+  .ev-car.gl .ev-gr,.ev-car.gl .ev-vel{display:none}
+
+  /* ---- sobreimpresos ---- */
+  .ev-scrim{
+    position:absolute;left:0;right:0;z-index:6;pointer-events:none;
+  }
+  /* Los velos no son decoracion: el texto va sobreimpreso sobre fotos de
+     ferias llenas de luces y de carteles con su propia tipografia. Medido
+     a ojo sobre las tres piezas, por debajo de estos valores el titular no
+     se lee. La rampa es larga para que el corte no se note. */
+  .ev-scrim.arr{
+    top:0;height:52%;
+    background:linear-gradient(180deg,rgba(4,6,10,.92) 0%,rgba(4,6,10,.72) 34%,rgba(4,6,10,0) 100%);
+  }
+  .ev-scrim.aba{
+    bottom:0;height:52%;
+    background:linear-gradient(0deg,rgba(4,6,10,.94) 0%,rgba(4,6,10,.74) 32%,rgba(4,6,10,0) 100%);
   }
 
-  /* ---- pista de avance y mandos ---- */
-  .ev-barra{display:flex;align-items:center;gap:clamp(10px,1.6vw,18px);margin-top:16px}
-  .ev-seg{
-    flex:1;position:relative;height:24px;padding:0;border:0;background:none;
-    cursor:pointer;appearance:none;-webkit-appearance:none;
+  .ev-hud{
+    position:absolute;left:0;right:0;z-index:8;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:clamp(16px,2.4vh,26px) clamp(18px,2.2vw,30px);
   }
-  .ev-seg::before,.ev-seg::after{content:'';position:absolute;left:0;top:11px;height:2px}
-  .ev-seg::before{right:0;background:rgba(0,0,0,.13)}
-  .ev-seg::after{width:0;background:var(--blue)}
-  .ev-seg.hecho::after{width:100%}
-  .ev-seg.corre::after{animation:ev-llena var(--espera) linear forwards}
-  .ev-seg:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-  @keyframes ev-llena{from{width:0}to{width:100%}}
-
-  .ev-mandos{display:flex;gap:8px}
-  .ev-mando{
-    width:34px;height:34px;display:grid;place-items:center;padding:0;cursor:pointer;
-    border:1px solid var(--filete);background:none;border-radius:50%;color:#07080a;
-    transition:border-color .25s, background .25s;
+  .ev-hud.arr{top:0}
+  .ev-kick,.ev-ref{
+    margin:0;font-family:'IBM Plex Mono',monospace;font-size:10px;
+    letter-spacing:.28em;text-transform:uppercase;
   }
-  .ev-mando:hover{border-color:rgba(0,0,0,.34);background:rgba(0,0,0,.04)}
-  .ev-mando:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-  .ev-mando svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7}
-  .ev-mando.ant svg{transform:scaleX(-1)}
+  .ev-kick{color:#fff;display:flex;align-items:center;gap:12px}
+  .ev-kick u{display:block;width:26px;height:1px;background:var(--blue);text-decoration:none}
+  .ev-ref{color:var(--tinta-2)}
 
-  /* al pausar se congelan tambien el travelling y el relleno: si el
-     carrusel se para pero la barra sigue corriendo, miente */
-  .ev-car.pausa .ev-seg.corre::after{animation-play-state:paused}
+  /* El titular es una cartela: se sostiene sobre la primera pieza y se
+     retira antes de la primera transicion. Mantenerlo toda la escena lo
+     pondria encima de la tipografia de los carteles, que ya traen la
+     suya. */
+  .ev-type{
+    position:absolute;left:clamp(18px,2.2vw,30px);z-index:8;
+    top:clamp(70px,9vh,104px);max-width:min(72%,30ch);
+    opacity:var(--cartela,1);transform:translateY(calc((1 - var(--cartela,1)) * -18px));
+  }
+  .ev-h{
+    margin:0 0 14px;font-size:clamp(26px,3.3vw,50px);font-weight:200;line-height:1.06;
+    letter-spacing:-.026em;color:#fff;text-wrap:balance;
+    text-shadow:0 2px 24px rgba(0,0,0,.75);
+  }
+  .ev-lede{
+    margin:0;max-width:44ch;font-size:clamp(12.5px,.95vw,14.5px);line-height:1.62;
+    color:#dbe2ee;text-shadow:0 1px 14px rgba(0,0,0,.85);
+  }
 
-  /* ---- ficha del evento ---- */
-  .ev-panel{margin-top:clamp(22px,3vh,32px);border-top:1px solid var(--filete);padding-top:clamp(18px,2.4vh,26px)}
+  /* ---- ficha del acto, al pie del plano ---- */
+  .ev-panel{
+    position:absolute;left:clamp(18px,2.2vw,30px);right:clamp(18px,2.2vw,30px);
+    bottom:clamp(50px,7vh,76px);z-index:8;
+  }
   .ev-ent{display:none}
   .ev-ent.on{
-    display:grid;grid-template-columns:1.25fr 1fr 1.1fr .9fr;
-    gap:clamp(14px,2vw,30px);align-items:start;
+    display:grid;grid-template-columns:1.3fr 1fr 1.15fr .9fr;
+    gap:clamp(14px,2vw,30px);align-items:end;
   }
-  /* La animacion escalona la entrada pero NO decide si el dato se ve. El
-     sitio pausa toda animacion de una seccion fuera de plano
-     (.fuera-de-vista *, animation-play-state:paused !important), asi que
-     una animacion que partiera de opacity:0 dejaria el nombre del evento,
-     la fecha y el lugar invisibles mientras la seccion no este en
-     pantalla, y a merced de cuando llegue el aviso del observador. Por eso
-     solo se anima el desplazamiento: pausada en su primer fotograma, la
-     celda se ve igual, catorce pixeles mas abajo. */
+  /* La animacion escalona la entrada pero NO decide si el dato se ve: el
+     sitio pausa toda animacion de una seccion fuera de plano, y una que
+     partiera de opacity:0 dejaria el nombre y la fecha invisibles. */
   .ev-cel{opacity:1}
   .ev-ent.on .ev-cel{animation:ev-sube .55s cubic-bezier(.22,.9,.3,1) backwards}
   .ev-ent.on .ev-cel:nth-child(1){animation-delay:.02s}
   .ev-ent.on .ev-cel:nth-child(2){animation-delay:.08s}
   .ev-ent.on .ev-cel:nth-child(3){animation-delay:.14s}
   .ev-ent.on .ev-cel:nth-child(4){animation-delay:.20s}
-  @keyframes ev-sube{from{transform:translateY(14px)}to{transform:none}}
-  /* el nombre voltea justo cuando el frente de luz cruza el plano: ata la
-     mitad de abajo con lo que acaba de pasar arriba */
-  .ev-car.cruza .ev-ent.on .ev-nom .v{animation:ev-gira .72s cubic-bezier(.5,0,.2,1) both}
-  @keyframes ev-gira{
-    0%{transform:perspective(600px) rotateX(-82deg);opacity:.15}
-    100%{transform:perspective(600px) rotateX(0);opacity:1}
-  }
-
+  @keyframes ev-sube{from{transform:translateY(16px)}to{transform:none}}
   .ev-cel .k{
     margin:0 0 7px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;
     letter-spacing:.22em;text-transform:uppercase;color:var(--tinta-3);
   }
   .ev-cel .v{
-    margin:0;font-size:clamp(12.5px,1.05vw,14.5px);color:#07080a;line-height:1.35;
+    margin:0;font-size:clamp(12.5px,1.05vw,15px);color:#fff;line-height:1.3;
     display:flex;align-items:center;gap:8px;
   }
-  .ev-nom .v{font-size:clamp(19px,1.85vw,29px);font-weight:200;letter-spacing:-.022em}
+  .ev-nom .v{font-size:clamp(20px,2.1vw,34px);font-weight:200;letter-spacing:-.022em}
+  .ev-cel .v,.ev-cel .k{text-shadow:0 1px 12px rgba(0,0,0,.8)}
   .ev-dot{
-    width:9px;height:9px;border-radius:50%;background:#16a34a;flex:none;
-    box-shadow:0 0 0 0 rgba(22,163,74,.5);animation:ev-lat 2.6s ease-out infinite;
+    width:9px;height:9px;border-radius:50%;background:#34d382;flex:none;
+    box-shadow:0 0 0 0 rgba(52,211,130,.5);animation:ev-lat 2.6s ease-out infinite;
   }
   @keyframes ev-lat{
-    0%{box-shadow:0 0 0 0 rgba(22,163,74,.45)}
-    70%{box-shadow:0 0 0 9px rgba(22,163,74,0)}
-    100%{box-shadow:0 0 0 0 rgba(22,163,74,0)}
+    0%{box-shadow:0 0 0 0 rgba(52,211,130,.45)}
+    70%{box-shadow:0 0 0 9px rgba(52,211,130,0)}
+    100%{box-shadow:0 0 0 0 rgba(52,211,130,0)}
+  }
+
+  /* ---- pista de avance: es la señalizacion del recorrido ---- */
+  .ev-barra{
+    position:absolute;left:clamp(18px,2.2vw,30px);right:clamp(18px,2.2vw,30px);
+    bottom:clamp(20px,2.6vh,30px);z-index:8;
+    display:flex;align-items:center;gap:clamp(8px,1.4vw,16px);
+  }
+  .ev-seg{
+    flex:1;position:relative;height:22px;padding:0;border:0;background:none;
+    cursor:pointer;appearance:none;-webkit-appearance:none;
+  }
+  .ev-seg::before,.ev-seg::after{content:'';position:absolute;left:0;top:10px;height:2px}
+  .ev-seg::before{right:0;background:rgba(255,255,255,.22)}
+  .ev-seg::after{width:calc(var(--f,0) * 100%);background:#fff}
+  .ev-seg:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+  .ev-cuenta{
+    margin:0;font-family:'IBM Plex Mono',monospace;font-size:10px;
+    letter-spacing:.24em;color:var(--tinta-2);white-space:nowrap;
+  }
+
+  /* ---- señalizacion de scroll ---- */
+  /* Al canto derecho y en vertical. Centrada abajo se montaba sobre la
+     ficha del acto, y no hay hueco ahi: la ficha ocupa las cuatro
+     columnas. En vertical ademas señala el eje por el que se avanza. */
+  .ev-cue{
+    position:absolute;right:clamp(14px,1.7vw,24px);top:50%;z-index:9;
+    transform:translateY(-50%);margin:0;
+    display:flex;flex-direction:column;align-items:center;gap:12px;
+    writing-mode:vertical-rl;
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.3em;
+    text-transform:uppercase;color:rgba(255,255,255,.8);
+    text-shadow:0 1px 10px rgba(0,0,0,.9);
+    opacity:var(--cue,1);transition:opacity .45s;pointer-events:none;
+  }
+  .ev-cue svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.7;
+              animation:ev-baja 1.9s ease-in-out infinite}
+  @keyframes ev-baja{
+    0%,100%{transform:translateY(-3px);opacity:.5}
+    50%{transform:translateY(3px);opacity:1}
   }
 
   @media (max-width:980px){
-    .ev-type{flex-direction:column;align-items:flex-start;gap:16px}
-    .ev-h{max-width:none;font-size:clamp(26px,7vw,38px)}
-    .ev-lede{max-width:none;font-size:13.5px}
-    .ev-ent.on{grid-template-columns:1fr 1fr;gap:20px}
+    /* En vertical el 16:9 mide 197px de alto y los sobreimpresos no caben:
+       se desbordaban del plano y se montaban unos sobre otros. Aqui no se
+       sobreimprime nada. El plano va arriba y el texto debajo, que ademas
+       es como se lee un telefono. */
+    .ev{height:300vh}
+    .ev-pin{
+      --marco:0px;padding:0 var(--pad);
+      place-items:center stretch;align-content:center;
+    }
+    .ev-car{display:flex;flex-direction:column;gap:clamp(12px,1.8vh,18px);width:100%}
+    .ev-hud,.ev-type,.ev-panel,.ev-barra,.ev-cue{
+      position:static;transform:none;inset:auto;padding:0;
+    }
+    .ev-hud{order:1;display:flex}
+    .ev-stage{order:2;width:100%}
+    .ev-type{order:3;opacity:1;max-width:none}
+    .ev-panel{order:4}
+    .ev-barra{order:5}
+    .ev-cue{order:6;justify-content:center}
+    .ev-scrim{display:none}   /* sin texto encima, el velo sobra */
+    .ev-type{top:clamp(58px,8vh,84px);max-width:88%}
+    .ev-h{font-size:clamp(24px,6.4vw,34px)}
+    .ev-lede{font-size:12.5px;max-width:none}
+    .ev-ent.on{grid-template-columns:1fr 1fr;gap:14px}
     .ev-nom{grid-column:1 / -1}
+    .ev-nom .v{font-size:clamp(19px,5.4vw,25px)}
+    .ev-panel{bottom:clamp(46px,6.4vh,64px)}
+    .ev-cue{
+      writing-mode:horizontal-tb;flex-direction:row;
+      right:auto;left:50%;top:auto;bottom:clamp(34px,4.6vh,46px);
+      transform:translateX(-50%);font-size:8px;letter-spacing:.2em;gap:9px;
+    }
+    .ev-cuenta{display:none}
     .ev-slide figcaption{font-size:7.5px;letter-spacing:.11em;padding:7px 10px}
   }
-  @media (max-width:520px){
-    .ev-barra{gap:8px}
-    .ev-mando{width:30px;height:30px}
-  }
 
-  /* Sin movimiento: nada corre solo. El carrusel sigue siendo manejable
-     con los mandos, los segmentos y el teclado, que es lo que hay que
-     conservar; lo que se retira es el automatismo y el travelling. */
+  /* Sin movimiento no hay shader ni latidos, pero la escena sigue
+     funcionando: la mueve el scroll, que es cosa del lector. */
   @media (prefers-reduced-motion:reduce){
-    .ev-slide,.ev-par{transition:none}
-    .ev-seg.corre::after,.ev-ent.on .ev-cel,.ev-dot{animation:none}
-    .ev-seg[aria-current="true"]::after{width:100%}
+    .ev-dot,.ev-cue svg{animation:none}
+    .ev-ent.on .ev-cel{animation:none}
   }
 
   /* ============ equipo ============
@@ -4681,25 +4690,15 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 
 
 <section class="ev" id="events">
-  <div class="ev-in">
-    <div class="ev-head">
-      <p class="ev-kick">Events</p>
-      <p class="ev-ref">03 confirmed</p>
-    </div>
-
-    <div class="ev-type">
-      <h2 class="ev-h">Where Sectora will be in 2027.</h2>
-      <p class="ev-lede">Three conferences, all confirmed. Two of the images are each organiser&rsquo;s own event artwork; the Consensus frame is a photograph from an earlier edition.</p>
-    </div>
-
-    <div class="ev-car" id="ev-car" role="group" aria-roledescription="carousel" aria-label="Events Sectora is attending in 2027" tabindex="0">
+  <div class="ev-pin" id="ev-pin">
+    <div class="ev-car" id="ev-car" role="group" aria-roledescription="carousel" aria-label="Events Sectora is attending in 2027">
       <div class="ev-stage">
         <figure class="ev-slide on" aria-hidden="false">
           <span class="ev-par">
             <picture>
-              <source type="image/webp" srcset="images/consensus-640.webp 640w, images/consensus-960.webp 960w, images/consensus-1280.webp 1280w, images/consensus-1920.webp 1920w" sizes="(max-width:1340px) 92vw, 1220px">
+              <source type="image/webp" srcset="images/consensus-640.webp 640w, images/consensus-960.webp 960w, images/consensus-1280.webp 1280w, images/consensus-1920.webp 1920w, images/consensus-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
               <img src="images/consensus-1280.jpg"
-                   srcset="images/consensus-640.jpg 640w, images/consensus-960.jpg 960w, images/consensus-1280.jpg 1280w, images/consensus-1920.jpg 1920w" sizes="(max-width:1340px) 92vw, 1220px"
+                   srcset="images/consensus-640.jpg 640w, images/consensus-960.jpg 960w, images/consensus-1280.jpg 1280w, images/consensus-1920.jpg 1920w, images/consensus-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
                    width="1920" height="1280" decoding="async"
                    alt="Attendees walking across the show floor at a Consensus conference, between stands and overhead signage.">
             </picture>
@@ -4710,9 +4709,9 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <figure class="ev-slide" aria-hidden="true">
           <span class="ev-par">
             <picture>
-              <source type="image/webp" srcset="images/bf2027-640.webp 640w, images/bf2027-960.webp 960w, images/bf2027-1280.webp 1280w, images/bf2027-1920.webp 1920w" sizes="(max-width:1340px) 92vw, 1220px">
+              <source type="image/webp" srcset="images/bf2027-640.webp 640w, images/bf2027-960.webp 960w, images/bf2027-1280.webp 1280w, images/bf2027-1920.webp 1920w, images/bf2027-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
               <img src="images/bf2027-1280.jpg"
-                   srcset="images/bf2027-640.jpg 640w, images/bf2027-960.jpg 960w, images/bf2027-1280.jpg 1280w, images/bf2027-1920.jpg 1920w" sizes="(max-width:1340px) 92vw, 1220px"
+                   srcset="images/bf2027-640.jpg 640w, images/bf2027-960.jpg 960w, images/bf2027-1280.jpg 1280w, images/bf2027-1920.jpg 1920w, images/bf2027-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
                    width="1920" height="1080" decoding="async"
                    alt="Official Blockchain Forum 2027 poster: the event logo, April 28 to 29, Moscow, over a photograph of the main stage and audience.">
             </picture>
@@ -4723,9 +4722,9 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <figure class="ev-slide" aria-hidden="true">
           <span class="ev-par">
             <picture>
-              <source type="image/webp" srcset="images/btc2027-640.webp 640w, images/btc2027-960.webp 960w, images/btc2027-1280.webp 1280w, images/btc2027-1920.webp 1920w" sizes="(max-width:1340px) 92vw, 1220px">
+              <source type="image/webp" srcset="images/btc2027-640.webp 640w, images/btc2027-960.webp 960w, images/btc2027-1280.webp 1280w, images/btc2027-1920.webp 1920w, images/btc2027-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
               <img src="images/btc2027-1280.jpg"
-                   srcset="images/btc2027-640.jpg 640w, images/btc2027-960.jpg 960w, images/btc2027-1280.jpg 1280w, images/btc2027-1920.jpg 1920w" sizes="(max-width:1340px) 92vw, 1220px"
+                   srcset="images/btc2027-640.jpg 640w, images/btc2027-960.jpg 960w, images/btc2027-1280.jpg 1280w, images/btc2027-1920.jpg 1920w, images/btc2027-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
                    width="1880" height="940" decoding="async"
                    alt="Official Bitcoin 2027 Nashville poster: the event logo over the Nashville skyline, July 15 to 17, Music City Center.">
             </picture>
@@ -4736,16 +4735,18 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <canvas class="ev-gl" id="ev-gl" aria-hidden="true"></canvas>
         <span class="ev-vel" aria-hidden="true"></span>
         <span class="ev-gr" aria-hidden="true"></span>
+        <span class="ev-scrim arr" aria-hidden="true"></span>
+        <span class="ev-scrim aba" aria-hidden="true"></span>
+
+      </div>
+      <div class="ev-hud arr">
+        <p class="ev-kick"><u aria-hidden="true"></u>Events</p>
+        <p class="ev-ref">03 confirmed</p>
       </div>
 
-      <div class="ev-barra">
-        <button class="ev-seg corre" type="button" aria-current="true"><span class="sr-only">Consensus 2027</span></button>
-        <button class="ev-seg" type="button" aria-current="false"><span class="sr-only">Blockchain Forum 2027</span></button>
-        <button class="ev-seg" type="button" aria-current="false"><span class="sr-only">Bitcoin 2027</span></button>
-        <div class="ev-mandos">
-          <button class="ev-mando ant" type="button" aria-label="Previous event"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
-          <button class="ev-mando sig" type="button" aria-label="Next event"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
-        </div>
+      <div class="ev-type" id="ev-type">
+        <h2 class="ev-h">Where Sectora will be in 2027.</h2>
+        <p class="ev-lede">Three conferences, all confirmed. Two of the images are each organiser&rsquo;s own event artwork; the Consensus frame is a photograph from an earlier edition.</p>
       </div>
 
       <div class="ev-panel">
@@ -4767,6 +4768,18 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
           <div class="ev-cel"><p class="k">Location</p><p class="v">Nashville &middot; Music City Center</p></div>
           <div class="ev-cel"><p class="k">Status</p><p class="v"><span class="ev-dot" aria-hidden="true"></span>Registered</p></div>
         </div>
+      </div>
+
+      <p class="ev-cue" id="ev-cue" aria-hidden="true">
+        <span>Scroll to move between events</span>
+        <svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg>
+      </p>
+
+      <div class="ev-barra">
+        <button class="ev-seg" type="button" aria-current="true"><span class="sr-only">Consensus 2027</span></button>
+        <button class="ev-seg" type="button" aria-current="false"><span class="sr-only">Blockchain Forum 2027</span></button>
+        <button class="ev-seg" type="button" aria-current="false"><span class="sr-only">Bitcoin 2027</span></button>
+        <p class="ev-cuenta" id="ev-cuenta" aria-hidden="true">01 / 03</p>
       </div>
     </div>
   </div>
@@ -5761,41 +5774,42 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   if(reduce){ ctx.fillStyle = '#000'; ctx.fillRect(0,0,W,H); }
 })();
 
-/* ===== eventos: carrusel con transicion por shader =====
+/* ===== eventos: escena anclada, transicion por shader =====
 
-   El paso de una pieza a otra no es un fundido ni un barrido de CSS: es un
-   FRENTE DE LUZ que cruza el plano. Delante del frente sigue la pieza que
-   sale, arrastrada por un campo de flujo que la deforma justo en el filo;
-   detras ya esta la que entra. En el propio filo la imagen se parte en sus
-   tres canales y se enciende. Encima, grano y viñeta permanentes.
+   El scroll es el unico motor. Cada acto ocupa un tramo del recorrido y
+   entre tramo y tramo el frente de luz del shader cruza el plano; como el
+   avance sale de la posicion y no de un reloj, se puede ir y volver a
+   mitad de la transicion y el frente retrocede con el dedo.
 
-   Todo eso son unas pocas lineas de GLSL sobre un solo cuadrilatero, que
-   es trabajo de GPU y no cuesta nada al hilo principal. En CSS habria que
-   fingirlo con capas y mascaras, y ni la deformacion ni la separacion de
-   canales tienen equivalente.
+   El frente en si es GLSL sobre un solo cuadrilatero: delante sigue la
+   pieza que sale, arrastrada por un campo de flujo que la deforma en el
+   filo; detras ya esta la que entra; en el filo la imagen se parte en sus
+   tres canales y se enciende. Ni el arrastre ni la separacion de canales
+   tienen equivalente en CSS.
 
-   Las imagenes <img> siguen en el marcado: son el texto alternativo, lo
-   que ve un buscador y el respaldo si no hay WebGL. El lienzo solo se
-   pone por delante cuando el contexto existe y las tres texturas estan
-   cargadas; si algo falla, el carrusel sigue funcionando con CSS.
-
-   El bucle solo corre con la seccion en pantalla y sin
-   prefers-reduced-motion. Un bucle de rAF pintando donde nadie mira gasta
-   bateria a cambio de nada. */
+   Las <img> siguen en el marcado: son el texto alternativo, lo que indexa
+   un buscador y el respaldo si no hay WebGL. */
 (function(){
+  const sec = document.getElementById('events');
   const car = document.getElementById('ev-car');
-  if(!car) return;
+  if(!sec || !car) return;
   const slides = [...car.querySelectorAll('.ev-slide')];
   const fichas = [...car.querySelectorAll('.ev-ent')];
   const segs   = [...car.querySelectorAll('.ev-seg')];
+  const tipo   = document.getElementById('ev-type');
+  const cue    = document.getElementById('ev-cue');
+  const cuenta = document.getElementById('ev-cuenta');
   const lienzo = document.getElementById('ev-gl');
   const n = slides.length;
   if(!n) return;
 
-  const ESPERA = 7000;                      /* == --espera del CSS */
-  const CRUCE  = 1900;                      /* lo que tarda el frente */
+  /* Reparto del recorrido. Cada acto tiene su reposo y entre ellos un
+     tramo de cruce. Los cruces son cortos a proposito: la mayor parte del
+     scroll se pasa viendo una pieza quieta, no en transito. */
+  const CRUCES = [[.28,.44],[.60,.76]];
   const quieto = matchMedia('(prefers-reduced-motion:reduce)');
-  let i = 0, reloj = null, parado = false, visible = false;
+  const lim = v => v < 0 ? 0 : v > 1 ? 1 : v;
+  const suave = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
 
   /* ---------------------------------------------------------- shader */
   const VS = `attribute vec2 p; varying vec2 vUv;
@@ -5804,7 +5818,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const FS = `precision highp float;
     varying vec2 vUv;
     uniform sampler2D uA, uB;
-    uniform vec2  uSa, uSb;      /* recorte tipo cover por textura */
+    uniform vec2  uSa, uSb;
     uniform float uP, uT;
     uniform vec2  uRes;
 
@@ -5820,21 +5834,18 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
     void main(){
       vec2 uv = vUv;
-
-      /* el frente avanza en diagonal y el ruido lo ondula: recto seria una
-         cortina, ondulado parece una onda de luz recorriendo el plano */
       float eje  = uv.x*0.80 + uv.y*0.20;
       float onda = (fbm(uv*3.2 + uT*0.04) - 0.5) * 0.30;
       float frente = uP*1.50 - 0.25 + onda;
       float d = eje - frente;
-      float m = smoothstep(0.07, -0.07, d);        /* 1 = ya es la nueva */
-      float filo = exp(-d*d/0.0035);               /* cercania al frente */
+      float m = smoothstep(0.07, -0.07, d);
+      float filo = exp(-d*d/0.0035);
 
-      vec2 dir = vec2(0.9701, 0.2425);             /* normalizado de (.8,.2) */
+      vec2 dir = vec2(0.9701, 0.2425);
       vec2 arrastre = dir * filo * 0.085;
       vec2 temblor  = vec2(fbm(uv*8.0 + uT*0.35) - 0.5,
                            fbm(uv*8.0 - uT*0.31) - 0.5) * filo * 0.030;
-      float ca = filo * 0.0055;                    /* separacion de canales */
+      float ca = filo * 0.0055;
 
       vec2 ua = cubre(uv + arrastre + temblor, uSa);
       vec2 ub = cubre(uv - arrastre*0.5 + temblor*0.6, uSb);
@@ -5847,11 +5858,9 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
                     texture2D(uB, ub - vec2(ca,0.0)).b);
       vec3 col = mix(A, B, m);
 
-      /* el filo se enciende, pero solo mientras cruza */
       float vivo = smoothstep(0.0,0.14,uP) * smoothstep(1.0,0.86,uP);
       col += vec3(0.42,0.62,1.0) * filo * 0.62 * vivo;
 
-      /* grano y viñeta: constantes, son la textura de pelicula */
       col += (hash(vUv*uRes + fract(uT)*97.3) - 0.5) * 0.038;
       vec2 q = vUv - 0.5;
       col *= 1.0 - dot(q,q) * 0.40;
@@ -5859,14 +5868,13 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       gl_FragColor = vec4(col, 1.0);
     }`;
 
-  let gl = null, prog = null, tex = [], uni = {}, corriendo = false;
-  let pAct = 1, tIni = 0, iDe = 0, iA = 0;
+  let gl = null, prog = null, tex = [], uni = {}, pidiendo = false;
+  let iA = 0, iB = 0, pCruce = 1;
 
-  function compilar(tipo, src){
-    const s = gl.createShader(tipo);
+  function compilar(t, src){
+    const s = gl.createShader(t);
     gl.shaderSource(s, src); gl.compileShader(s);
-    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) return null;
-    return s;
+    return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
   }
 
   function textura(img){
@@ -5882,8 +5890,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     return {t, ar: img.naturalWidth / img.naturalHeight};
   }
 
-  /* el mismo recorte que hace object-fit:cover, pero en coordenadas de
-     textura: se muestrea un subrectangulo en vez de estirar la pieza */
+  /* el mismo recorte que object-fit:cover, pero en coordenadas de textura */
   function cubre(ar){
     const arE = lienzo.width / lienzo.height;
     return ar > arE ? [arE/ar, 1] : [1, ar/arE];
@@ -5899,145 +5906,128 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     }
   }
 
-  function pintar(ms){
-    if(!corriendo) return;
+  function pintarGL(){
+    if(!gl) return;
     medir();
-    if(pAct < 1){
-      pAct = Math.min(1, (ms - tIni) / CRUCE);
-      if(pAct >= 1) iA = iDe;
-    }
-    const a = tex[iA], b = tex[iDe];
+    const a = tex[iA], b = tex[iB];
     gl.useProgram(prog);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, a.t); gl.uniform1i(uni.uA, 0);
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, b.t); gl.uniform1i(uni.uB, 1);
     gl.uniform2fv(uni.uSa, cubre(a.ar));
     gl.uniform2fv(uni.uSb, cubre(b.ar));
-    gl.uniform1f(uni.uP, pAct);
-    gl.uniform1f(uni.uT, ms * 0.001);
+    gl.uniform1f(uni.uP, pCruce);
+    gl.uniform1f(uni.uT, performance.now() * 0.001);
     gl.uniform2f(uni.uRes, lienzo.width, lienzo.height);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    requestAnimationFrame(pintar);
   }
 
   function arrancarGL(){
-    if(!lienzo || quieto.matches) return false;
-    try{
-      gl = lienzo.getContext('webgl', {antialias:false, alpha:false, depth:false});
-    }catch(e){ return false; }
-    if(!gl) return false;
-
+    if(gl || !lienzo || quieto.matches) return;
+    try{ gl = lienzo.getContext('webgl', {antialias:false, alpha:false, depth:false}); }
+    catch(e){ gl = null; }
+    if(!gl) return;
     const imgs = slides.map(s => s.querySelector('img'));
-    if(imgs.some(im => !im || !im.complete || !im.naturalWidth)) return false;
-
+    if(imgs.some(im => !im || !im.complete || !im.naturalWidth)){ gl = null; return; }
     const vs = compilar(gl.VERTEX_SHADER, VS), fs = compilar(gl.FRAGMENT_SHADER, FS);
-    if(!vs || !fs) return false;
+    if(!vs || !fs){ gl = null; return; }
     prog = gl.createProgram();
     gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
-    if(!gl.getProgramParameter(prog, gl.LINK_STATUS)) return false;
-
+    if(!gl.getProgramParameter(prog, gl.LINK_STATUS)){ gl = null; return; }
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
     const loc = gl.getAttribLocation(prog, 'p');
     gl.enableVertexAttribArray(loc);
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
     for(const k of ['uA','uB','uSa','uSb','uP','uT','uRes']) uni[k] = gl.getUniformLocation(prog, k);
     tex = imgs.map(textura);
-
     car.classList.add('gl');
-    corriendo = true;
-    requestAnimationFrame(pintar);
-    return true;
+    pintarGL();
   }
 
-  /* ------------------------------------------------------- carrusel */
-  function reiniciar(el, clase){
+  /* ---------------------------------------------------------- escena */
+  let iUlt = -1;
+
+  function reponer(el, clase){
     el.classList.remove(clase); void el.offsetWidth; el.classList.add(clase);
   }
 
-  function programar(){
-    clearTimeout(reloj);
-    if(quieto.matches || parado || !visible || n < 2) return;
-    reloj = setTimeout(() => ir(i + 1), ESPERA);
-  }
+  function pintar(){
+    const r = sec.getBoundingClientRect();
+    const span = r.height - window.innerHeight;
+    if(span <= 0) return;
+    const u = lim(-r.top / span);
 
-  function ir(k){
-    k = ((k % n) + n) % n;
-    const ant = i;
-    if(k !== ant){
-      i = k;
-      if(corriendo){ iA = ant; iDe = i; pAct = 0; tIni = performance.now(); }
+    /* de la posicion salen tres cosas: que par de piezas estan en juego,
+       cuanto ha cruzado el frente, y cual es la vigente */
+    let a = 0, b = 0, p = 1;
+    for(let k = 0; k < CRUCES.length; k++){
+      const [x0, x1] = CRUCES[k];
+      if(u >= x1){ a = k + 1; b = k + 1; p = 1; }
+      else if(u > x0){ a = k; b = k + 1; p = suave((u - x0) / (x1 - x0)); break; }
+      else break;
+    }
+    iA = a; iB = b; pCruce = p;
+    const vig = p > .5 ? b : a;
+
+    if(gl) pintarGL();
+
+    if(vig !== iUlt){
+      iUlt = vig;
       slides.forEach((s, j) => {
-        s.classList.toggle('on', j === i);
-        s.classList.toggle('sale', j === ant);
-        s.setAttribute('aria-hidden', j === i ? 'false' : 'true');
+        s.classList.toggle('on', j === vig);
+        s.setAttribute('aria-hidden', j === vig ? 'false' : 'true');
       });
       fichas.forEach((f, j) => {
         f.classList.remove('on');
-        if(j === i) reiniciar(f, 'on');
+        if(j === vig) reponer(f, 'on');
       });
-      segs.forEach((s, j) => {
-        s.classList.remove('corre');
-        s.classList.toggle('hecho', j < i);
-        s.setAttribute('aria-current', j === i ? 'true' : 'false');
-      });
-      reiniciar(segs[i], 'corre');
-      reiniciar(car, 'cruza');
+      segs.forEach((s, j) => s.setAttribute('aria-current', j === vig ? 'true' : 'false'));
+      if(cuenta) cuenta.textContent = ('0' + (vig + 1)) + ' / 0' + n;
     }
-    programar();
+
+    /* la pista se llena por tramos: cada segmento es un acto entero */
+    segs.forEach((s, j) => {
+      const ini = j === 0 ? 0 : CRUCES[j-1][1];
+      const fin = j < CRUCES.length ? CRUCES[j][0] : 1;
+      s.style.setProperty('--f', lim((u - ini) / (fin - ini)).toFixed(3));
+    });
+
+    /* la cartela se retira antes del primer cruce y la señal de scroll
+       se apaga cuando ya no queda recorrido que señalar */
+    if(tipo) tipo.style.setProperty('--cartela', (1 - lim((u - .12) / .12)).toFixed(3));
+    if(cue)  cue.style.setProperty('--cue', (1 - lim((u - .80) / .10)).toFixed(3));
   }
 
-  const ant = car.querySelector('.ev-mando.ant');
-  const sig = car.querySelector('.ev-mando.sig');
-  if(ant) ant.addEventListener('click', () => ir(i - 1));
-  if(sig) sig.addEventListener('click', () => ir(i + 1));
-  segs.forEach((s, j) => s.addEventListener('click', () => ir(j)));
-
-  car.addEventListener('keydown', e => {
-    if(e.key === 'ArrowRight'){ e.preventDefault(); ir(i + 1); }
-    else if(e.key === 'ArrowLeft'){ e.preventDefault(); ir(i - 1); }
-  });
-
-  let x0 = null, y0 = null;
-  car.addEventListener('touchstart', e => {
-    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
-  }, {passive:true});
-  car.addEventListener('touchend', e => {
-    if(x0 === null) return;
-    const dx = e.changedTouches[0].clientX - x0;
-    const dy = e.changedTouches[0].clientY - y0;
-    x0 = y0 = null;
-    if(Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy) * 1.4) ir(i + (dx < 0 ? 1 : -1));
-  }, {passive:true});
-
-  function pausar(v){
-    parado = v;
-    car.classList.toggle('pausa', v);
-    v ? clearTimeout(reloj) : programar();
+  let pedido = false;
+  function alScroll(){
+    if(pedido) return;
+    pedido = true;
+    requestAnimationFrame(() => {
+      pedido = false;
+      /* fuera de plano no hay nada que pintar, y medir cuesta igual */
+      if(sec.classList.contains('fuera-de-vista')) return;
+      pintar();
+    });
   }
-  car.addEventListener('pointerenter', () => pausar(true));
-  car.addEventListener('pointerleave', () => pausar(false));
-  car.addEventListener('focusin',  () => pausar(true));
-  car.addEventListener('focusout', () => pausar(false));
-  document.addEventListener('visibilitychange', () => {
-    if(document.hidden){ clearTimeout(reloj); corriendo = false; }
-    else { programar(); if(gl && !corriendo){ corriendo = true; requestAnimationFrame(pintar); } }
-  });
+
+  /* los segmentos llevan al tramo de su acto: la escena se navega tambien
+     a golpe de clic, no solo arrastrando */
+  segs.forEach((s, j) => s.addEventListener('click', () => {
+    const r = sec.getBoundingClientRect();
+    const span = r.height - window.innerHeight;
+    const destino = j === 0 ? .06 : (CRUCES[j-1][1] + .04);
+    window.scrollTo({top: window.scrollY + r.top + span * destino, behavior: 'smooth'});
+  }));
+
+  window.addEventListener('scroll', alScroll, {passive:true});
+  window.addEventListener('resize', () => { if(gl) medir(); alScroll(); });
 
   new IntersectionObserver(es => {
-    visible = es[0].isIntersecting;
-    if(visible){
-      programar();
-      if(!gl) arrancarGL();
-      else if(!corriendo){ corriendo = true; requestAnimationFrame(pintar); }
-    } else {
-      clearTimeout(reloj);
-      corriendo = false;                 /* el bucle para fuera de plano */
-    }
-  }, {threshold:.15}).observe(car);
+    if(es[0].isIntersecting){ arrancarGL(); pintar(); }
+  }, {threshold:.05}).observe(sec);
 
-  quieto.addEventListener('change', () => programar());
+  pintar();
 })();
 
 /* ===== indice vivo de Developments =====
