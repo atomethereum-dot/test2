@@ -2199,7 +2199,10 @@
      puede resucitar. */
   .ev-car.gl .ev-par{opacity:0}
   .ev-car.gl .ev-slide{opacity:1;z-index:3;pointer-events:none}
-  .ev-car.gl .ev-slide:not(.on) figcaption{opacity:0}
+  /* El credito apagado va en la regla base, no solo bajo .gl: la clase la
+     pone el JS y hasta entonces los tres creditos valen 1, asi que al
+     encenderse el shader los tres se veian juntos durante la transicion. */
+  .ev-slide:not(.on) figcaption{opacity:0}
   .ev-slide figcaption{
     position:absolute;left:0;bottom:0;z-index:5;transition:opacity .45s;
     padding:9px 14px;border-top-right-radius:10px;background:rgba(6,8,12,.74);
@@ -4688,6 +4691,54 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   </div>
 </section>
 
+<div class="seam" aria-hidden="true">
+  <span>Market context</span>
+  <i></i>
+</div>
+
+<section class="rwa" id="rwa">
+  <div class="rwa-pin" id="rwa-pin">
+    <div class="rwa-grid" aria-hidden="true"></div>
+    <div class="rwa-inner">
+
+      <div class="rwa-left">
+        <div>
+        <p class="rwa-eyebrow">Market opportunity</p>
+        <h2 class="rwa-title">RWA industry projected growth</h2>
+        </div>
+
+        <div class="rwa-rows" id="rwa-rows">
+        <div class="rwa-row" data-v="3.1"><span class="rwa-year">2025</span><span class="rwa-track"><i></i></span><span class="rwa-val">$3.1T</span></div>
+        <div class="rwa-row" data-v="5.2"><span class="rwa-year">2026</span><span class="rwa-track"><i></i></span><span class="rwa-val">$5.2T</span></div>
+        <div class="rwa-row" data-v="7.5"><span class="rwa-year">2027</span><span class="rwa-track"><i></i></span><span class="rwa-val">$7.5T</span></div>
+        <div class="rwa-row" data-v="10.2"><span class="rwa-year">2028</span><span class="rwa-track"><i></i></span><span class="rwa-val">$10.2T</span></div>
+        <div class="rwa-row" data-v="13.0"><span class="rwa-year">2029</span><span class="rwa-track"><i></i></span><span class="rwa-val">$13.0T</span></div>
+        <div class="rwa-row last" data-v="16.1"><span class="rwa-year">2030</span><span class="rwa-track"><i></i></span><span class="rwa-val">$16.1T</span></div>
+        </div>
+
+        <div class="rwa-axis" aria-hidden="true">
+          <span></span>
+          <span class="rwa-ticks"><span>0</span><span>4</span><span>8</span><span>12</span><span>16</span></span>
+          <span></span>
+        </div>
+
+        <p class="rwa-src">Source · Boston Consulting Group</p>
+      </div>
+
+      <aside class="rwa-stat">
+        <p class="rwa-big"><span id="rwa-big">$3.1</span> Trillion</p>
+        <p class="rwa-copy">
+          Projected value of tokenized real-world assets by 2030 — the market
+          Sectora is built to secure.
+        </p>
+        <p class="rwa-note"><span id="rwa-yr">2025</span> · Projected</p>
+      </aside>
+
+    </div>
+    <p class="rwa-hint"><i></i>Keep scrolling<i></i></p>
+  </div>
+</section>
+
 
 <section class="ev" id="events">
   <div class="ev-pin" id="ev-pin">
@@ -4782,54 +4833,6 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <p class="ev-cuenta" id="ev-cuenta" aria-hidden="true">01 / 03</p>
       </div>
     </div>
-  </div>
-</section>
-
-<div class="seam" aria-hidden="true">
-  <span>Market context</span>
-  <i></i>
-</div>
-
-<section class="rwa" id="rwa">
-  <div class="rwa-pin" id="rwa-pin">
-    <div class="rwa-grid" aria-hidden="true"></div>
-    <div class="rwa-inner">
-
-      <div class="rwa-left">
-        <div>
-        <p class="rwa-eyebrow">Market opportunity</p>
-        <h2 class="rwa-title">RWA industry projected growth</h2>
-        </div>
-
-        <div class="rwa-rows" id="rwa-rows">
-        <div class="rwa-row" data-v="3.1"><span class="rwa-year">2025</span><span class="rwa-track"><i></i></span><span class="rwa-val">$3.1T</span></div>
-        <div class="rwa-row" data-v="5.2"><span class="rwa-year">2026</span><span class="rwa-track"><i></i></span><span class="rwa-val">$5.2T</span></div>
-        <div class="rwa-row" data-v="7.5"><span class="rwa-year">2027</span><span class="rwa-track"><i></i></span><span class="rwa-val">$7.5T</span></div>
-        <div class="rwa-row" data-v="10.2"><span class="rwa-year">2028</span><span class="rwa-track"><i></i></span><span class="rwa-val">$10.2T</span></div>
-        <div class="rwa-row" data-v="13.0"><span class="rwa-year">2029</span><span class="rwa-track"><i></i></span><span class="rwa-val">$13.0T</span></div>
-        <div class="rwa-row last" data-v="16.1"><span class="rwa-year">2030</span><span class="rwa-track"><i></i></span><span class="rwa-val">$16.1T</span></div>
-        </div>
-
-        <div class="rwa-axis" aria-hidden="true">
-          <span></span>
-          <span class="rwa-ticks"><span>0</span><span>4</span><span>8</span><span>12</span><span>16</span></span>
-          <span></span>
-        </div>
-
-        <p class="rwa-src">Source · Boston Consulting Group</p>
-      </div>
-
-      <aside class="rwa-stat">
-        <p class="rwa-big"><span id="rwa-big">$3.1</span> Trillion</p>
-        <p class="rwa-copy">
-          Projected value of tokenized real-world assets by 2030 — the market
-          Sectora is built to secure.
-        </p>
-        <p class="rwa-note"><span id="rwa-yr">2025</span> · Projected</p>
-      </aside>
-
-    </div>
-    <p class="rwa-hint"><i></i>Keep scrolling<i></i></p>
   </div>
 </section>
 
