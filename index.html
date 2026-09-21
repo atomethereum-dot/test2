@@ -2355,11 +2355,21 @@
     text-shadow:0 1px 10px rgba(0,0,0,.9);
     opacity:var(--cue,1);transition:opacity .45s;pointer-events:none;
   }
-  .ev-cue svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.7;
-              animation:ev-baja 1.9s ease-in-out infinite}
+  /* La flecha va dentro de un redondel para que se lea como un boton de
+     "sigue bajando" y no como un adorno del texto. */
+  /* El redondel lleva fondo propio porque se sobreimprime en carteles que
+     van de negro a naranja saturado: sin el se perdia justo encima de la
+     tipografia del cartel. */
+  .ev-cue svg{
+    width:32px;height:32px;padding:8px;box-sizing:border-box;
+    border:1px solid rgba(255,255,255,.46);border-radius:50%;
+    background:rgba(0,0,0,.5);
+    fill:none;stroke:#fff;stroke-width:1.9;
+    animation:ev-baja 1.9s ease-in-out infinite;
+  }
   @keyframes ev-baja{
-    0%,100%{transform:translateY(-3px);opacity:.5}
-    50%{transform:translateY(3px);opacity:1}
+    0%,100%{transform:translateY(-4px);opacity:.62}
+    50%{transform:translateY(4px);opacity:1}
   }
 
   @media (max-width:980px){
@@ -2368,32 +2378,40 @@
        sobreimprime nada. El plano va arriba y el texto debajo, que ademas
        es como se lee un telefono. */
     .ev{height:300vh}
-    .ev-pin{
-      --marco:0px;padding:0 var(--pad);
-      place-items:center stretch;align-content:center;
+    .ev-pin{--marco:0px;padding:0;place-items:stretch;align-content:stretch}
+    /* La escena ocupa el alto entero y reparte el aire entre las piezas.
+       Antes se quedaba encogida en el centro con los cantos vacios: en un
+       390x844 sobraban 253px muertos. El margen lateral pasa del pin a
+       cada pieza para que el plano pueda ir a sangre. */
+    .ev-car{
+      display:flex;flex-direction:column;justify-content:space-between;
+      width:100%;height:100%;gap:clamp(10px,1.6vh,18px);
+      padding:clamp(14px,2.4vh,26px) 0 clamp(12px,2vh,22px);
     }
-    .ev-car{display:flex;flex-direction:column;gap:clamp(12px,1.8vh,18px);width:100%}
     .ev-hud,.ev-type,.ev-panel,.ev-barra,.ev-cue{
-      position:static;transform:none;inset:auto;padding:0;
+      position:static;transform:none;inset:auto;
+      padding:0 var(--pad);
     }
     .ev-hud{order:1;display:flex}
+    /* A sangre: en un telefono cada pixel de ancho es alto en el 16:9,
+       y el 16:9 no se puede tocar sin recortar los carteles. */
     .ev-stage{order:2;width:100%}
     .ev-type{order:3;opacity:1;max-width:none}
     .ev-panel{order:4}
     .ev-barra{order:5}
-    .ev-cue{order:6;justify-content:center}
+    .ev-cue{order:6}
     .ev-scrim{display:none}   /* sin texto encima, el velo sobra */
-    .ev-type{top:clamp(58px,8vh,84px);max-width:88%}
     .ev-h{font-size:clamp(24px,6.4vw,34px)}
     .ev-lede{font-size:12.5px;max-width:none}
     .ev-ent.on{grid-template-columns:1fr 1fr;gap:14px}
     .ev-nom{grid-column:1 / -1}
     .ev-nom .v{font-size:clamp(19px,5.4vw,25px)}
-    .ev-panel{bottom:clamp(46px,6.4vh,64px)}
+    /* Horizontal y centrada. Ojo: aqui va estatica, asi que left/bottom
+       no pintan nada y un translateX heredado la sacaba media pantalla
+       a la izquierda. El centrado lo hace el propio flex. */
     .ev-cue{
       writing-mode:horizontal-tb;flex-direction:row;
-      right:auto;left:50%;top:auto;bottom:clamp(34px,4.6vh,46px);
-      transform:translateX(-50%);font-size:8px;letter-spacing:.2em;gap:9px;
+      justify-content:center;font-size:9px;letter-spacing:.22em;gap:14px;
     }
     .ev-cuenta{display:none}
     .ev-slide figcaption{font-size:7.5px;letter-spacing:.11em;padding:7px 10px}
