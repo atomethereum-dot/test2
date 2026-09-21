@@ -2237,6 +2237,14 @@
     bottom:0;height:52%;
     background:linear-gradient(0deg,rgba(4,6,10,.94) 0%,rgba(4,6,10,.74) 32%,rgba(4,6,10,0) 100%);
   }
+  /* Velo lateral para la cartela. Los carteles oficiales llevan su propia
+     tipografia grande y clara justo donde cae la entradilla, asi que el
+     lado del texto necesita suelo. Se va con la cartela: en cuanto el
+     titular se retira, la pieza queda limpia. */
+  .ev-scrim.izq{
+    top:0;bottom:0;right:auto;width:62%;opacity:var(--cartela,1);
+    background:linear-gradient(90deg,rgba(4,6,10,.88) 0%,rgba(4,6,10,.66) 34%,rgba(4,6,10,0) 100%);
+  }
 
   .ev-hud{
     position:absolute;left:0;right:0;z-index:8;
@@ -4747,14 +4755,14 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <figure class="ev-slide on" aria-hidden="false">
           <span class="ev-par">
             <picture>
-              <source type="image/webp" srcset="images/consensus-640.webp 640w, images/consensus-960.webp 960w, images/consensus-1280.webp 1280w, images/consensus-1920.webp 1920w, images/consensus-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
-              <img src="images/consensus-1280.jpg"
-                   srcset="images/consensus-640.jpg 640w, images/consensus-960.jpg 960w, images/consensus-1280.jpg 1280w, images/consensus-1920.jpg 1920w, images/consensus-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
-                   width="1920" height="1280" decoding="async"
-                   alt="Attendees walking across the show floor at a Consensus conference, between stands and overhead signage.">
+              <source type="image/webp" srcset="images/btc2027-640.webp 640w, images/btc2027-960.webp 960w, images/btc2027-1280.webp 1280w, images/btc2027-1920.webp 1920w, images/btc2027-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
+              <img src="images/btc2027-1280.jpg"
+                   srcset="images/btc2027-640.jpg 640w, images/btc2027-960.jpg 960w, images/btc2027-1280.jpg 1280w, images/btc2027-1920.jpg 1920w, images/btc2027-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
+                   width="1880" height="940" decoding="async"
+                   alt="Official Bitcoin 2027 Nashville poster: the event logo over the Nashville skyline, July 15 to 17, Music City Center.">
             </picture>
           </span>
-          <figcaption>Consensus &middot; photograph, earlier edition</figcaption>
+          <figcaption>Bitcoin 2027 &middot; official event artwork</figcaption>
         </figure>
 
         <figure class="ev-slide" aria-hidden="true">
@@ -4773,14 +4781,14 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <figure class="ev-slide" aria-hidden="true">
           <span class="ev-par">
             <picture>
-              <source type="image/webp" srcset="images/btc2027-640.webp 640w, images/btc2027-960.webp 960w, images/btc2027-1280.webp 1280w, images/btc2027-1920.webp 1920w, images/btc2027-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
-              <img src="images/btc2027-1280.jpg"
-                   srcset="images/btc2027-640.jpg 640w, images/btc2027-960.jpg 960w, images/btc2027-1280.jpg 1280w, images/btc2027-1920.jpg 1920w, images/btc2027-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
-                   width="1880" height="940" decoding="async"
-                   alt="Official Bitcoin 2027 Nashville poster: the event logo over the Nashville skyline, July 15 to 17, Music City Center.">
+              <source type="image/webp" srcset="images/consensus-640.webp 640w, images/consensus-960.webp 960w, images/consensus-1280.webp 1280w, images/consensus-1920.webp 1920w, images/consensus-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
+              <img src="images/consensus-1280.jpg"
+                   srcset="images/consensus-640.jpg 640w, images/consensus-960.jpg 960w, images/consensus-1280.jpg 1280w, images/consensus-1920.jpg 1920w, images/consensus-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
+                   width="1920" height="1280" decoding="async"
+                   alt="Attendees walking across the show floor at a Consensus conference, between stands and overhead signage.">
             </picture>
           </span>
-          <figcaption>Bitcoin 2027 &middot; official event artwork</figcaption>
+          <figcaption>Consensus &middot; photograph, earlier edition</figcaption>
         </figure>
 
         <canvas class="ev-gl" id="ev-gl" aria-hidden="true"></canvas>
@@ -4788,6 +4796,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <span class="ev-gr" aria-hidden="true"></span>
         <span class="ev-scrim arr" aria-hidden="true"></span>
         <span class="ev-scrim aba" aria-hidden="true"></span>
+        <span class="ev-scrim izq" aria-hidden="true"></span>
 
       </div>
       <div class="ev-hud arr">
@@ -4802,9 +4811,9 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 
       <div class="ev-panel">
         <div class="ev-ent on">
-          <div class="ev-cel ev-nom"><p class="k">Event 01</p><p class="v">Consensus 2027</p></div>
-          <div class="ev-cel"><p class="k">Dates</p><p class="v">To be confirmed</p></div>
-          <div class="ev-cel"><p class="k">Location</p><p class="v">To be confirmed</p></div>
+          <div class="ev-cel ev-nom"><p class="k">Event 01</p><p class="v">Bitcoin 2027</p></div>
+          <div class="ev-cel"><p class="k">Dates</p><p class="v">July 15&ndash;17</p></div>
+          <div class="ev-cel"><p class="k">Location</p><p class="v">Nashville &middot; Music City Center</p></div>
           <div class="ev-cel"><p class="k">Status</p><p class="v"><span class="ev-dot" aria-hidden="true"></span>Registered</p></div>
         </div>
         <div class="ev-ent">
@@ -4814,9 +4823,9 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
           <div class="ev-cel"><p class="k">Status</p><p class="v"><span class="ev-dot" aria-hidden="true"></span>Registered</p></div>
         </div>
         <div class="ev-ent">
-          <div class="ev-cel ev-nom"><p class="k">Event 03</p><p class="v">Bitcoin 2027</p></div>
-          <div class="ev-cel"><p class="k">Dates</p><p class="v">July 15&ndash;17</p></div>
-          <div class="ev-cel"><p class="k">Location</p><p class="v">Nashville &middot; Music City Center</p></div>
+          <div class="ev-cel ev-nom"><p class="k">Event 03</p><p class="v">Consensus 2027</p></div>
+          <div class="ev-cel"><p class="k">Dates</p><p class="v">To be confirmed</p></div>
+          <div class="ev-cel"><p class="k">Location</p><p class="v">To be confirmed</p></div>
           <div class="ev-cel"><p class="k">Status</p><p class="v"><span class="ev-dot" aria-hidden="true"></span>Registered</p></div>
         </div>
       </div>
@@ -4827,9 +4836,9 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       </p>
 
       <div class="ev-barra">
-        <button class="ev-seg" type="button" aria-current="true"><span class="sr-only">Consensus 2027</span></button>
+        <button class="ev-seg" type="button" aria-current="true"><span class="sr-only">Bitcoin 2027</span></button>
         <button class="ev-seg" type="button" aria-current="false"><span class="sr-only">Blockchain Forum 2027</span></button>
-        <button class="ev-seg" type="button" aria-current="false"><span class="sr-only">Bitcoin 2027</span></button>
+        <button class="ev-seg" type="button" aria-current="false"><span class="sr-only">Consensus 2027</span></button>
         <p class="ev-cuenta" id="ev-cuenta" aria-hidden="true">01 / 03</p>
       </div>
     </div>
@@ -5799,7 +5808,6 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const slides = [...car.querySelectorAll('.ev-slide')];
   const fichas = [...car.querySelectorAll('.ev-ent')];
   const segs   = [...car.querySelectorAll('.ev-seg')];
-  const tipo   = document.getElementById('ev-type');
   const cue    = document.getElementById('ev-cue');
   const cuenta = document.getElementById('ev-cuenta');
   const lienzo = document.getElementById('ev-gl');
@@ -5997,8 +6005,10 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     });
 
     /* la cartela se retira antes del primer cruce y la señal de scroll
-       se apaga cuando ya no queda recorrido que señalar */
-    if(tipo) tipo.style.setProperty('--cartela', (1 - lim((u - .12) / .12)).toFixed(3));
+       se apaga cuando ya no queda recorrido que señalar. El valor va en
+       el carrusel, no en el titular: el velo lateral es hermano suyo y
+       tiene que apagarse con el. */
+    car.style.setProperty('--cartela', (1 - lim((u - .12) / .12)).toFixed(3));
     if(cue)  cue.style.setProperty('--cue', (1 - lim((u - .80) / .10)).toFixed(3));
   }
 
