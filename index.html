@@ -2247,6 +2247,22 @@
   .ev-slide.sale .ev-par{transform:scale(1.03)}
   .ev-slide img{width:100%;height:100%;object-fit:cover;display:block}
 
+  /* El lienzo solo se pone por delante cuando el contexto existe y las
+     tres texturas estan cargadas (clase .gl). Hasta entonces, y si WebGL
+     falla, manda el carrusel de CSS que hay debajo. */
+  .ev-gl{position:absolute;inset:0;z-index:2;display:block;width:100%;height:100%;opacity:0}
+  .ev-car.gl .ev-gl{opacity:1}
+  /* Se apaga la CAPA DE IMAGEN, no la diapositiva entera: dentro va el
+     credito del cartel, que tiene que seguir viendose. Apagar el padre no
+     deja resucitar al hijo, porque la opacidad del padre ya ha aplanado el
+     grupo. */
+  .ev-car.gl .ev-par{opacity:0}
+  .ev-car.gl .ev-slide{clip-path:none;z-index:3;pointer-events:none}
+  .ev-car.gl .ev-slide figcaption{transition:opacity .45s}
+  .ev-car.gl .ev-slide:not(.on) figcaption{opacity:0}
+  /* grano y viñeta los pone ya el shader: repetirlos en CSS los duplica */
+  .ev-car.gl .ev-gr,.ev-car.gl .ev-vel{display:none}
+
   .ev-vel{
     position:absolute;inset:0;z-index:3;pointer-events:none;
     background:
@@ -2318,6 +2334,13 @@
   .ev-ent.on .ev-cel:nth-child(3){animation-delay:.14s}
   .ev-ent.on .ev-cel:nth-child(4){animation-delay:.20s}
   @keyframes ev-sube{from{transform:translateY(14px)}to{transform:none}}
+  /* el nombre voltea justo cuando el frente de luz cruza el plano: ata la
+     mitad de abajo con lo que acaba de pasar arriba */
+  .ev-car.cruza .ev-ent.on .ev-nom .v{animation:ev-gira .72s cubic-bezier(.5,0,.2,1) both}
+  @keyframes ev-gira{
+    0%{transform:perspective(600px) rotateX(-82deg);opacity:.15}
+    100%{transform:perspective(600px) rotateX(0);opacity:1}
+  }
 
   .ev-cel .k{
     margin:0 0 7px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;
@@ -4710,6 +4733,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
           <figcaption>Bitcoin 2027 &middot; official event artwork</figcaption>
         </figure>
 
+        <canvas class="ev-gl" id="ev-gl" aria-hidden="true"></canvas>
         <span class="ev-vel" aria-hidden="true"></span>
         <span class="ev-gr" aria-hidden="true"></span>
       </div>
@@ -5737,31 +5761,199 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   if(reduce){ ctx.fillStyle = '#000'; ctx.fillRect(0,0,W,H); }
 })();
 
-/* ===== eventos: carrusel =====
-   Corre solo, pero el lector manda: se para al pasar el raton o al recibir
-   foco, y responde a los mandos, a los segmentos, al teclado y al gesto.
-   Fuera de pantalla no corre: un carrusel avanzando donde nadie lo ve
-   gasta repintado y ademas llega a destiempo cuando el lector baja. */
+/* ===== eventos: carrusel con transicion por shader =====
+
+   El paso de una pieza a otra no es un fundido ni un barrido de CSS: es un
+   FRENTE DE LUZ que cruza el plano. Delante del frente sigue la pieza que
+   sale, arrastrada por un campo de flujo que la deforma justo en el filo;
+   detras ya esta la que entra. En el propio filo la imagen se parte en sus
+   tres canales y se enciende. Encima, grano y viñeta permanentes.
+
+   Todo eso son unas pocas lineas de GLSL sobre un solo cuadrilatero, que
+   es trabajo de GPU y no cuesta nada al hilo principal. En CSS habria que
+   fingirlo con capas y mascaras, y ni la deformacion ni la separacion de
+   canales tienen equivalente.
+
+   Las imagenes <img> siguen en el marcado: son el texto alternativo, lo
+   que ve un buscador y el respaldo si no hay WebGL. El lienzo solo se
+   pone por delante cuando el contexto existe y las tres texturas estan
+   cargadas; si algo falla, el carrusel sigue funcionando con CSS.
+
+   El bucle solo corre con la seccion en pantalla y sin
+   prefers-reduced-motion. Un bucle de rAF pintando donde nadie mira gasta
+   bateria a cambio de nada. */
 (function(){
   const car = document.getElementById('ev-car');
   if(!car) return;
   const slides = [...car.querySelectorAll('.ev-slide')];
   const fichas = [...car.querySelectorAll('.ev-ent')];
   const segs   = [...car.querySelectorAll('.ev-seg')];
+  const lienzo = document.getElementById('ev-gl');
   const n = slides.length;
   if(!n) return;
 
-  const ESPERA = 7000;                       /* == --espera del CSS */
+  const ESPERA = 7000;                      /* == --espera del CSS */
+  const CRUCE  = 1900;                      /* lo que tarda el frente */
   const quieto = matchMedia('(prefers-reduced-motion:reduce)');
   let i = 0, reloj = null, parado = false, visible = false;
 
-  /* quitar y reponer una clase de animacion no basta: el navegador agrupa
-     los dos cambios en el mismo fotograma y la animacion no se reinicia.
-     Leer offsetWidth en medio fuerza el reflujo que los separa. */
+  /* ---------------------------------------------------------- shader */
+  const VS = `attribute vec2 p; varying vec2 vUv;
+    void main(){ vUv = p*0.5+0.5; gl_Position = vec4(p,0.0,1.0); }`;
+
+  const FS = `precision highp float;
+    varying vec2 vUv;
+    uniform sampler2D uA, uB;
+    uniform vec2  uSa, uSb;      /* recorte tipo cover por textura */
+    uniform float uP, uT;
+    uniform vec2  uRes;
+
+    float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }
+    float ruido(vec2 p){
+      vec2 i = floor(p), f = fract(p);
+      f = f*f*(3.0-2.0*f);
+      float a=hash(i), b=hash(i+vec2(1.0,0.0)), c=hash(i+vec2(0.0,1.0)), d=hash(i+vec2(1.0,1.0));
+      return mix(mix(a,b,f.x), mix(c,d,f.x), f.y);
+    }
+    float fbm(vec2 p){ return ruido(p)*0.62 + ruido(p*2.07)*0.26 + ruido(p*4.31)*0.12; }
+    vec2 cubre(vec2 uv, vec2 s){ return (uv-0.5)*s + 0.5; }
+
+    void main(){
+      vec2 uv = vUv;
+
+      /* el frente avanza en diagonal y el ruido lo ondula: recto seria una
+         cortina, ondulado parece una onda de luz recorriendo el plano */
+      float eje  = uv.x*0.80 + uv.y*0.20;
+      float onda = (fbm(uv*3.2 + uT*0.04) - 0.5) * 0.30;
+      float frente = uP*1.50 - 0.25 + onda;
+      float d = eje - frente;
+      float m = smoothstep(0.07, -0.07, d);        /* 1 = ya es la nueva */
+      float filo = exp(-d*d/0.0035);               /* cercania al frente */
+
+      vec2 dir = vec2(0.9701, 0.2425);             /* normalizado de (.8,.2) */
+      vec2 arrastre = dir * filo * 0.085;
+      vec2 temblor  = vec2(fbm(uv*8.0 + uT*0.35) - 0.5,
+                           fbm(uv*8.0 - uT*0.31) - 0.5) * filo * 0.030;
+      float ca = filo * 0.0055;                    /* separacion de canales */
+
+      vec2 ua = cubre(uv + arrastre + temblor, uSa);
+      vec2 ub = cubre(uv - arrastre*0.5 + temblor*0.6, uSb);
+
+      vec3 A = vec3(texture2D(uA, ua + vec2(ca,0.0)).r,
+                    texture2D(uA, ua).g,
+                    texture2D(uA, ua - vec2(ca,0.0)).b);
+      vec3 B = vec3(texture2D(uB, ub + vec2(ca,0.0)).r,
+                    texture2D(uB, ub).g,
+                    texture2D(uB, ub - vec2(ca,0.0)).b);
+      vec3 col = mix(A, B, m);
+
+      /* el filo se enciende, pero solo mientras cruza */
+      float vivo = smoothstep(0.0,0.14,uP) * smoothstep(1.0,0.86,uP);
+      col += vec3(0.42,0.62,1.0) * filo * 0.62 * vivo;
+
+      /* grano y viñeta: constantes, son la textura de pelicula */
+      col += (hash(vUv*uRes + fract(uT)*97.3) - 0.5) * 0.038;
+      vec2 q = vUv - 0.5;
+      col *= 1.0 - dot(q,q) * 0.40;
+
+      gl_FragColor = vec4(col, 1.0);
+    }`;
+
+  let gl = null, prog = null, tex = [], uni = {}, corriendo = false;
+  let pAct = 1, tIni = 0, iDe = 0, iA = 0;
+
+  function compilar(tipo, src){
+    const s = gl.createShader(tipo);
+    gl.shaderSource(s, src); gl.compileShader(s);
+    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) return null;
+    return s;
+  }
+
+  function textura(img){
+    const t = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, t);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
+    /* sin mipmaps y con borde fijado: las piezas no son potencia de dos */
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    return {t, ar: img.naturalWidth / img.naturalHeight};
+  }
+
+  /* el mismo recorte que hace object-fit:cover, pero en coordenadas de
+     textura: se muestrea un subrectangulo en vez de estirar la pieza */
+  function cubre(ar){
+    const arE = lienzo.width / lienzo.height;
+    return ar > arE ? [arE/ar, 1] : [1, ar/arE];
+  }
+
+  function medir(){
+    const r = lienzo.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.round(r.width*dpr), h = Math.round(r.height*dpr);
+    if(w && h && (lienzo.width !== w || lienzo.height !== h)){
+      lienzo.width = w; lienzo.height = h;
+      gl.viewport(0, 0, w, h);
+    }
+  }
+
+  function pintar(ms){
+    if(!corriendo) return;
+    medir();
+    if(pAct < 1){
+      pAct = Math.min(1, (ms - tIni) / CRUCE);
+      if(pAct >= 1) iA = iDe;
+    }
+    const a = tex[iA], b = tex[iDe];
+    gl.useProgram(prog);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, a.t); gl.uniform1i(uni.uA, 0);
+    gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, b.t); gl.uniform1i(uni.uB, 1);
+    gl.uniform2fv(uni.uSa, cubre(a.ar));
+    gl.uniform2fv(uni.uSb, cubre(b.ar));
+    gl.uniform1f(uni.uP, pAct);
+    gl.uniform1f(uni.uT, ms * 0.001);
+    gl.uniform2f(uni.uRes, lienzo.width, lienzo.height);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(pintar);
+  }
+
+  function arrancarGL(){
+    if(!lienzo || quieto.matches) return false;
+    try{
+      gl = lienzo.getContext('webgl', {antialias:false, alpha:false, depth:false});
+    }catch(e){ return false; }
+    if(!gl) return false;
+
+    const imgs = slides.map(s => s.querySelector('img'));
+    if(imgs.some(im => !im || !im.complete || !im.naturalWidth)) return false;
+
+    const vs = compilar(gl.VERTEX_SHADER, VS), fs = compilar(gl.FRAGMENT_SHADER, FS);
+    if(!vs || !fs) return false;
+    prog = gl.createProgram();
+    gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+    if(!gl.getProgramParameter(prog, gl.LINK_STATUS)) return false;
+
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+    for(const k of ['uA','uB','uSa','uSb','uP','uT','uRes']) uni[k] = gl.getUniformLocation(prog, k);
+    tex = imgs.map(textura);
+
+    car.classList.add('gl');
+    corriendo = true;
+    requestAnimationFrame(pintar);
+    return true;
+  }
+
+  /* ------------------------------------------------------- carrusel */
   function reiniciar(el, clase){
-    el.classList.remove(clase);
-    void el.offsetWidth;
-    el.classList.add(clase);
+    el.classList.remove(clase); void el.offsetWidth; el.classList.add(clase);
   }
 
   function programar(){
@@ -5775,6 +5967,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     const ant = i;
     if(k !== ant){
       i = k;
+      if(corriendo){ iA = ant; iDe = i; pAct = 0; tIni = performance.now(); }
       slides.forEach((s, j) => {
         s.classList.toggle('on', j === i);
         s.classList.toggle('sale', j === ant);
@@ -5790,11 +5983,11 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
         s.setAttribute('aria-current', j === i ? 'true' : 'false');
       });
       reiniciar(segs[i], 'corre');
+      reiniciar(car, 'cruza');
     }
     programar();
   }
 
-  /* --- mandos --- */
   const ant = car.querySelector('.ev-mando.ant');
   const sig = car.querySelector('.ev-mando.sig');
   if(ant) ant.addEventListener('click', () => ir(i - 1));
@@ -5806,8 +5999,6 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     else if(e.key === 'ArrowLeft'){ e.preventDefault(); ir(i - 1); }
   });
 
-  /* --- gesto: solo cuenta el desplazamiento horizontal, para no robarle
-         el scroll vertical a quien esta bajando por la pagina --- */
   let x0 = null, y0 = null;
   car.addEventListener('touchstart', e => {
     x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
@@ -5820,7 +6011,6 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy) * 1.4) ir(i + (dx < 0 ? 1 : -1));
   }, {passive:true});
 
-  /* --- pausa --- */
   function pausar(v){
     parado = v;
     car.classList.toggle('pausa', v);
@@ -5831,13 +6021,21 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   car.addEventListener('focusin',  () => pausar(true));
   car.addEventListener('focusout', () => pausar(false));
   document.addEventListener('visibilitychange', () => {
-    if(document.hidden) clearTimeout(reloj); else programar();
+    if(document.hidden){ clearTimeout(reloj); corriendo = false; }
+    else { programar(); if(gl && !corriendo){ corriendo = true; requestAnimationFrame(pintar); } }
   });
 
   new IntersectionObserver(es => {
     visible = es[0].isIntersecting;
-    if(visible) programar(); else clearTimeout(reloj);
-  }, {threshold:.25}).observe(car);
+    if(visible){
+      programar();
+      if(!gl) arrancarGL();
+      else if(!corriendo){ corriendo = true; requestAnimationFrame(pintar); }
+    } else {
+      clearTimeout(reloj);
+      corriendo = false;                 /* el bucle para fuera de plano */
+    }
+  }, {threshold:.15}).observe(car);
 
   quieto.addEventListener('change', () => programar());
 })();
