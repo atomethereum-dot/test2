@@ -350,47 +350,22 @@
     document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
   }
 
-  // ---- simulated live network stats ----
-  let staked = 1_840_000 + randInt(0, 40000);
-  let stakers = 612 + randInt(0, 30);
-  const stakedEl = document.getElementById("lvStaked");
-  const stakersEl = document.getElementById("lvStakers");
+  // ---- network stats ----
+  // Aqui habia una simulacion: arrancaba en 1.840.000 #SECT depositados y 612
+  // stakers y los hacia crecer cada 4,6 s. Se enseñaban bajo las etiquetas
+  // "Total staked" y "Stakers", sin ninguna advertencia, en una pagina donde
+  // no hay contrato desplegado y por tanto no hay ni un token depositado ni
+  // un staker. Eso es inventarse la traccion del proyecto, asi que fuera.
+  // Los dos numeros se quedan en el 0 del marcado, que es la verdad, y los
+  // rellena staking-chain.js desde poolView() cuando haya contrato.
 
-  function paintStats() {
-    if (stakedEl) stakedEl.textContent = Math.round(staked).toLocaleString("en-US") + " #SECT";
-    if (stakersEl) stakersEl.textContent = stakers.toLocaleString("en-US");
-  }
-  paintStats();
-  if (!reduced) {
-    setInterval(() => {
-      staked += rand(200, 3200);
-      if (Math.random() < 0.6) stakers += randInt(0, 2);
-      paintStats();
-    }, 4600);
-  }
-
-  // ---- wallet connect (simulated preview, no real wallet integration) ----
-  const connectBtn = document.getElementById("connectBtn");
-  let connected = false;
-  if (connectBtn) {
-    connectBtn.addEventListener("click", () => {
-      if (connectBtn.disabled) return;
-      if (!connected) {
-        connectBtn.disabled = true;
-        connectBtn.textContent = "Connecting…";
-        setTimeout(() => {
-          connected = true;
-          connectBtn.disabled = false;
-          connectBtn.textContent = "0x" + randHex(4) + "…" + randHex(4) + " — Stake #SECT";
-        }, 850);
-      } else {
-        connectBtn.textContent = "Preview only — use the Dashboard";
-        setTimeout(() => {
-          connectBtn.textContent = "0x" + randHex(4) + "…" + randHex(4) + " — Stake #SECT";
-        }, 1800);
-      }
-    });
-  }
+  // ---- wallet connect ----
+  // Este archivo ya NO toca el boton. Antes fingia la conexion: mostraba
+  // "Connecting…" y luego inventaba una direccion con randHex y la enseñaba
+  // como si fuera la cartera del visitante. En una pagina donde se deposita
+  // dinero eso no se puede hacer. El boton lo gobierna staking-chain.js, que
+  // es el unico que habla con una cartera de verdad; mientras el contrato no
+  // este desplegado el boton se queda inerte, como viene en el marcado.
 
   // ---- network staking activity feed (simulated) ----
   const CHECK_ICON = '<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>';

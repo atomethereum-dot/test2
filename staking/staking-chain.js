@@ -54,6 +54,13 @@
   const ZERO = "0x0000000000000000000000000000000000000000";
   const desplegado = CONTRACTS.token !== ZERO && CONTRACTS.staking !== ZERO;
 
+  /* El estado de la pagina cuelga de esta unica clase. Sin ella el marcado
+     dice la verdad de hoy: el contrato no esta desplegado, no se puede
+     depositar y el boton no hace nada. Al pegar la direccion de arriba, la
+     clase aparece y con ella el texto de "en vivo". Asi no hay una lista de
+     sitios que acordarse de cambiar el dia del despliegue: es una linea. */
+  if (desplegado) document.documentElement.classList.add("cadena-viva");
+
   // Sin direcciones no hay nada que cablear: se deja la vista previa intacta
   // en vez de dejar la pagina a medias con botones que no responden.
   if (!desplegado) {
@@ -112,15 +119,15 @@
   /** Traduce un fallo de cadena a algo que una persona pueda leer. */
   function explicar(e) {
     const m = (e && (e.shortMessage || e.reason || e.message)) || "";
-    if (/user rejected|ACTION_REJECTED/i.test(m)) return "Cancelado en la cartera.";
-    if (/still locked/i.test(m)) return "Todavía dentro del periodo de bloqueo.";
-    if (/nothing to claim/i.test(m)) return "No hay recompensas que cobrar.";
-    if (/amount above stake/i.test(m)) return "Más de lo que tienes depositado.";
+    if (/user rejected|ACTION_REJECTED/i.test(m)) return "Cancelled in your wallet.";
+    if (/still locked/i.test(m)) return "Still inside the lock period.";
+    if (/nothing to claim/i.test(m)) return "Nothing to claim yet.";
+    if (/amount above stake/i.test(m)) return "More than you have staked.";
     if (/insufficient allowance|ERC20InsufficientAllowance/i.test(m))
-      return "Falta aprobar el gasto del token.";
+      return "The token spend has not been approved.";
     if (/insufficient balance|ERC20InsufficientBalance/i.test(m))
-      return "Saldo insuficiente.";
-    return m.slice(0, 140) || "La transacción falló.";
+      return "Not enough balance.";
+    return m.slice(0, 140) || "The transaction failed.";
   }
 
   // ---------------------------------------------------------------
@@ -145,7 +152,7 @@
       });
 
       if (pv.paused) {
-        aviso("Devengo en pausa: el fondo de recompensas está agotado.", true);
+        aviso("Accrual paused: the reward pool is empty.", true);
       }
     } catch (e) {
       console.warn("[sectora] no pude leer poolView", e);
@@ -157,8 +164,8 @@
     try {
       const v = await staking.accountView(cuenta);
       const partes = [];
-      partes.push("Depositado " + fmt(v.staked) + " #SECT");
-      partes.push("pendiente " + fmt(v.pendingRewards, 4));
+      partes.push("Staked " + fmt(v.staked) + " #SECT");
+      partes.push("pending " + fmt(v.pendingRewards, 4));
       if (v.staked > 0n) {
         // contra el reloj de la cadena, no el del navegador: en la prueba de
         // punta a punta los dos iban separados por años y el aviso decia
@@ -167,8 +174,8 @@
         const faltan = Number(v.unlocksAt) - ahora;
         partes.push(
           faltan > 0
-            ? "se desbloquea en " + Math.ceil(faltan / 86400) + " d"
-            : "desbloqueado"
+            ? "unlocks in " + Math.ceil(faltan / 86400) + " d"
+            : "unlocked"
         );
       }
       aviso(partes.join(" · "));
@@ -185,9 +192,9 @@
     try {
       aviso(nombre + "…");
       const tx = await hacer();
-      aviso(nombre + ": confirmando…");
+      aviso(nombre + ": confirming…");
       await tx.wait();
-      aviso(nombre + ": hecho.");
+      aviso(nombre + ": done.");
       await pintarPool();
       await pintarCuenta();
     } catch (e) {
@@ -199,25 +206,25 @@
     const txt = entrada && entrada.value ? entrada.value.replace(/,/g, "") : "";
     const n = Number(txt);
     if (!txt || !isFinite(n) || n <= 0) {
-      aviso("Escribe una cantidad primero.", true);
+      aviso("Enter an amount first.", true);
       return;
     }
     const cantidad = parse(txt);
 
     const v = await staking.accountView(cuenta);
     if (v.walletBalance < cantidad) {
-      aviso("No tienes tantos #SECT en la cartera.", true);
+      aviso("You do not have that many #SECT in your wallet.", true);
       return;
     }
     // aprobar solo si hace falta: una aprobación de más es una firma de más
     if (v.allowance < cantidad) {
-      await enviar("Aprobando", () =>
+      await enviar("Approving", () =>
         token.connect(firmante).approve(CONTRACTS.staking, cantidad)
       );
       const v2 = await staking.accountView(cuenta);
       if (v2.allowance < cantidad) return; // la aprobación no salió
     }
-    await enviar("Depositando", () => staking.connect(firmante).stake(cantidad));
+    await enviar("Staking", () => staking.connect(firmante).stake(cantidad));
   }
 
   // ---------------------------------------------------------------
@@ -243,11 +250,11 @@
       return b;
     };
 
-    nuevo("Depositar", depositar);
-    nuevo("Cobrar", () => enviar("Cobrando", () => staking.connect(firmante).claim()));
-    nuevo("Retirar", async () => {
+    nuevo("Stake #SECT", depositar);
+    nuevo("Claim rewards", () => enviar("Claiming", () => staking.connect(firmante).claim()));
+    nuevo("Unstake", async () => {
       const v = await staking.accountView(cuenta);
-      if (v.staked === 0n) return aviso("No tienes nada depositado.", true);
+      if (v.staked === 0n) return aviso("You have nothing staked.", true);
       enviar("Retirando", () => staking.connect(firmante).unstake(v.staked));
     });
 
@@ -265,7 +272,7 @@
 
     const red = await eip1193.request({ method: "eth_chainId" });
     if (red !== CONTRACTS.chainId) {
-      aviso("Cambia la cartera a la red Ethereum.", true);
+      aviso("Switch your wallet to the Ethereum network.", true);
       return;
     }
 
@@ -275,7 +282,7 @@
     try {
       decimales = Number(await token.decimals());
     } catch (e) {
-      aviso("No pude leer los decimales del token; no sigo.", true);
+      aviso("Could not read the token decimals; stopping here.", true);
       return;   // antes que arriesgarse a mover una cantidad mal escalada
     }
 
@@ -286,13 +293,13 @@
     try {
       const suyo = await staking.stakingToken();
       if (suyo.toLowerCase() !== CONTRACTS.token.toLowerCase()) {
-        aviso("Configuracion incorrecta: el contrato de staking usa otro token.", true);
+        aviso("Misconfigured: the staking contract points at a different token.", true);
         console.error("[sectora] token esperado", CONTRACTS.token, "pero el staking usa", suyo);
         staking = null;
         return;
       }
     } catch (e) {
-      aviso("No pude verificar el token del contrato; no sigo.", true);
+      aviso("Could not verify the contract token; stopping here.", true);
       return;
     }
 
@@ -324,7 +331,7 @@
   async function pedirConexion() {
     const eip1193 = elegirProveedor();
     if (!eip1193) {
-      aviso("No se detecta ninguna cartera en este navegador.", true);
+      aviso("No wallet detected in this browser.", true);
       return;
     }
     try {
@@ -354,7 +361,13 @@
       btn = clon;   // sin esto, btn apuntaria al nodo viejo ya desconectado
                     // y todo lo que se le colgase despues no se veria
     }
-    if (btn) btn.addEventListener("click", pedirConexion);
+    // El boton nace apagado en el marcado, que es la verdad mientras no haya
+    // contrato. Despertarlo es cosa de este modulo y solo aqui: si se
+    // olvidase, el dia del despliegue la pagina quedaria con un boton muerto.
+    if (btn) {
+      btn.disabled = false;
+      btn.addEventListener("click", pedirConexion);
+    }
 
     // staking.js guarda referencias a estos dos nodos y les escribe cifras
     // simuladas cada 4,6 s. Sustituirlos por clones deja aquellas escrituras

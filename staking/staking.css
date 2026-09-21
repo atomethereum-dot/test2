@@ -426,3 +426,30 @@ h1{font-size:clamp(34px,5.2vw,66px);color:var(--ink);font-weight:200;line-height
   .panel{transform:none!important}
   .panel-shine{display:none}
 }
+
+/* ============ estado de la pagina: vista previa o en vivo ============
+   Todo cuelga de una sola clase en <html>, que pone staking-chain.js cuando
+   CONTRACTS.staking deja de ser la direccion cero. Por defecto -- y tambien
+   sin JavaScript, que es lo prudente -- manda el texto de vista previa: el
+   contrato no esta desplegado y aqui no se puede depositar nada. No se
+   fuerza ningun display sobre lo que se enseña, solo se oculta lo otro, asi
+   cada elemento conserva el suyo. */
+html:not(.cadena-viva) .solo-vivo{display:none}
+html.cadena-viva .solo-previa{display:none}
+
+/* El boton nace inerte y lo despierta staking-chain.js. Tiene que parecer
+   apagado, no roto: si parece pulsable la gente lo pulsa y no pasa nada. */
+.btn:disabled{
+  opacity:.42;cursor:not-allowed;filter:saturate(.35);
+  box-shadow:none;transform:none!important;
+}
+.btn:disabled:hover{opacity:.42}
+
+/* El aviso de "todavia no" se lee, no se esconde en gris claro. */
+.stake-note.solo-previa{color:#aab3c2;line-height:1.6}
+.stake-note.solo-previa b{color:#fff;font-weight:600}
+
+/* Nota bajo las dos cifras de la portada mientras no hay contrato. */
+.lv-previa{
+  margin:10px 0 0;font-size:11px;line-height:1.55;color:#8b94a3;
+}

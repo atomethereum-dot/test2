@@ -31,7 +31,7 @@
 <link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="staking.css?v=20260820d">
+<link rel="stylesheet" href="staking.css?v=20260921a">
 </head>
 <body>
 <div class="vig" aria-hidden="true"></div>
@@ -47,7 +47,8 @@
     <span class="crumb">Staking</span>
   </div>
   <div class="top-r">
-    <span class="pill live"><i class="dot"></i>Staking open</span>
+    <span class="pill live solo-vivo"><i class="dot"></i>Staking open</span>
+    <span class="pill solo-previa">Contract not yet deployed</span>
     <span class="pill">14.9% target APY</span>
     <span class="pill">Flexible · no lockup</span>
     <a class="btn ghost" href="../index.html">← Main site</a>
@@ -65,8 +66,9 @@
         <p class="eyebrow"><i></i>#SECT Staking</p>
         <h1>Put #SECT to work.</h1>
         <span class="hero-rule" aria-hidden="true"></span>
-        <p class="lead">Stake #SECT and start earning today — Year 1 rewards are funded directly
-          by the Sectora Foundation treasury, so you don't wait on revenue to get started.
+        <p class="lead">Stake #SECT and start earning from the moment you stake — Year 1 rewards
+          are funded directly by the Sectora Foundation treasury, so you don't wait on revenue to
+          get started.
           From Year 2, the same 14.9% target APY is funded by hash market revenue: 80% buys
           back and burns #SECT on the open market, the other 20% pays rewards.</p>
         <div class="hero-cta">
@@ -89,9 +91,9 @@
           </div>
           <div class="gauge-side">
             <div>
-              <span class="s-lbl">Payout frequency</span>
-              <span class="s-big">Daily</span>
-              <span class="s-note">Accrues to your stake automatically</span>
+              <span class="s-lbl">Accrual</span>
+              <span class="s-big">Per second</span>
+              <span class="s-note">Claim your rewards whenever you want</span>
             </div>
             <div>
               <span class="s-lbl">Rewards activate</span>
@@ -118,6 +120,8 @@
           <div><span class="lv-lbl">Total staked</span><b class="num" id="lvStaked">0</b></div>
           <div><span class="lv-lbl">Stakers</span><b class="num" id="lvStakers">0</b></div>
         </div>
+        <p class="lv-previa solo-previa">Zero because the contract is not deployed yet. These two
+          figures are read straight from the contract once it is.</p>
         </div>
       </div>
     </div>
@@ -204,8 +208,11 @@
           <div><span>Monthly</span><b id="outMonth">0.00 #SECT</b></div>
           <div><span>Yearly</span><b id="outYearSm">0.00 #SECT</b></div>
         </div>
-        <button type="button" class="btn primary wide" id="connectBtn">Connect wallet</button>
-        <p class="stake-note">No lockup · unstake anytime · rewards calculated at the 14.9% target rate</p>
+        <button type="button" class="btn primary wide" id="connectBtn" disabled>Connect wallet</button>
+        <p class="stake-note solo-previa"><b>Not live yet.</b> The staking contract has not been
+          deployed to Ethereum mainnet, so nothing can be staked from this page today. The figures
+          above are a calculator at the 14.9% target rate, not a live position.</p>
+        <p class="stake-note solo-vivo">No lockup · unstake anytime · rewards accrue per second at the 14.9% target rate</p>
         </div>
       </div>
 
@@ -219,12 +226,12 @@
         <h3>Terms</h3>
         <ul class="terms-list">
           <li><span>Target APY</span><b>14.9%</b></li>
-          <li><span>Payout</span><b>Daily, auto-compounding</b></li>
+          <li><span>Accrual</span><b>Per second, claim anytime</b></li>
           <li><span>Lockup</span><b>None — flexible</b></li>
           <li><span>Unstake</span><b>Anytime, no penalty</b></li>
           <li><span>Year 1 funding</span><b>Sectora Foundation treasury</b></li>
           <li><span>Year 2+ funding</span><b>Hash market revenue</b></li>
-          <li><span>Rewards start</span><b>Immediately</b></li>
+          <li><span>Rewards start</span><b>The moment you stake</b></li>
         </ul>
         <div class="terms-disclosure">
           <p>14.9% is a target rate, not a guaranteed return. Year 1 is funded directly
@@ -328,11 +335,15 @@
     </div>
     <div class="faq-list reveal">
       <details class="faq-item" open>
-        <summary>Is the 14.9% APY active right now?</summary>
-        <p>Yes. Year 1 rewards are funded directly by the Sectora Foundation treasury, so
-          your #SECT starts accruing the day you stake — you don't wait on hash market
-          revenue to get paid. From Year 2, funding shifts to hash market revenue under the
-          same 80/20 split, and the realized rate then tracks real network usage.</p>
+        <summary>Can I stake right now?</summary>
+        <p class="solo-previa">Not yet. The staking contract is written and covered by an
+          automated test suite, but it has not been deployed to Ethereum mainnet, so there is no
+          address to stake into today. Nothing on this page moves real #SECT until it is. When it goes
+          live this page switches over on its own and this answer changes with it.</p>
+        <p class="solo-vivo">Yes. Year 1 rewards are funded directly by the Sectora Foundation
+          treasury, so your #SECT starts accruing the moment you stake — you don't wait on hash
+          market revenue to get paid. From Year 2, funding shifts to hash market revenue under
+          the same 80/20 split, and the realized rate then tracks real network usage.</p>
       </details>
       <details class="faq-item">
         <summary>Can I unstake whenever I want?</summary>
@@ -358,10 +369,10 @@
 
 </main>
 
-<script src="staking.js?v=20260820c"></script>
+<script src="staking.js?v=20260921a"></script>
 <!-- cableado on-chain. Mientras CONTRACTS siga con direcciones a cero el
      modulo se retira solo y la pagina queda exactamente como esta hoy. -->
 <script src="../ethers.min.js"></script>
-<script src="staking-chain.js?v=20260906a"></script>
+<script src="staking-chain.js?v=20260921a"></script>
 </body>
 </html>
