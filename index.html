@@ -2949,6 +2949,17 @@
   .intro-lock{overflow:hidden!important}
   @media (prefers-reduced-motion:reduce){ .intro{display:none} }
 
+  /* RED DE SEGURIDAD DEL INTRO.
+     El panel azul tapa la pagina entera con position:fixed y z-index 200,
+     y quien lo retira es el JS. Si el JS no corre -- porque falla, porque
+     el rastreador no lo ejecuta o porque su renderizado expira -- lo unico
+     que queda a la vista es "INITIALIZING 00%" sobre azul, con los 10.000
+     caracteres de la pagina debajo sin que nadie los lea.
+     Va condicionado a que falte .intro-lock, que el JS pone en <html> nada
+     mas arrancar: si el JS vive, esto no se dispara nunca. */
+  html:not(.intro-lock) .intro{animation:intro-rescate 1ms linear 8s forwards}
+  @keyframes intro-rescate{to{opacity:0;visibility:hidden;pointer-events:none}}
+
   /* ============ pie ============
      negro, con la reticula de la pagina y la marca en la esquina. Todo el
      movimiento nace del scroll o del puntero: nada gira porque si. */
@@ -3651,6 +3662,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 @media (prefers-reduced-motion:reduce){
 }
 </style>
+<noscript><style>.intro{display:none!important}</style></noscript>
 </head>
 <body>
 
