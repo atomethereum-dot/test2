@@ -125,10 +125,6 @@ p:last-child{margin-bottom:0}
   letter-spacing:.02em; fill:#fff; fill-opacity:.9}
 .lock-data .tab{margin-top:0}
 .lock-cta{display:flex; flex-wrap:wrap; gap:10px 26px; margin:20px 0 0}
-/* el certificado del locker aun no tiene URL: se deja el hueco marcado y
-   sin enlazar, en vez de apuntar a ninguna parte */
-.lock-soon{pointer-events:none; color:var(--ink-4); border-bottom-color:transparent}
-.lock-soon::after{content:' (soon)'; font-size:.86em}
 @media (max-width:760px){
   .lock{grid-template-columns:1fr; gap:26px}
   .lock-art{max-width:238px}
@@ -320,11 +316,9 @@ footer p{max-width:70ch}
           <tr><td>Token standard</td><td>ERC-721</td></tr>
           <tr><td>Held by</td><td>TrustSwap: Team Finance Lock</td></tr>
           <tr><td>Positions contract</td><td class="brk">0xC36442b4a4522E871399CD717aBDD847Ab11FE88</td></tr>
-          <tr><td>Unlock date</td><td>&mdash;</td></tr>
         </table>
         <p class="lock-cta">
           <a href="https://etherscan.io/nft/0xC36442b4a4522E871399CD717aBDD847Ab11FE88/1360231" target="_blank" rel="noopener noreferrer">Verify the owner on Etherscan &#8599;</a>
-          <a class="lock-soon" href="#">Lock certificate on Team Finance &#8599;</a>
         </p>
       </div>
     </div>
