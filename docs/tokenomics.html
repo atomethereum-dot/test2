@@ -111,6 +111,29 @@ p:last-child{margin-bottom:0}
   letter-spacing:-.01em; margin:0 0 4px}
 .fig .n{font-size:13px; color:var(--ink-3); margin:0}
 
+/* bloqueo de liquidez */
+.lock{display:grid; grid-template-columns:238px 1fr; gap:34px; align-items:start; margin:26px 0 0}
+.lock-art svg{width:100%; height:auto; display:block; border-radius:26px;
+  box-shadow:0 18px 44px -18px rgba(10,12,15,.5)}
+.lock-art .lk-addr{font-family:'IBM Plex Mono',monospace; font-size:7.2px;
+  letter-spacing:.06em; fill:#fff; fill-opacity:.62}
+.lock-art .lk-pair{font-family:'IBM Plex Mono',monospace; font-size:27px;
+  letter-spacing:-.01em; fill:#fff}
+.lock-art .lk-fee{font-family:'IBM Plex Mono',monospace; font-size:27px; fill:#fff; fill-opacity:.9}
+.lock-art .lk-pill rect{fill:#0d0a12; fill-opacity:.72}
+.lock-art .lk-pill text{font-family:'IBM Plex Mono',monospace; font-size:11px;
+  letter-spacing:.02em; fill:#fff; fill-opacity:.9}
+.lock-data .tab{margin-top:0}
+.lock-cta{display:flex; flex-wrap:wrap; gap:10px 26px; margin:20px 0 0}
+/* el certificado del locker aun no tiene URL: se deja el hueco marcado y
+   sin enlazar, en vez de apuntar a ninguna parte */
+.lock-soon{pointer-events:none; color:var(--ink-4); border-bottom-color:transparent}
+.lock-soon::after{content:' (soon)'; font-size:.86em}
+@media (max-width:760px){
+  .lock{grid-template-columns:1fr; gap:26px}
+  .lock-art{max-width:238px}
+}
+
 /* nota */
 .note{
   border-left:2px solid var(--blue); background:var(--surface);
@@ -225,7 +248,94 @@ footer p{max-width:70ch}
   </section>
 
   <section>
-    <p class="num">05 · Verification</p>
+    <p class="num">05 · Liquidity lock</p>
+    <h2>The liquidity is not ours to move</h2>
+    <p>The initial liquidity was placed in a Uniswap V3 position and that position has been
+      handed over to Team Finance, a third-party liquidity locker operated by TrustSwap. The
+      position exists as a single ERC-721 token, and ownership of that token now sits with the
+      locker contract, not with the foundation.</p>
+    <p>In practice this means the foundation cannot withdraw the liquidity, reduce it or move
+      it while the lock runs. Not as a promise — as a matter of who holds the key.</p>
+
+    <div class="lock">
+      <div class="lock-art">
+        <!-- La tarjeta de la posicion, redibujada en SVG a partir de los datos
+             on-chain. Va en vectores y no como imagen: asi queda nitida a
+             cualquier tamano y en cualquier densidad de pantalla, que es
+             justo lo que se pierde al ampliar una captura. -->
+        <svg viewBox="0 0 290 500" role="img" aria-label="Uniswap V3 position 1360231, USDT/SECT 0.01%">
+          <defs>
+            <linearGradient id="lk-bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0"   stop-color="#2b1435"/>
+              <stop offset=".42" stop-color="#4a2d4e"/>
+              <stop offset=".72" stop-color="#9a7f63"/>
+              <stop offset="1"   stop-color="#d8c19a"/>
+            </linearGradient>
+            <linearGradient id="lk-cv" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#fff" stop-opacity=".95"/>
+              <stop offset="1" stop-color="#fff" stop-opacity=".55"/>
+            </linearGradient>
+            <clipPath id="lk-cp"><rect x="0" y="0" width="290" height="500" rx="26"/></clipPath>
+          </defs>
+
+          <g clip-path="url(#lk-cp)">
+            <rect width="290" height="500" fill="url(#lk-bg)"/>
+            <rect x="15" y="15" width="260" height="470" rx="18"
+                  fill="#15111b" fill-opacity=".62"/>
+
+            <!-- direcciones de los dos tokens, rotadas en los cantos -->
+            <text class="lk-addr" x="150" y="11" text-anchor="middle">0xdac17f958d2ee523a2206206994597c13d831ec7 · USDT</text>
+            <text class="lk-addr" x="145" y="491" text-anchor="middle"
+                  transform="rotate(180 145 491)">0x8c9984b06281f1ca9416e493c2e602aab08513db · SECT</text>
+
+            <text class="lk-pair" x="34" y="72">USDT/SECT</text>
+            <text class="lk-fee"  x="34" y="112">0.01%</text>
+
+            <!-- el trazo caracteristico de la posicion -->
+            <path d="M62 196 C62 300 84 348 196 372" fill="none"
+                  stroke="url(#lk-cv)" stroke-width="7" stroke-linecap="round"/>
+            <circle cx="62"  cy="196" r="7.5" fill="#fff"/>
+            <circle cx="196" cy="372" r="7.5" fill="#fff"/>
+
+            <g class="lk-pill">
+              <rect x="30" y="398" width="104" height="24" rx="7"/>
+              <text x="42" y="414">ID: 1360231</text>
+              <rect x="30" y="428" width="140" height="24" rx="7"/>
+              <text x="42" y="444">Min Tick: -299354</text>
+              <rect x="30" y="458" width="140" height="24" rx="7"/>
+              <text x="42" y="474">Max Tick: -272270</text>
+            </g>
+
+            <path d="M232 452 C232 432 244 424 256 424" fill="none"
+                  stroke="#fff" stroke-opacity=".8" stroke-width="3.5" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="lock-data">
+        <table class="tab">
+          <tr><th>Lock</th><th>On-chain record</th></tr>
+          <tr><td>Position</td><td>Uniswap V3 — USDT/SECT, 0.01%</td></tr>
+          <tr><td>Token ID</td><td>1360231</td></tr>
+          <tr><td>Token standard</td><td>ERC-721</td></tr>
+          <tr><td>Held by</td><td>TrustSwap: Team Finance Lock</td></tr>
+          <tr><td>Positions contract</td><td class="brk">0xC36442b4a4522E871399CD717aBDD847Ab11FE88</td></tr>
+          <tr><td>Unlock date</td><td>&mdash;</td></tr>
+        </table>
+        <p class="lock-cta">
+          <a href="https://etherscan.io/nft/0xC36442b4a4522E871399CD717aBDD847Ab11FE88/1360231" target="_blank" rel="noopener noreferrer">Verify the owner on Etherscan &#8599;</a>
+          <a class="lock-soon" href="#">Lock certificate on Team Finance &#8599;</a>
+        </p>
+      </div>
+    </div>
+
+    <p class="note">Ownership of the position token is public and can be read straight from
+      Ethereum. Anyone can open the link above and see, without taking our word for it, that
+      the holder is the locker contract and not an address controlled by the foundation.</p>
+  </section>
+
+  <section>
+    <p class="num">06 · Verification</p>
     <h2>Check it without asking us</h2>
     <p>Every claim above is backed by a record held by someone other than the foundation.</p>
     <table class="tab">
