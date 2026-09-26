@@ -3731,8 +3731,10 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   position:relative;background:#000;color:#fff;
   min-height:100vh;min-height:100svh;
   display:flex;align-items:stretch;
-  /* sin margen lateral: la pieza va de borde a borde */
-  padding:0 0 clamp(16px,2.6vh,30px);
+  /* sin margen lateral, para que la pieza vaya de borde a borde; con
+     aire arriba y abajo, porque la seccion anterior va fijada y sin
+     separacion su aviso de "keep scrolling" cae encima del video */
+  padding:clamp(40px,6vh,84px) 0 clamp(28px,4vh,56px);
   --filete:rgba(255,255,255,.16);
   --tinta-2:#b9c2d2;--tinta-3:#7f8899;
   --reserva:230px;            /* lo que ocupan ficha + barra + huecos */
@@ -4953,7 +4955,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     <h2 class="sr-only">Seven percent a month, for seven months.</h2>
 
     <div class="sk-stage">
-      <video class="sk-pieza" id="sk-video" width="1280" height="720"
+      <video class="sk-pieza" id="sk-video" width="1920" height="1080"
              poster="images/staking-season-poster.jpg"
              data-mp4="images/staking-season.mp4" data-webm="images/staking-season.webm"
              data-mp4-v="images/staking-season-v.mp4" data-webm-v="images/staking-season-v.webm"
@@ -5464,11 +5466,11 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       // se queda en 220px de alto y el texto que lleva dentro no se lee
       const vert = window.matchMedia('(max-width: 980px)').matches;
       if (vert && v.dataset.posterV) v.poster = v.dataset.posterV;
+      // el mp4 va primero porque pesa menos que el vp9 y lo reproduce
+      // casi todo; el webm queda de respaldo para quien no lleve H.264
       const fuentes = vert
-        ? [['webmV', 'video/webm'], ['mp4V', 'video/mp4']]
-        : [['webm', 'video/webm'], ['mp4', 'video/mp4']];
-      // dos fuentes y que elija el navegador: webm para los que no
-      // llevan H.264, mp4 para todo lo demas, que es casi todo
+        ? [['mp4V', 'video/mp4'], ['webmV', 'video/webm']]
+        : [['mp4', 'video/mp4'], ['webm', 'video/webm']];
       fuentes.forEach(([k, t]) => {
         const u = v.dataset[k];
         if (!u) return;
