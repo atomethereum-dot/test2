@@ -3424,6 +3424,14 @@ a.pend{cursor:default;opacity:.55;pointer-events:none}
   display:inline-flex;align-items:baseline;gap:6px;transition:color .25s ease}
 .ft-social a:hover{color:#fff}
 .ft-social a em{font-style:normal;font-size:11px;opacity:.6}
+/* Tres enlaces: rejilla de tres columnas con los extremos 1fr, asi el del
+   medio queda en el centro exacto. Con el space-between heredado de 'nav'
+   los huecos son iguales ENTRE enlaces, y como "X" es corto y "CoinGecko"
+   largo, Telegram caia 28 px a la izquierda del centro. */
+.ft-social{display:grid;grid-template-columns:1fr auto 1fr;align-items:baseline}
+.ft-social a:first-child{justify-self:start}
+.ft-social a:nth-child(2){justify-self:center}
+.ft-social a:last-child{justify-self:end}
 .ft-social a.ft-wp-all{color:var(--blue);font-family:'IBM Plex Mono',monospace;
   font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin-left:auto}
 .ft-col a b{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;
