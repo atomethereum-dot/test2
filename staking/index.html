@@ -31,7 +31,7 @@
 <link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="staking.css?v=20260930a">
+<link rel="stylesheet" href="staking.css?v=20260930b">
 </head>
 <body>
 <div class="vig" aria-hidden="true"></div>
@@ -51,6 +51,7 @@
     <span class="pill solo-previa">Contract not yet deployed</span>
     <span class="pill">7% a month · 12 months</span>
     <span class="pill">No lockup</span>
+    <span class="pill">Capped at 10M #SECT</span>
     <a class="btn ghost" href="../index.html">← Main site</a>
   </div>
 </header>
@@ -69,7 +70,7 @@
         <p class="lead">A twelve-month staking season paid by the Sectora Foundation treasury, as a
           marketing and growth program instead of an airdrop. You earn 7% a month on what you
           stake: 3.5% you collect every month, and 3.5% a month that builds up and is paid when
-          the season closes. Nothing is locked.</p>
+          the season closes. Nothing is locked, and the program is capped at 10,000,000 #SECT.</p>
         <p class="lead solo-previa">The contract is written and tested but not deployed yet, so
           nothing can be staked today.</p>
         <div class="hero-cta">
@@ -121,7 +122,12 @@
           <div><span class="lv-lbl">Total staked</span><b class="num" id="lvStaked">0</b></div>
           <div><span class="lv-lbl">Stakers</span><b class="num" id="lvStakers">0</b></div>
         </div>
-        <p class="lv-previa solo-previa">Zero because the contract is not deployed yet. These two
+        <div class="cap">
+          <div class="cap-top"><span class="lv-lbl">Program cap</span><b id="lvCap">0% filled</b></div>
+          <div class="cap-bar" aria-hidden="true"><i id="lvCapBar"></i></div>
+          <span class="cap-note"><b id="lvCapLeft">10,000,000</b> of 10,000,000 #SECT still available</span>
+        </div>
+        <p class="lv-previa solo-previa">Zero because the contract is not deployed yet. These
           figures are read straight from the contract once it is.</p>
         </div>
       </div>
@@ -233,6 +239,7 @@
           <li><span>Paid at the close</span><b>3.5% a month, after month 12</b></li>
           <li><span>Season</span><b>12 months</b></li>
           <li><span>Full season</span><b>84% (42% + 42%)</b></li>
+          <li><span>Program cap</span><b>10,000,000 #SECT</b></li>
           <li><span>Lockup</span><b>None</b></li>
           <li><span>If you withdraw</span><b>24 hours to put it back</b></li>
           <li><span>Funded by</span><b>Sectora Foundation treasury</b></li>
@@ -407,13 +414,20 @@
         <p>An airdrop creates new sellers: people who received tokens for free and sell them.
           This program spends the treasury budget only on #SECT that stays staked, and pays half
           of it at the end. It is a growth program designed to reward holders without pushing
-          the price down.</p>
+          the price down, with a hard cap so its cost to the treasury is known in advance.</p>
       </details>
       <details class="faq-item">
         <summary>Where does the reward money come from?</summary>
         <p>From the Sectora Foundation treasury, deposited into the contract in advance. No new
           tokens are created. If the reward pool ever ran out, rewards would pause until it is
           refilled, instead of promising more than the contract holds.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is there a limit on how much can be staked?</summary>
+        <p>Yes. The whole program takes at most 10,000,000 #SECT, a limit written into the
+          contract. Once it is full, new deposits are refused until space frees up. If you
+          withdraw and the program fills up in the meantime, you can still put your own amount
+          back within your 24-hour window.</p>
       </details>
       <details class="faq-item">
         <summary>Can I join after the season has started?</summary>
@@ -430,6 +444,6 @@
 <!-- cableado on-chain. Mientras CONTRACTS siga con direcciones a cero el
      modulo se retira solo y la pagina queda exactamente como esta hoy. -->
 <script src="../ethers.min.js"></script>
-<script src="staking-chain.js?v=20260930a"></script>
+<script src="staking-chain.js?v=20260930b"></script>
 </body>
 </html>

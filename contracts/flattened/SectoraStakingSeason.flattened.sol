@@ -882,14 +882,17 @@ abstract contract ReentrancyGuard {
 ///     a month; the other 3.5% a month goes to a final balance paid in one
 ///     settlement when the season closes.
 ///  3. NO LOCK. unstake() always works, immediately, in full.
-///  4. THE 24-HOUR WINDOW. Taking principal out below your high-water mark
+///  4. A HARD CAP. At most 10,000,000 #SECT can be staked in the program,
+///     so the treasury's total cost is bounded in code: 8,400,000 #SECT
+///     for a full season at the cap.
+///  5. THE 24-HOUR WINDOW. Taking principal out below your high-water mark
 ///     opens a 24-hour window. Put it back within the window and nothing is
 ///     lost. Let the window close and every reward not yet collected --
 ///     monthly and final alike -- is forfeited back to the pool, and
 ///     accrual restarts from the new balance. What was already collected
 ///     stays collected.
 ///
-/// The high-water mark is what makes rule 4 exploit-resistant. Without it,
+/// The high-water mark is what makes rule 5 exploit-resistant. Without it,
 /// an account could withdraw 99.9% of its principal, leave one wei behind
 /// so it never technically "exits", and keep rewards that were accrued on
 /// the full amount. Here any drop below the peak opens the window, so the
@@ -933,6 +936,9 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
 
     /// @notice Length of the season: twelve months from deployment.
     uint256 public constant SEASON = 12 * MONTH;
+
+    /// @notice Most #SECT the program can hold in stakes at once.
+    uint256 public constant MAX_TOTAL_STAKED = 10_000_000 ether;
 
     /// @notice How long an account has to restore its stake before the
     /// uncollected reward is forfeited. Fixed: stakers need to know this
@@ -1092,6 +1098,16 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
         require(block.timestamp < seasonEnd, "Season: closed");
 
         _touch(msg.sender);
+
+        // The cap applies to new capacity, not to someone putting back what
+        // they took out: a staker inside their 24-hour window can always
+        // restore up to their own peak, even if others filled the program in
+        // the meantime. Otherwise a full program would turn a withdrawal into
+        // a forfeit the staker could do nothing about. The overshoot this
+        // allows is bounded by the open windows and lasts at most 24 hours.
+        Account storage cur = accounts[msg.sender];
+        bool restoring = cur.graceUntil != 0 && cur.amount + amount <= cur.peakAmount;
+        require(restoring || totalStaked + amount <= MAX_TOTAL_STAKED, "Season: program full");
 
         // measured, not assumed: a fee-on-transfer token would credit more
         // than actually arrived and leave the last withdrawer unable to exit
@@ -1359,6 +1375,11 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
             stakerCount,
             block.timestamp
         );
+    }
+
+    /// @notice How much more #SECT the program can take before the cap.
+    function remainingCapacity() external view returns (uint256) {
+        return totalStaked >= MAX_TOTAL_STAKED ? 0 : MAX_TOTAL_STAKED - totalStaked;
     }
 
     /// @notice Seconds the current pool can keep paying at the current

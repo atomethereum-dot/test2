@@ -13,9 +13,10 @@ de marketing y crecimiento en lugar de un airdrop.
 | Duración | **12 meses** desde el despliegue (`seasonEnd`) |
 | Total si se queda los 12 meses | **84 %**: 42 % en mensualidades + 42 % al final |
 | Bloqueo | **Ninguno**: `unstake` funciona siempre |
+| Tope del programa | **10.000.000 #SECT** en staking como máximo. Coste máximo para la tesorería: **8.400.000 #SECT** |
 | Ventana de 24 h | Si alguien retira por debajo de su máximo, tiene 24 h para volver a depositar. Si no vuelve, pierde todo lo **no cobrado** (mensual y final). Lo ya cobrado no se toca. |
 
-La tasa, el reparto 50/50, los 12 meses y las 24 h son **constantes**. Nadie,
+La tasa, el reparto 50/50, los 12 meses, el tope de 10M y las 24 h son **constantes**. Nadie,
 tampoco el dueño, puede cambiarlos después de desplegar.
 
 ---
@@ -37,7 +38,7 @@ tampoco el dueño, puede cambiarlos después de desplegar.
 
 | Operación | Gas | Quién paga |
 |---|---|---|
-| Desplegar | **2.012.625** | tú, una vez |
+| Desplegar | **2.069.369** | tú, una vez |
 | `approve` del fondo | ~46.000 | tú |
 | `fundRewards` | ~98.000 | tú, cada recarga |
 | `setStakingPaused(false)` | ~25.000 | tú, una vez |
@@ -112,7 +113,7 @@ fondo necesario = total depositado × 0,84      (12 meses completos)
 |---|---|
 | 1.000.000 #SECT | 840.000 #SECT |
 | 5.000.000 #SECT | 4.200.000 #SECT |
-| 10.000.000 #SECT | 8.400.000 #SECT |
+| 10.000.000 #SECT (el tope) | 8.400.000 #SECT (el máximo posible) |
 
 Puedes cargar por tramos. Dos lecturas te dicen si vas bien:
 
@@ -162,6 +163,8 @@ En *Read Contract*:
 - `seasonEnd()` → fecha de despliegue + 365 días (conviértela en
   epochconverter.com)
 - `rewardPool()` → lo que cargaste
+- `MAX_TOTAL_STAKED()` → `10000000000000000000000000` (10M con 18 decimales)
+- `remainingCapacity()` → cuánto cupo queda
 - `stakingPaused()` → `false`
 - `owner()` → tu wallet
 
@@ -177,6 +180,10 @@ comprueba con `accountView` que no perdiste nada.
   ninguna función del dueño toca depósitos ni recompensas ya devengadas.
 - `unstake` y `emergencyWithdraw` funcionan siempre, aunque el fondo esté
   vacío o los depósitos cerrados.
+- El tope de 10M se aplica a gente nueva, no a quien repone lo suyo: si
+  alguien retira y el programa se llena mientras tanto, puede volver a
+  depositar lo suyo dentro de las 24 h igualmente. Así un programa lleno
+  nunca le quita a nadie lo acumulado.
 - El atajo de sacar el 99,9 % dejando 1 wei dentro no funciona: la ventana
   de 24 h se abre en cuanto el saldo baja de su máximo.
 - Con la ventana abierta no se puede cobrar el mensual, así que nadie puede
@@ -185,7 +192,7 @@ comprueba con `accountView` que no perdiste nada.
 - `nonReentrant` en toda función que mueve tokens, y la cantidad recibida se
   mide en vez de suponerse.
 
-Probado en cadena local: **51 pruebas, todas pasan**
+Probado en cadena local: **61 pruebas, todas pasan**
 (`node scripts/test-season.js`), incluida una temporada completa de 12 meses
 que paga exactamente 84 % (420 en mensualidades + 420 al final sobre 1.000).
 
@@ -194,7 +201,6 @@ que paga exactamente 84 % (420 en mensualidades + 420 al final sobre 1.000).
 - **No está auditado.** Las pruebas comprueban lo que se me ocurrió
   comprobar. Para un contrato que va a guardar dinero de la gente, una
   auditoría antes de abrirlo al público es lo recomendable.
-- **Financiar el fondo.** 84 % al año es mucho. Si 10M #SECT entran en
-  staking, son 8,4M #SECT de la tesorería en 12 meses. Decide el tope que
-  estás dispuesto a pagar y cierra los depósitos con `setStakingPaused(true)`
-  cuando lo alcances.
+- **Financiar el fondo.** Con el programa lleno (10M) son 8,4M #SECT de la
+  tesorería en 12 meses. Carga por tramos según vaya entrando gente y
+  vigila `fundingGap()`.

@@ -46,6 +46,7 @@
     "function accountView(address) view returns (uint256 staked, uint256 monthlyRewards, uint256 finalRewards, uint256 nextMonthlyAt, uint256 peak, uint256 restoreBy, uint256 walletBalance, uint256 allowance)",
     "function poolView() view returns (uint256 staked, uint256 pool, uint256 rate, uint256 endsAt, bool paused, bool depositsPaused, uint256 stakers, uint256 chainTime)",
     "function stakingToken() view returns (address)",
+    "function MAX_TOTAL_STAKED() view returns (uint256)",
   ];
 
   const ZERO = "0x0000000000000000000000000000000000000000";
@@ -118,6 +119,7 @@
     const m = (e && (e.shortMessage || e.reason || e.message)) || "";
     if (/user rejected|ACTION_REJECTED/i.test(m)) return "Cancelled in your wallet.";
     if (/deposits paused/i.test(m)) return "Deposits are not open yet.";
+    if (/program full/i.test(m)) return "Not enough room left in the program for that amount. See the capacity still available above.";
     if (/Season: closed/i.test(m)) return "The season is closed to new deposits.";
     if (/monthly not ready/i.test(m)) return "Your next monthly collection is not ready yet.";
     if (/restore your stake first/i.test(m)) return "Put your stake back first: your 24-hour window is open.";
@@ -148,6 +150,7 @@
 
   let horaCadena = 0;
   let finTemporada = 0;
+  let tope = 0n;
   let decimales = 18;   // provisional hasta leerlo del token
 
   async function pintarPool() {
@@ -157,6 +160,18 @@
       finTemporada = Number(pv.endsAt);
       if (elStaked) elStaked.textContent = fmt(pv.staked, 0) + " #SECT";
       if (elStakers) elStakers.textContent = pv.stakers.toString();
+
+      // barra del cupo: el tope se lee del contrato, no se da por hecho
+      if (!tope) tope = await staking.MAX_TOTAL_STAKED();
+      const lleno = pv.staked >= tope ? 10000n : (pv.staked * 10000n) / tope;
+      const pct = Number(lleno) / 100;
+      const libre = pv.staked >= tope ? 0n : tope - pv.staked;
+      const eCap = $("lvCap"), eBar = $("lvCapBar"), eLeft = $("lvCapLeft");
+      // se redondea hacia abajo: con 500 libres de 10M no puede decir "100%"
+      const pctTxt = pct < 10 || pct >= 99 ? (Math.floor(pct * 10) / 10).toFixed(1) : String(Math.floor(pct));
+      if (eCap) eCap.textContent = libre === 0n ? "Full" : pctTxt + "% filled";
+      if (eBar) eBar.style.width = Math.min(pct, 100) + "%";
+      if (eLeft) eLeft.textContent = fmt(libre, 0);
 
       if (pv.paused) aviso("Rewards paused: the reward pool is waiting to be refilled.", true);
       else if (pv.depositsPaused && horaCadena < finTemporada) aviso("Deposits are not open yet.");

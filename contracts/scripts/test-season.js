@@ -251,6 +251,34 @@ async function main() {
   await (await seg2.connect(alice).emergencyWithdraw(GAS)).wait();
   cerca((await saldo(alice)) - antes, 1000, 0, "emergencyWithdraw devuelve el deposito siempre");
 
+  // --- 10. tope del programa: 10M #SECT ---------------------------
+  console.log("\n=== 10. tope de 10M ===");
+  const seg3 = await Seg.deploy(await tok.getAddress(), { gasLimit: 4000000 });
+  await seg3.waitForDeployment();
+  const s3 = await seg3.getAddress();
+  ok((await seg3.MAX_TOTAL_STAKED()) === E("10000000"), "el tope es 10.000.000 #SECT");
+  await (await tok.connect(deployer).approve(s3, E("20000000"), GAS)).wait();
+  for (const q of [alice, bob]) await (await tok.connect(q).approve(s3, E("1000000"), GAS)).wait();
+  await (await seg3.connect(deployer).fundRewards(E("100000"), GAS)).wait();
+  await (await seg3.connect(deployer).setStakingPaused(false, GAS)).wait();
+  await (await seg3.connect(deployer).stake(E("9999000"), GAS)).wait();
+  cerca(N(await seg3.remainingCapacity()), 1000, 0, "quedan 1.000 de cupo");
+  await revierte(() => seg3.connect(alice).stake.staticCall(E("1001"), GAS), "no se puede pasar del tope", "program full");
+  await (await seg3.connect(alice).stake(E("1000"), GAS)).wait();
+  ok((await seg3.remainingCapacity()) === 0n, "el programa queda lleno exactamente en 10M");
+  await revierte(() => seg3.connect(bob).stake.staticCall(E("1"), GAS), "lleno: nadie nuevo entra", "program full");
+
+  await (await seg3.connect(alice).unstake(E("400"), GAS)).wait();
+  await (await seg3.connect(bob).stake(E("400"), GAS)).wait();
+  ok((await seg3.remainingCapacity()) === 0n, "bob ocupa el hueco que dejo alice");
+  await revierte(() => seg3.connect(alice).stake.staticCall(E("401"), GAS), "alice no puede reponer mas de su maximo", "program full");
+  await (await seg3.connect(alice).stake(E("400"), GAS)).wait();
+  ok((await seg3.accountView(await dir(alice))).restoreBy === 0n, "pero SI puede reponer lo suyo dentro de las 24 h aunque este lleno");
+  cerca(N(await seg3.totalStaked()), 10000400, 0, "exceso temporal acotado a lo repuesto");
+  await (await seg3.connect(alice).unstake(E("400"), GAS)).wait();
+  await avanzar(25 * HORA);
+  await revierte(() => seg3.connect(alice).stake.staticCall(E("400"), GAS), "con la ventana cerrada vuelve a contar el tope", "program full");
+
   // --- gas de cada operacion para la guia -------------------------
   console.log(`\n================  ${pasan} pasan, ${fallan} fallan  ================`);
   process.exit(fallan ? 1 : 0);
