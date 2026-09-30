@@ -7,16 +7,16 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sectoraorg.com/staking">
 <meta property="og:title" content="Sectora Foundation — #SECT Staking">
-<meta property="og:description" content="Staking is in progress and not yet deployed. Year 1 rewards are funded by the Sectora Foundation treasury; from Year 2, the same 14.9% target is funded by hash market revenue — 80% buys back and burns #SECT, 20% funds rewards.">
+<meta property="og:description" content="Twelve-month #SECT staking season funded by the Sectora Foundation treasury as a growth program instead of an airdrop: 7% a month, 3.5% collected monthly and 3.5% at the close, no lockup.">
 <meta property="og:image" content="https://sectoraorg.com/staking/og-image.jpg">
 <meta property="og:image:width" content="1920">
 <meta property="og:image:height" content="1080">
 <meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Sectora Foundation — #SECT Staking">
-<meta name="twitter:description" content="Staking is in progress and not yet deployed. Year 1 rewards are funded by the Sectora Foundation treasury; from Year 2, the same 14.9% target is funded by hash market revenue — 80% buys back and burns #SECT, 20% funds rewards.">
+<meta name="twitter:description" content="Twelve-month #SECT staking season funded by the Sectora Foundation treasury as a growth program instead of an airdrop: 7% a month, 3.5% collected monthly and 3.5% at the close, no lockup.">
 <meta name="twitter:image" content="https://sectoraorg.com/staking/og-image.jpg">
-<meta name="description" content="Staking is in progress and not yet deployed. Year 1 rewards come from the Sectora Foundation treasury; from Year 2, hash market revenue funds the same target.">
+<meta name="description" content="#SECT staking season: 7% a month for 12 months, funded by the Sectora Foundation treasury. 3.5% collected every month, 3.5% paid at the close. No lockup.">
 <link rel="icon" type="image/png" sizes="192x192" href="/icons/v2/icon-192.png">
 <link rel="icon" type="image/png" sizes="144x144" href="/icons/v2/favicon-144x144.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/icons/v2/favicon-96x96.png">
@@ -31,7 +31,7 @@
 <link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="staking.css?v=20260921a">
+<link rel="stylesheet" href="staking.css?v=20260930a">
 </head>
 <body>
 <div class="vig" aria-hidden="true"></div>
@@ -49,8 +49,8 @@
   <div class="top-r">
     <span class="pill live solo-vivo"><i class="dot"></i>Staking open</span>
     <span class="pill solo-previa">Contract not yet deployed</span>
-    <span class="pill">14.9% target APY</span>
-    <span class="pill">Flexible · no lockup</span>
+    <span class="pill">7% a month · 12 months</span>
+    <span class="pill">No lockup</span>
     <a class="btn ghost" href="../index.html">← Main site</a>
   </div>
 </header>
@@ -63,20 +63,15 @@
     <div class="hero-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <div class="hero-in">
       <div class="hero-txt">
-        <p class="eyebrow"><i></i>#SECT Staking</p>
+        <p class="eyebrow"><i></i>#SECT Staking Season</p>
         <h1>Put #SECT to work.</h1>
         <span class="hero-rule" aria-hidden="true"></span>
-        <p class="lead solo-previa">Staking is in progress: the contract is written and tested,
-          but it is not deployed yet, so nothing can be staked today. Once it is live, Year 1
-          rewards are funded directly by the Sectora Foundation treasury, so you don't wait on
-          revenue to get started. From Year 2, the same 14.9% target APY is funded by hash
-          market revenue: 80% buys back and burns #SECT on the open market, the other 20% pays
-          rewards.</p>
-        <p class="lead solo-vivo">Stake #SECT and start earning from the moment you stake — Year 1
-          rewards are funded directly by the Sectora Foundation treasury, so you don't wait on
-          revenue to get started. From Year 2, the same 14.9% target APY is funded by hash
-          market revenue: 80% buys back and burns #SECT on the open market, the other 20% pays
-          rewards.</p>
+        <p class="lead">A twelve-month staking season paid by the Sectora Foundation treasury, as a
+          marketing and growth program instead of an airdrop. You earn 7% a month on what you
+          stake: 3.5% you collect every month, and 3.5% a month that builds up and is paid when
+          the season closes. Nothing is locked.</p>
+        <p class="lead solo-previa">The contract is written and tested but not deployed yet, so
+          nothing can be staked today.</p>
         <div class="hero-cta">
           <a class="btn primary" href="#stake">Stake #SECT <em>↓</em></a>
           <a class="btn ghost" href="../dash/index.html">Open in Dashboard</a>
@@ -93,31 +88,31 @@
         <div class="gauge-row">
           <div class="gauge-wrap">
             <canvas id="apyRing" width="152" height="152" aria-hidden="true"></canvas>
-            <div class="gauge-mid"><b>14.9<small>%</small></b><span>Target APY</span></div>
+            <div class="gauge-mid"><b>7<small>%</small></b><span>A month</span></div>
           </div>
           <div class="gauge-side">
             <div>
-              <span class="s-lbl">Accrual</span>
-              <span class="s-big">Per second</span>
-              <span class="s-note">Claim your rewards whenever you want</span>
+              <span class="s-lbl">Season</span>
+              <span class="s-big">12 months</span>
+              <span class="s-note">Rewards accrue every second, from your first deposit</span>
             </div>
             <div>
-              <span class="s-lbl">Rewards activate</span>
-              <span class="s-big">Day one</span>
-              <span class="s-note">Year 1: treasury-funded · Year 2+: hash market revenue</span>
+              <span class="s-lbl">Full season</span>
+              <span class="s-big">84%</span>
+              <span class="s-note">42% collected monthly + 42% paid at the close</span>
             </div>
           </div>
         </div>
 
         <div class="stat-split">
-          <span class="sp-lbl">How each hash sale splits</span>
+          <span class="sp-lbl">How each 7% is paid</span>
           <div class="split-row">
             <div class="ring-wrap sm">
               <canvas id="splitRing" width="88" height="88" aria-hidden="true"></canvas>
             </div>
             <div class="sp-keys">
-              <span><i class="k a"></i><b>80%</b> buys back &amp; burns #SECT</span>
-              <span><i class="k b"></i><b>20%</b> funds APY, expansion, team</span>
+              <span><i class="k a"></i><b>3.5%</b> collect it every month</span>
+              <span><i class="k b"></i><b>3.5%</b> builds up, paid at the close</span>
             </div>
           </div>
         </div>
@@ -136,12 +131,13 @@
   <section class="sect why" id="why">
     <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
-      <h2>Why Year 1 comes from the treasury</h2>
-      <span>A deliberate bootstrap, not a shortfall</span>
+      <h2>Why staking instead of an airdrop</h2>
+      <span>A growth program paid by the treasury, for a limited time</span>
     </div>
 
-    <p class="why-lede reveal">Waiting for revenue to mature before paying a single reward would leave the
-      people who show up first holding nothing while the network gets built. So the Foundation flips the order:</p>
+    <p class="why-lede reveal">Most projects grow by giving tokens away. Those tokens land with people who
+      have no reason to keep them, and they are sold into the market the same week. The Foundation chose
+      the opposite: put the same treasury budget behind the people who hold.</p>
 
     <div class="handoff reveal">
       <div class="handoff-card y1 panel">
@@ -151,9 +147,9 @@
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
-          <span class="handoff-yr">Year 1</span>
-          <span class="handoff-src">Treasury funded</span>
-          <p>Real #SECT, paid daily, from the day you stake — not a promise deferred to a future milestone.</p>
+          <span class="handoff-yr">Airdrop</span>
+          <span class="handoff-src">Tokens given away</span>
+          <p>New supply goes to wallets that did nothing to earn it. Most of it is sold, and every holder pays for that in price.</p>
         </div>
       </div>
 
@@ -169,22 +165,22 @@
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
-          <span class="handoff-yr">Year 2+</span>
-          <span class="handoff-src">Revenue funded</span>
-          <p>80% of every hash sale burns #SECT, 20% funds rewards — self-sustaining, no treasury needed.</p>
+          <span class="handoff-yr">Staking season</span>
+          <span class="handoff-src">Rewards for holding</span>
+          <p>Rewards go only to #SECT that stays staked, and half of them are paid at the close. Holding is what pays.</p>
         </div>
       </div>
     </div>
 
-    <p class="why-punch reveal">Early stakers take the real risk. The Foundation makes sure they get paid
-      first — not last.</p>
+    <p class="why-punch reveal">An airdrop pays people to leave. This season pays people to stay. It is safer
+      for the project and it scales with the people who believe in it.</p>
   </section>
 
   <section class="sect" id="stake">
     <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
       <h2>Estimate your rewards</h2>
-      <span>Illustrative of the target rate — Year 1 rewards are funded by the treasury and accrue from day one</span>
+      <span>7% a month on what you stake, over the twelve-month season</span>
     </div>
 
     <div class="stake-grid">
@@ -204,21 +200,22 @@
         </div>
         <div class="chart-wrap">
           <div class="chart-head">
-            <span>12-month projection</span>
+            <span>12-month season · cumulative rewards</span>
             <b id="outYear">0.00 #SECT</b>
           </div>
           <canvas id="growthChart" width="600" height="180" aria-hidden="true"></canvas>
+          <div class="chart-key"><span><i class="k a"></i>Collected month by month</span><span><i class="k b"></i>Paid at the close</span></div>
         </div>
         <div class="stake-out">
-          <div><span>Daily</span><b id="outDay">0.00 #SECT</b></div>
-          <div><span>Monthly</span><b id="outMonth">0.00 #SECT</b></div>
-          <div><span>Yearly</span><b id="outYearSm">0.00 #SECT</b></div>
+          <div><span>Collect every month</span><b id="outMonth">0.00 #SECT</b></div>
+          <div><span>Paid at the close</span><b id="outFinal">0.00 #SECT</b></div>
+          <div><span>Full season</span><b id="outYearSm">0.00 #SECT</b></div>
         </div>
         <button type="button" class="btn primary wide" id="connectBtn" disabled>Connect wallet</button>
         <p class="stake-note solo-previa"><b>Not live yet.</b> The staking contract has not been
           deployed to Ethereum mainnet, so nothing can be staked from this page today. The figures
-          above are a calculator at the 14.9% target rate, not a live position.</p>
-        <p class="stake-note solo-vivo">No lockup · unstake anytime · rewards accrue per second at the 14.9% target rate</p>
+          above are a calculator for someone who stays the full twelve months, not a live position.</p>
+        <p class="stake-note solo-vivo">No lockup · 3.5% to collect every month · 3.5% a month paid at the close · 24 hours to put back what you withdraw</p>
         </div>
       </div>
 
@@ -231,43 +228,33 @@
         <div class="panel-in">
         <h3>Terms</h3>
         <ul class="terms-list">
-          <li><span>Target APY</span><b>14.9%</b></li>
-          <li><span>Accrual</span><b>Per second, claim anytime</b></li>
-          <li><span>Lockup</span><b>None — flexible</b></li>
-          <li><span>Unstake</span><b>Anytime, no penalty</b></li>
-          <li><span>Year 1 funding</span><b>Sectora Foundation treasury</b></li>
-          <li><span>Year 2+ funding</span><b>Hash market revenue</b></li>
-          <li><span>Rewards start</span><b>The moment you stake</b></li>
+          <li><span>Rewards</span><b>7% a month</b></li>
+          <li><span>Collect monthly</span><b>3.5% a month, once a month</b></li>
+          <li><span>Paid at the close</span><b>3.5% a month, after month 12</b></li>
+          <li><span>Season</span><b>12 months</b></li>
+          <li><span>Full season</span><b>84% (42% + 42%)</b></li>
+          <li><span>Lockup</span><b>None</b></li>
+          <li><span>If you withdraw</span><b>24 hours to put it back</b></li>
+          <li><span>Funded by</span><b>Sectora Foundation treasury</b></li>
         </ul>
         <div class="terms-disclosure">
-          <p>14.9% is a target rate, not a guaranteed return. Year 1 is funded directly
-            from the Sectora Foundation treasury — a deliberate bootstrap so early stakers get
-            paid from day one instead of waiting on revenue. From Year 2, funding shifts to
-            hash market revenue under the same 80/20 split, and the realized rate then moves
-            with actual network usage. See the
-            <a href="https://sectoraorg.com/docs#s08" target="_blank" rel="noopener noreferrer">whitepaper</a>
-            for the full mechanism and the treasury allocation behind Year 1.</p>
+          <p>7% a month is the rate the contract pays while its reward pool is funded, not a
+            guaranteed return. Every reward is paid from #SECT the treasury deposits in advance;
+            nothing is minted. If the pool ran dry, rewards would stop accruing until it is
+            refilled rather than promise what cannot be paid. The treasury cannot take the pool
+            back until the season is over. The contract has been tested but not externally
+            audited.</p>
         </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="sect" id="feed">
-    <div class="head reveal">
-      <h2>Network staking activity</h2>
-      <span>Simulated preview feed — illustrative of staking activity, not real transactions</span>
-    </div>
-    <div class="feed-box reveal">
-      <div class="feed-list" id="feedList"></div>
-    </div>
-  </section>
-
-  <section class="sect" id="verify">
+  <section class="sect" id="window">
     <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
-      <h2>Why this isn't just a promised number</h2>
-      <span>The mechanism behind the 14.9% target, in three parts</span>
+      <h2>The 24-hour window</h2>
+      <span>Nothing is locked. Leaving just has a clock on it.</span>
     </div>
     <div class="grid3">
       <div class="pqc-card panel reveal" style="--d:0.00s">
@@ -278,11 +265,9 @@
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">01</span>
-        <span class="pqc-tag">Guaranteed for Year 1</span>
-        <h3>Funded directly by the treasury</h3>
-        <p>The Foundation allocates treasury funds to cover Year 1 rewards in full — a
-          scheduled disbursement disclosed in the whitepaper, not a discretionary pool. It's
-          there so early stakers get paid before the network needs to carry that cost itself.</p>
+        <span class="pqc-tag">You withdraw</span>
+        <h3>Your #SECT comes back immediately</h3>
+        <p>You can take out part or all of your stake at any moment, with no penalty and no waiting period. The moment your balance drops below its highest point, a 24-hour window opens.</p>
         </div>
       </div>
       <div class="pqc-card panel reveal" style="--d:0.06s">
@@ -293,11 +278,9 @@
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">02</span>
-        <span class="pqc-tag">Revenue, not emissions</span>
-        <h3>Funded by hash market sales</h3>
-        <p>Every hash purchase splits by a fixed, published rule: 80% buys back and burns
-          #SECT on the open market, 20% funds APY rewards, protocol expansion and the team.
-          Nothing is minted to pay stakers.</p>
+        <span class="pqc-tag">Within 24 hours</span>
+        <h3>Put it back and nothing is lost</h3>
+        <p>Deposit the amount again before the window closes and everything you had accrued is still there, monthly and final balance alike. The season carries on as if you never left.</p>
         </div>
       </div>
       <div class="pqc-card panel reveal" style="--d:0.12s">
@@ -308,11 +291,9 @@
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">03</span>
-        <span class="pqc-tag">Deflationary by design</span>
-        <h3>The other 80% shrinks supply</h3>
-        <p>Every #SECT bought back with hash revenue is burned instantly — permanently
-          removed from circulating supply. Staking rewards and supply reduction are funded
-          by the same transaction, not competing budgets.</p>
+        <span class="pqc-tag">After 24 hours</span>
+        <h3>Uncollected rewards go back to the pool</h3>
+        <p>If the window closes, every reward you had not collected yet is forfeited and returns to the reward pool for the stakers who stayed. Anything you already collected is yours to keep.</p>
         </div>
       </div>
       <div class="pqc-card panel reveal" style="--d:0.18s">
@@ -323,12 +304,71 @@
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">04</span>
-        <span class="pqc-tag">Verify it yourself</span>
-        <h3>Read from the chain</h3>
-        <p>Buybacks, burns and reward payouts are on-chain events — check them in the
-          Dashboard's Hash Market panel or directly on the explorer, instead of taking our
-          word for it.</p>
-        <a class="link-go" href="../dash/index.html" target="_blank" rel="noopener noreferrer">Open the Dashboard <em>↗</em></a>
+        <span class="pqc-tag">No shortcuts</span>
+        <h3>Leaving one token behind does not count</h3>
+        <p>The window opens whenever your balance falls below its peak, not only when it reaches zero. Withdrawing almost everything and leaving a dust amount inside does not keep the rewards.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect" id="verify">
+    <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
+    <div class="head reveal">
+      <h2>Why this isn't just a promised number</h2>
+      <span>The rules live in the contract, not in an announcement</span>
+    </div>
+    <div class="grid3">
+      <div class="pqc-card panel reveal" style="--d:0.00s">
+        <span class="panel-glow" aria-hidden="true"></span>
+        <span class="panel-grid" aria-hidden="true"></span>
+        <span class="panel-vig" aria-hidden="true"></span>
+        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
+        <div class="panel-in">
+        <span class="panel-num" aria-hidden="true">01</span>
+        <span class="pqc-tag">Funded before it's paid</span>
+        <h3>Every reward is deposited first</h3>
+        <p>#SECT has no mint function and its ownership is renounced. The treasury transfers the reward budget into the contract before it is paid out, and the size of that pool is public on-chain.</p>
+        </div>
+      </div>
+      <div class="pqc-card panel reveal" style="--d:0.06s">
+        <span class="panel-glow" aria-hidden="true"></span>
+        <span class="panel-grid" aria-hidden="true"></span>
+        <span class="panel-vig" aria-hidden="true"></span>
+        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
+        <div class="panel-in">
+        <span class="panel-num" aria-hidden="true">02</span>
+        <span class="pqc-tag">No pulling out</span>
+        <h3>The treasury is committed for the season</h3>
+        <p>Once #SECT is in the reward pool, the contract does not let the owner take it back until the twelve months are over. Rewards already earned by stakers are out of the owner's reach entirely.</p>
+        </div>
+      </div>
+      <div class="pqc-card panel reveal" style="--d:0.12s">
+        <span class="panel-glow" aria-hidden="true"></span>
+        <span class="panel-grid" aria-hidden="true"></span>
+        <span class="panel-vig" aria-hidden="true"></span>
+        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
+        <div class="panel-in">
+        <span class="panel-num" aria-hidden="true">03</span>
+        <span class="pqc-tag">Fixed in code</span>
+        <h3>Nobody can change the rules mid-season</h3>
+        <p>7% a month, the 3.5% / 3.5% split, the twelve-month season and the 24-hour window are constants in the contract. They cannot be edited after anyone has staked.</p>
+        </div>
+      </div>
+      <div class="pqc-card panel reveal" style="--d:0.18s">
+        <span class="panel-glow" aria-hidden="true"></span>
+        <span class="panel-grid" aria-hidden="true"></span>
+        <span class="panel-vig" aria-hidden="true"></span>
+        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="panel-shine" aria-hidden="true"></span>
+        <div class="panel-in">
+        <span class="panel-num" aria-hidden="true">04</span>
+        <span class="pqc-tag">Your deposit is yours</span>
+        <h3>Principal never pays anyone else</h3>
+        <p>Staked #SECT and reward #SECT are accounted separately. No function lets a deposit be paid out as someone else's reward, and withdrawing always works, even if the pool is empty.</p>
         </div>
       </div>
     </div>
@@ -344,41 +384,52 @@
         <summary>Can I stake right now?</summary>
         <p class="solo-previa">Not yet. The staking contract is written and covered by an
           automated test suite, but it has not been deployed to Ethereum mainnet, so there is no
-          address to stake into today. Nothing on this page moves real #SECT until it is. When it goes
-          live this page switches over on its own and this answer changes with it.</p>
-        <p class="solo-vivo">Yes. Year 1 rewards are funded directly by the Sectora Foundation
-          treasury, so your #SECT starts accruing the moment you stake — you don't wait on hash
-          market revenue to get paid. From Year 2, funding shifts to hash market revenue under
-          the same 80/20 split, and the realized rate then tracks real network usage.</p>
+          address to stake into today. When it goes live this page switches over on its own.</p>
+        <p class="solo-vivo">Yes. Connect your wallet above, enter an amount and stake. Rewards
+          start accruing from that moment.</p>
+      </details>
+      <details class="faq-item">
+        <summary>When can I collect my rewards?</summary>
+        <p>Every reward is split in two as it accrues. The monthly half (3.5% a month) can be
+          collected one month after your first deposit, and then once a month. The other half
+          (3.5% a month) builds up and is paid in one go when the twelve-month season closes,
+          together with any monthly balance you have not collected.</p>
       </details>
       <details class="faq-item">
         <summary>Can I unstake whenever I want?</summary>
-        <p>Yes. This is flexible staking — no lockup period, no early-unstake penalty. Your
-          principal is available on demand; only accrued rewards depend on revenue timing.</p>
+        <p>Yes. There is no lockup and no penalty on your deposit. If you withdraw, you have 24
+          hours to put it back and keep everything you had accrued. After that, rewards you had
+          not collected yet go back to the pool. While the window is open the monthly collection
+          waits until your stake is restored.</p>
       </details>
       <details class="faq-item">
-        <summary>Where does the reward money actually come from?</summary>
-        <p>Two phases. Year 1: a scheduled disbursement from the Sectora Foundation treasury,
-          disclosed in the whitepaper — not new token issuance or presale proceeds. From Year
-          2: 20% of every hash market sale, published and verifiable on-chain. Once revenue
-          takes over, if hash market revenue is zero, realized rewards for that period are
-          zero, regardless of what the target rate says.</p>
+        <summary>Why a staking season and not an airdrop?</summary>
+        <p>An airdrop creates new sellers: people who received tokens for free and sell them.
+          This program spends the treasury budget only on #SECT that stays staked, and pays half
+          of it at the end. It is a growth program designed to reward holders without pushing
+          the price down.</p>
       </details>
       <details class="faq-item">
-        <summary>How is this different from staking on the Dashboard?</summary>
-        <p>Same mechanism, same contract — this page is the dedicated place to understand
-          the mechanics and estimate rewards. Wallet connection and live position management
-          happen in the Dashboard.</p>
+        <summary>Where does the reward money come from?</summary>
+        <p>From the Sectora Foundation treasury, deposited into the contract in advance. No new
+          tokens are created. If the reward pool ever ran out, rewards would pause until it is
+          refilled, instead of promising more than the contract holds.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I join after the season has started?</summary>
+        <p>Yes, as long as the season is open. The season has one fixed closing date for
+          everyone, so you earn 7% a month for the months you are in, and your final balance is
+          paid at that closing date.</p>
       </details>
     </div>
   </section>
 
 </main>
 
-<script src="staking.js?v=20260921a"></script>
+<script src="staking.js?v=20260930a"></script>
 <!-- cableado on-chain. Mientras CONTRACTS siga con direcciones a cero el
      modulo se retira solo y la pagina queda exactamente como esta hoy. -->
 <script src="../ethers.min.js"></script>
-<script src="staking-chain.js?v=20260921a"></script>
+<script src="staking-chain.js?v=20260930a"></script>
 </body>
 </html>

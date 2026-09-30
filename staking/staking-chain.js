@@ -25,7 +25,7 @@
     // MAINNET: aqui se mueve #SECT de verdad
     chainId: "0x1", // Ethereum mainnet
     token: "0x8C9984B06281f1CA9416e493c2E602AaB08513db", // #SECT
-    staking: "0x0000000000000000000000000000000000000000", // pendiente de desplegar
+    staking: "0x0000000000000000000000000000000000000000", // SectoraStakingSeason, pendiente de desplegar
   };
 
   const TOKEN_ABI = [
@@ -35,19 +35,16 @@
     "function decimals() view returns (uint8)",
   ];
 
+  // SectoraStakingSeason: 7% al mes, 12 meses, mitad mensual y mitad al
+  // cierre, ventana de 24 h. Ver contracts/DEPLOY_STAKING_SEASON.md
   const STAKING_ABI = [
     "function stake(uint256 amount)",
     "function unstake(uint256 amount)",
-    "function claim()",
-    "function emergencyWithdraw()",
+    "function claimMonthly()",
+    "function claimFinal()",
     "function earned(address) view returns (uint256)",
-    "function accountView(address) view returns (uint256 staked, uint256 pendingRewards, uint256 unlocksAt, uint256 walletBalance, uint256 allowance)",
-    "function poolView() view returns (uint256 staked, uint256 pool, uint256 rate, uint256 lock, bool paused, uint256 stakers, uint256 chainTime)",
-    "function stakerCount() view returns (uint256)",
-    "function runwaySeconds() view returns (uint256)",
-    "function totalStaked() view returns (uint256)",
-    "function rewardPool() view returns (uint256)",
-    "function rateBps() view returns (uint256)",
+    "function accountView(address) view returns (uint256 staked, uint256 monthlyRewards, uint256 finalRewards, uint256 nextMonthlyAt, uint256 peak, uint256 restoreBy, uint256 walletBalance, uint256 allowance)",
+    "function poolView() view returns (uint256 staked, uint256 pool, uint256 rate, uint256 endsAt, bool paused, bool depositsPaused, uint256 stakers, uint256 chainTime)",
     "function stakingToken() view returns (address)",
   ];
 
@@ -120,8 +117,12 @@
   function explicar(e) {
     const m = (e && (e.shortMessage || e.reason || e.message)) || "";
     if (/user rejected|ACTION_REJECTED/i.test(m)) return "Cancelled in your wallet.";
-    if (/still locked/i.test(m)) return "Still inside the lock period.";
-    if (/nothing to claim/i.test(m)) return "Nothing to claim yet.";
+    if (/deposits paused/i.test(m)) return "Deposits are not open yet.";
+    if (/Season: closed/i.test(m)) return "The season is closed to new deposits.";
+    if (/monthly not ready/i.test(m)) return "Your next monthly collection is not ready yet.";
+    if (/restore your stake first/i.test(m)) return "Put your stake back first: your 24-hour window is open.";
+    if (/not over yet/i.test(m)) return "The final balance is paid when the season closes.";
+    if (/nothing to claim/i.test(m)) return "Nothing to collect yet.";
     if (/amount above stake/i.test(m)) return "More than you have staked.";
     if (/insufficient allowance|ERC20InsufficientAllowance/i.test(m))
       return "The token spend has not been approved.";
@@ -130,53 +131,75 @@
     return m.slice(0, 140) || "The transaction failed.";
   }
 
+  /** Segundos a "3 d 4 h" / "5 h 12 min". */
+  function plazo(seg) {
+    seg = Math.max(0, Math.floor(seg));
+    const d = Math.floor(seg / 86400), h = Math.floor((seg % 86400) / 3600), mi = Math.floor((seg % 3600) / 60);
+    // por debajo de 2 dias se cuenta en horas: la ventana de 24 h se lee
+    // mejor como "23 h 59 min" que como "0 d 23 h"
+    if (seg >= 2 * 86400) return d + " d " + h + " h";
+    if (seg >= 3600) return Math.floor(seg / 3600) + " h " + mi + " min";
+    return mi + " min";
+  }
+
   // ---------------------------------------------------------------
   // lectura
   // ---------------------------------------------------------------
 
   let horaCadena = 0;
+  let finTemporada = 0;
   let decimales = 18;   // provisional hasta leerlo del token
 
   async function pintarPool() {
     try {
       const pv = await staking.poolView();
       horaCadena = Number(pv.chainTime);
+      finTemporada = Number(pv.endsAt);
       if (elStaked) elStaked.textContent = fmt(pv.staked, 0) + " #SECT";
       if (elStakers) elStakers.textContent = pv.stakers.toString();
 
-      // el anillo y la calculadora de staking.js usan 14,9 fijo; si el
-      // contrato lleva otra tasa, manda el contrato
-      const apy = Number(pv.rate) / 100;
-      document.querySelectorAll("[data-apy]").forEach((el) => {
-        el.textContent = apy.toFixed(2) + "%";
-      });
-
-      if (pv.paused) {
-        aviso("Accrual paused: the reward pool is empty.", true);
-      }
+      if (pv.paused) aviso("Rewards paused: the reward pool is waiting to be refilled.", true);
+      else if (pv.depositsPaused && horaCadena < finTemporada) aviso("Deposits are not open yet.");
     } catch (e) {
       console.warn("[sectora] no pude leer poolView", e);
     }
   }
 
+  let ultimaCuenta = null;
+
   async function pintarCuenta() {
     if (!cuenta) return;
     try {
       const v = await staking.accountView(cuenta);
+      ultimaCuenta = v;
+      // contra el reloj de la cadena, no el del navegador
+      const ahora = horaCadena || Math.floor(Date.now() / 1000);
+      const cerrada = finTemporada > 0 && ahora >= finTemporada;
       const partes = [];
       partes.push("Staked " + fmt(v.staked) + " #SECT");
-      partes.push("pending " + fmt(v.pendingRewards, 4));
-      if (v.staked > 0n) {
-        // contra el reloj de la cadena, no el del navegador: en la prueba de
-        // punta a punta los dos iban separados por años y el aviso decia
-        // "se desbloquea en 3225 d" sobre un deposito sin bloqueo
-        const ahora = horaCadena || Math.floor(Date.now() / 1000);
-        const faltan = Number(v.unlocksAt) - ahora;
-        partes.push(
-          faltan > 0
-            ? "unlocks in " + Math.ceil(faltan / 86400) + " d"
-            : "unlocked"
+
+      let mensual = "monthly " + fmt(v.monthlyRewards, 4);
+      if (!cerrada && v.nextMonthlyAt > 0n) {
+        const faltan = Number(v.nextMonthlyAt) - ahora;
+        mensual += faltan > 0 ? " (collect in " + plazo(faltan) + ")" : " (ready)";
+      }
+      partes.push(mensual);
+      partes.push(
+        "at the close " + fmt(v.finalRewards, 4) +
+        (cerrada ? " (ready)" : finTemporada ? " (in " + plazo(finTemporada - ahora) + ")" : "")
+      );
+
+      if (v.restoreBy > 0n) {
+        const quedan = Number(v.restoreBy) - ahora;
+        const falta = fmt(v.peak - v.staked);
+        aviso(
+          partes.join(" · ") + " — " +
+          (quedan > 0
+            ? "Put back " + falta + " #SECT within " + plazo(quedan) + " to keep your rewards."
+            : "Your 24-hour window closed; uncollected rewards were returned to the pool."),
+          true
         );
+        return;
       }
       aviso(partes.join(" · "));
     } catch (e) {
@@ -251,11 +274,29 @@
     };
 
     nuevo("Stake #SECT", depositar);
-    nuevo("Claim rewards", () => enviar("Claiming", () => staking.connect(firmante).claim()));
+    nuevo("Collect monthly", () =>
+      enviar("Collecting", () => staking.connect(firmante).claimMonthly())
+    );
+    nuevo("Collect final", () =>
+      enviar("Collecting", () => staking.connect(firmante).claimFinal())
+    );
     nuevo("Unstake", async () => {
       const v = await staking.accountView(cuenta);
       if (v.staked === 0n) return aviso("You have nothing staked.", true);
-      enviar("Retirando", () => staking.connect(firmante).unstake(v.staked));
+      // si hay cantidad escrita se retira esa; si no, todo
+      const txt = entrada && entrada.value ? entrada.value.replace(/,/g, "") : "";
+      let cantidad = v.staked;
+      if (txt && Number(txt) > 0) {
+        cantidad = parse(txt);
+        if (cantidad > v.staked) return aviso("More than you have staked.", true);
+      }
+      const cerrada = finTemporada > 0 && (horaCadena || Date.now() / 1000) >= finTemporada;
+      if (!cerrada && !window.confirm(
+        "Withdrawing " + fmt(cantidad) + " #SECT opens a 24-hour window.\n\n" +
+        "Put it back within 24 hours and you keep everything you have accrued. " +
+        "If you don't, every reward you have not collected yet goes back to the pool.\n\nContinue?"
+      )) return;
+      enviar("Withdrawing", () => staking.connect(firmante).unstake(cantidad));
     });
 
     btn.parentNode.appendChild(caja);

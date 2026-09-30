@@ -198,6 +198,8 @@ h1{font-size:clamp(34px,5.2vw,66px);color:var(--ink);font-weight:200;line-height
 .chart-head span{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;
   text-transform:uppercase;color:var(--ink4)}
 .chart-head b{font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--blue2);font-variant-numeric:tabular-nums}
+.chart-key{display:flex;flex-wrap:wrap;gap:6px 18px;margin:8px 0 6px;font-size:11px;color:var(--ink3)}
+.chart-key span{display:inline-flex;align-items:center;gap:7px}
 #growthChart{display:block;width:100%;height:auto}
 
 .stake-out{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hair);
@@ -251,6 +253,9 @@ h1{font-size:clamp(34px,5.2vw,66px);color:var(--ink);font-weight:200;line-height
 .pqc-tag{align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;
   text-transform:uppercase;color:var(--blue2);border:1px solid rgba(21,105,255,.3);
   background:rgba(21,105,255,.08);padding:5px 9px;border-radius:2px}
+/* el contenido va dentro de .panel-in, asi que el gap del flex de la
+   tarjeta no le llegaba: la etiqueta, el titulo y el texto iban pegados */
+.pqc-card > .panel-in{display:flex;flex-direction:column;gap:12px}
 .pqc-card h3{font-size:17px;color:var(--ink);font-weight:400}
 .pqc-card p{font-size:13px;color:var(--ink3);line-height:1.65}
 .link-go{align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;
