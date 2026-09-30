@@ -7,84 +7,83 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /// @title Sectora Staking Season
-/// @notice A fixed-length staking season with no lock. Stakers can leave
-/// whenever they want, but rewards are paid in a single settlement at the
-/// end of the season, and leaving without coming back forfeits everything
-/// accrued so far.
+/// @notice A twelve-month staking season paid by the Sectora Foundation
+/// treasury as a marketing and growth program, instead of an airdrop. An
+/// airdrop hands tokens to people who sell them; this pays people for
+/// holding them.
 ///
-/// The design answers one question: how do you reward people for holding
-/// without taking their tokens hostage? A lock does it by force. This does
-/// it by making the reward worth more than the exit.
+/// THE RULES
 ///
-/// THE THREE RULES
+///  1. 7% A MONTH. Rewards accrue every second at 7% of principal per
+///     month (84% a year, linear, no compounding), for twelve months.
+///  2. HALF MONTHLY, HALF AT THE END. Every reward is split as it accrues:
+///     3.5% a month goes to a monthly balance the staker can collect once
+///     a month; the other 3.5% a month goes to a final balance paid in one
+///     settlement when the season closes.
+///  3. NO LOCK. unstake() always works, immediately, in full.
+///  4. THE 24-HOUR WINDOW. Taking principal out below your high-water mark
+///     opens a 24-hour window. Put it back within the window and nothing is
+///     lost. Let the window close and every reward not yet collected --
+///     monthly and final alike -- is forfeited back to the pool, and
+///     accrual restarts from the new balance. What was already collected
+///     stays collected.
 ///
-///  1. NO LOCK. unstake() always works, immediately, in full.
-///  2. NO EARLY CLAIM. claim() reverts until seasonEnd. Everything accrued
-///     is settled in one payment after the season closes.
-///  3. THE STREAK. Taking principal out below your high-water mark opens a
-///     24-hour window. Put it back within the window and nothing is lost.
-///     Let the window close and every reward accrued so far is forfeited
-///     back to the pool, and accrual restarts from the new balance.
-///
-/// The high-water mark is what makes rule 3 exploit-resistant. Without it,
+/// The high-water mark is what makes rule 4 exploit-resistant. Without it,
 /// an account could withdraw 99.9% of its principal, leave one wei behind
 /// so it never technically "exits", and keep rewards that were accrued on
 /// the full amount. Here any drop below the peak opens the window, so the
 /// only way to keep the accrued reward is to actually restore the stake.
 ///
-/// ON MAINNET THIS HOLDS REAL VALUE. Inherited from SectoraStaking and kept
-/// deliberately:
+/// ON MAINNET THIS HOLDS REAL VALUE.
 ///
 ///  - Rewards are NEVER minted. #SECT is renounced and has no mint
 ///    function. Every token paid out was transferred in beforehand via
 ///    fundRewards().
-///  - Accrual moves tokens out of rewardPool as it happens, so the owner's
-///    withdraw functions -- bounded by rewardPool -- can never reach a
-///    reward that has already been booked to an account. During a season
-///    where nobody can claim for months, that property is the whole reason
-///    the promise is credible.
+///  - Accrual moves tokens out of rewardPool as it happens, so a reward
+///    already booked to an account is outside the owner's reach.
+///  - The owner cannot take back unallocated reward tokens until the
+///    season is over. Whatever the treasury puts in stays available to
+///    stakers for the whole twelve months.
+///  - The rate and the season length are constants. Nobody can change
+///    them after people have staked.
 ///  - The rate is a target, not a debt. If the pool empties, accrual stops
 ///    at the last funded second rather than promising what cannot be paid.
 ///
 /// Stake token and reward token are the same ERC-20, so the contract's
 /// balance holds both principal and reward pool. They are tracked
 /// separately (totalStaked / rewardPool) and every payout is checked
-/// against rewardPool alone: one staker's principal can never leave as
+/// against booked rewards alone: one staker's principal can never leave as
 /// another staker's reward.
 contract SectoraStakingSeason is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
-    /// @dev Rates are in basis points. 8400 = 84.00% per year, which is the
-    /// linear equivalent of 7.00% per month.
     uint256 public constant BPS = 10_000;
     uint256 public constant YEAR = 365 days;
 
-    /// @dev Ceiling on the configurable rate. Not a business preference: it
-    /// bounds how fast a compromised or fat-fingered owner could drain the
-    /// reward pool.
-    uint256 public constant MAX_RATE_BPS = 10_000;
+    /// @notice One month of the season: a twelfth of a year, 30.42 days.
+    uint256 public constant MONTH = YEAR / 12;
 
-    /// @dev How long an account has to restore its stake before the accrued
-    /// reward is forfeited. Fixed, not configurable: stakers need to know
-    /// this number cannot be shortened under them after they have staked.
+    /// @notice 8400 bps = 84.00% a year = 7.00% a month, linear.
+    uint256 public constant RATE_BPS = 8_400;
+
+    /// @notice Share of every reward that goes to the monthly balance.
+    /// 5000 = half: 3.5% a month collectable monthly, 3.5% at the end.
+    uint256 public constant MONTHLY_SHARE_BPS = 5_000;
+
+    /// @notice Length of the season: twelve months from deployment.
+    uint256 public constant SEASON = 12 * MONTH;
+
+    /// @notice How long an account has to restore its stake before the
+    /// uncollected reward is forfeited. Fixed: stakers need to know this
+    /// number cannot be shortened under them after they have staked.
     uint256 public constant GRACE_WINDOW = 24 hours;
-
-    /// @dev Bounds on the season length, checked at construction. A season
-    /// that could be set to a century would be a lock by another name,
-    /// since rewards are unclaimable until it ends.
-    uint256 public constant MIN_SEASON = 7 days;
-    uint256 public constant MAX_SEASON = 400 days;
 
     IERC20 public immutable stakingToken;
 
-    /// @notice When the season closes. Accrual stops here and claiming
-    /// opens here. Immutable: the owner cannot move the finish line after
-    /// people have staked against it.
+    /// @notice When the season closes. Accrual stops here, the final
+    /// balance becomes payable here, and the owner may recover leftovers
+    /// from here on.
     uint256 public immutable seasonEnd;
-
-    /// @notice Target annual rate in basis points. 8400 = 84.00% per year
-    /// = 7.00% per month.
-    uint256 public rateBps;
 
     /// @notice Sum of every account's principal. Never includes rewards.
     uint256 public totalStaked;
@@ -103,17 +102,20 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
     /// @dev Set once the pool cannot cover accrual any more.
     bool public accrualPaused;
 
-    /// @notice Stops NEW deposits. One-directional in what it can do:
-    /// withdrawing, claiming and the emergency exit stay open, so it can
-    /// never be used to lock anyone in.
-    bool public stakingPaused;
+    /// @notice Stops NEW deposits. Starts true so nobody can stake before
+    /// the pool is funded; the owner opens deposits after funding.
+    /// Withdrawing, collecting and the emergency exit are never affected,
+    /// so it can never be used to lock anyone in.
+    bool public stakingPaused = true;
 
     struct Account {
         uint256 amount; // principal
         uint256 rewardDebt; // accumulator checkpoint, scaled by 1e18
-        uint256 pending; // rewards accrued, payable only after seasonEnd
+        uint256 monthly; // collectable once a month
+        uint256 deferred; // payable only after seasonEnd
         uint256 peakAmount; // high-water principal for the current streak
         uint256 graceUntil; // 0 when whole; otherwise the restore deadline
+        uint256 nextMonthlyAt; // earliest time of the next monthly collection
     }
 
     mapping(address => Account) public accounts;
@@ -122,23 +124,19 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
     event Unstaked(address indexed account, uint256 amount, uint256 graceUntil);
     event StreakRestored(address indexed account, uint256 amount);
     event StreakBroken(address indexed account, uint256 forfeited, uint256 restartsAt);
-    event RewardClaimed(address indexed account, uint256 amount);
+    event MonthlyClaimed(address indexed account, uint256 amount, uint256 nextAt);
+    event FinalClaimed(address indexed account, uint256 amount);
     event RewardsFunded(address indexed from, uint256 amount, uint256 poolAfter);
     event RewardsWithdrawn(address indexed to, uint256 amount, uint256 poolAfter);
-    event RateChanged(uint256 oldRateBps, uint256 newRateBps);
     event AccrualPaused(uint256 atTimestamp, uint256 poolRemaining);
     event AccrualResumed(uint256 atTimestamp, uint256 poolRemaining);
     event EmergencyWithdrawn(address indexed account, uint256 amount, uint256 forfeited);
     event StakingPausedChanged(bool paused);
 
-    constructor(address _stakingToken, uint256 _rateBps, uint256 _seasonSeconds) Ownable(msg.sender) {
+    constructor(address _stakingToken) Ownable(msg.sender) {
         require(_stakingToken != address(0), "Season: token is zero");
-        require(_rateBps <= MAX_RATE_BPS, "Season: rate above max");
-        require(_seasonSeconds >= MIN_SEASON, "Season: too short");
-        require(_seasonSeconds <= MAX_SEASON, "Season: too long");
         stakingToken = IERC20(_stakingToken);
-        rateBps = _rateBps;
-        seasonEnd = block.timestamp + _seasonSeconds;
+        seasonEnd = block.timestamp + SEASON;
         lastUpdate = block.timestamp;
     }
 
@@ -154,7 +152,7 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
         uint256 upTo = block.timestamp < seasonEnd ? block.timestamp : seasonEnd;
         if (upTo <= lastUpdate) return 0;
         uint256 elapsed = upTo - lastUpdate;
-        return (totalStaked * rateBps * elapsed) / (BPS * YEAR);
+        return (totalStaked * RATE_BPS * elapsed) / (BPS * YEAR);
     }
 
     /// @dev Moves the accumulator forward. If the pool cannot cover the
@@ -176,12 +174,16 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
         lastUpdate = block.timestamp;
     }
 
-    /// @dev Books an account's share of the accumulator into `pending`.
+    /// @dev Books an account's share of the accumulator, split between the
+    /// monthly and the final balance.
     function _settle(address who) internal {
         Account storage a = accounts[who];
         if (a.amount > 0) {
             uint256 acc = (a.amount * accRewardPerToken) / 1e18;
-            a.pending += acc - a.rewardDebt;
+            uint256 delta = acc - a.rewardDebt;
+            uint256 toMonthly = (delta * MONTHLY_SHARE_BPS) / BPS;
+            a.monthly += toMonthly;
+            a.deferred += delta - toMonthly;
         }
         a.rewardDebt = (a.amount * accRewardPerToken) / 1e18;
     }
@@ -192,7 +194,7 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
     ///
     /// There is deliberately no "the season is over, you are safe" branch.
     /// A window that closed in month two must still forfeit at claim time
-    /// in month seven, otherwise walking away early and reappearing at the
+    /// in month twelve, otherwise walking away early and reappearing at the
     /// end would pay exactly the same as never leaving.
     function _enforceStreak(address who) internal {
         Account storage a = accounts[who];
@@ -204,12 +206,19 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
         }
         if (block.timestamp <= a.graceUntil) return; // still inside the window
 
-        uint256 lost = a.pending;
-        a.pending = 0;
+        uint256 lost = a.monthly + a.deferred;
+        a.monthly = 0;
+        a.deferred = 0;
         a.peakAmount = a.amount; // accrual restarts from what is actually there
         a.graceUntil = 0;
         if (lost > 0) rewardPool += lost; // back to the pool, never to the owner
         emit StreakBroken(who, lost, a.amount);
+    }
+
+    function _touch(address who) internal {
+        _update();
+        _settle(who);
+        _enforceStreak(who);
     }
 
     // ---------------------------------------------------------------
@@ -221,9 +230,7 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
         require(amount > 0, "Season: amount is zero");
         require(block.timestamp < seasonEnd, "Season: closed");
 
-        _update();
-        _settle(msg.sender);
-        _enforceStreak(msg.sender);
+        _touch(msg.sender);
 
         // measured, not assumed: a fee-on-transfer token would credit more
         // than actually arrived and leave the last withdrawer unable to exit
@@ -236,6 +243,10 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
         if (a.amount == 0) stakerCount += 1;
         a.amount += received;
         totalStaked += received;
+
+        // the monthly clock starts with the first deposit and keeps its own
+        // rhythm after that; topping up does not push it back
+        if (a.nextMonthlyAt == 0) a.nextMonthlyAt = block.timestamp + MONTH;
 
         if (a.amount >= a.peakAmount) {
             if (a.graceUntil != 0) {
@@ -258,9 +269,7 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
         require(amount > 0, "Season: amount is zero");
         require(a.amount >= amount, "Season: amount above stake");
 
-        _update();
-        _settle(msg.sender);
-        _enforceStreak(msg.sender);
+        _touch(msg.sender);
 
         a.amount -= amount;
         if (a.amount == 0) stakerCount -= 1;
@@ -277,28 +286,48 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
         emit Unstaked(msg.sender, amount, a.graceUntil);
     }
 
-    /// @notice Collect the season's rewards. Reverts until the season
-    /// closes: that single settlement is the point of the design.
-    function claim() external nonReentrant {
-        require(block.timestamp >= seasonEnd, "Season: not over yet");
-
-        _update();
-        _settle(msg.sender);
-        _enforceStreak(msg.sender);
+    /// @notice Collect the monthly half: 3.5% a month. Available one month
+    /// after the first deposit and then once a month. Blocked while a
+    /// restore window is open, so nobody can pull principal, collect, and
+    /// walk away with a reward the window was about to forfeit.
+    function claimMonthly() external nonReentrant {
+        _touch(msg.sender);
 
         Account storage a = accounts[msg.sender];
-        uint256 amount = a.pending;
+        require(a.graceUntil == 0, "Season: restore your stake first");
+        require(a.nextMonthlyAt != 0 && block.timestamp >= a.nextMonthlyAt, "Season: monthly not ready");
+        uint256 amount = a.monthly;
         require(amount > 0, "Season: nothing to claim");
-        a.pending = 0;
+
+        a.monthly = 0;
+        a.nextMonthlyAt = block.timestamp + MONTH;
 
         // the tokens left rewardPool during _update, so this transfer can
         // never reach into anyone's principal
         stakingToken.safeTransfer(msg.sender, amount);
-        emit RewardClaimed(msg.sender, amount);
+        emit MonthlyClaimed(msg.sender, amount, a.nextMonthlyAt);
     }
 
-    /// @notice Withdraw principal immediately, forfeiting all rewards. The
-    /// escape hatch that stops a paused pool from trapping anyone's money.
+    /// @notice Collect everything left -- the final half plus any monthly
+    /// balance not yet collected. Reverts until the season closes.
+    function claimFinal() external nonReentrant {
+        require(block.timestamp >= seasonEnd, "Season: not over yet");
+
+        _touch(msg.sender);
+
+        Account storage a = accounts[msg.sender];
+        uint256 amount = a.monthly + a.deferred;
+        require(amount > 0, "Season: nothing to claim");
+        a.monthly = 0;
+        a.deferred = 0;
+
+        stakingToken.safeTransfer(msg.sender, amount);
+        emit FinalClaimed(msg.sender, amount);
+    }
+
+    /// @notice Withdraw principal immediately, forfeiting every reward not
+    /// yet collected. The escape hatch that stops a paused pool or any
+    /// other failure from trapping anyone's money.
     function emergencyWithdraw() external nonReentrant {
         Account storage a = accounts[msg.sender];
         uint256 amount = a.amount;
@@ -307,13 +336,15 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
         _update();
         _settle(msg.sender);
 
-        uint256 forfeited = a.pending;
+        uint256 forfeited = a.monthly + a.deferred;
         stakerCount -= 1;
         a.amount = 0;
-        a.pending = 0;
+        a.monthly = 0;
+        a.deferred = 0;
         a.rewardDebt = 0;
         a.peakAmount = 0;
         a.graceUntil = 0;
+        a.nextMonthlyAt = 0;
         totalStaked -= amount;
 
         // what they give up goes back to the pool, not to the owner
@@ -345,10 +376,11 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
         emit RewardsFunded(msg.sender, received, rewardPool);
     }
 
-    /// @notice Recover unallocated reward tokens. Bounded by rewardPool, so
-    /// the owner can never touch staked principal or a reward already
-    /// booked to an account.
+    /// @notice Recover unallocated reward tokens once the season is over.
+    /// Bounded by rewardPool, so it can never touch staked principal or a
+    /// reward already booked to an account.
     function withdrawRewards(address to, uint256 amount) external onlyOwner nonReentrant {
+        require(block.timestamp >= seasonEnd, "Season: not over yet");
         require(to != address(0), "Season: to is zero");
         _update();
         require(amount > 0 && amount <= rewardPool, "Season: amount above pool");
@@ -357,11 +389,9 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
         emit RewardsWithdrawn(to, amount, rewardPool);
     }
 
-    /// @notice Recover the whole unallocated pool. Reading rewardPool
-    /// off-chain and passing it to withdrawRewards always reverts by a
-    /// hair, because _update() shrinks it in between; here the amount is
-    /// read after the update, inside the same call.
+    /// @notice Recover the whole unallocated pool once the season is over.
     function withdrawAllRewards(address to) external onlyOwner nonReentrant {
+        require(block.timestamp >= seasonEnd, "Season: not over yet");
         require(to != address(0), "Season: to is zero");
         _update();
         uint256 amount = rewardPool;
@@ -375,14 +405,6 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
     // admin
     // ---------------------------------------------------------------
 
-    function setRate(uint256 newRateBps) external onlyOwner {
-        require(newRateBps <= MAX_RATE_BPS, "Season: rate above max");
-        _update(); // settle at the old rate before it changes
-        uint256 old = rateBps;
-        rateBps = newRateBps;
-        emit RateChanged(old, newRateBps);
-    }
-
     function setStakingPaused(bool paused) external onlyOwner {
         stakingPaused = paused;
         emit StakingPausedChanged(paused);
@@ -392,24 +414,36 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
     // views for the interface
     // ---------------------------------------------------------------
 
-    /// @notice Rewards booked to an account right now, including the window
-    /// since the last write. Returns 0 if the restore window has already
-    /// closed below the high-water mark, so the page never shows a figure
-    /// the contract would refuse to pay.
-    function earned(address who) external view returns (uint256) {
+    /// @notice Rewards booked to an account right now, split into the
+    /// monthly and the final balance, including the window since the last
+    /// write. Both are 0 if the restore window has already closed below the
+    /// high-water mark, so the page never shows a figure the contract would
+    /// refuse to pay.
+    function earnedSplit(address who) public view returns (uint256 monthly, uint256 deferred) {
         Account storage a = accounts[who];
 
         bool broken = a.graceUntil != 0 && a.amount < a.peakAmount && block.timestamp > a.graceUntil;
-        if (broken) return 0;
+        if (broken) return (0, 0);
 
-        if (a.amount == 0) return a.pending;
+        monthly = a.monthly;
+        deferred = a.deferred;
+        if (a.amount == 0) return (monthly, deferred);
 
         uint256 acc = accRewardPerToken;
         uint256 owed = _pendingGlobal();
         if (owed > rewardPool) owed = rewardPool;
         if (owed > 0 && totalStaked > 0) acc += (owed * 1e18) / totalStaked;
 
-        return a.pending + ((a.amount * acc) / 1e18) - a.rewardDebt;
+        uint256 delta = ((a.amount * acc) / 1e18) - a.rewardDebt;
+        uint256 toMonthly = (delta * MONTHLY_SHARE_BPS) / BPS;
+        monthly += toMonthly;
+        deferred += delta - toMonthly;
+    }
+
+    /// @notice Total rewards booked to an account right now.
+    function earned(address who) external view returns (uint256) {
+        (uint256 m, uint256 d) = earnedSplit(who);
+        return m + d;
     }
 
     /// @notice Everything the staking page needs, in one call.
@@ -418,20 +452,21 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
         view
         returns (
             uint256 staked,
-            uint256 pendingRewards,
+            uint256 monthlyRewards,
+            uint256 finalRewards,
+            uint256 nextMonthlyAt,
             uint256 peak,
             uint256 restoreBy,
-            uint256 claimableAt,
             uint256 walletBalance,
             uint256 allowance
         )
     {
         Account storage a = accounts[who];
         staked = a.amount;
-        pendingRewards = this.earned(who);
+        (monthlyRewards, finalRewards) = earnedSplit(who);
+        nextMonthlyAt = a.nextMonthlyAt;
         peak = a.peakAmount;
         restoreBy = a.graceUntil;
-        claimableAt = seasonEnd;
         walletBalance = stakingToken.balanceOf(who);
         allowance = stakingToken.allowance(who, address(this));
     }
@@ -446,31 +481,41 @@ contract SectoraStakingSeason is Ownable, ReentrancyGuard {
             uint256 rate,
             uint256 endsAt,
             bool paused,
+            bool depositsPaused,
             uint256 stakers,
             uint256 chainTime
         )
     {
         // chainTime is here so the interface counts down against the chain
         // clock and not the browser's, which can be far apart
-        return (totalStaked, rewardPool, rateBps, seasonEnd, accrualPaused, stakerCount, block.timestamp);
+        return (
+            totalStaked,
+            rewardPool,
+            RATE_BPS,
+            seasonEnd,
+            accrualPaused,
+            stakingPaused,
+            stakerCount,
+            block.timestamp
+        );
     }
 
-    /// @notice Seconds the current pool can keep paying at the current rate
-    /// and stake level. The honest version of an APY badge: it says how
-    /// long the advertised rate is actually funded for.
+    /// @notice Seconds the current pool can keep paying at the current
+    /// stake level. The honest version of an APY badge: it says how long
+    /// the advertised rate is actually funded for.
     function runwaySeconds() external view returns (uint256) {
-        if (totalStaked == 0 || rateBps == 0) return type(uint256).max;
-        uint256 perSecond = (totalStaked * rateBps) / (BPS * YEAR);
+        if (totalStaked == 0) return type(uint256).max;
+        uint256 perSecond = (totalStaked * RATE_BPS) / (BPS * YEAR);
         if (perSecond == 0) return type(uint256).max;
         return rewardPool / perSecond;
     }
 
     /// @notice What it would cost to fund the rest of the season at the
-    /// current stake level and rate. The number to check before funding.
+    /// current stake level. The number to check before funding.
     function fundingGap() external view returns (uint256) {
-        if (block.timestamp >= seasonEnd || rateBps == 0) return 0;
+        if (block.timestamp >= seasonEnd) return 0;
         uint256 remaining = seasonEnd - block.timestamp;
-        uint256 needed = (totalStaked * rateBps * remaining) / (BPS * YEAR);
+        uint256 needed = (totalStaked * RATE_BPS * remaining) / (BPS * YEAR);
         return needed > rewardPool ? needed - rewardPool : 0;
     }
 }
