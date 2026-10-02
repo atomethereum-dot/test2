@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sectora Foundation — #SECT Staking</title>
+<title>Sectora Foundation — #SECT Holder Rewards</title>
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sectoraorg.com/staking">
-<meta property="og:title" content="Sectora Foundation — #SECT Staking">
-<meta property="og:description" content="The Sectora Foundation #SECT staking program is being finalised. Its terms will be published here before the contract goes live.">
+<meta property="og:title" content="Sectora Foundation — #SECT Holder Rewards">
+<meta property="og:description" content="#SECT holders earn 14.9% APY, paid by the Sectora Foundation treasury. No lock-up, claim any time, capped at 10M #SECT.">
 <meta property="og:image" content="https://sectoraorg.com/staking/og-image.jpg">
 <meta property="og:image:width" content="1920">
 <meta property="og:image:height" content="1080">
 <meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Sectora Foundation — #SECT Staking">
-<meta name="twitter:description" content="The Sectora Foundation #SECT staking program is being finalised. Its terms will be published here before the contract goes live.">
+<meta name="twitter:title" content="Sectora Foundation — #SECT Holder Rewards">
+<meta name="twitter:description" content="#SECT holders earn 14.9% APY, paid by the Sectora Foundation treasury. No lock-up, claim any time, capped at 10M #SECT.">
 <meta name="twitter:image" content="https://sectoraorg.com/staking/og-image.jpg">
-<meta name="description" content="The Sectora Foundation #SECT staking program is being finalised. Its terms will be published here before the contract goes live.">
+<meta name="description" content="#SECT holders earn 14.9% APY, paid by the Sectora Foundation treasury. No lock-up, claim any time, capped at 10M #SECT.">
 <link rel="icon" type="image/png" sizes="192x192" href="/icons/v2/icon-192.png">
 <link rel="icon" type="image/png" sizes="144x144" href="/icons/v2/favicon-144x144.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/icons/v2/favicon-96x96.png">
@@ -31,7 +31,7 @@
 <link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="staking.css?v=20261002a">
+<link rel="stylesheet" href="staking.css?v=20261002b">
 </head>
 <body>
 <div class="vig" aria-hidden="true"></div>
@@ -44,17 +44,14 @@
       <span class="mark" aria-hidden="true"><i></i></span>
       <span class="word">SECTORA</span>
     </a>
-    <span class="crumb">Staking</span>
+    <span class="crumb">Holder rewards</span>
   </div>
   <div class="top-r">
-    <!-- programa oculto mientras se decide el modelo: quitar los hidden
-         de esta cabecera, del hero y de las secciones para volver a mostrarlo -->
-    <span class="pill">Coming soon</span>
-    <span class="pill live solo-vivo" hidden><i class="dot"></i>Staking open</span>
-    <span class="pill solo-previa" hidden>Contract not yet deployed</span>
-    <span class="pill" hidden>7% a month · 12 months</span>
-    <span class="pill" hidden>No lockup</span>
-    <span class="pill" hidden>Capped at 10M #SECT</span>
+    <span class="pill live solo-vivo"><i class="dot"></i>Live</span>
+    <span class="pill solo-previa">Coming soon</span>
+    <span class="pill">14.9% APY</span>
+    <span class="pill">No lock-up</span>
+    <span class="pill">Capped at 10M #SECT</span>
     <a class="btn ghost" href="../index.html">← Main site</a>
   </div>
 </header>
@@ -65,35 +62,23 @@
     <canvas id="stakeGrid" aria-hidden="true"></canvas>
     <span class="hero-vig" aria-hidden="true"></span>
     <div class="hero-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <div class="hero-in solo-pronto">
+    <div class="hero-in">
       <div class="hero-txt">
-        <p class="eyebrow"><i></i>#SECT Staking</p>
-        <h1>Staking is coming.</h1>
+        <p class="eyebrow"><i></i>#SECT Holder Rewards</p>
+        <h1>14.9% APY for holders.</h1>
         <span class="hero-rule" aria-hidden="true"></span>
-        <p class="lead">The Sectora Foundation staking program is being finalised. Its terms will
-          be published here, in full, before the contract goes live. Nothing can be staked
-          today.</p>
-        <div class="hero-cta">
-          <a class="btn primary" href="../index.html">Back to the main site</a>
-        </div>
-      </div>
-      <div class="hero-txt" hidden>
-        <p class="eyebrow"><i></i>#SECT Staking Season</p>
-        <h1>Put #SECT to work.</h1>
-        <span class="hero-rule" aria-hidden="true"></span>
-        <p class="lead">A twelve-month staking season paid by the Sectora Foundation treasury, as a
-          marketing and growth program instead of an airdrop. You earn 7% a month on what you
-          stake: 3.5% you collect every month, and 3.5% a month that builds up and is paid when
-          the season closes. Nothing is locked, and the program is capped at 10,000,000 #SECT.</p>
+        <p class="lead">Deposit #SECT and earn 14.9% a year, accrued every second and paid by the
+          Sectora Foundation treasury. No lock-up: withdraw whenever you want and claim your
+          rewards at any time. The program holds at most 10,000,000 #SECT.</p>
         <p class="lead solo-previa">The contract is written and tested but not deployed yet, so
-          nothing can be staked today.</p>
+          nothing can be deposited today.</p>
         <div class="hero-cta">
-          <a class="btn primary" href="#stake">Stake #SECT <em>↓</em></a>
-          <a class="btn ghost" href="../dash/index.html">Open in Dashboard</a>
+          <a class="btn primary" href="#earn">Estimate your rewards <em>↓</em></a>
+          <a class="btn ghost" href="../index.html">Main site</a>
         </div>
       </div>
 
-      <div class="stat-card panel" hidden>
+      <div class="stat-card panel">
         <span class="panel-glow" aria-hidden="true"></span>
         <span class="panel-grid" aria-hidden="true"></span>
         <span class="panel-vig" aria-hidden="true"></span>
@@ -103,38 +88,25 @@
         <div class="gauge-row">
           <div class="gauge-wrap">
             <canvas id="apyRing" width="152" height="152" aria-hidden="true"></canvas>
-            <div class="gauge-mid"><b>7<small>%</small></b><span>A month</span></div>
+            <div class="gauge-mid"><b>14.9<small>%</small></b><span>APY</span></div>
           </div>
           <div class="gauge-side">
             <div>
-              <span class="s-lbl">Season</span>
-              <span class="s-big">12 months</span>
-              <span class="s-note">Rewards accrue every second, from your first deposit</span>
+              <span class="s-lbl">Accrual</span>
+              <span class="s-big">Every second</span>
+              <span class="s-note">Claim whenever you want</span>
             </div>
             <div>
-              <span class="s-lbl">Full season</span>
-              <span class="s-big">84%</span>
-              <span class="s-note">42% collected monthly + 42% paid at the close</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="stat-split">
-          <span class="sp-lbl">How each 7% is paid</span>
-          <div class="split-row">
-            <div class="ring-wrap sm">
-              <canvas id="splitRing" width="88" height="88" aria-hidden="true"></canvas>
-            </div>
-            <div class="sp-keys">
-              <span><i class="k a"></i><b>3.5%</b> collect it every month</span>
-              <span><i class="k b"></i><b>3.5%</b> builds up, paid at the close</span>
+              <span class="s-lbl">Lock-up</span>
+              <span class="s-big">None</span>
+              <span class="s-note">Withdraw any time, keep what you earned</span>
             </div>
           </div>
         </div>
 
         <div class="stat-live">
-          <div><span class="lv-lbl">Total staked</span><b class="num" id="lvStaked">0</b></div>
-          <div><span class="lv-lbl">Stakers</span><b class="num" id="lvStakers">0</b></div>
+          <div><span class="lv-lbl">Total deposited</span><b class="num" id="lvStaked">0</b></div>
+          <div><span class="lv-lbl">Holders in</span><b class="num" id="lvStakers">0</b></div>
         </div>
         <div class="cap">
           <div class="cap-top"><span class="lv-lbl">Program cap</span><b id="lvCap">0% filled</b></div>
@@ -148,59 +120,11 @@
     </div>
   </section>
 
-  <section class="sect why" id="why" hidden>
-    <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
-    <div class="head reveal">
-      <h2>Why staking instead of an airdrop</h2>
-      <span>A growth program paid by the treasury, for a limited time</span>
-    </div>
-
-    <p class="why-lede reveal">Most projects grow by giving tokens away. Those tokens land with people who
-      have no reason to keep them, and they are sold into the market the same week. The Foundation chose
-      the opposite: put the same treasury budget behind the people who hold.</p>
-
-    <div class="handoff reveal">
-      <div class="handoff-card y1 panel">
-        <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
-        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
-        <div class="panel-in">
-          <span class="handoff-yr">Airdrop</span>
-          <span class="handoff-src">Tokens given away</span>
-          <p>New supply goes to wallets that did nothing to earn it. Most of it is sold, and every holder pays for that in price.</p>
-        </div>
-      </div>
-
-      <div class="handoff-link" aria-hidden="true">
-        <span class="handoff-line"></span>
-        <span class="handoff-pulse"></span>
-      </div>
-
-      <div class="handoff-card y2 panel">
-        <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
-        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
-        <div class="panel-in">
-          <span class="handoff-yr">Staking season</span>
-          <span class="handoff-src">Rewards for holding</span>
-          <p>Rewards go only to #SECT that stays staked, and half of them are paid at the close. Holding is what pays.</p>
-        </div>
-      </div>
-    </div>
-
-    <p class="why-punch reveal">An airdrop pays people to leave. This season pays people to stay. It is safer
-      for the project and it scales with the people who believe in it.</p>
-  </section>
-
-  <section class="sect" id="stake" hidden>
+  <section class="sect" id="earn">
     <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
       <h2>Estimate your rewards</h2>
-      <span>7% a month on what you stake, over the twelve-month season</span>
+      <span>14.9% a year on what you deposit, accrued every second</span>
     </div>
 
     <div class="stake-grid">
@@ -212,7 +136,7 @@
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <div class="stake-row">
-          <label for="sectIn">You stake</label>
+          <label for="sectIn">You deposit</label>
           <div class="input-wrap">
             <input type="number" id="sectIn" inputmode="decimal" min="0" step="1" placeholder="0.00">
             <span class="input-suffix">#SECT</span>
@@ -220,22 +144,21 @@
         </div>
         <div class="chart-wrap">
           <div class="chart-head">
-            <span>12-month season · cumulative rewards</span>
+            <span>12 months · cumulative rewards</span>
             <b id="outYear">0.00 #SECT</b>
           </div>
           <canvas id="growthChart" width="600" height="180" aria-hidden="true"></canvas>
-          <div class="chart-key"><span><i class="k a"></i>Collected month by month</span><span><i class="k b"></i>Paid at the close</span></div>
         </div>
         <div class="stake-out">
-          <div><span>Collect every month</span><b id="outMonth">0.00 #SECT</b></div>
-          <div><span>Paid at the close</span><b id="outFinal">0.00 #SECT</b></div>
-          <div><span>Full season</span><b id="outYearSm">0.00 #SECT</b></div>
+          <div><span>Per day</span><b id="outDay">0.00 #SECT</b></div>
+          <div><span>Per month</span><b id="outMonth">0.00 #SECT</b></div>
+          <div><span>Per year</span><b id="outYearSm">0.00 #SECT</b></div>
         </div>
         <button type="button" class="btn primary wide" id="connectBtn" disabled>Connect wallet</button>
-        <p class="stake-note solo-previa"><b>Not live yet.</b> The staking contract has not been
-          deployed to Ethereum mainnet, so nothing can be staked from this page today. The figures
-          above are a calculator for someone who stays the full twelve months, not a live position.</p>
-        <p class="stake-note solo-vivo">No lockup · 3.5% to collect every month · 3.5% a month paid at the close · 24 hours to put back what you withdraw</p>
+        <p class="stake-note solo-previa"><b>Not live yet.</b> The contract has not been deployed
+          to Ethereum mainnet, so nothing can be deposited from this page today. The figures
+          above are a calculator at 14.9% APY.</p>
+        <p class="stake-note solo-vivo">No lock-up · claim any time · rewards accrue every second at 14.9% APY</p>
         </div>
       </div>
 
@@ -248,34 +171,30 @@
         <div class="panel-in">
         <h3>Terms</h3>
         <ul class="terms-list">
-          <li><span>Rewards</span><b>7% a month</b></li>
-          <li><span>Collect monthly</span><b>3.5% a month, once a month</b></li>
-          <li><span>Paid at the close</span><b>3.5% a month, after month 12</b></li>
-          <li><span>Season</span><b>12 months</b></li>
-          <li><span>Full season</span><b>84% (42% + 42%)</b></li>
+          <li><span>Rewards</span><b>14.9% APY</b></li>
+          <li><span>Accrual</span><b>Every second, no compounding</b></li>
+          <li><span>Claim</span><b>Any time</b></li>
+          <li><span>Lock-up</span><b>None</b></li>
+          <li><span>Withdraw</span><b>Any time, no penalty</b></li>
           <li><span>Program cap</span><b>10,000,000 #SECT</b></li>
-          <li><span>Lockup</span><b>None</b></li>
-          <li><span>If you withdraw</span><b>24 hours to put it back</b></li>
           <li><span>Funded by</span><b>Sectora Foundation treasury</b></li>
         </ul>
         <div class="terms-disclosure">
-          <p>7% a month is the rate the contract pays while its reward pool is funded, not a
-            guaranteed return. Every reward is paid from #SECT the treasury deposits in advance;
-            nothing is minted. If the pool ran dry, rewards would stop accruing until it is
-            refilled rather than promise what cannot be paid. The treasury cannot take the pool
-            back until the season is over. The contract has been tested but not externally
-            audited.</p>
+          <p>Rewards are paid from #SECT the treasury deposits into the contract in advance;
+            nothing is minted. If the reward pool ran dry, rewards would stop accruing until it
+            is refilled, rather than promise what is not there. The contract has been tested
+            but not externally audited.</p>
         </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="sect" id="window" hidden>
+  <section class="sect" id="how">
     <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
-      <h2>The 24-hour window</h2>
-      <span>Nothing is locked. Leaving just has a clock on it.</span>
+      <h2>How it works</h2>
+      <span>Three steps, all from your own wallet</span>
     </div>
     <div class="grid3">
       <div class="pqc-card panel reveal" style="--d:0.00s">
@@ -286,9 +205,9 @@
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">01</span>
-        <span class="pqc-tag">You withdraw</span>
-        <h3>Your #SECT comes back immediately</h3>
-        <p>You can take out part or all of your stake at any moment, with no penalty and no waiting period. The moment your balance drops below its highest point, a 24-hour window opens.</p>
+        <span class="pqc-tag">Deposit</span>
+        <h3>Put #SECT in</h3>
+        <p>Connect your wallet, approve #SECT once and deposit any amount while the program has room. Rewards start accruing that second.</p>
         </div>
       </div>
       <div class="pqc-card panel reveal" style="--d:0.06s">
@@ -299,9 +218,9 @@
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">02</span>
-        <span class="pqc-tag">Within 24 hours</span>
-        <h3>Put it back and nothing is lost</h3>
-        <p>Deposit the amount again before the window closes and everything you had accrued is still there, monthly and final balance alike. The season carries on as if you never left.</p>
+        <span class="pqc-tag">Earn</span>
+        <h3>14.9% a year, every second</h3>
+        <p>Your rewards grow continuously at 14.9% APY on what you have deposited. Collect them whenever you like; there is no date to wait for.</p>
         </div>
       </div>
       <div class="pqc-card panel reveal" style="--d:0.12s">
@@ -312,32 +231,19 @@
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">03</span>
-        <span class="pqc-tag">After 24 hours</span>
-        <h3>Uncollected rewards go back to the pool</h3>
-        <p>If the window closes, every reward you had not collected yet is forfeited and returns to the reward pool for the stakers who stayed. Anything you already collected is yours to keep.</p>
-        </div>
-      </div>
-      <div class="pqc-card panel reveal" style="--d:0.18s">
-        <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
-        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
-        <div class="panel-in">
-        <span class="panel-num" aria-hidden="true">04</span>
-        <span class="pqc-tag">No shortcuts</span>
-        <h3>Leaving one token behind does not count</h3>
-        <p>The window opens whenever your balance falls below its peak, not only when it reaches zero. Withdrawing almost everything and leaving a dust amount inside does not keep the rewards.</p>
+        <span class="pqc-tag">Withdraw</span>
+        <h3>Take it out any time</h3>
+        <p>Withdraw part or all of your deposit whenever you want, with no penalty. Rewards you already earned stay yours to claim.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="sect" id="verify" hidden>
+  <section class="sect" id="verify">
     <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
       <h2>Why this isn't just a promised number</h2>
-      <span>The rules live in the contract, not in an announcement</span>
+      <span>The rules live in the contract</span>
     </div>
     <div class="grid3">
       <div class="pqc-card panel reveal" style="--d:0.00s">
@@ -361,9 +267,9 @@
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">02</span>
-        <span class="pqc-tag">No pulling out</span>
-        <h3>The treasury is committed for the season</h3>
-        <p>Once #SECT is in the reward pool, the contract does not let the owner take it back until the twelve months are over. Rewards already earned by stakers are out of the owner's reach entirely.</p>
+        <span class="pqc-tag">Fixed in code</span>
+        <h3>The rate cannot change</h3>
+        <p>14.9% APY and the 10,000,000 #SECT cap are constants in the contract. Nobody can edit them after deployment.</p>
         </div>
       </div>
       <div class="pqc-card panel reveal" style="--d:0.12s">
@@ -374,90 +280,58 @@
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">03</span>
-        <span class="pqc-tag">Fixed in code</span>
-        <h3>Nobody can change the rules mid-season</h3>
-        <p>7% a month, the 3.5% / 3.5% split, the twelve-month season and the 24-hour window are constants in the contract. They cannot be edited after anyone has staked.</p>
-        </div>
-      </div>
-      <div class="pqc-card panel reveal" style="--d:0.18s">
-        <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
-        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
-        <div class="panel-in">
-        <span class="panel-num" aria-hidden="true">04</span>
         <span class="pqc-tag">Your deposit is yours</span>
-        <h3>Principal never pays anyone else</h3>
-        <p>Staked #SECT and reward #SECT are accounted separately. No function lets a deposit be paid out as someone else's reward, and withdrawing always works, even if the pool is empty.</p>
+        <h3>Deposits never pay anyone else</h3>
+        <p>Deposits and rewards are accounted separately. No function lets the owner touch a deposit or a reward already earned, and withdrawing always works.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="sect" id="faq" hidden>
+  <section class="sect" id="faq">
     <div class="head reveal">
       <h2>Frequently asked</h2>
-      <span>What to know before staking #SECT</span>
+      <span>What to know before depositing #SECT</span>
     </div>
     <div class="faq-list reveal">
       <details class="faq-item" open>
-        <summary>Can I stake right now?</summary>
-        <p class="solo-previa">Not yet. The staking contract is written and covered by an
-          automated test suite, but it has not been deployed to Ethereum mainnet, so there is no
-          address to stake into today. When it goes live this page switches over on its own.</p>
-        <p class="solo-vivo">Yes. Connect your wallet above, enter an amount and stake. Rewards
+        <summary>Can I deposit right now?</summary>
+        <p class="solo-previa">Not yet. The contract is written and covered by an automated test
+          suite, but it has not been deployed to Ethereum mainnet. When it goes live this page
+          switches over on its own.</p>
+        <p class="solo-vivo">Yes. Connect your wallet above, enter an amount and deposit. Rewards
           start accruing from that moment.</p>
       </details>
       <details class="faq-item">
         <summary>When can I collect my rewards?</summary>
-        <p>Every reward is split in two as it accrues. The monthly half (3.5% a month) can be
-          collected one month after your first deposit, and then once a month. The other half
-          (3.5% a month) builds up and is paid in one go when the twelve-month season closes,
-          together with any monthly balance you have not collected.</p>
+        <p>Whenever you want. Rewards accrue every second and you can claim them at any time,
+          including after you have withdrawn your deposit.</p>
       </details>
       <details class="faq-item">
-        <summary>Can I unstake whenever I want?</summary>
-        <p>Yes. There is no lockup and no penalty on your deposit. If you withdraw, you have 24
-          hours to put it back and keep everything you had accrued. After that, rewards you had
-          not collected yet go back to the pool. While the window is open the monthly collection
-          waits until your stake is restored.</p>
-      </details>
-      <details class="faq-item">
-        <summary>Why a staking season and not an airdrop?</summary>
-        <p>An airdrop creates new sellers: people who received tokens for free and sell them.
-          This program spends the treasury budget only on #SECT that stays staked, and pays half
-          of it at the end. It is a growth program designed to reward holders without pushing
-          the price down, with a hard cap so its cost to the treasury is known in advance.</p>
+        <summary>Can I withdraw whenever I want?</summary>
+        <p>Yes. There is no lock-up and no penalty. You can take out part or all of your deposit
+          at any moment, and everything you earned until then stays claimable.</p>
       </details>
       <details class="faq-item">
         <summary>Where does the reward money come from?</summary>
         <p>From the Sectora Foundation treasury, deposited into the contract in advance. No new
           tokens are created. If the reward pool ever ran out, rewards would pause until it is
-          refilled, instead of promising more than the contract holds.</p>
+          refilled.</p>
       </details>
       <details class="faq-item">
-        <summary>Is there a limit on how much can be staked?</summary>
-        <p>Yes. The whole program takes at most 10,000,000 #SECT, a limit written into the
-          contract. Once it is full, new deposits are refused until space frees up. If you
-          withdraw and the program fills up in the meantime, you can still put your own amount
-          back within your 24-hour window.</p>
-      </details>
-      <details class="faq-item">
-        <summary>Can I join after the season has started?</summary>
-        <p>Yes, as long as the season is open. The season has one fixed closing date for
-          everyone, so you earn 7% a month for the months you are in, and your final balance is
-          paid at that closing date.</p>
+        <summary>Is there a limit on how much can be deposited?</summary>
+        <p>Yes. The program holds at most 10,000,000 #SECT, a limit written into the contract.
+          Once it is full, new deposits are refused until someone withdraws.</p>
       </details>
     </div>
   </section>
 
 </main>
 
-<script src="staking.js?v=20260930a"></script>
+<script src="staking.js?v=20261002b"></script>
 <!-- cableado on-chain. Mientras CONTRACTS siga con direcciones a cero el
      modulo se retira solo y la pagina queda exactamente como esta hoy. -->
 <script src="../ethers.min.js"></script>
-<script src="staking-chain.js?v=20260930b"></script>
+<script src="staking-chain.js?v=20261002b"></script>
 </body>
 </html>

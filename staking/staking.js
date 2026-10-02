@@ -148,26 +148,20 @@
   function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
   function fmtNum(n) { return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
-  // Temporada: 7% al mes sobre lo depositado, lineal, 12 meses. La mitad
-  // se cobra cada mes y la otra mitad se acumula hasta el cierre. Son las
-  // constantes de SectoraStakingSeason, no una estimacion.
-  const MONTHLY = 0.07;
+  // 14,9% APY lineal: la constante RATE_BPS = 1490 de SectoraHolderRewards
+  const APY = 0.149;
   const MONTHS = 12;
 
   // ---- rewards calculator ----
   function recalc() {
     const input = document.getElementById("sectIn");
     const amt = input ? parseFloat(input.value) || 0 : 0;
-    const perMonth = amt * MONTHLY;
-    const season = perMonth * MONTHS;
-    const outMonth = document.getElementById("outMonth");
-    const outFinal = document.getElementById("outFinal");
-    const outYear = document.getElementById("outYear");
-    const outYearSm = document.getElementById("outYearSm");
-    if (outMonth) outMonth.textContent = fmtNum(perMonth / 2) + " #SECT";
-    if (outFinal) outFinal.textContent = fmtNum(season / 2) + " #SECT";
-    if (outYear) outYear.textContent = fmtNum(season) + " #SECT";
-    if (outYearSm) outYearSm.textContent = fmtNum(season) + " #SECT";
+    const yearly = amt * APY;
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = fmtNum(v) + " #SECT"; };
+    set("outDay", yearly / 365);
+    set("outMonth", yearly / 12);
+    set("outYear", yearly);
+    set("outYearSm", yearly);
     drawGrowthChart(amt || 1000);
   }
   const sectInput = document.getElementById("sectIn");
@@ -210,22 +204,13 @@
   }
 
   const apyRing = document.getElementById("apyRing");
-  const splitRing = document.getElementById("splitRing");
   function paintRings() {
-    // el anillo grande es la temporada: 12 tramos, uno por mes
-    const meses = [];
-    for (let i = 0; i < 12; i++) meses.push({ frac: 1 / 12 - 0.012, color: "#4d8dff" }, { frac: 0.012, color: "rgba(0,0,0,0)" });
-    drawRingGauge(apyRing, meses, { stroke: 9, glow: true, butt: true });
-    drawRingGauge(splitRing, [
-      { frac: 0.50, color: "#1569ff" },
-      { frac: 0.50, color: "#e8b45c" },
-    ], { stroke: 10, glow: false });
+    drawRingGauge(apyRing, [{ frac: APY, color: "#4d8dff" }], { stroke: 9, glow: true });
   }
   paintRings();
   window.addEventListener("resize", () => { clearTimeout(window.__ringRt); window.__ringRt = setTimeout(paintRings, 150); });
 
-  // ---- 12-month season chart: cumulative rewards, stacked by how they are
-  // paid (collected monthly below, held for the close on top) ----
+  // ---- 12-month chart: cumulative rewards at 14.9% APY, one bar a month ----
   function drawGrowthChart(principal) {
     const canvas = document.getElementById("growthChart");
     if (!canvas) return;
@@ -237,8 +222,8 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, cssW, cssH);
 
-    const half = principal * MONTHLY / 2;
-    const max = half * 2 * MONTHS * 1.08;
+    const perMonth = principal * APY / MONTHS;
+    const max = perMonth * MONTHS * 1.08;
     const padL = 4, padR = 4, padT = 10, padB = 18;
     const plotW = cssW - padL - padR, plotH = cssH - padT - padB;
     const slot = plotW / MONTHS;
@@ -257,16 +242,9 @@
     ctx.textAlign = "center";
     for (let m = 1; m <= MONTHS; m++) {
       const cx = padL + slot * (m - 0.5);
-      const x0 = cx - barW / 2;
-      const collected = half * m;       // lo cobrado mes a mes
-      const held = half * m;            // lo que espera al cierre
-      const yMid = y(collected), yTop = y(collected + held), yBase = y(0);
-
-      ctx.fillStyle = "#1569ff";
-      ctx.fillRect(x0, yMid, barW, yBase - yMid);
-      ctx.fillStyle = m === MONTHS ? "#e8b45c" : "rgba(232,180,92,.55)";
-      ctx.fillRect(x0, yTop, barW, yMid - yTop);
-
+      const top = y(perMonth * m), base = y(0);
+      ctx.fillStyle = m === MONTHS ? "#ffffff" : "#1569ff";
+      ctx.fillRect(cx - barW / 2, top, barW, base - top);
       ctx.fillStyle = "rgba(255,255,255,.38)";
       ctx.fillText(String(m), cx, cssH - 4);
     }
