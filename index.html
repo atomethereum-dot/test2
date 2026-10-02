@@ -3731,6 +3731,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
    plano, no encima, porque el video ya lleva sus propios rotulos y
    sobreimprimir otros los pisaria.
    =============================================================== */
+.sk[hidden]{display:none}
 .sk{
   position:relative;background:#000;color:#fff;
   display:flex;align-items:stretch;
@@ -4959,7 +4960,10 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 </section>
 
 
-<section class="sk" id="staking-season">
+<!-- Oculta mientras se decide el modelo de staking. Para volver a
+     mostrarla basta con quitar el atributo hidden. Con display:none el
+     observador del video nunca la ve, asi que tampoco descarga nada. -->
+<section class="sk" id="staking-season" hidden>
   <div class="sk-car">
 
     <h2 class="sr-only">Seven percent a month, for twelve months.</h2>
