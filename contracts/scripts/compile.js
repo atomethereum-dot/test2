@@ -12,6 +12,7 @@ const CONTRACT_FILES = [
   "ValidatorRegistry.sol",
   "SectoraStaking.sol",
   "SectoraStakingSeason.sol",
+  "SectoraHolderRewards.sol",
   "MockToken6.sol",   // solo pruebas
 ];
 
