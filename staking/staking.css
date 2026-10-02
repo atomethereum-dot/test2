@@ -466,3 +466,9 @@ html.cadena-viva .solo-previa{display:none}
 .lv-previa{
   margin:10px 0 0;font-size:11px;line-height:1.55;color:#8b94a3;
 }
+
+/* programa oculto mientras se decide el modelo: varias piezas de esta hoja
+   fijan display (grid, flex) y le ganarian al atributo hidden */
+[hidden]{display:none!important}
+.hero-in.solo-pronto{grid-template-columns:minmax(0,1fr);max-width:1280px}
+.hero-in.solo-pronto .hero-txt{max-width:720px}

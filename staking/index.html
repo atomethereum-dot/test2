@@ -7,16 +7,16 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sectoraorg.com/staking">
 <meta property="og:title" content="Sectora Foundation — #SECT Staking">
-<meta property="og:description" content="Twelve-month #SECT staking season funded by the Sectora Foundation treasury as a growth program instead of an airdrop: 7% a month, 3.5% collected monthly and 3.5% at the close, no lockup.">
+<meta property="og:description" content="The Sectora Foundation #SECT staking program is being finalised. Its terms will be published here before the contract goes live.">
 <meta property="og:image" content="https://sectoraorg.com/staking/og-image.jpg">
 <meta property="og:image:width" content="1920">
 <meta property="og:image:height" content="1080">
 <meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Sectora Foundation — #SECT Staking">
-<meta name="twitter:description" content="Twelve-month #SECT staking season funded by the Sectora Foundation treasury as a growth program instead of an airdrop: 7% a month, 3.5% collected monthly and 3.5% at the close, no lockup.">
+<meta name="twitter:description" content="The Sectora Foundation #SECT staking program is being finalised. Its terms will be published here before the contract goes live.">
 <meta name="twitter:image" content="https://sectoraorg.com/staking/og-image.jpg">
-<meta name="description" content="#SECT staking season: 7% a month for 12 months, funded by the Sectora Foundation treasury. 3.5% collected every month, 3.5% paid at the close. No lockup.">
+<meta name="description" content="The Sectora Foundation #SECT staking program is being finalised. Its terms will be published here before the contract goes live.">
 <link rel="icon" type="image/png" sizes="192x192" href="/icons/v2/icon-192.png">
 <link rel="icon" type="image/png" sizes="144x144" href="/icons/v2/favicon-144x144.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/icons/v2/favicon-96x96.png">
@@ -31,7 +31,7 @@
 <link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="staking.css?v=20260930b">
+<link rel="stylesheet" href="staking.css?v=20261002a">
 </head>
 <body>
 <div class="vig" aria-hidden="true"></div>
@@ -47,11 +47,14 @@
     <span class="crumb">Staking</span>
   </div>
   <div class="top-r">
-    <span class="pill live solo-vivo"><i class="dot"></i>Staking open</span>
-    <span class="pill solo-previa">Contract not yet deployed</span>
-    <span class="pill">7% a month · 12 months</span>
-    <span class="pill">No lockup</span>
-    <span class="pill">Capped at 10M #SECT</span>
+    <!-- programa oculto mientras se decide el modelo: quitar los hidden
+         de esta cabecera, del hero y de las secciones para volver a mostrarlo -->
+    <span class="pill">Coming soon</span>
+    <span class="pill live solo-vivo" hidden><i class="dot"></i>Staking open</span>
+    <span class="pill solo-previa" hidden>Contract not yet deployed</span>
+    <span class="pill" hidden>7% a month · 12 months</span>
+    <span class="pill" hidden>No lockup</span>
+    <span class="pill" hidden>Capped at 10M #SECT</span>
     <a class="btn ghost" href="../index.html">← Main site</a>
   </div>
 </header>
@@ -62,8 +65,19 @@
     <canvas id="stakeGrid" aria-hidden="true"></canvas>
     <span class="hero-vig" aria-hidden="true"></span>
     <div class="hero-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <div class="hero-in">
+    <div class="hero-in solo-pronto">
       <div class="hero-txt">
+        <p class="eyebrow"><i></i>#SECT Staking</p>
+        <h1>Staking is coming.</h1>
+        <span class="hero-rule" aria-hidden="true"></span>
+        <p class="lead">The Sectora Foundation staking program is being finalised. Its terms will
+          be published here, in full, before the contract goes live. Nothing can be staked
+          today.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="../index.html">Back to the main site</a>
+        </div>
+      </div>
+      <div class="hero-txt" hidden>
         <p class="eyebrow"><i></i>#SECT Staking Season</p>
         <h1>Put #SECT to work.</h1>
         <span class="hero-rule" aria-hidden="true"></span>
@@ -79,7 +93,7 @@
         </div>
       </div>
 
-      <div class="stat-card panel">
+      <div class="stat-card panel" hidden>
         <span class="panel-glow" aria-hidden="true"></span>
         <span class="panel-grid" aria-hidden="true"></span>
         <span class="panel-vig" aria-hidden="true"></span>
@@ -134,7 +148,7 @@
     </div>
   </section>
 
-  <section class="sect why" id="why">
+  <section class="sect why" id="why" hidden>
     <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
       <h2>Why staking instead of an airdrop</h2>
@@ -182,7 +196,7 @@
       for the project and it scales with the people who believe in it.</p>
   </section>
 
-  <section class="sect" id="stake">
+  <section class="sect" id="stake" hidden>
     <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
       <h2>Estimate your rewards</h2>
@@ -257,7 +271,7 @@
     </div>
   </section>
 
-  <section class="sect" id="window">
+  <section class="sect" id="window" hidden>
     <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
       <h2>The 24-hour window</h2>
@@ -319,7 +333,7 @@
     </div>
   </section>
 
-  <section class="sect" id="verify">
+  <section class="sect" id="verify" hidden>
     <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
       <h2>Why this isn't just a promised number</h2>
@@ -381,7 +395,7 @@
     </div>
   </section>
 
-  <section class="sect" id="faq">
+  <section class="sect" id="faq" hidden>
     <div class="head reveal">
       <h2>Frequently asked</h2>
       <span>What to know before staking #SECT</span>
