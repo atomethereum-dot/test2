@@ -10,6 +10,12 @@
     · Mientras CONTRACT este vacio, la caja muestra "Muy pronto".
     · Los datos de tokenomics (impuesto, LP quemado, contrato renunciado):
       publicarlos SOLO cuando sean verdad y se puedan verificar on-chain.
+
+  INTRO CON SCROLL
+    La primera seccion (.fly) mide FLY_VH de alto y queda fija mientras se
+    hace scroll: Jesus entra volando, cruza el rayo y salen los textos.
+    · Mas alto = vuelo mas lento. Ajustar en CSS (.fly height).
+    · Ruta del vuelo: arrays PATH_DESK y PATH_MOB en el script.
 -->
 <head>
 <meta charset="utf-8">
@@ -25,389 +31,525 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Cellipse cx='32' cy='16' rx='18' ry='5' fill='none' stroke='%23C6FF00' stroke-width='4'/%3E%3Cpath d='M10 30h44l-4 12c-2 5-12 5-14 0l-2-6h-4l-2 6c-2 5-12 5-14 0z' fill='%23C6FF00'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&family=Sedgwick+Ave+Display&display=swap" rel="stylesheet">
 <style>
 :root{
   --lime:#C6FF00;
-  --lime-2:#9BE000;
-  --lime-dim:rgba(198,255,0,.14);
-  --lime-line:rgba(198,255,0,.28);
+  --lime-2:#8EE000;
+  --lime-glow:rgba(198,255,0,.55);
+  --lime-dim:rgba(198,255,0,.12);
+  --lime-line:rgba(198,255,0,.26);
   --bg:#000;
-  --bg-2:#0A0C06;
-  --card:#0E1108;
-  --ink:#F4F7EC;
-  --muted:#A3AA94;
+  --bg-2:#07090399;
+  --card:#0B0D06;
+  --ink:#F2F5EA;
+  --muted:#9DA48E;
   --red:#FF3B4E;
-  --radius:22px;
-  --display:"Anton",Impact,"Arial Narrow",sans-serif;
+  --pixel:"Silkscreen","Space Mono",ui-monospace,monospace;
+  --mono:"Space Mono",ui-monospace,monospace;
   --body:"Space Grotesk",system-ui,sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --graf:"Sedgwick Ave Display","Permanent Marker",cursive;
+  --bar:34px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;overflow-x:clip}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;overflow-x:clip}
 img,svg,canvas{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 ::selection{background:var(--lime);color:#000}
-:focus-visible{outline:3px solid var(--lime);outline-offset:3px;border-radius:6px}
-.wrap{width:min(1180px,100% - 32px);margin-inline:auto}
+:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+.wrap{width:min(1240px,100% - 32px);margin-inline:auto}
+.l{color:var(--lime)}
+.glowtx{text-shadow:0 0 24px var(--lime-glow)}
 
-/* ---------- NAV ---------- */
-.nav{position:fixed;inset:0 0 auto;z-index:50;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
-.nav.solid{background:rgba(0,0,0,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--lime-line)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;gap:16px}
-.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:24px;letter-spacing:.5px;white-space:nowrap}
-.brand b{color:var(--lime);font-weight:400}
-.brand .dot{width:34px;height:34px;border-radius:10px;background:var(--lime);display:grid;place-items:center}
-.links{display:flex;gap:26px;font-weight:500;font-size:15px}
-.links a{opacity:.8;transition:opacity .2s,color .2s}
-.links a:hover{opacity:1;color:var(--lime)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 24px;border-radius:999px;font-weight:700;font-size:16px;transition:transform .15s,box-shadow .2s,background .2s;white-space:nowrap}
+/* ---------- PROMO + NAV ---------- */
+.promo{position:fixed;inset:0 0 auto;height:var(--bar);z-index:70;display:flex;align-items:center;justify-content:center;gap:10px;padding:0 44px;
+  background:linear-gradient(90deg,#3A5200,var(--lime) 55%,#E9FF8A);color:#000;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden}
+.promo b{background:#000;color:var(--lime);font-family:var(--mono);font-size:12px;padding:3px 8px}
+.promo .x{position:absolute;right:12px;font-size:18px;line-height:1;opacity:.7}
+.promo-off .promo{display:none}
+@media (max-width:600px){.promo>span{display:none}}
+.promo-off{--bar:0px}
+.nav{position:fixed;left:0;right:0;top:var(--bar);z-index:60;transition:background .3s}
+.nav.solid{background:rgba(0,0,0,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:14px}
+.logo{font-family:var(--pixel);font-weight:700;font-size:clamp(20px,2.4vw,28px);letter-spacing:-.5px;white-space:nowrap;line-height:1}
+.logo i{font-style:normal;color:var(--lime);text-shadow:0 0 14px var(--lime-glow)}
+.nav-r{display:flex;align-items:center;gap:14px}
+.menu-btn{display:flex;align-items:center;gap:10px;font-family:var(--pixel);font-weight:700;font-size:14px}
+.burger{width:24px;display:grid;gap:4px}
+.burger i{height:3px;background:currentColor;display:block;transition:transform .25s,opacity .2s}
+.menu-open .burger i:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.menu-open .burger i:nth-child(2){opacity:0}
+.menu-open .burger i:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 22px;font-family:var(--pixel);font-weight:700;font-size:14px;letter-spacing:.3px;transition:transform .15s,box-shadow .2s,background .2s,color .2s;white-space:nowrap;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
 .btn:active{transform:scale(.97)}
-.btn-lime{background:var(--lime);color:#000;box-shadow:0 0 0 0 var(--lime)}
-.btn-lime:hover{box-shadow:0 0 34px -4px var(--lime);transform:translateY(-2px)}
-.btn-ghost{border:1.5px solid var(--lime-line);color:var(--ink)}
-.btn-ghost:hover{border-color:var(--lime);color:var(--lime)}
-.btn-sm{padding:10px 18px;font-size:14px}
-@media (max-width:860px){.links{display:none}}
-@media (max-width:420px){.brand{font-size:20px}.brand .dot{width:30px;height:30px}.nav .btn-sm{padding:9px 14px;font-size:13px}}
+.btn-lime{background:var(--lime);color:#000}
+.btn-lime:hover{box-shadow:0 0 30px var(--lime-glow);background:#DAFF4D}
+.btn-ghost{background:#141808;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--lime-line)}
+.btn-ghost:hover{color:var(--lime);box-shadow:inset 0 0 0 1.5px var(--lime)}
+.btn-sm{padding:10px 16px;font-size:12px}
+@media (max-width:560px){.nav .btn-sm{display:none}}
 
-/* ---------- HERO ---------- */
-.hero{position:relative;min-height:100svh;display:grid;align-items:center;overflow:hidden;padding:110px 0 70px;isolation:isolate}
-#chart{position:absolute;inset:0;width:100%;height:100%;z-index:-2;max-width:none}
-.hero::before{content:"";position:absolute;inset:0;z-index:-1;
-  background:radial-gradient(60% 55% at 70% 40%,rgba(198,255,0,.16),transparent 70%),
-             linear-gradient(to bottom,rgba(0,0,0,.25),rgba(0,0,0,0) 30%,rgba(0,0,0,.85) 92%,#000)}
-.hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:30px;align-items:center}
-.kicker{display:inline-flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
-.pill{font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:7px 12px;border-radius:999px;border:1px solid var(--lime-line);background:rgba(198,255,0,.06);color:var(--lime)}
-h1{font-family:var(--display);font-weight:400;font-size:clamp(56px,9vw,124px);line-height:.9;text-transform:uppercase;letter-spacing:.5px}
-h1 .l{color:var(--lime);text-shadow:0 0 40px rgba(198,255,0,.45)}
-.lead{font-size:clamp(17px,1.6vw,20px);color:var(--muted);max-width:560px;margin:22px 0 28px}
-.lead strong{color:var(--ink)}
-.cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px}
-.ca{display:flex;align-items:center;gap:10px;max-width:560px;background:rgba(14,17,8,.85);border:1px solid var(--lime-line);border-radius:16px;padding:8px 8px 8px 16px}
-.ca span{font-family:var(--mono);font-size:12px;color:var(--lime);flex:none}
-.ca code{font-family:var(--mono);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
-.ca button{flex:none;background:var(--lime);color:#000;font-weight:700;font-size:14px;padding:9px 14px;border-radius:10px}
-.stage{position:relative;aspect-ratio:1/1;max-width:600px;justify-self:center;width:100%}
-.stage .glow{position:absolute;inset:12%;border-radius:50%;background:radial-gradient(circle,rgba(198,255,0,.32),transparent 65%);filter:blur(12px);animation:breathe 4s ease-in-out infinite}
-#jesus{position:absolute;left:0;top:22%;width:100%;will-change:transform;filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))}
-#jesus svg{overflow:visible;width:100%;height:auto}
-.speech{position:absolute;right:4%;top:6%;background:var(--lime);color:#000;font-weight:700;padding:12px 16px;border-radius:18px 18px 4px 18px;font-size:15px;max-width:230px;transform-origin:bottom right;animation:pop .5s cubic-bezier(.3,1.6,.6,1) both}
-.degen{position:absolute;left:50%;bottom:2%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;color:var(--muted);background:rgba(0,0,0,.6);padding:8px 14px;border-radius:999px;border:1px solid var(--lime-line)}
-.switch{width:44px;height:24px;border-radius:999px;background:#222;position:relative;transition:background .2s}
-.switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#888;transition:transform .2s,background .2s}
-.degen[aria-pressed="true"] .switch{background:var(--lime-dim)}
-.degen[aria-pressed="true"] .switch::after{transform:translateX(20px);background:var(--lime)}
+.menu{position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.96);display:grid;align-content:center;padding:120px 0 40px;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.menu-open .menu{opacity:1;visibility:visible}
+.menu ol{list-style:none;counter-reset:m;display:grid;gap:4px}
+.menu a{display:flex;align-items:baseline;gap:18px;font-family:var(--pixel);font-weight:700;font-size:clamp(34px,7vw,80px);line-height:1.1;transition:color .2s,transform .2s}
+.menu a::before{counter-increment:m;content:"0" counter(m);font-family:var(--mono);font-size:14px;color:var(--lime)}
+.menu a:hover{color:var(--lime);transform:translateX(12px)}
+.menu .meta{margin-top:40px;font-family:var(--mono);color:var(--muted);font-size:13px}
+
+/* ---------- FLY (intro con scroll) ---------- */
+.fly{position:relative;height:460vh;background:#000}
+.stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;isolation:isolate}
+.gridbg{position:absolute;inset:-2px;z-index:-3;
+  background:
+    radial-gradient(90% 70% at 50% 45%,rgba(40,60,0,.55),transparent 70%),
+    linear-gradient(rgba(198,255,0,.07) 1px,transparent 1px) 0 0/90px 90px,
+    linear-gradient(90deg,rgba(198,255,0,.07) 1px,transparent 1px) 0 0/90px 90px,
+    #020300}
+.plus{position:absolute;z-index:-2;color:rgba(198,255,0,.45);font-family:var(--mono);font-size:18px;line-height:1;pointer-events:none}
+.beam{position:absolute;z-index:-2;left:50%;top:50%;width:190vmax;height:34vmax;margin:-17vmax 0 0 -95vmax;pointer-events:none;will-change:transform}
+.beam::before{content:"";position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(198,255,0,.62),rgba(198,255,0,.22) 38%,rgba(198,255,0,.05) 60%,transparent 72%);filter:blur(22px)}
+.beam::after{content:"";position:absolute;left:8%;right:8%;top:50%;height:2px;margin-top:-1px;background:linear-gradient(90deg,transparent,#F3FFC0,transparent);box-shadow:0 0 22px 6px var(--lime-glow);opacity:.85}
+.glyph{position:absolute;z-index:-1;pointer-events:none;will-change:transform;color:var(--lime);opacity:.16}
+.glyph.t{font-family:var(--graf);font-size:clamp(70px,9vw,150px);line-height:1;color:transparent;-webkit-text-stroke:2px var(--lime)}
+.glyph svg{width:clamp(70px,8vw,130px);height:auto;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.jw{position:absolute;left:50%;top:50%;width:clamp(340px,60vw,900px);will-change:transform;z-index:2}
+.jw .inner{transform:translate(-50%,-50%)}
+#jesus svg{overflow:visible;width:100%;height:auto;filter:drop-shadow(0 0 18px rgba(198,255,0,.35)) drop-shadow(0 40px 40px rgba(0,0,0,.7))}
+.streaks{position:absolute;right:68%;top:30%;width:70%;height:40%;opacity:0;pointer-events:none}
+.streaks i{position:absolute;right:0;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,rgba(198,255,0,.9))}
+.beat{position:absolute;z-index:3;font-family:var(--mono);font-weight:700;text-transform:uppercase;font-size:clamp(15px,1.65vw,23px);line-height:1.25;letter-spacing:.02em;max-width:min(560px,44vw);color:var(--ink);text-shadow:0 2px 14px #000;opacity:0;pointer-events:none}
+.beat .sc{color:var(--lime)}
+.b1{left:6vw;top:68%}
+.b2{right:6vw;top:20%}
+.b3{left:6vw;top:70%}
+.final{position:absolute;z-index:4;left:max(16px,calc((100vw - 1240px)/2));top:50%;transform:translateY(-50%);max-width:640px;opacity:0;pointer-events:none}
+.final.on{pointer-events:auto}
+.final h1{font-family:var(--pixel);font-weight:700;font-size:clamp(28px,3.9vw,58px);line-height:.98;letter-spacing:-1px;text-transform:uppercase}
+.final p{color:var(--muted);margin:18px 0 24px;font-size:clamp(16px,1.4vw,19px);max-width:520px}
+.final p strong{color:var(--ink)}
+.cta{display:flex;flex-wrap:wrap;gap:10px}
+.ca{display:flex;align-items:center;gap:10px;max-width:540px;margin-top:16px;background:#0B0E04;box-shadow:inset 0 0 0 1px var(--lime-line);padding:8px 8px 8px 14px}
+.ca span{font-family:var(--pixel);font-size:12px;color:var(--lime);flex:none}
+.ca code{font-family:var(--mono);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.ca button{flex:none;background:var(--lime);color:#000;font-family:var(--pixel);font-weight:700;font-size:12px;padding:8px 12px}
+.degen{display:inline-flex;align-items:center;gap:10px;margin-top:16px;font-family:var(--pixel);font-size:12px;color:var(--muted)}
+.switch{width:42px;height:22px;background:#1b1f10;position:relative;box-shadow:inset 0 0 0 1px var(--lime-line)}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;background:#777;transition:transform .2s,background .2s}
 .degen[aria-pressed="true"]{color:var(--lime)}
+.degen[aria-pressed="true"] .switch::after{transform:translateX(20px);background:var(--lime)}
 .laser{opacity:0;transition:opacity .25s}
 .degen-on .laser{opacity:1}
-.fx{position:fixed;pointer-events:none;z-index:60;font-size:26px;animation:float 1.2s ease-out forwards}
-@media (max-width:900px){
-  .hero .wrap{grid-template-columns:1fr}
-  .stage{order:-1;max-width:460px;margin-bottom:-30px}
-  .speech{font-size:13px;max-width:180px}
+.hint{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);font-family:var(--pixel);font-size:12px;color:var(--lime);display:grid;justify-items:center;gap:8px;z-index:4}
+.hint i{width:2px;height:34px;background:linear-gradient(var(--lime),transparent);animation:drip 1.6s ease-in-out infinite}
+.code{position:absolute;left:24px;bottom:22px;font-family:var(--mono);font-size:10px;line-height:1.5;color:rgba(198,255,0,.28);white-space:pre;z-index:-1;pointer-events:none}
+@media (max-width:760px){
+  .beat{left:16px!important;right:16px!important;top:auto!important;bottom:15%;max-width:none;font-size:16px}
+  .final{left:16px;right:16px;top:auto;bottom:6%;transform:none;max-width:none}
+  .final p{margin:12px 0 16px;font-size:15px}
+  .code{display:none}
+  .jw{width:118vw}
 }
+.fx{position:fixed;pointer-events:none;z-index:80;font-size:26px;animation:float 1.2s ease-out forwards}
 
-/* ---------- MARQUEE ---------- */
-.marquee{background:var(--lime);color:#000;overflow:hidden;transform:rotate(-1.6deg);margin:-10px -20px 0;border-block:3px solid #000;position:relative;z-index:3}
-.marquee .track{display:flex;width:max-content;animation:scroll 32s linear infinite}
-.marquee span{font-family:var(--display);font-size:clamp(22px,3vw,34px);padding:14px 0;white-space:nowrap;text-transform:uppercase}
+/* ---------- SECCIONES ---------- */
+section.s{padding:clamp(90px,12vw,170px) 0;position:relative}
+.crosses{position:absolute;inset:0;pointer-events:none}
+.crosses span{position:absolute;color:rgba(255,255,255,.55);font-family:var(--mono);font-size:22px;line-height:1}
+.tag{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--lime);text-transform:uppercase}
+h2{font-family:var(--pixel);font-weight:700;font-size:clamp(28px,4.6vw,64px);line-height:1.02;letter-spacing:-1px;text-transform:uppercase}
+h2 .l{text-shadow:0 0 26px var(--lime-glow)}
+.center{text-align:center}
+.center h2{margin-inline:auto}
+.p{color:var(--muted);font-size:clamp(16px,1.35vw,18px);max-width:720px}
+.center .p{margin-inline:auto}
+.caret{display:inline-block;width:.55em;height:.9em;background:var(--lime);vertical-align:-.08em;margin-left:4px;animation:blink 1s steps(1) infinite}
+.dot{width:12px;height:12px;background:#fff;margin:34px auto}
 
-/* ---------- SECTIONS ---------- */
-section{padding:clamp(80px,11vw,140px) 0;position:relative}
-.eyebrow{font-family:var(--mono);color:var(--lime);font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
-.eyebrow::before{content:"";width:28px;height:2px;background:var(--lime)}
-h2{font-family:var(--display);font-weight:400;font-size:clamp(42px,6.5vw,84px);line-height:.95;text-transform:uppercase;margin-bottom:18px}
-h2 .l{color:var(--lime)}
-.sub{color:var(--muted);font-size:18px;max-width:640px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
-@media (max-width:860px){.grid3{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--lime-line);border-radius:var(--radius);padding:28px;position:relative;overflow:hidden;transition:transform .25s,border-color .25s}
-.card:hover{transform:translateY(-6px);border-color:var(--lime)}
-.card .ico{font-size:40px;margin-bottom:16px;display:block}
-.card h3{font-family:var(--display);font-weight:400;font-size:30px;text-transform:uppercase;margin-bottom:8px;line-height:1}
-.card p{color:var(--muted)}
-.card .num{position:absolute;right:18px;top:10px;font-family:var(--display);font-size:80px;color:rgba(198,255,0,.07);line-height:1}
+/* milagros (filas alternas) */
+.mil{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(30px,6vw,90px);padding:clamp(40px,6vw,80px) 0}
+.mil:nth-child(even) .ic{order:2}
+.mil .ic{display:grid;place-items:center;aspect-ratio:1.2;position:relative}
+.mil .ic::before{content:"";position:absolute;inset:18%;background:radial-gradient(circle,rgba(198,255,0,.22),transparent 65%);filter:blur(10px)}
+.neon{width:min(360px,80%);height:auto;fill:none;stroke:var(--lime);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;
+  filter:drop-shadow(0 0 6px var(--lime)) drop-shadow(0 0 22px rgba(198,255,0,.6));animation:hover 5s ease-in-out infinite,flicker 6s linear infinite;position:relative}
+.neon .w{stroke:#F6FFD6;stroke-width:2.2}
+.mil h3{font-family:var(--pixel);font-weight:700;font-size:clamp(28px,3.6vw,52px);line-height:1.02;text-transform:uppercase;margin:10px 0 18px}
+.mil h3 .l{text-shadow:0 0 22px var(--lime-glow)}
+.mil p{color:var(--muted);max-width:520px;margin-bottom:24px}
+@media (max-width:860px){.mil{grid-template-columns:1fr}.mil .ic,.mil:nth-child(even) .ic{order:-1;aspect-ratio:1.6}}
 
-/* historia */
-.quote{margin-top:56px;border-left:4px solid var(--lime);padding:6px 0 6px 24px;font-size:clamp(20px,2.4vw,28px);font-weight:500;max-width:860px}
-.quote small{display:block;font-family:var(--mono);font-size:13px;color:var(--lime);margin-top:10px}
+/* esquinas tipo visor */
+.brk{--c:var(--lime);--s:16px;
+  background:
+   linear-gradient(var(--c),var(--c)) top left/var(--s) 2px,linear-gradient(var(--c),var(--c)) top left/2px var(--s),
+   linear-gradient(var(--c),var(--c)) top right/var(--s) 2px,linear-gradient(var(--c),var(--c)) top right/2px var(--s),
+   linear-gradient(var(--c),var(--c)) bottom left/var(--s) 2px,linear-gradient(var(--c),var(--c)) bottom left/2px var(--s),
+   linear-gradient(var(--c),var(--c)) bottom right/var(--s) 2px,linear-gradient(var(--c),var(--c)) bottom right/2px var(--s);
+  background-repeat:no-repeat}
 
 /* tokenomics */
-.toks{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:center;margin-top:40px}
-@media (max-width:860px){.toks{grid-template-columns:1fr}}
-.donut{position:relative;width:min(420px,100%);aspect-ratio:1;margin-inline:auto}
-.donut svg{width:100%;height:100%;transform:rotate(-90deg)}
-.donut .ring{transition:stroke-dashoffset 1.8s cubic-bezier(.2,.8,.2,1)}
-.donut .center{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
-.donut .center b{font-family:var(--display);font-weight:400;font-size:clamp(64px,10vw,104px);color:var(--lime);line-height:1}
-.donut .center span{font-family:var(--mono);font-size:13px;letter-spacing:.12em;color:var(--muted)}
+.toks{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(30px,5vw,70px);align-items:center;margin-top:60px}
+@media (max-width:900px){.toks{grid-template-columns:1fr}}
+.donut{position:relative;width:min(440px,100%);aspect-ratio:1;margin-inline:auto;padding:24px}
+.donut svg{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 0 16px rgba(198,255,0,.45))}
+.donut .ring{transition:stroke-dashoffset 2s cubic-bezier(.2,.8,.2,1)}
+.donut .ctr{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.donut .ctr b{font-family:var(--pixel);font-size:clamp(40px,6vw,72px);color:var(--lime);line-height:1;text-shadow:0 0 30px var(--lime-glow)}
+.donut .ctr span{font-family:var(--pixel);font-size:13px;color:var(--muted)}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.stat{background:var(--card);border:1px solid var(--lime-line);border-radius:18px;padding:20px}
-.stat span{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
-.stat b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(28px,3.4vw,40px);color:var(--ink);margin-top:4px;line-height:1.05;word-break:break-word}
+.stat{padding:22px;background-color:var(--card)}
+.stat span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.stat b{display:block;font-family:var(--pixel);font-weight:700;font-size:clamp(20px,2.3vw,30px);margin-top:6px;line-height:1.1;word-break:break-word}
 .stat.big{grid-column:1/-1}
-.stat.big b{color:var(--lime)}
+.stat.big b{color:var(--lime);font-size:clamp(24px,3.4vw,44px)}
 
-/* comprar */
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px;counter-reset:s}
-@media (max-width:980px){.steps{grid-template-columns:1fr 1fr}}
-@media (max-width:560px){.steps{grid-template-columns:1fr}}
-.step{background:var(--card);border:1px solid var(--lime-line);border-radius:var(--radius);padding:26px}
-.step::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--lime);color:#000;font-family:var(--display);font-size:24px;margin-bottom:16px}
-.step h3{font-size:20px;margin-bottom:6px}
-.step p{color:var(--muted);font-size:15px}
-
-/* juego */
-.game{margin-top:40px;position:relative;border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--lime);box-shadow:0 0 60px -20px var(--lime);background:#000}
+/* monitor del juego */
+.mon-wrap{margin-top:50px;perspective:1400px}
+.mon{position:relative;transform-origin:50% 0;will-change:transform;box-shadow:0 0 0 1.5px var(--lime),0 0 80px -16px var(--lime);background:#000}
 #game{width:100%;height:auto;aspect-ratio:16/9;max-width:none;touch-action:manipulation;cursor:pointer}
-.hud{position:absolute;top:14px;left:16px;right:16px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:14px;pointer-events:none}
+.hud{position:absolute;top:14px;left:16px;right:16px;display:flex;justify-content:space-between;font-family:var(--pixel);font-size:13px;pointer-events:none}
 .hud b{color:var(--lime)}
-.overlay{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:14px;background:rgba(0,0,0,.6);padding:20px}
-.overlay h3{font-family:var(--display);font-weight:400;font-size:clamp(34px,5vw,60px);text-transform:uppercase;line-height:1}
+.overlay{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:14px;background:rgba(0,0,0,.62);padding:20px}
+.overlay h3{font-family:var(--pixel);font-weight:700;font-size:clamp(26px,4.4vw,56px);text-transform:uppercase;line-height:1}
 .overlay p{color:var(--muted)}
 .overlay[hidden]{display:none}
 @media (max-width:600px){#game{aspect-ratio:4/5}}
 
-/* roadmap */
-.road{margin-top:50px;display:grid;gap:18px;position:relative}
-.road::before{content:"";position:absolute;left:23px;top:10px;bottom:10px;width:2px;background:linear-gradient(var(--lime),transparent)}
-.mile{display:grid;grid-template-columns:48px 1fr;gap:20px;align-items:start}
-.mile .b{width:48px;height:48px;border-radius:50%;border:2px solid var(--lime);background:#000;display:grid;place-items:center;font-size:20px;position:relative;z-index:1}
-.mile.done .b{background:var(--lime)}
-.mile .c{background:var(--card);border:1px solid var(--lime-line);border-radius:var(--radius);padding:22px 24px}
-.mile h3{font-family:var(--display);font-weight:400;font-size:28px;text-transform:uppercase;line-height:1.05}
-.mile h3 small{font-family:var(--mono);font-size:12px;color:var(--lime);letter-spacing:.12em;display:block;margin-bottom:4px}
-.mile ul{list-style:none;margin-top:10px;color:var(--muted);display:grid;gap:4px}
-.mile li::before{content:"✦ ";color:var(--lime)}
+/* comprar (panel lima con carrusel) */
+.buyhead{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+.panel{background:var(--lime);color:#000;margin-top:40px}
+.rail{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.stepc{--c:#000;flex:0 0 min(360px,86vw);scroll-snap-align:start;padding:26px 28px 34px;border-right:1px solid rgba(0,0,0,.18);display:grid;grid-template-rows:auto 150px auto;gap:6px}
+.stepc .tg{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em}
+.stepc .art{display:grid;place-items:center;margin:14px 0}
+.stepc .art svg{width:88px;height:88px;fill:none;stroke:#000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.stepc h3{font-family:var(--pixel);font-weight:700;font-size:22px;line-height:1.1;text-transform:uppercase;margin-bottom:8px}
+.stepc p{font-size:15px;opacity:.8}
+.arrows{display:flex;gap:8px}
+.arrows button{width:52px;height:52px;background:#141808;box-shadow:inset 0 0 0 1.5px var(--lime-line);font-family:var(--pixel);font-size:20px}
+.arrows button:hover{background:var(--lime);color:#000}
+.panel-foot{display:flex;border-top:1px solid rgba(0,0,0,.18);font-family:var(--mono);font-size:11px;font-weight:700;overflow:hidden}
+.panel-foot span{flex:1;padding:12px 28px;white-space:nowrap}
 
-/* comunidad */
-.cto{text-align:center;border:1.5px solid var(--lime);border-radius:32px;padding:clamp(40px,7vw,80px) 20px;background:radial-gradient(70% 100% at 50% 0%,rgba(198,255,0,.18),transparent 70%),var(--bg-2);overflow:hidden;position:relative}
-.cto h2{margin-inline:auto;max-width:900px}
-.cto .sub{margin:0 auto 30px}
-.socials{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
-.blessings{margin-top:34px;font-family:var(--mono);color:var(--muted);font-size:14px}
-.blessings b{color:var(--lime);font-size:22px}
-.bless-btn{margin-top:14px;font-size:40px;width:84px;height:84px;border-radius:50%;background:var(--lime-dim);border:1.5px solid var(--lime);transition:transform .15s}
-.bless-btn:hover{transform:scale(1.08) rotate(-6deg)}
+/* roadmap */
+.road{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:60px;border-top:2px solid var(--lime-line)}
+.mile{padding:30px 22px 10px 0;position:relative}
+.mile::before{content:"";position:absolute;top:-8px;left:0;width:14px;height:14px;background:#000;box-shadow:inset 0 0 0 2px var(--lime)}
+.mile.done::before{background:var(--lime);box-shadow:0 0 18px var(--lime)}
+.mile h3{font-family:var(--pixel);font-weight:700;font-size:clamp(22px,2.3vw,30px);line-height:1.05;text-transform:uppercase;margin:10px 0 14px}
+.mile ul{list-style:none;color:var(--muted);display:grid;gap:6px;font-size:15px}
+.mile li::before{content:"+ ";color:var(--lime);font-family:var(--mono)}
+@media (max-width:900px){.road{grid-template-columns:1fr 1fr;row-gap:20px}}
+@media (max-width:540px){.road{grid-template-columns:1fr}}
+
+/* mision + bendiciones */
+.bless{margin-top:36px;display:grid;justify-items:center;gap:12px;font-family:var(--pixel);font-size:13px;color:var(--muted)}
+.bless b{color:var(--lime);font-size:28px;text-shadow:0 0 18px var(--lime-glow)}
+.bless-btn{font-size:38px;width:88px;height:88px;background:#0B0E04;box-shadow:inset 0 0 0 1.5px var(--lime),0 0 30px -6px var(--lime);transition:transform .15s}
+.bless-btn:hover{transform:scale(1.07) rotate(-5deg)}
 .bless-btn:active{transform:scale(.92)}
 
 /* faq */
-.faq{margin-top:40px;display:grid;gap:12px;max-width:860px}
-details{background:var(--card);border:1px solid var(--lime-line);border-radius:18px;padding:0 22px}
-details[open]{border-color:var(--lime)}
-summary{cursor:pointer;list-style:none;padding:20px 0;font-weight:700;font-size:18px;display:flex;justify-content:space-between;gap:14px}
+.faq{margin:50px auto 0;display:grid;gap:10px;max-width:900px;text-align:left}
+details{background:var(--card);box-shadow:inset 0 0 0 1px var(--lime-line);padding:0 22px}
+details[open]{box-shadow:inset 0 0 0 1px var(--lime)}
+summary{cursor:pointer;list-style:none;padding:20px 0;font-family:var(--pixel);font-weight:700;font-size:16px;display:flex;justify-content:space-between;gap:14px;text-transform:uppercase}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"+";color:var(--lime);font-size:26px;line-height:1;transition:transform .2s}
+summary::after{content:"+";color:var(--lime);font-size:24px;line-height:1;transition:transform .2s}
 details[open] summary::after{transform:rotate(45deg)}
 details p{color:var(--muted);padding-bottom:20px}
 
 /* footer */
-footer{border-top:1px solid var(--lime-line);padding:40px 0 60px;color:var(--muted);font-size:14px}
-footer .wrap{display:grid;gap:18px}
-footer .top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
-.disc{font-size:13px;max-width:880px;opacity:.8}
+.foot{background:#0C1004;border-top:1px solid var(--lime-line)}
+.fcols{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px;padding:56px 0 46px}
+.fcols h4{font-family:var(--pixel);font-size:12px;color:var(--lime);margin-bottom:14px;font-weight:700}
+.fcols ul{list-style:none;display:grid;gap:8px;font-family:var(--pixel);font-size:12px}
+.fcols ul a:hover{color:var(--lime)}
+.fcols p{color:var(--muted);font-size:14px}
+@media (max-width:860px){.fcols{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.fcols{grid-template-columns:1fr}}
+.fbar{background:#000;border-top:1px solid var(--lime-line)}
+.fbar .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;padding:22px 0}
+.soc{display:flex;align-items:center;gap:16px;font-family:var(--pixel);font-size:13px}
+.soc a svg{width:22px;height:22px;fill:currentColor}
+.soc a:hover{color:var(--lime)}
+.legal{display:flex;flex-wrap:wrap;gap:22px;color:var(--muted);font-size:12px;font-family:var(--mono)}
+.disc{color:var(--muted);font-size:12px;padding:0 0 24px;max-width:960px}
+.graf{background:#171717;overflow:hidden;padding:2vw 0 0;user-select:none}
+.graf div{font-family:var(--graf);font-size:clamp(70px,17vw,300px);line-height:.9;text-align:center;white-space:nowrap;color:#050505;letter-spacing:-.02em;transform:rotate(-3deg);padding-bottom:3vw}
+.graf div span{transition:color .3s,text-shadow .3s;display:inline-block}
+.graf div span:hover{color:var(--lime);text-shadow:0 0 30px var(--lime-glow)}
+.graf small{display:block;font-family:var(--graf);font-size:clamp(30px,5vw,80px);color:#050505;margin-top:-1vw;transform:translateX(18vw)}
+
+.tgfab{position:fixed;right:20px;bottom:20px;z-index:50;width:58px;height:58px;display:grid;place-items:center;background:var(--lime);color:#000;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);transition:transform .2s}
+.tgfab:hover{transform:scale(1.08)}
+.tgfab svg{width:26px;height:26px;fill:#000}
 
 /* reveal */
-.rv{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1)}
+.rv{opacity:0;transform:translateY(34px);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1)}
 .rv.in{opacity:1;transform:none}
 
-@keyframes breathe{50%{transform:scale(1.08);opacity:.8}}
-@keyframes pop{from{transform:scale(0)}}
-@keyframes scroll{to{transform:translateX(-50%)}}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@keyframes blink{50%{opacity:0}}
+@keyframes hover{50%{transform:translateY(-14px) rotate(-2deg)}}
+@keyframes flicker{0%,18%,22%,62%,64%,100%{opacity:1}20%,63%{opacity:.55}}
 @keyframes float{to{transform:translate(var(--dx),-120px) rotate(var(--r));opacity:0}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-  html{scroll-behavior:auto}
+  .fly{height:auto}.stick{position:relative}
   .rv{opacity:1;transform:none}
 }
 </style>
 </head>
 <body>
 
+<div class="promo" id="promo">
+  <span>Lanzamiento justo · Sin preventa · Sin equipo</span><b>100% COMUNIDAD ✝</b>
+  <button class="x" id="promoX" type="button" aria-label="Cerrar aviso">×</button>
+</div>
+
 <nav class="nav" id="nav">
   <div class="wrap">
-    <a href="#top" class="brand" aria-label="Jesús Cripto, inicio">
-      <span class="dot" aria-hidden="true">
-        <svg width="22" height="22" viewBox="0 0 64 64"><ellipse cx="32" cy="14" rx="20" ry="6" fill="none" stroke="#000" stroke-width="5"/><path d="M6 30h52l-4 13c-2 6-14 6-16 0l-2-6h-8l-2 6c-2 6-14 6-16 0z" fill="#000"/></svg>
-      </span>
-      <span>JESÚS <b>CRIPTO</b></span>
-    </a>
-    <div class="links">
-      <a href="#historia">Historia</a>
-      <a href="#tokenomics">Tokenomics</a>
-      <a href="#comprar">Comprar</a>
-      <a href="#juego">Juego</a>
-      <a href="#roadmap">Roadmap</a>
+    <a href="#top" class="logo" aria-label="Jesús Cripto, inicio">JESÚS CR<i>✝</i>PTO</a>
+    <div class="nav-r">
+      <a class="btn btn-lime btn-sm" data-link="buy" href="#comprar">COMPRAR <span class="tk">$JCRIPTO</span></a>
+      <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="menu">MENÚ <span class="burger" aria-hidden="true"><i></i><i></i><i></i></span></button>
     </div>
-    <a class="btn btn-lime btn-sm" data-link="buy" href="#comprar">Comprar <span class="tk">$JCRIPTO</span></a>
   </div>
 </nav>
 
-<header class="hero" id="top">
-  <canvas id="chart" aria-hidden="true"></canvas>
+<div class="menu" id="menu">
   <div class="wrap">
-    <div class="rv">
-      <div class="kicker">
-        <span class="pill">100% COMUNIDAD</span>
-        <span class="pill">0% EQUIPO</span>
-        <span class="pill">0% IMPUESTOS</span>
-      </div>
-      <h1>Él volvió.<br><span class="l">Ahora vuela.</span></h1>
-      <p class="lead"><strong>Jesús Cripto</strong> bajó del cielo con lentes oscuros para multiplicar las bolsas de la comunidad. Sin dueños, sin VCs, sin equipo. Solo fe, memes y velas verdes.</p>
+    <ol>
+      <li><a href="#porque">Por qué</a></li>
+      <li><a href="#milagros">Milagros</a></li>
+      <li><a href="#tokenomics">Tokenomics</a></li>
+      <li><a href="#juego">Juego</a></li>
+      <li><a href="#comprar">Comprar</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+    </ol>
+    <p class="meta">// <span class="tk">$JCRIPTO</span> · sin equipo · sin VCs · sin dueños</p>
+  </div>
+</div>
+
+<!-- ===================== INTRO CON SCROLL ===================== -->
+<header class="fly" id="top">
+  <div class="stick" id="stick">
+    <div class="gridbg"></div>
+    <span class="plus" style="left:12%;top:22%">+</span><span class="plus" style="left:47%;top:13%">+</span>
+    <span class="plus" style="left:83%;top:28%">+</span><span class="plus" style="left:22%;top:78%">+</span>
+    <span class="plus" style="left:64%;top:86%">+</span><span class="plus" style="left:91%;top:70%">+</span>
+    <div class="beam" id="beam"></div>
+
+    <span class="glyph t" data-d="1.2" style="left:14%;top:12%">?</span>
+    <span class="glyph t" data-d="2"   style="left:70%;top:66%">!!</span>
+    <span class="glyph t" data-d=".7"  style="left:31%;top:72%">$</span>
+    <span class="glyph" data-d="1.6" style="left:76%;top:8%"><svg viewBox="0 0 100 100"><path d="M50 6v88M24 32h52"/></svg></span>
+    <span class="glyph" data-d=".9"  style="left:6%;top:48%"><svg viewBox="0 0 120 60"><ellipse cx="60" cy="14" rx="40" ry="9"/><path d="M8 30h104l-6 16c-4 9-28 9-32 0l-4-9h-8l-4 9c-4 9-28 9-32 0z"/></svg></span>
+    <span class="glyph" data-d="1.4" style="left:52%;top:4%"><svg viewBox="0 0 120 70"><path d="M10 35C35 8 75 8 96 35 75 62 35 62 10 35Z M96 35l18-16v32z"/><circle cx="32" cy="31" r="4"/></svg></span>
+    <span class="glyph" data-d="2.4" style="left:88%;top:44%"><svg viewBox="0 0 80 100"><rect x="22" y="22" width="36" height="56" rx="2"/><path d="M40 4v18M40 78v18"/></svg></span>
+
+    <div class="jw" id="jw"><div class="inner">
+      <div class="streaks" id="streaks"><i style="top:10%;width:70%"></i><i style="top:34%;width:100%"></i><i style="top:58%;width:55%"></i><i style="top:82%;width:85%"></i></div>
+      <div id="jesus"></div>
+    </div></div>
+
+    <p class="beat b1" data-a=".03" data-b=".30">Nuestras bolsas viven hoy en dos mundos: el de las velas verdes y el de las velas rojas…</p>
+    <p class="beat b2" data-a=".30" data-b=".56">En los dos pasa lo mismo: FUD, rug pulls y un montón de random sh!t.</p>
+    <p class="beat b3" data-a=".56" data-b=".82">Por eso volvió. Con lentes, sin equipo y sin dueños. Esta vez vuela para la comunidad.</p>
+
+    <div class="final" id="final">
+      <h1>Jesús Cripto es<br><span class="l glowtx">el meme 100%<br>de la comunidad.</span></h1>
+      <p><strong>Él volvió. Ahora vuela.</strong> Sin VCs, sin preventa, sin equipo con tokens. Solo fe, memes y velas verdes.</p>
       <div class="cta">
-        <a class="btn btn-lime" data-link="buy" href="#comprar">Comprar <span class="tk">$JCRIPTO</span></a>
-        <a class="btn btn-ghost" data-link="telegram" href="#comunidad">Telegram</a>
-        <a class="btn btn-ghost" data-link="x" href="#comunidad">X / Twitter</a>
+        <a class="btn btn-lime" data-link="buy" href="#comprar">COMPRAR <span class="tk">$JCRIPTO</span></a>
+        <a class="btn btn-ghost" data-link="telegram" href="#mision">TELEGRAM</a>
+        <a class="btn btn-ghost" data-link="x" href="#mision">X</a>
       </div>
-      <div class="ca">
-        <span>CA</span>
-        <code id="ca">Muy pronto…</code>
-        <button id="copy" type="button">Copiar</button>
-      </div>
+      <div class="ca"><span>CA</span><code id="ca">Muy pronto…</code><button id="copy" type="button">COPIAR</button></div>
+      <button class="degen" id="degen" type="button" aria-pressed="false"><span class="switch" aria-hidden="true"></span>MODO DEGEN (OJOS LÁSER)</button>
     </div>
 
-    <div class="stage" id="stage">
-      <div class="glow"></div>
-      <div class="speech" id="speech">Paz, amor y velas verdes 😎</div>
-      <div id="jesus"></div>
-      <button class="degen" id="degen" type="button" aria-pressed="false">
-        <span class="switch" aria-hidden="true"></span> MODO DEGEN
-      </button>
-    </div>
+    <div class="hint" id="hint">SCROLL<i></i></div>
+    <div class="code" aria-hidden="true">&lt;script type="text/fe"&gt;
+  const jesus = new Cripto({ lentes: true, equipo: 0 });
+  jesus.volar().multiplicar(bolsas).hodl();
+&lt;/script&gt;</div>
   </div>
 </header>
 
-<div class="marquee" aria-hidden="true"><div class="track" id="marq"></div></div>
-
-<section id="historia">
+<!-- ===================== POR QUE ===================== -->
+<section class="s center" id="porque">
+  <div class="crosses" aria-hidden="true"><span style="left:3%;top:20%">+</span><span style="left:3%;top:24%">+</span><span style="left:3%;top:28%">+</span><span style="right:3%;top:20%">+</span><span style="right:3%;top:24%">+</span><span style="right:3%;top:28%">+</span></div>
   <div class="wrap">
-    <p class="eyebrow rv">La historia</p>
-    <h2 class="rv">Los milagros<br>de <span class="l">Jesús Cripto</span></h2>
-    <p class="sub rv">Nadie lo lanzó para hacerse rico. Apareció en la blockchain, se puso los lentes y le entregó todo a la gente. Desde entonces el chart solo mira al cielo.</p>
-    <div class="grid3">
-      <article class="card rv"><span class="num">01</span><span class="ico">🍞</span><h3>Multiplicó las bolsas</h3><p>Cinco panes, dos peces y un pool de liquidez. Cuando la comunidad comparte, alcanza para todos.</p></article>
-      <article class="card rv"><span class="num">02</span><span class="ico">🌊</span><h3>Caminó sobre las rojas</h3><p>Las velas rojas son agua. Él camina por encima sin mojarse las sandalias. Tú también puedes: HODL.</p></article>
-      <article class="card rv"><span class="num">03</span><span class="ico">🕶️</span><h3>Resucitó al tercer dip</h3><p>Lo dieron por muerto dos veces. Al tercer dip volvió, con lentes y volando. Los paper hands no lo vieron venir.</p></article>
-    </div>
-    <blockquote class="quote rv">“Bienaventurados los holders, porque de ellos será el reino de las velas verdes.”<small>— EL SERMÓN DEL CHART, 1:1</small></blockquote>
+    <h2 class="rv">Sabemos por dónde vuela<br>el cripto: <span class="l" id="cycle">RANDOM</span><span class="caret" aria-hidden="true"></span></h2>
+    <div class="dot rv"></div>
+    <p class="p rv">Rug pulls, FUD a las 3 de la mañana, velas rojas que te arruinan el día, influencers que venden en tu cara… Hay demasiado random sh!t en el mundo cripto. Jesús Cripto no te promete milagros financieros: te promete comunidad. Sin equipo con tokens, sin VCs, sin preventa. Un meme de todos y para todos.</p>
   </div>
 </section>
 
-<section id="tokenomics" style="background:var(--bg-2)">
+<!-- ===================== MILAGROS ===================== -->
+<section class="s" id="milagros" style="padding-top:0">
   <div class="wrap">
-    <p class="eyebrow rv">Tokenomics</p>
-    <h2 class="rv">Todo para<br><span class="l">la comunidad</span></h2>
-    <p class="sub rv">Ni un token reservado para un equipo, porque no hay equipo. El supply completo va al pool y a las manos de la gente.</p>
+    <h2 class="rv center">Los milagros de<br><span class="l">Jesús Cripto.</span></h2>
+
+    <div class="mil">
+      <div class="ic rv"><svg class="neon" viewBox="0 0 200 160" aria-hidden="true"><ellipse cx="100" cy="30" rx="58" ry="14"/><path d="M28 70h144l-9 26c-6 16-42 16-48 0l-6-16h-18l-6 16c-6 16-42 16-48 0z"/><path class="w" d="M52 80l10-4M128 80l12-4"/><path d="M60 128c24 14 56 14 80 0"/></svg></div>
+      <div class="rv"><span class="tag">[ Milagro 01 ]</span><h3>Únete al<br><span class="l">rebaño con lentes</span></h3><p>No hay fundadores con millones de tokens esperando para venderte. Nadie es dueño de Jesús Cripto: cada holder es parte del equipo, de los memes y del camino al cielo.</p><a class="btn btn-ghost btn-sm" href="#tokenomics">VER TOKENOMICS</a></div>
+    </div>
+
+    <div class="mil">
+      <div class="ic rv"><svg class="neon" viewBox="0 0 200 160" aria-hidden="true"><path d="M40 30v70M40 46h0"/><rect x="30" y="44" width="20" height="40"/><path d="M100 14v80"/><rect x="90" y="26" width="20" height="54"/><path d="M160 6v74"/><rect x="150" y="16" width="20" height="46"/><path class="w" d="M14 124c14-12 26-12 40 0s26 12 40 0 26-12 40 0 26 12 40 0"/><path d="M14 146c14-12 26-12 40 0s26 12 40 0 26-12 40 0 26 12 40 0"/></svg></div>
+      <div class="rv"><span class="tag">[ Milagro 02 ]</span><h3>Camina sobre<br><span class="l">las velas rojas</span></h3><p>Las velas rojas son agua y Él camina por encima sin mojarse las sandalias. Cuando el mercado se hunde, la comunidad no: HODL es fe.</p><a class="btn btn-ghost btn-sm" href="#juego">PROBAR EL JUEGO</a></div>
+    </div>
+
+    <div class="mil">
+      <div class="ic rv"><svg class="neon" viewBox="0 0 200 160" aria-hidden="true"><path d="M20 62C52 24 108 24 140 62 108 100 52 100 20 62Z"/><path d="M140 62l34-28v56z"/><circle class="w" cx="54" cy="56" r="5"/><path d="M84 40c8 14 8 30 0 44"/><path d="M40 132c0-14 12-22 30-22h60c18 0 30 8 30 22v8H40z"/><path class="w" d="M70 120l4 12M100 118v14M130 120l-4 12"/></svg></div>
+      <div class="rv"><span class="tag">[ Milagro 03 ]</span><h3>Multiplica<br><span class="l">panes, peces y bolsas</span></h3><p>Cinco panes, dos peces y un pool de liquidez. Cuando la comunidad comparte, alcanza para todos. Resucitó al tercer dip y no ha dejado de volar.</p><a class="btn btn-ghost btn-sm" href="#comprar">CÓMO COMPRAR</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TOKENOMICS ===================== -->
+<section class="s" id="tokenomics" style="background:#050701">
+  <div class="crosses" aria-hidden="true"><span style="left:3%;top:12%">+</span><span style="right:3%;bottom:12%">+</span></div>
+  <div class="wrap">
+    <div class="center"><span class="tag rv">[ Tokenomics ]</span><h2 class="rv" style="margin-top:14px">Todo para la gente.<br><span class="l">Nada para un equipo.</span></h2></div>
     <div class="toks">
-      <div class="donut rv" id="donut">
+      <div class="donut brk rv" id="donut">
         <svg viewBox="0 0 200 200" aria-hidden="true">
-          <circle cx="100" cy="100" r="84" fill="none" stroke="#1A1F10" stroke-width="22"/>
-          <circle class="ring" cx="100" cy="100" r="84" fill="none" stroke="#C6FF00" stroke-width="22" stroke-linecap="round" stroke-dasharray="527.8" stroke-dashoffset="527.8"/>
+          <circle cx="100" cy="100" r="80" fill="none" stroke="#151A08" stroke-width="20"/>
+          <circle class="ring" cx="100" cy="100" r="80" fill="none" stroke="#C6FF00" stroke-width="20" stroke-dasharray="502.7" stroke-dashoffset="502.7"/>
         </svg>
-        <div class="center"><b>100%</b><span>COMUNIDAD</span></div>
+        <div class="ctr"><b>100%</b><span>COMUNIDAD</span></div>
       </div>
       <div class="stats rv">
-        <div class="stat big"><span>Supply total</span><b id="supply">777,777,777,777</b></div>
-        <div class="stat"><span>Impuesto compra/venta</span><b>0 / 0</b></div>
-        <div class="stat"><span>Equipo</span><b>0%</b></div>
-        <div class="stat"><span>Liquidez</span><b>Quemada 🔥</b></div>
-        <div class="stat"><span>Contrato</span><b>Renunciado</b></div>
-        <div class="stat"><span>Red</span><b id="chain">Ethereum</b></div>
-        <div class="stat"><span>Ticker</span><b class="tk">$JCRIPTO</b></div>
+        <div class="stat big brk"><span>Supply total</span><b id="supply">777,777,777,777</b></div>
+        <div class="stat brk"><span>Impuesto compra / venta</span><b>0% / 0%</b></div>
+        <div class="stat brk"><span>Equipo</span><b>0%</b></div>
+        <div class="stat brk"><span>Liquidez</span><b>Quemada</b></div>
+        <div class="stat brk"><span>Contrato</span><b>Renunciado</b></div>
+        <div class="stat brk"><span>Red</span><b id="chain">Ethereum</b></div>
+        <div class="stat brk"><span>Ticker</span><b class="tk l">$JCRIPTO</b></div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="comprar">
+<!-- ===================== JUEGO ===================== -->
+<section class="s" id="juego">
   <div class="wrap">
-    <p class="eyebrow rv">Cómo comprar</p>
-    <h2 class="rv">Únete al rebaño<br><span class="l">en 4 pasos</span></h2>
-    <div class="steps">
-      <div class="step rv"><h3>Crea tu wallet</h3><p>Descarga MetaMask, Rabby o tu wallet favorita. Guarda tu frase semilla como si fueran los diez mandamientos.</p></div>
-      <div class="step rv"><h3>Consigue <span class="native">ETH</span></h3><p>Compra <span class="native">ETH</span> en un exchange y envíalo a tu wallet. Deja un poco para el gas.</p></div>
-      <div class="step rv"><h3>Ve a <span class="dexname">Uniswap</span></h3><p>Conecta tu wallet, pega la dirección del contrato oficial y comprueba que coincide con la de esta página.</p></div>
-      <div class="step rv"><h3>Cambia por <span class="tk">$JCRIPTO</span></h3><p>Haz el swap, ponte los lentes y bienvenido a la comunidad. Ahora tú también vuelas.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="juego" style="background:var(--bg-2)">
-  <div class="wrap">
-    <p class="eyebrow rv">Mini juego</p>
-    <h2 class="rv">Vuelo <span class="l">de fe</span></h2>
-    <p class="sub rv">Toca, haz clic o pulsa espacio para volar. Esquiva las velas rojas y recoge panes y peces para multiplicar tu bolsa.</p>
-    <div class="game rv">
+    <div class="center"><span class="tag rv">[ Mini juego ]</span><h2 class="rv" style="margin-top:14px">Vuelo de fe:<br><span class="l">esquiva las rojas.</span></h2>
+    <p class="p rv" style="margin-top:18px">Toca, haz clic o pulsa espacio para volar. Las velas rojas te liquidan; los panes y los peces multiplican tu bolsa.</p></div>
+    <div class="mon-wrap"><div class="mon" id="mon">
       <canvas id="game" width="960" height="540" aria-label="Juego Vuelo de fe"></canvas>
       <div class="hud"><span>BOLSA <b id="score">0</b></span><span>RÉCORD <b id="best">0</b></span></div>
       <div class="overlay" id="over">
         <h3 id="overT">¿Tienes fe?</h3>
         <p id="overP">Las velas rojas no perdonan. Los panes sí suman.</p>
-        <div><button class="btn btn-lime" id="play" type="button">Volar 🕊️</button></div>
+        <div><button class="btn btn-lime" id="play" type="button">VOLAR 🕊️</button></div>
       </div>
-    </div>
+    </div></div>
   </div>
 </section>
 
-<section id="roadmap">
+<!-- ===================== MISION ===================== -->
+<section class="s center" id="mision" style="background:#050701">
+  <div class="crosses" aria-hidden="true"><span style="left:3%;top:40%">+</span><span style="left:3%;top:44%">+</span><span style="right:3%;top:40%">+</span><span style="right:3%;top:44%">+</span></div>
   <div class="wrap">
-    <p class="eyebrow rv">Roadmap</p>
-    <h2 class="rv">Las <span class="l">escrituras</span></h2>
-    <p class="sub rv">No hay fechas porque no hay jefe. La comunidad decide el ritmo.</p>
-    <div class="road">
-      <div class="mile done rv"><div class="b">✝</div><div class="c"><h3><small>LIBRO I</small>Génesis</h3><ul><li>Nace Jesús Cripto, con lentes</li><li>Lanzamiento justo, sin preventa</li><li>Liquidez quemada y contrato renunciado</li></ul></div></div>
-      <div class="mile rv"><div class="b">🕊️</div><div class="c"><h3><small>LIBRO II</small>Éxodo</h3><ul><li>Los primeros 1.000 holders</li><li>Raids de memes en X y Telegram</li><li>Listado en trackers (DexScreener, CoinGecko, CMC)</li></ul></div></div>
-      <div class="mile rv"><div class="b">🍞</div><div class="c"><h3><small>LIBRO III</small>Milagros</h3><ul><li>10.000 holders, multiplicación de bolsas</li><li>Concursos de memes votados por la comunidad</li><li>Merch con lentes oficiales</li></ul></div></div>
-      <div class="mile rv"><div class="b">🚀</div><div class="c"><h3><small>LIBRO IV</small>Ascensión</h3><ul><li>Exchanges centralizados</li><li>Jesús Cripto vuela hasta la luna</li><li>El reino de las velas verdes</li></ul></div></div>
+    <h2 class="rv">Nuestra misión:<br><span class="l">un meme para toda<br>la comunidad.</span></h2>
+    <p class="p rv" style="margin-top:22px">Jesús Cripto nació sin dueño a propósito. Las decisiones, los memes y el ritmo los pone la gente en Telegram y en X. No hay nadie a quien culpar ni nadie que te salve: solo nosotros, volando juntos.</p>
+    <div style="height:clamp(70px,9vw,130px)"></div>
+    <h2 class="rv">Sin equipo + sin VCs =<br><span class="l">poder 100% de la gente.</span></h2>
+    <div class="cta rv" style="justify-content:center;margin-top:30px">
+      <a class="btn btn-lime" data-link="telegram" href="#mision">ÚNETE AL TELEGRAM</a>
+      <a class="btn btn-ghost" data-link="x" href="#mision">SÍGUENOS EN X</a>
+      <a class="btn btn-ghost" data-link="chart" href="#mision">DEXSCREENER</a>
     </div>
-  </div>
-</section>
-
-<section id="comunidad">
-  <div class="wrap">
-    <div class="cto rv">
-      <p class="eyebrow" style="justify-content:center">Comunidad</p>
-      <h2>No hay equipo.<br><span class="l">Tú eres el equipo.</span></h2>
-      <p class="sub">Jesús Cripto es de todos. Haz memes, comparte, invita a tus amigos y sube al cielo con nosotros.</p>
-      <div class="socials">
-        <a class="btn btn-lime" data-link="telegram" href="#comunidad">Telegram</a>
-        <a class="btn btn-ghost" data-link="x" href="#comunidad">X / Twitter</a>
-        <a class="btn btn-ghost" data-link="chart" href="#comunidad">DexScreener</a>
-        <a class="btn btn-ghost" data-link="buy" href="#comunidad"><span class="dexname">Uniswap</span></a>
-      </div>
-      <p class="blessings">Bendiciones que has dado: <b id="bless">0</b></p>
+    <div class="bless rv">
+      <span>BENDICIONES QUE HAS DADO: <b id="bless">0</b></span>
       <button class="bless-btn" id="blessBtn" type="button" aria-label="Dar una bendición">🙏</button>
     </div>
   </div>
 </section>
 
-<section id="faq" style="padding-top:0">
+<!-- ===================== COMPRAR ===================== -->
+<section class="s" id="comprar">
   <div class="wrap">
-    <p class="eyebrow rv">Preguntas</p>
-    <h2 class="rv">Confesionario</h2>
+    <div class="buyhead">
+      <div><span class="tag rv">[ Cómo comprar ]</span><h2 class="rv" style="margin-top:14px">Únete al rebaño<br><span class="l">en 4 pasos:</span></h2></div>
+      <div class="arrows rv"><button type="button" id="prev" aria-label="Anterior">←</button><button type="button" id="next" aria-label="Siguiente">→</button></div>
+    </div>
+  </div>
+  <div class="panel rv">
+    <div class="rail" id="rail">
+      <div class="stepc"><span class="tg">[ PASO 01 · WALLET ]</span><div class="art"><svg viewBox="0 0 100 100"><rect x="10" y="24" width="80" height="58" rx="4"/><path d="M10 38h80M64 56h26v14H64z"/><path d="M22 24l44-14 6 14"/></svg></div><div><h3>Crea tu wallet</h3><p>MetaMask, Rabby o tu favorita. Guarda tu frase semilla como si fueran los diez mandamientos.</p></div></div>
+      <div class="stepc"><span class="tg">[ PASO 02 · <span class="native">ETH</span> ]</span><div class="art"><svg viewBox="0 0 100 100"><path d="M50 8L24 52l26 14 26-14z"/><path d="M24 58l26 34 26-34-26 14z"/></svg></div><div><h3>Consigue <span class="native">ETH</span></h3><p>Cómpralo en un exchange y envíalo a tu wallet. Deja un poco para el gas.</p></div></div>
+      <div class="stepc"><span class="tg">[ PASO 03 · <span class="dexname">UNISWAP</span> ]</span><div class="art"><svg viewBox="0 0 100 100"><path d="M18 36h58l-14-14M82 64H24l14 14"/></svg></div><div><h3>Ve a <span class="dexname">Uniswap</span></h3><p>Conecta tu wallet y pega la dirección oficial del contrato. Compárala con la de esta página.</p></div></div>
+      <div class="stepc"><span class="tg">[ PASO 04 · AMÉN ]</span><div class="art"><svg viewBox="0 0 120 100"><ellipse cx="60" cy="18" rx="34" ry="8"/><path d="M10 44h100l-6 18c-4 10-28 10-32 0l-4-10h-16l-4 10c-4 10-28 10-32 0z"/></svg></div><div><h3>Cambia por <span class="tk">$JCRIPTO</span></h3><p>Haz el swap, ponte los lentes y bienvenido. Ahora tú también vuelas.</p></div></div>
+    </div>
+    <div class="panel-foot"><span>[ SIN PREVENTA ]</span><span>[ 0% IMPUESTOS ]</span><span>[ NUNCA PEDIMOS TU FRASE SEMILLA ]</span></div>
+  </div>
+</section>
+
+<!-- ===================== ROADMAP ===================== -->
+<section class="s" id="roadmap" style="padding-top:0">
+  <div class="wrap">
+    <span class="tag rv">[ Roadmap ]</span><h2 class="rv" style="margin-top:14px">Las <span class="l">escrituras.</span></h2>
+    <p class="p rv" style="margin-top:14px">Sin fechas, porque no hay jefe. La comunidad pone el ritmo.</p>
+    <div class="road">
+      <div class="mile done rv"><span class="tag">Libro I</span><h3>Génesis</h3><ul><li>Nace Jesús Cripto, con lentes</li><li>Lanzamiento justo, sin preventa</li><li>Liquidez quemada, contrato renunciado</li></ul></div>
+      <div class="mile rv"><span class="tag">Libro II</span><h3>Éxodo</h3><ul><li>Los primeros 1.000 holders</li><li>Raids de memes en X y Telegram</li><li>DexScreener, CoinGecko y CMC</li></ul></div>
+      <div class="mile rv"><span class="tag">Libro III</span><h3>Milagros</h3><ul><li>10.000 holders</li><li>Concursos de memes votados por todos</li><li>Merch con los lentes oficiales</li></ul></div>
+      <div class="mile rv"><span class="tag">Libro IV</span><h3>Ascensión</h3><ul><li>Exchanges centralizados</li><li>Jesús Cripto vuela a la luna</li><li>El reino de las velas verdes</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="s center" id="faq" style="padding-top:0">
+  <div class="wrap">
+    <span class="tag rv">[ FAQ ]</span><h2 class="rv" style="margin-top:14px">Confesionario.</h2>
     <div class="faq">
-      <details class="rv"><summary>¿Quién está detrás de Jesús Cripto?</summary><p>Nadie y todos. Es un meme 100% de la comunidad: no hay equipo con tokens, ni fundadores que cobren, ni VCs.</p></details>
+      <details class="rv"><summary>¿Quién está detrás?</summary><p>Nadie y todos. Es un meme 100% de la comunidad: no hay equipo con tokens, ni fundadores que cobren, ni VCs.</p></details>
       <details class="rv"><summary>¿Tiene impuestos?</summary><p>No. 0% al comprar y 0% al vender.</p></details>
-      <details class="rv"><summary>¿Cómo sé que el contrato es el oficial?</summary><p>Copia la dirección solo desde esta página o desde los canales oficiales. Desconfía de cualquiera que te escriba por privado: Jesús Cripto nunca te pedirá tu frase semilla.</p></details>
+      <details class="rv"><summary>¿Cómo sé que el contrato es el oficial?</summary><p>Copia la dirección solo desde esta página o desde los canales oficiales. Desconfía de quien te escriba por privado: Jesús Cripto nunca te pedirá tu frase semilla.</p></details>
       <details class="rv"><summary>¿Tiene utilidad?</summary><p>Unir a la comunidad, hacer memes y pasarla bien. Es un meme coin, no una inversión ni un producto financiero.</p></details>
     </div>
   </div>
 </section>
 
+<!-- ===================== FOOTER ===================== -->
 <footer>
-  <div class="wrap">
-    <div class="top">
-      <a href="#top" class="brand"><span>JESÚS <b>CRIPTO</b></span></a>
-      <span class="tk" style="font-family:var(--mono);color:var(--lime)">$JCRIPTO</span>
+  <div class="foot">
+    <div class="wrap fcols">
+      <div><h4>JESÚS CRIPTO</h4><p>El mundo cripto está lleno de random sh!t. Jesús Cripto es la respuesta de la comunidad: un meme sin dueños, sin equipo y sin VCs, que vuela con lentes hacia las velas verdes.</p></div>
+      <div><h4>NAVEGA</h4><ul><li><a href="#porque">Por qué</a></li><li><a href="#milagros">Milagros</a></li><li><a href="#tokenomics">Tokenomics</a></li><li><a href="#juego">Juego</a></li><li><a href="#roadmap">Roadmap</a></li></ul></div>
+      <div><h4>COMUNIDAD</h4><ul><li><a data-link="telegram" href="#mision">Telegram</a></li><li><a data-link="x" href="#mision">X / Twitter</a></li><li><a data-link="chart" href="#mision">DexScreener</a></li><li><a data-link="buy" href="#comprar"><span class="dexname">Uniswap</span></a></li></ul></div>
+      <div><h4>TOKEN</h4><ul><li class="tk l">$JCRIPTO</li><li id="chain2">Ethereum</li><li>0% impuestos</li><li>100% comunidad</li></ul></div>
     </div>
-    <p class="disc"><span class="tk">$JCRIPTO</span> es un meme coin sin valor intrínseco ni expectativa de rentabilidad. No hay equipo formal ni hoja de ruta financiera: es solo entretenimiento. Las criptomonedas son muy volátiles y puedes perder todo lo que pongas. Nada de esta página es asesoramiento financiero. Investiga por tu cuenta (DYOR).</p>
-    <p>© <span id="yr"></span> Jesús Cripto · Hecho con fe por la comunidad 💚</p>
+    <div class="wrap"><p class="disc"><span class="tk">$JCRIPTO</span> es un meme coin sin valor intrínseco ni expectativa de rentabilidad. No hay equipo formal ni hoja de ruta financiera: es solo entretenimiento. Las criptomonedas son muy volátiles y puedes perder todo lo que pongas. Nada de esta página es asesoramiento financiero. Investiga por tu cuenta (DYOR).</p></div>
   </div>
+  <div class="fbar">
+    <div class="wrap">
+      <div class="soc">
+        <a data-link="telegram" href="#mision" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M21.9 4.3 18.7 19.4c-.2 1.1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.2 13l-4.8-1.5c-1-.3-1.1-1 .2-1.5l18.9-7.3c.9-.3 1.6.2 1.4 1.6z"/></svg></a>
+        <a data-link="x" href="#mision" aria-label="X"><svg viewBox="0 0 24 24"><path d="M17.8 3h3.3l-7.2 8.2L22.3 21h-6.6l-5.2-6.8L4.6 21H1.3l7.7-8.8L1 3h6.8l4.7 6.2zm-1.2 16h1.8L6.5 4.9H4.6z"/></svg></a>
+        <span>¿DUDAS? PREGUNTA EN EL TELEGRAM</span>
+      </div>
+      <div class="legal"><span>© <span id="yr"></span> Jesús Cripto</span><span>Hecho con fe por la comunidad</span><span>DYOR</span></div>
+    </div>
+  </div>
+  <div class="graf" aria-hidden="true"><div id="graf">Jesús Cripto<small>✝✝</small></div></div>
 </footer>
+
+<a class="tgfab" data-link="telegram" href="#mision" aria-label="Comunidad en Telegram"><svg viewBox="0 0 24 24"><path d="M21.9 4.3 18.7 19.4c-.2 1.1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.2 13l-4.8-1.5c-1-.3-1.1-1 .2-1.5l18.9-7.3c.9-.3 1.6.2 1.4 1.6z"/></svg></a>
 
 <script>
 /* ===================== CONFIG — editar aqui ===================== */
@@ -430,16 +572,19 @@ const CONFIG = {
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const ease = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
 };
 
-// Aplica CONFIG al documento
+/* ---------- Aplica CONFIG ---------- */
 $$(".tk").forEach(e => e.textContent = CONFIG.ticker);
 $$(".dexname").forEach(e => e.textContent = CONFIG.dex);
 $$(".native").forEach(e => e.textContent = CONFIG.native);
-$("#chain").textContent = CONFIG.chain;
+$("#chain").textContent = $("#chain2").textContent = CONFIG.chain;
 $("#supply").textContent = CONFIG.supply;
 $("#yr").textContent = new Date().getFullYear();
 document.title = `Jesús Cripto — ${CONFIG.ticker}`;
@@ -450,79 +595,140 @@ $$("[data-link]").forEach(a => {
 if (CONFIG.contract) $("#ca").textContent = CONFIG.contract;
 $("#copy").addEventListener("click", async e => {
   const b = e.currentTarget;
-  if (!CONFIG.contract) { b.textContent = "Pronto 🙏"; setTimeout(() => b.textContent = "Copiar", 1400); return; }
-  try { await navigator.clipboard.writeText(CONFIG.contract); b.textContent = "¡Copiado! ✝"; }
-  catch { b.textContent = "Selecciona y copia"; }
-  setTimeout(() => b.textContent = "Copiar", 1600);
+  if (!CONFIG.contract) { b.textContent = "PRONTO 🙏"; setTimeout(() => b.textContent = "COPIAR", 1400); return; }
+  try { await navigator.clipboard.writeText(CONFIG.contract); b.textContent = "¡COPIADO! ✝"; }
+  catch { b.textContent = "SELECCIONA Y COPIA"; }
+  setTimeout(() => b.textContent = "COPIAR", 1600);
 });
+
+/* ---------- Promo, nav y menu ---------- */
+if (store.get("jc-promo-off", false)) document.body.classList.add("promo-off");
+$("#promoX").addEventListener("click", () => { document.body.classList.add("promo-off"); store.set("jc-promo-off", true); });
+const nav = $("#nav");
+const setMenu = open => { document.body.classList.toggle("menu-open", open); $("#menuBtn").setAttribute("aria-expanded", open); };
+$("#menuBtn").addEventListener("click", () => setMenu(!document.body.classList.contains("menu-open")));
+$$("#menu a").forEach(a => a.addEventListener("click", () => setMenu(false)));
+addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
 
 /* ---------- Jesús Cripto (SVG) ---------- */
 function jesusSVG({ animated = true, lasers = true } = {}) {
   const cape1 = "M300 78 C240 58 160 36 66 50 C92 68 58 84 26 90 C78 106 66 124 34 140 C118 140 220 122 300 106 Z";
   const cape2 = "M300 78 C240 68 160 58 66 70 C92 84 58 100 26 110 C78 120 66 136 34 152 C118 148 220 126 300 106 Z";
+  const hair1 = "M304 58 C302 40 334 34 346 52 C336 50 326 52 318 58 C314 66 314 76 316 88 C300 96 280 94 262 86 C282 82 298 74 304 58 Z";
+  const hair2 = "M304 58 C302 40 334 34 346 52 C336 50 326 52 318 58 C314 66 314 76 316 88 C300 100 280 100 258 94 C282 86 298 76 304 58 Z";
   const anim = (vals, dur) => animated ? `<animate attributeName="d" dur="${dur}" repeatCount="indefinite" values="${vals}"/>` : "";
   return `<svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Jesús Cripto volando con lentes oscuros">
   <defs>
     <filter id="hg" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <linearGradient id="robe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#D9DCCF"/></linearGradient>
-    <linearGradient id="capeG" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#C6FF00"/><stop offset="1" stop-color="#7DBF00"/></linearGradient>
+    <linearGradient id="robe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#E4E7DA"/><stop offset="1" stop-color="#A9B78A"/></linearGradient>
+    <linearGradient id="capeG" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E2FF6A"/><stop offset=".45" stop-color="#C6FF00"/><stop offset="1" stop-color="#4C7A00"/></linearGradient>
+    <radialGradient id="skin" cx=".6" cy=".35" r=".8"><stop offset="0" stop-color="#F2C79C"/><stop offset="1" stop-color="#C98E5C"/></radialGradient>
   </defs>
-  ${lasers ? `<g class="laser"><line x1="344" y1="67" x2="1600" y2="10" stroke="#C6FF00" stroke-width="7" stroke-linecap="round" filter="url(#hg)"/><line x1="344" y1="67" x2="1600" y2="10" stroke="#fff" stroke-width="2"/></g>` : ""}
+  ${lasers ? `<g class="laser"><line x1="344" y1="66" x2="1700" y2="0" stroke="#C6FF00" stroke-width="8" stroke-linecap="round" filter="url(#hg)"/><line x1="344" y1="66" x2="1700" y2="0" stroke="#fff" stroke-width="2.4"/></g>` : ""}
   <path fill="url(#capeG)" d="${cape1}">${anim(`${cape1};${cape2};${cape1}`, ".8s")}</path>
-  <ellipse cx="70" cy="104" rx="13" ry="6" fill="#E3AE80"/>
-  <ellipse cx="76" cy="116" rx="13" ry="6" fill="#D49C6E"/>
-  <path d="M64 100 L64 110 M70 112 L70 122" stroke="#5B3A1E" stroke-width="3"/>
-  <path fill="url(#robe)" stroke="#BFC3B2" stroke-width="1.5" d="M306 84 C262 70 190 72 128 90 L80 102 C84 114 98 122 128 120 C200 130 262 128 306 116 Z"/>
-  <path d="M120 100 C170 96 220 98 270 92" stroke="#D0D4C4" stroke-width="2" fill="none"/>
-  <path d="M232 76 C236 92 236 110 232 126" stroke="#8A5A2B" stroke-width="5" fill="none" stroke-linecap="round"/>
-  <path fill="url(#robe)" stroke="#BFC3B2" stroke-width="1.5" d="M286 92 C318 84 350 80 374 78 L376 92 C352 94 320 100 290 108 Z"/>
-  <circle cx="384" cy="85" r="9" fill="#E3AE80"/>
+  <ellipse cx="70" cy="104" rx="13" ry="6" fill="url(#skin)"/>
+  <ellipse cx="76" cy="116" rx="13" ry="6" fill="#C98E5C"/>
+  <path d="M64 100 L64 110 M70 112 L70 122" stroke="#3B250F" stroke-width="3"/>
+  <path fill="url(#robe)" d="M306 84 C262 70 190 72 128 90 L80 102 C84 114 98 122 128 120 C200 130 262 128 306 116 Z"/>
+  <path d="M306 84 C262 70 190 72 128 90 L80 102" fill="none" stroke="#C6FF00" stroke-width="2.2" opacity=".85"/>
+  <path d="M120 104 C170 98 220 100 270 94 M140 114 C190 112 230 112 280 106" stroke="#B9C2A2" stroke-width="2" fill="none"/>
+  <path d="M232 76 C236 92 236 110 232 126" stroke="#6B4520" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path fill="url(#robe)" d="M286 92 C318 84 350 80 374 78 L376 92 C352 94 320 100 290 108 Z"/>
+  <path d="M286 92 C318 84 350 80 374 78" fill="none" stroke="#C6FF00" stroke-width="2" opacity=".85"/>
+  <circle cx="384" cy="85" r="9" fill="url(#skin)"/>
   <path d="M378 78 L380 70 M384 77 L386 69" stroke="#E3AE80" stroke-width="5" stroke-linecap="round"/>
-  <ellipse cx="316" cy="40" rx="26" ry="7" fill="none" stroke="#C6FF00" stroke-width="4.5" filter="url(#hg)">${animated ? `<animate attributeName="opacity" values="1;.55;1" dur="1.8s" repeatCount="indefinite"/>` : ""}</ellipse>
-  <path fill="#5B3A1E" d="M304 58 C302 40 334 34 346 52 C336 50 326 52 318 58 C314 66 314 76 316 88 C300 96 280 94 262 86 C282 82 298 74 304 58 Z">${anim("M304 58 C302 40 334 34 346 52 C336 50 326 52 318 58 C314 66 314 76 316 88 C300 96 280 94 262 86 C282 82 298 74 304 58 Z;M304 58 C302 40 334 34 346 52 C336 50 326 52 318 58 C314 66 314 76 316 88 C300 100 280 100 258 94 C282 86 298 76 304 58 Z;M304 58 C302 40 334 34 346 52 C336 50 326 52 318 58 C314 66 314 76 316 88 C300 96 280 94 262 86 C282 82 298 74 304 58 Z", ".8s")}</path>
-  <circle cx="326" cy="70" r="20" fill="#E8B88A"/>
-  <path fill="#5B3A1E" d="M318 50 C330 44 344 48 346 58 C336 54 326 54 318 58 Z"/>
-  <path fill="#5B3A1E" d="M312 76 C316 98 340 102 348 82 C342 86 330 86 322 80 Z"/>
+  <ellipse cx="316" cy="38" rx="27" ry="7" fill="none" stroke="#C6FF00" stroke-width="5" filter="url(#hg)">${animated ? `<animate attributeName="opacity" values="1;.6;1" dur="1.8s" repeatCount="indefinite"/>` : ""}</ellipse>
+  <path fill="#4A2E15" d="${hair1}">${anim(`${hair1};${hair2};${hair1}`, ".8s")}</path>
+  <circle cx="326" cy="70" r="20" fill="url(#skin)"/>
+  <path fill="#4A2E15" d="M318 50 C330 44 344 48 346 58 C336 54 326 54 318 58 Z"/>
+  <path fill="#4A2E15" d="M312 76 C316 98 340 102 348 82 C342 86 330 86 322 80 Z"/>
   <path d="M332 85 C336 87 340 86 342 83" stroke="#2B1A0C" stroke-width="2" fill="none" stroke-linecap="round"/>
-  <path d="M308 64 L322 62" stroke="#0A0A0A" stroke-width="3"/>
-  <path fill="#0A0A0A" d="M320 60 L350 60 L347 71 C343 77 331 77 327 71 Z"/>
-  <path d="M327 64 L333 64 M329 68 L340 66" stroke="#C6FF00" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+  <path d="M308 64 L322 62" stroke="#050505" stroke-width="3"/>
+  <path fill="#050505" d="M320 59 L351 59 L348 71 C344 78 331 78 327 71 Z"/>
+  <path d="M326 63 L333 63 M329 68 L341 65" stroke="#C6FF00" stroke-width="2" stroke-linecap="round"/>
 </svg>`;
 }
 $("#jesus").innerHTML = jesusSVG();
 
-/* ---------- Jesús sigue al puntero y flota ---------- */
-const stage = $("#stage"), jesus = $("#jesus");
-let tx = 0, ty = 0, cx = 0, cy = 0;
-stage.closest(".hero").addEventListener("pointermove", e => {
-  const r = stage.getBoundingClientRect();
-  tx = ((e.clientX - r.left) / r.width - .5) * 60;
-  ty = ((e.clientY - r.top) / r.height - .5) * 50;
-});
-(function bob(t) {
-  cx += (tx - cx) * .06; cy += (ty - cy) * .06;
-  const y = reduced ? 0 : Math.sin(t / 600) * 14;
-  const rot = reduced ? 0 : Math.sin(t / 900) * 3 - cy * .06;
-  jesus.style.transform = `translate(${cx}px, ${cy + y}px) rotate(${rot}deg)`;
-  requestAnimationFrame(bob);
-})(0);
+/* ---------- Intro con scroll ---------- */
+// [progreso, x (vw), y (vh), escala, giro (grados)]
+const PATH_DESK = [
+  [0,    -34, -30, .32, 22],
+  [.22,  -10,  -8, .78, 10],
+  [.48,    6,   2, 1.1, -3],
+  [.72,   30, -10, .85, -12],
+  [.86,   80, -32, .5, -20],
+  [.861, -90,  10, .5,  8],
+  [1,     12, -16, .58,  0],
+];
+const PATH_MOB = [
+  [0,    -40, -34, .4, 22],
+  [.22,  -14, -18, .7, 10],
+  [.48,    4, -12, .85, -3],
+  [.72,   26, -20, .7, -12],
+  [.86,   90, -36, .5, -20],
+  [.861, -100, -20, .5, 8],
+  [1,     -6, -30, .5,  0],
+];
+(() => {
+  const fly = $("#top"), jw = $("#jw"), beam = $("#beam"), fin = $("#final"), hint = $("#hint"), streaks = $("#streaks");
+  const glyphs = $$(".glyph"), beats = $$(".beat");
+  const CH = "!<>-_\\/[]{}—=+*^?#$✝01";
+  beats.forEach(b => { b.dataset.text = b.textContent; b.textContent = ""; });
+  let target = 0, cur = reduced ? 1 : 0, last = -1;
 
-const phrases = ["Paz, amor y velas verdes 😎", "HODL es fe 🙏", "Multiplico tus bolsas 🍞🐟", "Camino sobre las rojas 🌊", "Resucité al tercer dip ✝", "Ni equipo, ni VCs. Solo tú 💚", "Mis lentes: anti-FUD 🕶️"];
-let pi = 0;
-setInterval(() => {
-  const s = $("#speech"); pi = (pi + 1) % phrases.length;
-  s.style.animation = "none"; void s.offsetWidth; s.style.animation = ""; s.textContent = phrases[pi];
-}, 3800);
+  function pose(p, path) {
+    let i = 0; while (i < path.length - 2 && p > path[i + 1][0]) i++;
+    const a = path[i], b = path[i + 1], t = ease(clamp((p - a[0]) / (b[0] - a[0] || 1)));
+    return a.map((v, k) => lerp(v, b[k], t));
+  }
+  function typeBeat(el, p) {
+    const a = +el.dataset.a, b = +el.dataset.b, t = (p - a) / (b - a);
+    if (t <= 0 || t >= 1) { el.style.opacity = 0; return; }
+    const full = el.dataset.text, n = full.length;
+    const k = clamp(t / .5), shown = Math.floor(n * k);
+    let tail = "";
+    for (let i = 0; i < Math.min(5, n - shown); i++) tail += CH[Math.random() * CH.length | 0];
+    el.innerHTML = full.slice(0, shown).replace(/</g, "&lt;") + (tail ? `<span class="sc">${tail.replace(/</g, "&lt;")}</span>` : "");
+    el.style.opacity = t > .82 ? clamp(1 - (t - .82) / .18) * .9 + .1 : 1;
+    el.style.color = t > .82 ? "#6c735f" : "";
+  }
+  function frame() {
+    const r = fly.getBoundingClientRect();
+    target = reduced ? 1 : clamp(-r.top / (r.height - innerHeight));
+    const prev = cur;
+    cur += (target - cur) * .12;
+    if (Math.abs(target - cur) < .0004) cur = target;
+    const v = Math.abs(cur - prev);
+    if (cur !== last) {
+      last = cur;
+      const mob = innerWidth < 760;
+      const [, x, y, s, rot] = pose(cur, mob ? PATH_MOB : PATH_DESK);
+      jw.style.transform = `translate(${x}vw, ${y}vh) scale(${s}) rotate(${rot}deg)`;
+      streaks.style.opacity = clamp(v * 120);
+      beam.style.transform = `translate(${lerp(-12, 10, cur)}vw, ${lerp(10, -6, cur)}vh) rotate(${lerp(-24, -12, cur)}deg)`;
+      glyphs.forEach(g => g.style.transform = `translateY(${-cur * 320 * +g.dataset.d}px) rotate(${cur * 40 * (+g.dataset.d - 1.4)}deg)`);
+      beats.forEach(b => typeBeat(b, cur));
+      const f = clamp((cur - .86) / .1);
+      fin.style.opacity = f;
+      fin.style.transform = (mob ? "" : "translateY(-50%) ") + `translateY(${(1 - f) * 30}px)`;
+      fin.classList.toggle("on", f > .5);
+      hint.style.opacity = clamp(1 - cur * 12);
+    }
+    nav.classList.toggle("solid", scrollY > innerHeight * 4);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
 
-/* ---------- Modo degen: ojos láser ---------- */
+/* ---------- Modo degen: ojos laser ---------- */
 $("#degen").addEventListener("click", e => {
   const on = e.currentTarget.getAttribute("aria-pressed") !== "true";
   e.currentTarget.setAttribute("aria-pressed", on);
-  stage.classList.toggle("degen-on", on);
-  $("#speech").textContent = on ? "MODO DEGEN ACTIVADO 🔥" : phrases[pi];
+  $("#stick").classList.toggle("degen-on", on);
 });
 
-/* ---------- Particulas de bendicion ---------- */
+/* ---------- Bendiciones ---------- */
 const emojis = ["🙏", "✨", "🍞", "🐟", "💚", "🕶️", "✝️", "🕊️"];
 function burst(x, y, n = 6) {
   for (let i = 0; i < n; i++) {
@@ -542,70 +748,82 @@ function bless(x, y) {
   $("#bless").textContent = blessings.toLocaleString("es");
   burst(x, y);
 }
-$(".hero").addEventListener("click", e => { if (!e.target.closest("a,button")) bless(e.clientX, e.clientY); });
+$("#stick").addEventListener("click", e => { if (!e.target.closest("a,button,code")) bless(e.clientX, e.clientY); });
 $("#blessBtn").addEventListener("click", e => {
   const r = e.currentTarget.getBoundingClientRect();
   bless(r.left + r.width / 2, r.top + r.height / 2);
 });
 
-/* ---------- Marquee ---------- */
-const mq = `${CONFIG.ticker} ✦ MULTIPLICA TUS BOLSAS ✦ CAMINA SOBRE LAS VELAS ROJAS ✦ HODL ES FE ✦ RESUCITÓ AL TERCER DIP ✦ 100% COMUNIDAD ✦ `;
-$("#marq").innerHTML = `<span>${mq.repeat(3)}</span><span>${mq.repeat(3)}</span>`;
+/* ---------- Palabra que cambia (estilo maquina de escribir) ---------- */
+(() => {
+  const el = $("#cycle"), words = ["RANDOM", "DEGEN", "BENDITO", "ALCISTA", "CON LENTES"];
+  if (reduced) return;
+  let w = 0, i = words[0].length, dir = -1, hold = 18;
+  setInterval(() => {
+    if (hold > 0) return hold--;
+    const word = words[w];
+    i += dir;
+    if (i >= word.length) { dir = -1; hold = 18; }
+    else if (i <= 0) { dir = 1; hold = 3; w = (w + 1) % words.length; }
+    el.textContent = word.slice(0, i) || "\u00a0";
+  }, 80);
+})();
 
-/* ---------- Nav solida al hacer scroll ---------- */
-const nav = $("#nav");
-const onScroll = () => nav.classList.toggle("solid", scrollY > 40);
-addEventListener("scroll", onScroll, { passive: true }); onScroll();
+/* ---------- Scramble de titulos al aparecer ---------- */
+function scramble(el) {
+  const nodes = [];
+  const walk = n => n.nodeType === 3 ? n.textContent.trim() && nodes.push([n, n.textContent]) : n.childNodes.forEach(walk);
+  walk(el);
+  const CH = "!<>-_/[]{}=+*^?#$✝01";
+  let f = 0; const total = 22;
+  (function tick() {
+    f++;
+    nodes.forEach(([n, txt]) => {
+      const k = Math.floor(txt.length * f / total);
+      n.textContent = txt.slice(0, k) + txt.slice(k).replace(/\S/g, () => CH[Math.random() * CH.length | 0]);
+    });
+    if (f < total) requestAnimationFrame(tick); else nodes.forEach(([n, txt]) => n.textContent = txt);
+  })();
+}
 
-/* ---------- Reveal + donut ---------- */
+/* ---------- Reveal, donut y scramble ---------- */
 const io = new IntersectionObserver(es => es.forEach(e => {
   if (!e.isIntersecting) return;
-  e.target.classList.add("in");
-  if (e.target.id === "donut") $(".ring", e.target).style.strokeDashoffset = "0";
-  io.unobserve(e.target);
+  const t = e.target;
+  t.classList.add("in");
+  if (t.id === "donut") $(".ring", t).style.strokeDashoffset = "0";
+  if (t.tagName === "H2" && !reduced && !t.querySelector("#cycle")) scramble(t);
+  io.unobserve(t);
 }), { threshold: .15 });
 $$(".rv").forEach(el => io.observe(el));
 
-/* ---------- Chart de velas verdes de fondo ---------- */
+/* ---------- Monitor del juego que crece con el scroll ---------- */
 (() => {
-  const c = $("#chart"), x = c.getContext("2d");
-  let W, H, dpr, candles = [], off = 0, last = 0;
-  const CW = 22;
-  function next(prev) {
-    const up = Math.random() < .72;
-    const body = 8 + Math.random() * 30;
-    const o = prev ? prev.c : 0;
-    const cl = o + (up ? body : -body * .7);
-    return { o, c: cl, h: Math.max(o, cl) + Math.random() * 14, l: Math.min(o, cl) - Math.random() * 14 };
-  }
-  function resize() {
-    dpr = Math.min(devicePixelRatio || 1, 2);
-    W = c.clientWidth; H = c.clientHeight;
-    c.width = W * dpr; c.height = H * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
-    candles = []; let p = null;
-    for (let i = 0; i < Math.ceil(W / CW) + 3; i++) candles.push(p = next(p));
-  }
-  function draw(t) {
-    const dt = Math.min(t - last, 50); last = t;
-    if (!reduced) off += dt * .03;
-    while (off >= CW) { off -= CW; candles.shift(); candles.push(next(candles[candles.length - 1])); }
-    x.clearRect(0, 0, W, H);
-    x.strokeStyle = "rgba(198,255,0,.06)"; x.lineWidth = 1;
-    for (let gy = 0; gy < H; gy += 60) { x.beginPath(); x.moveTo(0, gy); x.lineTo(W, gy); x.stroke(); }
-    let lo = Infinity, hi = -Infinity;
-    candles.forEach(k => { lo = Math.min(lo, k.l); hi = Math.max(hi, k.h); });
-    const sy = v => H * .92 - (v - lo) / (hi - lo || 1) * H * .75;
-    candles.forEach((k, i) => {
-      const px = i * CW - off, up = k.c >= k.o;
-      const a = .18 + .5 * (i / candles.length);
-      x.strokeStyle = x.fillStyle = up ? `rgba(198,255,0,${a})` : `rgba(255,59,78,${a * .8})`;
-      x.beginPath(); x.moveTo(px + CW / 2, sy(k.h)); x.lineTo(px + CW / 2, sy(k.l)); x.stroke();
-      const y1 = sy(Math.max(k.o, k.c)), y2 = sy(Math.min(k.o, k.c));
-      x.fillRect(px + 4, y1, CW - 8, Math.max(2, y2 - y1));
-    });
-    requestAnimationFrame(draw);
-  }
-  addEventListener("resize", resize); resize(); requestAnimationFrame(draw);
+  const mon = $("#mon");
+  if (reduced) return;
+  (function f() {
+    const r = mon.getBoundingClientRect();
+    const t = clamp((innerHeight - r.top) / (innerHeight * .85));
+    mon.style.transform = `scale(${lerp(.6, 1, ease(t))}) rotateX(${lerp(14, 0, t)}deg)`;
+    requestAnimationFrame(f);
+  })();
+})();
+
+/* ---------- Carrusel de pasos ---------- */
+const rail = $("#rail");
+$("#prev").addEventListener("click", () => rail.scrollBy({ left: -rail.firstElementChild.offsetWidth, behavior: "smooth" }));
+$("#next").addEventListener("click", () => rail.scrollBy({ left: rail.firstElementChild.offsetWidth, behavior: "smooth" }));
+
+/* ---------- Grafiti del footer: letras sueltas para el hover ---------- */
+(() => {
+  const g = $("#graf"), small = g.querySelector("small");
+  const txt = g.firstChild.textContent;
+  g.firstChild.remove();
+  [...txt].reverse().forEach(ch => {
+    const s = document.createElement("span"); s.textContent = ch === " " ? " " : ch;
+    g.insertBefore(s, g.firstChild);
+  });
+  g.appendChild(document.createElement("br")); g.appendChild(small);
 })();
 
 /* ---------- Juego: Vuelo de fe ---------- */
@@ -619,7 +837,7 @@ $$(".rv").forEach(el => io.observe(el));
 
   function size() {
     const r = c.getBoundingClientRect();
-    W = 960; H = Math.round(960 * r.height / r.width) || 540;
+    W = 960; H = Math.round(960 * (c.offsetHeight || r.height) / (c.offsetWidth || r.width)) || 540;
     c.width = W; c.height = H;
   }
   function reset() {
@@ -637,10 +855,11 @@ $$(".rv").forEach(el => io.observe(el));
   }
   function end() {
     running = false;
-    if (st.score > best) { best = st.score; store.set("jc-best", best); bestEl.textContent = best; }
-    $("#overT").textContent = st.score >= best && st.score > 0 ? "¡Nuevo récord! 🙌" : "Liquidado 😵";
+    const record = st.score > best;
+    if (record) { best = st.score; store.set("jc-best", best); bestEl.textContent = best; }
+    $("#overT").textContent = record ? "¡Nuevo récord! 🙌" : "Liquidado 😵";
     $("#overP").textContent = `Tu bolsa: ${st.score}. Resucita y vuelve a intentarlo.`;
-    $("#play").textContent = "Resucitar ✝";
+    $("#play").textContent = "RESUCITAR ✝";
     over.hidden = false;
   }
   const PW = 74, PX = 220, HW = 68, HH = 18; // caja de colision (medio ancho / medio alto)
@@ -660,7 +879,6 @@ $$(".rv").forEach(el => io.observe(el));
     st.pipes = st.pipes.filter(p => p.x > -PW - 20);
     st.items = st.items.filter(i => i.x > -40 && !i.got);
 
-    // colisiones
     const jx = PX, jy = st.y;
     if (jy < HH || jy > H - HH) return draw(), end();
     for (const p of st.pipes) {
