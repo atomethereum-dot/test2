@@ -7904,7 +7904,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 <script>
 /* serie grabada (prensa): banda guilloche en SVG. Es vector, asi que
    queda nitida en cualquier pantalla (las de 3x incluidas); el trazo usa
-   non-scaling-stroke para medir 1px real aunque la banda se estire. Se
+   non-scaling-stroke de medio pixel CSS: una linea finisima y nitida. Se
    redibuja si cambia el ancho para que la onda no se deforme. */
 (() => {
   const bandas=[...document.querySelectorAll('svg.gs-band')];
@@ -7914,24 +7914,30 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     const W=Math.max(1,svg.clientWidth),H=Math.max(1,svg.clientHeight),seed=+svg.dataset.seed||1;
     svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
     while(svg.firstChild) svg.removeChild(svg.firstChild);
-    const L=14, ondas=Math.max(3,Math.round(W/110)), k=Math.PI*2*ondas/W;
+    /* la trenza solo ocupa el hueco entre las dos etiquetas y se afina en los extremos */
+    const box=svg.getBoundingClientRect(),izq=svg.parentElement.querySelector('span'),der=svg.parentElement.querySelector('b');
+    const x0=izq?Math.min(W*.45,izq.getBoundingClientRect().right-box.left+14):0;
+    const x1=der?Math.max(W*.55,der.getBoundingClientRect().left-box.left-14):W;
+    const G=Math.max(10,x1-x0);
+    const L=9, ondas=Math.max(2,Math.round(G/60)), k=Math.PI*2*ondas/G;
     for(let i=0;i<L;i++){
-      const ph=i*Math.PI/L + seed*.37, A=(H*.42)*(.45+.55*Math.abs(Math.cos(i*Math.PI/L)));
+      const ph=i*Math.PI/L + seed*.37, A=H*.26;
       let d='';
-      for(let x=0;x<=W;x+=3){
-        const env=.35+.65*Math.sin(Math.PI*x/W);
-        const y=H/2+A*env*Math.sin(k*x+ph);
-        d+=(x?'L':'M')+x.toFixed(1)+' '+y.toFixed(2);
+      for(let u=0;u<=G;u+=1.5){
+        const env=Math.pow(Math.sin(Math.PI*u/G),.6);
+        const y=H/2+A*env*Math.sin(k*u+ph);
+        d+=(u?'L':'M')+(x0+u).toFixed(1)+' '+y.toFixed(2);
       }
       const p=document.createElementNS(NS,'path');
       p.setAttribute('d',d);p.setAttribute('fill','none');
-      p.setAttribute('stroke','#1569ff');p.setAttribute('stroke-opacity',(i%2?.42:.7).toString());
-      p.setAttribute('stroke-width','1');p.setAttribute('vector-effect','non-scaling-stroke');
+      p.setAttribute('stroke','#1569ff');p.setAttribute('stroke-opacity',(i%2?.45:.75).toString());
+      p.setAttribute('stroke-width','.5');p.setAttribute('vector-effect','non-scaling-stroke');
       svg.appendChild(p);
     }
   }
   const todo=()=>bandas.forEach(dibuja);
   todo();
+  (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(todo);
   let w=innerWidth;addEventListener('resize',()=>{if(innerWidth!==w){w=innerWidth;todo();}});
 })();
 </script>
