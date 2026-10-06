@@ -3825,8 +3825,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
      "despachos" certificados; eventos, tres acreditaciones con su roseta,
      su foto, un sello y un talon perforado. Todo el dibujo fino va en
      canvas (bandas, rosetas, codigos) y se pinta una vez al cargar. */
-  .press,.evs{position:relative;background:#000;color:#fff;padding:clamp(96px,14vh,170px) var(--pad) clamp(90px,13vh,150px)}
-  .evs{border-top:1px solid var(--hair);padding-top:clamp(80px,12vh,150px)}
+  .press{position:relative;background:#000;color:#fff;padding:clamp(96px,14vh,170px) var(--pad) clamp(90px,13vh,150px)}
   .gs-in{position:relative;max-width:1600px;margin:0 auto}
   .gs-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:30px}
   .gs-top .eyebrow{margin-bottom:0}
@@ -3867,40 +3866,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .gs-foot{margin-top:34px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--ink-4)}
   .gs-foot a{color:var(--ink-3)}
   .gs-foot a:hover{color:#fff}
-  .passes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2vw,28px)}
-  .pass{position:relative;border:1px solid rgba(255,255,255,.18);background:#020409;min-width:0;transition:transform .6s cubic-bezier(.16,1,.3,1),border-color .4s}
-  .pass:hover{transform:translateY(-8px);border-color:rgba(21,105,255,.6)}
-  .pass-photo{position:relative;aspect-ratio:16/10;max-width:100%;overflow:hidden;margin:0;border-bottom:1px solid rgba(255,255,255,.12)}
-  .pass-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s cubic-bezier(.16,1,.3,1)}
-  .pass:hover .pass-photo img{transform:scale(1.04)}
-  .pass-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,4,9,.85),rgba(2,4,9,0) 30%,rgba(2,4,9,0) 62%,rgba(2,4,9,.92))}
-  .pass-photo .num,.pass-photo .ser{position:absolute;top:16px;z-index:1}
-  .pass-photo .num{left:20px;color:#fff}.pass-photo .ser{right:20px;color:var(--ink-2)}
-  .pass-photo figcaption{position:absolute;left:20px;right:20px;bottom:12px;z-index:1;color:var(--ink-2);font-size:9.5px}
-  .pass-art{position:relative;aspect-ratio:2/1;max-width:100%;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.12)}
-  .pass-art canvas{position:absolute;inset:0;width:100%;height:100%}
-  .pass-art .mes{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font-size:clamp(48px,4.6vw,82px);font-weight:200;letter-spacing:-.05em;line-height:1}
-  .pass-art .coord{position:absolute;left:20px;bottom:12px;color:var(--ink-3);font-size:10px}
-  .stamp{position:absolute;right:16px;top:50%;margin-top:-46px;width:92px;height:92px;border:1.5px solid var(--blue);border-radius:50%;display:grid;place-items:center;transform:rotate(-14deg);color:var(--blue);background:rgba(2,4,9,.7)}
-  .stamp::before{content:"";position:absolute;inset:6px;border:1px dashed rgba(21,105,255,.6);border-radius:50%}
-  .stamp span{font-size:9.5px;letter-spacing:.16em;text-align:center;line-height:1.5}
-  .pass-body{padding:22px}
-  .pass-body h3{font-size:clamp(22px,1.9vw,30px);font-weight:300;letter-spacing:-.02em}
-  .pass-rows{margin-top:16px;border-top:1px solid var(--hair)}
-  .pass-rows div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--hair)}
-  .pass-rows .k{color:var(--ink-4)}
-  .pass-rows .v{color:#fff;text-align:right}
-  .pass-rows .ok{color:#2fd27a}
-  .perf{position:relative;height:22px}
-  .perf::before{content:"";position:absolute;left:14px;right:14px;top:50%;border-top:1px dashed rgba(255,255,255,.25)}
-  .perf i{position:absolute;top:0;width:22px;height:22px;border-radius:50%;background:#000;border:1px solid rgba(255,255,255,.18)}
-  .perf i:first-child{left:-12px;clip-path:inset(0 0 0 50%)}.perf i:last-child{right:-12px;clip-path:inset(0 50% 0 0)}
-  .stub{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 22px 20px}
-  .stub canvas{height:34px;width:150px;max-width:50%}
-  .stub .mono{color:var(--ink-4)}
-  @media (max-width:1000px){.disp,.passes{grid-template-columns:1fr}.gs-head{grid-template-columns:1fr}}
+  @media (max-width:1000px){.disp{grid-template-columns:1fr}.gs-head{grid-template-columns:1fr}}
   @media (max-width:560px){.gs-top .gs-ser{font-size:9.5px}.dp-meta{grid-template-columns:1fr 1fr}.dp-meta div:last-child{grid-column:1/-1}}
-  @media (prefers-reduced-motion:reduce){.pass,.pass-photo img{transition:none}.pass:hover{transform:none}}
 </style>
 <noscript><style>.intro{display:none!important}</style></noscript>
 </head>
@@ -5117,62 +5084,99 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   </div>
 </section>
 
-<section class="evs" id="events">
-  <div class="gs-in">
-    <div class="gs-top"><p class="eyebrow mono reveal"><i></i>Events</p><p class="mono gs-ser">Credential series SF·EV·27 · 03 registered</p></div>
-    <div class="gs-head">
-      <h2 class="reveal" style="--d:.06s">Where Sectora will be in 2027.</h2>
-      <p class="reveal" style="--d:.12s">Three conferences, all confirmed. Two of the images are each organizer’s own event artwork; the Consensus frame is a photograph from an earlier edition.</p>
-    </div>
-    <div class="passes">
-      <article class="pass reveal" style="--d:0.00s">
-        <figure class="pass-photo">
-          <picture>
-            <source type="image/webp" srcset="images/bf2027-640.webp 640w, images/bf2027-960.webp 960w, images/bf2027-1280.webp 1280w" sizes="(max-width:1000px) 96vw, 33vw">
-            <img src="images/bf2027-960.jpg" srcset="images/bf2027-640.jpg 640w, images/bf2027-960.jpg 960w, images/bf2027-1280.jpg 1280w" sizes="(max-width:1000px) 96vw, 33vw" width="1920" height="1080" loading="lazy" decoding="async" alt="Official Blockchain Forum 2027 poster: the event logo, April 28 to 29, Moscow, over a photograph of the main stage and audience.">
-          </picture>
-          <span class="num mono">Event 01</span><span class="ser mono">SF·EV·01·27</span>
-          <figcaption class="mono">Blockchain Forum 2027 · official event artwork</figcaption>
+<section class="ev" id="events">
+  <div class="ev-pin" id="ev-pin">
+    <div class="ev-car" id="ev-car" role="group" aria-roledescription="carousel" aria-label="Events Sectora is attending in 2027">
+      <div class="ev-stage">
+        <figure class="ev-slide on" aria-hidden="false">
+          <span class="ev-par">
+            <picture>
+              <source type="image/webp" srcset="images/btc2027-640.webp 640w, images/btc2027-960.webp 960w, images/btc2027-1280.webp 1280w, images/btc2027-1920.webp 1920w, images/btc2027-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
+              <img src="images/btc2027-1280.jpg"
+                   srcset="images/btc2027-640.jpg 640w, images/btc2027-960.jpg 960w, images/btc2027-1280.jpg 1280w, images/btc2027-1920.jpg 1920w, images/btc2027-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
+                   width="1880" height="940" decoding="async"
+                   alt="Official Bitcoin 2027 Nashville poster: the event logo over the Nashville skyline, July 15 to 17, Music City Center.">
+            </picture>
+          </span>
+          <figcaption>Bitcoin 2027 &middot; official event artwork</figcaption>
         </figure>
-        <div class="pass-art"><canvas data-gs="rose" data-seed="1" aria-hidden="true"></canvas><span class="mes">Apr</span><span class="coord mono">55.7558° N · 37.6173° E</span><span class="stamp mono" aria-hidden="true"><span>Registered<br>2027</span></span></div>
-        <div class="pass-body"><h3>Blockchain Forum 2027</h3>
-          <div class="pass-rows mono"><div><span class="k">Dates</span><span class="v">April 28–29</span></div><div><span class="k">Location</span><span class="v">Moscow</span></div><div><span class="k">Status</span><span class="v ok">Registered</span></div></div>
-        </div>
-        <div class="perf" aria-hidden="true"><i></i><i></i></div>
-        <div class="stub"><canvas data-gs="code" data-seed="11" aria-hidden="true"></canvas><span class="mono">Admit · Sectora</span></div>
-      </article>
-      <article class="pass reveal" style="--d:0.08s">
-        <figure class="pass-photo">
-          <picture>
-            <source type="image/webp" srcset="images/consensus-640.webp 640w, images/consensus-960.webp 960w, images/consensus-1280.webp 1280w" sizes="(max-width:1000px) 96vw, 33vw">
-            <img src="images/consensus-960.jpg" srcset="images/consensus-640.jpg 640w, images/consensus-960.jpg 960w, images/consensus-1280.jpg 1280w" sizes="(max-width:1000px) 96vw, 33vw" width="1920" height="1280" loading="lazy" decoding="async" alt="The Consensus show floor seen from above: attendees across the networking lounge, exhibitor stands and hanging signage for the media center.">
-          </picture>
-          <span class="num mono">Event 02</span><span class="ser mono">SF·EV·02·27</span>
-          <figcaption class="mono">Consensus · photograph, earlier edition</figcaption>
+
+        <figure class="ev-slide" aria-hidden="true">
+          <span class="ev-par">
+            <picture>
+              <source type="image/webp" srcset="images/bf2027-640.webp 640w, images/bf2027-960.webp 960w, images/bf2027-1280.webp 1280w, images/bf2027-1920.webp 1920w, images/bf2027-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
+              <img src="images/bf2027-1280.jpg"
+                   srcset="images/bf2027-640.jpg 640w, images/bf2027-960.jpg 960w, images/bf2027-1280.jpg 1280w, images/bf2027-1920.jpg 1920w, images/bf2027-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
+                   width="1920" height="1080" decoding="async"
+                   alt="Official Blockchain Forum 2027 poster: the event logo, April 28 to 29, Moscow, over a photograph of the main stage and audience.">
+            </picture>
+          </span>
+          <figcaption>Blockchain Forum 2027 &middot; official event artwork</figcaption>
         </figure>
-        <div class="pass-art"><canvas data-gs="rose" data-seed="2" aria-hidden="true"></canvas><span class="mes">May</span><span class="coord mono">25.7617° N · 80.1918° W</span><span class="stamp mono" aria-hidden="true"><span>Registered<br>2027</span></span></div>
-        <div class="pass-body"><h3>Consensus 2027</h3>
-          <div class="pass-rows mono"><div><span class="k">Dates</span><span class="v">May 4–6</span></div><div><span class="k">Location</span><span class="v">Miami</span></div><div><span class="k">Status</span><span class="v ok">Registered</span></div></div>
-        </div>
-        <div class="perf" aria-hidden="true"><i></i><i></i></div>
-        <div class="stub"><canvas data-gs="code" data-seed="12" aria-hidden="true"></canvas><span class="mono">Admit · Sectora</span></div>
-      </article>
-      <article class="pass reveal" style="--d:0.16s">
-        <figure class="pass-photo">
-          <picture>
-            <source type="image/webp" srcset="images/btc2027-640.webp 640w, images/btc2027-960.webp 960w, images/btc2027-1280.webp 1280w" sizes="(max-width:1000px) 96vw, 33vw">
-            <img src="images/btc2027-960.jpg" srcset="images/btc2027-640.jpg 640w, images/btc2027-960.jpg 960w, images/btc2027-1280.jpg 1280w" sizes="(max-width:1000px) 96vw, 33vw" width="1880" height="940" loading="lazy" decoding="async" alt="Official Bitcoin 2027 Nashville poster: the event logo over the Nashville skyline, July 15 to 17, Music City Center.">
-          </picture>
-          <span class="num mono">Event 03</span><span class="ser mono">SF·EV·03·27</span>
-          <figcaption class="mono">Bitcoin 2027 · official event artwork</figcaption>
+
+        <figure class="ev-slide" aria-hidden="true">
+          <span class="ev-par">
+            <picture>
+              <source type="image/webp" srcset="images/consensus-640.webp 640w, images/consensus-960.webp 960w, images/consensus-1280.webp 1280w, images/consensus-1920.webp 1920w, images/consensus-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
+              <img src="images/consensus-1280.jpg"
+                   srcset="images/consensus-640.jpg 640w, images/consensus-960.jpg 960w, images/consensus-1280.jpg 1280w, images/consensus-1920.jpg 1920w, images/consensus-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
+                   width="1920" height="1280" decoding="async"
+                   alt="The Consensus show floor seen from above: attendees across the networking lounge, exhibitor stands and hanging signage for the media center.">
+            </picture>
+          </span>
+          <figcaption>Consensus &middot; photograph, earlier edition</figcaption>
         </figure>
-        <div class="pass-art"><canvas data-gs="rose" data-seed="3" aria-hidden="true"></canvas><span class="mes">Jul</span><span class="coord mono">36.1627° N · 86.7816° W</span><span class="stamp mono" aria-hidden="true"><span>Registered<br>2027</span></span></div>
-        <div class="pass-body"><h3>Bitcoin 2027</h3>
-          <div class="pass-rows mono"><div><span class="k">Dates</span><span class="v">July 15–17</span></div><div><span class="k">Location</span><span class="v">Nashville · Music City Center</span></div><div><span class="k">Status</span><span class="v ok">Registered</span></div></div>
+
+        <canvas class="ev-gl" id="ev-gl" aria-hidden="true"></canvas>
+        <span class="ev-vel" aria-hidden="true"></span>
+        <span class="ev-gr" aria-hidden="true"></span>
+        <span class="ev-scrim arr" aria-hidden="true"></span>
+        <span class="ev-scrim aba" aria-hidden="true"></span>
+        <span class="ev-scrim izq" aria-hidden="true"></span>
+
+      </div>
+      <div class="ev-hud arr">
+        <p class="ev-kick"><u aria-hidden="true"></u>Events</p>
+        <p class="ev-ref">03 confirmed</p>
+      </div>
+
+      <div class="ev-type" id="ev-type">
+        <h2 class="ev-h">Where Sectora will be in 2027.</h2>
+        <p class="ev-lede">Three conferences, all confirmed. Two of the images are each organizer&rsquo;s own event artwork; the Consensus frame is a photograph from an earlier edition.</p>
+      </div>
+
+      <div class="ev-panel">
+        <div class="ev-ent on">
+          <div class="ev-cel ev-nom"><p class="k">Event 01</p><p class="v">Bitcoin 2027</p></div>
+          <div class="ev-cel"><p class="k">Dates</p><p class="v">July 15&ndash;17</p></div>
+          <div class="ev-cel"><p class="k">Location</p><p class="v">Nashville &middot; Music City Center</p></div>
+          <div class="ev-cel"><p class="k">Status</p><p class="v"><span class="ev-dot" aria-hidden="true"></span>Registered</p></div>
         </div>
-        <div class="perf" aria-hidden="true"><i></i><i></i></div>
-        <div class="stub"><canvas data-gs="code" data-seed="13" aria-hidden="true"></canvas><span class="mono">Admit · Sectora</span></div>
-      </article>
+        <div class="ev-ent">
+          <div class="ev-cel ev-nom"><p class="k">Event 02</p><p class="v">Blockchain Forum 2027</p></div>
+          <div class="ev-cel"><p class="k">Dates</p><p class="v">April 28&ndash;29</p></div>
+          <div class="ev-cel"><p class="k">Location</p><p class="v">Moscow</p></div>
+          <div class="ev-cel"><p class="k">Status</p><p class="v"><span class="ev-dot" aria-hidden="true"></span>Registered</p></div>
+        </div>
+        <div class="ev-ent">
+          <div class="ev-cel ev-nom"><p class="k">Event 03</p><p class="v">Consensus 2027</p></div>
+          <div class="ev-cel"><p class="k">Dates</p><p class="v">May 4–6</p></div>
+          <div class="ev-cel"><p class="k">Location</p><p class="v">Miami</p></div>
+          <div class="ev-cel"><p class="k">Status</p><p class="v"><span class="ev-dot" aria-hidden="true"></span>Registered</p></div>
+        </div>
+      </div>
+
+      <p class="ev-cue" id="ev-cue" aria-hidden="true">
+        <span>Scroll to move between events</span>
+        <svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg>
+      </p>
+
+      <div class="ev-barra">
+        <button class="ev-seg" type="button" aria-current="true"><span class="sr-only">Bitcoin 2027</span></button>
+        <button class="ev-seg" type="button" aria-current="false"><span class="sr-only">Blockchain Forum 2027</span></button>
+        <button class="ev-seg" type="button" aria-current="false"><span class="sr-only">Consensus 2027</span></button>
+        <p class="ev-cuenta" id="ev-cuenta" aria-hidden="true">01 / 03</p>
+      </div>
     </div>
   </div>
 </section>
