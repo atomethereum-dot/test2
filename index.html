@@ -3842,7 +3842,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .gs-crn::before{left:6px;top:0;width:1px;height:14px}.gs-crn::after{top:6px;left:0;height:1px;width:14px}
   .gs-crn.c1{left:-7px;top:-7px}.gs-crn.c2{right:-7px;top:-7px}.gs-crn.c3{left:-7px;bottom:-7px}.gs-crn.c4{right:-7px;bottom:-7px}
   .dp-band{position:relative;height:58px;margin-bottom:22px;overflow:hidden}
-  .dp-band canvas{position:absolute;inset:0;width:100%;height:100%}
+  .dp-band svg{position:absolute;inset:0;width:100%;height:100%;display:block}
   .dp-band span,.dp-band b{position:absolute;top:50%;transform:translateY(-50%);background:#000;padding:6px 12px}
   .dp-band span{left:0;padding-left:0;color:var(--ink-3)}
   .dp-band b{right:0;padding-right:0;color:var(--blue);font-weight:500}
@@ -5058,7 +5058,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     <div class="disp">
       <article class="dp reveal">
         <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
-        <div class="dp-band"><canvas data-gs="band" data-seed="3" aria-hidden="true"></canvas><span class="mono">Dispatch 01</span><b class="mono">SF·PR·01·26</b></div>
+        <div class="dp-band"><svg class="gs-band" data-seed="3" aria-hidden="true" preserveAspectRatio="none"></svg><span class="mono">Dispatch 01</span><b class="mono">SF·PR·01·26</b></div>
         <div class="dp-name"><h3>AP News</h3><span class="mono">Press release</span></div>
         <div class="dp-media">
           <video src="media/sectora-apnews-X-1080p.mp4" poster="images/press-apnews-poster.jpg" muted loop playsinline preload="none" aria-label="Video: Sectora press release on AP News"></video>
@@ -5070,7 +5070,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       </article>
       <article class="dp reveal" style="--d:.08s">
         <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
-        <div class="dp-band"><canvas data-gs="band" data-seed="7" aria-hidden="true"></canvas><span class="mono">Dispatch 02</span><b class="mono">SF·PR·02·26</b></div>
+        <div class="dp-band"><svg class="gs-band" data-seed="7" aria-hidden="true" preserveAspectRatio="none"></svg><span class="mono">Dispatch 02</span><b class="mono">SF·PR·02·26</b></div>
         <div class="dp-name"><h3>Benzinga</h3><span class="mono">Press release</span></div>
         <div class="dp-media">
           <video src="media/sectora-benzinga-X-1080p.mp4" poster="images/press-benzinga-poster.jpg" muted loop playsinline preload="none" aria-label="Video: Sectora press release on Benzinga"></video>
@@ -7902,35 +7902,36 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 })();
 </script>
 <script>
-/* serie grabada (prensa y eventos): bandas guilloche, rosetas y codigos.
-   Se pintan una vez, a la resolucion de la pantalla, y se repintan si
-   cambia el ancho. */
+/* serie grabada (prensa): banda guilloche en SVG. Es vector, asi que
+   queda nitida en cualquier pantalla (las de 3x incluidas); el trazo usa
+   non-scaling-stroke para medir 1px real aunque la banda se estire. Se
+   redibuja si cambia el ancho para que la onda no se deforme. */
 (() => {
-  const cvs=[...document.querySelectorAll('canvas[data-gs]')];
-  if(!cvs.length) return;
-  const rnd=s=>()=>{s=(s*16807)%2147483647;return s/2147483647};
-  function pinta(c){
-    const k=Math.min(devicePixelRatio||1,2),W=c.clientWidth,H=c.clientHeight;
-    if(!W||!H) return;
-    c.width=W*k;c.height=H*k;const x=c.getContext('2d');x.setTransform(k,0,0,k,0,0);
-    const g=c.dataset.gs,seed=+c.dataset.seed,r=rnd(seed*7919+13);
-    if(g==='band'){
-      for(let L=0;L<18;L++){x.beginPath();const a=6+L*.9,f=.018+(L%3)*.004,ph=L*.55+seed;
-        for(let px=0;px<=W;px+=2){const y=H/2+Math.sin(px*f+ph)*a*Math.cos(px*.004+L*.2);px?x.lineTo(px,y):x.moveTo(px,y)}
-        x.strokeStyle=`rgba(21,105,255,${.18+.25*(L%2)})`;x.lineWidth=.7;x.stroke();}
-    }else if(g==='rose'){
-      const cx=W/2,cy=H/2,R=Math.min(W*.5,H)*.46,P=[[7,3,.62],[9,4,.58],[11,5,.6]][(seed-1)%3];
-      for(let n=0;n<26;n++){x.beginPath();const rot=n*Math.PI*2/26;
-        for(let i=0;i<=720;i++){const t=i/720*Math.PI*2*P[1],rr=R*(1-P[2]*.5+P[2]*.5*Math.cos(P[0]*t/P[1]));
-          const xx=cx+rr*Math.cos(t+rot)*1.9,yy=cy+rr*Math.sin(t+rot);i?x.lineTo(xx,yy):x.moveTo(xx,yy)}
-        x.strokeStyle=`rgba(21,105,255,${.11+.12*(n%3===0)})`;x.lineWidth=.6;x.stroke();}
-      const gr=x.createRadialGradient(cx,cy,0,cx,cy,R*.9);gr.addColorStop(0,'rgba(2,4,9,.9)');gr.addColorStop(1,'rgba(2,4,9,0)');x.fillStyle=gr;x.fillRect(0,0,W,H);
-    }else if(g==='code'){
-      let px=0;while(px<W){const w=1+Math.floor(r()*3);if(r()>.42){x.fillStyle='rgba(255,255,255,.75)';x.fillRect(px,0,w,H)}px+=w+1;}
+  const bandas=[...document.querySelectorAll('svg.gs-band')];
+  if(!bandas.length) return;
+  const NS='http://www.w3.org/2000/svg';
+  function dibuja(svg){
+    const W=Math.max(1,svg.clientWidth),H=Math.max(1,svg.clientHeight),seed=+svg.dataset.seed||1;
+    svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    const L=14, ondas=Math.max(3,Math.round(W/110)), k=Math.PI*2*ondas/W;
+    for(let i=0;i<L;i++){
+      const ph=i*Math.PI/L + seed*.37, A=(H*.42)*(.45+.55*Math.abs(Math.cos(i*Math.PI/L)));
+      let d='';
+      for(let x=0;x<=W;x+=3){
+        const env=.35+.65*Math.sin(Math.PI*x/W);
+        const y=H/2+A*env*Math.sin(k*x+ph);
+        d+=(x?'L':'M')+x.toFixed(1)+' '+y.toFixed(2);
+      }
+      const p=document.createElementNS(NS,'path');
+      p.setAttribute('d',d);p.setAttribute('fill','none');
+      p.setAttribute('stroke','#1569ff');p.setAttribute('stroke-opacity',(i%2?.42:.7).toString());
+      p.setAttribute('stroke-width','1');p.setAttribute('vector-effect','non-scaling-stroke');
+      svg.appendChild(p);
     }
   }
-  const todo=()=>cvs.forEach(pinta);
-  (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(todo);
+  const todo=()=>bandas.forEach(dibuja);
+  todo();
   let w=innerWidth;addEventListener('resize',()=>{if(innerWidth!==w){w=innerWidth;todo();}});
 })();
 </script>
