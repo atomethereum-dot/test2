@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Despliegue testnet · Sectora</title>
+<!-- herramienta interna: se usa una vez para lanzar los contratos de testnet -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico">
+<meta name="color-scheme" content="light">
+<style>
+@font-face{font-family:'IBM Plex Sans';src:url('/fonts/IBMPlexSans.woff2') format('woff2');font-weight:100 700}
+@font-face{font-family:'IBM Plex Mono';src:url('/fonts/IBMPlexMono-400.woff2') format('woff2');font-weight:400}
+:root{--ink:#0b0d12;--ink-2:#3c414c;--ink-3:#6b7280;--line:#e3e6ec;--blue:#1569ff;--ok:#0f8f52;--bad:#c62828}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff;color:var(--ink);font:300 16px/1.6 'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.w{max-width:760px;margin:0 auto;padding:48px 20px 80px}
+.k{font:400 11px 'IBM Plex Mono',monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);display:flex;gap:12px;align-items:center}
+.k i{width:28px;height:1px;background:var(--blue)}
+h1{font-weight:200;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;margin:14px 0 12px}
+p.l{color:var(--ink-2);max-width:60ch}
+.box{margin-top:28px;border:1px solid var(--line)}
+.row{display:grid;grid-template-columns:34px 1fr auto;gap:14px;align-items:start;padding:16px 18px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.n{font:400 12px 'IBM Plex Mono',monospace;color:var(--blue);padding-top:3px}
+.row b{font-weight:500;display:block}
+.row small{display:block;color:var(--ink-3);font-size:13.5px;overflow-wrap:anywhere}
+.row small a{color:var(--blue);text-decoration:none}
+.st{font:400 11px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding-top:4px;white-space:nowrap}
+.st.ok{color:var(--ok)}.st.run{color:var(--blue)}.st.bad{color:var(--bad)}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+button{font:400 12px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;padding:13px 18px;border:1px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer}
+button.p{background:var(--blue);border-color:var(--blue);color:#fff}
+button:disabled{opacity:.4;cursor:not-allowed}
+.msg{margin-top:16px;font-size:14px;color:var(--ink-2);min-height:22px}
+.msg.bad{color:var(--bad)}
+pre{margin-top:22px;padding:16px;background:#f4f6fa;border:1px solid var(--line);font:400 12.5px/1.6 'IBM Plex Mono',monospace;white-space:pre-wrap;overflow-wrap:anywhere;display:none}
+pre.on{display:block}
+.note{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-3)}
+.note a{color:var(--blue)}
+</style>
+</head>
+<body>
+<div class="w">
+  <p class="k"><i></i>Sectora · Testnet Sepolia</p>
+  <h1>Despliegue de los contratos de testnet</h1>
+  <p class="l">Lanza desde tu MetaMask, en la red de pruebas Sepolia, los tres contratos del dash: el token tSECT con faucet de 5.000 al día, el marketplace de hash con 25% APY y el registro de nodos. Necesitas unos 0,05 ETH de Sepolia, que se consiguen gratis en un faucet de Sepolia.</p>
+
+  <div class="box" id="steps"></div>
+
+  <div class="acts">
+    <button class="p" id="go" type="button">Conectar MetaMask y desplegar</button>
+    <button id="reset" type="button">Empezar de cero</button>
+  </div>
+  <p class="msg" id="msg"></p>
+  <pre id="out"></pre>
+  <div class="acts"><button id="copy" type="button" style="display:none">Copiar direcciones</button></div>
+
+  <p class="note">Si el despliegue se interrumpe, vuelve a pulsar el botón: la página recuerda los pasos ya hechos y continúa donde se quedó. Al terminar, copia las direcciones y envíalas para activarlas en el dash. Código fuente para verificar en Etherscan (compilador 0.8.24, optimizador 200 runs): <a href="/contracts/flattened/SectoraToken.flattened.sol">SectoraToken</a> · <a href="/contracts/flattened/SectoraHashMarket.flattened.sol">SectoraHashMarket</a> · <a href="/contracts/flattened/ValidatorRegistry.flattened.sol">ValidatorRegistry</a>.</p>
+</div>
+
+<script src="/ethers.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  const SEPOLIA = { chainId:'0xaa36a7', chainName:'Sepolia', rpcUrls:['https://ethereum-sepolia-rpc.publicnode.com'],
+    nativeCurrency:{name:'Sepolia Ether',symbol:'ETH',decimals:18}, blockExplorerUrls:['https://sepolia.etherscan.io'] };
+  const EXP = 'https://sepolia.etherscan.io';
+  const E = v => ethers.parseEther(v);
+  const KEY = 'sectora:testnet-deploy';
+  const MIN_HASH = 50;                     /* lo que el dash pide para registrar un nodo */
+  const INITIAL = '50000000';              /* mismo supply inicial que el #SECT real */
+  const RESERVE = '5000000';               /* reserva inicial de recompensas */
+
+  const STEPS = [
+    { id:'token',    t:'SectoraToken (tSECT)',  d:'Token de prueba · 50.000.000 iniciales · faucet 5.000 tSECT / 24 h' },
+    { id:'market',   t:'SectoraHashMarket',     d:'Marketplace de hash · 80% quemado como recompra · 25% APY' },
+    { id:'registry', t:'ValidatorRegistry',     d:'Registro de nodos · mínimo ' + MIN_HASH + ' TH/s' },
+    { id:'fund',     t:'Reserva de recompensas', d:'Envía ' + Number(RESERVE).toLocaleString('es') + ' tSECT al marketplace para pagar el APY' }
+  ];
+  let st = {};
+  try{ st = JSON.parse(localStorage.getItem(KEY) || '{}'); }catch(e){}
+  const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} };
+  const $ = id => document.getElementById(id);
+  const msg = (t, bad) => { $('msg').textContent = t; $('msg').className = 'msg' + (bad ? ' bad' : ''); };
+
+  function paint(run){
+    $('steps').innerHTML = STEPS.map((s,i) => {
+      const v = st[s.id];
+      const estado = v ? '<span class="st ok">Hecho</span>' : (run === s.id ? '<span class="st run">En curso…</span>' : '<span class="st">Pendiente</span>');
+      const link = v ? (s.id === 'fund'
+          ? '<small><a href="'+EXP+'/tx/'+v+'" target="_blank" rel="noopener">Ver transacción ↗</a></small>'
+          : '<small><a href="'+EXP+'/address/'+v+'" target="_blank" rel="noopener">'+v+' ↗</a></small>') : '';
+      return '<div class="row"><span class="n">0'+(i+1)+'</span><div><b>'+s.t+'</b><small>'+s.d+'</small>'+link+'</div>'+estado+'</div>';
+    }).join('');
+    const done = st.token && st.market && st.registry && st.fund;
+    if(done){
+      const cfg = { network:'sepolia', chainId:11155111, token:st.token, hashMarket:st.market, registry:st.registry, deployer:st.deployer };
+      $('out').textContent = JSON.stringify(cfg, null, 2);
+      $('out').classList.add('on'); $('copy').style.display = '';
+      $('go').disabled = true;
+    }
+  }
+
+  async function provider(){
+    if(!window.ethereum) throw new Error('No se detecta MetaMask. Abre esta página en un navegador con MetaMask instalado.');
+    await window.ethereum.request({ method:'eth_requestAccounts' });
+    let cid = await window.ethereum.request({ method:'eth_chainId' });
+    if(cid !== SEPOLIA.chainId){
+      try{ await window.ethereum.request({ method:'wallet_switchEthereumChain', params:[{ chainId:SEPOLIA.chainId }] }); }
+      catch(e){
+        if(e && e.code === 4902) await window.ethereum.request({ method:'wallet_addEthereumChain', params:[SEPOLIA] });
+        else throw new Error('Cambia MetaMask a la red Sepolia y vuelve a intentarlo.');
+      }
+    }
+    const p = new ethers.BrowserProvider(window.ethereum);
+    const n = await p.getNetwork();
+    if(n.chainId !== 11155111n) throw new Error('MetaMask no está en Sepolia.');
+    return p;
+  }
+
+  async function run(){
+    $('go').disabled = true;
+    try{
+      msg('Cargando los contratos compilados…');
+      const art = await (await fetch('testnet-artifacts.json', { cache:'no-store' })).json();
+      const p = await provider();
+      const signer = await p.getSigner();
+      const me = await signer.getAddress();
+      if(st.deployer && st.deployer.toLowerCase() !== me.toLowerCase() && !st.fund){
+        throw new Error('Este despliegue lo empezó otra cuenta ('+st.deployer+'). Cambia a esa cuenta o pulsa "Empezar de cero".');
+      }
+      st.deployer = me; save();
+      const eth = await p.getBalance(me);
+      if(eth < E('0.02')) throw new Error('Tu cuenta tiene '+ethers.formatEther(eth)+' ETH de Sepolia. Consigue al menos 0,05 en un faucet de Sepolia y vuelve.');
+
+      const deploy = async (name, args, key) => {
+        if(st[key]) return;
+        paint(key); msg('Confirma en MetaMask el despliegue de '+name+'…');
+        const f = new ethers.ContractFactory(art.contracts[name].abi, art.contracts[name].bytecode, signer);
+        const c = await f.deploy(...args);
+        msg('Esperando a que la red confirme '+name+'…');
+        await c.waitForDeployment();
+        st[key] = await c.getAddress(); save(); paint();
+      };
+      await deploy('SectoraToken', [E(INITIAL)], 'token');
+      await deploy('SectoraHashMarket', [st.token], 'market');
+      await deploy('ValidatorRegistry', [st.market, MIN_HASH], 'registry');
+
+      if(!st.fund){
+        paint('fund'); msg('Confirma en MetaMask el envío de la reserva de recompensas…');
+        const tok = new ethers.Contract(st.token, art.contracts.SectoraToken.abi, signer);
+        const tx = await tok.mint(st.market, E(RESERVE));
+        await tx.wait();
+        st.fund = tx.hash; save();
+      }
+      paint();
+      msg('Listo. Los tres contratos están en Sepolia y la reserva de recompensas está cargada.');
+    }catch(e){
+      paint();
+      const t = (e && (e.shortMessage || e.message)) || String(e);
+      msg(/user rejected|denied|ACTION_REJECTED/i.test(t) ? 'Cancelaste la transacción en MetaMask. Pulsa el botón para continuar.' : t, true);
+      $('go').disabled = false;
+    }
+  }
+
+  $('go').onclick = run;
+  $('reset').onclick = () => {
+    if(!confirm('¿Borrar el progreso guardado y desplegar contratos nuevos?')) return;
+    st = {}; save(); $('out').classList.remove('on'); $('copy').style.display = 'none'; $('go').disabled = false; msg(''); paint();
+  };
+  $('copy').onclick = async () => {
+    try{ await navigator.clipboard.writeText($('out').textContent); msg('Direcciones copiadas.'); }
+    catch(e){ msg('No se pudo copiar: selecciona el texto y cópialo a mano.'); }
+  };
+  paint();
+})();
+</script>
+</body>
+</html>

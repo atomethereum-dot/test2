@@ -1,0 +1,8 @@
+{
+  "network": "sepolia",
+  "chainId": 11155111,
+  "rpc": "https://ethereum-sepolia-rpc.publicnode.com",
+  "token": "",
+  "hashMarket": "",
+  "registry": ""
+}

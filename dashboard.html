@@ -1709,6 +1709,13 @@ const _br = $('#bReg'); if(_br) _br.onclick = () => {
 };
 
 pintaPks(); resumen(); progreso();
+/* puente para la capa de testnet (dashboard-testnet.js): lee el paquete
+   elegido y escribe el hash y los validadores reales de la cadena */
+window.__sectoraMarket = {
+  pick: () => sel === null ? null : { kind, sel, p: PK[kind][sel] },
+  setHash: v => { mio = v; progreso(); },
+  setValid: n => { VALID = n; }
+};
 
 /* ---------- cifras que cuentan al entrar ---------- */
 function cuenta(el, fin, pre, suf){
@@ -3069,13 +3076,18 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 
   const corta = a => a.slice(0,6)+'…'+a.slice(-4);
 
+  /* la capa de testnet (dashboard-testnet.js) firma con esta misma cartera */
+  window.__sectoraEIP1193 = () => prov;
+  window.__sectoraCuenta = () => cuenta;
+
   async function saldoDe(dir){
     /* si el token aun no existe, se muestra el saldo nativo de la red de pruebas */
     try{
-      if(CONFIG.token){
+      const tk = (window.__SECT_TESTNET && window.__SECT_TESTNET.token) || CONFIG.token;
+      if(tk){
         const data = '0x70a08231' + dir.slice(2).padStart(64,'0');
         const r = await prov.request({method:'eth_call',
-          params:[{to:CONFIG.token, data}, 'latest']});
+          params:[{to:tk, data}, 'latest']});
         return Number(BigInt(r || '0x0') / (10n ** BigInt(CONFIG.decimales - 4))) / 1e4;
       }
       const r = await prov.request({method:'eth_getBalance', params:[dir,'latest']});
@@ -3472,5 +3484,6 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 })();
 })();
 </script>
+<script src="dashboard-testnet.js?v=20261007"></script>
 </body>
 </html>

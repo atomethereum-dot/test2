@@ -1,93 +1,42 @@
-# Sectora Testnet — Guía de despliegue real en Sepolia
+# Sectora Testnet — despliegue en Sepolia
 
-Los 3 contratos ya están escritos, compilados y probados (27/27 tests
-pasando localmente).
+Tres contratos, compilados y probados en local (`scripts/test-hashmarket.js`, 26/26):
 
-> **El staking no está aquí.** Va a mainnet contra el #SECT real, así que
-> tiene su propia guía: `DEPLOY_MAINNET_STAKING.md`.
+1. **SectoraToken (tSECT)**: token de prueba sin valor real, 50.000.000 iniciales,
+   faucet de **5.000 tSECT cada 24 h** por wallet. Quemable.
+2. **SectoraHashMarket**: compra de hash con tSECT. Los mismos paquetes que muestra el dash:
+   - Online: Starter (490 tSECT, 5 TH/s), Standard (2.200, 25 TH/s), Pro (8.200, 100 TH/s).
+   - Físico: Node Kit (4.300, 50 TH/s), Node Kit XL (19.500, 250 TH/s).
+   - De cada compra, el **80% se quema** (recompra simulada) y el **20% queda en la reserva**.
+   - Cada wallet gana un **25% APY fijo** sobre los tSECT gastados en hash, por segundo,
+     y lo cobra cuando quiere (`claim`). La reserva se recarga con `fundRewards` o
+     acuñando tSECT directamente al contrato.
+3. **ValidatorRegistry**: registro de nodos, mínimo **50 TH/s** comprados.
 
-Yo no puedo enviar la transacción de despliegue porque este entorno no tiene
-salida de red hacia ningún RPC de blockchain — tenés que hacer el despliegue
-vos mismo desde tu navegador, con tu MetaMask. Son ~10 minutos, sin instalar
-nada.
+## Desplegar (10 minutos, desde el navegador)
 
-## Cómo funciona el sistema
+El entorno de desarrollo no tiene salida a ningún RPC, así que el despliegue se hace
+con tu MetaMask:
 
-1. **SectoraToken (tSECT)** — token de prueba, sin valor real, con faucet
-   (1,000 tSECT gratis cada 24h por wallet).
-2. **SectoraHashMarket** — acá se "compra" Hash (poder de cómputo) pagando
-   con tSECT. Hay 6 paquetes predefinidos:
-   - *Online* (alquiler de hash): Starter Hash (100 tSECT → 10 hash),
-     Pro Hash (450 tSECT → 50 hash), Enterprise Hash (1,800 tSECT → 220 hash).
-   - *Físico* (equipo de validación): Home Validator Kit (300 tSECT → 45
-     hash), Pro Rack Node (1,200 tSECT → 200 hash), Datacenter Node (5,000
-     tSECT → 950 hash) — mejor precio por hash, simulando que es una compra
-     de hardware propio.
-   - El pago va a una wallet **tesorería** que vos elegís al desplegar.
-3. **ValidatorRegistry** — para registrarte como validador necesitás tener
-   un mínimo de Hash comprado (lo definís al desplegar, ej. 40). Si no
-   comprás Hash primero, el registro falla.
-
-## Paso 0 — Preparar la wallet
-
-1. Abrí MetaMask, cambiá a la red **Sepolia** (Configuración → Redes →
-   Mostrar redes de testnet).
-2. Conseguí ETH de prueba gratis: https://sepoliafaucet.com o
-   https://www.alchemy.com/faucets/ethereum-sepolia (con ~0.05 ETH de test
-   alcanza para los 3 despliegues).
-
-## Paso 1 — Abrir Remix
-
-Andá a **https://remix.ethereum.org** (corre en tu navegador, sin cuenta).
-
-## Paso 2 — Desplegar SectoraToken
-
-1. Archivo nuevo `SectoraToken.sol`, pegá `SectoraToken.flattened.sol`.
-2. Pestaña **Solidity Compiler**: versión **0.8.24**, optimizador activado
-   (200 runs), **Compile**.
-3. Pestaña **Deploy & Run Transactions**, Environment = **Injected Provider
-   - MetaMask** (confirmá que estás en Sepolia).
-4. Constructor `initialSupply`, poné:
-   ```
-   50000000000000000000000000
-   ```
-   (50,000,000 tSECT con 18 decimales — mismo supply inicial que
-   tendrá el token real en mainnet).
-5. **Deploy**, confirmá en MetaMask, **copiá la dirección desplegada**.
-
-## Paso 3 — Desplegar SectoraHashMarket
-
-1. Archivo nuevo `SectoraHashMarket.sol`, pegá `SectoraHashMarket.flattened.sol`.
-2. Compilá igual (0.8.24, optimizador 200 runs).
-3. Constructor:
-   - `_paymentToken`: la dirección de **SectoraToken** del paso 2.
-   - `_treasury`: la dirección de wallet que va a recibir los pagos (puede
-     ser la misma que estás usando para desplegar, u otra).
-4. Deploy, confirmá, copiá la dirección.
-
-## Paso 4 — Desplegar ValidatorRegistry
-
-1. Archivo nuevo `ValidatorRegistry.sol`, pegá `ValidatorRegistry.flattened.sol`.
-2. Compilá igual.
-3. Constructor:
-   - `_hashMarket`: la dirección de **SectoraHashMarket** del paso 3.
-   - `_minHashToValidate`: el mínimo de hash requerido para poder
-     registrarse como validador. Recomendado: `40` (así, comprar solo
-     "Starter Hash" no alcanza, pero un "Home Validator Kit" o combinar
-     dos compras online sí).
-4. Deploy, confirmá, copiá la dirección.
-
-## Paso 5 — Pasarme las 3 direcciones
-
-Una vez desplegado, pasame:
-- Dirección de **SectoraToken**
-- Dirección de **SectoraHashMarket**
-- Dirección de **ValidatorRegistry**
+1. MetaMask en la red **Sepolia** con unos 0,05 ETH de prueba
+   (faucet: https://cloud.google.com/application/web3/faucet/ethereum/sepolia).
+2. Abre **https://sectoraorg.com/dash/deploy.html** y pulsa *Conectar MetaMask y desplegar*.
+3. Confirma 4 transacciones: token, marketplace, registro y la reserva inicial de
+   5.000.000 tSECT para el APY. Si algo se corta, vuelve a pulsar: la página continúa
+   donde se quedó.
+4. Copia las direcciones que muestra al final y envíalas. Se pegan en
+   `dash/testnet-config.json` y el dash pasa de modo demo a la cadena real.
 
 ## Verificar en Etherscan (opcional)
 
-Remix tiene un plugin "Contract Verification" (ícono de enchufe →
-"CONTRACT VERIFICATION - REMIX"), conectalo a Sepolia Etherscan, y verificá
-cada contrato pegando el mismo `.flattened.sol` que usaste para desplegar.
-No es obligatorio, pero hace público el código fuente en
-https://sepolia.etherscan.io.
+En https://sepolia.etherscan.io → contrato → *Verify and Publish*: Solidity single file,
+compilador **v0.8.24**, optimizador **sí, 200 runs**, licencia MIT, y pega el
+`.flattened.sol` correspondiente de `contracts/flattened/`. Argumentos del constructor:
+token `50000000000000000000000000`; marketplace la dirección del token;
+registro la dirección del marketplace y `50`.
+
+## Recompilar
+
+`node scripts/compile.js` (artefactos para las pruebas), `node scripts/flatten.js` y
+`node scripts/build-web-artifacts.js` (bytecode que usa la página de despliegue, compilado
+desde los mismos `.flattened.sol` que se verifican).

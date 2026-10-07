@@ -2,14 +2,16 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title Sectora Testnet Token (test #SECT)
 /// @notice ERC-20 test token for the Sectora testnet. Anyone can claim a
 /// fixed amount from the faucet once per cooldown window so the dashboard
 /// and staking contract have real, transferable balances to work with.
-contract SectoraToken is ERC20, Ownable {
-    uint256 public constant FAUCET_AMOUNT = 1_000 ether;
+/// Burnable so the hash market can retire the 80% buyback share for real.
+contract SectoraToken is ERC20, ERC20Burnable, Ownable {
+    uint256 public constant FAUCET_AMOUNT = 5_000 ether;
     uint256 public constant FAUCET_COOLDOWN = 1 days;
 
     mapping(address => uint256) public lastFaucetClaim;

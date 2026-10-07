@@ -605,14 +605,283 @@ abstract contract Ownable is Context {
 }
 
 
+// OpenZeppelin Contracts (last updated v5.5.0) (utils/ReentrancyGuard.sol)
 
-/// @title Sectora Hash Market
-/// @notice Real on-chain purchase of test hash power, paid in the Sectora
-/// test token. Two purchase paths mirror the real-world products Sectora
-/// sells: renting hash online, or buying physical validator node hardware.
-/// This is a testnet demo — no real compute is provisioned; the purchase
-/// itself and the resulting hashPower balance are real on-chain state.
-contract SectoraHashMarket is Ownable {
+
+// OpenZeppelin Contracts (last updated v5.1.0) (utils/StorageSlot.sol)
+// This file was procedurally generated from scripts/generate/templates/StorageSlot.js.
+
+
+/**
+ * @dev Library for reading and writing primitive types to specific storage slots.
+ *
+ * Storage slots are often used to avoid storage conflict when dealing with upgradeable contracts.
+ * This library helps with reading and writing to such slots without the need for inline assembly.
+ *
+ * The functions in this library return Slot structs that contain a `value` member that can be used to read or write.
+ *
+ * Example usage to set ERC-1967 implementation slot:
+ * ```solidity
+ * contract ERC1967 {
+ *     // Define the slot. Alternatively, use the SlotDerivation library to derive the slot.
+ *     bytes32 internal constant _IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
+ *
+ *     function _getImplementation() internal view returns (address) {
+ *         return StorageSlot.getAddressSlot(_IMPLEMENTATION_SLOT).value;
+ *     }
+ *
+ *     function _setImplementation(address newImplementation) internal {
+ *         require(newImplementation.code.length > 0);
+ *         StorageSlot.getAddressSlot(_IMPLEMENTATION_SLOT).value = newImplementation;
+ *     }
+ * }
+ * ```
+ *
+ * TIP: Consider using this library along with {SlotDerivation}.
+ */
+library StorageSlot {
+    struct AddressSlot {
+        address value;
+    }
+
+    struct BooleanSlot {
+        bool value;
+    }
+
+    struct Bytes32Slot {
+        bytes32 value;
+    }
+
+    struct Uint256Slot {
+        uint256 value;
+    }
+
+    struct Int256Slot {
+        int256 value;
+    }
+
+    struct StringSlot {
+        string value;
+    }
+
+    struct BytesSlot {
+        bytes value;
+    }
+
+    /**
+     * @dev Returns an `AddressSlot` with member `value` located at `slot`.
+     */
+    function getAddressSlot(bytes32 slot) internal pure returns (AddressSlot storage r) {
+        assembly ("memory-safe") {
+            r.slot := slot
+        }
+    }
+
+    /**
+     * @dev Returns a `BooleanSlot` with member `value` located at `slot`.
+     */
+    function getBooleanSlot(bytes32 slot) internal pure returns (BooleanSlot storage r) {
+        assembly ("memory-safe") {
+            r.slot := slot
+        }
+    }
+
+    /**
+     * @dev Returns a `Bytes32Slot` with member `value` located at `slot`.
+     */
+    function getBytes32Slot(bytes32 slot) internal pure returns (Bytes32Slot storage r) {
+        assembly ("memory-safe") {
+            r.slot := slot
+        }
+    }
+
+    /**
+     * @dev Returns a `Uint256Slot` with member `value` located at `slot`.
+     */
+    function getUint256Slot(bytes32 slot) internal pure returns (Uint256Slot storage r) {
+        assembly ("memory-safe") {
+            r.slot := slot
+        }
+    }
+
+    /**
+     * @dev Returns a `Int256Slot` with member `value` located at `slot`.
+     */
+    function getInt256Slot(bytes32 slot) internal pure returns (Int256Slot storage r) {
+        assembly ("memory-safe") {
+            r.slot := slot
+        }
+    }
+
+    /**
+     * @dev Returns a `StringSlot` with member `value` located at `slot`.
+     */
+    function getStringSlot(bytes32 slot) internal pure returns (StringSlot storage r) {
+        assembly ("memory-safe") {
+            r.slot := slot
+        }
+    }
+
+    /**
+     * @dev Returns an `StringSlot` representation of the string storage pointer `store`.
+     */
+    function getStringSlot(string storage store) internal pure returns (StringSlot storage r) {
+        assembly ("memory-safe") {
+            r.slot := store.slot
+        }
+    }
+
+    /**
+     * @dev Returns a `BytesSlot` with member `value` located at `slot`.
+     */
+    function getBytesSlot(bytes32 slot) internal pure returns (BytesSlot storage r) {
+        assembly ("memory-safe") {
+            r.slot := slot
+        }
+    }
+
+    /**
+     * @dev Returns an `BytesSlot` representation of the bytes storage pointer `store`.
+     */
+    function getBytesSlot(bytes storage store) internal pure returns (BytesSlot storage r) {
+        assembly ("memory-safe") {
+            r.slot := store.slot
+        }
+    }
+}
+
+
+
+/**
+ * @dev Contract module that helps prevent reentrant calls to a function.
+ *
+ * Inheriting from `ReentrancyGuard` will make the {nonReentrant} modifier
+ * available, which can be applied to functions to make sure there are no nested
+ * (reentrant) calls to them.
+ *
+ * Note that because there is a single `nonReentrant` guard, functions marked as
+ * `nonReentrant` may not call one another. This can be worked around by making
+ * those functions `private`, and then adding `external` `nonReentrant` entry
+ * points to them.
+ *
+ * TIP: If EIP-1153 (transient storage) is available on the chain you're deploying at,
+ * consider using {ReentrancyGuardTransient} instead.
+ *
+ * TIP: If you would like to learn more about reentrancy and alternative ways
+ * to protect against it, check out our blog post
+ * https://blog.openzeppelin.com/reentrancy-after-istanbul/[Reentrancy After Istanbul].
+ *
+ * IMPORTANT: Deprecated. This storage-based reentrancy guard will be removed and replaced
+ * by the {ReentrancyGuardTransient} variant in v6.0.
+ *
+ * @custom:stateless
+ */
+abstract contract ReentrancyGuard {
+    using StorageSlot for bytes32;
+
+    // keccak256(abi.encode(uint256(keccak256("openzeppelin.storage.ReentrancyGuard")) - 1)) & ~bytes32(uint256(0xff))
+    bytes32 private constant REENTRANCY_GUARD_STORAGE =
+        0x9b779b17422d0df92223018b32b4d1fa46e071723d6817e2486d003becc55f00;
+
+    // Booleans are more expensive than uint256 or any type that takes up a full
+    // word because each write operation emits an extra SLOAD to first read the
+    // slot's contents, replace the bits taken up by the boolean, and then write
+    // back. This is the compiler's defense against contract upgrades and
+    // pointer aliasing, and it cannot be disabled.
+
+    // The values being non-zero value makes deployment a bit more expensive,
+    // but in exchange the refund on every call to nonReentrant will be lower in
+    // amount. Since refunds are capped to a percentage of the total
+    // transaction's gas, it is best to keep them low in cases like this one, to
+    // increase the likelihood of the full refund coming into effect.
+    uint256 private constant NOT_ENTERED = 1;
+    uint256 private constant ENTERED = 2;
+
+    /**
+     * @dev Unauthorized reentrant call.
+     */
+    error ReentrancyGuardReentrantCall();
+
+    constructor() {
+        _reentrancyGuardStorageSlot().getUint256Slot().value = NOT_ENTERED;
+    }
+
+    /**
+     * @dev Prevents a contract from calling itself, directly or indirectly.
+     * Calling a `nonReentrant` function from another `nonReentrant`
+     * function is not supported. It is possible to prevent this from happening
+     * by making the `nonReentrant` function external, and making it call a
+     * `private` function that does the actual work.
+     */
+    modifier nonReentrant() {
+        _nonReentrantBefore();
+        _;
+        _nonReentrantAfter();
+    }
+
+    /**
+     * @dev A `view` only version of {nonReentrant}. Use to block view functions
+     * from being called, preventing reading from inconsistent contract state.
+     *
+     * CAUTION: This is a "view" modifier and does not change the reentrancy
+     * status. Use it only on view functions. For payable or non-payable functions,
+     * use the standard {nonReentrant} modifier instead.
+     */
+    modifier nonReentrantView() {
+        _nonReentrantBeforeView();
+        _;
+    }
+
+    function _nonReentrantBeforeView() private view {
+        if (_reentrancyGuardEntered()) {
+            revert ReentrancyGuardReentrantCall();
+        }
+    }
+
+    function _nonReentrantBefore() private {
+        // On the first call to nonReentrant, _status will be NOT_ENTERED
+        _nonReentrantBeforeView();
+
+        // Any calls to nonReentrant after this point will fail
+        _reentrancyGuardStorageSlot().getUint256Slot().value = ENTERED;
+    }
+
+    function _nonReentrantAfter() private {
+        // By storing the original value once again, a refund is triggered (see
+        // https://eips.ethereum.org/EIPS/eip-2200)
+        _reentrancyGuardStorageSlot().getUint256Slot().value = NOT_ENTERED;
+    }
+
+    /**
+     * @dev Returns true if the reentrancy guard is currently set to "entered", which indicates there is a
+     * `nonReentrant` function in the call stack.
+     */
+    function _reentrancyGuardEntered() internal view returns (bool) {
+        return _reentrancyGuardStorageSlot().getUint256Slot().value == ENTERED;
+    }
+
+    function _reentrancyGuardStorageSlot() internal pure virtual returns (bytes32) {
+        return REENTRANCY_GUARD_STORAGE;
+    }
+}
+
+
+
+interface IBurnableToken {
+    function burn(uint256 amount) external;
+}
+
+/// @title Sectora Hash Market (testnet)
+/// @notice On-chain purchase of test hash power, paid in tSECT, with the
+/// same revenue rule the protocol will use on mainnet:
+///   - 80% of every purchase is a simulated buyback: those tSECT are
+///     burned on the spot, so the supply really shrinks.
+///   - 20% stays in this contract as the reward reserve.
+/// Every buyer earns a fixed 25% APY on the tSECT they have spent on hash,
+/// accrued every second and claimable at any time. The owner can top the
+/// reserve up (fundRewards, or mint straight to this contract) so testers
+/// never hit an empty pool. Testnet only: tSECT has no monetary value.
+contract SectoraHashMarket is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     enum PackageKind {
@@ -623,58 +892,148 @@ contract SectoraHashMarket is Ownable {
     struct Package {
         string name;
         PackageKind kind;
-        uint256 priceInToken; // in stakeToken's smallest unit (18 decimals)
-        uint256 hashPower; // arbitrary hash-power units granted per purchase
+        uint256 priceInToken; // tSECT, 18 decimals
+        uint256 hashPower; // TH/s granted per purchase
         bool active;
     }
 
+    uint256 public constant BPS = 10_000;
+    uint256 public constant BUYBACK_BPS = 8_000; // 80% burned as buyback
+    uint256 public constant APY_BPS = 2_500; // 25% APY on tSECT spent
+    uint256 public constant YEAR = 365 days;
+
     IERC20 public immutable paymentToken;
-    address public treasury;
 
     Package[] public packages;
+
     mapping(address => uint256) public hashPower;
     mapping(address => uint256) public purchaseCount;
+    mapping(address => uint256) public principal; // tSECT spent on hash
+    mapping(address => uint256) public accrued; // rewards stored at lastAccrual
+    mapping(address => uint256) public lastAccrual;
+    mapping(address => uint256) public claimed;
+
+    uint256 public totalHashSold;
+    uint256 public totalBoughtBack;
+    uint256 public totalPrincipal;
+    uint256 public totalRewardsClaimed;
+    uint256 public buyerCount;
 
     event PackageAdded(uint256 indexed packageId, string name, PackageKind kind, uint256 priceInToken, uint256 hashPower);
     event PackageStatusChanged(uint256 indexed packageId, bool active);
     event HashPurchased(address indexed buyer, uint256 indexed packageId, uint256 hashPowerAdded, uint256 pricePaid);
+    event BuybackBurned(uint256 amount);
+    event RewardsClaimed(address indexed account, uint256 amount);
+    event RewardsFunded(address indexed from, uint256 amount);
 
-    constructor(address _paymentToken, address _treasury) Ownable(msg.sender) {
+    constructor(address _paymentToken) Ownable(msg.sender) {
         paymentToken = IERC20(_paymentToken);
-        treasury = _treasury;
 
-        // Online hash — rented compute, priced per unit, no bulk discount floor.
-        _addPackage("Starter Hash", PackageKind.Online, 100 ether, 10);
-        _addPackage("Pro Hash", PackageKind.Online, 450 ether, 50);
-        _addPackage("Enterprise Hash", PackageKind.Online, 1800 ether, 220);
+        // Same packages the dashboard shows. Online hash: rented compute.
+        _addPackage("Starter", PackageKind.Online, 490 ether, 5);
+        _addPackage("Standard", PackageKind.Online, 2200 ether, 25);
+        _addPackage("Pro", PackageKind.Online, 8200 ether, 100);
 
-        // Physical validator node hardware — bigger upfront cost, better
-        // hash-per-token rate since it's dedicated owned equipment.
-        _addPackage("Home Validator Kit", PackageKind.Physical, 300 ether, 45);
-        _addPackage("Pro Rack Node", PackageKind.Physical, 1200 ether, 200);
-        _addPackage("Datacenter Node", PackageKind.Physical, 5000 ether, 950);
+        // Physical validator hardware: best price per TH/s.
+        _addPackage("Node Kit", PackageKind.Physical, 4300 ether, 50);
+        _addPackage("Node Kit XL", PackageKind.Physical, 19500 ether, 250);
     }
 
-    function _addPackage(string memory name, PackageKind kind, uint256 price, uint256 power) internal {
-        packages.push(Package(name, kind, price, power, true));
-        emit PackageAdded(packages.length - 1, name, kind, price, power);
-    }
+    // ---------------------------------------------------------------- views
 
     function packageCount() external view returns (uint256) {
         return packages.length;
     }
 
-    function purchase(uint256 packageId) external {
+    /// @notice Rewards earned and not yet claimed, up to this second.
+    function pendingRewards(address account) public view returns (uint256) {
+        uint256 p = principal[account];
+        if (p == 0) return accrued[account];
+        uint256 elapsed = block.timestamp - lastAccrual[account];
+        return accrued[account] + (p * APY_BPS * elapsed) / (BPS * YEAR);
+    }
+
+    /// @notice tSECT the account earns per day at the current principal.
+    function rewardsPerDay(address account) external view returns (uint256) {
+        return (principal[account] * APY_BPS * 1 days) / (BPS * YEAR);
+    }
+
+    /// @notice tSECT available to pay rewards.
+    function rewardReserve() public view returns (uint256) {
+        return paymentToken.balanceOf(address(this));
+    }
+
+    function getAccount(address account)
+        external
+        view
+        returns (uint256 hash, uint256 spent, uint256 pending, uint256 claimedTotal, uint256 purchases)
+    {
+        return (hashPower[account], principal[account], pendingRewards(account), claimed[account], purchaseCount[account]);
+    }
+
+    function getStats()
+        external
+        view
+        returns (
+            uint256 hashSold,
+            uint256 boughtBack,
+            uint256 spent,
+            uint256 rewardsClaimed,
+            uint256 buyers,
+            uint256 reserve
+        )
+    {
+        return (totalHashSold, totalBoughtBack, totalPrincipal, totalRewardsClaimed, buyerCount, rewardReserve());
+    }
+
+    // -------------------------------------------------------------- actions
+
+    function purchase(uint256 packageId) external nonReentrant {
         require(packageId < packages.length, "SectoraHashMarket: bad package id");
         Package storage pkg = packages[packageId];
         require(pkg.active, "SectoraHashMarket: package inactive");
 
-        paymentToken.safeTransferFrom(msg.sender, treasury, pkg.priceInToken);
+        _accrue(msg.sender);
+        if (purchaseCount[msg.sender] == 0) buyerCount += 1;
+
+        uint256 price = pkg.priceInToken;
+        paymentToken.safeTransferFrom(msg.sender, address(this), price);
+
+        uint256 buyback = (price * BUYBACK_BPS) / BPS;
+        IBurnableToken(address(paymentToken)).burn(buyback);
+        totalBoughtBack += buyback;
+        emit BuybackBurned(buyback);
+
         hashPower[msg.sender] += pkg.hashPower;
         purchaseCount[msg.sender] += 1;
+        principal[msg.sender] += price;
+        totalPrincipal += price;
+        totalHashSold += pkg.hashPower;
 
-        emit HashPurchased(msg.sender, packageId, pkg.hashPower, pkg.priceInToken);
+        emit HashPurchased(msg.sender, packageId, pkg.hashPower, price);
     }
+
+    function claim() external nonReentrant {
+        _accrue(msg.sender);
+        uint256 amount = accrued[msg.sender];
+        require(amount > 0, "SectoraHashMarket: nothing to claim");
+        require(rewardReserve() >= amount, "SectoraHashMarket: reward reserve empty");
+
+        accrued[msg.sender] = 0;
+        claimed[msg.sender] += amount;
+        totalRewardsClaimed += amount;
+        paymentToken.safeTransfer(msg.sender, amount);
+
+        emit RewardsClaimed(msg.sender, amount);
+    }
+
+    /// @notice Anyone can top up the reward reserve.
+    function fundRewards(uint256 amount) external {
+        paymentToken.safeTransferFrom(msg.sender, address(this), amount);
+        emit RewardsFunded(msg.sender, amount);
+    }
+
+    // ---------------------------------------------------------------- admin
 
     function addPackage(string calldata name, PackageKind kind, uint256 price, uint256 power) external onlyOwner {
         _addPackage(name, kind, price, power);
@@ -686,8 +1045,16 @@ contract SectoraHashMarket is Ownable {
         emit PackageStatusChanged(packageId, active);
     }
 
-    function setTreasury(address _treasury) external onlyOwner {
-        treasury = _treasury;
+    // ------------------------------------------------------------- internal
+
+    function _accrue(address account) internal {
+        accrued[account] = pendingRewards(account);
+        lastAccrual[account] = block.timestamp;
+    }
+
+    function _addPackage(string memory name, PackageKind kind, uint256 price, uint256 power) internal {
+        packages.push(Package(name, kind, price, power, true));
+        emit PackageAdded(packages.length - 1, name, kind, price, power);
     }
 }
 

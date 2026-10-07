@@ -597,6 +597,43 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
 }
 
 
+// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC20/extensions/ERC20Burnable.sol)
+
+
+
+/**
+ * @dev Extension of {ERC20} that allows token holders to destroy both their own
+ * tokens and those that they have an allowance for, in a way that can be
+ * recognized off-chain (via event analysis).
+ */
+abstract contract ERC20Burnable is Context, ERC20 {
+    /**
+     * @dev Destroys a `value` amount of tokens from the caller.
+     *
+     * See {ERC20-_burn}.
+     */
+    function burn(uint256 value) public virtual {
+        _burn(_msgSender(), value);
+    }
+
+    /**
+     * @dev Destroys a `value` amount of tokens from `account`, deducting from
+     * the caller's allowance.
+     *
+     * See {ERC20-_burn} and {ERC20-allowance}.
+     *
+     * Requirements:
+     *
+     * - the caller must have allowance for ``accounts``'s tokens of at least
+     * `value`.
+     */
+    function burnFrom(address account, uint256 value) public virtual {
+        _spendAllowance(account, _msgSender(), value);
+        _burn(account, value);
+    }
+}
+
+
 // OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)
 
 
@@ -701,8 +738,9 @@ abstract contract Ownable is Context {
 /// @notice ERC-20 test token for the Sectora testnet. Anyone can claim a
 /// fixed amount from the faucet once per cooldown window so the dashboard
 /// and staking contract have real, transferable balances to work with.
-contract SectoraToken is ERC20, Ownable {
-    uint256 public constant FAUCET_AMOUNT = 1_000 ether;
+/// Burnable so the hash market can retire the 80% buyback share for real.
+contract SectoraToken is ERC20, ERC20Burnable, Ownable {
+    uint256 public constant FAUCET_AMOUNT = 5_000 ether;
     uint256 public constant FAUCET_COOLDOWN = 1 days;
 
     mapping(address => uint256) public lastFaucetClaim;
