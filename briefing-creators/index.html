@@ -3,20 +3,39 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Briefing para creadores · Sectora</title>
+<title>Briefing para creadores · Sectora Foundation</title>
 <meta name="description" content="Información oficial de Sectora Foundation para los creadores de contenido de la campaña de $SECT: puntos del vídeo, enlaces de comprobación y procedimiento de compra.">
 <!-- documento de trabajo para creadores: accesible por enlace, fuera de los buscadores -->
 <meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://sectoraorg.com/briefing-creators/">
+<link rel="alternate" hreflang="es" href="https://sectoraorg.com/briefing-creators/">
+<link rel="alternate" hreflang="en" href="https://sectoraorg.com/briefing-creators/en/">
+<link rel="alternate" hreflang="pt" href="https://sectoraorg.com/briefing-creators/pt/">
+<link rel="alternate" hreflang="x-default" href="https://sectoraorg.com/briefing-creators/en/">
+<!-- tarjeta para redes: la misma imagen y formato que la portada del sitio -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://sectoraorg.com/briefing-creators">
-<meta property="og:title" content="Briefing para creadores · Sectora">
-<meta property="og:description" content="Información oficial de Sectora Foundation para los creadores de contenido de la campaña de $SECT.">
+<meta property="og:site_name" content="Sectora Foundation">
+<meta property="og:locale" content="es_ES">
+<meta property="og:url" content="https://sectoraorg.com/briefing-creators/">
+<meta property="og:title" content="Briefing para creadores · Sectora Foundation">
+<meta property="og:description" content="Información oficial de Sectora Foundation para los creadores de contenido de la campaña de $SECT: puntos del vídeo, enlaces de comprobación y procedimiento de compra.">
 <meta property="og:image" content="https://sectoraorg.com/og-image.jpg">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="840">
+<meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briefing para creadores · Sectora Foundation">
+<meta name="twitter:description" content="Información oficial de Sectora Foundation para los creadores de contenido de la campaña de $SECT: puntos del vídeo, enlaces de comprobación y procedimiento de compra.">
+<meta name="twitter:image" content="https://sectoraorg.com/og-image.jpg">
 <link rel="icon" type="image/png" sizes="192x192" href="/icons/v2/icon-192.png">
+<link rel="icon" type="image/png" sizes="144x144" href="/icons/v2/favicon-144x144.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/icons/v2/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/icons/v2/favicon-48x48.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/icons/v2/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/v2/favicon-16x16.png">
 <link rel="icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/icons/v2/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#ffffff">
 <meta name="color-scheme" content="light">
 <style>
@@ -36,7 +55,12 @@ a{color:var(--blue);text-decoration:none}
 .brand{display:flex;align-items:center;gap:12px;color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;min-width:0}
 .brand svg{flex:none}
 .brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dl{margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;background:var(--blue);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;transition:background .2s}
+.lng{margin-left:auto;display:flex;border:1px solid var(--line)}
+.lng a{padding:8px 10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--ink-3);transition:color .2s,background .2s}
+.lng a + a{border-left:1px solid var(--line)}
+.lng a:hover{color:var(--ink)}
+.lng a[aria-current]{color:var(--ink);background:var(--line-2);font-weight:500}
+.dl{flex:none;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;background:var(--blue);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;transition:background .2s}
 .dl:hover{background:#0f57d8}
 
 /* portada */
@@ -90,7 +114,9 @@ blockquote{margin:12px 0 14px;padding:4px 0 4px 22px;border-left:2px solid var(-
 @media (max-width:560px){
   body{font-size:15.5px}
   .brand span{display:none}
-  .dl{padding:9px 12px}
+  .dl{padding:9px 10px}
+  .dl span{display:none}
+  .lng a{padding:8px 8px}
   h3{font-size:17.5px}
   blockquote{font-size:17px;padding-left:16px}
   .steps li{padding-left:38px}
@@ -101,7 +127,8 @@ blockquote{margin:12px 0 14px;padding:4px 0 4px 22px;border-left:2px solid var(-
 <body>
 <header class="top"><div class="top-in">
   <a class="brand" href="https://sectoraorg.com"><svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="30" fill="none" stroke="#fff" stroke-width="11"/></svg><span>Sectora Foundation · Briefing para creadores</span></a>
-  <a class="dl" href="Sectora-Briefing-Creadores-ES.pdf" download>Descargar PDF <span aria-hidden="true">↓</span></a>
+  <nav class="lng" aria-label="Language"><a href="/briefing-creators/en/" hreflang="en" lang="en">EN</a><a href="/briefing-creators/" aria-current="page" hreflang="es" lang="es">ES</a><a href="/briefing-creators/pt/" hreflang="pt" lang="pt">PT</a></nav>
+  <a class="dl" href="/briefing-creators/Sectora-Briefing-Creadores-ES.pdf" download>Descargar PDF <span aria-hidden="true">↓</span></a>
 </div></header>
 
 <section class="hero">
@@ -198,11 +225,11 @@ blockquote{margin:12px 0 14px;padding:4px 0 4px 22px;border-left:2px solid var(-
 <li>Si el token no aparece en la wallet, importarlo mediante la dirección del contrato.</li>
 </ol>
 <h2 id="s5"><b>05</b>Cobertura y mercado</h2>
-<p class="item"><b>AP News</b>Https://apnews.com/press-release/globenewswire-mobile/press-release-f507395c38cb75f10c3f8ffe67b3ce18</p>
-<p class="item"><b>Benzinga</b>Https://www.benzinga.com/pressreleases/26/10/g62178300/sectora-launches-sect-quantum-cybersecurity-and-rwa-token-supply-capped-50-million</p>
-<p class="item"><b>CoinGecko</b>Https://www.coingecko.com/en/coins/sectora</p>
-<p class="item"><b>X</b>Https://x.com/sectora__</p>
-<p class="item"><b>Telegram</b>Https://t.me/sectoraorg</p>
+<p class="item">AP News: <a href="https://apnews.com/press-release/globenewswire-mobile/press-release-f507395c38cb75f10c3f8ffe67b3ce18" target="_blank" rel="noopener noreferrer">https://apnews.com/press-release/globenewswire-mobile/press-release-f507395c38cb75f10c3f8ffe67b3ce18</a></p>
+<p class="item">Benzinga: <a href="https://www.benzinga.com/pressreleases/26/10/g62178300/sectora-launches-sect-quantum-cybersecurity-and-rwa-token-supply-capped-50-million" target="_blank" rel="noopener noreferrer">https://www.benzinga.com/pressreleases/26/10/g62178300/sectora-launches-sect-quantum-cybersecurity-and-rwa-token-supply-capped-50-million</a></p>
+<p class="item">CoinGecko: <a href="https://www.coingecko.com/en/coins/sectora" target="_blank" rel="noopener noreferrer">https://www.coingecko.com/en/coins/sectora</a></p>
+<p class="item">X: <a href="https://x.com/sectora__" target="_blank" rel="noopener noreferrer">https://x.com/sectora__</a></p>
+<p class="item">Telegram: <a href="https://t.me/sectoraorg" target="_blank" rel="noopener noreferrer">https://t.me/sectoraorg</a></p>
 <p class="foot">Contacto de la campaña: marketing@sectoraorg.com · support@sectoraorg.com</p>
 <p class="foot">Sectora Foundation · Chicago, Illinois, Estados Unidos</p>
   </main>
