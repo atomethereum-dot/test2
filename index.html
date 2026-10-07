@@ -143,6 +143,11 @@
 
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;background:#000;overflow-x:clip}
+  /* sin rebote al final: en iPhone, al pasar del pie el navegador estira
+     la pagina y enseña el fondo negro del documento por debajo, de modo
+     que el pie parecia seguir de largo. Asi la pagina se detiene en seco
+     en el ultimo pixel del pie */
+  html,body{overscroll-behavior-y:none}
   body{
     background:var(--bg);
     color:var(--ink);
