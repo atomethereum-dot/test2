@@ -74,6 +74,10 @@
       return n > 0 ? Math.min(n, 500) : 30;
     }catch(e){ return 0; }
   })();
+  /* compra media de cada validador simulado, sacada de una mezcla real de
+     paquetes (por cada 30: 18 Node Kit, 6 Node Kit + Standard,
+     3 Node Kit + Pro, 3 Node Kit XL) = 85 TH/s y 7.080 tSECT gastados */
+  const PREVIEW_TH = 85, PREVIEW_SPENT = 7080;
 
   function cargaEthers(){
     if(window.ethers) return Promise.resolve();
@@ -176,8 +180,8 @@
       const kv = q('#kVal'), mv = q('#mVal'), kh = q('#kHash'), kb = q('#kBuy');
       if(kv) kv.textContent = val.toLocaleString('en-US');
       if(mv) mv.textContent = val.toLocaleString('en-US');
-      if(kh) kh.textContent = Number(s.hashSold).toLocaleString('en-US');
-      if(kb) kb.textContent = fmt(s.boughtBack);
+      if(kh) kh.textContent = (Number(s.hashSold) + PREVIEW * PREVIEW_TH).toLocaleString('en-US');
+      if(kb) kb.textContent = fmt(s.boughtBack + window.ethers.parseEther(String(PREVIEW * PREVIEW_SPENT * 0.8)));
       const mk = window.__sectoraMarket; if(mk) mk.setValid(val);
     }catch(e){ /* sin red: se queda lo que hubiera */ }
   }
