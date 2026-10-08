@@ -4042,14 +4042,6 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .hmk-band b{color:var(--blue);font-weight:500}
   .hmk-media{position:relative;aspect-ratio:16/9;background:#05070b;overflow:hidden}
   .hmk-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-  .hmk-play{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:flex-start;gap:14px;
-    padding:clamp(14px,2vw,24px);background:linear-gradient(0deg,rgba(0,0,0,.42),transparent 46%);border:0;cursor:pointer;color:#fff}
-  .hmk-play .mono{font-size:11px;letter-spacing:.16em}
-  .hmk-tri{position:relative;width:52px;height:52px;flex:none;background:#fff;border-radius:50%;
-    transition:transform .35s var(--ease)}
-  .hmk-tri::after{content:'';position:absolute;left:21px;top:17px;border-style:solid;border-width:9px 0 9px 14px;
-    border-color:transparent transparent transparent var(--blue)}
-  .hmk-play:hover .hmk-tri{transform:scale(1.08)}
   .hmk-steps{list-style:none;margin:0;padding:0;border-top:1px solid var(--fs-line)}
   .hmk-step{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);column-gap:16px;
     padding:clamp(18px,2vw,26px) 0;border-bottom:1px solid var(--fs-line)}
@@ -4856,7 +4848,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <div class="hmk-band mono"><span>Launch film</span><b>SF·HM·01·26</b></div>
         <div class="hmk-media">
           <video data-poster="images/hashmarket-testnet-poster.jpg" data-src="media/sectora-hash-market-testnet-X-1080p.mp4" playsinline preload="none" aria-label="Video: the Sectora Hash Market, live on testnet"></video>
-          <button class="hmk-play" type="button"><span class="hmk-tri" aria-hidden="true"></span><span class="mono">Play film · 0:21</span></button>
+          <button class="pr-snd hmk-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
       </figure>
       <ol class="hmk-steps">
@@ -8285,14 +8277,47 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 })();
 </script>
 <script>
-/* hash market: el video no se descarga hasta que se pulsa reproducir */
+/* hash market: el video se descarga al acercarse, arranca solo con musica
+   cuando se ve y se para al salir de la seccion. Si el navegador no deja
+   sonar antes de que el visitante toque la pagina, arranca mudo y el sonido
+   entra con el primer toque o clic; "Sound" lo quita o lo pone. */
 (() => {
-  const v=document.querySelector('.hmk video'), b=document.querySelector('.hmk-play'); if(!v||!b) return;
+  const v=document.querySelector('.hmk video'), b=document.querySelector('.hmk-snd'); if(!v||!b) return;
+  let quiere=true, visto=false, propia=false;
+  const carga=()=>{ if(!v.src){ v.preload='auto'; v.src=v.dataset.src; } };
+  const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
+  const callaPrensa=()=>document.querySelectorAll('.press video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
+  const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
+  const para=()=>{ if(!v.paused){ propia=true; v.pause(); } };
+  const juega=()=>{
+    carga(); if(v.ended) v.currentTime=0;
+    v.muted=!quiere; if(quiere) callaPrensa();
+    const p=v.play();
+    if(p&&p.catch) p.catch(e=>{ if(e && e.name==='NotAllowedError' && visto && !document.hidden) mudo(); });
+    marca();
+  };
+  /* si el navegador lo para por quitarle el mudo sin permiso, sigue mudo */
+  v.addEventListener('pause',()=>{ if(!propia && !v.ended && visto && !document.hidden) mudo(); propia=false; });
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(es=>{ if(es[0].isIntersecting) carga(); },{rootMargin:'100% 0px'}).observe(v);
+    new IntersectionObserver(es=>{
+      visto=es[0].isIntersecting;
+      if(visto && !document.hidden) juega(); else para();
+    },{threshold:.5}).observe(v);
+  }
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden) para(); else if(visto) juega(); });
+  /* primer toque o clic en cualquier parte: si quiere sonido y sono mudo, lo enciende */
+  const gesto=e=>{
+    if(e.target.closest && e.target.closest('.hmk-snd')) return;
+    if(navigator.userActivation && !navigator.userActivation.isActive) return;
+    if(quiere && visto && v.muted && !v.paused){ v.muted=false; callaPrensa(); marca(); }
+  };
+  ['click','touchend','keydown'].forEach(t=>document.addEventListener(t,gesto,{capture:true,passive:true}));
   b.addEventListener('click',()=>{
-    if(!v.src) v.src=v.dataset.src;
-    v.controls=true; b.hidden=true;
-    document.querySelectorAll('.press video').forEach(o=>{ o.muted=true; });
-    const p=v.play(); if(p&&p.catch) p.catch(()=>{});
+    quiere=v.muted;
+    if(quiere){ v.muted=false; callaPrensa(); if(v.paused) juega(); }
+    else v.muted=true;
+    marca();
   });
 })();
 </script>
