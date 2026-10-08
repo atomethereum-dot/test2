@@ -1860,10 +1860,23 @@ const serie = n => Array.from({length:20}, (_,i) => n*(.62 + .38*Math.sin(i/3.1)
 
 /* ---------- estado de red (demostracion) ---------- */
 let VALID = 128, HASH = 4160, TPS = 47;
-cuenta($('#kVal'), VALID);
-cuenta($('#kHash'), HASH);
-cuenta($('#kBuy'), Math.round(HASH*38*.8), '$');
-cuenta($('#mVal'), VALID);
+/* Las cifras de demostracion solo se animan si el dash NO esta conectado a
+   la testnet. Antes arrancaban siempre al cargar y, si los datos reales
+   llegaban durante la animacion, esta los pisaba y se quedaban las cifras
+   viejas (128, 4,160...) hasta la siguiente lectura. La capa de testnet
+   avisa con 'sectora:demo' cuando no hay contratos; si en 4 s no ha dicho
+   nada y tampoco hay testnet, se anima igualmente. */
+let demoHecha = false;
+function demoCifras(){
+  if(demoHecha || window.__SECT_TESTNET) return;
+  demoHecha = true;
+  cuenta($('#kVal'), VALID);
+  cuenta($('#kHash'), HASH);
+  cuenta($('#kBuy'), Math.round(HASH*38*.8), '$');
+  cuenta($('#mVal'), VALID);
+}
+document.addEventListener('sectora:demo', demoCifras, {once:true});
+setTimeout(demoCifras, 4000);
 cuenta($('#mTps'), TPS);
 spark('#sp1', serie(VALID), '#4d8dff');
 spark('#sp2', serie(TPS), '#3ecf8e');
@@ -3550,7 +3563,8 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     CIUDADES.forEach(([lon, lat], i) => { if (colocar(lon, lat, i, false)) puestos++; });
 
     const n = document.getElementById('mapN');
-    if (n) n.textContent = puestos;
+    /* la vista previa fija el recuento para que cuadre con el contador */
+    if (n) n.textContent = window.__sectoraMapN != null ? window.__sectoraMapN : puestos;
   }
 
   pinta();
@@ -3595,6 +3609,6 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   }));
 })();
 </script>
-<script src="dashboard-testnet.js?v=20261011"></script>
+<script src="dashboard-testnet.js?v=20261012"></script>
 </body>
 </html>

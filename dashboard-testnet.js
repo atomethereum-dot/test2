@@ -183,6 +183,8 @@
       if(kh) kh.textContent = (Number(s.hashSold) + PREVIEW * PREVIEW_TH).toLocaleString('en-US');
       if(kb) kb.textContent = fmt(s.boughtBack + window.ethers.parseEther(String(PREVIEW * PREVIEW_SPENT * 0.8)));
       const mk = window.__sectoraMarket; if(mk) mk.setValid(val);
+      /* en la vista previa el mapa cuenta los mismos nodos que el contador */
+      if(PREVIEW){ window.__sectoraMapN = val.toLocaleString('en-US'); const mn = q('#mapN'); if(mn) mn.textContent = window.__sectoraMapN; }
     }catch(e){ /* sin red: se queda lo que hubiera */ }
   }
 
@@ -382,11 +384,14 @@
 
   /* ------------------------------------------------------------ arranque */
   async function arranca(){
-    try{ cfg = await (await fetch(CFG_URL, { cache:'no-store' })).json(); }catch(e){ return; }
+    const demo = () => document.dispatchEvent(new CustomEvent('sectora:demo'));
+    try{ cfg = await (await fetch(CFG_URL, { cache:'no-store' })).json(); }catch(e){ demo(); return; }
     const dirs = [cfg && cfg.token, cfg && cfg.hashMarket, cfg && cfg.registry];
-    if(!dirs.every(d => typeof d === 'string' && /^0x[0-9a-fA-F]{40}$/.test(d) && !ZERO.test(d))) return;   /* modo demo */
+    if(!dirs.every(d => typeof d === 'string' && /^0x[0-9a-fA-F]{40}$/.test(d) && !ZERO.test(d))){ demo(); return; }   /* modo demo */
     cfg.chainId = Number(cfg.chainId || 11155111);
     window.__SECT_TESTNET = cfg;
+    /* hasta la primera lectura de la cadena, guion: nunca cifras de demo */
+    ['#kVal','#mVal','#kHash','#kBuy'].forEach(s => { const el = q(s); if(el) el.textContent = '—'; });
     await cargaEthers();
     const net = window.ethers.Network.from(cfg.chainId);
     ro = new window.ethers.JsonRpcProvider(cfg.rpc || 'https://ethereum-sepolia-rpc.publicnode.com', net, { staticNetwork: net, cacheTimeout: -1 });
