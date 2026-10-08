@@ -81,6 +81,11 @@ pre.on{display:block}
   let st = {};
   try{ st = JSON.parse(localStorage.getItem(KEY) || '{}'); }catch(e){}
   const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} };
+  /* continuar con un token ya desplegado: deploy.html?token=0x... */
+  try{
+    const qt = new URLSearchParams(location.search).get('token');
+    if(qt && /^0x[0-9a-fA-F]{40}$/.test(qt) && !st.token){ st.token = qt; save(); }
+  }catch(e){}
   const $ = id => document.getElementById(id);
   const msg = (t, bad) => { $('msg').textContent = t; $('msg').className = 'msg' + (bad ? ' bad' : ''); };
 
