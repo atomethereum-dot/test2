@@ -5988,8 +5988,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     requestAnimationFrame(() => {
       irisQueued = false;
       /* fuera de pantalla no hay nada que pintar, y medirla cuesta igual */
-      if(iris.classList.contains('fuera-de-vista')) return;
-      const r = iris.getBoundingClientRect();
+      if(iris.classList.contains('fuera-de-vista') || (window.__lejos && window.__lejos(iris))) return;
+      const r = window.__sectGeo ? window.__sectGeo(iris) : iris.getBoundingClientRect();
       const vh = window.innerHeight;
       const span = r.height - vh;
       if(span <= 0) return;
@@ -6456,7 +6456,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   }
 
   function progress(){
-    const r = sec.getBoundingClientRect();
+    const r = window.__sectGeo ? window.__sectGeo(sec) : sec.getBoundingClientRect();
     const run = r.height - window.innerHeight;
     if(run <= 0) return 0;
     let p = (-r.top) / run;
@@ -6543,7 +6543,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
          cada fotograma, ese recalculo forzado era el lag de fondo de toda
          la pagina. La clase la pone el observador de secciones, con margen
          por delante para que la escena llegue al dia antes de verse. */
-      if(sec.classList.contains('fuera-de-vista')) return;
+      if(sec.classList.contains('fuera-de-vista') || (window.__lejos && window.__lejos(sec))) return;
       paint();
     });
   }
@@ -6733,7 +6733,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   }
 
   function pintar(){
-    const r = sec.getBoundingClientRect();
+    const r = window.__sectGeo ? window.__sectGeo(sec) : sec.getBoundingClientRect();
     const span = r.height - window.innerHeight;
     if(span <= 0) return;
     const u = lim(-r.top / span);
@@ -6788,7 +6788,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     requestAnimationFrame(() => {
       pedido = false;
       /* fuera de plano no hay nada que pintar, y medir cuesta igual */
-      if(sec.classList.contains('fuera-de-vista')) return;
+      if(sec.classList.contains('fuera-de-vista') || (window.__lejos && window.__lejos(sec))) return;
       pintar();
     });
   }
@@ -6796,7 +6796,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   /* los segmentos llevan al tramo de su acto: la escena se navega tambien
      a golpe de clic, no solo arrastrando */
   segs.forEach((s, j) => s.addEventListener('click', () => {
-    const r = sec.getBoundingClientRect();
+    const r = window.__sectGeo ? window.__sectGeo(sec) : sec.getBoundingClientRect();
     const span = r.height - window.innerHeight;
     const destino = j === 0 ? .06 : (CRUCES[j-1][1] + .04);
     window.scrollTo({top: window.scrollY + r.top + span * destino, behavior: 'smooth'});
@@ -6859,7 +6859,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const cv  = document.getElementById('plate-canvas');
   if(!sec || !pin || !cv) return;
 
-  const ctx = cv.getContext('2d');
+  let ctx = cv.getContext('2d');
   const qEl = document.getElementById('plate-q');
   const nEl = document.getElementById('plate-name');
   const sEl = document.getElementById('plate-sub');
@@ -6891,7 +6891,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   }
 
   function progress(){
-    const r = sec.getBoundingClientRect();
+    const r = window.__sectGeo ? window.__sectGeo(sec) : sec.getBoundingClientRect();
     const run = r.height - window.innerHeight;
     if(run <= 0) return 0;
     const p = (-r.top) / run;
@@ -6931,7 +6931,28 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     ctx.stroke();
   }
 
+  /* El aro, sus 72 marcas y los hitos solo cambian al pasar de hito o al
+     cambiar el tamano: se pintan una vez en un lienzo aparte y en cada
+     fotograma se copian de un golpe. Antes se redibujaban enteros (con su
+     halo difuminado) en cada fotograma del scroll. El resultado es el mismo
+     pixel a pixel: se compone igual, encima de la trama. */
+  let aroCv = null, aroIdx = -1, aroW = 0, aroH = 0;
   function bezel(p, idx){
+    const dpr = cv.width / W;
+    if(!aroCv || aroIdx !== idx || aroW !== cv.width || aroH !== cv.height){
+      aroCv = aroCv || document.createElement('canvas');
+      aroCv.width = cv.width; aroCv.height = cv.height;
+      aroW = cv.width; aroH = cv.height; aroIdx = idx;
+      const real = ctx;
+      ctx = aroCv.getContext('2d');
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      aroFijo(idx);
+      ctx = real;
+    }
+    ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(aroCv, 0, 0); ctx.restore();
+    arcoAvance(p);
+  }
+  function aroFijo(idx){
     // aro exterior con marcas cada 5 grados
     ctx.save();
     ctx.shadowColor = 'rgba(21,105,255,.9)';
@@ -6967,7 +6988,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       ctx.fillStyle = done ? '#1569ff' : 'rgba(255,255,255,.3)';
       ctx.fill();
     }
-
+  }
+  function arcoAvance(p){
     // arco de avance
     ctx.save();
     ctx.shadowColor = 'rgba(21,105,255,.95)';
@@ -7060,7 +7082,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
          cada fotograma, ese recalculo forzado era el lag de fondo de toda
          la pagina. La clase la pone el observador de secciones, con margen
          por delante para que la escena llegue al dia antes de verse. */
-      if(sec.classList.contains('fuera-de-vista')) return;
+      if(sec.classList.contains('fuera-de-vista') || (window.__lejos && window.__lejos(sec))) return;
       paint();
     });
   }
@@ -7155,7 +7177,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   }
 
   function progress(){
-    const r = sec.getBoundingClientRect();
+    const r = window.__sectGeo ? window.__sectGeo(sec) : sec.getBoundingClientRect();
     const run = r.height - window.innerHeight;
     if(run <= 0) return 0;
     const p = (-r.top) / run;
@@ -7312,7 +7334,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
          cada fotograma, ese recalculo forzado era el lag de fondo de toda
          la pagina. La clase la pone el observador de secciones, con margen
          por delante para que la escena llegue al dia antes de verse. */
-      if(sec.classList.contains('fuera-de-vista')) return;
+      if(sec.classList.contains('fuera-de-vista') || (window.__lejos && window.__lejos(sec))) return;
       paint();
     });
   }
@@ -7596,7 +7618,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const clamp = t => t<0 ? 0 : t>1 ? 1 : t;
 
   function progress(){
-    const r = sec.getBoundingClientRect();
+    const r = window.__sectGeo ? window.__sectGeo(sec) : sec.getBoundingClientRect();
     const run = r.height - window.innerHeight;
     if(run <= 0) return 0;
     return clamp((-r.top) / run);
@@ -7646,7 +7668,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
          cada fotograma, ese recalculo forzado era el lag de fondo de toda
          la pagina. La clase la pone el observador de secciones, con margen
          por delante para que la escena llegue al dia antes de verse. */
-      if(sec.classList.contains('fuera-de-vista')) return;
+      if(sec.classList.contains('fuera-de-vista') || (window.__lejos && window.__lejos(sec))) return;
       paint();
     });
   }
@@ -7677,7 +7699,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   let W = 0, H = 0;
 
   function scrollProg(){
-    const r = sec.getBoundingClientRect();
+    const r = window.__sectGeo ? window.__sectGeo(sec) : sec.getBoundingClientRect();
     const run = r.height - window.innerHeight;
     if(run <= 0) return 0;
     const p = (-r.top) / run;
@@ -7922,8 +7944,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     requestAnimationFrame(() => {
       queued = false;
       /* fuera de pantalla no hay nada que pintar, y medirla cuesta igual */
-      if(sec.classList.contains('fuera-de-vista')) return;
-      const r = sec.getBoundingClientRect();
+      if(sec.classList.contains('fuera-de-vista') || (window.__lejos && window.__lejos(sec))) return;
+      const r = window.__sectGeo ? window.__sectGeo(sec) : sec.getBoundingClientRect();
       const vh = window.innerHeight;
       const span = r.height - vh;
       if(span <= 0) return;
@@ -8600,6 +8622,15 @@ window.__sectGeo = (function(){
     return {top: top, bottom: top + g.h, height: g.h};
   };
 })();
+/* una escena esta "lejos" si ninguna parte suya se ve ni esta a media pantalla
+   de pantalla de verse (media pantalla de margen). El observador deja una pantalla
+   entera de margen y, dentro de ese margen, las escenas se seguian
+   dibujando enteras en cada fotograma sin que nadie las viera (el disco
+   del roadmap mientras se lee la lista de debajo, por ejemplo). */
+window.__lejos = function(el){
+  const g = window.__sectGeo(el), m = innerHeight * .5;
+  return g.bottom < -m || g.top > innerHeight + m;
+};
 </script>
 <script>
 /* ---------- cada seccion se apaga al quedar atras ----------
@@ -8665,13 +8696,18 @@ window.__sectGeo = (function(){
       d = d < 0 ? 0 : d > 1 ? 1 : d;
       const refuerzo = d * d * (3 - 2 * d);
 
-      s.n = noche;
-      const v = Math.round(noche * 1000) / 1000;
+      /* En pasos de 1/40, no a cada fotograma: cada escritura obliga a
+         recalcular los colores de toda la seccion, y en un telefono eso
+         pesa. Cuarenta peldanos a lo largo de una pantalla de scroll no se
+         distinguen de un fundido continuo, y la costura sigue cuadrando
+         porque la seccion de arriba toma este mismo valor. */
+      const v = Math.round(noche * 40) / 40;
+      s.n = v;
       if(v !== s.v){
         s.v = v;
         s.el.style.setProperty('--noche', v);
-        s.el.style.setProperty('--tinta', Math.round(tinta * 1000) / 1000);
-        s.el.style.setProperty('--refuerzo', Math.round(refuerzo * 1000) / 1000);
+        s.el.style.setProperty('--tinta', Math.round(tinta * 40) / 40);
+        s.el.style.setProperty('--refuerzo', Math.round(refuerzo * 40) / 40);
       }
     }
 
