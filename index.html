@@ -8609,6 +8609,32 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 })();
 </script>
 <script>
+/* ---------- geometria en cache ----------
+   La posicion de una seccion dentro del documento no cambia al hacer
+   scroll: solo cambia scrollY. Asi que se mide una vez y se reutiliza, en
+   vez de pedirle al navegador getBoundingClientRect en cada fotograma
+   (cada llamada, justo despues de escribir variables de color, le obligaba
+   a recalcular estilos a destiempo). La cache se vacia si cambia el tamano
+   de la ventana o del documento. */
+window.__sectGeo = (function(){
+  const cache = new Map();
+  const vaciar = () => cache.clear();
+  /* scrollY se lee en el evento de scroll, antes de que nadie escriba
+     estilos en el fotograma: leerlo despues tambien obliga a recalcular */
+  let sy = scrollY;
+  addEventListener('scroll', () => { sy = scrollY; }, {passive:true});
+  addEventListener('resize', () => { sy = scrollY; vaciar(); }, {passive:true});
+  addEventListener('load', vaciar);
+  if('ResizeObserver' in window) new ResizeObserver(vaciar).observe(document.body);
+  return function(el){
+    let g = cache.get(el);
+    if(!g){ sy = scrollY; const r = el.getBoundingClientRect(); g = {top: r.top + sy, h: r.height}; cache.set(el, g); }
+    const top = g.top - sy;
+    return {top: top, bottom: top + g.h, height: g.h};
+  };
+})();
+</script>
+<script>
 /* ---------- cada seccion se apaga al quedar atras ----------
    No es el bloque entero apagandose como una sola pieza: cada superficie
    clara lleva su propia noche. Mientras la estas leyendo es papel; en
@@ -8646,7 +8672,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     for(const s of secs){
       /* fuera de pantalla no hay nada que atenuar, y medirla cuesta igual */
       if(s.el.classList.contains('fuera-de-vista')) continue;
-      const c = s.el.getBoundingClientRect();
+      const c = window.__sectGeo(s.el);
 
       /* 0 mientras el pie sigue por debajo del pliegue, 1 cuando la
          seccion ha terminado de salir por arriba */
@@ -8731,7 +8757,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     for(const r of reglas){
       /* fuera de pantalla la regla no se lee, y medirla cuesta igual */
       if(r.sec.classList.contains('fuera-de-vista')){ r.el.classList.remove('on'); continue; }
-      const c = r.sec.getBoundingClientRect();
+      const c = window.__sectGeo(r.sec);
       /* solo se enciende la regla de la seccion que se esta leyendo. Con
          dos o tres a la vez, sus lecturas flotaban a distintas alturas
          del margen y aquello parecia ruido, no un instrumento */
