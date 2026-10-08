@@ -8005,47 +8005,14 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 })();
 
 
-/* ===== amortiguado del scroll (solo escritorio) =====
-   la rueda del raton avanza a saltos grandes y las transiciones ligadas al
-   scroll se leen entrecortadas. Aqui cada golpe empuja un destino y la
-   posicion real lo persigue con suavizado, asi el recorrido es continuo.
-   En pantallas tactiles no se toca: la inercia del sistema ya lo resuelve. */
-(function(){
-  const fino   = window.matchMedia('(pointer: fine)').matches;
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(!fino || reduce) return;
-
-  const FACTOR = 1;      // cuanto avanza cada golpe de rueda (1 = nativo)
-  const SUAVE  = 0.4;    // cuanto se acerca por fotograma (mas bajo = mas lento)
-
-  let destino = window.scrollY, actual = window.scrollY, raf = 0, propio = false;
-  const tope = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-
-  function paso(){
-    actual += (destino - actual) * SUAVE;
-    if(Math.abs(destino - actual) < .5){ actual = destino; raf = 0; }
-    else raf = requestAnimationFrame(paso);
-    propio = true;
-    /* pixel entero: con posiciones fraccionarias el navegador rasteriza la
-       pagina desplazada a subpixel y el texto pequeno pierde nitidez */
-    window.scrollTo({top: Math.round(actual), behavior: 'instant'});
-  }
-
-  window.addEventListener('wheel', e => {
-    if(e.ctrlKey) return;                    // el zoom del navegador se respeta
-    e.preventDefault();
-    destino = Math.round(Math.max(0, Math.min(tope(), destino + e.deltaY * FACTOR)));
-    if(!raf) raf = requestAnimationFrame(paso);
-  }, {passive:false});
-
-  // teclado, barra de desplazamiento y anclas: se vuelve a sincronizar
-  window.addEventListener('scroll', () => {
-    if(propio){ propio = false; return; }
-    destino = actual = window.scrollY;
-  }, {passive:true});
-
-  window.addEventListener('resize', () => { destino = actual = window.scrollY; });
-})();
+/* ===== scroll de escritorio: nativo =====
+   Aqui iba un amortiguado propio de la rueda: cada golpe se cancelaba
+   (preventDefault) y la posicion se movia con requestAnimationFrame. Eso
+   ataba el scroll al hilo principal, y en cuanto una escena pesada (disco
+   del roadmap, eventos, partners) ocupaba un fotograma, la pagina se
+   quedaba pegada. Ahora la rueda la mueve el navegador en su propio hilo,
+   que ya la suaviza, y el scroll no se detiene aunque una escena tarde.
+   Las escenas ligadas al scroll siguen igual: leen scrollY como antes. */
 
 /* ===== pie =====
    hora local de la entidad, copia de correo con confirmacion, vuelta
