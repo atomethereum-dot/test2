@@ -877,8 +877,10 @@ interface IBurnableToken {
 ///   - 80% of every purchase is a simulated buyback: those tSECT are
 ///     burned on the spot, so the supply really shrinks.
 ///   - 20% stays in this contract as the reward reserve.
-/// Every buyer earns a fixed 25% APY on the tSECT they have spent on hash,
-/// accrued every second and claimable at any time. The owner can top the
+/// Every buyer earns an APY on the tSECT they have spent on hash (25% at
+/// launch), accrued every second and claimable at any time. The owner can
+/// change the rate with setApy: rewards already earned keep the old rate and
+/// the new one applies from that second on. The owner can also top the
 /// reserve up (fundRewards, or mint straight to this contract) so testers
 /// never hit an empty pool. Testnet only: tSECT has no monetary value.
 contract SectoraHashMarket is Ownable, ReentrancyGuard {
@@ -899,8 +901,13 @@ contract SectoraHashMarket is Ownable, ReentrancyGuard {
 
     uint256 public constant BPS = 10_000;
     uint256 public constant BUYBACK_BPS = 8_000; // 80% burned as buyback
-    uint256 public constant APY_BPS = 2_500; // 25% APY on tSECT spent
+    uint256 public constant MAX_APY_BPS = 10_000; // ceiling: 100% APY
     uint256 public constant YEAR = 365 days;
+
+    uint256 public apyBps = 2_500; // 25% APY on tSECT spent, adjustable
+    // global reward index: tSECT earned per 1 tSECT spent, scaled by 1e18
+    uint256 public rewardIndex;
+    uint256 public lastIndexUpdate;
 
     IERC20 public immutable paymentToken;
 
@@ -909,8 +916,8 @@ contract SectoraHashMarket is Ownable, ReentrancyGuard {
     mapping(address => uint256) public hashPower;
     mapping(address => uint256) public purchaseCount;
     mapping(address => uint256) public principal; // tSECT spent on hash
-    mapping(address => uint256) public accrued; // rewards stored at lastAccrual
-    mapping(address => uint256) public lastAccrual;
+    mapping(address => uint256) public accrued; // rewards stored at the last checkpoint
+    mapping(address => uint256) public userIndex;
     mapping(address => uint256) public claimed;
 
     uint256 public totalHashSold;
@@ -925,9 +932,11 @@ contract SectoraHashMarket is Ownable, ReentrancyGuard {
     event BuybackBurned(uint256 amount);
     event RewardsClaimed(address indexed account, uint256 amount);
     event RewardsFunded(address indexed from, uint256 amount);
+    event ApyUpdated(uint256 oldApyBps, uint256 newApyBps);
 
     constructor(address _paymentToken) Ownable(msg.sender) {
         paymentToken = IERC20(_paymentToken);
+        lastIndexUpdate = block.timestamp;
 
         // Same packages the dashboard shows. Online hash: rented compute.
         _addPackage("Starter", PackageKind.Online, 490 ether, 5);
@@ -945,17 +954,19 @@ contract SectoraHashMarket is Ownable, ReentrancyGuard {
         return packages.length;
     }
 
-    /// @notice Rewards earned and not yet claimed, up to this second.
-    function pendingRewards(address account) public view returns (uint256) {
-        uint256 p = principal[account];
-        if (p == 0) return accrued[account];
-        uint256 elapsed = block.timestamp - lastAccrual[account];
-        return accrued[account] + (p * APY_BPS * elapsed) / (BPS * YEAR);
+    /// @notice Reward index up to this second.
+    function currentIndex() public view returns (uint256) {
+        return rewardIndex + (apyBps * 1e18 * (block.timestamp - lastIndexUpdate)) / (BPS * YEAR);
     }
 
-    /// @notice tSECT the account earns per day at the current principal.
+    /// @notice Rewards earned and not yet claimed, up to this second.
+    function pendingRewards(address account) public view returns (uint256) {
+        return accrued[account] + (principal[account] * (currentIndex() - userIndex[account])) / 1e18;
+    }
+
+    /// @notice tSECT the account earns per day at the current principal and rate.
     function rewardsPerDay(address account) external view returns (uint256) {
-        return (principal[account] * APY_BPS * 1 days) / (BPS * YEAR);
+        return (principal[account] * apyBps * 1 days) / (BPS * YEAR);
     }
 
     /// @notice tSECT available to pay rewards.
@@ -1035,6 +1046,14 @@ contract SectoraHashMarket is Ownable, ReentrancyGuard {
 
     // ---------------------------------------------------------------- admin
 
+    /// @notice Change the APY. Earned rewards keep the old rate.
+    function setApy(uint256 newApyBps) external onlyOwner {
+        require(newApyBps <= MAX_APY_BPS, "SectoraHashMarket: APY above ceiling");
+        _updateIndex();
+        emit ApyUpdated(apyBps, newApyBps);
+        apyBps = newApyBps;
+    }
+
     function addPackage(string calldata name, PackageKind kind, uint256 price, uint256 power) external onlyOwner {
         _addPackage(name, kind, price, power);
     }
@@ -1047,9 +1066,15 @@ contract SectoraHashMarket is Ownable, ReentrancyGuard {
 
     // ------------------------------------------------------------- internal
 
+    function _updateIndex() internal {
+        rewardIndex = currentIndex();
+        lastIndexUpdate = block.timestamp;
+    }
+
     function _accrue(address account) internal {
-        accrued[account] = pendingRewards(account);
-        lastAccrual[account] = block.timestamp;
+        _updateIndex();
+        accrued[account] += (principal[account] * (rewardIndex - userIndex[account])) / 1e18;
+        userIndex[account] = rewardIndex;
     }
 
     function _addPackage(string memory name, PackageKind kind, uint256 price, uint256 power) internal {

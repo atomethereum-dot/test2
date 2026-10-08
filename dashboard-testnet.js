@@ -4,7 +4,8 @@
    Con direcciones:
      - faucet: 5.000 tSECT cada 24 h por wallet
      - compra de hash real (approve + purchase) en SectoraHashMarket
-     - rendimiento: 25% APY fijo sobre los tSECT gastados en hash, que se
+     - rendimiento: APY sobre los tSECT gastados en hash (25% al lanzar,
+       ajustable por el dueño del contrato), que se
        acumula cada segundo y se cobra cuando se quiera
      - registro real del nodo en ValidatorRegistry
      - cifras de la portada y de la red leidas de la cadena
@@ -32,7 +33,7 @@
     'function pendingRewards(address) view returns (uint256)',
     'function rewardsPerDay(address) view returns (uint256)',
     'function claimed(address) view returns (uint256)',
-    'function APY_BPS() view returns (uint256)',
+    'function apyBps() view returns (uint256)',
     'function getStats() view returns (uint256 hashSold, uint256 boughtBack, uint256 spent, uint256 rewardsClaimed, uint256 buyers, uint256 reserve)'
   ];
   const REGISTRY_ABI = [
@@ -60,7 +61,8 @@
   let acct = null;           /* cuenta conectada */
   let me = null;             /* ultimo estado leido de la cuenta */
   let ocupado = false;
-  let desfase = 0;           /* segundos que la cadena va por delante del reloj local */
+  let desfase = 0;
+  let APY = 0.25;            /* lo lee del contrato: apyBps / 10000 */           /* segundos que la cadena va por delante del reloj local */
 
   function cargaEthers(){
     if(window.ethers) return Promise.resolve();
@@ -78,7 +80,7 @@
     const head = document.createElement('div');
     head.className = 'head'; head.id = 'rewards';
     head.innerHTML = '<h2 data-i18n="hashdash.tn.title">Faucet &amp; rewards</h2>' +
-      '<span data-i18n="hashdash.tn.sub">25% APY on the tSECT you spend on hash</span>';
+      '<span id="tnSub"></span>';
     const grid = document.createElement('div');
     grid.className = 'g2 rv on'; grid.id = 'tnGrid';
     grid.innerHTML =
@@ -115,7 +117,7 @@
     /* la tarjeta de APY de la red pasa a mostrar la tasa real de testnet */
     const apy = [...document.querySelectorAll('#network ~ .g3 .card')].find(c => c.querySelector('[data-i18n="hashdash.network.apy"]'));
     if(apy){
-      const big = apy.querySelector('.big'); if(big) big.textContent = '25%';
+      const big = apy.querySelector('.big'); if(big){ big.id = 'tnApyBig'; big.textContent = '25%'; }
       const sub = apy.querySelector('[data-i18n="hashdash.network.apySub"]');
       if(sub) sub.setAttribute('data-i18n', 'hashdash.tn.apySub');
     }
@@ -131,7 +133,17 @@
   }
 
   /* ----------------------------------------------------------- lecturas */
+  function pintaApy(){
+    const pct = (Math.round(APY * 1000) / 10).toString().replace(/\.0$/, '');
+    const a = q('#tnApy'), b = q('#tnApyBig'), sub = q('#tnSub');
+    if(a) a.textContent = pct + '% APY';
+    if(b) b.textContent = pct + '%';
+    if(sub) sub.textContent = tr('hashdash.tn.sub', '25% APY on the tSECT you spend on hash').replace(/25\s?%/, pct + '%');
+  }
+
   async function leeRed(){
+    try{ APY = Number(await marketRO.apyBps()) / 10000; }catch(e){}
+    pintaApy();
     try{
       const [s, act] = await Promise.all([marketRO.getStats(), registryRO.activeValidatorCount()]);
       const kv = q('#kVal'), mv = q('#mVal'), kh = q('#kHash'), kb = q('#kBuy');
@@ -219,7 +231,7 @@
     const el = q('#tnPending');
     if(el && me){
       const seg = (Date.now() - me.t0) / 1000;
-      const extra = Number(window.ethers.formatEther(me.spent)) * 0.25 * seg / (365 * 86400);
+      const extra = Number(window.ethers.formatEther(me.spent)) * APY * seg / (365 * 86400);
       const v = Number(window.ethers.formatEther(me.pend)) + extra;
       el.textContent = v.toLocaleString('en-US', { minimumFractionDigits: 6, maximumFractionDigits: 6 });
     }
@@ -368,7 +380,7 @@
     setInterval(leeRed, 30000);
     setInterval(() => { if(acct && !ocupado) leeCuenta(); }, 20000);
     setInterval(pintaFaucet, 30000);
-    document.addEventListener('sectora:langchange', pintaCuenta);
+    document.addEventListener('sectora:langchange', () => { pintaCuenta(); pintaApy(); });
     requestAnimationFrame(tic);
   }
 

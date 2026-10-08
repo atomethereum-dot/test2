@@ -109,6 +109,29 @@ async function main() {
   await (await m2.connect(bob).claim()).wait();
   ok((await m2.pendingRewards(bob.address)) < E("0.001"), "tras recargar la reserva se cobra todo");
 
+  // APY ajustable: lo ganado antes del cambio se respeta, el nuevo cuenta desde ese segundo
+  const m3 = await (await new ethers.ContractFactory(mA.abi, mA.bytecode, deployer).deploy(await t2.getAddress())).waitForDeployment();
+  const M3 = await m3.getAddress();
+  await (await t2.mint(M3, E("1000000"))).wait();
+  const carol = await provider.getSigner(6);
+  await (await t2.mint(carol.address, E("10000"))).wait();
+  await (await t2.connect(carol).approve(M3, E("4300"))).wait();
+  await (await m3.connect(carol).purchase(3)).wait();          // 4.300 gastados
+  ok((await m3.apyBps()) === 2500n, "APY inicial 25%");
+  await warp(YEAR / 2n);
+  const antesCambio = await m3.pendingRewards(carol.address); // ~537.5
+  ok(antesCambio >= E("537.49") && antesCambio <= E("537.51"), "6 meses al 25% = ~537,5 tSECT");
+  await fails(m3.connect(carol).setApy(5000), "revert", "solo el dueño puede cambiar el APY");
+  await fails(m3.setApy(10001), "above ceiling", "el APY no puede pasar del 100%");
+  await (await m3.setApy(5000)).wait();
+  ok((await m3.apyBps()) === 5000n, "APY cambiado a 50%");
+  await warp(YEAR / 2n);
+  const trasCambio = await m3.pendingRewards(carol.address);   // 537.5 + 1075
+  ok(trasCambio >= E("1612.4") && trasCambio <= E("1612.6"), "6 meses al 25% + 6 meses al 50% = ~1.612,5 (" + ethers.formatEther(trasCambio) + ")");
+  ok((await m3.rewardsPerDay(carol.address)) === (E("4300") * 5000n * 86400n) / (10000n * YEAR), "rewardsPerDay usa el nuevo APY");
+  await (await m3.connect(carol).claim()).wait();
+  ok((await m3.pendingRewards(carol.address)) < E("0.01"), "cobro correcto tras el cambio de APY");
+
   // stats
   const s = await market.getStats();
   ok(s.buyers === 2n && s.hashSold === 80n, "getStats: 2 compradores, 80 TH/s vendidos");

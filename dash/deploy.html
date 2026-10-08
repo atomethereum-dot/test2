@@ -44,7 +44,7 @@ pre.on{display:block}
 <div class="w">
   <p class="k"><i></i>Sectora · Testnet Sepolia</p>
   <h1>Despliegue de los contratos de testnet</h1>
-  <p class="l">Lanza desde tu MetaMask, en la red de pruebas Sepolia, los tres contratos del dash: el token tSECT con faucet de 5.000 al día, el marketplace de hash con 25% APY y el registro de nodos. Necesitas unos 0,05 ETH de Sepolia, que se consiguen gratis en un faucet de Sepolia.</p>
+  <p class="l">Lanza desde tu MetaMask, en la red de pruebas Sepolia, los tres contratos del dash: el token tSECT con faucet de 5.000 al día, el marketplace de hash (APY inicial 25%, ajustable por el owner) y el registro de nodos. Necesitas unos 0,05 ETH de Sepolia, que se consiguen gratis en un faucet de Sepolia.</p>
 
   <div class="box" id="steps"></div>
 
@@ -74,7 +74,7 @@ pre.on{display:block}
 
   const STEPS = [
     { id:'token',    t:'SectoraToken (tSECT)',  d:'Token de prueba · 50.000.000 iniciales · faucet 5.000 tSECT / 24 h' },
-    { id:'market',   t:'SectoraHashMarket',     d:'Marketplace de hash · 80% quemado como recompra · 25% APY' },
+    { id:'market',   t:'SectoraHashMarket',     d:'Marketplace de hash · 80% quemado como recompra · APY inicial 25%, ajustable' },
     { id:'registry', t:'ValidatorRegistry',     d:'Registro de nodos · mínimo ' + MIN_HASH + ' TH/s' },
     { id:'fund',     t:'Reserva de recompensas', d:'Envía ' + Number(RESERVE).toLocaleString('es') + ' tSECT al marketplace para pagar el APY' }
   ];
