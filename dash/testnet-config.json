@@ -2,7 +2,7 @@
   "network": "sepolia",
   "chainId": 11155111,
   "rpc": "https://ethereum-sepolia-rpc.publicnode.com",
-  "token": "",
-  "hashMarket": "",
-  "registry": ""
+  "token": "0x189a39081D99bB9D964dfF7FA756978645592Cf3",
+  "hashMarket": "0x8C9984B06281f1CA9416e493c2E602AaB08513db",
+  "registry": "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1"
 }
