@@ -4016,58 +4016,56 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
      "despachos" certificados; eventos, tres acreditaciones con su roseta,
      su foto, un sello y un talon perforado. Todo el dibujo fino va en
      canvas (bandas, rosetas, codigos) y se pinta una vez al cargar. */
-  /* ============ hash market en testnet ============ */
-  /* clip y no hidden: hidden convertiria la seccion en contenedor de scroll y el video fijo dejaria de acompanar */
-  .hmk{position:relative;background:#000;color:#fff;overflow:hidden;overflow:clip;scroll-margin-top:70px;
-    padding:clamp(96px,14vh,170px) var(--pad) clamp(90px,13vh,150px);border-top:1px solid rgba(255,255,255,.08)}
-  .hmk-grid{position:absolute;inset:0;pointer-events:none;
-    background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-    background-size:60px 60px;
-    -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 35%,#000 35%,transparent 85%);
-    mask-image:radial-gradient(ellipse 80% 70% at 50% 35%,#000 35%,transparent 85%)}
-  .hmk-in{position:relative;max-width:1600px;margin:0 auto}
-  .hmk-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:34px}
-  .hmk-live{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border:1px solid rgba(62,207,142,.35);
-    background:rgba(62,207,142,.06);color:#3ecf8e;font-size:11px}
+  /* ============ hash market en testnet ============
+     Hoja clara entre la declaracion de los fundadores y "Distribucion".
+     Lleva la clase .fst, asi que hereda su papel, su relleno y las tintas
+     de la cadena de noche (--fs-ink*, --fs-line*): se apaga al quedar
+     atras igual que sus vecinas. Aqui solo va lo propio de la seccion. */
+  .hmk{scroll-margin-top:70px}
+  .hmk-in{position:relative;z-index:1;max-width:1280px}
+  .hmk-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:30px}
+  .hmk-live{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border:1px solid rgba(15,143,82,.38);
+    background:rgba(15,143,82,.07);color:#0f8f52;font-size:11px}
   .hmk .led,.hero-new .led{position:relative;width:6px;height:6px;border-radius:50%;flex:none;background:#25d366;
     box-shadow:0 0 10px 1px rgba(37,211,102,.65)}
   .hmk .led::after,.hero-new .led::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid #25d366;
     animation:ping 2.6s var(--ease) infinite}
-  .hmk-ser{color:var(--ink-4);font-size:11px}
-  .hmk-head{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,90px);align-items:end;
-    margin-bottom:clamp(44px,5.5vw,80px)}
-  .hmk-head h2{font-size:clamp(34px,5.4vw,80px);font-weight:200;line-height:1.02;letter-spacing:-.038em;max-width:14ch;text-wrap:balance}
-  .hmk-head p{color:var(--ink-2);font-size:clamp(15px,1.1vw,17px);line-height:1.7;max-width:52ch}
-  .hmk-body{display:grid;grid-template-columns:minmax(0,1.38fr) minmax(0,1fr);gap:clamp(24px,3.4vw,60px);align-items:start}
+  .hmk-ser{color:var(--fs-ink-3);font-size:11px}
+  .hmk-head{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,90px);align-items:end;
+    margin-bottom:clamp(40px,5vw,72px)}
+  .hmk-head h2{font-size:clamp(34px,4.6vw,68px);font-weight:300;line-height:1.02;letter-spacing:-.03em;max-width:13ch;
+    text-wrap:balance;color:var(--fs-ink)}
+  .hmk-head p{color:var(--fs-ink-2);font-size:clamp(15px,1.15vw,18px);line-height:1.65;font-weight:300;max-width:50ch}
+  .hmk-body{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,3.4vw,56px);align-items:start}
   /* el video acompana mientras se leen los pasos */
-  .hmk-film{position:sticky;top:clamp(84px,12vh,120px);margin:0;padding:clamp(14px,1.4vw,20px);border:1px solid rgba(255,255,255,.16)}
+  .hmk-film{position:sticky;top:clamp(84px,12vh,120px);margin:0;padding:clamp(14px,1.4vw,20px);border:1px solid var(--fs-line)}
   .hmk-band{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;font-size:10.5px}
-  .hmk-band span{color:var(--ink-3)}
+  .hmk-band span{color:var(--fs-ink-3)}
   .hmk-band b{color:var(--blue);font-weight:500}
-  .hmk-media{position:relative;aspect-ratio:16/9;background:#05070b;border:1px solid rgba(255,255,255,.14);overflow:hidden}
+  .hmk-media{position:relative;aspect-ratio:16/9;background:#05070b;overflow:hidden}
   .hmk-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-  .hmk-steps{list-style:none;margin:0;padding:0;border-top:1px solid rgba(255,255,255,.14)}
+  .hmk-steps{list-style:none;margin:0;padding:0;border-top:1px solid var(--fs-line)}
   .hmk-step{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);column-gap:16px;
-    padding:clamp(18px,2vw,26px) 0;border-bottom:1px solid rgba(255,255,255,.14)}
+    padding:clamp(18px,2vw,26px) 0;border-bottom:1px solid var(--fs-line)}
   .hmk-step::before{content:'';position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--blue);
     transform:scaleX(0);transform-origin:0 50%;transition:transform .55s var(--ease)}
   .hmk-step:hover::before{transform:scaleX(1)}
   .hmk-n{grid-row:1/span 3;color:var(--blue);font-size:11px;padding-top:7px}
-  .hmk-step h3{font-size:clamp(20px,1.7vw,26px);font-weight:300;letter-spacing:-.016em;line-height:1.2}
-  .hmk-step p{margin-top:8px;color:var(--ink-3);font-size:14.5px;line-height:1.65;max-width:46ch}
-  .hmk-fact{justify-self:start;margin-top:14px;padding:6px 10px;border:1px solid rgba(255,255,255,.18);color:#fff;font-size:10px}
+  .hmk-step h3{font-size:clamp(20px,1.7vw,25px);font-weight:400;letter-spacing:-.016em;line-height:1.2;color:var(--fs-ink)}
+  .hmk-step p{margin-top:8px;color:var(--fs-ink-3);font-size:14.5px;line-height:1.65;max-width:46ch}
+  .hmk-fact{justify-self:start;margin-top:14px;padding:6px 10px;border:1px solid var(--fs-line);color:var(--fs-ink);font-size:10px}
   .hmk-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px 30px;
-    margin-top:clamp(36px,4vw,56px);padding-top:clamp(24px,2.6vw,32px);border-top:1px solid rgba(255,255,255,.14)}
+    margin-top:clamp(36px,4vw,56px);padding-top:clamp(24px,2.6vw,32px);border-top:1px solid var(--fs-line)}
   .hmk-btns{display:flex;flex-wrap:wrap;gap:12px}
-  .hmk-btn{display:inline-flex;align-items:center;gap:12px;height:56px;padding:0 22px;border:1px solid rgba(255,255,255,.24);
-    color:#fff;font-size:11px;text-decoration:none;
-    transition:background .3s var(--ease),border-color .3s var(--ease)}
+  .hmk-btn{display:inline-flex;align-items:center;gap:12px;height:56px;padding:0 22px;border:1px solid var(--fs-ink);
+    color:var(--fs-ink);font-size:11px;text-decoration:none;
+    transition:background .3s var(--ease),border-color .3s var(--ease),color .3s var(--ease)}
   .hmk-btn i{font-style:normal;transition:transform .38s var(--ease)}
-  .hmk-btn:hover{border-color:#fff}
+  .hmk-btn:hover{border-color:var(--blue);color:var(--blue)}
   .hmk-btn:hover i{transform:translate(3px,-3px)}
-  .hmk-btn.go{background:var(--blue);border-color:var(--blue)}
-  .hmk-btn.go:hover{background:#0f57db;border-color:#0f57db}
-  .hmk-note{color:var(--ink-4);font-size:13px;line-height:1.6;max-width:58ch}
+  .hmk-btn.go{background:var(--blue);border-color:var(--blue);color:#fff}
+  .hmk-btn.go:hover{background:#0f57db;border-color:#0f57db;color:#fff}
+  .hmk-note{color:var(--fs-ink-3);font-size:13px;line-height:1.6;max-width:56ch}
   @media (max-width:1000px){
     .hmk-head,.hmk-body{grid-template-columns:1fr}
     .hmk-head h2{max-width:16ch}
@@ -4830,9 +4828,68 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   </div>
 </section>
 
+<section class="fst hmk" id="hashmarket" aria-labelledby="hmk-h">
+  <div class="spine" aria-hidden="true"><em><b>03</b><span>Hash Market</span></em><i></i></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
+  <div class="lux" aria-hidden="true"></div>
+  <div class="hmk-in">
+    <div class="hmk-top">
+      <span class="hmk-live mono"><span class="led" aria-hidden="true"></span>Testnet live</span>
+      <span class="hmk-ser mono">Hash Market · Sepolia testnet</span>
+    </div>
+    <div class="hmk-head">
+      <h2 id="hmk-h">The Hash Market is live on testnet.</h2>
+      <p>Buy hash power, watch 80% of every purchase burn on the spot, earn rewards every second and register your own security node. It all runs on Sepolia with free test tokens, so you can try the full flow before mainnet.</p>
+    </div>
+    <div class="hmk-body">
+      <figure class="hmk-film">
+        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+        <div class="hmk-band mono"><span>Launch film</span><b>SF·HM·01·26</b></div>
+        <div class="hmk-media">
+          <video src="media/sectora-hash-market-testnet-X-1080p.mp4" poster="images/hashmarket-testnet-poster.jpg" muted loop playsinline preload="none" aria-label="Video: the Sectora Hash Market, live on testnet"></video>
+          <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+        </div>
+      </figure>
+      <ol class="hmk-steps">
+        <li class="hmk-step">
+          <span class="hmk-n mono">01</span>
+          <h3>Claim free tSECT</h3>
+          <p>Connect MetaMask on Sepolia and claim 5,000 free tSECT from the faucet, once every 24 hours.</p>
+          <span class="hmk-fact mono">5,000 tSECT · every 24 h</span>
+        </li>
+        <li class="hmk-step">
+          <span class="hmk-n mono">02</span>
+          <h3>Buy hash</h3>
+          <p>Pick a package. 80% of what you pay is burned on the spot and 20% funds the reward pool.</p>
+          <span class="hmk-fact mono">80% burned on the spot</span>
+        </li>
+        <li class="hmk-step">
+          <span class="hmk-n mono">03</span>
+          <h3>Earn every second</h3>
+          <p>Rewards accrue every second on the tSECT you spent. Claim them whenever you want.</p>
+          <span class="hmk-fact mono">25% APY · testnet rate</span>
+        </li>
+        <li class="hmk-step">
+          <span class="hmk-n mono">04</span>
+          <h3>Register your node</h3>
+          <p>Reach 50 TH/s and register your security node. It appears live on the network map.</p>
+          <span class="hmk-fact mono">50 TH/s to validate</span>
+        </li>
+      </ol>
+    </div>
+    <div class="hmk-cta">
+      <div class="hmk-btns">
+        <a class="hmk-btn go mono" href="https://sectoraorg.com/dash" target="_blank" rel="noopener noreferrer"><span class="led" aria-hidden="true"></span><span>Open the testnet dashboard</span><i aria-hidden="true">↗</i></a>
+        <a class="hmk-btn mono" href="https://sectoraorg.com/docs#s08" target="_blank" rel="noopener noreferrer"><span>How it works</span><i aria-hidden="true">↗</i></a>
+      </div>
+      <p class="hmk-note">Free test tokens on Sepolia. tSECT has no monetary value. The same rules will run on mainnet with $SECT.</p>
+    </div>
+  </div>
+</section>
+
 <section class="offer" id="offer">
   <!-- aqui iba <div class="of-halo">: la mancha de luz azul de la derecha. Retirada a peticion. -->
-  <div class="spine" aria-hidden="true"><em><b>03</b><span>Distribution</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>04</b><span>Distribution</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="of-inner">
@@ -4862,7 +4919,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   <!-- fuera de .m-bg, como en las otras dos secciones: ese envoltorio
        lleva z-index y recorte para contener los halos, y dentro de el
        el lomo quedaba por debajo del velo del titulo fijo -->
-  <div class="spine" aria-hidden="true"><em><b>04</b><span>Verification</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>05</b><span>Verification</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="m-bg" aria-hidden="true">
     <!-- aqui iban los dos <div class="halo">: las manchas de luz azul detras del titular. Retiradas a peticion. -->
@@ -5038,63 +5095,6 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 
 
 
-
-<section class="hmk" id="hashmarket" aria-labelledby="hmk-h">
-  <div class="hmk-grid" aria-hidden="true"></div>
-  <div class="hmk-in">
-    <div class="hmk-top">
-      <span class="hmk-live mono"><span class="led" aria-hidden="true"></span>Testnet live</span>
-      <span class="hmk-ser mono">Hash Market · Sepolia testnet</span>
-    </div>
-    <div class="hmk-head">
-      <h2 id="hmk-h">The Hash Market is live on testnet.</h2>
-      <p>Buy hash power, watch 80% of every purchase burn on the spot, earn rewards every second and register your own security node. It all runs on Sepolia with free test tokens, so you can try the full flow before mainnet.</p>
-    </div>
-    <div class="hmk-body">
-      <figure class="hmk-film">
-        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
-        <div class="hmk-band mono"><span>Launch film</span><b>SF·HM·01·26</b></div>
-        <div class="hmk-media">
-          <video src="media/sectora-hash-market-testnet-X-1080p.mp4" poster="images/hashmarket-testnet-poster.jpg" muted loop playsinline preload="none" aria-label="Video: the Sectora Hash Market, live on testnet"></video>
-          <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
-        </div>
-      </figure>
-      <ol class="hmk-steps">
-        <li class="hmk-step">
-          <span class="hmk-n mono">01</span>
-          <h3>Claim free tSECT</h3>
-          <p>Connect MetaMask on Sepolia and claim 5,000 free tSECT from the faucet, once every 24 hours.</p>
-          <span class="hmk-fact mono">5,000 tSECT · every 24 h</span>
-        </li>
-        <li class="hmk-step">
-          <span class="hmk-n mono">02</span>
-          <h3>Buy hash</h3>
-          <p>Pick a package. 80% of what you pay is burned on the spot and 20% funds the reward pool.</p>
-          <span class="hmk-fact mono">80% burned on the spot</span>
-        </li>
-        <li class="hmk-step">
-          <span class="hmk-n mono">03</span>
-          <h3>Earn every second</h3>
-          <p>Rewards accrue every second on the tSECT you spent. Claim them whenever you want.</p>
-          <span class="hmk-fact mono">25% APY · testnet rate</span>
-        </li>
-        <li class="hmk-step">
-          <span class="hmk-n mono">04</span>
-          <h3>Register your node</h3>
-          <p>Reach 50 TH/s and register your security node. It appears live on the network map.</p>
-          <span class="hmk-fact mono">50 TH/s to validate</span>
-        </li>
-      </ol>
-    </div>
-    <div class="hmk-cta">
-      <div class="hmk-btns">
-        <a class="hmk-btn go mono" href="https://sectoraorg.com/dash" target="_blank" rel="noopener noreferrer"><span class="led" aria-hidden="true"></span><span>Open the testnet dashboard</span><i aria-hidden="true">↗</i></a>
-        <a class="hmk-btn mono" href="https://sectoraorg.com/docs#s08" target="_blank" rel="noopener noreferrer"><span>How it works</span><i aria-hidden="true">↗</i></a>
-      </div>
-      <p class="hmk-note">Free test tokens on Sepolia. tSECT has no monetary value. The same rules will run on mainnet with $SECT.</p>
-    </div>
-  </div>
-</section>
 
 <section class="plate" id="plate">
   <div class="plate-pin">
@@ -8606,7 +8606,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
      que ella: si llegara a negro, el titulo quedaria carbon con papel
      justo debajo. Se queda en un atenuado suave, y como su avance nunca
      alcanza el punto de cruce, su texto sigue siendo oscuro. */
-  const secs = [['what',1], ['statement',1], ['offer',1], ['mandates',1]]
+  const secs = [['what',1], ['statement',1], ['hashmarket',1], ['offer',1], ['mandates',1]]
     .map(function(par){
       const el = document.getElementById(par[0]);
       return el ? {el: el, tope: par[1], v: -1, n: 0, vf: -1} : null;
