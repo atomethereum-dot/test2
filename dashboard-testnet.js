@@ -394,10 +394,22 @@
     ['#kVal','#mVal','#kHash','#kBuy'].forEach(s => { const el = q(s); if(el) el.textContent = '—'; });
     await cargaEthers();
     const net = window.ethers.Network.from(cfg.chainId);
-    ro = new window.ethers.JsonRpcProvider(cfg.rpc || 'https://ethereum-sepolia-rpc.publicnode.com', net, { staticNetwork: net, cacheTimeout: -1 });
-    tokenRO = new window.ethers.Contract(cfg.token, TOKEN_ABI, ro);
-    marketRO = new window.ethers.Contract(cfg.hashMarket, MARKET_ABI, ro);
-    registryRO = new window.ethers.Contract(cfg.registry, REGISTRY_ABI, ro);
+    /* nodos publicos de Sepolia: si el primero no responde en ese movil o
+       esa red, se prueba el siguiente; las lecturas nunca se quedan sin datos */
+    const RPCS = [cfg.rpc || 'https://ethereum-sepolia-rpc.publicnode.com',
+                  'https://sepolia.drpc.org', 'https://1rpc.io/sepolia', 'https://rpc.sepolia.org']
+                 .filter((u, i, a) => u && a.indexOf(u) === i);
+    const conecta = u => {
+      ro = new window.ethers.JsonRpcProvider(u, net, { staticNetwork: net, cacheTimeout: -1 });
+      tokenRO = new window.ethers.Contract(cfg.token, TOKEN_ABI, ro);
+      marketRO = new window.ethers.Contract(cfg.hashMarket, MARKET_ABI, ro);
+      registryRO = new window.ethers.Contract(cfg.registry, REGISTRY_ABI, ro);
+    };
+    const prueba = u => { const pr = new window.ethers.JsonRpcProvider(u, net, { staticNetwork: net });
+      return Promise.race([pr.getBlockNumber(), new Promise((_, mal) => setTimeout(() => mal(new Error('lento')), 5000))]); };
+    let elegido = RPCS[0];
+    for(const u of RPCS){ try{ await prueba(u); elegido = u; break; }catch(e){} }
+    conecta(elegido);
 
     montaUI();
     const bb = q('#bBuy'); if(bb) bb.onclick = compra;
