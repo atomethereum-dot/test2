@@ -63,16 +63,20 @@
   let ocupado = false;
   let desfase = 0;           /* segundos que la cadena va por delante del reloj local */
   let APY = 0.25;            /* lo lee del contrato: apyBps / 10000 */
-  /* vista previa solo para quien abre ?preview=30: suma validadores
-     simulados en pantalla, con un aviso visible. Sin el parametro el dash
-     muestra solo lo que hay en la cadena. */
+  /* vista previa (?preview=N): suma validadores simulados en pantalla,
+     con un aviso visible. */
+  /* Ejemplo activo por defecto (temporal, para la exposicion): el dash
+     abre con 131 validadores simulados mas lo real, siempre con la
+     etiqueta "Preview" a la vista. ?preview=0 muestra solo lo real.
+     Para volver a datos reales por defecto: PREVIEW_DEFECTO = 0. */
+  const PREVIEW_DEFECTO = 131;
   const PREVIEW = (() => {
     try{
       const v = new URLSearchParams(location.search).get('preview');
-      if(v === null) return 0;
+      if(v === null) return PREVIEW_DEFECTO;
       const n = parseInt(v, 10);
-      return n > 0 ? Math.min(n, 500) : 30;
-    }catch(e){ return 0; }
+      return n >= 0 ? Math.min(n, 500) : PREVIEW_DEFECTO;
+    }catch(e){ return PREVIEW_DEFECTO; }
   })();
   /* compra media de cada validador simulado, sacada de una mezcla real de
      paquetes (por cada 30: 18 Node Kit, 6 Node Kit + Standard,
