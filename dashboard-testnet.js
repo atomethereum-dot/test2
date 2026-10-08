@@ -61,8 +61,8 @@
   let acct = null;           /* cuenta conectada */
   let me = null;             /* ultimo estado leido de la cuenta */
   let ocupado = false;
-  let desfase = 0;
-  let APY = 0.25;            /* lo lee del contrato: apyBps / 10000 */           /* segundos que la cadena va por delante del reloj local */
+  let desfase = 0;           /* segundos que la cadena va por delante del reloj local */
+  let APY = 0.25;            /* lo lee del contrato: apyBps / 10000 */
 
   function cargaEthers(){
     if(window.ethers) return Promise.resolve();
@@ -139,6 +139,7 @@
     if(a) a.textContent = pct + '% APY';
     if(b) b.textContent = pct + '%';
     if(sub) sub.textContent = tr('hashdash.tn.sub', '25% APY on the tSECT you spend on hash').replace(/25\s?%/, pct + '%');
+    document.querySelectorAll('.tn-apy-v').forEach(el => { el.textContent = pct + '%'; });   /* guia "como funciona" */
   }
 
   async function leeRed(){

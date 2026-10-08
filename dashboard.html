@@ -828,6 +828,41 @@ svg{display:block}
 }
 
 
+/* ================= como funciona: guia de testnet ================= */
+.how{display:flex;flex-direction:column;gap:clamp(13px,1.6vw,18px)}
+.how-lead{margin:0;font-size:clamp(15px,1.25vw,17px);line-height:1.62;color:var(--ink2);max-width:76ch}
+.how-lead b{color:var(--ink);font-weight:400}
+.how-steps{list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(11px,1.3vw,16px)}
+.how-s{display:flex;flex-direction:column;gap:11px;padding:clamp(17px,1.7vw,22px)}
+.how-top{display:flex;align-items:center;justify-content:space-between}
+.how-n{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--blue2)}
+.how-top svg{width:22px;height:22px;color:var(--ink3)}
+.how-s h3{margin:2px 0 0;font-size:16.5px;font-weight:400;letter-spacing:-.01em;color:var(--ink);line-height:1.3}
+.how-s p,.how-f p{margin:0;font-size:13.5px;line-height:1.62;color:var(--ink3)}
+.how-s p b,.how-f p b{color:var(--ink2);font-weight:400}
+.how-go{margin-top:auto;align-self:flex-start;display:inline-block;text-align:start;
+  padding:8px 0 0;line-height:1.6;background:none;border:0;cursor:pointer;text-decoration:none;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue2);
+  transition:color .25s var(--ease)}
+.how-go:hover{color:var(--ink)}
+/* la flecha va pegada a la ultima palabra y apunta hacia donde se lee */
+.how-go::after{content:'\00a0\2192'}
+.how-go.ext::after{content:'\00a0\2197'}
+[dir=rtl] .how-go::after{content:'\00a0\2190'}
+[dir=rtl] .how-go.ext::after{content:'\00a0\2196'}
+.how-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--hair);background:rgba(21,105,255,.035)}
+.how-f{display:flex;flex-direction:column;gap:9px;padding:clamp(16px,1.6vw,20px) clamp(17px,1.7vw,22px)}
+.how-f + .how-f{border-inline-start:1px solid var(--hair)}
+.how-f .how-go{padding-top:2px}
+@media (max-width:1180px){.how-steps{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){
+  .how-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .how-facts{grid-template-columns:minmax(0,1fr)}
+  .how-f + .how-f{border-inline-start:0;border-top:1px solid var(--hair)}
+}
+@media (max-width:520px){.how-steps{grid-template-columns:minmax(0,1fr)}}
+
 /* ================= aviso de fase de pruebas ================= */
 .warn{display:flex;gap:14px;align-items:flex-start;
   padding:15px 17px;margin-bottom:clamp(13px,1.6vw,18px);
@@ -976,6 +1011,62 @@ html.booting,body.booting{overflow:hidden}
     </section>
 
     <main class="shell">
+
+      <div class="head" id="how">
+        <h2 data-i18n="hashdash.how.title">How it works</h2>
+        <span data-i18n="hashdash.how.sub">Testnet guide · 5 easy steps</span>
+      </div>
+
+      <div class="how">
+        <p class="how-lead rv" data-i18n="hashdash.how.lead">This is the <b>test version</b> of Sectora. You practise with free test tokens, so <b>nothing here costs real money</b>. Follow these 5 steps:</p>
+        <ol class="how-steps">
+          <li class="card how-s rv">
+            <div class="how-top"><span class="how-n">01</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1.5"/><path d="M21 12h-4a2 2 0 0 0 0 4h4a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1Z"/></svg></div>
+            <h3 data-i18n="hashdash.how.s1.t">Connect your wallet</h3>
+            <p data-i18n="hashdash.how.s1.p">Press <b>Connect wallet</b> at the top right and choose MetaMask. The dash moves you to the Sepolia test network on its own.</p>
+            <button class="how-go" type="button" data-go="connect"><span data-i18n="hashdash.top.connect">Connect wallet</span></button>
+          </li>
+          <li class="card how-s rv">
+            <div class="how-top"><span class="how-n">02</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.7c3 3.6 6.5 7.2 6.5 10.8a6.5 6.5 0 0 1-13 0c0-3.6 3.5-7.2 6.5-10.8Z"/><path d="M9 14.5a3 3 0 0 0 3 3"/></svg></div>
+            <h3 data-i18n="hashdash.how.s2.t">Get free gas</h3>
+            <p data-i18n="hashdash.how.s2.p">Every action needs a tiny amount of <b>Sepolia ETH</b>, a free test coin that pays the network. A little goes a long way.</p>
+            <a class="how-go ext" href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer"><span data-i18n="hashdash.how.s2.go">Get Sepolia ETH</span></a>
+          </li>
+          <li class="card how-s rv">
+            <div class="how-top"><span class="how-n">03</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></div>
+            <h3 data-i18n="hashdash.how.s3.t">Claim 5,000 tSECT</h3>
+            <p data-i18n="hashdash.how.s3.p">In <b>Faucet &amp; rewards</b>, press <b>Claim 5,000 tSECT</b>. It is free and you can do it again every 24 hours.</p>
+            <button class="how-go" type="button" data-go="#rewards"><span data-i18n="hashdash.how.s3.go">Go to the faucet</span></button>
+          </li>
+          <li class="card how-s rv">
+            <div class="how-top"><span class="how-n">04</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></div>
+            <h3 data-i18n="hashdash.how.s4.t">Buy hash</h3>
+            <p data-i18n="hashdash.how.s4.p">In <b>Hash market</b>, pick a package and press <b>Buy</b>. Your wallet asks twice: first to allow the payment, then to confirm the purchase.</p>
+            <button class="how-go" type="button" data-go="#market"><span data-i18n="hashdash.how.s4.go">Go to the market</span></button>
+          </li>
+          <li class="card how-s rv">
+            <div class="how-top"><span class="how-n">05</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
+            <h3 data-i18n="hashdash.how.s5.t">Earn and claim</h3>
+            <p data-i18n="hashdash.how.s5.p">From then on you earn <b class="tn-apy-v">25%</b> a year on the tSECT you spent, counted every second. Press <b>Claim rewards</b> whenever you want.</p>
+            <button class="how-go" type="button" data-go="#rewards"><span data-i18n="hashdash.how.s5.go">See my rewards</span></button>
+          </li>
+        </ol>
+        <div class="how-facts rv">
+          <div class="how-f">
+            <span class="lbl" data-i18n="hashdash.how.f1.t">Where your payment goes</span>
+            <p data-i18n="hashdash.how.f1.p">80% is burned on the spot, like a #SECT buyback. The other 20% stays in the contract and pays the rewards.</p>
+          </div>
+          <div class="how-f">
+            <span class="lbl" data-i18n="hashdash.how.f2.t">Your own node</span>
+            <p data-i18n="hashdash.how.f2.p">With 50 TH/s you can register a security node on the network map. A Node Kit (<b>Physical node</b> tab) gives exactly 50 TH/s for 4,300 tSECT, so your first claim is enough.</p>
+            <button class="how-go" type="button" data-go="#node"><span data-i18n="hashdash.node.register">Register node</span></button>
+          </div>
+          <div class="how-f">
+            <span class="lbl" data-i18n="hashdash.how.f3.t">No real money</span>
+            <p data-i18n="hashdash.how.f3.p">tSECT and Sepolia ETH are test coins with no value. This dash never touches your real #SECT.</p>
+          </div>
+        </div>
+      </div>
 
       <div class="head" id="market">
         <h2 data-i18n="hashdash.market.title">Hash market</h2>
@@ -1228,7 +1319,7 @@ html.booting,body.booting{overflow:hidden}
 </div>
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="translations.js"></script>
-<script src="dashboard-i18n-extra.js?v=20261008"></script>
+<script src="dashboard-i18n-extra.js?v=20261009"></script>
 <script src="i18n.js"></script>
 <script src="dashboard-reticle.js?v=20260820b"></script>
 <script>
@@ -3484,6 +3575,26 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 })();
 })();
 </script>
-<script src="dashboard-testnet.js?v=20261008"></script>
+<script>
+/* guia "como funciona": cada boton lleva a su paso */
+(function(){
+  document.querySelectorAll('.how-go[data-go]').forEach(b => b.addEventListener('click', () => {
+    let go = b.dataset.go;
+    if(go === 'connect'){
+      const c = window.__sectoraCuenta && window.__sectoraCuenta();
+      const bc = document.getElementById('bConnect');
+      if(!c && bc){ bc.click(); return; }
+      go = '#rewards';
+    }
+    const el = document.querySelector(go) || document.getElementById('market');
+    if(!el) return;
+    /* que la barra superior fija no tape el titulo del paso */
+    const top = document.querySelector('.top');
+    const y = el.getBoundingClientRect().top + window.scrollY - (top ? top.offsetHeight : 0) - 8;
+    window.scrollTo({ top: Math.max(0, y), behavior:'smooth' });
+  }));
+})();
+</script>
+<script src="dashboard-testnet.js?v=20261009"></script>
 </body>
 </html>
