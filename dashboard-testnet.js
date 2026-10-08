@@ -63,6 +63,17 @@
   let ocupado = false;
   let desfase = 0;           /* segundos que la cadena va por delante del reloj local */
   let APY = 0.25;            /* lo lee del contrato: apyBps / 10000 */
+  /* vista previa solo para quien abre ?preview=30: suma validadores
+     simulados en pantalla, con un aviso visible. Sin el parametro el dash
+     muestra solo lo que hay en la cadena. */
+  const PREVIEW = (() => {
+    try{
+      const v = new URLSearchParams(location.search).get('preview');
+      if(v === null) return 0;
+      const n = parseInt(v, 10);
+      return n > 0 ? Math.min(n, 500) : 30;
+    }catch(e){ return 0; }
+  })();
 
   function cargaEthers(){
     if(window.ethers) return Promise.resolve();
@@ -125,6 +136,15 @@
     const kb = q('#kBuy');
     if(kb){ const s = kb.parentNode.querySelector('.sub'); if(s) s.setAttribute('data-i18n','hashdash.tn.burnedSub'); }
 
+    if(PREVIEW){
+      const pv = document.createElement('div');
+      pv.id = 'tnPreview';
+      pv.setAttribute('role', 'status');
+      pv.style.cssText = 'position:fixed;left:16px;bottom:16px;z-index:80;padding:9px 13px;border:1px solid rgba(232,180,92,.45);' +
+        'background:rgba(10,13,19,.92);color:var(--amber);font:400 10.5px/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase';
+      document.body.appendChild(pv);
+    }
+
     if(window.SECTORA_APPLY_LANG) window.SECTORA_APPLY_LANG(window.SECTORA_CURRENT_LANG || 'en', { silent:true });
 
     q('#tnFaucet').onclick = reclamaFaucet;
@@ -133,6 +153,11 @@
   }
 
   /* ----------------------------------------------------------- lecturas */
+  function pintaPreview(){
+    const pv = q('#tnPreview');
+    if(pv) pv.textContent = tr('hashdash.tn.preview', 'Preview · {n} simulated validators').replace('{n}', PREVIEW);
+  }
+
   function pintaApy(){
     const pct = (Math.round(APY * 1000) / 10).toString().replace(/\.0$/, '');
     const a = q('#tnApy'), b = q('#tnApyBig'), sub = q('#tnSub');
@@ -147,12 +172,13 @@
     pintaApy();
     try{
       const [s, act] = await Promise.all([marketRO.getStats(), registryRO.activeValidatorCount()]);
+      const val = Number(act) + PREVIEW;
       const kv = q('#kVal'), mv = q('#mVal'), kh = q('#kHash'), kb = q('#kBuy');
-      if(kv) kv.textContent = Number(act).toLocaleString('en-US');
-      if(mv) mv.textContent = Number(act).toLocaleString('en-US');
+      if(kv) kv.textContent = val.toLocaleString('en-US');
+      if(mv) mv.textContent = val.toLocaleString('en-US');
       if(kh) kh.textContent = Number(s.hashSold).toLocaleString('en-US');
       if(kb) kb.textContent = fmt(s.boughtBack);
-      const mk = window.__sectoraMarket; if(mk) mk.setValid(Number(act));
+      const mk = window.__sectoraMarket; if(mk) mk.setValid(val);
     }catch(e){ /* sin red: se queda lo que hubiera */ }
   }
 
@@ -381,7 +407,8 @@
     setInterval(leeRed, 30000);
     setInterval(() => { if(acct && !ocupado) leeCuenta(); }, 20000);
     setInterval(pintaFaucet, 30000);
-    document.addEventListener('sectora:langchange', () => { pintaCuenta(); pintaApy(); });
+    pintaPreview();
+    document.addEventListener('sectora:langchange', () => { pintaCuenta(); pintaApy(); pintaPreview(); });
     requestAnimationFrame(tic);
   }
 

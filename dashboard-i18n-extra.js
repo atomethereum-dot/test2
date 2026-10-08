@@ -221,7 +221,8 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f2.p": "مع 50 TH/s يمكنك تسجيل عقدة أمان على خريطة الشبكة. يمنحك Node Kit (تبويب <b>عقدة فعلية</b>) ‏50 TH/s بالضبط مقابل 4,300 tSECT، لذا تكفيك مطالبتك الأولى.",
     "hashdash.how.f3.t": "بلا أموال حقيقية",
     "hashdash.how.f3.p": "رموز tSECT و ETH على Sepolia عملات اختبار بلا قيمة. هذا اللوح لا يلمس أبدًا رموز #SECT الحقيقية لديك.",
-    "hashdash.how.s2.go": "احصل على ETH على Sepolia"
+    "hashdash.how.s2.go": "احصل على ETH على Sepolia",
+    "hashdash.tn.preview": "معاينة · {n} مدقّقين محاكين"
   },
   "de": {
     "hashdash.tn.balance": "Dein Guthaben",
@@ -445,7 +446,8 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f2.p": "Mit 50 TH/s kannst du einen Sicherheitsknoten auf der Netzwerkkarte registrieren. Ein Node Kit (Tab <b>Physischer Knoten</b>) liefert genau 50 TH/s für 4.300 tSECT – dein erstes Abholen reicht also.",
     "hashdash.how.f3.t": "Kein echtes Geld",
     "hashdash.how.f3.p": "tSECT und Sepolia-ETH sind Testmünzen ohne Wert. Dieses Dash berührt nie deine echten #SECT.",
-    "hashdash.how.s2.go": "Sepolia-ETH holen"
+    "hashdash.how.s2.go": "Sepolia-ETH holen",
+    "hashdash.tn.preview": "Vorschau · {n} simulierte Validatoren"
   },
   "en": {
     "hashdash.tn.balance": "Your balance",
@@ -669,7 +671,8 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f2.p": "With 50 TH/s you can register a security node on the network map. A Node Kit (<b>Physical node</b> tab) gives exactly 50 TH/s for 4,300 tSECT, so your first claim is enough.",
     "hashdash.how.f3.t": "No real money",
     "hashdash.how.f3.p": "tSECT and Sepolia ETH are test coins with no value. This dash never touches your real #SECT.",
-    "hashdash.how.s2.go": "Get Sepolia ETH"
+    "hashdash.how.s2.go": "Get Sepolia ETH",
+    "hashdash.tn.preview": "Preview · {n} simulated validators"
   },
   "es": {
     "hashdash.tn.balance": "Tu saldo",
@@ -893,7 +896,8 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f2.p": "Con 50 TH/s puedes registrar un nodo de seguridad en el mapa de la red. Un Node Kit (pestaña <b>Nodo físico</b>) da justo 50 TH/s por 4.300 tSECT, así que te basta con tu primer reclamo.",
     "hashdash.how.f3.t": "Sin dinero real",
     "hashdash.how.f3.p": "Los tSECT y el ETH de Sepolia son monedas de prueba sin valor. Este dash nunca toca tus #SECT reales.",
-    "hashdash.how.s2.go": "Conseguir ETH de Sepolia"
+    "hashdash.how.s2.go": "Conseguir ETH de Sepolia",
+    "hashdash.tn.preview": "Vista previa · {n} validadores simulados"
   },
   "fr": {
     "hashdash.tn.balance": "Votre solde",
@@ -1117,7 +1121,8 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f2.p": "Avec 50 TH/s, vous pouvez enregistrer un nœud de sécurité sur la carte du réseau. Un Node Kit (onglet <b>Nœud physique</b>) donne exactement 50 TH/s pour 4 300 tSECT : votre première réclamation suffit.",
     "hashdash.how.f3.t": "Pas d’argent réel",
     "hashdash.how.f3.p": "Les tSECT et l’ETH Sepolia sont des monnaies de test sans valeur. Ce dash ne touche jamais à vos vrais #SECT.",
-    "hashdash.how.s2.go": "Obtenir de l’ETH Sepolia"
+    "hashdash.how.s2.go": "Obtenir de l’ETH Sepolia",
+    "hashdash.tn.preview": "Aperçu · {n} validateurs simulés"
   },
   "hi": {
     "hashdash.tn.balance": "आपका बैलेंस",
@@ -1341,7 +1346,8 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f2.p": "50 TH/s होने पर आप नेटवर्क मैप पर एक सुरक्षा नोड रजिस्टर कर सकते हैं। Node Kit (<b>भौतिक नोड</b> टैब) 4,300 tSECT में ठीक 50 TH/s देता है, इसलिए पहला क्लेम ही काफ़ी है।",
     "hashdash.how.f3.t": "कोई असली पैसा नहीं",
     "hashdash.how.f3.p": "tSECT और Sepolia ETH बिना मूल्य के टेस्ट कॉइन हैं। यह डैशबोर्ड आपके असली #SECT को कभी नहीं छूता।",
-    "hashdash.how.s2.go": "Sepolia ETH पाएँ"
+    "hashdash.how.s2.go": "Sepolia ETH पाएँ",
+    "hashdash.tn.preview": "प्रीव्यू · {n} सिम्युलेटेड वैलिडेटर"
   },
   "ja": {
     "hashdash.tn.balance": "あなたの残高",
@@ -1565,7 +1571,8 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f2.p": "50 TH/s あれば、ネットワークマップにセキュリティノードを登録できます。Node Kit（<b>物理ノード</b>タブ）は 4,300 tSECT でちょうど 50 TH/s。最初の受け取り分で足ります。",
     "hashdash.how.f3.t": "本物のお金は不要",
     "hashdash.how.f3.p": "tSECT と Sepolia ETH は価値のないテスト用コインです。このダッシュボードがあなたの本物の #SECT に触れることはありません。",
-    "hashdash.how.s2.go": "Sepolia ETH を入手"
+    "hashdash.how.s2.go": "Sepolia ETH を入手",
+    "hashdash.tn.preview": "プレビュー · シミュレーションのバリデーター {n} 件"
   },
   "ko": {
     "hashdash.tn.balance": "내 잔액",
@@ -1789,7 +1796,8 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f2.p": "50 TH/s가 있으면 네트워크 지도에 보안 노드를 등록할 수 있습니다. Node Kit(<b>물리 노드</b> 탭)는 4,300 tSECT로 정확히 50 TH/s를 제공하므로 첫 포싯 수령분이면 충분합니다.",
     "hashdash.how.f3.t": "실제 돈 없음",
     "hashdash.how.f3.p": "tSECT와 Sepolia ETH는 가치가 없는 테스트 코인입니다. 이 대시보드는 실제 #SECT를 절대 건드리지 않습니다.",
-    "hashdash.how.s2.go": "Sepolia ETH 받기"
+    "hashdash.how.s2.go": "Sepolia ETH 받기",
+    "hashdash.tn.preview": "미리보기 · 시뮬레이션 검증자 {n}개"
   },
   "pt": {
     "hashdash.tn.balance": "Seu saldo",
@@ -2013,7 +2021,8 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f2.p": "Com 50 TH/s você pode registrar um nó de segurança no mapa da rede. Um Node Kit (aba <b>Nó físico</b>) dá exatamente 50 TH/s por 4.300 tSECT, então seu primeiro resgate já basta.",
     "hashdash.how.f3.t": "Sem dinheiro real",
     "hashdash.how.f3.p": "tSECT e o ETH da Sepolia são moedas de teste sem valor. Este dash nunca toca nos seus #SECT reais.",
-    "hashdash.how.s2.go": "Obter ETH da Sepolia"
+    "hashdash.how.s2.go": "Obter ETH da Sepolia",
+    "hashdash.tn.preview": "Pré-visualização · {n} validadores simulados"
   },
   "ru": {
     "hashdash.tn.balance": "Ваш баланс",
@@ -2237,7 +2246,8 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f2.p": "С 50 TH/s можно зарегистрировать узел безопасности на карте сети. Node Kit (вкладка <b>Физический узел</b>) даёт ровно 50 TH/s за 4 300 tSECT — первого получения из крана хватит.",
     "hashdash.how.f3.t": "Без реальных денег",
     "hashdash.how.f3.p": "tSECT и Sepolia ETH — тестовые монеты без ценности. Этот дашборд никогда не трогает ваши настоящие #SECT.",
-    "hashdash.how.s2.go": "Получить Sepolia ETH"
+    "hashdash.how.s2.go": "Получить Sepolia ETH",
+    "hashdash.tn.preview": "Предпросмотр · {n} симулированных валидаторов"
   },
   "zh": {
     "hashdash.tn.balance": "你的余额",
@@ -2461,6 +2471,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f2.p": "拥有 50 TH/s 即可在网络地图上注册一个安全节点。Node Kit（<b>实体节点</b>标签页）以 4,300 tSECT 正好提供 50 TH/s，第一次领取的代币就够了。",
     "hashdash.how.f3.t": "不涉及真钱",
     "hashdash.how.f3.p": "tSECT 和 Sepolia ETH 都是没有价值的测试币。此仪表盘绝不会动用你真实的 #SECT。",
-    "hashdash.how.s2.go": "获取 Sepolia ETH"
+    "hashdash.how.s2.go": "获取 Sepolia ETH",
+    "hashdash.tn.preview": "预览 · {n} 个模拟验证者"
   }
 };
