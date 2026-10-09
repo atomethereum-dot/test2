@@ -138,9 +138,11 @@
   let decimales = 18;   // provisional hasta leerlo del token
 
   let ultimaTasa = null;
+  let ultimoPausado = false;
   async function pintarPool(c) {
     try {
       const pv = await (c || staking).poolView();
+      ultimoPausado = pv.paused;
       // la tasa es la del contrato, no la escrita en la pagina
       if (pv.rate !== ultimaTasa) {
         ultimaTasa = pv.rate;
@@ -168,11 +170,50 @@
     }
   }
 
+  /* Contador en vivo: el contrato suma recompensas cada segundo. Cada 15 s
+     se lee lo cobrable de la cadena y entre lecturas la cifra avanza con
+     deposito x tasa, asi el usuario ve llegar lo que gana segundo a
+     segundo. Cobrar sigue siendo un claim suyo. */
+  const ANO_S = 365n * 86400n;
+  const contador = { base: 0, porSeg: 0, t0: 0, id: null };
+  const fmtVivo = (n) => n.toLocaleString("en-US", { minimumFractionDigits: 6, maximumFractionDigits: 6 });
+
+  function montarContador() {
+    if ($("earnLive") || !btn || !btn.parentNode) return;
+    const caja = document.createElement("div");
+    caja.id = "earnLive";
+    caja.className = "earn-live";
+    caja.innerHTML =
+      '<div class="earn-head"><span>Your rewards · accruing every second</span><i aria-hidden="true"></i></div>' +
+      '<b class="earn-n"><span id="earnN">0.000000</span> <small>#SECT</small></b>' +
+      '<div class="earn-sub"><span>Deposited <b id="earnDep">0</b> #SECT</span><span>+<b id="earnMin">0</b> #SECT / min</span></div>' +
+      '<button type="button" class="btn primary wide earn-claim" id="earnClaim">Claim rewards</button>';
+    btn.parentNode.insertBefore(caja, btn);
+    $("earnClaim").addEventListener("click", () =>
+      enviar("Claiming", () => staking.connect(firmante).claim())
+    );
+    clearInterval(contador.id);
+    contador.id = setInterval(() => {
+      const el = $("earnN");
+      if (!el || !contador.t0) return;
+      el.textContent = fmtVivo(contador.base + contador.porSeg * (Date.now() - contador.t0) / 1000);
+    }, 200);
+  }
+
   async function pintarCuenta() {
     if (!cuenta) return;
     try {
       const v = await staking.accountView(cuenta);
-      aviso("Deposited " + fmt(v.deposited) + " #SECT · rewards to claim " + fmt(v.claimable, 4) + " #SECT");
+      montarContador();
+      const tasa = ultimaTasa === null ? 0n : ultimaTasa;
+      const porSegWei = ultimoPausado ? 0n : (v.deposited * tasa) / (10000n * ANO_S);
+      contador.base = Number(ethers.formatUnits(v.claimable, decimales));
+      contador.porSeg = Number(ethers.formatUnits(porSegWei, decimales));
+      contador.t0 = Date.now();
+      const dep = $("earnDep"), min = $("earnMin");
+      if (dep) dep.textContent = fmt(v.deposited);
+      if (min) min.textContent = (contador.porSeg * 60).toLocaleString("en-US", { maximumFractionDigits: 4 });
+      $("earnN").textContent = fmtVivo(contador.base);
     } catch (e) {
       console.warn("[sectora] no pude leer accountView", e);
     }
@@ -245,9 +286,7 @@
     };
 
     nuevo("Deposit #SECT", depositar);
-    nuevo("Claim rewards", () =>
-      enviar("Claiming", () => staking.connect(firmante).claim())
-    );
+    // cobrar va en el contador en vivo (montarContador)
     nuevo("Withdraw", async () => {
       const v = await staking.accountView(cuenta);
       if (v.deposited === 0n) return aviso("You have nothing deposited.", true);
@@ -344,7 +383,11 @@
 
       eip1193.on && eip1193.on("accountsChanged", (c) => {
         if (c && c.length) conectar(eip1193, c[0]);
-        else { clearInterval(refrescoId); cuenta = null; aviso(""); }
+        else {
+          clearInterval(refrescoId); cuenta = null; aviso("");
+          clearInterval(contador.id); contador.t0 = 0;
+          const caja = $("earnLive"); if (caja) caja.remove();
+        }
       });
       // un cambio de red invalida los contratos ya instanciados: lo mas
       // seguro y lo que hacen las dapps serias es recargar
