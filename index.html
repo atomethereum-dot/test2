@@ -1663,6 +1663,17 @@
     background:#25d366;box-shadow:0 0 10px 1px rgba(37,211,102,.65)}
   .hb .led::after{content:'';position:absolute;inset:-4px;border-radius:50%;
     border:1px solid #25d366;animation:ping 2.6s var(--ease) infinite}
+  /* nodo validador: boton en negro como los demas, con borde verde suave */
+  .hb a.vivo{background:#000;border-color:rgba(37,211,102,.45);color:var(--ink)}
+  .hb a.vivo:hover{border-color:#25d366;color:#fff}
+  /* etiqueta "Testnet live": se ve de un vistazo que ya se puede usar */
+  .p-tag{display:inline-flex;align-items:center;gap:10px;margin:2px 0 14px;padding:7px 12px 7px 11px;
+    border:1px solid rgba(37,211,102,.4);background:rgba(37,211,102,.08);color:#25d366;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+  .p-tag .led{position:relative;width:6px;height:6px;border-radius:50%;flex:none;
+    background:#25d366;box-shadow:0 0 10px 1px rgba(37,211,102,.65)}
+  .p-tag .led::after{content:'';position:absolute;inset:-4px;border-radius:50%;
+    border:1px solid #25d366;animation:ping 2.6s var(--ease) infinite}
 
   /* aun no disponible: mismo formato que el estado en vivo, pero el
      punto va hueco y sin pulso. Se lee como "apagado" de un vistazo */
@@ -5046,9 +5057,10 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <span class="p-num">03</span>
         <span class="p-name">Security node validation</span>
         <div class="p-meta">
+          <span class="p-tag"><span class="led" aria-hidden="true"></span>Testnet live</span>
           <span class="p-desc">A validator set that verifies contract behavior continuously, not only at deployment. Hash market: Testnet live. Claim tSECT, buy hash and register a node.</span>
           <span class="hb">
-            <a class="go" href="https://sectoraorg.com/dash" target="_blank" rel="noopener noreferrer"><span class="led"></span>Open dashboard <i>↗</i></a>
+            <a class="vivo" href="https://sectoraorg.com/dash" target="_blank" rel="noopener noreferrer"><span class="led"></span>Open dashboard <i>↗</i></a>
             <a href="https://sectoraorg.com/docs#s08" target="_blank" rel="noopener noreferrer">How it works <i>↗</i></a>
           </span>
         </div>
