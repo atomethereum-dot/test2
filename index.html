@@ -5079,8 +5079,12 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <span class="p-num">05</span>
         <span class="p-name">Staking</span>
         <div class="p-meta">
-          <span class="p-desc">Live on Ethereum mainnet. Deposit #SECT and earn rewards every second, paid by the Sectora Foundation. No lock-up: claim and withdraw any time.</span>
-          <a class="p-live" href="https://sectoraorg.com/staking" target="_blank" rel="noopener noreferrer"><span class="led"></span>Open staking <i>↗</i></a>
+          <span class="p-tag"><span class="led" aria-hidden="true"></span>Mainnet live</span>
+          <span class="p-desc">Deposit #SECT and earn 14.9% APY, accrued every second and paid by the Sectora Foundation from a funded reward pool. Claim your rewards and withdraw your deposit any time: no lock-up, no fees.</span>
+          <span class="hb">
+            <a class="vivo" href="https://sectoraorg.com/staking" target="_blank" rel="noopener noreferrer"><span class="led"></span>Open staking · APY 14.9% <i>↗</i></a>
+            <a href="https://sectoraorg.com/staking#how" target="_blank" rel="noopener noreferrer">How it works <i>↗</i></a>
+          </span>
         </div>
       </div>
       <div class="p-row reveal" style="--d:0.36s">
@@ -8355,7 +8359,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261012';
+      sc.src = 'i18n-home.js?v=20261013';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
