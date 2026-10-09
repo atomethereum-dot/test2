@@ -25,8 +25,10 @@ Leído en Remix justo después de desplegar:
 | `depositsPaused()` | `true` |
 
 Pendiente:
-- [ ] Verificación en Etherscan (Sourcify enviada desde Remix).
+- [x] Verificado en Etherscan.
 - [ ] `transferOwnership` a la Safe y `acceptOwnership` desde la Safe (el dueño decidió seguir con su wallet por ahora).
 - [x] Fondo cargado: 1.490.000 #SECT desde la wallet de la fundación `0x09ae50654Fd92F9B62a1a7c97dfA2985e4Fd84FD`.
-- [ ] `setDepositsPaused(false)`.
+- [x] Depósitos abiertos (`setDepositsPaused(false)`).
 - [x] `staking/staking-chain.js` conectado al contrato.
+
+Blockaid (avisos de MetaMask) marcó el contrato como malicioso tras el lanzamiento; se envió un informe de falso positivo.
