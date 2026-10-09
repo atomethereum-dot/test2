@@ -15,6 +15,7 @@ quieren. Las recompensas salen de un fondo que carga la fundación.
 | Fondo de recompensas | Lo carga la fundación. El dueño puede retirar en cualquier momento la parte que nadie ha ganado todavía |
 | Propiedad | En dos pasos: transferir + aceptar. `renounceOwnership` está desactivado |
 | Depósitos de los holders | Nadie puede tocarlos, tampoco el dueño |
+| Bloqueos (15 días, 1 mes, 2 meses) | Incluidos pero **desactivados**. Los activas cuando quieras con `setLockOption`, cada uno con su APY |
 
 ---
 
@@ -243,12 +244,49 @@ las cuentas nunca desborden.
 - Ninguna de las dos toca depósitos ni recompensas ya ganadas. No se puede
   usar el propio contrato como destino.
 
+## Bloqueos (vienen desactivados)
+
+El contrato trae tres opciones de bloqueo, **apagadas y con tasa 0**:
+
+| Opción | Plazo | Para escribir el plazo |
+|---|---|---|
+| `0` | 15 días | `1296000` |
+| `1` | 30 días | `2592000` |
+| `2` | 60 días | `5184000` |
+
+**Cómo funciona para el holder:**
+- Elige la opción y la cantidad (`lock(opción, cantidad)`).
+- **El APY queda fijo para su bloqueo** aunque luego lo cambies.
+- **La recompensa entera se aparta del fondo al bloquear.** Está garantizada y
+  tú no la puedes retirar. Si el fondo no tiene suficiente, el bloqueo no se
+  acepta.
+- **La recompensa se gana cada segundo** y la cobra cuando quiera
+  (`claimLock` o `claimAllLocks`).
+- **El principal no sale hasta que acaba el plazo** (`withdrawLock`). Al
+  acabar deja de ganar.
+- Salir antes **no se puede**, salvo que actives `setEarlyExit(true)`. Si lo
+  activas, quien salga antes recupera el principal y lo que no había cobrado
+  de ese bloqueo vuelve al fondo.
+
+**Cómo los activas (desde la Safe):**
+- `setLockOption(opción, plazo, tasa, true)`. Por ejemplo, 1 mes al 25 %:
+  `setLockOption(1, 2592000, 2500, true)`.
+- Para apagar una opción: la misma llamada con `false`. Los bloqueos ya hechos
+  siguen hasta su fin.
+- `addLockOption(plazo, tasa, true)` añade un plazo nuevo, por ejemplo 6 meses
+  = `15552000`.
+- La tasa se escribe igual que en `setRate`: % al año × 100.
+
+**Antes de activarlos, avísame:** hay que añadir a la página de staking los
+botones para bloquear, ver los bloqueos y retirarlos. Hoy no aparecen porque
+están apagados.
+
 ## Recuperar envíos por error
 
 - **`recoverSurplus(to)`**: devuelve los #SECT que llegaron al contrato fuera
   de `deposit`/`fundRewards`, por ejemplo con "Enviar". Solo sale lo que
-  sobra después de cubrir todos los depósitos, el fondo y todo lo ganado
-  pendiente de cobrar.
+  sobra después de cubrir todos los depósitos, el fondo, todo lo ganado
+  pendiente de cobrar, lo bloqueado y lo reservado para los bloqueos.
 - **`rescueToken(token, to, amount)`**: devuelve **otros** tokens enviados por
   error (USDT, etc.). No puede tocar #SECT.
 
