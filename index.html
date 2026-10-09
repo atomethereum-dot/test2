@@ -4681,10 +4681,10 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
           <span class="nvp-n">Cybersecurity Software</span>
           <span class="nvp-s"><span class="nvp-led"></span>Open security</span>
         </a>
-        <a class="nvp-item" href="https://sectoraorg.com/staking" target="_blank" rel="noopener noreferrer">
+        <span class="nvp-item soon">
           <span class="nvp-n">Staking</span>
-          <span class="nvp-s"><span class="nvp-led"></span>Open staking</span>
-        </a>
+          <span class="nvp-s"><span class="nvp-led"></span>In progress</span>
+        </span>
         <a class="nvp-item" href="https://sectoraorg.com/dex" target="_blank" rel="noopener noreferrer">
           <span class="nvp-n">DEX</span>
           <span class="nvp-s"><span class="nvp-led"></span>Open DEX</span>
@@ -5022,7 +5022,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       <p class="eyebrow mono reveal"><i></i>Developments</p>
       <h2 class="reveal" style="--d:.06s">Seven products on one security layer.</h2>
       <p class="p-lede reveal" style="--d:.12s">
-        Each one runs on the same security layer. Staking is live on Ethereum mainnet, five are open on testnet and the stablecoin is still in progress.
+        Each one runs on the same security layer. Five are open on testnet; staking and the stablecoin are still in progress.
       </p>
       <p class="p-count mono reveal" style="--d:.18s">07 products · 05 live</p>
 
@@ -5079,12 +5079,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <span class="p-num">05</span>
         <span class="p-name">Staking</span>
         <div class="p-meta">
-          <span class="p-tag"><span class="led" aria-hidden="true"></span>Mainnet live</span>
-          <span class="p-desc">Deposit #SECT and earn 14.9% APY, accrued every second and paid by the Sectora Foundation from a funded reward pool. Claim your rewards and withdraw your deposit any time: no lock-up, no fees.</span>
-          <span class="hb">
-            <a class="vivo" href="https://sectoraorg.com/staking" target="_blank" rel="noopener noreferrer"><span class="led"></span>Open staking · APY 14.9% <i>↗</i></a>
-            <a href="https://sectoraorg.com/staking#how" target="_blank" rel="noopener noreferrer">How it works <i>↗</i></a>
-          </span>
+          <span class="p-desc">The staking program is being finalised. Its terms will be published before launch.</span>
+          <span class="p-soon"><span class="led"></span>In progress</span>
         </div>
       </div>
       <div class="p-row reveal" style="--d:0.36s">
@@ -5168,7 +5164,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <span class="tl-q">Aug 2026 · Phase 2</span><span class="tl-tag">Testing Phase · Testnet</span>
         <h3>Testnet</h3>
         <ul class="tl-ml">
-          <li>Staking — live on Ethereum mainnet</li>
+          <li>Staking — in progress</li>
           <li>Testnet infrastructure deployed: Sectora L3 blockchain, node validation, DEX</li>
           <li>Hash market (Dashboard) — Testnet live: tSECT faucet, hash purchases with 80% burn, APY rewards and node registration</li>
         </ul>
@@ -6874,7 +6870,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
   const M = [
     {q:'Aug 2026 · Phase 1', n:'Foundation & audit',                     s:'Contract renounced · Audit approved · Illinois registered',                 c:'SF·RM·P1·26', k:5.07,  d:1.35, l:3},
-    {q:'Aug 2026 · Phase 2', n:'Testnet live · staking live',             s:'Sectora L3 blockchain · Hash market · Node validation · DEX · Staking live on mainnet',              c:'SF·RM·P2·26', k:6.69,  d:1.25, l:3},
+    {q:'Aug 2026 · Phase 2', n:'Testnet live · staking in progress',      s:'Sectora L3 blockchain · Hash market · Node validation · DEX · Staking in progress',              c:'SF·RM·P2·26', k:6.69,  d:1.25, l:3},
     {q:'15 Mar 2027 · Phase 3', n:'Supply reduction & exchange listings',   s:'50% supply reduction · Exchange listings',                                  c:'SF·RM·P3·27', k:8.31,  d:1.14, l:3},
     {q:'2027 · Phase 4',     n:'Mainnet infrastructure launch',          s:'L3 RWA blockchain · Hash market & Hash Nodes',                                             c:'SF·RM·P4·27', k:11.55, d:0.93, l:4},
     {q:'2027 · Phase 5',     n:'DEX, tokenization & security software',  s:'Multi-trade DEX · RWA tokenization · Security software',                   c:'SF·RM·P5·27', k:14.79, d:0.72, l:5},
@@ -8359,7 +8355,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261013';
+      sc.src = 'i18n-home.js?v=20261014';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);

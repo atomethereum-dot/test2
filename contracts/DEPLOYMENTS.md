@@ -32,3 +32,10 @@ Pendiente:
 - [x] `staking/staking-chain.js` conectado al contrato.
 
 Blockaid (avisos de MetaMask) marcó el contrato como malicioso tras el lanzamiento; se envió un informe de falso positivo.
+
+Mientras Blockaid no quite la alerta, el staking está oculto en la web (el contrato sigue funcionando):
+- Portada: menú, fila 05 de Developments, hoja de ruta y placa vuelven a "In progress", sin enlace a /staking.
+- Whitepaper (web y PDF): §04 ya no menciona el staking; la hoja de ruta dice "Staking — in progress".
+- `/staking/` sigue funcionando con el enlace directo (para que quien ya depositó pueda reclamar o retirar), pero lleva `noindex` y salió de `sitemap.xml`.
+
+Para volver a publicarlo: revertir el commit "Hide staking until Blockaid clears the alert".
