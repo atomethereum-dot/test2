@@ -1,522 +1,633 @@
-/* ---- Sectora Staking: efectos.
-   1. Intro: el anillo de la marca se dibuja entre estrellas, se cierra en el
-      logo y la camara entra por su centro; el hueco del anillo es la ventana
-      por la que aparece la pagina.
-   2. Cielo fijo: estrellas en tres profundidades, constelaciones alrededor
-      del puntero y alguna estrella fugaz.
-   3. Anillos de la portada: el 14.9% es el planeta. Lo que pasa por delante
-      se pinta en un lienzo encima del numero y lo de atras en otro debajo.
-      El anillo del dial marca el segundo real (las recompensas se acumulan
-      cada segundo) y cada segundo sale un pulso.
-   4. Cinta que acelera con el scroll, pasos en horizontal y el pie.
-   Sin librerias externas: esta pagina pide firmas a la wallet y no carga
-   codigo de terceros. ---- */
-(() => {
-  "use strict";
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const coarse = window.matchMedia("(pointer:coarse)").matches;
-  const $ = (id) => document.getElementById(id);
-  const root = document.documentElement;
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-  const dprMax = () => Math.min(window.devicePixelRatio || 1, 2);
-  const E = {
-    outCubic: (t) => 1 - Math.pow(1 - t, 3),
-    outExpo: (t) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t)),
-    inOutCubic: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
-    inOutSine: (t) => -(Math.cos(Math.PI * t) - 1) / 2,
-  };
+/* ---- Sectora Staking: la intro, la rejilla de la portada y los margenes.
+   Todo sale de index.html de la web principal, con un solo cambio: al
+   salir de la intro, en vez de deshacerse en celdas, la camara entra por
+   el aro y la pagina aparece por su centro (zoom). ---- */
 
-  // puntero compartido, suavizado
-  const ptr = { x: -9999, y: -9999, nx: 0, ny: 0, sx: 0, sy: 0, on: false };
-  window.addEventListener("pointermove", (e) => {
-    ptr.x = e.clientX; ptr.y = e.clientY; ptr.on = true;
-    ptr.nx = e.clientX / window.innerWidth - 0.5; ptr.ny = e.clientY / window.innerHeight - 0.5;
-  }, { passive: true });
-  document.documentElement.addEventListener("pointerleave", () => { ptr.on = false; });
+/* ===== intro =====
+   barrido de la rejilla, aro, pulso de cierre, enganche con escuadras y
+   salida en zoom: el aro crece hasta salirse de la pantalla y por su hueco
+   se descubre la portada. El azul lo pinta el lienzo para poder abrirle
+   el agujero. */
+(function () {
+  const el = document.getElementById("intro");
+  const cv = document.getElementById("intro-grid");
+  const ring = document.getElementById("intro-ring");
+  const word = document.getElementById("intro-word");
+  const est = document.getElementById("intro-state");
+  const pctE = document.getElementById("intro-pct");
+  const fill = document.getElementById("intro-fill");
+  const stage = document.getElementById("stage");
 
-  // brillo pre-dibujado para estrellas grandes y particulas
-  function sprite(color, size) {
-    const c = document.createElement("canvas"); c.width = c.height = size;
-    const g = c.getContext("2d"), r = size / 2;
-    const gr = g.createRadialGradient(r, r, 0, r, r, r);
-    gr.addColorStop(0, "rgba(255,255,255,1)");
-    gr.addColorStop(0.18, color.replace("A", "0.95"));
-    gr.addColorStop(0.45, color.replace("A", "0.25"));
-    gr.addColorStop(1, color.replace("A", "0"));
-    g.fillStyle = gr; g.fillRect(0, 0, size, size);
-    return c;
+  let listo;
+  window.SECT_INTRO = new Promise((r) => { listo = r; });
+  if (!el || !cv) { if (el) el.remove(); listo(); return; }
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) { el.remove(); listo(); return; }
+
+  let corto = false;
+  try { corto = sessionStorage.getItem("sect_stk_intro") === "1"; } catch (e) {}
+  const F = corto ? 0.45 : 1;
+
+  const T_SWEEP = 600 * F, T_RING = 980 * F, T_LAP = 340 * F,
+        T_SNAP = 600 * F, T_LOCK = 430 * F, T_HOLD = 270 * F, T_EXIT = 1250 * (corto ? 0.8 : 1);
+  const T0_RING = T_SWEEP * 0.7;
+  const T0_LAP = T0_RING + T_RING;
+  const T0_SNAP = T0_LAP + T_LAP;
+  const T0_LOCK = T0_SNAP + T_SNAP;
+  const T0_HOLD = T0_LOCK + T_LOCK;
+  const T_TOTAL = T0_HOLD + T_HOLD;
+
+  const AZUL = "#1569ff";
+  const CIAN = "52,231,255";
+  const VIOL = "168,85,247";
+  const SCAN_T = 1730;
+  const scanY = (t) => H * 1.12 - ((t % SCAN_T) / SCAN_T) * (H * 1.24);
+
+  document.documentElement.classList.add("intro-lock");
+  document.body.classList.add("intro-lock");
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  window.scrollTo(0, 0);
+
+  const ctx = cv.getContext("2d");
+  let W = 0, H = 0, CELL = 40, sweep = [], R = 0, SW = 0, cxG = 0, cyG = 0, MONO = "";
+
+  function medir() {
+    W = window.innerWidth; H = window.innerHeight;
+    const dpr = Math.min(window.devicePixelRatio || 1, W < 900 ? 1.5 : 2);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    CELL = W < 700 ? 26 : 40;
+    // el aro del SVG mide 54.5vmin con r=44 y trazo 9.87 sobre 100
+    const vmin = Math.min(W, H);
+    R = vmin * 0.545 * 0.44;
+    SW = vmin * 0.545 * 0.0987;
+    cxG = W / 2; cyG = H / 2;
+    MONO = "500 " + (W < 700 ? 8.5 : 9.5) + "px 'IBM Plex Mono', monospace";
+    const nX = Math.ceil(W / CELL / 2) + 2, nY = Math.ceil(H / CELL / 2) + 2;
+    const diag = nX * 2 + nY * 2 || 1;
+    sweep = [];
+    for (let j = -nY; j < nY; j++) {
+      for (let i = -nX; i < nX; i++) {
+        const dx = (i + 0.5) * CELL, dy = (j + 0.5) * CELL;
+        const x = cxG + i * CELL, y = cyG + j * CELL;
+        if (x > W || y > H || x < -CELL || y < -CELL) continue;
+        const d = Math.hypot(dx, dy);
+        if (Math.abs(d - R) <= CELL * 0.7) continue;   // el hueco del aro
+        const sem = Math.abs((Math.sin(i * 12.9898 + j * 78.233) * 43758.5453) % 1);
+        sweep.push({ x, y, cx: x + CELL / 2, cy: y + CELL / 2, rad: d, sem, diag: ((i + nX) + (j + nY)) / diag });
+      }
+    }
   }
-  const GLOW_W = sprite("rgba(190,215,255,A)", 64);
-  const GLOW_C = sprite("rgba(52,231,255,A)", 64);
-  const GLOW_B = sprite("rgba(77,141,255,A)", 64);
 
-  // =================================================================
-  // 1. intro
-  // =================================================================
-  let terminarIntro = () => {};
-  const intro = (() => {
-    const el = $("intro");
-    if (!el || !root.classList.contains("intro-on")) { root.classList.add("ready"); return null; }
-    root.classList.add("intro-run");
-    try { history.scrollRestoration = "manual"; } catch (e) {}
-    window.scrollTo(0, 0);
-    try { sessionStorage.setItem("sectStkIntro", "1"); } catch (e) {}
+  const cl = (t) => (t < 0 ? 0 : t > 1 ? 1 : t);
+  const sw = (t) => { t = cl(t); return t * t * (3 - 2 * t); };
+  const io = (t) => { t = cl(t); return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  const out = (t) => { t = cl(t); return 1 - Math.pow(1 - t, 3); };
 
-    const corta = root.classList.contains("intro-corta");
-    const cv = $("introSky"), ctx = cv.getContext("2d");
-    const core = $("introCore"), sq = core.querySelector(".im-sq"), ring = core.querySelector(".im-ring");
-    const word = $("introWord"), pct = $("introPct"), bar = $("introBar");
-    const logs = Array.from(($("introLog") || { children: [] }).children);
-    const hud = el.querySelector(".intro-hud"), frame = el.querySelector(".intro-frame"), skip = $("introSkip");
-    const hero = $("hero");
-
-    // tiempos en ms
-    const T = corta
-      ? { dibujo: [0, 0], cierre: [0, 0], zoom: 120, zoomDur: 1000 }
-      : { dibujo: [180, 1350], cierre: [1350, 1800], zoom: 1800, zoomDur: 1250 };
-    const FIN = T.zoom + T.zoomDur;
-
-    let W = 0, H = 0, d = 1, S = 180;
-    const stars = [];
-    function medir() {
-      d = dprMax(); W = window.innerWidth; H = window.innerHeight;
-      cv.width = Math.round(W * d); cv.height = Math.round(H * d); ctx.setTransform(d, 0, 0, d, 0, 0);
-      S = core.offsetWidth || 180;
+  function escuadras(half, L, alfa) {
+    ctx.save();
+    ctx.shadowColor = "rgba(" + CIAN + ",.9)"; ctx.shadowBlur = 12;
+    ctx.strokeStyle = "rgba(255,255,255," + alfa.toFixed(3) + ")";
+    ctx.lineWidth = 1.4;
+    for (const [sx, sy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+      const x = cxG + sx * half, y = cyG + sy * half;
+      ctx.beginPath(); ctx.moveTo(x, y + sy * -L); ctx.lineTo(x, y); ctx.lineTo(x + sx * -L, y); ctx.stroke();
     }
-    medir();
-    const N = coarse ? 420 : 820;
-    for (let i = 0; i < N; i++) stars.push({ x: (Math.random() * 2 - 1) * 1.4, y: (Math.random() * 2 - 1) * 1.4, z: Math.random() * 0.98 + 0.02, pz: 0 });
-    window.addEventListener("resize", medir);
+    ctx.restore();
+  }
 
-    let t0 = performance.now(), ultimo = t0, saltado = false, acabado = false, ondaHecha = false;
-    const ondas = [];
-    // kMax: el hueco del anillo (radio interior 24.15 de 100) tiene que
-    // pasar de la esquina de la pantalla
-    const kMax = () => (Math.hypot(W, H) / 2) / (S * 0.2415) * 1.12;
+  /* ---------- fase de montaje (la de la portada) ---------- */
+  function pintar(t) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = AZUL;
+    ctx.fillRect(0, 0, W, H);
 
-    function cielo(t, vel, alfa) {
-      const cx = W / 2, cy = H / 2, f = Math.min(W, H) * 0.62;
-      ctx.clearRect(0, 0, W, H);
-      const rayas = vel > 0.004;
-      ctx.lineCap = "round";
-      for (const s of stars) {
-        s.pz = s.z;
-        s.z -= vel;
-        if (s.z <= 0.02) { s.x = (Math.random() * 2 - 1) * 1.4; s.y = (Math.random() * 2 - 1) * 1.4; s.z = 1; s.pz = 1; continue; }
-        const sx = cx + (s.x / s.z) * f, sy = cy + (s.y / s.z) * f;
-        if (sx < -50 || sx > W + 50 || sy < -50 || sy > H + 50) continue;
-        const b = clamp((1 - s.z) * 1.35, 0, 1) * alfa;
-        if (rayas) {
-          const px = cx + (s.x / s.pz) * f, py = cy + (s.y / s.pz) * f;
-          ctx.strokeStyle = "rgba(200,225,255," + b.toFixed(3) + ")";
-          ctx.lineWidth = Math.max(0.6, (1 - s.z) * 2.4);
-          ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(sx, sy); ctx.stroke();
+    const pS = cl(t / T_SWEEP);
+    const pR = cl((t - T0_RING) / T_RING);
+    const pL = cl((t - T0_LAP) / T_LAP);
+    const pN = cl((t - T0_SNAP) / T_SNAP);
+    const pK = cl((t - T0_LOCK) / T_LOCK);
+    const pH = cl((t - T0_HOLD) / T_HOLD);
+
+    const sy = scanY(t);
+    const ALC = CELL * 2.4;
+    const huida = sw(cl((pN - 0.05) / 0.55));
+    if (huida < 0.995) {
+      for (let k = 0; k < sweep.length; k++) {
+        const q = sweep[k];
+        const kk = (pS - q.diag * 0.82 + q.sem * 0.06) / 0.16;
+        const base = kk > 0 ? Math.max(0, (1 - Math.abs(kk - 1)) * 0.2) : 0;
+        const db = Math.abs(q.cy + CELL / 2 - sy);
+        const luz = db < ALC ? (1 - db / ALC) * 0.3 : 0;
+        const a = (base + luz) * (1 - huida);
+        if (a < 0.012) continue;
+        const emp = huida * huida * 90 * (0.5 + q.sem);
+        const ux = (q.cx - cxG) / (q.rad || 1), uy = (q.cy - cyG) / (q.rad || 1);
+        const px = q.x + ux * emp, py = q.y + uy * emp;
+        if (q.sem > 0.935) {
+          ctx.font = MONO; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+          ctx.fillStyle = "rgba(" + CIAN + "," + Math.min(1, a * 3).toFixed(3) + ")";
+          ctx.fillText(((q.sem * 65535) | 0).toString(16).toUpperCase().padStart(4, "0"), px + CELL / 2, py + CELL / 2);
         } else {
-          const r = Math.max(0.5, (1 - s.z) * 2.1);
-          ctx.fillStyle = "rgba(225,235,255," + b.toFixed(3) + ")";
-          ctx.fillRect(sx - r / 2, sy - r / 2, r, r);
+          ctx.fillStyle = "rgba(255,255,255," + a.toFixed(3) + ")";
+          ctx.fillRect(px, py, CELL - 1, CELL - 1);
         }
       }
-      // ondas del cierre del anillo
-      for (let i = ondas.length - 1; i >= 0; i--) {
-        const o = ondas[i], p = (t - o.t) / 1100;
-        if (p < 0) continue;
-        if (p >= 1) { ondas.splice(i, 1); continue; }
-        const r = S * 0.272 * (1 + E.outCubic(p) * (2.4 + i * 0.6));
-        ctx.strokeStyle = "rgba(52,231,255," + ((1 - p) * 0.55).toFixed(3) + ")";
+    }
+
+    // descargas mientras el pulso da la vuelta
+    if (pL > 0.05 && pL < 0.95) {
+      for (let n = 0; n < 2; n++) {
+        const a1 = (pL + n * 0.5) * Math.PI * 2;
+        const a2 = a1 + Math.PI * (0.7 + Math.sin(pL * 9 + n) * 0.25);
+        const x1 = cxG + Math.cos(a1) * R, y1 = cyG + Math.sin(a1) * R;
+        const x2 = cxG + Math.cos(a2) * R, y2 = cyG + Math.sin(a2) * R;
+        ctx.save();
+        ctx.shadowColor = "rgba(" + CIAN + ",1)"; ctx.shadowBlur = 16;
+        ctx.strokeStyle = "rgba(" + CIAN + "," + (0.25 + 0.5 * Math.random()).toFixed(2) + ")";
         ctx.lineWidth = 1.2;
-        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x1, y1);
+        for (let i = 1; i < 7; i++) {
+          const u = i / 7, mx = x1 + (x2 - x1) * u, my = y1 + (y2 - y1) * u;
+          const d = (Math.random() - 0.5) * R * 0.3 * Math.sin(u * Math.PI);
+          ctx.lineTo(mx + d, my - d * 0.6);
+        }
+        ctx.lineTo(x2, y2); ctx.stroke(); ctx.restore();
       }
     }
 
-    // durante el zoom el logo se pinta en el lienzo: un SVG escalado 30 veces
-    // con transform se ve borroso; dibujado a su tamaño real queda nitido
-    function logo(k) {
-      const cx = W / 2, cy = H / 2, lado = S * k, rr = lado * 0.09;
-      ctx.fillStyle = "#1569ff";
-      ctx.beginPath();
-      if (ctx.roundRect) ctx.roundRect(cx - lado / 2, cy - lado / 2, lado, lado, rr);
-      else ctx.rect(cx - lado / 2, cy - lado / 2, lado, lado);
-      ctx.fill();
-      ctx.strokeStyle = "#ffffff"; ctx.lineWidth = S * 0.061 * k;
-      ctx.shadowColor = "rgba(190,220,255,.55)"; ctx.shadowBlur = 18;
-      ctx.beginPath(); ctx.arc(cx, cy, S * 0.272 * k, 0, Math.PI * 2); ctx.stroke();
-      ctx.shadowBlur = 0;
-    }
-
-    function mascara(r) {
-      const v = r <= 0 ? "none" :
-        "radial-gradient(circle at 50% 50%, transparent " + r.toFixed(1) + "px, #000 " + (r + 1.5).toFixed(1) + "px)";
-      el.style.webkitMaskImage = v; el.style.maskImage = v;
-    }
-
-    function cuadro(ahora) {
-      if (acabado) return;
-      let t = ahora - t0;
-      if (saltado && t < T.zoom) { t0 -= T.zoom - t; t = T.zoom; }
-      const dt = Math.min(50, ahora - ultimo); ultimo = ahora;
-
-      // A. el anillo se dibuja
-      const pA = corta ? 1 : E.inOutSine(clamp((t - T.dibujo[0]) / (T.dibujo[1] - T.dibujo[0]), 0, 1));
-      ring.style.strokeDashoffset = (1 - pA).toFixed(4);
-      if (!corta) {
-        const n = Math.round(pA * 100);
-        pct.textContent = String(n).padStart(3, "0");
-        bar.style.transform = "scaleX(" + pA.toFixed(4) + ")";
-        logs.forEach((l, i) => l.classList.toggle("on", t > T.dibujo[0] + 260 + i * 280));
-      }
-      // B. cierre: aparece el cuadrado azul detras del anillo y el nombre
-      const pB = corta ? 1 : clamp((t - T.cierre[0]) / (T.cierre[1] - T.cierre[0]), 0, 1);
-      if (!ondaHecha && pB > 0) { ondaHecha = true; ondas.push({ t: ahora }); ondas.push({ t: ahora + 140 }); }
-      const eB = E.outExpo(pB);
-      sq.style.opacity = eB.toFixed(3);
-      sq.style.transform = "scale(" + (0.4 + 0.6 * eB).toFixed(4) + ")";
-      if (!corta) {
-        word.style.opacity = eB.toFixed(3);
-        word.style.letterSpacing = (0.9 - 0.48 * eB).toFixed(3) + "em";
-      }
-      // C. zoom: la camara entra por el anillo
-      const pC = clamp((t - T.zoom) / T.zoomDur, 0, 1);
-      const eC = E.inOutCubic(pC);
-      const k = Math.pow(kMax(), eC);           // escala exponencial: velocidad de camara constante
-      core.style.visibility = pC > 0 ? "hidden" : "";
-      mascara(pC > 0 ? S * 0.2415 * k - 0.5 : 0);
-      if (pC > 0.12 && !root.classList.contains("ready")) root.classList.add("ready");   // el 14.9% entra mientras se acerca
-      const fuera = clamp(1 - pC * 3.2, 0, 1);
-      if (hud) hud.style.opacity = fuera; if (frame) frame.style.opacity = fuera;
-      if (skip) skip.style.opacity = fuera * 1; if (!corta) word.style.opacity = (eB * fuera).toFixed(3);
-      if (hero) {
-        const z = 0.62 + 0.38 * E.outCubic(pC);
-        hero.style.transform = pC > 0 ? "scale(" + z.toFixed(4) + ")" : "scale(.62)";
-        hero.style.opacity = (0.25 + 0.75 * pC).toFixed(3);
-      }
-      const vel = (0.0011 + 0.075 * Math.pow(pC, 1.6)) * (dt / 16.7);
-      cielo(ahora, vel, 1 - Math.pow(pC, 4));
-      if (pC > 0) logo(k);
-
-      if (t >= FIN) return terminar();
-      requestAnimationFrame(cuadro);
-    }
-
-    function terminar() {
-      if (acabado) return;
-      acabado = true;
-      el.remove();
-      if (hero) { hero.style.transform = ""; hero.style.opacity = ""; }
-      root.classList.remove("intro-on", "intro-run", "intro-larga", "intro-corta");
-      root.classList.add("ready");
-      window.removeEventListener("keydown", tecla);
-      window.dispatchEvent(new Event("sectora:relayout"));
-      if (location.hash && location.hash.length > 1) {
-        const destino = document.querySelector(location.hash);
-        if (destino) setTimeout(() => destino.scrollIntoView({ behavior: "smooth" }), 350);
+    // ondas del enganche
+    if (pK > 0 && pK < 1) {
+      for (let n = 0; n < 2; n++) {
+        const o = cl((pK - n * 0.16) / 0.62);
+        if (o <= 0 || o >= 1) continue;
+        ctx.save();
+        ctx.shadowColor = "rgba(" + CIAN + ",.9)"; ctx.shadowBlur = 18 * (1 - o);
+        ctx.strokeStyle = n === 0 ? "rgba(255,255,255," + ((1 - o) * 0.55).toFixed(3) + ")"
+                                  : "rgba(" + VIOL + "," + ((1 - o) * 0.4).toFixed(3) + ")";
+        ctx.lineWidth = 2 * (1 - o) + 0.4;
+        ctx.beginPath(); ctx.arc(cxG, cyG, R * (1 + o * 1.7), 0, Math.PI * 2); ctx.stroke();
+        ctx.restore();
       }
     }
-    terminarIntro = terminar;
+    if (pK > 0) {
+      const e = out(pK);
+      escuadras(R * (2.5 - 1.08 * e), R * 0.3, Math.min(1, pK * 2.4) * 0.95);
+    }
+    // inversion de un instante en el enganche
+    if (pK > 0.04 && pK < 0.13) {
+      ctx.save(); ctx.globalCompositeOperation = "difference"; ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H); ctx.restore();
+    }
+    if (pH > 0 || pK >= 1) {
+      const gir = (t / 1100) % 1, rr = R * 1.17;
+      ctx.save();
+      ctx.shadowColor = "rgba(" + CIAN + ",1)"; ctx.shadowBlur = 14;
+      ctx.strokeStyle = "rgba(" + CIAN + ",.85)"; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.arc(cxG, cyG, rr, gir * Math.PI * 2, gir * Math.PI * 2 + 0.5); ctx.stroke();
+      ctx.restore();
+      const o = sw(cl(pH / 0.7));
+      if (o > 0.02) {
+        ctx.font = MONO; ctx.textBaseline = "middle";
+        ctx.strokeStyle = "rgba(255,255,255," + (o * 0.4).toFixed(3) + ")";
+        ctx.fillStyle = "rgba(255,255,255," + (o * 0.75).toFixed(3) + ")";
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(cxG + R * 1.34, cyG); ctx.lineTo(cxG + R * 1.62, cyG); ctx.stroke();
+        ctx.textAlign = "left"; ctx.fillText("APY 14.9%", cxG + R * 1.7, cyG);
+        ctx.beginPath(); ctx.moveTo(cxG - R * 1.34, cyG); ctx.lineTo(cxG - R * 1.62, cyG); ctx.stroke();
+        ctx.textAlign = "right"; ctx.fillText("EVERY 1S", cxG - R * 1.7, cyG);
+      }
+    }
+    // haz de escaneo
+    if (sy > -60 && sy < H + 60) {
+      const halo = CELL * 2.6;
+      const g = ctx.createLinearGradient(0, sy - halo, 0, sy + halo);
+      g.addColorStop(0, "rgba(" + CIAN + ",0)"); g.addColorStop(0.38, "rgba(" + CIAN + ",.20)");
+      g.addColorStop(0.5, "rgba(" + CIAN + ",.45)"); g.addColorStop(0.62, "rgba(" + CIAN + ",.20)");
+      g.addColorStop(1, "rgba(" + CIAN + ",0)");
+      ctx.fillStyle = g; ctx.fillRect(0, sy - halo, W, halo * 2);
+      ctx.save(); ctx.shadowColor = "rgba(" + CIAN + ",1)"; ctx.shadowBlur = 16;
+      ctx.fillStyle = "rgba(235,252,255,.95)"; ctx.fillRect(0, sy - 1, W, 2); ctx.restore();
+      ctx.fillStyle = "rgba(224,238,255,.9)"; ctx.fillRect(0, sy - 6, 2, 12); ctx.fillRect(W - 2, sy - 6, 2, 12);
+    }
+    const apar = sw(cl((pR - 0.06) / 0.62));
+    if (apar > 0.02) {
+      const g2 = ctx.createRadialGradient(cxG, cyG, R * 0.52, cxG, cyG, R * 1.58);
+      g2.addColorStop(0, "rgba(" + CIAN + ",0)");
+      g2.addColorStop(0.34, "rgba(" + CIAN + "," + (apar * 0.16).toFixed(3) + ")");
+      g2.addColorStop(0.47, "rgba(" + CIAN + "," + (apar * 0.4).toFixed(3) + ")");
+      g2.addColorStop(0.6, "rgba(" + CIAN + "," + (apar * 0.16).toFixed(3) + ")");
+      g2.addColorStop(1, "rgba(" + CIAN + ",0)");
+      ctx.fillStyle = g2; ctx.fillRect(cxG - R * 1.6, cyG - R * 1.6, R * 3.2, R * 3.2);
+    }
+    ring.style.opacity = apar.toFixed(3);
+    ring.style.transform = "scale(" + (1 + (1 - apar) * 0.02).toFixed(4) + ")";
+    if (word) {
+      const wv = sw(cl((pK - 0.2) / 0.8));
+      word.style.opacity = wv.toFixed(3);
+      word.style.letterSpacing = (0.9 - 0.48 * wv).toFixed(3) + "em";
+      word.style.transform = "translateX(-50%) translateY(" + ((1 - wv) * 8).toFixed(1) + "px)";
+    }
+  }
 
-    function saltar() { saltado = true; }
-    function tecla(e) { if (["Escape", "Enter", " "].includes(e.key)) saltar(); }
-    el.addEventListener("click", saltar);
-    window.addEventListener("keydown", tecla);
-    if (hero) { hero.style.transform = "scale(.62)"; hero.style.opacity = ".25"; }
+  /* ---------- salida: zoom a traves del aro ----------
+     El aro crece con escala exponencial (velocidad de camara constante)
+     hasta que su hueco pasa de las esquinas de la pantalla. El campo azul
+     lleva ese hueco recortado, asi que la portada se ve por el centro del
+     aro desde el primer instante y termina ocupandolo todo. */
+  function salir(k) {
+    ctx.clearRect(0, 0, W, H);
+    const e = io(k);
+    const rIn = R - SW / 2;
+    const zMax = (Math.hypot(W, H) / 2) / rIn * 1.18;
+    const z = Math.pow(zMax, e);
+    ctx.fillStyle = AZUL;
+    ctx.beginPath();
+    ctx.rect(0, 0, W, H);
+    ctx.arc(cxG, cyG, Math.max(0, rIn * z - 0.5), 0, Math.PI * 2, true);
+    ctx.fill("evenodd");
+    // el aro, con su resplandor
+    ctx.save();
+    ctx.shadowColor = "rgba(" + CIAN + ",.9)"; ctx.shadowBlur = 22;
+    ctx.strokeStyle = "#ffffff"; ctx.lineWidth = SW * z;
+    ctx.beginPath(); ctx.arc(cxG, cyG, R * z, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+    // las escuadras se abren con la camara
+    const fe = 1 - cl(k * 2.2);
+    if (fe > 0.01) escuadras(R * 1.42 * z, R * 0.3 * Math.min(z, 3), fe * 0.95);
+    // la portada se acerca desde el fondo mientras la camara entra
+    if (stage) {
+      stage.style.transform = "scale(" + (0.8 + 0.2 * out(k)).toFixed(4) + ")";
+      stage.style.opacity = (0.35 + 0.65 * cl(k * 1.4)).toFixed(3);
+    }
+  }
 
-    requestAnimationFrame(cuadro);
-    // por si la pestana estaba en segundo plano o algo se atasca
-    setTimeout(() => { if (!acabado && document.visibilityState === "visible") terminar(); }, FIN + 2500);
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible" && !acabado && performance.now() - t0 > FIN + 1000) terminar();
+  /* ---------- carga real ---------- */
+  let cargado = false;
+  const fuentes = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+  const pagina = document.readyState === "complete" ? Promise.resolve()
+    : new Promise((r) => window.addEventListener("load", r, { once: true }));
+  Promise.all([fuentes, pagina]).then(() => { cargado = true; });
+
+  medir();
+  window.addEventListener("resize", medir);
+
+  const t0 = performance.now();
+  let saliendo = false, tSal = 0, estado = 0, preparado = false;
+  function rotulo(txt) { if (est && est.lastChild) est.lastChild.nodeValue = txt; }
+  const logEls = [...document.querySelectorAll("#intro-log span")];
+  const logT = [T_SWEEP * 0.4, T0_RING + T_RING * 0.35, T0_SNAP + T_SNAP * 0.5, T0_LOCK + T_LOCK * 0.4];
+  let logN = 0;
+
+  function ciclo(now) {
+    const t = now - t0;
+    if (!saliendo) {
+      pintar(t);
+      const porTiempo = cl(t / T_TOTAL);
+      const p = cargado ? porTiempo : Math.min(porTiempo, 0.96);
+      if (pctE) pctE.textContent = String(Math.round(p * 100)).padStart(2, "0");
+      if (fill) fill.style.transform = "scaleX(" + p.toFixed(4) + ")";
+      while (logN < logEls.length && t > logT[logN]) { logEls[logN].classList.add("on"); logN++; }
+      if (estado === 0 && t > T0_LOCK) { estado = 1; rotulo("Signal locked"); }
+      if (estado === 1 && p >= 1) { estado = 2; rotulo("Ready"); if (est) est.classList.add("ok"); }
+      if ((t >= T_TOTAL && cargado) || t > 6600) { saliendo = true; tSal = now; }
+    } else {
+      if (!preparado) {
+        preparado = true;
+        el.style.background = "transparent";   // el azul lo pinta ya el lienzo, con su hueco
+        ring.style.opacity = 0;                // el aro lo dibuja ahora el lienzo
+        if (typeof window.SECT_IGNITE === "function") window.SECT_IGNITE();
+        listo();                               // la portada arranca su entrada ya
+      }
+      const k = cl((now - tSal) / T_EXIT);
+      salir(k);
+      if (word) word.style.opacity = (1 - cl(k * 2.6)).toFixed(3);
+      const fr = el.querySelector(".intro-frame"), hu = el.querySelector(".intro-hud");
+      if (fr) fr.style.opacity = (1 - cl(k * 2.0)).toFixed(3);
+      if (hu) hu.style.opacity = (1 - cl(k * 2.0)).toFixed(3);
+      if (k >= 1) { fin(); return; }
+    }
+    requestAnimationFrame(ciclo);
+  }
+
+  function fin() {
+    document.documentElement.classList.remove("intro-lock");
+    document.body.classList.remove("intro-lock");
+    if (stage) { stage.style.transform = ""; stage.style.opacity = ""; }
+    el.remove();
+    try { sessionStorage.setItem("sect_stk_intro", "1"); } catch (e) {}
+    listo();
+    if (location.hash && location.hash.length > 1) {
+      const d = document.querySelector(location.hash);
+      if (d) setTimeout(() => d.scrollIntoView({ behavior: "smooth" }), 250);
+    }
+  }
+
+  // por si la pestana estaba en segundo plano: rAF no corre y la capa se quedaria
+  setTimeout(() => { if (document.getElementById("intro") && document.visibilityState === "visible" && !saliendo) { saliendo = true; tSal = performance.now(); } }, 9000);
+  requestAnimationFrame(ciclo);
+})();
+
+/* ===== portada: titular, entrada, progreso y altura de la cabecera ===== */
+(function () {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let hecho = false;
+  function play() {
+    if (hecho) return;
+    hecho = true;
+    requestAnimationFrame(() => document.body.classList.add("played"));
+  }
+  const arranque = window.SECT_INTRO || Promise.resolve();
+  const fuentes = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+  Promise.all([fuentes, arranque]).then(play);
+  setTimeout(play, 7500);
+  if (reduce) play();
+
+  const bar = document.getElementById("progress");
+  let ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (bar) bar.style.transform = "scaleX(" + (max > 0 ? window.scrollY / max : 0) + ")";
+      ticking = false;
     });
-    return el;
-  })();
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
 
-  // =================================================================
-  // 2. cielo fijo
-  // =================================================================
-  (() => {
-    const cv = $("sky");
-    if (!cv) return;
-    const ctx = cv.getContext("2d");
-    let W = 0, H = 0, d = 1, stars = [];
-    let fugaz = null, sigFugaz = performance.now() + 3500;
-    function construir() {
-      d = dprMax(); W = window.innerWidth; H = window.innerHeight;
-      cv.width = Math.round(W * d); cv.height = Math.round(H * d); ctx.setTransform(d, 0, 0, d, 0, 0);
-      const n = Math.min(950, Math.round((W * H) / (coarse ? 4200 : 2300)));
-      stars = [];
-      for (let i = 0; i < n; i++) {
-        const z = Math.pow(Math.random(), 1.7);
-        stars.push({ x: Math.random() * W, y: Math.random() * H, z, r: 0.45 + z * 1.35, a: 0.2 + Math.random() * 0.6,
-          ph: Math.random() * 6.283, sp: 0.5 + Math.random() * 1.8, c: Math.random() < 0.13 });
+  const head = document.querySelector(".top");
+  function measureHead() { if (head) document.documentElement.style.setProperty("--head-h", head.offsetHeight + "px"); }
+  measureHead();
+  window.addEventListener("resize", measureHead);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureHead);
+})();
+
+/* ===== rejilla del hero: la de la portada, con sus celdas azules ===== */
+(function () {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canvas = document.getElementById("grid");
+  const stage = document.getElementById("stage");
+  if (!canvas || !stage) return;
+  const ctx = canvas.getContext("2d");
+  const CELL = 54;
+  let cols = 0, rows = 0, heat = null, tone = null, W = 0, H = 0, dpr = 1;
+  const lineLayer = document.createElement("canvas");
+  const lctx = lineLayer.getContext("2d");
+
+  function paintLines() {
+    lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    lctx.clearRect(0, 0, W, H);
+    lctx.lineWidth = 1;
+    lctx.strokeStyle = "rgba(255,255,255,.034)";
+    lctx.beginPath();
+    for (let c = 0; c <= cols; c++) { lctx.moveTo(c * CELL + 0.5, 0); lctx.lineTo(c * CELL + 0.5, H); }
+    for (let r = 0; r <= rows; r++) { lctx.moveTo(0, r * CELL + 0.5); lctx.lineTo(W, r * CELL + 0.5); }
+    lctx.stroke();
+  }
+  function rnd(c, r) { const x = Math.sin(c * 127.1 + r * 311.7) * 43758.5453; return x - Math.floor(x); }
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    if (w < 1 || h < 1) return;
+    W = w; H = h;
+    dpr = Math.min(window.devicePixelRatio || 1, W < 900 ? 1.5 : 2);
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cols = Math.ceil(W / CELL); rows = Math.ceil(H / CELL);
+    heat = new Float32Array(cols * rows);
+    tone = new Float32Array(cols * rows);
+    for (let i = 0; i < tone.length; i++) tone[i] = rnd(i % cols, (i / cols) | 0);
+    lineLayer.width = W * dpr; lineLayer.height = H * dpr;
+    paintLines();
+    seedWalkers();
+  }
+  const idx = (c, r) => r * cols + c;
+
+  let walkers = [];
+  function seedWalkers() {
+    const n = W < 700 ? 4 : 7;
+    walkers = [];
+    for (let i = 0; i < n; i++) walkers.push({ c: (Math.random() * cols) | 0, r: (Math.random() * rows) | 0, dc: Math.random() < 0.5 ? 1 : -1, dr: 0, next: 0 });
+  }
+  function stepWalkers(t, fast) {
+    for (const w of walkers) {
+      if (t < w.next) continue;
+      w.next = t + (fast ? 60 + Math.random() * 60 : 105 + Math.random() * 130);
+      if (Math.random() < 0.3) {
+        if (w.dc !== 0) { w.dr = Math.random() < 0.5 ? 1 : -1; w.dc = 0; }
+        else { w.dc = Math.random() < 0.5 ? 1 : -1; w.dr = 0; }
+      }
+      w.c += w.dc; w.r += w.dr;
+      if (w.c < 0) { w.c = 0; w.dc = 1; }
+      if (w.c >= cols) { w.c = cols - 1; w.dc = -1; }
+      if (w.r < 0) { w.r = 0; w.dr = 1; }
+      if (w.r >= rows) { w.r = rows - 1; w.dr = -1; }
+      heat[idx(w.c, w.r)] = fast ? 0.8 : 0.5;
+    }
+  }
+  let startT = 0;
+  const INTRO_MS = 1150;
+  function intro(t) {
+    const e = t - startT;
+    if (e > INTRO_MS) return;
+    const p = e / INTRO_MS;
+    const front = p * (cols + rows + 6);
+    for (let r = 0; r < rows; r++) {
+      const c0 = Math.round(front - r);
+      for (let k = -2; k <= 2; k++) {
+        const c = c0 + k;
+        if (c >= 0 && c < cols) {
+          const v = (1 - Math.abs(k) / 2.7) * (1 - p * 0.3), i = idx(c, r);
+          if (heat[i] < v) heat[i] = v;
+        }
       }
     }
-    construir();
-    let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(construir, 150); });
-
-    const cerca = [];
-    function cuadro(t) {
-      ptr.sx += (ptr.nx - ptr.sx) * 0.05; ptr.sy += (ptr.ny - ptr.sy) * 0.05;
-      ctx.clearRect(0, 0, W, H);
-      const sy = window.scrollY;
-      cerca.length = 0;
-      for (const s of stars) {
-        let y = (s.y - sy * (0.015 + s.z * 0.11) - ptr.sy * s.z * 16) % H; if (y < 0) y += H;
-        let x = (s.x - ptr.sx * s.z * 22) % W; if (x < 0) x += W;
-        const tw = reduced ? 1 : 0.62 + 0.38 * Math.sin(t * 0.001 * s.sp + s.ph);
-        const a = s.a * tw;
-        if (s.r > 1.35) {
-          const g = s.c ? GLOW_C : GLOW_W, sz = s.r * 7;
-          ctx.globalAlpha = a * 0.9; ctx.drawImage(g, x - sz / 2, y - sz / 2, sz, sz); ctx.globalAlpha = 1;
-        } else {
-          ctx.fillStyle = s.c ? "rgba(150,215,255," + a.toFixed(3) + ")" : "rgba(235,240,255," + a.toFixed(3) + ")";
-          ctx.fillRect(x, y, s.r, s.r);
-        }
-        if (ptr.on && !coarse && s.z > 0.25) {
-          const dx = x - ptr.x, dy = y - ptr.y, dd = dx * dx + dy * dy;
-          if (dd < 190 * 190 && cerca.length < 26) cerca.push({ x, y, dd });
+  }
+  let nextPop = 0;
+  function pops(t) {
+    if (t < nextPop) return;
+    nextPop = t + 80 + Math.random() * 90;
+    const n = 2 + ((Math.random() * 3) | 0);
+    for (let k = 0; k < n; k++) {
+      const i = idx((Math.random() * cols) | 0, (Math.random() * rows) | 0);
+      const v = 0.55 + Math.random() * 0.4;
+      if (heat[i] < v) heat[i] = v;
+    }
+  }
+  let sweepStart = -1;
+  const SWEEP_MS = 1900, SWEEP_GAP = 6500;
+  function sweep(t) {
+    const phase = t - sweepStart;
+    if (phase < 0) return;
+    if (phase > SWEEP_MS) { sweepStart = t + SWEEP_GAP; return; }
+    const front = (phase / SWEEP_MS) * (cols + rows);
+    for (let r = 0; r < rows; r++) {
+      const c0 = Math.round(front - r);
+      for (let k = -1; k <= 1; k++) {
+        const c = c0 + k;
+        if (c >= 0 && c < cols) {
+          const v = 0.34 * (1 - Math.abs(k) / 1.6), i = idx(c, r);
+          if (heat[i] < v) heat[i] = v;
         }
       }
-      // constelacion alrededor del puntero
-      if (cerca.length > 1) {
-        ctx.lineWidth = 0.7;
-        for (let i = 0; i < cerca.length; i++) {
-          const a = cerca[i];
-          for (let j = i + 1; j < cerca.length; j++) {
-            const b = cerca[j], dx = a.x - b.x, dy = a.y - b.y, dd = dx * dx + dy * dy;
-            if (dd > 115 * 115) continue;
-            const f = (1 - Math.sqrt(dd) / 115) * (1 - Math.sqrt(Math.max(a.dd, b.dd)) / 190);
-            ctx.strokeStyle = "rgba(120,170,255," + (f * 0.55).toFixed(3) + ")";
-            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    }
+  }
+
+  window.addEventListener("pointermove", (e) => {
+    if (!heat || reduce) return;
+    const rect = canvas.getBoundingClientRect();
+    const c = ((e.clientX - rect.left) / CELL) | 0, r = ((e.clientY - rect.top) / CELL) | 0;
+    if (c >= 0 && r >= 0 && c < cols && r < rows && e.clientY >= rect.top && e.clientY <= rect.bottom) heat[idx(c, r)] = 1;
+  }, { passive: true });
+
+  function draw() {
+    if (!heat) return;
+    ctx.clearRect(0, 0, W, H);
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const i = idx(c, r), v = heat[i];
+        if (v > 0.015) {
+          const g = tone[i];
+          const R = (12 + 62 * g) | 0, G = (74 + 96 * g) | 0, B = (198 + 57 * g) | 0;
+          ctx.fillStyle = "rgba(" + R + "," + G + "," + B + "," + (Math.min(v, 1) * 0.82).toFixed(3) + ")";
+          ctx.fillRect(c * CELL, r * CELL, CELL, CELL);
+        }
+      }
+    }
+    if (lineLayer.width > 1) ctx.drawImage(lineLayer, 0, 0, W, H);
+  }
+
+  // la intro llama a esto al abrirse: frente circular desde el centro
+  let ignicion = -1;
+  window.SECT_IGNITE = () => { ignicion = performance.now(); startT = 0; sweepStart = -1; };
+
+  let last = 0, tabVisible = true, heroVisible = true;
+  document.addEventListener("visibilitychange", () => { tabVisible = !document.hidden; });
+  new IntersectionObserver((es) => { heroVisible = es[0].isIntersecting; }, { rootMargin: "10% 0px" }).observe(stage);
+
+  function frame(t) {
+    requestAnimationFrame(frame);
+    if (!tabVisible || !heroVisible) { last = t; return; }
+    if (!lineLayer.width) { resize(); if (!lineLayer.width) { last = t; return; } }
+    const dt = Math.min(t - last, 50); last = t;
+    if (!startT) { startT = t; sweepStart = t + INTRO_MS + 4500; }
+    const intoIntro = t - startT < INTRO_MS;
+    intro(t);
+    if (ignicion > 0) {
+      const e = (performance.now() - ignicion) / 620;
+      if (e >= 1.2) ignicion = -1;
+      else {
+        const ccx = W / 2 / CELL, ccy = H / 2 / CELL;
+        const frente = e * (Math.hypot(cols, rows) * 0.62);
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const v = 1 - Math.abs(Math.hypot(c - ccx, r - ccy) - frente) / 1.6;
+            if (v > 0) { const i = idx(c, r), a = v * (1 - e * 0.55); if (heat[i] < a) heat[i] = a; }
           }
         }
       }
-      // estrella fugaz
-      if (!reduced) {
-        if (!fugaz && t > sigFugaz) {
-          const ang = Math.PI * (0.16 + Math.random() * 0.1);
-          fugaz = { x: Math.random() * W * 0.8 + W * 0.1, y: Math.random() * H * 0.35, vx: Math.cos(ang), vy: Math.sin(ang), t };
-        }
-        if (fugaz) {
-          const p = (t - fugaz.t) / 900;
-          if (p >= 1) { fugaz = null; sigFugaz = t + 6000 + Math.random() * 9000; }
-          else {
-            const dist = 520 * E.outCubic(p), largo = 140 * Math.sin(Math.PI * p);
-            const hx = fugaz.x + fugaz.vx * dist, hy = fugaz.y + fugaz.vy * dist;
-            const gr = ctx.createLinearGradient(hx, hy, hx - fugaz.vx * largo, hy - fugaz.vy * largo);
-            gr.addColorStop(0, "rgba(255,255,255," + (0.9 * Math.sin(Math.PI * p)).toFixed(3) + ")");
-            gr.addColorStop(1, "rgba(77,141,255,0)");
-            ctx.strokeStyle = gr; ctx.lineWidth = 1.3;
-            ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(hx - fugaz.vx * largo, hy - fugaz.vy * largo); ctx.stroke();
-          }
-        }
+    }
+    stepWalkers(t, intoIntro);
+    if (!intoIntro) pops(t);
+    sweep(t);
+    const decay = Math.pow(intoIntro ? 0.915 : 0.922, dt / 16.7);
+    for (let i = 0; i < heat.length; i++) heat[i] *= decay;
+    draw();
+  }
+  let rt;
+  window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(resize, 120); });
+  resize();
+  if (reduce) draw(); else requestAnimationFrame(frame);
+})();
+
+/* ===== cursor de coordenadas en todo el documento: se ancla a la celda
+   de 54px y cambia de tono sobre las hojas claras ===== */
+(function () {
+  const reticle = document.getElementById("reticle"), readout = document.getElementById("readout");
+  if (!reticle || !readout) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const rx = reticle.querySelector(".rx"), ry = reticle.querySelector(".ry");
+  const CELL = 54;
+  let claro = false, ultimaLum = 0;
+  function fondoClaro(x, y) {
+    if (performance.now() - ultimaLum < 140) return claro;
+    ultimaLum = performance.now();
+    let el = document.elementFromPoint(x, y), n = 0;
+    while (el && n < 8) {
+      const bg = getComputedStyle(el).backgroundColor;
+      const m = bg && bg.match(/rgba?\(([^)]+)\)/);
+      if (m) {
+        const v = m[1].split(",").map(parseFloat);
+        if ((v.length > 3 ? v[3] : 1) > 0.35) { claro = (0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]) / 255 > 0.5; return claro; }
       }
-      if (!reduced) requestAnimationFrame(cuadro);
+      // las hojas claras pintan su papel con un degradado, no con color
+      if (el.classList && el.classList.contains("paper")) { claro = true; return claro; }
+      el = el.parentElement; n++;
     }
-    requestAnimationFrame(cuadro);
-    if (reduced) {
-      let p = false;
-      const otra = () => { if (!p) { p = true; requestAnimationFrame((t) => { p = false; cuadro(t); }); } };
-      window.addEventListener("scroll", otra, { passive: true });
-      window.addEventListener("resize", otra);
+    return claro;
+  }
+  window.addEventListener("pointermove", (e) => {
+    const gx = Math.floor((e.clientX + window.scrollX) / CELL) * CELL - window.scrollX;
+    const gy = Math.floor((e.clientY + window.scrollY) / CELL) * CELL - window.scrollY;
+    const cc = Math.floor((e.clientX + window.scrollX) / CELL), cr = Math.floor((e.clientY + window.scrollY) / CELL);
+    readout.style.transform = "translate3d(" + gx + "px," + gy + "px,0)";
+    readout.textContent = String(Math.abs(cc) % 100).padStart(2, "0") + " · " + String(Math.abs(cr) % 100).padStart(2, "0");
+    rx.style.transform = "translate3d(0," + gy + "px,0)";
+    ry.style.transform = "translate3d(" + gx + "px,0,0)";
+    reticle.classList.add("on"); readout.classList.add("on");
+    const c2 = fondoClaro(e.clientX, e.clientY);
+    reticle.classList.toggle("on-light", c2); readout.classList.toggle("on-light", c2);
+  }, { passive: true });
+  document.documentElement.addEventListener("pointerleave", () => { reticle.classList.remove("on"); readout.classList.remove("on"); });
+})();
+
+/* ===== margenes de las hojas claras: la regla mide donde estas dentro de
+   la seccion, la luz sigue al puntero y el titular sube al entrar ===== */
+(function () {
+  const reglas = [...document.querySelectorAll(".gauge")].map((el) => ({ el, u: el.querySelector("u"), sec: el.parentElement }));
+  let pend = false;
+  function medir() {
+    pend = false;
+    const vh = innerHeight;
+    for (const r of reglas) {
+      const c = r.sec.getBoundingClientRect();
+      const dentro = c.top < vh * 0.5 && c.bottom > vh * 0.5;
+      r.el.classList.toggle("on", dentro);
+      if (!dentro) continue;
+      const p = Math.max(0, Math.min(1, (vh - c.top) / (vh + c.height)));
+      r.u.style.transform = "translateY(" + (p * c.height).toFixed(1) + "px)";
     }
-  })();
+  }
+  addEventListener("scroll", () => { if (!pend) { pend = true; requestAnimationFrame(medir); } }, { passive: true });
+  addEventListener("resize", () => { if (!pend) { pend = true; requestAnimationFrame(medir); } }, { passive: true });
+  medir();
 
-  // =================================================================
-  // 3. anillos de la portada
-  // =================================================================
-  (() => {
-    const back = $("orbitBack"), front = $("orbitFront"), hero = $("hero");
-    const num = document.querySelector(".hx-n");
-    if (!back || !front || !hero || !num) return;
-    const cb = back.getContext("2d"), cf = front.getContext("2d");
-    let W = 0, H = 0, d = 1, cx = 0, cy = 0, base = 200, visible = true, hp = 0;
-
-    // radios en multiplos de la mitad del ancho del numero
-    const ANILLOS = [
-      { k: 1.08, a: 0.55, w: 1.1, parts: [0.1, 2.3], sp: 0.075 },
-      { k: 1.2, a: 0.22, w: 1, parts: [], sp: 0 , dash: true },
-      { k: 1.34, a: 0.0, w: 1, parts: [], sp: 0, dial: true },
-      { k: 1.52, a: 0.32, w: 1, parts: [1.2, 3.4, 5.1], sp: -0.045 },
-      { k: 1.86, a: 0.14, w: 1, parts: [0.6, 4.0], sp: 0.028 },
-    ];
-    const INC = 0.2, ROT = -0.13;
-
-    function medir() {
-      d = dprMax(); W = hero.clientWidth; H = hero.clientHeight;
-      for (const c of [back, front]) { c.width = Math.round(W * d); c.height = Math.round(H * d); }
-      cb.setTransform(d, 0, 0, d, 0, 0); cf.setTransform(d, 0, 0, d, 0, 0);
-      // posicion del numero sin transformaciones (offset*, no getBoundingClientRect)
-      let x = 0, y = 0, n = num;
-      while (n && n !== hero) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
-      if (n !== hero) { x = (W - num.offsetWidth) / 2; y = H * 0.4; }
-      cx = x + num.offsetWidth / 2; cy = y + num.offsetHeight * 0.52;
-      base = Math.max(120, num.offsetWidth / 2);
-      if (W < 700) base = Math.min(base, W * 0.4);
-    }
-    medir();
-    let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(medir, 120); });
-    window.addEventListener("sectora:relayout", medir);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(medir);
-    new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { threshold: 0 }).observe(hero);
-    window.addEventListener("scroll", () => {
-      hp = clamp(window.scrollY / (hero.offsetHeight * 0.85), 0, 1);
-      hero.style.setProperty("--hp", hp.toFixed(4));
-    }, { passive: true });
-
-    // punto del anillo de radio a en el angulo th; z>0 = delante del numero
-    function punto(a, th, inc, rot) {
-      const ex = a * Math.cos(th), ey = a * inc * Math.sin(th);
-      return { x: cx + ex * Math.cos(rot) - ey * Math.sin(rot), y: cy + ex * Math.sin(rot) + ey * Math.cos(rot), z: Math.sin(th) };
-    }
-
-    function arco(a, inc, rot, alfa, ancho, color, dash) {
-      // 48 tramos: cada uno al lienzo de delante o al de detras segun su lado
-      const SEG = 96;
-      for (let i = 0; i < SEG; i++) {
-        const t1 = (i / SEG) * Math.PI * 2, t2 = ((i + 1) / SEG) * Math.PI * 2;
-        if (dash && i % 2) continue;
-        const p1 = punto(a, t1, inc, rot), p2 = punto(a, t2, inc, rot);
-        const z = Math.sin((t1 + t2) / 2);
-        const ctx = z > 0 ? cf : cb;
-        const f = z > 0 ? 0.55 + 0.45 * z : 0.5 + 0.25 * (1 + z);
-        ctx.strokeStyle = color + (alfa * f).toFixed(3) + ")";
-        ctx.lineWidth = ancho;
-        ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+  if (matchMedia("(hover:hover)").matches && !matchMedia("(prefers-reduced-motion:reduce)").matches) {
+    const luces = [...document.querySelectorAll(".lux")].map((el) => ({ el, host: el.parentElement, x: 0, y: 0, on: false }));
+    let p2 = false;
+    const pintar = () => {
+      p2 = false;
+      for (const l of luces) {
+        l.el.style.transform = "translate3d(" + l.x.toFixed(1) + "px," + l.y.toFixed(1) + "px,0)";
+        l.el.classList.toggle("on", l.on);
       }
-    }
-
-    function cuadro(t) {
-      if (!visible && !reduced) { requestAnimationFrame(cuadro); return; }
-      cb.clearRect(0, 0, W, H); cf.clearRect(0, 0, W, H);
-      const ahora = Date.now();
-      const inc = INC + (coarse ? 0 : ptr.sy * 0.08);
-      const rot = ROT + (coarse ? 0 : ptr.sx * 0.12) + hp * 0.35;
-      const esc = 1 + hp * 0.5;
-      const alfaG = 1 - hp * 0.85;
-      cb.globalAlpha = cf.globalAlpha = alfaG;
-
-      // nucleo: halo azul detras del numero
-      const gr = cb.createRadialGradient(cx, cy, 0, cx, cy, base * 1.25 * esc);
-      gr.addColorStop(0, "rgba(21,105,255,.22)"); gr.addColorStop(0.5, "rgba(21,105,255,.07)"); gr.addColorStop(1, "rgba(21,105,255,0)");
-      cb.save(); cb.translate(cx, cy); cb.scale(1, 0.62); cb.translate(-cx, -cy);
-      cb.fillStyle = gr; cb.fillRect(cx - base * 1.4 * esc, cy - base * 1.4 * esc, base * 2.8 * esc, base * 2.8 * esc); cb.restore();
-
-      for (const R of ANILLOS) {
-        const a = base * R.k * esc;
-        if (R.dial) {
-          // dial de 60 marcas: el segundo actual en cian y una estela detras
-          const seg = Math.floor(ahora / 1000) % 60, frac = (ahora % 1000) / 1000;
-          for (let i = 0; i < 60; i++) {
-            const th = (i / 60) * Math.PI * 2 - Math.PI / 2;
-            const atras = (seg - i + 60) % 60;
-            const p1 = punto(a, th, inc, rot), p2 = punto(a * (i % 5 ? 1.035 : 1.07), th, inc, rot);
-            const ctx = p1.z > 0 ? cf : cb;
-            let al = (i % 5 ? 0.16 : 0.34) * (p1.z > 0 ? 1 : 0.6), col = "rgba(255,255,255,";
-            if (atras === 0) { al = 1; col = "rgba(52,231,255,"; }
-            else if (atras < 12) { al = Math.max(al, 0.75 * (1 - atras / 12)); col = "rgba(77,141,255,"; }
-            ctx.strokeStyle = col + al.toFixed(3) + ")"; ctx.lineWidth = atras === 0 ? 2 : 1;
-            ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-            if (atras === 0) {
-              const g = GLOW_C, sz = 26;
-              ctx.globalAlpha = alfaG * (1 - frac * 0.5); ctx.drawImage(g, p2.x - sz / 2, p2.y - sz / 2, sz, sz); ctx.globalAlpha = alfaG;
-            }
-          }
-          // pulso de cada segundo, saliendo del numero
-          if (!reduced) {
-            const ap = base * (0.92 + 0.9 * E.outCubic(frac)) * esc;
-            arco(ap, inc, rot, (1 - frac) * 0.45, 1, "rgba(52,231,255,", false);
-          }
-          continue;
-        }
-        if (R.a > 0) arco(a, inc, rot, R.a, R.w, "rgba(160,190,255,", R.dash);
-        for (const ph of R.parts) {
-          const th = ph + (reduced ? 0 : (t / 1000) * R.sp * Math.PI * 2 / 6);
-          const p = punto(a, th, inc, rot);
-          const ctx = p.z > 0 ? cf : cb;
-          const sz = (p.z > 0 ? 18 : 12) * (0.8 + 0.35 * p.z);
-          ctx.globalAlpha = alfaG * (p.z > 0 ? 1 : 0.55);
-          ctx.drawImage(p.z > 0 ? GLOW_W : GLOW_B, p.x - sz / 2, p.y - sz / 2, sz, sz);
-          ctx.globalAlpha = alfaG;
-        }
-      }
-      if (!reduced) requestAnimationFrame(cuadro);
-    }
-    requestAnimationFrame(cuadro);
-    if (reduced) window.addEventListener("sectora:relayout", () => requestAnimationFrame(cuadro));
-  })();
-
-  // =================================================================
-  // 4. cinta, pasos en horizontal y pie
-  // =================================================================
-  (() => {
-    const track = $("mqTrack");
-    if (!track) return;
-    const set = track.querySelector(".mq-set");
-    // copias suficientes para cubrir dos anchos de pantalla
-    const rellenar = () => {
-      while (track.children.length > 1) track.lastChild.remove();
-      const w = set.offsetWidth || 1;
-      const n = Math.max(2, Math.ceil((window.innerWidth * 2) / w) + 1);
-      for (let i = 1; i < n; i++) track.appendChild(set.cloneNode(true));
     };
-    rellenar();
-    window.addEventListener("resize", rellenar);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(rellenar);
-    if (reduced) return;
-    let x = 0, dir = 1, vel = 0, ultimoY = window.scrollY, ultimoT = performance.now();
-    window.addEventListener("scroll", () => {
-      const y = window.scrollY, dy = y - ultimoY; ultimoY = y;
-      if (Math.abs(dy) > 0.5) dir = dy > 0 ? 1 : -1;
-      vel = Math.min(2400, vel + Math.abs(dy) * 6);
-    }, { passive: true });
-    function cuadro(t) {
-      const dt = Math.min(50, t - ultimoT) / 1000; ultimoT = t;
-      vel *= Math.pow(0.04, dt);
-      const w = set.offsetWidth || 1;
-      x -= dir * (55 + vel) * dt;
-      if (x <= -w) x += w; if (x > 0) x -= w;
-      track.style.transform = "translate3d(" + x.toFixed(2) + "px,0,0)";
-      requestAnimationFrame(cuadro);
-    }
-    requestAnimationFrame(cuadro);
-  })();
-
-  (() => {
-    const sec = $("how"), track = $("howTrack"), now = $("howNow"), bar = $("howBar");
-    if (!sec || !track) return;
-    let activo = false, dist = 0, topSec = 0;
-    function maquetar() {
-      if (window.innerWidth < 900 || reduced) {
-        activo = false; sec.style.height = ""; track.style.transform = ""; return;
+    addEventListener("pointermove", (e) => {
+      for (const l of luces) {
+        const c = l.host.getBoundingClientRect();
+        l.on = e.clientY >= c.top && e.clientY <= c.bottom;
+        if (l.on) { l.x = e.clientX - c.left; l.y = e.clientY - c.top; }
       }
-      activo = true;
-      track.style.transform = "";
-      dist = Math.max(0, track.scrollWidth - track.clientWidth);
-      sec.style.height = (window.innerHeight + dist) + "px";
-      topSec = sec.getBoundingClientRect().top + window.scrollY;
-      mover();
-    }
-    function mover() {
-      if (!activo) return;
-      const p = dist > 0 ? clamp((window.scrollY - topSec) / dist, 0, 1) : 0;
-      track.style.transform = "translate3d(" + (-p * dist).toFixed(1) + "px,0,0)";
-      if (bar) bar.style.transform = "scaleX(" + p.toFixed(4) + ")";
-      if (now) now.textContent = "0" + Math.min(3, 1 + Math.round(p * 2));
-    }
-    maquetar();
-    let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(maquetar, 150); });
-    window.addEventListener("sectora:relayout", maquetar);
-    window.addEventListener("load", maquetar);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(maquetar);
-    window.addEventListener("scroll", () => requestAnimationFrame(mover), { passive: true });
-  })();
-
-  (() => {
-    const pie = document.querySelector(".ft"), palabra = document.querySelector(".ft-word span");
-    if (!pie || !palabra || reduced) return;
-    window.addEventListener("scroll", () => {
-      const r = pie.getBoundingClientRect();
-      const p = clamp((window.innerHeight - r.top) / (r.height || 1), 0, 1);
-      palabra.style.setProperty("--fw", p.toFixed(3));
+      if (!p2) { p2 = true; requestAnimationFrame(pintar); }
     }, { passive: true });
-  })();
+  }
+
+  const secs = document.querySelectorAll(".paper");
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((es) => {
+      for (const e of es) if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); }
+    }, { threshold: 0.12 });
+    secs.forEach((s) => io.observe(s));
+  } else secs.forEach((s) => s.classList.add("on"));
 })();
