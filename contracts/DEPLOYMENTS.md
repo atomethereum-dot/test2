@@ -26,7 +26,7 @@ Leído en Remix justo después de desplegar:
 
 Pendiente:
 - [ ] Verificación en Etherscan (Sourcify enviada desde Remix).
-- [ ] `transferOwnership` a la Safe y `acceptOwnership` desde la Safe.
-- [ ] Cargar el fondo con `approve` + `fundRewards`, desde la Safe.
+- [ ] `transferOwnership` a la Safe y `acceptOwnership` desde la Safe (el dueño decidió seguir con su wallet por ahora).
+- [x] Fondo cargado: 1.490.000 #SECT desde la wallet de la fundación `0x09ae50654Fd92F9B62a1a7c97dfA2985e4Fd84FD`.
 - [ ] `setDepositsPaused(false)`.
-- [ ] Conectar `staking/staking-chain.js`.
+- [x] `staking/staking-chain.js` conectado al contrato.

@@ -25,7 +25,7 @@
     // MAINNET: aqui se mueve #SECT de verdad
     chainId: "0x1", // Ethereum mainnet
     token: "0x8C9984B06281f1CA9416e493c2E602AaB08513db", // #SECT
-    staking: "0x0000000000000000000000000000000000000000", // SectoraHolderRewards, pendiente de desplegar
+    staking: "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0", // SectoraHolderRewards, desplegado el 9 oct 2026
   };
 
   // nodos publicos de mainnet para leer la tasa y el programa sin wallet
