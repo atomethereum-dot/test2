@@ -868,20 +868,24 @@ abstract contract ReentrancyGuard {
 
 
 /// @title Sectora Holder Rewards
-/// @notice #SECT holders deposit #SECT and earn 14.9% APY, paid by the
-/// Sectora Foundation treasury.
+/// @notice #SECT holders deposit #SECT and earn rewards, 14.9% APY at
+/// launch, paid by the Sectora Foundation treasury.
 ///
 /// THE RULES
 ///
-///  1. 14.9% APY. Rewards accrue every second at 14.9% of the deposit per
-///     year, linear, no compounding. The rate is a constant: nobody can
-///     change it after deployment.
+///  1. 14.9% APY AT LAUNCH. Rewards accrue every second at the current
+///     rate (rateBps) on the deposit, linear, no compounding. The owner can
+///     change the rate with setRate(), up to MAX_RATE_BPS. A change only
+///     applies from that second on: everything accrued before it was booked
+///     at the old rate and is never recalculated.
 ///  2. NO LOCK. withdraw() always works, immediately, in full or in part,
 ///     whatever state the reward pool is in.
 ///  3. CLAIM ANY TIME. Accrued rewards are the depositor's to collect
 ///     whenever they want, also after withdrawing.
 ///  4. A HARD CAP. At most 10,000,000 #SECT can be deposited at once, so the
-///     treasury's cost is bounded in code: 1,490,000 #SECT a year at the cap.
+///     treasury's cost is bounded in code: cap x rate, 1,490,000 #SECT a
+///     year at the cap and the launch rate. Whatever the rate, payouts
+///     never exceed what was funded into the pool.
 ///
 /// ON MAINNET THIS HOLDS REAL VALUE.
 ///
@@ -906,8 +910,9 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
     uint256 public constant BPS = 10_000;
     uint256 public constant YEAR = 365 days;
 
-    /// @notice 1490 bps = 14.90% a year.
-    uint256 public constant RATE_BPS = 1_490;
+    /// @notice Ceiling for setRate(): 10000 bps = 100% a year. It bounds a
+    /// fat-fingered or compromised owner key; the pool bounds it anyway.
+    uint256 public constant MAX_RATE_BPS = 10_000;
 
     /// @notice Most #SECT the program can hold in deposits at once.
     uint256 public constant MAX_TOTAL_DEPOSITED = 10_000_000 ether;
@@ -927,6 +932,9 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
     /// @dev Accumulated reward per deposited token, scaled by 1e18.
     uint256 public accRewardPerToken;
     uint256 public lastUpdate;
+
+    /// @notice Current reward rate in basis points: 1490 = 14.90% a year.
+    uint256 public rateBps = 1_490;
 
     /// @dev Set once the pool cannot cover accrual any more.
     bool public accrualPaused;
@@ -953,6 +961,7 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
     event AccrualPaused(uint256 atTimestamp);
     event AccrualResumed(uint256 atTimestamp, uint256 poolRemaining);
     event DepositsPausedChanged(bool paused);
+    event RateChanged(uint256 oldRateBps, uint256 newRateBps);
 
     constructor(address _token) Ownable(msg.sender) {
         require(_token != address(0), "Rewards: token is zero");
@@ -967,7 +976,7 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
     function _pendingGlobal() internal view returns (uint256) {
         if (totalDeposited == 0 || accrualPaused) return 0;
         uint256 elapsed = block.timestamp - lastUpdate;
-        return (totalDeposited * RATE_BPS * elapsed) / (BPS * YEAR);
+        return (totalDeposited * rateBps * elapsed) / (BPS * YEAR);
     }
 
     /// @dev Moves the accumulator forward. If the pool cannot cover the
@@ -1117,6 +1126,18 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
         emit DepositsPausedChanged(paused);
     }
 
+    /// @notice Change the reward rate, in basis points (1490 = 14.90% APY,
+    /// 0 stops rewards). Accrual is settled at the old rate first, so the
+    /// new rate only counts from this second on: nobody gains or loses
+    /// anything already earned.
+    function setRate(uint256 newRateBps) external onlyOwner {
+        require(newRateBps <= MAX_RATE_BPS, "Rewards: rate above max");
+        _update();
+        uint256 old = rateBps;
+        rateBps = newRateBps;
+        emit RateChanged(old, newRateBps);
+    }
+
     // ---------------------------------------------------------------
     // views for the interface
     // ---------------------------------------------------------------
@@ -1164,7 +1185,7 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
         return (
             totalDeposited,
             rewardPool,
-            RATE_BPS,
+            rateBps,
             MAX_TOTAL_DEPOSITED,
             accrualPaused,
             depositsPaused,
@@ -1182,7 +1203,7 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
     /// deposit level. Divide by 86400 for days.
     function runwaySeconds() external view returns (uint256) {
         if (totalDeposited == 0) return type(uint256).max;
-        uint256 perSecond = (totalDeposited * RATE_BPS) / (BPS * YEAR);
+        uint256 perSecond = (totalDeposited * rateBps) / (BPS * YEAR);
         if (perSecond == 0) return type(uint256).max;
         return rewardPool / perSecond;
     }

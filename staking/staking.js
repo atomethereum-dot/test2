@@ -148,8 +148,10 @@
   function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
   function fmtNum(n) { return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
-  // 14,9% APY lineal: la constante RATE_BPS = 1490 de SectoraHolderRewards
-  const APY = 0.149;
+  // APY lineal. Arranca en 14,9% (rateBps = 1490 de SectoraHolderRewards);
+  // la fundacion puede cambiarla con setRate, asi que con el contrato en
+  // vivo staking-chain.js lee la tasa y avisa con "sectora:apy".
+  let APY = 0.149;
   const MONTHS = 12;
 
   // ---- rewards calculator ----
@@ -210,7 +212,19 @@
   paintRings();
   window.addEventListener("resize", () => { clearTimeout(window.__ringRt); window.__ringRt = setTimeout(paintRings, 150); });
 
-  // ---- 12-month chart: cumulative rewards at 14.9% APY, one bar a month ----
+  /* tasa leida del contrato: cada cifra de APY de la pagina (.apy-n), el
+     anillo, la calculadora y el grafico pasan a la tasa real */
+  window.addEventListener("sectora:apy", (e) => {
+    const bps = Number(e.detail);
+    if (!(bps >= 0)) return;
+    APY = bps / 10000;
+    const txt = (bps / 100).toFixed(2).replace(/\.?0+$/, "");
+    document.querySelectorAll(".apy-n").forEach((el) => { el.textContent = txt; });
+    paintRings();
+    recalc();
+  });
+
+  // ---- 12-month chart: cumulative rewards at the current APY, one bar a month ----
   function drawGrowthChart(principal) {
     const canvas = document.getElementById("growthChart");
     if (!canvas) return;

@@ -1,21 +1,23 @@
 # SectoraHolderRewards — despliegue en Ethereum Mainnet
 
-El programa de recompensas para holders de #SECT: **14,9 % APY**, pagado por
-la tesorería de Sectora Foundation.
+El programa de recompensas para holders de #SECT: **14,9 % APY al arrancar**,
+pagado por la tesorería de Sectora Foundation. El dueño puede cambiar la tasa
+cuando quiera con `setRate`.
 
-## Las reglas (fijas en el contrato)
+## Las reglas
 
 | | |
 |---|---|
-| Recompensa | **14,9 % APY**, se acumula cada segundo, sin interés compuesto |
+| Recompensa | **14,9 % APY** al arrancar, se acumula cada segundo, sin interés compuesto. **Ajustable** por el dueño (`setRate`, máximo 100 %) |
 | Cobro | **Cuando quieran** (`claim`) |
 | Retiro | **Cuando quieran, sin penalización** (`withdraw`). Lo ganado sigue cobrable después de retirar |
 | Tope | **10.000.000 #SECT** depositados como máximo |
 | Duración | Sin fecha de fin |
 | Fondo de recompensas | Lo carga la tesorería. **Sin bloqueo**: el dueño puede retirar en cualquier momento la parte que nadie ha ganado todavía |
 
-La tasa (14,9 %) y el tope (10M) son **constantes**: nadie puede cambiarlos
-después de desplegar.
+El tope (10M) es **constante**: nadie puede cambiarlo después de desplegar.
+La tasa sí se puede cambiar (ver *Cambiar la tasa* más abajo), y cada cambio
+cuenta solo desde ese segundo: lo ya ganado nunca se recalcula.
 
 Las funciones se llaman `deposit`, `withdraw` y `claim`; el contrato no usa
 la palabra "stake" en ningún sitio.
@@ -39,10 +41,11 @@ la palabra "stake" en ningún sitio.
 
 | Operación | Gas | Quién paga |
 |---|---|---|
-| Desplegar | **1.472.251** | tú, una vez |
+| Desplegar | **1.539.284** | tú, una vez |
 | `approve` del fondo | ~46.000 | tú |
 | `fundRewards` | ~98.000 | tú, en cada recarga |
 | `setDepositsPaused(false)` | ~25.000 | tú, una vez |
+| `setRate` | ~37.000 | tú, cada vez que cambies la tasa |
 | `deposit` | ~129.000–141.000 | el holder |
 | `claim` | ~70.000 | el holder |
 | `withdraw` | ~72.000–99.000 | el holder |
@@ -98,10 +101,10 @@ verificado, cualquiera puede leer el código: es lo que da confianza.
 ### Cuánto cargar
 
 ```
-recompensas al año = total depositado × 0,149
+recompensas al año = total depositado × tasa   (0,149 con el 14,9 %)
 ```
 
-| Si la gente deposita | Cuesta al año | Al mes |
+| Si la gente deposita (al 14,9 %) | Cuesta al año | Al mes |
 |---|---|---|
 | 1.000.000 #SECT | 149.000 #SECT | ~12.400 |
 | 5.000.000 #SECT | 745.000 #SECT | ~62.100 |
@@ -120,6 +123,30 @@ Eso son holders enfadados: recarga antes de que llegue a cero.
 Para cerrar la entrada de gente nueva en el futuro: `setDepositsPaused(true)`.
 Quien ya está sigue pudiendo retirar y cobrar.
 
+## Cambiar la tasa (cuando quieras)
+
+Etherscan → **SectoraHolderRewards** → *Write Contract* → conecta la wallet
+dueña → `setRate` → escribe la tasa en **puntos básicos** (1 % = 100):
+
+| APY | valor a escribir |
+|---|---|
+| 10 % | `1000` |
+| 14,9 % | `1490` |
+| 20 % | `2000` |
+| 25 % | `2500` |
+| 0 % (parar las recompensas) | `0` |
+
+Máximo `10000` (100 %). **Write** → confirma en MetaMask. En *Read Contract*,
+`rateBps()` devuelve la tasa actual, y la web la lee del contrato y la
+muestra sola.
+
+- El cambio cuenta **desde ese segundo**: todo lo ganado antes se queda
+  calculado con la tasa anterior.
+- Subir la tasa vacía el fondo más rápido. Revisa `runwaySeconds()` después
+  de cambiarla y recarga si hace falta.
+- Bajarla no quita nada a nadie, pero anúncialo antes: la gente deposita por
+  la tasa que ve.
+
 ## Paso 5 — Conectar la web
 
 Pásame la dirección del contrato y conecto la página. Con eso pasa sola de
@@ -132,7 +159,8 @@ Pásame la dirección del contrato y conecto la página. Con eso pasa sola de
 En *Read Contract*:
 
 - `token()` → `0x8C9984B06281f1CA9416e493c2E602AaB08513db`
-- `RATE_BPS()` → `1490`
+- `rateBps()` → `1490`
+- `MAX_RATE_BPS()` → `10000`
 - `MAX_TOTAL_DEPOSITED()` → `10000000000000000000000000`
 - `rewardPool()` → lo que cargaste
 - `depositsPaused()` → `false`
@@ -150,14 +178,16 @@ Luego una prueba real con poco desde otra wallet: `approve` de 10 #SECT,
   ninguna función del dueño toca depósitos ni recompensas ya ganadas.
 - `withdraw` funciona siempre, aunque el fondo esté vacío o los depósitos
   cerrados.
-- La tasa y el tope no se pueden cambiar.
+- El tope no se puede cambiar. La tasa sí, pero solo el dueño, con un
+  máximo del 100 %, y sin tocar lo ya ganado.
 - No se crean tokens: todo lo que se paga entró antes con `fundRewards`.
 - `nonReentrant` en toda función que mueve tokens, y la cantidad recibida se
   mide en vez de suponerse.
 
-Probado en cadena local: **35 pruebas, todas pasan**
+Probado en cadena local: **49 pruebas, todas pasan**
 (`node scripts/test-rewards.js`), incluido un año completo que paga
-exactamente el 14,9 %.
+exactamente el 14,9 % y cambios de tasa (14,9 % → 25 % → 0 % → 14,9 %) que
+no tocan lo ya ganado.
 
 ## Lo que depende de ti
 

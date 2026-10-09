@@ -472,3 +472,8 @@ html.cadena-viva .solo-previa{display:none}
 [hidden]{display:none!important}
 .hero-in.solo-pronto{grid-template-columns:minmax(0,1fr);max-width:1280px}
 .hero-in.solo-pronto .hero-txt{max-width:720px}
+
+/* cifra de APY que staking-chain.js actualiza con la tasa del contrato: es
+   solo texto, hereda todo del sitio donde esta (el anillo, la tabla...) */
+.apy-n{display:inline !important;font:inherit !important;letter-spacing:inherit !important;
+  text-transform:inherit !important;color:inherit !important;gap:0 !important}

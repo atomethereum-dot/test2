@@ -31,7 +31,7 @@
 <link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="staking.css?v=20261002b">
+<link rel="stylesheet" href="staking.css?v=20261009">
 </head>
 <body>
 <div class="vig" aria-hidden="true"></div>
@@ -49,7 +49,7 @@
   <div class="top-r">
     <span class="pill live solo-vivo"><i class="dot"></i>Live</span>
     <span class="pill solo-previa">Coming soon</span>
-    <span class="pill">14.9% APY</span>
+    <span class="pill"><span class="apy-n">14.9</span>% APY</span>
     <span class="pill">No lock-up</span>
     <span class="pill">Capped at 10M #SECT</span>
     <a class="btn ghost" href="../index.html">← Main site</a>
@@ -65,9 +65,9 @@
     <div class="hero-in">
       <div class="hero-txt">
         <p class="eyebrow"><i></i>#SECT Holder Rewards</p>
-        <h1>14.9% APY for holders.</h1>
+        <h1><span class="apy-n">14.9</span>% APY for holders.</h1>
         <span class="hero-rule" aria-hidden="true"></span>
-        <p class="lead">Deposit #SECT and earn 14.9% a year, accrued every second and paid by the
+        <p class="lead">Deposit #SECT and earn <span class="apy-n">14.9</span>% a year, accrued every second and paid by the
           Sectora Foundation treasury. No lock-up: withdraw whenever you want and claim your
           rewards at any time. The program holds at most 10,000,000 #SECT.</p>
         <p class="lead solo-previa">The contract is written and tested but not deployed yet, so
@@ -88,7 +88,7 @@
         <div class="gauge-row">
           <div class="gauge-wrap">
             <canvas id="apyRing" width="152" height="152" aria-hidden="true"></canvas>
-            <div class="gauge-mid"><b>14.9<small>%</small></b><span>APY</span></div>
+            <div class="gauge-mid"><b><span class="apy-n">14.9</span><small>%</small></b><span>APY</span></div>
           </div>
           <div class="gauge-side">
             <div>
@@ -124,7 +124,7 @@
     <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
     <div class="head reveal">
       <h2>Estimate your rewards</h2>
-      <span>14.9% a year on what you deposit, accrued every second</span>
+      <span><span class="apy-n">14.9</span>% a year on what you deposit, accrued every second</span>
     </div>
 
     <div class="stake-grid">
@@ -157,8 +157,8 @@
         <button type="button" class="btn primary wide" id="connectBtn" disabled>Connect wallet</button>
         <p class="stake-note solo-previa"><b>Not live yet.</b> The contract has not been deployed
           to Ethereum mainnet, so nothing can be deposited from this page today. The figures
-          above are a calculator at 14.9% APY.</p>
-        <p class="stake-note solo-vivo">No lock-up · claim any time · rewards accrue every second at 14.9% APY</p>
+          above are a calculator at <span class="apy-n">14.9</span>% APY.</p>
+        <p class="stake-note solo-vivo">No lock-up · claim any time · rewards accrue every second at <span class="apy-n">14.9</span>% APY</p>
         </div>
       </div>
 
@@ -171,7 +171,7 @@
         <div class="panel-in">
         <h3>Terms</h3>
         <ul class="terms-list">
-          <li><span>Rewards</span><b>14.9% APY</b></li>
+          <li><span>Rewards</span><b><span class="apy-n">14.9</span>% APY</b></li>
           <li><span>Accrual</span><b>Every second, no compounding</b></li>
           <li><span>Claim</span><b>Any time</b></li>
           <li><span>Lock-up</span><b>None</b></li>
@@ -219,8 +219,8 @@
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">02</span>
         <span class="pqc-tag">Earn</span>
-        <h3>14.9% a year, every second</h3>
-        <p>Your rewards grow continuously at 14.9% APY on what you have deposited. Collect them whenever you like; there is no date to wait for.</p>
+        <h3><span class="apy-n">14.9</span>% a year, every second</h3>
+        <p>Your rewards grow continuously at <span class="apy-n">14.9</span>% APY on what you have deposited. Collect them whenever you like; there is no date to wait for.</p>
         </div>
       </div>
       <div class="pqc-card panel reveal" style="--d:0.12s">
@@ -267,9 +267,9 @@
         <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
         <span class="panel-num" aria-hidden="true">02</span>
-        <span class="pqc-tag">Fixed in code</span>
-        <h3>The rate cannot change</h3>
-        <p>14.9% APY and the 10,000,000 #SECT cap are constants in the contract. Nobody can edit them after deployment.</p>
+        <span class="pqc-tag">Written in code</span>
+        <h3>What you earn stays earned</h3>
+        <p>The 10,000,000 #SECT cap is a constant in the contract. The APY starts at 14.9% and the foundation can adjust it on-chain; a change only counts from that second on, so nothing already earned is ever recalculated.</p>
         </div>
       </div>
       <div class="pqc-card panel reveal" style="--d:0.12s">
@@ -328,10 +328,10 @@
 
 </main>
 
-<script src="staking.js?v=20261002b"></script>
+<script src="staking.js?v=20261009"></script>
 <!-- cableado on-chain. Mientras CONTRACTS siga con direcciones a cero el
      modulo se retira solo y la pagina queda exactamente como esta hoy. -->
 <script src="../ethers.min.js"></script>
-<script src="staking-chain.js?v=20261002b"></script>
+<script src="staking-chain.js?v=20261009"></script>
 </body>
 </html>

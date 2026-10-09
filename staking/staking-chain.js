@@ -28,6 +28,9 @@
     staking: "0x0000000000000000000000000000000000000000", // SectoraHolderRewards, pendiente de desplegar
   };
 
+  // nodos publicos de mainnet para leer la tasa y el programa sin wallet
+  const RPCS = ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org", "https://1rpc.io/eth"];
+
   const TOKEN_ABI = [
     "function balanceOf(address) view returns (uint256)",
     "function allowance(address owner, address spender) view returns (uint256)",
@@ -35,8 +38,9 @@
     "function decimals() view returns (uint8)",
   ];
 
-  // SectoraHolderRewards: 14,9% APY fijo, sin bloqueo, cobro libre, tope
-  // de 10M #SECT. Ver contracts/DEPLOY_HOLDER_REWARDS.md
+  // SectoraHolderRewards: 14,9% APY al arrancar (ajustable por el dueño con
+  // setRate), sin bloqueo, cobro libre, tope de 10M #SECT.
+  // Ver contracts/DEPLOY_HOLDER_REWARDS.md
   const STAKING_ABI = [
     "function deposit(uint256 amount)",
     "function withdraw(uint256 amount)",
@@ -133,9 +137,15 @@
 
   let decimales = 18;   // provisional hasta leerlo del token
 
-  async function pintarPool() {
+  let ultimaTasa = null;
+  async function pintarPool(c) {
     try {
-      const pv = await staking.poolView();
+      const pv = await (c || staking).poolView();
+      // la tasa es la del contrato, no la escrita en la pagina
+      if (pv.rate !== ultimaTasa) {
+        ultimaTasa = pv.rate;
+        window.dispatchEvent(new CustomEvent("sectora:apy", { detail: Number(pv.rate) }));
+      }
       if (elStaked) elStaked.textContent = fmt(pv.deposited, 0) + " #SECT";
       if (elStakers) elStakers.textContent = pv.depositors.toString();
 
@@ -344,6 +354,25 @@
     }
   }
 
+  /* Sin wallet tambien se lee el contrato: la tasa puede haber cambiado
+     (setRate) y la pagina no debe seguir mostrando la de su texto. */
+  async function lecturaPublica() {
+    for (const url of RPCS) {
+      try {
+        const p = new ethers.JsonRpcProvider(url, Number(CONTRACTS.chainId), { staticNetwork: true });
+        const c = new ethers.Contract(CONTRACTS.staking, STAKING_ABI, p);
+        await Promise.race([
+          c.poolView(),
+          new Promise((_, no) => setTimeout(() => no(new Error("timeout")), 6000)),
+        ]);
+        if (!staking) await pintarPool(c);   // con wallet conectada, manda la wallet
+        return;
+      } catch (e) {
+        console.warn("[sectora] lectura publica fallo en", url, e && e.message);
+      }
+    }
+  }
+
   function arrancar() {
     // staking.js tambien escucha este boton para su vista previa: se
     // sustituye por un clon limpio para que no queden dos manejadores
@@ -381,6 +410,8 @@
         if (direccion && eip1193) conectar(eip1193, direccion);
       });
     }
+
+    lecturaPublica();
   }
 
   if (document.readyState === "loading") {

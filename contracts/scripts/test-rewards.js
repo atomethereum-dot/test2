@@ -4,7 +4,7 @@
  *   node scripts/compile.js
  *   node scripts/test-rewards.js
  *
- * El programa: 14,9% APY fijo, sin bloqueo, cobro cuando quieran, tope de
+ * El programa: 14,9% APY al arrancar (el dueño puede cambiarla con setRate), sin bloqueo, cobro cuando quieran, tope de
  * 10M #SECT depositados, fondo pagado por la tesorería y sin bloqueo para
  * el dueño (puede retirar lo que nadie ha ganado todavía).
  *
@@ -69,7 +69,7 @@ async function main() {
   console.log("\n=== 0. parametros ===");
   console.log(`         gas del despliegue: ${recDep.gasUsed}`);
   const pv = await r.poolView();
-  ok(pv.rate === 1490n, "tasa fija 1490 bps = 14,9% APY");
+  ok(pv.rate === 1490n, "tasa inicial 1490 bps = 14,9% APY");
   ok(pv.cap === E("10000000"), "tope 10.000.000 #SECT");
   ok(pv.depositsClosed === true, "los depositos nacen cerrados");
   for (const q of [alice, bob]) {
@@ -180,6 +180,50 @@ async function main() {
   const fondo = N(await r.rewardPool());
   const pendDueno = N(await r.earned(yo));
   ok(bal + 1e-9 >= dep + fondo + pendDueno, `el contrato cubre depositos + fondo + lo ganado (${bal.toFixed(4)} >= ${(dep + fondo + pendDueno).toFixed(4)})`);
+
+  // --- 10. cambio de tasa (contrato nuevo, sin arrastrar lo anterior) --
+  console.log("\n=== 10. cambio de tasa ===");
+  const r2 = await R.deploy(await tok.getAddress(), { gasLimit: 4000000 });
+  await r2.waitForDeployment();
+  const r2a = await r2.getAddress();
+  await (await tok.connect(dueno).approve(r2a, E("1000000"), GAS)).wait();
+  await (await r2.connect(dueno).fundRewards(E("1000000"), GAS)).wait();
+  await (await r2.connect(dueno).setDepositsPaused(false, GAS)).wait();
+  await (await tok.connect(alice).approve(r2a, E("100000000"), GAS)).wait();
+  ok((await r2.rateBps()) === 1490n, "arranca en 14,9%");
+  ok((await r2.MAX_RATE_BPS()) === 10000n, "techo del 100%");
+  await revierte(() => r2.connect(alice).setRate.staticCall(2500, GAS), "solo el dueño cambia la tasa");
+  await revierte(() => r2.connect(dueno).setRate.staticCall(10001, GAS), "no puede pasar del techo", "rate above max");
+
+  await (await r2.connect(alice).deposit(E("10000"), GAS)).wait();
+  await avanzar(100 * DIA);
+  const a14 = 10000 * 0.149 * 100 / 365;
+  cerca(N(await r2.earned(await dir(alice))), a14, 0.05, "100 dias a 14,9% sobre 10.000");
+  const rc = await (await r2.connect(dueno).setRate(2500, GAS)).wait();
+  const evt = rc.logs.map((l) => { try { return r2.interface.parseLog(l); } catch (e) { return null; } }).find((x) => x && x.name === "RateChanged");
+  ok(!!evt && evt.args[0] === 1490n && evt.args[1] === 2500n, "emite RateChanged(1490, 2500)");
+  ok((await r2.poolView()).rate === 2500n, "poolView ya da 25%");
+  cerca(N(await r2.earned(await dir(alice))), a14, 0.05, "lo ganado antes del cambio no se recalcula");
+  await avanzar(100 * DIA);
+  const a25 = a14 + 10000 * 0.25 * 100 / 365;
+  cerca(N(await r2.earned(await dir(alice))), a25, 0.05, "desde el cambio paga al 25%");
+
+  await (await r2.connect(dueno).setRate(0, GAS)).wait();
+  await avanzar(30 * DIA);
+  cerca(N(await r2.earned(await dir(alice))), a25, 0.05, "a 0% se para el devengo sin quitar lo ganado");
+  await (await r2.connect(dueno).setRate(1490, GAS)).wait();
+  await avanzar(30 * DIA);
+  cerca(N(await r2.earned(await dir(alice))), a25 + 10000 * 0.149 * 30 / 365, 0.05, "vuelve a 14,9% y retoma desde ahi");
+
+  antes = await saldo(alice);
+  const deber = N(await r2.earned(await dir(alice)));
+  await (await r2.connect(alice).claim(GAS)).wait();
+  await (await r2.connect(alice).withdraw(E("10000"), GAS)).wait();
+  cerca((await saldo(alice)) - antes, deber + 10000, 0.05, "cobra todo y recupera su deposito");
+  await (await r2.connect(dueno).setRate(10000, GAS)).wait();
+  ok((await r2.rateBps()) === 10000n, "el techo exacto se acepta");
+  const bal2 = N(await tok.balanceOf(r2a));
+  ok(bal2 + 1e-9 >= N(await r2.totalDeposited()) + N(await r2.rewardPool()), "el contrato nuevo tambien cuadra");
 
   console.log(`\n================  ${pasan} pasan, ${fallan} fallan  ================`);
   process.exit(fallan ? 1 : 0);
