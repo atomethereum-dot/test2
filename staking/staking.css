@@ -537,6 +537,100 @@ html:not(.js) .hw h2{transform:none}
   .ft-word{font-size:26vw;bottom:-3vw}
 }
 
+
+/* ============ ojo de buey: transicion entre secciones ligada al scroll ============
+   El mismo motor que el iris de la portada: la escena queda fija y un
+   circulo con el filo encendido se abre desde el centro hasta descubrir
+   el fondo de la seccion siguiente. "to-light" va de noche a papel y
+   "to-dark" de papel a noche. El titular va en modo diferencia, asi que
+   se invierte solo segun lo que tenga detras. */
+.port{position:relative;height:230vh;height:230dvh}
+.port-pin{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;display:grid;place-items:center;isolation:isolate}
+.port.to-light{background:#000}
+.port.to-light .port-pin{background:
+  radial-gradient(70% 55% at 50% 52%,rgba(21,105,255,.13),transparent 62%),
+  radial-gradient(120% 90% at 50% 100%,rgba(13,60,150,.18),transparent 60%),#000}
+.port.to-dark{background:#f2f2ef}
+.port.to-dark .port-pin{background:radial-gradient(75% 60% at 50% 46%,#ffffff,transparent 70%),#f2f2ef}
+.port-grid,.port-panel-grid{position:absolute;inset:0;z-index:0;pointer-events:none;background-size:54px 54px;
+  -webkit-mask-image:radial-gradient(68% 62% at 50% 52%,#000,transparent 82%);mask-image:radial-gradient(68% 62% at 50% 52%,#000,transparent 82%)}
+.to-light .port-grid,.to-dark .port-panel-grid{background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px)}
+.to-dark .port-grid,.to-light .port-panel-grid{background-image:linear-gradient(rgba(0,0,0,.055) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(0,0,0,.055) 1px,transparent 1px)}
+.port-rings{position:absolute;inset:-20%;z-index:0;pointer-events:none;
+  background:repeating-radial-gradient(circle at 50% 50%,transparent 0 92px,rgba(110,170,255,.17) 92px 94px);
+  -webkit-mask-image:radial-gradient(46% 46% at 50% 50%,#000,transparent 76%);mask-image:radial-gradient(46% 46% at 50% 50%,#000,transparent 76%);
+  animation:ringOut 5.2s linear infinite;will-change:transform,opacity}
+.port-rings.b{animation-delay:-2.6s}
+.to-dark .port-rings{background:repeating-radial-gradient(circle at 50% 50%,transparent 0 92px,rgba(21,105,255,.14) 92px 94px)}
+@keyframes ringOut{0%{transform:scale(.55);opacity:0}18%{opacity:.9}100%{transform:scale(1.5);opacity:0}}
+.port-cells{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+
+.aurora{position:absolute;left:0;right:0;bottom:0;height:52vh;z-index:1;pointer-events:none;overflow:hidden}
+.aurora span{position:absolute;bottom:-22vh;will-change:transform}
+.aurora span:nth-child(1){left:-8%;width:56vw;height:40vh;opacity:.85;
+  background:radial-gradient(closest-side,#1569ff 0%,#1569ff 30%,transparent 100%);animation:driftIzq 22s ease-in-out infinite}
+.aurora span:nth-child(2){right:-8%;width:56vw;height:40vh;opacity:.85;
+  background:radial-gradient(closest-side,#1569ff 0%,#1569ff 30%,transparent 100%);animation:driftDer 22s ease-in-out infinite}
+.aurora span:nth-child(3){left:50%;width:64vw;height:36vh;margin-left:-32vw;opacity:.6;
+  background:radial-gradient(closest-side,#3f86ff 0%,#3f86ff 30%,transparent 100%);animation:driftCentro 17s ease-in-out infinite}
+.to-dark .aurora span{opacity:.32}
+@keyframes driftIzq{0%,100%{transform:translate3d(-4%,0,0) scale(1)}50%{transform:translate3d(9%,-6%,0) scale(1.14)}}
+@keyframes driftDer{0%,100%{transform:translate3d(4%,0,0) scale(1)}50%{transform:translate3d(-9%,-6%,0) scale(1.14)}}
+@keyframes driftCentro{0%,100%{transform:translate3d(0,2%,0) scale(1)}50%{transform:translate3d(0,-5%,0) scale(1.12)}}
+.sweep{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(104deg,transparent 42%,rgba(255,255,255,.5) 50%,transparent 58%);
+  transform:translate3d(-130%,0,0);animation:sweep 11s cubic-bezier(.5,0,.2,1) infinite;will-change:transform}
+.port-pin > .sweep{opacity:.16}
+.port-panel .sweep{mix-blend-mode:overlay}
+@keyframes sweep{0%{transform:translate3d(-130%,0,0)}55%,100%{transform:translate3d(130%,0,0)}}
+
+/* lo que hay detras del circulo: el fondo de la seccion que viene */
+.port-panel{position:absolute;inset:0;z-index:2;clip-path:circle(0px at 50% 50%);will-change:clip-path}
+.to-light .port-panel{background:radial-gradient(75% 60% at 50% 46%,#ffffff,transparent 70%),#f2f2ef}
+.to-dark .port-panel{background:radial-gradient(70% 55% at 50% 52%,rgba(21,105,255,.16),transparent 62%),#000}
+.port-panel > .port-cells{z-index:1}
+
+/* el filo del circulo: el aro azul encendido de la portada */
+.port-edge{position:absolute;left:50%;top:50%;z-index:3;width:0;height:0;transform:translate(-50%,-50%);border-radius:50%;
+  pointer-events:none;opacity:0;will-change:width,height;
+  background:radial-gradient(circle at 50% 50%,
+    rgba(21,105,255,0) calc(50% - 40px),rgba(21,105,255,.30) calc(50% - 12px),rgba(150,195,255,.95) calc(50% - 2px),
+    rgba(190,225,255,1) 50%,rgba(90,160,255,.75) calc(50% + 2px),rgba(21,105,255,.35) calc(50% + 16px),rgba(21,105,255,0) calc(50% + 46px))}
+.port-edge::after{content:'';position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 0deg,rgba(255,255,255,0) 0deg,rgba(255,255,255,.9) 26deg,rgba(120,190,255,.5) 62deg,rgba(255,255,255,0) 120deg,rgba(255,255,255,0) 360deg);
+  -webkit-mask:radial-gradient(circle at 50% 50%,transparent calc(50% - 7px),#000 calc(50% - 4px),#000 calc(50% + 3px),transparent calc(50% + 7px));
+  mask:radial-gradient(circle at 50% 50%,transparent calc(50% - 7px),#000 calc(50% - 4px),#000 calc(50% + 3px),transparent calc(50% + 7px));
+  animation:rimSpin 4.6s linear infinite}
+@keyframes rimSpin{to{transform:rotate(360deg)}}
+/* el modo diferencia va en la capa que forma el contexto de apilado: puesto
+   en los hijos, se mezclarian solo con su caja transparente y no se invertirian */
+.port-marks{position:absolute;inset:38px;z-index:3;pointer-events:none;mix-blend-mode:difference}
+.port-marks i{position:absolute;width:11px;height:11px}
+.port-marks i::before,.port-marks i::after{content:'';position:absolute;background:#fff;opacity:.55}
+.port-marks i::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-.5px)}
+.port-marks i::after{top:50%;left:0;right:0;height:1px;transform:translateY(-.5px)}
+.port-marks i:nth-child(1){left:0;top:0}
+.port-marks i:nth-child(2){right:0;top:0}
+.port-marks i:nth-child(3){left:0;bottom:0}
+.port-marks i:nth-child(4){right:0;bottom:0}
+.port-txt{position:relative;z-index:4;text-align:center;padding:0 var(--pad);mix-blend-mode:difference;color:#fff}
+.port-kicker{opacity:.55;margin-bottom:26px}
+.port-title{font-size:clamp(34px,7vw,96px);font-weight:200;letter-spacing:-.032em;line-height:1}
+.port-title b{font-weight:400}
+.port-sub{opacity:.72;margin:clamp(22px,3.2vh,36px) auto 0;max-width:34ch;
+  font-size:clamp(15px,1.5vw,22px);font-weight:300;line-height:1.5;letter-spacing:-.01em;text-wrap:balance}
+.zoom-cue{position:absolute;left:50%;bottom:clamp(58px,9vh,86px);z-index:6;transform:translateX(-50%);display:flex;flex-direction:column;
+  align-items:center;gap:9px;pointer-events:none;color:#fff;mix-blend-mode:difference;font-family:'IBM Plex Mono',monospace;
+  font-size:9px;letter-spacing:.24em;text-transform:uppercase;transition:opacity .5s ease}
+.zoom-cue svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;
+  animation:zoomCue 1.9s ease-in-out infinite}
+.zoom-cue.off{opacity:0;transition:opacity .8s ease}
+@keyframes zoomCue{0%,100%{transform:translateY(-3px);opacity:.5}50%{transform:translateY(4px);opacity:1}}
+/* la seccion que sigue a un ojo de buey arranca ya con su color: sin hueco */
+.port + .paper,.port + .night{margin-top:0}
+
 /* ============ intro: la de la portada ============ */
 .intro{display:none;position:fixed;inset:0;z-index:200;overflow:hidden;place-items:center;background:#1569ff}
 html.js .intro{display:grid}
@@ -571,8 +665,12 @@ html.js .intro{display:grid}
 .intro-bar i{position:absolute;left:0;top:-1px;height:3px;width:100%;background:#34e7ff;box-shadow:0 0 10px rgba(52,231,255,.9);
   transform:scaleX(0);transform-origin:0 50%}
 .intro-stack{position:absolute;inset:0;z-index:5;display:grid;place-items:center}
-.intro-ring{width:54.5vmin;height:54.5vmin;max-width:none;display:block;transform-origin:50% 50%;opacity:0}
-.intro-ring circle{fill:none;stroke:#fff;stroke-width:9.87;stroke-linecap:round}
+.intro-apy{display:flex;align-items:flex-start;justify-content:center;color:#fff;opacity:0;font-variant-numeric:tabular-nums;
+  line-height:.9;letter-spacing:-.04em;will-change:opacity,transform}
+.intro-apy b{font-weight:200;font-size:clamp(46px,11vmin,120px)}
+.intro-apy span{font-weight:200;font-size:clamp(22px,5vmin,54px);margin:.12em 0 0 .06em}
+.intro-apy small{position:absolute;left:50%;top:calc(50% + clamp(34px,7.4vmin,80px));transform:translateX(-50%);
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.32em;text-indent:.32em;color:rgba(255,255,255,.8)}
 .intro-word{position:absolute;left:50%;top:calc(50% + 34vmin);transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;
   font-size:10.5px;letter-spacing:.42em;text-transform:uppercase;color:rgba(255,255,255,.92);text-indent:.42em;opacity:0;white-space:nowrap}
 .intro-lock{overflow:hidden!important}
@@ -590,6 +688,10 @@ html.js:not(.intro-lock) .intro{animation:introRescue 1ms linear 8s forwards}
   *,*::before,*::after{transition:none!important;animation:none!important}
   .lift{opacity:1;transform:none}
   h1 .ln > span,.hw h2{transform:none}
+  .port{height:auto}
+  .port-pin{position:relative}
+  .port-panel{clip-path:none!important}
+  .port-edge{display:none}
   .eyebrow i{width:30px}
   .rule{width:74px}
 }

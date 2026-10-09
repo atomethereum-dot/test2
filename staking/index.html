@@ -36,7 +36,7 @@
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
 <!-- la intro solo existe con JavaScript: sin el, la pagina se ve directa -->
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="staking.css?v=20261016">
+<link rel="stylesheet" href="staking.css?v=20261017">
 </head>
 <body>
 
@@ -51,7 +51,7 @@
     <span class="tr">Holder rewards &middot; Ethereum mainnet</span>
     <div class="intro-log" id="intro-log">
       <span>Grid 54px &middot; raster ok</span>
-      <span>Assembling mark &middot; 360&deg;</span>
+      <span>Dial 60 ticks &middot; 1 s each</span>
       <span class="hi">Contract 0x79Cb&hellip;20E0</span>
       <span class="hi">Accrual &middot; every second</span>
     </div>
@@ -60,7 +60,7 @@
     <span class="intro-bar"><i id="intro-fill"></i></span>
   </div>
   <div class="intro-stack">
-    <svg class="intro-ring" id="intro-ring" viewBox="0 0 100 100" overflow="visible"><circle cx="50" cy="50" r="44"/></svg>
+    <p class="intro-apy" id="intro-apy"><b id="intro-num">0.0</b><span>%</span><small>APY</small></p>
     <p class="intro-word" id="intro-word">Holder rewards</p>
   </div>
 </div>
@@ -134,6 +134,31 @@
     </main>
   </div>
 </div>
+
+<!-- ============ ojo de buey: el circulo se abre con el scroll ============ -->
+<section class="port to-light" id="port-stake" aria-hidden="true">
+  <div class="port-pin">
+    <div class="port-grid"></div>
+    <div class="port-rings"></div>
+    <div class="port-rings b"></div>
+    <canvas class="port-cells"></canvas>
+    <div class="aurora"><span></span><span></span><span></span></div>
+    <div class="sweep"></div>
+    <div class="port-panel">
+      <div class="port-panel-grid"></div>
+      <canvas class="port-cells"></canvas>
+      <div class="sweep"></div>
+    </div>
+    <div class="port-edge"></div>
+    <div class="port-marks"><i></i><i></i><i></i><i></i></div>
+    <div class="port-txt">
+      <p class="port-kicker mono">Holder rewards &middot; Ethereum mainnet</p>
+      <h2 class="port-title">Earn <b>every second.</b></h2>
+      <p class="port-sub"><span class="apy-n">14.9</span>% APY on #SECT, paid by the Sectora Foundation.</p>
+    </div>
+    <div class="zoom-cue"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
+  </div>
+</section>
 
 <!-- ============ 01 · stake: hoja clara, como el Hash Market de la portada ============ -->
 <section class="paper" id="stake">
@@ -220,6 +245,31 @@
   </div>
 </section>
 
+<!-- ============ ojo de buey: el circulo se abre con el scroll ============ -->
+<section class="port to-dark" id="port-terms" aria-hidden="true">
+  <div class="port-pin">
+    <div class="port-grid"></div>
+    <div class="port-rings"></div>
+    <div class="port-rings b"></div>
+    <canvas class="port-cells"></canvas>
+    <div class="aurora"><span></span><span></span><span></span></div>
+    <div class="sweep"></div>
+    <div class="port-panel">
+      <div class="port-panel-grid"></div>
+      <canvas class="port-cells"></canvas>
+      <div class="sweep"></div>
+    </div>
+    <div class="port-edge"></div>
+    <div class="port-marks"><i></i><i></i><i></i><i></i></div>
+    <div class="port-txt">
+      <p class="port-kicker mono">The terms</p>
+      <h2 class="port-title">Written in <b>the contract.</b></h2>
+      <p class="port-sub">No lock-up, no deposit cap and approvals for the exact amount only.</p>
+    </div>
+    <div class="zoom-cue"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
+  </div>
+</section>
+
 <!-- ============ 02 · terms: noche con rejilla, como el roadmap ============ -->
 <section class="night" id="terms">
   <div class="night-glow" aria-hidden="true"></div>
@@ -245,6 +295,31 @@
       earned and adjust the rate, which only counts from that second on. Deposits and rewards
       already earned stay yours. If the pool ran dry, rewards would stop accruing until it is
       refilled. The contract has been tested but not externally audited.</p>
+  </div>
+</section>
+
+<!-- ============ ojo de buey: el circulo se abre con el scroll ============ -->
+<section class="port to-light" id="port-verify" aria-hidden="true">
+  <div class="port-pin">
+    <div class="port-grid"></div>
+    <div class="port-rings"></div>
+    <div class="port-rings b"></div>
+    <canvas class="port-cells"></canvas>
+    <div class="aurora"><span></span><span></span><span></span></div>
+    <div class="sweep"></div>
+    <div class="port-panel">
+      <div class="port-panel-grid"></div>
+      <canvas class="port-cells"></canvas>
+      <div class="sweep"></div>
+    </div>
+    <div class="port-edge"></div>
+    <div class="port-marks"><i></i><i></i><i></i><i></i></div>
+    <div class="port-txt">
+      <p class="port-kicker mono">Security</p>
+      <h2 class="port-title">Verify, <b>don&rsquo;t trust.</b></h2>
+      <p class="port-sub">Every rule can be checked on Etherscan.</p>
+    </div>
+    <div class="zoom-cue"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
   </div>
 </section>
 
@@ -286,6 +361,31 @@
         <a class="m-link mono" href="#stake">Go to the console <i>↑</i></a>
       </article>
     </div>
+  </div>
+</section>
+
+<!-- ============ ojo de buey: el circulo se abre con el scroll ============ -->
+<section class="port to-dark" id="port-faq" aria-hidden="true">
+  <div class="port-pin">
+    <div class="port-grid"></div>
+    <div class="port-rings"></div>
+    <div class="port-rings b"></div>
+    <canvas class="port-cells"></canvas>
+    <div class="aurora"><span></span><span></span><span></span></div>
+    <div class="sweep"></div>
+    <div class="port-panel">
+      <div class="port-panel-grid"></div>
+      <canvas class="port-cells"></canvas>
+      <div class="sweep"></div>
+    </div>
+    <div class="port-edge"></div>
+    <div class="port-marks"><i></i><i></i><i></i><i></i></div>
+    <div class="port-txt">
+      <p class="port-kicker mono">Questions</p>
+      <h2 class="port-title">Before you <b>deposit.</b></h2>
+      <p class="port-sub">Six short answers.</p>
+    </div>
+    <div class="zoom-cue"><span>Keep scrolling</span><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
   </div>
 </section>
 
@@ -382,8 +482,8 @@
   <div class="ft-word" aria-hidden="true">SECTORA</div>
 </footer>
 
-<script src="staking-fx.js?v=20261016"></script>
-<script src="staking.js?v=20261016"></script>
+<script src="staking-fx.js?v=20261017"></script>
+<script src="staking.js?v=20261017"></script>
 <!-- cableado on-chain: wallet, deposito, cobro y retiro -->
 <script src="../ethers.min.js"></script>
 <script src="staking-chain.js?v=20261012"></script>
