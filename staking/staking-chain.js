@@ -303,9 +303,12 @@
       aviso("You do not have that many #SECT in your wallet.", true);
       return;
     }
-    // aprobar solo si hace falta: una aprobación de más es una firma de más
+    // aprobar solo si hace falta, y solo por la cantidad exacta que se va a
+    // depositar: nunca una aprobacion ilimitada. El deposito la gasta entera,
+    // asi que despues no queda nada aprobado.
     if (v.allowance < cantidad) {
-      await enviar("Approving", () =>
+      const exacto = ethers.formatUnits(cantidad, decimales).replace(/\.0$/, "");
+      await enviar("Approving exactly " + exacto + " #SECT (nothing more)", () =>
         token.connect(firmante).approve(CONTRACTS.staking, cantidad)
       );
       const v2 = await staking.accountView(cuenta);
@@ -538,7 +541,7 @@
       a.target = "_blank";
       a.rel = "noopener noreferrer";
       a.textContent = CONTRACTS.staking;
-      nota.append(a, ". Your wallet must show this same address when you approve.");
+      nota.append(a, ". You only approve the exact amount you deposit, never more, and your wallet must show this same address when you approve.");
       btn.parentNode.appendChild(nota);
     }
 
