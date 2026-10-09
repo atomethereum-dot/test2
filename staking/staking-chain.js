@@ -39,7 +39,7 @@
   ];
 
   // SectoraHolderRewards: 14,9% APY al arrancar (ajustable por el dueño con
-  // setRate), sin bloqueo, cobro libre, tope de 10M #SECT.
+  // setRate), sin bloqueo, cobro libre, sin tope de depositos.
   // Ver contracts/DEPLOY_HOLDER_REWARDS.md
   const STAKING_ABI = [
     "function deposit(uint256 amount)",
@@ -47,7 +47,7 @@
     "function claim()",
     "function earned(address) view returns (uint256)",
     "function accountView(address) view returns (uint256 deposited, uint256 claimable, uint256 walletBalance, uint256 allowance)",
-    "function poolView() view returns (uint256 deposited, uint256 pool, uint256 rate, uint256 cap, bool paused, bool depositsClosed, uint256 depositors, uint256 chainTime)",
+    "function poolView() view returns (uint256 deposited, uint256 pool, uint256 rate, bool paused, bool depositsClosed, uint256 depositors, uint256 chainTime)",
     "function token() view returns (address)",
   ];
 
@@ -121,7 +121,6 @@
     const m = (e && (e.shortMessage || e.reason || e.message)) || "";
     if (/user rejected|ACTION_REJECTED/i.test(m)) return "Cancelled in your wallet.";
     if (/deposits paused/i.test(m)) return "Deposits are not open yet.";
-    if (/program full/i.test(m)) return "Not enough room left in the program for that amount. See the capacity still available above.";
     if (/nothing to claim/i.test(m)) return "Nothing to claim yet.";
     if (/amount above deposit/i.test(m)) return "More than you have deposited.";
     if (/insufficient allowance|ERC20InsufficientAllowance/i.test(m))
@@ -150,18 +149,6 @@
       }
       if (elStaked) elStaked.textContent = fmt(pv.deposited, 0) + " #SECT";
       if (elStakers) elStakers.textContent = pv.depositors.toString();
-
-      // barra del cupo: el tope se lee del contrato, no se da por hecho
-      const tope = pv.cap;
-      const lleno = pv.deposited >= tope ? 10000n : (pv.deposited * 10000n) / tope;
-      const pct = Number(lleno) / 100;
-      const libre = pv.deposited >= tope ? 0n : tope - pv.deposited;
-      const eCap = $("lvCap"), eBar = $("lvCapBar"), eLeft = $("lvCapLeft");
-      // se redondea hacia abajo: con 500 libres de 10M no puede decir "100%"
-      const pctTxt = pct < 10 || pct >= 99 ? (Math.floor(pct * 10) / 10).toFixed(1) : String(Math.floor(pct));
-      if (eCap) eCap.textContent = libre === 0n ? "Full" : pctTxt + "% filled";
-      if (eBar) eBar.style.width = Math.min(pct, 100) + "%";
-      if (eLeft) eLeft.textContent = fmt(libre, 0);
 
       if (pv.paused) aviso("Rewards paused: the reward pool is waiting to be refilled.", true);
       else if (pv.depositsClosed) aviso("Deposits are not open yet.");

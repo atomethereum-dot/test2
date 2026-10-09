@@ -4,14 +4,15 @@
  *   node scripts/compile.js
  *   node scripts/test-rewards.js
  *
- * El programa: 14,9% APY al arrancar (el dueño puede cambiarla con setRate), sin bloqueo, cobro cuando quieran, tope de
- * 10M #SECT depositados, fondo pagado por la tesorería y sin bloqueo para
- * el dueño (puede retirar lo que nadie ha ganado todavía).
+ * El programa: 14,9% APY al arrancar (el dueño puede cambiarla con
+ * setRate), sin bloqueo, cobro cuando quieran, sin tope de depositos, fondo
+ * pagado por la tesorería y sin bloqueo para el dueño (puede retirar lo que
+ * nadie ha ganado todavía).
  *
  * Lo que se prueba es lo que puede costar dinero: que el ritmo sea el
  * anunciado, que retirar funcione siempre y no haga perder lo ganado, que
- * el dueño no pueda tocar depósitos ni recompensas ya ganadas, que el tope
- * se respete y que un fondo vacío pare el devengo en vez de prometer.
+ * el dueño no pueda tocar depósitos ni recompensas ya ganadas, que no haya
+ * tope de depositos y que un fondo vacío pare el devengo en vez de prometer.
  *
  * NOTA SOBRE EL ARNES: todas las transacciones van con gasLimit explicito y
  * los reverts se comprueban con staticCall, que es lo que permite leer el
@@ -70,7 +71,6 @@ async function main() {
   console.log(`         gas del despliegue: ${recDep.gasUsed}`);
   const pv = await r.poolView();
   ok(pv.rate === 1490n, "tasa inicial 1490 bps = 14,9% APY");
-  ok(pv.cap === E("10000000"), "tope 10.000.000 #SECT");
   ok(pv.depositsClosed === true, "los depositos nacen cerrados");
   for (const q of [alice, bob]) {
     await (await tok.connect(dueno).transfer(await dir(q), E("100000"), GAS)).wait();
@@ -152,16 +152,14 @@ async function main() {
   await avanzar(30 * DIA);
   cerca(N(await r.earned(await dir(alice))), 10000 * 0.149 * 30 / 365, 0.01, "y desde la recarga vuelve a pagar 14,9%");
 
-  // --- 7. tope ------------------------------------------------------
-  console.log("\n=== 7. tope de 10M ===");
-  const libre = await r.remainingCapacity();
-  await (await r.connect(dueno).deposit(libre - E("500"), GAS)).wait();
-  cerca(N(await r.remainingCapacity()), 500, 0, "quedan 500 de cupo");
-  await revierte(() => r.connect(bob).deposit.staticCall(E("501"), GAS), "no se puede pasar del tope", "program full");
+  // --- 7. sin tope ---------------------------------------------------
+  console.log("\n=== 7. sin tope de depositos ===");
+  await (await r.connect(dueno).deposit(E("15000000"), GAS)).wait();
+  ok((await r.totalDeposited()) > E("10000000"), "entran 15M de una vez: ya no hay tope de 10M");
   await (await r.connect(bob).deposit(E("500"), GAS)).wait();
-  ok((await r.totalDeposited()) === E("10000000"), "el programa se llena exactamente en 10M");
+  ok((await r.totalDeposited()) === E("15010500"), "y se puede seguir depositando encima");
   await (await r.connect(bob).withdraw(E("500"), GAS)).wait();
-  ok((await r.remainingCapacity()) === E("500"), "al retirar se libera cupo");
+  ok((await r.poolView()).depositors === 2n, "cuenta bien a los depositantes (alice y el dueño)");
 
   // --- 8. cerrar entradas no encierra a nadie -----------------------
   console.log("\n=== 8. cerrar depositos ===");

@@ -22,9 +22,10 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 ///     whatever state the reward pool is in.
 ///  3. CLAIM ANY TIME. Accrued rewards are the depositor's to collect
 ///     whenever they want, also after withdrawing.
-///  4. A HARD CAP. At most 10,000,000 #SECT can be deposited at once, so the
-///     treasury's cost is bounded in code: cap x rate, 1,490,000 #SECT a
-///     year at the cap and the launch rate. Whatever the rate, payouts
+///  4. NO DEPOSIT CAP. Anyone can deposit any amount. To stop new
+///     deposits the owner closes them with setDepositsPaused(true); whoever
+///     is in can still withdraw and claim. The treasury's cost is total
+///     deposited x rate, and whatever the rate or the deposits, payouts
 ///     never exceed what was funded into the pool.
 ///
 /// ON MAINNET THIS HOLDS REAL VALUE.
@@ -53,12 +54,11 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
     /// @notice Technical ceiling for setRate(), not a business limit: 1e12
     /// bps is ten billion percent a year. It only exists so that
     /// totalDeposited * rate * elapsed can never overflow; an overflow there
-    /// would make _update() revert and lock every withdrawal. Payouts are
-    /// bounded by the funded pool whatever the rate.
+    /// would make _update() revert and lock every withdrawal. totalDeposited
+    /// is bounded by the token's supply, so with any real supply the product
+    /// stays far below 2^256. Payouts are bounded by the funded pool
+    /// whatever the rate.
     uint256 public constant MAX_RATE_BPS = 1e12;
-
-    /// @notice Most #SECT the program can hold in deposits at once.
-    uint256 public constant MAX_TOTAL_DEPOSITED = 10_000_000 ether;
 
     IERC20 public immutable token;
 
@@ -157,7 +157,6 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
     function deposit(uint256 amount) external nonReentrant {
         require(!depositsPaused, "Rewards: deposits paused");
         require(amount > 0, "Rewards: amount is zero");
-        require(totalDeposited + amount <= MAX_TOTAL_DEPOSITED, "Rewards: program full");
 
         _update();
         _settle(msg.sender);
@@ -316,7 +315,6 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
             uint256 deposited,
             uint256 pool,
             uint256 rate,
-            uint256 cap,
             bool paused,
             bool depositsClosed,
             uint256 depositors,
@@ -329,17 +327,11 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
             totalDeposited,
             rewardPool,
             rateBps,
-            MAX_TOTAL_DEPOSITED,
             accrualPaused,
             depositsPaused,
             depositorCount,
             block.timestamp
         );
-    }
-
-    /// @notice How much more #SECT the program can take before the cap.
-    function remainingCapacity() external view returns (uint256) {
-        return totalDeposited >= MAX_TOTAL_DEPOSITED ? 0 : MAX_TOTAL_DEPOSITED - totalDeposited;
     }
 
     /// @notice Seconds the current pool can keep paying at the current

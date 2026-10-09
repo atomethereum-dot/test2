@@ -166,14 +166,6 @@ h1{font-size:clamp(34px,5.2vw,66px);color:var(--ink);font-weight:200;line-height
 .stat-live > div{flex:1;background:var(--surf2);padding:12px 14px;display:flex;flex-direction:column;gap:4px}
 .lv-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4)}
 .stat-live b{font-size:16px;color:var(--ink)}
-.cap{margin-top:14px;display:flex;flex-direction:column;gap:8px}
-.cap-top{display:flex;justify-content:space-between;align-items:baseline}
-.cap-top b{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blue2);font-weight:400;font-variant-numeric:tabular-nums}
-.cap-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden}
-.cap-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blued),var(--blue2));
-  box-shadow:0 0 10px rgba(77,141,255,.55);transition:width .8s ease}
-.cap-note{font-size:11px;color:var(--ink3)}
-.cap-note b{color:var(--ink2);font-weight:400;font-variant-numeric:tabular-nums}
 
 @media (max-width:900px){
   .hero-in{grid-template-columns:1fr}

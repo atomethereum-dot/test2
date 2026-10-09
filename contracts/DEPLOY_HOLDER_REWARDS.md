@@ -11,13 +11,13 @@ cuando quiera con `setRate`.
 | Recompensa | **14,9 % APY** al arrancar, se acumula cada segundo, sin interés compuesto. **Ajustable** por el dueño (`setRate`), sin límite de negocio |
 | Cobro | **Cuando quieran** (`claim`) |
 | Retiro | **Cuando quieran, sin penalización** (`withdraw`). Lo ganado sigue cobrable después de retirar |
-| Tope | **10.000.000 #SECT** depositados como máximo |
+| Tope de depósitos | **Ninguno**. Para frenar la entrada: `setDepositsPaused(true)` |
 | Duración | Sin fecha de fin |
 | Fondo de recompensas | Lo carga la tesorería. **Sin bloqueo**: el dueño puede retirar en cualquier momento la parte que nadie ha ganado todavía |
 
-El tope (10M) es **constante**: nadie puede cambiarlo después de desplegar.
-La tasa sí se puede cambiar (ver *Cambiar la tasa* más abajo), y cada cambio
-cuenta solo desde ese segundo: lo ya ganado nunca se recalcula.
+No hay tope de depósitos. La tasa se puede cambiar (ver *Cambiar la tasa*
+más abajo), y cada cambio cuenta solo desde ese segundo: lo ya ganado nunca
+se recalcula.
 
 Las funciones se llaman `deposit`, `withdraw` y `claim`; el contrato no usa
 la palabra "stake" en ningún sitio.
@@ -41,7 +41,7 @@ la palabra "stake" en ningún sitio.
 
 | Operación | Gas | Quién paga |
 |---|---|---|
-| Desplegar | **1.539.284** | tú, una vez |
+| Desplegar | **1.495.293** | tú, una vez |
 | `approve` del fondo | ~46.000 | tú |
 | `fundRewards` | ~98.000 | tú, en cada recarga |
 | `setDepositsPaused(false)` | ~25.000 | tú, una vez |
@@ -108,7 +108,8 @@ recompensas al año = total depositado × tasa   (0,149 con el 14,9 %)
 |---|---|---|
 | 1.000.000 #SECT | 149.000 #SECT | ~12.400 |
 | 5.000.000 #SECT | 745.000 #SECT | ~62.100 |
-| 10.000.000 #SECT (el tope) | 1.490.000 #SECT | ~124.200 |
+| 10.000.000 #SECT | 1.490.000 #SECT | ~124.200 |
+| 20.000.000 #SECT | 2.980.000 #SECT | ~248.300 |
 
 Puedes cargar por tramos según vayan entrando depósitos. Vigila
 `runwaySeconds()`: los segundos que aguanta el fondo al ritmo actual
@@ -167,7 +168,6 @@ En *Read Contract*:
 - `token()` → `0x8C9984B06281f1CA9416e493c2E602AaB08513db`
 - `rateBps()` → `1490`
 - `MAX_RATE_BPS()` → `1000000000000` (tope técnico)
-- `MAX_TOTAL_DEPOSITED()` → `10000000000000000000000000`
 - `rewardPool()` → lo que cargaste
 - `depositsPaused()` → `false`
 - `owner()` → tu wallet
@@ -184,16 +184,16 @@ Luego una prueba real con poco desde otra wallet: `approve` de 10 #SECT,
   ninguna función del dueño toca depósitos ni recompensas ya ganadas.
 - `withdraw` funciona siempre, aunque el fondo esté vacío o los depósitos
   cerrados.
-- El tope no se puede cambiar. La tasa sí, solo el dueño, sin límite de
+- Sin tope de depósitos. La tasa la cambia solo el dueño, sin límite de
   negocio, y sin tocar lo ya ganado. Nunca se paga más de lo que hay en el
-  fondo, sea cual sea la tasa.
+  fondo, sea cual sea la tasa o lo depositado.
 - No se crean tokens: todo lo que se paga entró antes con `fundRewards`.
 - `nonReentrant` en toda función que mueve tokens, y la cantidad recibida se
   mide en vez de suponerse.
 
-Probado en cadena local: **53 pruebas, todas pasan**
+Probado en cadena local: **51 pruebas, todas pasan**
 (`node scripts/test-rewards.js`), incluido un año completo que paga
-exactamente el 14,9 %, cambios de tasa (14,9 % → 25 % → 0 % → 14,9 %) que
+exactamente el 14,9 %, depósitos por encima de 10M sin tope, cambios de tasa (14,9 % → 25 % → 0 % → 14,9 %) que
 no tocan lo ya ganado, un mes al 10 % mensual que paga exactamente el 10 %, y
 la tasa al tope técnico durante 10 años sin que se bloquee ningún retiro.
 

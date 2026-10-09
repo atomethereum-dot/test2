@@ -7,16 +7,16 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sectoraorg.com/staking">
 <meta property="og:title" content="Sectora Foundation — #SECT Holder Rewards">
-<meta property="og:description" content="#SECT holders earn 14.9% APY, paid by the Sectora Foundation treasury. No lock-up, claim any time, capped at 10M #SECT.">
+<meta property="og:description" content="#SECT holders earn 14.9% APY, paid by the Sectora Foundation treasury. No lock-up, claim any time, no deposit cap.">
 <meta property="og:image" content="https://sectoraorg.com/staking/og-image.jpg">
 <meta property="og:image:width" content="1920">
 <meta property="og:image:height" content="1080">
 <meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Sectora Foundation — #SECT Holder Rewards">
-<meta name="twitter:description" content="#SECT holders earn 14.9% APY, paid by the Sectora Foundation treasury. No lock-up, claim any time, capped at 10M #SECT.">
+<meta name="twitter:description" content="#SECT holders earn 14.9% APY, paid by the Sectora Foundation treasury. No lock-up, claim any time, no deposit cap.">
 <meta name="twitter:image" content="https://sectoraorg.com/staking/og-image.jpg">
-<meta name="description" content="#SECT holders earn 14.9% APY, paid by the Sectora Foundation treasury. No lock-up, claim any time, capped at 10M #SECT.">
+<meta name="description" content="#SECT holders earn 14.9% APY, paid by the Sectora Foundation treasury. No lock-up, claim any time, no deposit cap.">
 <link rel="icon" type="image/png" sizes="192x192" href="/icons/v2/icon-192.png">
 <link rel="icon" type="image/png" sizes="144x144" href="/icons/v2/favicon-144x144.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/icons/v2/favicon-96x96.png">
@@ -31,7 +31,7 @@
 <link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="staking.css?v=20261009b">
+<link rel="stylesheet" href="staking.css?v=20261009c">
 </head>
 <body>
 <div class="vig" aria-hidden="true"></div>
@@ -51,7 +51,7 @@
     <span class="pill solo-previa">Coming soon</span>
     <span class="pill"><span class="apy-n">14.9</span>% APY</span>
     <span class="pill">No lock-up</span>
-    <span class="pill">Capped at 10M #SECT</span>
+    <span class="pill">No deposit cap</span>
     <a class="btn ghost" href="../index.html">← Main site</a>
   </div>
 </header>
@@ -69,7 +69,7 @@
         <span class="hero-rule" aria-hidden="true"></span>
         <p class="lead">Deposit #SECT and earn <span class="apy-n">14.9</span>% a year, accrued every second and paid by the
           Sectora Foundation treasury. No lock-up: withdraw whenever you want and claim your
-          rewards at any time. The program holds at most 10,000,000 #SECT.</p>
+          rewards at any time. There is no cap on deposits.</p>
         <p class="lead solo-previa">The contract is written and tested but not deployed yet, so
           nothing can be deposited today.</p>
         <div class="hero-cta">
@@ -107,11 +107,6 @@
         <div class="stat-live">
           <div><span class="lv-lbl">Total deposited</span><b class="num" id="lvStaked">0</b></div>
           <div><span class="lv-lbl">Holders in</span><b class="num" id="lvStakers">0</b></div>
-        </div>
-        <div class="cap">
-          <div class="cap-top"><span class="lv-lbl">Program cap</span><b id="lvCap">0% filled</b></div>
-          <div class="cap-bar" aria-hidden="true"><i id="lvCapBar"></i></div>
-          <span class="cap-note"><b id="lvCapLeft">10,000,000</b> of 10,000,000 #SECT still available</span>
         </div>
         <p class="lv-previa solo-previa">Zero because the contract is not deployed yet. These
           figures are read straight from the contract once it is.</p>
@@ -176,7 +171,7 @@
           <li><span>Claim</span><b>Any time</b></li>
           <li><span>Lock-up</span><b>None</b></li>
           <li><span>Withdraw</span><b>Any time, no penalty</b></li>
-          <li><span>Program cap</span><b>10,000,000 #SECT</b></li>
+          <li><span>Deposit cap</span><b>None</b></li>
           <li><span>Funded by</span><b>Sectora Foundation treasury</b></li>
         </ul>
         <div class="terms-disclosure">
@@ -269,7 +264,7 @@
         <span class="panel-num" aria-hidden="true">02</span>
         <span class="pqc-tag">Written in code</span>
         <h3>What you earn stays earned</h3>
-        <p>The 10,000,000 #SECT cap is a constant in the contract. The APY starts at 14.9% and the foundation can adjust it on-chain; a change only counts from that second on, so nothing already earned is ever recalculated.</p>
+        <p>The APY starts at 14.9% and the foundation can adjust it on-chain; a change only counts from that second on, so nothing already earned is ever recalculated.</p>
         </div>
       </div>
       <div class="pqc-card panel reveal" style="--d:0.12s">
@@ -320,8 +315,8 @@
       </details>
       <details class="faq-item">
         <summary>Is there a limit on how much can be deposited?</summary>
-        <p>Yes. The program holds at most 10,000,000 #SECT, a limit written into the contract.
-          Once it is full, new deposits are refused until someone withdraws.</p>
+        <p>No. There is no cap on deposits. The foundation can close the program to new
+          deposits; anyone already in can still withdraw and claim at any time.</p>
       </details>
     </div>
   </section>
@@ -332,6 +327,6 @@
 <!-- cableado on-chain. Mientras CONTRACTS siga con direcciones a cero el
      modulo se retira solo y la pagina queda exactamente como esta hoy. -->
 <script src="../ethers.min.js"></script>
-<script src="staking-chain.js?v=20261009b"></script>
+<script src="staking-chain.js?v=20261009c"></script>
 </body>
 </html>
