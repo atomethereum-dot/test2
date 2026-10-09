@@ -955,18 +955,6 @@ abstract contract ReentrancyGuard {
 ///     deposited x rate, and whatever the rate or the deposits, payouts
 ///     never exceed what was funded into the pool.
 ///
-///  5. LOCKS (fixed-term deposits), disabled until the owner enables them.
-///     Lock options (15 days, 30 days, 60 days at deployment; the owner can
-///     change them and add more) each have their own rate. A lock keeps the
-///     rate it was taken at for its whole term, and its full reward is
-///     reserved out of rewardPool the moment it is taken, so it is paid in
-///     full whatever happens to the pool later; a lock the pool cannot cover
-///     is refused. The reward vests every second and can be claimed any
-///     time; the principal comes back after the term, and accrual stops at
-///     the end of the term. Leaving early is off unless the owner turns it
-///     on, and then it returns the principal and gives the unclaimed part of
-///     that lock's reward back to the pool.
-///
 /// ON MAINNET THIS HOLDS REAL VALUE.
 ///
 ///  - Rewards are NEVER minted. #SECT is renounced and has no mint
@@ -1046,38 +1034,6 @@ contract SectoraHolderRewards is Ownable2Step, ReentrancyGuard {
 
     mapping(address => Account) public accounts;
 
-    /// @notice Longest term the owner can give a lock option.
-    uint256 public constant MAX_LOCK_DURATION = 3650 days;
-
-    struct LockOption {
-        uint256 duration; // seconds
-        uint256 rateBps; // a year; every lock taken with it keeps this rate
-        bool enabled;
-    }
-
-    struct Lock {
-        uint256 amount; // principal
-        uint256 rateBps; // rate fixed when the lock was taken
-        uint256 start;
-        uint256 end;
-        uint256 reward; // full-term reward, reserved when the lock was taken
-        uint256 claimed; // part of reward already paid out
-        bool closed; // principal returned
-    }
-
-    LockOption[] public lockOptions;
-    mapping(address => Lock[]) private _locks;
-
-    /// @notice Principal held in open locks. Never part of totalDeposited.
-    uint256 public totalLocked;
-
-    /// @notice Reward reserved for open locks and not paid yet. Taken out
-    /// of rewardPool when each lock starts, so the owner can't withdraw it.
-    uint256 public totalLockReserved;
-
-    /// @notice Whether a lock can be left before its term (off by default).
-    bool public earlyExitEnabled;
-
     event Deposited(address indexed account, uint256 amount);
     event Withdrawn(address indexed account, uint256 amount);
     event RewardClaimed(address indexed account, uint256 amount);
@@ -1089,30 +1045,11 @@ contract SectoraHolderRewards is Ownable2Step, ReentrancyGuard {
     event RateChanged(uint256 oldRateBps, uint256 newRateBps);
     event SurplusRecovered(address indexed to, uint256 amount);
     event TokenRescued(address indexed otherToken, address indexed to, uint256 amount);
-    event LockOptionSet(uint256 indexed optionId, uint256 duration, uint256 rateBps, bool enabled);
-    event EarlyExitChanged(bool enabled);
-    event Locked(
-        address indexed account,
-        uint256 indexed lockId,
-        uint256 optionId,
-        uint256 amount,
-        uint256 rateBps,
-        uint256 end,
-        uint256 reward
-    );
-    event LockClaimed(address indexed account, uint256 indexed lockId, uint256 amount);
-    event LockWithdrawn(address indexed account, uint256 indexed lockId, uint256 amount);
-    event LockExitedEarly(address indexed account, uint256 indexed lockId, uint256 amount, uint256 forfeited);
 
     constructor(address _token) Ownable(msg.sender) {
         require(_token != address(0), "Rewards: token is zero");
         token = IERC20(_token);
         lastUpdate = block.timestamp;
-        // the three lock terms, disabled and without a rate until the owner
-        // sets one with setLockOption
-        lockOptions.push(LockOption(15 days, 0, false));
-        lockOptions.push(LockOption(30 days, 0, false));
-        lockOptions.push(LockOption(60 days, 0, false));
     }
 
     // ---------------------------------------------------------------
@@ -1272,7 +1209,7 @@ contract SectoraHolderRewards is Ownable2Step, ReentrancyGuard {
     function recoverSurplus(address to) external onlyOwner nonReentrant {
         require(to != address(0) && to != address(this), "Rewards: bad recipient");
         _update();
-        uint256 owedOut = totalDeposited + rewardPool + totalUnclaimed + totalLocked + totalLockReserved;
+        uint256 owedOut = totalDeposited + rewardPool + totalUnclaimed;
         uint256 bal = token.balanceOf(address(this));
         require(bal > owedOut, "Rewards: no surplus");
         uint256 amount = bal - owedOut;
@@ -1290,148 +1227,8 @@ contract SectoraHolderRewards is Ownable2Step, ReentrancyGuard {
     }
 
     // ---------------------------------------------------------------
-    // locks (fixed-term deposits)
-    // ---------------------------------------------------------------
-
-    /// @notice Take a lock: `amount` stays in for the option's term and
-    /// earns the option's current rate, fixed for this lock. Its full reward
-    /// is reserved from the pool now.
-    function lock(uint256 optionId, uint256 amount) external nonReentrant returns (uint256 lockId) {
-        require(!depositsPaused, "Rewards: deposits paused");
-        require(optionId < lockOptions.length, "Rewards: no such lock option");
-        LockOption memory o = lockOptions[optionId];
-        require(o.enabled, "Rewards: lock option disabled");
-        require(amount > 0, "Rewards: amount is zero");
-
-        _update();
-
-        uint256 before = token.balanceOf(address(this));
-        token.safeTransferFrom(msg.sender, address(this), amount);
-        uint256 received = token.balanceOf(address(this)) - before;
-        require(received > 0, "Rewards: nothing received");
-
-        uint256 reward = (received * o.rateBps * o.duration) / (BPS * YEAR);
-        require(reward <= rewardPool, "Rewards: pool too small for this lock");
-        rewardPool -= reward;
-        totalLockReserved += reward;
-        totalLocked += received;
-
-        uint256 end = block.timestamp + o.duration;
-        lockId = _locks[msg.sender].length;
-        _locks[msg.sender].push(Lock(received, o.rateBps, block.timestamp, end, reward, 0, false));
-        emit Locked(msg.sender, lockId, optionId, received, o.rateBps, end, reward);
-    }
-
-    /// @notice Collect what one lock has earned so far.
-    function claimLock(uint256 lockId) external nonReentrant {
-        uint256 amount = _claimLock(msg.sender, lockId);
-        require(amount > 0, "Rewards: nothing to claim");
-        token.safeTransfer(msg.sender, amount);
-    }
-
-    /// @notice Collect what every lock of the caller has earned so far.
-    function claimAllLocks() external nonReentrant {
-        uint256 n = _locks[msg.sender].length;
-        uint256 total;
-        for (uint256 i = 0; i < n; i++) total += _claimLock(msg.sender, i);
-        require(total > 0, "Rewards: nothing to claim");
-        token.safeTransfer(msg.sender, total);
-    }
-
-    /// @notice After the term: principal back plus whatever of the reward
-    /// is still unclaimed.
-    function withdrawLock(uint256 lockId) external nonReentrant {
-        require(lockId < _locks[msg.sender].length, "Rewards: no such lock");
-        Lock storage l = _locks[msg.sender][lockId];
-        require(!l.closed, "Rewards: lock already closed");
-        require(block.timestamp >= l.end, "Rewards: still locked");
-        uint256 rest = _claimLock(msg.sender, lockId);
-        l.closed = true;
-        totalLocked -= l.amount;
-        emit LockWithdrawn(msg.sender, lockId, l.amount);
-        token.safeTransfer(msg.sender, l.amount + rest);
-    }
-
-    /// @notice Leave a lock before its term, only while the owner allows it:
-    /// the principal comes back and the unclaimed part of the lock's reward
-    /// returns to the pool.
-    function exitLockEarly(uint256 lockId) external nonReentrant {
-        require(earlyExitEnabled, "Rewards: early exit disabled");
-        require(lockId < _locks[msg.sender].length, "Rewards: no such lock");
-        Lock storage l = _locks[msg.sender][lockId];
-        require(!l.closed, "Rewards: lock already closed");
-        require(block.timestamp < l.end, "Rewards: lock ended, use withdrawLock");
-        _update();
-        uint256 forfeited = l.reward - l.claimed;
-        l.closed = true;
-        totalLocked -= l.amount;
-        totalLockReserved -= forfeited;
-        _addToPool(forfeited);
-        emit LockExitedEarly(msg.sender, lockId, l.amount, forfeited);
-        token.safeTransfer(msg.sender, l.amount);
-    }
-
-    function _vested(Lock storage l) internal view returns (uint256) {
-        if (block.timestamp >= l.end) return l.reward;
-        return (l.reward * (block.timestamp - l.start)) / (l.end - l.start);
-    }
-
-    function _claimLock(address who, uint256 lockId) internal returns (uint256 amount) {
-        require(lockId < _locks[who].length, "Rewards: no such lock");
-        Lock storage l = _locks[who][lockId];
-        if (l.closed) return 0;
-        amount = _vested(l) - l.claimed;
-        if (amount > 0) {
-            l.claimed += amount;
-            totalLockReserved -= amount;
-            emit LockClaimed(who, lockId, amount);
-        }
-    }
-
-    /// @dev Puts tokens back in the pool and restarts accrual if the pool
-    /// had run dry; the empty gap is not paid.
-    function _addToPool(uint256 amount) internal {
-        if (amount == 0) return;
-        rewardPool += amount;
-        if (accrualPaused) {
-            accrualPaused = false;
-            lastUpdate = block.timestamp;
-            emit AccrualResumed(block.timestamp, rewardPool);
-        }
-    }
-
-    // ---------------------------------------------------------------
     // admin
     // ---------------------------------------------------------------
-
-    /// @notice Change a lock option. Locks already taken keep their own
-    /// term and rate; this only affects new ones.
-    function setLockOption(uint256 optionId, uint256 duration, uint256 rate, bool enabled) external onlyOwner {
-        require(optionId < lockOptions.length, "Rewards: no such lock option");
-        _checkLockOption(duration, rate);
-        lockOptions[optionId] = LockOption(duration, rate, enabled);
-        emit LockOptionSet(optionId, duration, rate, enabled);
-    }
-
-    /// @notice Add a new lock option (e.g. 6 months).
-    function addLockOption(uint256 duration, uint256 rate, bool enabled) external onlyOwner returns (uint256 optionId) {
-        _checkLockOption(duration, rate);
-        optionId = lockOptions.length;
-        lockOptions.push(LockOption(duration, rate, enabled));
-        emit LockOptionSet(optionId, duration, rate, enabled);
-    }
-
-    function _checkLockOption(uint256 duration, uint256 rate) internal pure {
-        require(duration > 0 && duration <= MAX_LOCK_DURATION, "Rewards: bad lock duration");
-        require(rate <= MAX_RATE_BPS, "Rewards: rate above max");
-    }
-
-    /// @notice Allow or forbid leaving locks before their term.
-    function setEarlyExit(bool enabled) external onlyOwner {
-        earlyExitEnabled = enabled;
-        emit EarlyExitChanged(enabled);
-    }
-
 
     /// @notice Disabled: leaving the contract without an owner would freeze
     /// the rate and the unearned pool forever.
@@ -1521,28 +1318,6 @@ contract SectoraHolderRewards is Ownable2Step, ReentrancyGuard {
             return (0, accrualPaused || owed > 0);
         }
         return (rewardPool - owed, accrualPaused);
-    }
-
-    /// @notice Every lock option, for the page.
-    function allLockOptions() external view returns (LockOption[] memory) {
-        return lockOptions;
-    }
-
-    /// @notice Every lock an account has taken, open and closed.
-    function locksOf(address who) external view returns (Lock[] memory) {
-        return _locks[who];
-    }
-
-    function lockCount(address who) external view returns (uint256) {
-        return _locks[who].length;
-    }
-
-    /// @notice What one lock could claim right now.
-    function lockEarned(address who, uint256 lockId) external view returns (uint256) {
-        require(lockId < _locks[who].length, "Rewards: no such lock");
-        Lock storage l = _locks[who][lockId];
-        if (l.closed) return 0;
-        return _vested(l) - l.claimed;
     }
 
     /// @notice Seconds the pool can keep paying at the current deposits and
