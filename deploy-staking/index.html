@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Despliegue staking · Sectora</title>
+<!-- herramienta interna: se usa una vez para lanzar el contrato de staking en mainnet -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico">
+<meta name="color-scheme" content="light">
+<style>
+@font-face{font-family:'IBM Plex Sans';src:url('/fonts/IBMPlexSans.woff2') format('woff2');font-weight:100 700}
+@font-face{font-family:'IBM Plex Mono';src:url('/fonts/IBMPlexMono-400.woff2') format('woff2');font-weight:400}
+:root{--ink:#0b0d12;--ink-2:#3c414c;--ink-3:#6b7280;--line:#e3e6ec;--blue:#1569ff;--ok:#0f8f52;--bad:#c62828;--warn:#9a6700}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff;color:var(--ink);font:300 16px/1.6 'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.w{max-width:760px;margin:0 auto;padding:48px 20px 80px}
+.k{font:400 11px 'IBM Plex Mono',monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);display:flex;gap:12px;align-items:center}
+.k i{width:28px;height:1px;background:var(--blue)}
+h1{font-weight:200;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.02em;margin:14px 0 12px}
+p.l{color:var(--ink-2);max-width:62ch}
+.box{margin-top:28px;border:1px solid var(--line)}
+.row{display:grid;grid-template-columns:34px 1fr auto;gap:14px;align-items:start;padding:16px 18px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.n{font:400 12px 'IBM Plex Mono',monospace;color:var(--blue);padding-top:3px}
+.row b{font-weight:500;display:block}
+.row small{display:block;color:var(--ink-3);font-size:13.5px;overflow-wrap:anywhere}
+.row small a{color:var(--blue);text-decoration:none}
+.st{font:400 11px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding-top:4px;white-space:nowrap}
+.st.ok{color:var(--ok)}.st.run{color:var(--blue)}.st.bad{color:var(--bad)}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+button{font:400 12px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;padding:13px 18px;border:1px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer}
+button.p{background:var(--blue);border-color:var(--blue);color:#fff}
+button:disabled{opacity:.4;cursor:not-allowed}
+button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.msg{margin-top:16px;font-size:14px;color:var(--ink-2);min-height:22px}
+.msg.bad{color:var(--bad)}
+.msg.ok{color:var(--ok)}
+.res{margin-top:22px;padding:16px 18px;border:1px solid var(--ok);display:none}
+.res.on{display:block}
+.res b{font-weight:500}
+.addr{font:400 14px 'IBM Plex Mono',monospace;overflow-wrap:anywhere;margin:6px 0 10px;color:var(--ink)}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;font-size:14px;color:var(--ink-2);margin-top:8px}
+.kv span:nth-child(odd){color:var(--ink-3)}
+.kv span{overflow-wrap:anywhere}
+.note{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-3)}
+.note a{color:var(--blue)}
+.note code{font:400 12.5px 'IBM Plex Mono',monospace;color:var(--ink-2);overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<div class="w">
+  <p class="k"><i></i>Sectora · Ethereum Mainnet</p>
+  <h1>Despliegue del staking</h1>
+  <p class="l">Lanza desde tu MetaMask el contrato de staking SectoraHolderRewards en Ethereum Mainnet. El código es exactamente el revisado y probado, ya compilado, y la dirección del token #SECT va fija. No hay que compilar ni escribir nada: conecta, revisa el coste y despliega.</p>
+
+  <div class="box" id="steps"></div>
+
+  <div class="acts">
+    <button class="p" id="conn" type="button">1 · Conectar MetaMask</button>
+    <button class="p" id="go" type="button" disabled>2 · Desplegar staking</button>
+  </div>
+  <p class="msg" id="msg"></p>
+
+  <div class="res" id="res">
+    <b>Contrato desplegado</b>
+    <p class="addr" id="addr"></p>
+    <div class="acts" style="margin-top:0"><button id="copy" type="button">Copiar dirección</button><button id="reset" type="button">Empezar de cero</button></div>
+    <div class="kv" id="kv"></div>
+  </div>
+
+  <p class="note">
+    Para verificar en Etherscan (Contract → Verify and Publish → Solidity Single file): compilador <code>v0.8.24+commit.e11b9ed9</code>, licencia MIT, optimización Yes · 200 runs, EVM version por defecto, código
+    <a href="/contracts/flattened/SectoraHolderRewards.copy.sol" target="_blank" rel="noopener">SectoraHolderRewards.copy.sol</a>
+    y Constructor Arguments <code>0000000000000000000000008c9984b06281f1ca9416e493c2e602aab08513db</code>. Si Etherscan no lo acepta, usa “Standard-Json-Input” con
+    <a href="standard-input.json" target="_blank" rel="noopener">standard-input.json</a> (nombre del contrato: <code>SectoraHolderRewards.sol:SectoraHolderRewards</code>).
+  </p>
+</div>
+
+<script src="/ethers.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  const CHAIN = '0x1';
+  const EXP = 'https://etherscan.io';
+  const TOKEN = '0x8C9984B06281f1CA9416e493c2E602AaB08513db';
+  const KEY = 'sectora:staking-deploy-mainnet';
+  const ERC20 = ['function symbol() view returns (string)', 'function decimals() view returns (uint8)', 'function totalSupply() view returns (uint256)'];
+
+  const $ = id => document.getElementById(id);
+  const msg = (t, cls) => { $('msg').textContent = t; $('msg').className = 'msg' + (cls ? ' ' + cls : ''); };
+  let st = {};
+  try{ st = JSON.parse(localStorage.getItem(KEY) || '{}'); }catch(e){}
+  const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} };
+
+  let art = null, p = null, signer = null, me = null, plan = null;
+
+  const STEPS = [
+    { id:'wallet', t:'MetaMask en Ethereum Mainnet' },
+    { id:'token',  t:'Token #SECT comprobado' },
+    { id:'cost',   t:'Coste del despliegue' },
+    { id:'deploy', t:'Contrato desplegado' },
+    { id:'check',  t:'Comprobación del contrato' }
+  ];
+  const info = {}, estado = {};
+  function paint(){
+    $('steps').innerHTML = '';
+    STEPS.forEach((s, i) => {
+      const row = document.createElement('div'); row.className = 'row';
+      const n = document.createElement('span'); n.className = 'n'; n.textContent = '0' + (i + 1);
+      const mid = document.createElement('div');
+      const b = document.createElement('b'); b.textContent = s.t; mid.appendChild(b);
+      if(info[s.id]){
+        const sm = document.createElement('small');
+        if(info[s.id].href){ const a = document.createElement('a'); a.href = info[s.id].href; a.target = '_blank'; a.rel = 'noopener'; a.textContent = info[s.id].text + ' ↗'; sm.appendChild(a); }
+        else sm.textContent = info[s.id].text;
+        mid.appendChild(sm);
+      }
+      const e = document.createElement('span');
+      const v = estado[s.id] || '';
+      e.className = 'st' + (v === 'ok' ? ' ok' : v === 'run' ? ' run' : v === 'bad' ? ' bad' : '');
+      e.textContent = v === 'ok' ? 'Hecho' : v === 'run' ? 'En curso…' : v === 'bad' ? 'Revisar' : 'Pendiente';
+      row.append(n, mid, e);
+      $('steps').appendChild(row);
+    });
+  }
+  const set = (id, v, text, href) => { estado[id] = v; if(text) info[id] = { text, href }; paint(); };
+  const err = e => { const t = (e && (e.shortMessage || e.reason || e.message)) || String(e); return /user rejected|denied|ACTION_REJECTED/i.test(t) ? 'Cancelaste en MetaMask. Pulsa el botón otra vez cuando quieras.' : t; };
+
+  async function conectar(){
+    $('conn').disabled = true;
+    try{
+      if(!window.ethereum) throw new Error('No se detecta MetaMask en este navegador.');
+      set('wallet', 'run');
+      msg('Acepta la conexión en MetaMask. Si no ves la ventana, pulsa el icono del zorro arriba a la derecha.');
+      await window.ethereum.request({ method:'eth_requestAccounts' });
+      let cid = await window.ethereum.request({ method:'eth_chainId' });
+      if(cid !== CHAIN){
+        msg('Acepta en MetaMask el cambio a Ethereum Mainnet…');
+        await window.ethereum.request({ method:'wallet_switchEthereumChain', params:[{ chainId:CHAIN }] });
+      }
+      p = new ethers.BrowserProvider(window.ethereum);
+      const net = await p.getNetwork();
+      if(net.chainId !== 1n) throw new Error('MetaMask no está en Ethereum Mainnet.');
+      signer = await p.getSigner(); me = await signer.getAddress();
+      const eth = await p.getBalance(me);
+      set('wallet', 'ok', 'Cuenta ' + me + ' · ' + Number(ethers.formatEther(eth)).toFixed(5) + ' ETH');
+
+      set('token', 'run');
+      const code = await p.getCode(TOKEN);
+      if(!code || code === '0x') throw new Error('No hay contrato en la dirección del token. No despliegues.');
+      const t = new ethers.Contract(TOKEN, ERC20, p);
+      const [sym, dec, sup] = await Promise.all([t.symbol(), t.decimals(), t.totalSupply()]);
+      if(Number(dec) !== 18) throw new Error('El token no tiene 18 decimales. No despliegues.');
+      set('token', 'ok', sym + ' · ' + Number(dec) + ' decimales · supply ' + Number(ethers.formatUnits(sup, 18)).toLocaleString('es') + ' · ' + TOKEN, EXP + '/token/' + TOKEN);
+
+      if(st.address){ await comprobar(); return; }
+
+      set('cost', 'run'); msg('Calculando el coste…');
+      art = await (await fetch('artifact.json', { cache:'no-store' })).json();
+      const f = new ethers.ContractFactory(art.abi, art.bytecode, signer);
+      const tx = await f.getDeployTransaction(TOKEN);
+      const gas = await p.estimateGas({ ...tx, from: me });
+      const fee = await p.getFeeData();
+      const precio = fee.maxFeePerGas || fee.gasPrice;
+      const limite = gas * 12n / 10n;
+      const coste = gas * (fee.gasPrice || precio);
+      const tope = limite * precio;
+      plan = { f, limite };
+      const okSaldo = eth >= tope;
+      set('cost', okSaldo ? 'ok' : 'bad',
+        'Gas ~' + Number(gas).toLocaleString('es') + ' · coste estimado ~' + Number(ethers.formatEther(coste)).toFixed(5) + ' ETH (máximo ' + Number(ethers.formatEther(tope)).toFixed(5) + ' ETH)');
+      if(!okSaldo){ msg('Te falta ETH: añade un poco más a la cuenta y vuelve a pulsar Conectar.', 'bad'); $('conn').disabled = false; return; }
+      $('go').disabled = false;
+      msg('Todo listo. Pulsa "Desplegar staking" y confirma en MetaMask.');
+    }catch(e){
+      ['wallet','token','cost'].forEach(id => { if(estado[id] === 'run') estado[id] = 'bad'; }); paint();
+      msg(err(e), 'bad'); $('conn').disabled = false;
+    }
+  }
+
+  async function desplegar(){
+    $('go').disabled = true;
+    try{
+      if(st.address) throw new Error('Ya hay un contrato desplegado desde esta página: ' + st.address);
+      set('deploy', 'run');
+      msg('Confirma el despliegue en MetaMask. Si no ves la ventana, pulsa el icono del zorro arriba a la derecha.');
+      const c = await plan.f.deploy(TOKEN, { gasLimit: plan.limite });
+      const tx = c.deploymentTransaction();
+      st.tx = tx.hash; save();
+      set('deploy', 'run', 'Transacción enviada: ' + tx.hash, EXP + '/tx/' + tx.hash);
+      msg('Esperando a que Ethereum confirme (suele tardar menos de un minuto)…');
+      await c.waitForDeployment();
+      st.address = await c.getAddress(); st.deployer = me; save();
+      set('deploy', 'ok', st.address, EXP + '/address/' + st.address);
+      await comprobar();
+    }catch(e){
+      if(estado.deploy === 'run') estado.deploy = 'bad'; paint();
+      msg(err(e), 'bad'); $('go').disabled = !!st.address;
+    }
+  }
+
+  async function comprobar(){
+    set('deploy', 'ok', st.address, EXP + '/address/' + st.address);
+    set('check', 'run');
+    if(!art) art = await (await fetch('artifact.json', { cache:'no-store' })).json();
+    const c = new ethers.Contract(st.address, art.abi, p);
+    const [owner, tok, rate, cerr] = await Promise.all([c.owner(), c.token(), c.rateBps(), c.depositsPaused()]);
+    const bien = tok.toLowerCase() === TOKEN.toLowerCase() && rate === 1490n && cerr === true;
+    set('check', bien ? 'ok' : 'bad', bien ? 'Token correcto · tasa 14,9% · depósitos cerrados · dueño ' + owner : 'Algo no cuadra: revisa los datos de abajo');
+    $('addr').textContent = st.address;
+    $('kv').innerHTML = '';
+    [['Dueño (owner)', owner], ['Token', tok], ['Tasa (rateBps)', rate.toString() + ' = 14,9% al año'], ['Depósitos', cerr ? 'cerrados (correcto: se abren después de cargar el fondo)' : 'abiertos'], ['Transacción', st.tx || '—']]
+      .forEach(([k, v]) => { const a = document.createElement('span'); a.textContent = k; const b = document.createElement('span'); b.textContent = v; $('kv').append(a, b); });
+    $('res').classList.add('on');
+    $('go').disabled = true;
+    msg(bien ? 'Desplegado y comprobado. Copia la dirección y pásasela a tu equipo para el siguiente paso (pasar el contrato a la Safe). No cargues SECT todavía.' : 'Revisa los datos antes de seguir.', bien ? 'ok' : 'bad');
+  }
+
+  $('conn').onclick = conectar;
+  $('go').onclick = desplegar;
+  $('copy').onclick = async () => {
+    try{ await navigator.clipboard.writeText(st.address); msg('Dirección copiada.', 'ok'); }
+    catch(e){ msg('No se pudo copiar: selecciona la dirección y cópiala a mano.'); }
+  };
+  $('reset').onclick = () => {
+    if(!confirm('¿Olvidar el contrato desplegado y permitir desplegar otro? El contrato ya desplegado sigue existiendo en la blockchain.')) return;
+    st = {}; save(); $('res').classList.remove('on'); ['deploy','check','cost'].forEach(k => { delete estado[k]; delete info[k]; }); paint(); msg('Pulsa Conectar para empezar.'); $('conn').disabled = false;
+  };
+  paint();
+  if(st.address) msg('Ya desplegaste un contrato desde este navegador. Pulsa Conectar para comprobarlo.');
+})();
+</script>
+</body>
+</html>
