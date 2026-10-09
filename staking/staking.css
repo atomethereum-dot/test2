@@ -107,17 +107,19 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offse
 @media (max-width:520px){.brand svg{width:32px;height:32px}}
 
 /* ============ portada ============ */
-.stage{position:relative;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;background:#000;overflow:hidden;
+.stage{position:relative;display:flex;flex-direction:column;background:#000;overflow:hidden;
   transform-origin:50% 50%}
 #grid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 .vignette{position:absolute;inset:0;z-index:1;pointer-events:none;
   background:radial-gradient(118% 88% at 38% 46%,transparent 46%,rgba(0,0,0,.7) 100%)}
 .layer{position:relative;z-index:2;display:flex;flex-direction:column;flex:1;
-  padding-top:calc(var(--head-h,76px) + clamp(16px,4vh,44px))}
-.hero{flex:1;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.8fr);gap:clamp(30px,4vw,76px);
-  align-items:center;padding:clamp(48px,7vh,96px) var(--pad)}
+  padding-top:calc(var(--head-h,76px) + clamp(6px,1.6vh,18px))}
+/* el bloque arranca pegado a la cabecera y las dos columnas miden lo mismo:
+   la ficha empieza a la altura del rotulo Live y termina con los botones */
+.hero{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.8fr);gap:clamp(30px,4vw,76px);
+  align-items:stretch;padding:clamp(18px,3vh,36px) var(--pad) clamp(80px,12vh,130px)}
 .hero-l{position:relative}
-.hero-new{position:absolute;left:0;bottom:calc(100% + 22px);white-space:nowrap;display:inline-flex;align-items:center;gap:12px;
+.hero-new{position:relative;margin-bottom:22px;white-space:nowrap;display:inline-flex;align-items:center;gap:12px;
   padding:9px 14px 9px 12px;border:1px solid rgba(62,207,142,.32);background:rgba(62,207,142,.06);color:var(--ink-2);
   font-size:10.5px;text-decoration:none;transition:border-color .3s var(--ease),color .3s var(--ease)}
 .hero-new b{color:#3ecf8e;font-weight:500}
@@ -162,12 +164,12 @@ h1 .ln > span{display:block;transform:translateY(112%)}
 .btn.addr{text-transform:none;letter-spacing:.08em}
 
 /* ficha del programa */
-.sheet{color:var(--ink-3);border-left:1px solid var(--hair);padding-left:clamp(18px,2vw,30px);min-width:190px}
+.sheet{color:var(--ink-3);border-left:1px solid var(--hair);padding-left:clamp(18px,2vw,30px);min-width:190px;display:flex;flex-direction:column}
 .sheet h2{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
   color:var(--ink-4);display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;margin-bottom:4px;
   border-bottom:1px solid var(--hair)}
 .sheet h2 em{font-style:normal;color:var(--ink-4)}
-.sheet dl{display:grid;grid-template-columns:1fr auto;gap:0 18px;align-items:baseline}
+.sheet dl{flex:1;display:grid;grid-template-columns:1fr auto;gap:0 18px;align-items:baseline;align-content:space-between}
 .sheet dt,.sheet dd{padding:12px 0;border-bottom:1px solid var(--hair-soft)}
 .sheet dt{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-4)}
 .sheet dd{color:var(--ink-2);font-size:13.5px;font-weight:400;text-align:right;font-variant-numeric:tabular-nums}
@@ -199,7 +201,6 @@ html:not(.js) .rule{width:74px}
   h1{max-width:none}
   .sheet{border-left:0;border-top:1px solid var(--hair);padding:24px 0 0;min-width:0}
   .sheet h2{padding-bottom:12px}
-  .hero-new{position:static;margin-bottom:22px}
 }
 
 /* ============ hojas claras ============ */
