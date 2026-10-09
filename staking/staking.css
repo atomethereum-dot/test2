@@ -488,3 +488,8 @@ html.cadena-viva .solo-previa{display:none}
 .earn-sub b{color:var(--blue2);font-weight:400;font-variant-numeric:tabular-nums}
 .earn-claim{margin-top:14px}
 @media (prefers-reduced-motion:reduce){.earn-head i::after{animation:none}}
+
+/* direccion oficial del contrato bajo el formulario */
+.stake-addr{overflow-wrap:anywhere}
+.stake-addr a{color:var(--blue2);text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:.95em}
+.stake-addr a:hover{text-decoration:underline}

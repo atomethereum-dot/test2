@@ -3,7 +3,7 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable2Step.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /// @title Sectora Holder Rewards
@@ -45,7 +45,12 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 /// claimed. They are tracked separately and every payout is checked
 /// against its own bucket: one holder's deposit can never leave as another
 /// holder's reward.
-contract SectoraHolderRewards is Ownable, ReentrancyGuard {
+///
+/// OWNERSHIP. Two-step (Ownable2Step): a transfer only completes when the
+/// new owner calls acceptOwnership(), so a mistyped address can never take
+/// control. renounceOwnership() is disabled, so the pool and the rate can
+/// never be frozen by accident.
+contract SectoraHolderRewards is Ownable2Step, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     uint256 public constant BPS = 10_000;
@@ -69,6 +74,12 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
     /// deposits, and never includes a reward already earned by a holder.
     uint256 public rewardPool;
 
+    /// @notice Upper bound of rewards credited to holders and not claimed
+    /// yet: every token that leaves rewardPool through accrual is added here
+    /// and every claim is taken off. Holders are credited rounding down, so
+    /// what they can actually claim never exceeds this.
+    uint256 public totalUnclaimed;
+
     /// @notice Accounts with a non-zero deposit right now.
     uint256 public depositorCount;
 
@@ -90,7 +101,7 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
 
     struct Account {
         uint256 amount; // deposit
-        uint256 rewardDebt; // accumulator checkpoint, scaled by 1e18
+        uint256 accPaid; // accRewardPerToken at the last settlement
         uint256 earned; // rewards accrued and not yet claimed
     }
 
@@ -105,6 +116,8 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
     event AccrualResumed(uint256 atTimestamp, uint256 poolRemaining);
     event DepositsPausedChanged(bool paused);
     event RateChanged(uint256 oldRateBps, uint256 newRateBps);
+    event SurplusRecovered(address indexed to, uint256 amount);
+    event TokenRescued(address indexed otherToken, address indexed to, uint256 amount);
 
     constructor(address _token) Ownable(msg.sender) {
         require(_token != address(0), "Rewards: token is zero");
@@ -135,19 +148,23 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
             }
             if (owed > 0) {
                 rewardPool -= owed;
+                totalUnclaimed += owed;
                 accRewardPerToken += (owed * 1e18) / totalDeposited;
             }
         }
         lastUpdate = block.timestamp;
     }
 
-    /// @dev Books an account's share of the accumulator into `earned`.
+    /// @dev Books an account's share of the accumulator into `earned`. The
+    /// checkpoint is the accumulator itself, not amount x accumulator, so
+    /// each credit is the holder's exact share rounded down: the sum of all
+    /// credits can never exceed what left rewardPool.
     function _settle(address who) internal {
         Account storage a = accounts[who];
         if (a.amount > 0) {
-            a.earned += ((a.amount * accRewardPerToken) / 1e18) - a.rewardDebt;
+            a.earned += (a.amount * (accRewardPerToken - a.accPaid)) / 1e18;
         }
-        a.rewardDebt = (a.amount * accRewardPerToken) / 1e18;
+        a.accPaid = accRewardPerToken;
     }
 
     // ---------------------------------------------------------------
@@ -172,7 +189,6 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
         if (a.amount == 0) depositorCount += 1;
         a.amount += received;
         totalDeposited += received;
-        a.rewardDebt = (a.amount * accRewardPerToken) / 1e18;
         emit Deposited(msg.sender, received);
     }
 
@@ -189,7 +205,6 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
         a.amount -= amount;
         if (a.amount == 0) depositorCount -= 1;
         totalDeposited -= amount;
-        a.rewardDebt = (a.amount * accRewardPerToken) / 1e18;
 
         token.safeTransfer(msg.sender, amount);
         emit Withdrawn(msg.sender, amount);
@@ -204,6 +219,7 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
         uint256 amount = a.earned;
         require(amount > 0, "Rewards: nothing to claim");
         a.earned = 0;
+        totalUnclaimed -= amount;
 
         // the tokens left rewardPool during _update, so this transfer can
         // never reach into anyone's deposit
@@ -237,7 +253,7 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
     /// rewardPool, so it can never touch a deposit or a reward already
     /// earned by a holder.
     function withdrawRewards(address to, uint256 amount) external onlyOwner nonReentrant {
-        require(to != address(0), "Rewards: to is zero");
+        require(to != address(0) && to != address(this), "Rewards: bad recipient");
         _update();
         require(amount > 0 && amount <= rewardPool, "Rewards: amount above pool");
         rewardPool -= amount;
@@ -250,7 +266,7 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
     /// because _update() shrinks it in between; here the amount is read
     /// after the update, inside the same call.
     function withdrawAllRewards(address to) external onlyOwner nonReentrant {
-        require(to != address(0), "Rewards: to is zero");
+        require(to != address(0) && to != address(this), "Rewards: bad recipient");
         _update();
         uint256 amount = rewardPool;
         require(amount > 0, "Rewards: pool empty");
@@ -259,9 +275,39 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
         emit RewardsWithdrawn(to, amount, 0);
     }
 
+    /// @notice Recover #SECT that reached the contract outside deposit()
+    /// and fundRewards(), e.g. a plain transfer by mistake. Only what is
+    /// left after every deposit, the pool and every unclaimed reward is
+    /// covered can move, so no holder's tokens can ever leave this way.
+    function recoverSurplus(address to) external onlyOwner nonReentrant {
+        require(to != address(0) && to != address(this), "Rewards: bad recipient");
+        _update();
+        uint256 owedOut = totalDeposited + rewardPool + totalUnclaimed;
+        uint256 bal = token.balanceOf(address(this));
+        require(bal > owedOut, "Rewards: no surplus");
+        uint256 amount = bal - owedOut;
+        token.safeTransfer(to, amount);
+        emit SurplusRecovered(to, amount);
+    }
+
+    /// @notice Recover any OTHER token sent here by mistake. It can never
+    /// touch #SECT.
+    function rescueToken(address otherToken, address to, uint256 amount) external onlyOwner nonReentrant {
+        require(otherToken != address(token), "Rewards: not for the staking token");
+        require(to != address(0), "Rewards: bad recipient");
+        IERC20(otherToken).safeTransfer(to, amount);
+        emit TokenRescued(otherToken, to, amount);
+    }
+
     // ---------------------------------------------------------------
     // admin
     // ---------------------------------------------------------------
+
+    /// @notice Disabled: leaving the contract without an owner would freeze
+    /// the rate and the unearned pool forever.
+    function renounceOwnership() public view override onlyOwner {
+        revert("Rewards: renounce disabled");
+    }
 
     function setDepositsPaused(bool paused) external onlyOwner {
         depositsPaused = paused;
@@ -292,7 +338,7 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
         uint256 owed = _pendingGlobal();
         if (owed > rewardPool) owed = rewardPool;
         if (owed > 0 && totalDeposited > 0) acc += (owed * 1e18) / totalDeposited;
-        return a.earned + ((a.amount * acc) / 1e18) - a.rewardDebt;
+        return a.earned + (a.amount * (acc - a.accPaid)) / 1e18;
     }
 
     /// @notice Everything the page needs about one account, in one call.
@@ -321,25 +367,40 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
             uint256 chainTime
         )
     {
-        // chainTime lets the page count against the chain clock, not the
-        // browser's, which can be far apart
+        // pool and paused are as of this second, not as of the last
+        // transaction: accrual since then is already taken off the pool, and
+        // a pool it has emptied reads as paused. chainTime lets the page
+        // count against the chain clock, not the browser's.
+        (uint256 effPool, bool effPaused) = _effectivePool();
         return (
             totalDeposited,
-            rewardPool,
+            effPool,
             rateBps,
-            accrualPaused,
+            effPaused,
             depositsPaused,
             depositorCount,
             block.timestamp
         );
     }
 
-    /// @notice Seconds the current pool can keep paying at the current
-    /// deposit level. Divide by 86400 for days.
+    /// @dev rewardPool minus what has accrued since the last update, and
+    /// whether that leaves accrual stopped.
+    function _effectivePool() internal view returns (uint256 effPool, bool effPaused) {
+        uint256 owed = _pendingGlobal();
+        if (owed >= rewardPool) {
+            return (0, accrualPaused || owed > 0);
+        }
+        return (rewardPool - owed, accrualPaused);
+    }
+
+    /// @notice Seconds the pool can keep paying at the current deposits and
+    /// rate, counted from now. 0 if it is already empty; the maximum uint
+    /// if nothing is being paid (no deposits or a 0 rate). Divide by 86400
+    /// for days.
     function runwaySeconds() external view returns (uint256) {
-        if (totalDeposited == 0) return type(uint256).max;
-        uint256 perSecond = (totalDeposited * rateBps) / (BPS * YEAR);
-        if (perSecond == 0) return type(uint256).max;
-        return rewardPool / perSecond;
+        if (totalDeposited == 0 || rateBps == 0) return type(uint256).max;
+        (uint256 effPool, bool effPaused) = _effectivePool();
+        if (effPaused || effPool == 0) return 0;
+        return (effPool * BPS * YEAR) / (totalDeposited * rateBps);
     }
 }

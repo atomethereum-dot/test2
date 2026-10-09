@@ -76,6 +76,23 @@
     return;
   }
 
+  // Dentro de un iframe de otra web no se conecta nada: evita que alguien
+  // la incruste y haga pulsar botones encima (clickjacking).
+  if (window.top !== window.self) {
+    console.warn("[sectora] pagina incrustada en otra web: staking desactivado");
+    return;
+  }
+
+  // Direcciones con checksum valido o no se arranca: un caracter mal pegado
+  // no puede llegar nunca a una aprobacion.
+  try {
+    if (ethers.getAddress(CONTRACTS.staking) !== CONTRACTS.staking ||
+        ethers.getAddress(CONTRACTS.token) !== CONTRACTS.token) throw new Error("checksum");
+  } catch (e) {
+    console.error("[sectora] direccion de CONTRACTS invalida o sin checksum", e);
+    return;
+  }
+
   // ---------------------------------------------------------------
   // estado
   // ---------------------------------------------------------------
@@ -100,7 +117,6 @@
     Number(ethers.formatUnits(v, decimales)).toLocaleString("en-US", {
       maximumFractionDigits: dec === undefined ? 2 : dec,
     });
-  const parse = (txt) => ethers.parseUnits(txt, decimales);
 
   function aviso(texto, error) {
     let caja = $("chainMsg");
@@ -127,6 +143,8 @@
       return "The token spend has not been approved.";
     if (/insufficient balance|ERC20InsufficientBalance/i.test(m))
       return "Not enough balance.";
+    if (/network changed|NETWORK_ERROR/i.test(m))
+      return "Your wallet changed network. Reload the page.";
     return m.slice(0, 140) || "The transaction failed.";
   }
 
@@ -176,9 +194,9 @@
       '<div class="earn-sub"><span>Deposited <b id="earnDep">0</b> #SECT</span><span>+<b id="earnMin">0</b> #SECT / min</span></div>' +
       '<button type="button" class="btn primary wide earn-claim" id="earnClaim">Claim rewards</button>';
     btn.parentNode.insertBefore(caja, btn);
-    $("earnClaim").addEventListener("click", () =>
+    $("earnClaim").addEventListener("click", accion(() =>
       enviar("Claiming", () => staking.connect(firmante).claim())
-    );
+    ));
     clearInterval(contador.id);
     contador.id = setInterval(() => {
       const el = $("earnN");
@@ -210,8 +228,52 @@
   // escritura
   // ---------------------------------------------------------------
 
+  /* Una accion a la vez: los botones se apagan mientras hay una en curso
+     (un doble clic no manda dos depositos) y cualquier fallo, tambien de
+     lectura, acaba en un aviso legible en vez de en silencio. */
+  let ocupado = false;
+  function accion(fn) {
+    return async () => {
+      if (ocupado) return;
+      ocupado = true;
+      document.querySelectorAll("#chainActions button, #earnClaim").forEach((b) => (b.disabled = true));
+      try {
+        await fn();
+      } catch (e) {
+        aviso(explicar(e), true);
+      } finally {
+        ocupado = false;
+        document.querySelectorAll("#chainActions button, #earnClaim").forEach((b) => (b.disabled = false));
+      }
+    };
+  }
+
+  /** La red y la cuenta de la wallet, comprobadas justo antes de firmar. */
+  async function mismaWallet() {
+    const red = await proveedor.send("eth_chainId", []);
+    const cs = await proveedor.send("eth_accounts", []);
+    if (red !== CONTRACTS.chainId) throw new Error("Your wallet is not on the Ethereum network.");
+    if (!cs || !cs[0] || cs[0].toLowerCase() !== cuenta.toLowerCase())
+      throw new Error("Your wallet account changed. Reload the page.");
+  }
+
+  /* Cantidad escrita: solo cifras con punto decimal opcional y como mucho
+     los decimales del token. Nada de signos, comas, notacion cientifica ni
+     ceros: si no es valida no se hace nada. */
+  function leerCantidad() {
+    const t = ((entrada && entrada.value) || "").trim();
+    if (!/^\d+(\.\d+)?$/.test(t)) return null;
+    try {
+      const v = ethers.parseUnits(t, decimales);
+      return v > 0n ? v : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   async function enviar(nombre, hacer) {
     try {
+      await mismaWallet();
       aviso(nombre + "…");
       const tx = await hacer();
       aviso(nombre + ": confirming…");
@@ -225,13 +287,16 @@
   }
 
   async function depositar() {
-    const txt = entrada && entrada.value ? entrada.value.replace(/,/g, "") : "";
-    const n = Number(txt);
-    if (!txt || !isFinite(n) || n <= 0) {
-      aviso("Enter an amount first.", true);
+    const cantidad = leerCantidad();
+    if (cantidad === null) {
+      aviso("Enter a valid amount, like 1000 or 1000.5.", true);
       return;
     }
-    const cantidad = parse(txt);
+    const pv = await staking.poolView();
+    if (pv.depositsClosed) {
+      aviso("Deposits are not open yet.", true);
+      return;
+    }
 
     const v = await staking.accountView(cuenta);
     if (v.walletBalance < cantidad) {
@@ -272,20 +337,22 @@
       return b;
     };
 
-    nuevo("Deposit #SECT", depositar);
+    nuevo("Deposit #SECT", accion(depositar));
     // cobrar va en el contador en vivo (montarContador)
-    nuevo("Withdraw", async () => {
+    // retirar usa solo la cantidad escrita; para sacarlo todo hay un boton
+    // aparte, asi una cantidad mal escrita nunca se convierte en "todo"
+    nuevo("Withdraw", accion(async () => {
+      const cantidad = leerCantidad();
+      if (cantidad === null) return aviso("Enter the amount to withdraw, or use Withdraw all.", true);
+      const v = await staking.accountView(cuenta);
+      if (cantidad > v.deposited) return aviso("More than you have deposited.", true);
+      await enviar("Withdrawing", () => staking.connect(firmante).withdraw(cantidad));
+    }));
+    nuevo("Withdraw all", accion(async () => {
       const v = await staking.accountView(cuenta);
       if (v.deposited === 0n) return aviso("You have nothing deposited.", true);
-      // si hay cantidad escrita se retira esa; si no, todo
-      const txt = entrada && entrada.value ? entrada.value.replace(/,/g, "") : "";
-      let cantidad = v.deposited;
-      if (txt && Number(txt) > 0) {
-        cantidad = parse(txt);
-        if (cantidad > v.deposited) return aviso("More than you have deposited.", true);
-      }
-      enviar("Withdrawing", () => staking.connect(firmante).withdraw(cantidad));
-    });
+      await enviar("Withdrawing all", () => staking.connect(firmante).withdraw(v.deposited));
+    }));
 
     btn.parentNode.appendChild(caja);
   }
@@ -313,6 +380,10 @@
     } catch (e) {
       aviso("Could not read the token decimals; stopping here.", true);
       return;   // antes que arriesgarse a mover una cantidad mal escalada
+    }
+    if (decimales !== 18) {
+      aviso("Unexpected token decimals; stopping here.", true);
+      return;
     }
 
     // Esta es la comprobacion que de verdad protege al pegar direcciones: si
@@ -348,7 +419,9 @@
   const anunciados = new Map();
   window.addEventListener("eip6963:announceProvider", (e) => {
     const d = e.detail || {};
-    if (d.info && d.provider) anunciados.set(d.info.rdns, d.provider);
+    // por uuid: un anuncio posterior con el mismo rdns no puede sustituir
+    // a la cartera que ya se anuncio
+    if (d.info && d.info.uuid && d.provider && !anunciados.has(d.info.uuid)) anunciados.set(d.info.uuid, d.provider);
   });
   window.dispatchEvent(new Event("eip6963:requestProvider"));
 
@@ -357,6 +430,7 @@
     return window.ethereum || null;
   }
 
+  const oyentes = new WeakSet();
   async function pedirConexion() {
     const eip1193 = elegirProveedor();
     if (!eip1193) {
@@ -368,6 +442,8 @@
       if (!cuentas || !cuentas.length) return;
       await conectar(eip1193, cuentas[0]);
 
+      if (oyentes.has(eip1193)) return;   // volver a pulsar no duplica oyentes
+      oyentes.add(eip1193);
       eip1193.on && eip1193.on("accountsChanged", (c) => {
         if (c && c.length) conectar(eip1193, c[0]);
         else {
@@ -387,20 +463,29 @@
   /* Sin wallet tambien se lee el contrato: la tasa puede haber cambiado
      (setRate) y la pagina no debe seguir mostrando la de su texto. */
   async function lecturaPublica() {
+    // se pregunta a dos nodos publicos y, si contestan los dos, tienen que
+    // coincidir en la tasa: un solo nodo mentiroso no puede inventar el APY
+    const buenos = [];
     for (const url of RPCS) {
+      if (buenos.length === 2) break;
       try {
         const p = new ethers.JsonRpcProvider(url, Number(CONTRACTS.chainId), { staticNetwork: true });
         const c = new ethers.Contract(CONTRACTS.staking, STAKING_ABI, p);
-        await Promise.race([
+        const pv = await Promise.race([
           c.poolView(),
           new Promise((_, no) => setTimeout(() => no(new Error("timeout")), 6000)),
         ]);
-        if (!staking) await pintarPool(c);   // con wallet conectada, manda la wallet
-        return;
+        buenos.push({ c, rate: pv.rate });
       } catch (e) {
         console.warn("[sectora] lectura publica fallo en", url, e && e.message);
       }
     }
+    if (!buenos.length) return;
+    if (buenos.length === 2 && buenos[0].rate !== buenos[1].rate) {
+      console.warn("[sectora] los nodos publicos no coinciden; no se muestra su lectura");
+      return;
+    }
+    if (!staking) await pintarPool(buenos[0].c);   // con wallet conectada, manda la wallet
   }
 
   function arrancar() {
@@ -439,6 +524,22 @@
       window.SectoraWallet.onChange((direccion, eip1193) => {
         if (direccion && eip1193) conectar(eip1193, direccion);
       });
+    }
+
+    // la direccion oficial a la vista: quien la compare con la que muestra
+    // su wallet al aprobar detecta una copia falsa de la pagina
+    if (btn && btn.parentNode && !$("stakeAddr")) {
+      const nota = document.createElement("p");
+      nota.id = "stakeAddr";
+      nota.className = "stake-note stake-addr";
+      nota.append("Staking contract: ");
+      const a = document.createElement("a");
+      a.href = "https://etherscan.io/address/" + CONTRACTS.staking;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = CONTRACTS.staking;
+      nota.append(a, ". Your wallet must show this same address when you approve.");
+      btn.parentNode.appendChild(nota);
     }
 
     lecturaPublica();

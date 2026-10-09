@@ -240,6 +240,64 @@ async function main() {
   const bal2 = N(await tok.balanceOf(r2a));
   ok(bal2 + 1e-9 >= N(await r2.totalDeposited()) + N(await r2.rewardPool()), "el contrato nuevo tambien cuadra");
 
+  // --- 11. blindaje: propiedad, destinatarios, rescates, vistas --------
+  console.log("\n=== 11. blindaje ===");
+  const r3 = await R.deploy(await tok.getAddress(), { gasLimit: 4000000 });
+  await r3.waitForDeployment();
+  const r3a = await r3.getAddress();
+  const bobA = await dir(bob);
+  const aliceA = await dir(alice);
+  const tokA = await tok.getAddress();
+  await revierte(() => r3.connect(dueno).renounceOwnership.staticCall(GAS), "renounceOwnership esta desactivado", "renounce disabled");
+  await (await r3.connect(dueno).transferOwnership(bobA, GAS)).wait();
+  ok((await r3.owner()) === yo && (await r3.pendingOwner()) === bobA, "transferir no cambia el dueño hasta que el nuevo acepta");
+  await revierte(() => r3.connect(alice).acceptOwnership.staticCall(GAS), "nadie mas puede aceptar la propiedad");
+  await (await r3.connect(bob).acceptOwnership(GAS)).wait();
+  ok((await r3.owner()) === bobA, "al aceptar, el nuevo dueño manda");
+  await revierte(() => r3.connect(dueno).setRate.staticCall(1, GAS), "el dueño anterior ya no puede tocar nada");
+  await (await r3.connect(bob).transferOwnership(yo, GAS)).wait();
+  await (await r3.connect(dueno).acceptOwnership(GAS)).wait();
+  ok((await r3.owner()) === yo, "y se puede devolver con el mismo proceso");
+
+  await (await tok.connect(dueno).approve(r3a, E("100000"), GAS)).wait();
+  await (await r3.connect(dueno).fundRewards(E("100000"), GAS)).wait();
+  await (await r3.connect(dueno).setDepositsPaused(false, GAS)).wait();
+  await revierte(() => r3.connect(dueno).withdrawRewards.staticCall(r3a, E("1"), GAS), "el fondo no se puede 'retirar' al propio contrato", "bad recipient");
+  await revierte(() => r3.connect(dueno).withdrawAllRewards.staticCall(r3a, GAS), "tampoco con withdrawAllRewards", "bad recipient");
+
+  await (await tok.connect(alice).approve(r3a, E("100000000"), GAS)).wait();
+  await (await r3.connect(alice).deposit(E("10000"), GAS)).wait();
+  await avanzar(30 * DIA);
+  const runway = Number(await r3.runwaySeconds()) / DIA;
+  cerca(runway, (100000 - 10000 * 0.149 * 30 / 365) / (10000 * 0.149) * 365, 0.01, "runwaySeconds cuenta desde ahora (dias)");
+  cerca(N((await r3.poolView()).pool), 100000 - 10000 * 0.149 * 30 / 365, 0.01, "poolView da el fondo de este segundo");
+  await revierte(() => r3.connect(dueno).recoverSurplus.staticCall(yo, GAS), "sin envios por error no hay nada que recuperar", "no surplus");
+  await revierte(() => r3.connect(alice).recoverSurplus.staticCall(aliceA, GAS), "solo el dueño recupera");
+  await (await tok.connect(bob).transfer(r3a, E("500"), GAS)).wait();   // alguien envia SECT por error
+  antes = await saldo(dueno);
+  await (await r3.connect(dueno).recoverSurplus(yo, GAS)).wait();
+  cerca((await saldo(dueno)) - antes, 500, 0, "recupera exactamente los 500 enviados por error");
+  await revierte(() => r3.connect(dueno).recoverSurplus.staticCall(yo, GAS), "y ni un wei mas", "no surplus");
+  antes = await saldo(alice);
+  const ganadoR3 = N(await r3.earned(await dir(alice)));
+  await (await r3.connect(alice).claim(GAS)).wait();
+  await (await r3.connect(alice).withdraw(E("10000"), GAS)).wait();
+  cerca((await saldo(alice)) - antes, ganadoR3 + 10000, 0.001, "alice cobra y retira todo despues del rescate");
+  const pendA = await r3.earned(aliceA);
+  const polvo = (await r3.totalUnclaimed()) - pendA;
+  ok(polvo >= 0n && polvo < 10n ** 9n, `totalUnclaimed = lo que alice aun no cobro (${pendA} wei) + polvo de redondeo (${polvo} wei)`);
+
+  const otro = await new ethers.ContractFactory(tokArt.abi, tokArt.bytecode, dueno).deploy(E("1000"), { gasLimit: 4000000 });
+  await otro.waitForDeployment();
+  await (await otro.connect(dueno).transfer(r3a, E("100"), GAS)).wait();
+  const otroA = await otro.getAddress();
+  await revierte(() => r3.connect(dueno).rescueToken.staticCall(tokA, yo, E("1"), GAS), "rescueToken nunca toca #SECT", "not for the staking token");
+  await revierte(() => r3.connect(alice).rescueToken.staticCall(otroA, aliceA, E("100"), GAS), "solo el dueño rescata");
+  await (await r3.connect(dueno).rescueToken(otroA, yo, E("100"), GAS)).wait();
+  ok((await otro.balanceOf(r3a)) === 0n, "rescata otro token enviado por error");
+  const bal3 = await tok.balanceOf(r3a);
+  ok(bal3 >= (await r3.totalDeposited()) + (await r3.rewardPool()) + (await r3.totalUnclaimed()), "cuadra: saldo >= depositos + fondo + pendiente");
+
   console.log(`\n================  ${pasan} pasan, ${fallan} fallan  ================`);
   process.exit(fallan ? 1 : 0);
 }

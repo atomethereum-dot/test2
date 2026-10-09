@@ -1,26 +1,65 @@
 # SectoraHolderRewards — despliegue en Ethereum Mainnet
 
-El programa de recompensas para holders de #SECT: **14,9 % APY al arrancar**,
-pagado por la tesorería de Sectora Foundation. El dueño puede cambiar la tasa
-cuando quiera con `setRate`.
+El staking de #SECT: los holders depositan #SECT, ganan recompensas cada
+segundo a la tasa que fije el dueño (14,9 % al arrancar) y cobran cuando
+quieren. Las recompensas salen de un fondo que carga la fundación.
 
 ## Las reglas
 
 | | |
 |---|---|
-| Recompensa | **14,9 % APY** al arrancar, se acumula cada segundo, sin interés compuesto. **Ajustable** por el dueño (`setRate`), sin límite de negocio |
-| Cobro | **Cuando quieran** (`claim`) |
-| Retiro | **Cuando quieran, sin penalización** (`withdraw`). Lo ganado sigue cobrable después de retirar |
-| Tope de depósitos | **Ninguno**. Para frenar la entrada: `setDepositsPaused(true)` |
-| Duración | Sin fecha de fin |
-| Fondo de recompensas | Lo carga la tesorería. **Sin bloqueo**: el dueño puede retirar en cualquier momento la parte que nadie ha ganado todavía |
+| Recompensa | Cada segundo, a `rateBps`. Arranca en 14,9 %. El dueño la cambia cuando quiera con `setRate`, sin límite de negocio |
+| Cobro | Cuando quieran (`claim`) |
+| Retiro | Cuando quieran, sin penalización (`withdraw`). Funciona siempre |
+| Tope de depósitos | Ninguno. Para frenar la entrada: `setDepositsPaused(true)` |
+| Fondo de recompensas | Lo carga la fundación. El dueño puede retirar en cualquier momento la parte que nadie ha ganado todavía |
+| Propiedad | En dos pasos: transferir + aceptar. `renounceOwnership` está desactivado |
+| Depósitos de los holders | Nadie puede tocarlos, tampoco el dueño |
 
-No hay tope de depósitos. La tasa se puede cambiar (ver *Cambiar la tasa*
-más abajo), y cada cambio cuenta solo desde ese segundo: lo ya ganado nunca
-se recalcula.
+---
 
-Las funciones se llaman `deposit`, `withdraw` y `claim`; el contrato no usa
-la palabra "stake" en ningún sitio.
+## 0. Antes de desplegar (obligatorio)
+
+### 0.1 Comprueba el token #SECT en Etherscan
+
+Abre `0x8C9984B06281f1CA9416e493c2E602AaB08513db` en etherscan.io →
+*Contract* → *Code*. El staking da por hecho que #SECT es un ERC-20 normal.
+Confirma cada punto:
+
+- [ ] **La reducción de 50M a 25M del 15 mar 2027 es una quema** desde una
+      wallet, y **no** un cambio automático de los saldos de todo el mundo
+      (rebase). Si fuera un rebase, el staking se quedaría sin fondos para
+      devolver los depósitos.
+- [ ] **No es un proxy**: no aparece *Read as Proxy* ni *Write as Proxy*.
+- [ ] **`owner()` es `0x0000…0000`** y no hay otros roles de administrador
+      (admin, minter, operator…).
+- [ ] **0 % de comisión** al transferir, y ninguna función para activarla.
+- [ ] **No tiene pausa, lista negra, límite por transacción, límite por
+      wallet ni enfriamiento entre transferencias.**
+
+Si algo de esto no se cumple, **no despliegues** y avísame.
+
+### 0.2 Las wallets
+
+- **No despliegues desde la MetaMask de todos los días.** La dirección del
+  Hash Market en Sepolia coincide con la del #SECT de mainnet: eso indica que
+  la misma wallet desplegó ambos, y es una wallet que se usa a diario para
+  pruebas.
+- Despliega desde una **hardware wallet** (Ledger o Trezor) conectada a
+  MetaMask.
+- Crea una **Safe** (safe.global), multifirma 2 de 3 con firmantes en
+  hardware wallets. Va a ser la **dueña** del staking y conviene que guarde
+  también la tesorería de #SECT.
+
+### 0.3 La web
+
+- 2FA con llave física en GitHub para todo el que pueda subir cambios.
+- Protege la rama que publica la web (revisión obligatoria antes de
+  publicar).
+- 2FA y bloqueo de transferencia del dominio en el registrador.
+
+Quien controle el repositorio o el dominio podría cambiar la dirección del
+contrato en la página y robar a los usuarios que aprueben.
 
 ---
 
@@ -32,177 +71,255 @@ la palabra "stake" en ningún sitio.
 | Token | **`0x8C9984B06281f1CA9416e493c2E602AaB08513db`** (#SECT, 18 decimales) |
 | Contrato a desplegar | `SectoraHolderRewards` |
 | Código para pegar | `flattened/SectoraHolderRewards.flattened.sol` |
-| Compilador | **0.8.24**, optimizador **activado**, runs **200** |
+| Compilador | **0.8.24**, optimizador **activado**, runs **200**, EVM version **por defecto** |
 | Constructor | un solo campo: `_token` = la dirección del token de arriba |
-
----
 
 ## Gas (medido)
 
 | Operación | Gas | Quién paga |
 |---|---|---|
-| Desplegar | **1.495.293** | tú, una vez |
-| `approve` del fondo | ~46.000 | tú |
-| `fundRewards` | ~98.000 | tú, en cada recarga |
-| `setDepositsPaused(false)` | ~25.000 | tú, una vez |
-| `setRate` | ~37.000 | tú, cada vez que cambies la tasa |
-| `deposit` | ~129.000–141.000 | el holder |
+| Desplegar | **1.772.212** | tú, una vez |
+| `transferOwnership` | ~48.000 | tú, una vez |
+| `acceptOwnership` | ~28.000 | la Safe, una vez |
+| `approve` del fondo | ~46.000 | la Safe |
+| `fundRewards` | ~100.000 | la Safe, en cada recarga |
+| `setDepositsPaused` | ~25.000 | la Safe |
+| `setRate` | ~37.000 | la Safe |
+| `deposit` | ~130.000–145.000 | el holder |
 | `claim` | ~70.000 | el holder |
-| `withdraw` | ~72.000–99.000 | el holder |
+| `withdraw` | ~70.000–100.000 | el holder |
 
-Coste = gas × precio del gas. Mira etherscan.io/gastracker. Con
-**0,05 ETH** en la wallet tienes margen de sobra.
+Coste = gas × precio del gas (etherscan.io/gastracker). Con **0,05 ETH** en
+la wallet que despliega hay margen.
 
 ---
 
 ## Paso 1 — Desplegar
 
-1. Abre **remix.ethereum.org**.
-2. Archivo nuevo `SectoraHolderRewards.sol`. Pega **entero** el contenido de
+1. Abre **remix.ethereum.org**. Escríbelo tú o usa un marcador; no entres
+   desde un buscador.
+2. Archivo nuevo `SectoraHolderRewards.sol` → pega **entero**
    `flattened/SectoraHolderRewards.flattened.sol`.
-3. **Solidity Compiler**: versión **0.8.24**, **Enable optimization** con
-   **200** runs. Compila; no debe salir ningún error.
+3. **Solidity Compiler**: versión **0.8.24**, *Advanced Configurations* →
+   **Enable optimization** con **200**. EVM version: por defecto. Compila; no
+   debe salir ningún error.
 4. **Deploy & Run**:
-   - Environment: **Injected Provider — MetaMask**, red **Ethereum Mainnet**.
-   - Contract: **SectoraHolderRewards**.
-   - Campo `_token`: `0x8C9984B06281f1CA9416e493c2E602AaB08513db`
-     (cópialo, no lo escribas a mano).
-5. **Deploy** → confirma en MetaMask → copia la dirección del contrato.
+   - Environment: **Injected Provider — MetaMask**, con MetaMask en
+     **Ethereum Mainnet** y la **hardware wallet** seleccionada.
+   - Contract: **`SectoraHolderRewards`**. El desplegable también muestra
+     `SafeERC20` y `StorageSlot`: elige el que tiene el campo `_token`.
+   - `_token`: `0x8C9984B06281f1CA9416e493c2E602AaB08513db` (cópialo, no lo
+     escribas a mano).
+5. **Deploy** → confirma en la hardware wallet.
+6. Copia la dirección del contrato **desde Remix** (*Deployed Contracts*) o
+   desde la transacción de creación en Etherscan. **Nunca** desde el
+   historial de la wallet: ahí pueden colarse direcciones falsas parecidas.
 
-La wallet que despliega queda como **dueña**. Recomendado: una hardware
-wallet o una multifirma (Safe).
-
-El contrato nace con los **depósitos cerrados**: nadie puede depositar hasta
-que cargues el fondo y los abras (pasos 3 y 4).
+El contrato nace con los **depósitos cerrados** y con la wallet que despliega
+como dueña.
 
 ## Paso 2 — Verificar en Etherscan
 
-Etherscan → la dirección del contrato → *Contract* → **Verify and Publish**
-→ *Solidity (Single file)*, compilador **v0.8.24**, licencia **MIT**,
-optimización **Yes / 200**. Pega el mismo archivo aplanado. Con el contrato
-verificado, cualquiera puede leer el código: es lo que da confianza.
+Lo más fácil es el plugin **Etherscan** de Remix (*Plugin manager* →
+Etherscan → *Verify*).
 
-## Paso 3 — Cargar el fondo de recompensas
+A mano: Etherscan → la dirección → *Contract* → **Verify and Publish** →
+*Solidity (Single file)*:
+- compilador **v0.8.24**, licencia **MIT**, optimización **Yes / 200**;
+- pega el mismo archivo;
+- *Constructor Arguments ABI-encoded*:
+  `0000000000000000000000008c9984b06281f1ca9416e493c2e602aab08513db`
 
-1. Contrato de **#SECT** en Etherscan → *Write Contract* → `approve`:
-   `spender` = dirección de SectoraHolderRewards, `amount` en 18 decimales.
+Con el contrato verificado, cualquiera puede leer el código y aparecen las
+pestañas *Read* y *Write*.
 
-   | #SECT | valor a escribir |
-   |---|---|
-   | 100.000 | `100000000000000000000000` |
-   | 500.000 | `500000000000000000000000` |
-   | 1.000.000 | `1000000000000000000000000` |
-   | 1.490.000 | `1490000000000000000000000` |
+## Paso 3 — Pasar la propiedad a la Safe (antes de cargar nada)
 
-2. **SectoraHolderRewards** → *Write Contract* → `fundRewards`, la misma
-   cantidad.
-3. *Read Contract* → `rewardPool()` debe devolver lo cargado.
+1. Etherscan → staking → *Write Contract* → conecta la wallet que desplegó →
+   **`transferOwnership`** → `newOwner` = la dirección de tu **Safe**.
+2. En *Read Contract*: `owner()` sigue siendo tu wallet y `pendingOwner()` es
+   la Safe. Todavía no ha cambiado nada: falta aceptar.
+3. En la Safe (app.safe.global) → *New transaction* → **Transaction
+   Builder** → dirección del staking. El ABI se carga solo porque está
+   verificado. Elige **`acceptOwnership`** → *Create batch* → firman 2 de 3 →
+   *Execute*.
+4. *Read Contract* → `owner()` = **la Safe**.
 
-### Cuánto cargar
+Si te equivocas de dirección en el punto 1, no pasa nada: esa dirección
+nunca podrá aceptar. Repite `transferOwnership` con la buena.
+
+A partir de aquí todas las funciones de dueño se hacen **desde la Safe**.
+
+## Paso 4 — Cargar el fondo (por tramos)
+
+Carga lo de **1 a 3 meses** de recompensas, no todo de golpe. Si alguien
+robara las llaves de dueño, solo podría llevarse lo que haya cargado en el
+fondo.
+
+En la Safe → Transaction Builder, **un solo lote** con dos llamadas:
+1. Contrato **#SECT** → `approve`: `spender` = staking, `amount` = la
+   cantidad exacta.
+2. **Staking** → `fundRewards`: la misma cantidad.
+
+| #SECT | valor a escribir (18 decimales) |
+|---|---|
+| 100.000 | `100000000000000000000000` |
+| 500.000 | `500000000000000000000000` |
+| 1.000.000 | `1000000000000000000000000` |
+| 10.000.000 | `10000000000000000000000000` |
+
+**No uses nunca "Enviar" / `transfer` para mandar #SECT al staking.** Lo
+enviado así no entra en el fondo. Se puede recuperar con `recoverSurplus`
+(ver abajo), pero cuesta una transacción más.
+
+*Read Contract* → `rewardPool()` debe dar lo cargado.
+
+### Cuánto cuesta
 
 ```
 recompensas al año = total depositado × tasa   (0,149 con el 14,9 %)
 ```
 
-| Si la gente deposita (al 14,9 %) | Cuesta al año | Al mes |
+| Depositado (al 14,9 %) | Al año | Al mes |
 |---|---|---|
-| 1.000.000 #SECT | 149.000 #SECT | ~12.400 |
-| 5.000.000 #SECT | 745.000 #SECT | ~62.100 |
-| 10.000.000 #SECT | 1.490.000 #SECT | ~124.200 |
-| 20.000.000 #SECT | 2.980.000 #SECT | ~248.300 |
+| 1.000.000 #SECT | 149.000 | ~12.400 |
+| 10.000.000 #SECT | 1.490.000 | ~124.200 |
+| 20.000.000 #SECT | 2.980.000 | ~248.300 |
 
-Puedes cargar por tramos según vayan entrando depósitos. Vigila
-`runwaySeconds()`: los segundos que aguanta el fondo al ritmo actual
-(÷ 86400 = días). Si el fondo se queda a cero, las recompensas **se paran**
-(no se promete lo que no hay) y se reanudan al recargar, sin pagar el hueco.
-Eso son holders enfadados: recarga antes de que llegue a cero.
+Quien reinvierte sus recompensas gana algo más (con 14,9 %, hasta un 16,1 %
+efectivo). Vigila `runwaySeconds()`: son los segundos que aguanta el fondo
+desde ahora (÷ 86400 = días). Si llega a 0 las recompensas se paran (no se
+promete lo que no hay) y vuelven al recargar, sin pagar el hueco.
 
-## Paso 4 — Abrir los depósitos
+## Paso 5 — Abrir los depósitos
 
-*Write Contract* → `setDepositsPaused` → `false`.
+Safe → staking → `setDepositsPaused(false)`.
 
-Para cerrar la entrada de gente nueva en el futuro: `setDepositsPaused(true)`.
-Quien ya está sigue pudiendo retirar y cobrar.
+## Paso 6 — Conectar la web
 
-## Cambiar la tasa (cuando quieras)
+Pásame la dirección del contrato y la pongo en `staking/staking-chain.js`.
+Antes de anunciarlo, abre tú
+`https://sectoraorg.com/staking/staking-chain.js` y comprueba que la
+dirección que aparece es exactamente la tuya.
 
-Etherscan → **SectoraHolderRewards** → *Write Contract* → conecta la wallet
-dueña → `setRate` → escribe la tasa en **puntos básicos** (1 % = 100):
+## Paso 7 — Prueba real con poco
 
-| APY | valor a escribir |
-|---|---|
-| 10 % | `1000` |
-| 14,9 % | `1490` |
-| 20 % | `2000` |
-| 25 % | `2500` |
-| 100 % | `10000` |
-| 120 % (10 % al mes) | `12000` |
-| 0 % (parar las recompensas) | `0` |
-
-Para pasar de % al mes a lo que escribes: **% mensual × 1200** (10 % al mes →
-`12000`). No hay máximo de negocio: el único tope es técnico (`1e12`), para
-que las cuentas del contrato nunca desborden y bloqueen los retiros.
-**Revisa el número antes de confirmar**: un cero de más paga el fondo entero
-en muy poco tiempo a quien tenga depositado. **Write** → confirma en MetaMask. En *Read Contract*,
-`rateBps()` devuelve la tasa actual, y la web la lee del contrato y la
-muestra sola.
-
-- El cambio cuenta **desde ese segundo**: todo lo ganado antes se queda
-  calculado con la tasa anterior.
-- Subir la tasa vacía el fondo más rápido. Revisa `runwaySeconds()` después
-  de cambiarla y recarga si hace falta.
-- Bajarla no quita nada a nadie, pero anúncialo antes: la gente deposita por
-  la tasa que ve.
-
-## Paso 5 — Conectar la web
-
-Pásame la dirección del contrato y conecto la página. Con eso pasa sola de
-"vista previa" a "en vivo": conectar wallet, depositar, cobrar y retirar.
+Desde **otra** wallet, en sectoraorg.com/staking:
+1. Deposita 10 #SECT. En la ventana de aprobación, el *spender* tiene que
+   ser la dirección del staking y la cantidad, 10.
+2. Mira que el contador sube.
+3. *Claim*, y después *Withdraw all*.
 
 ---
 
-## Comprobaciones antes de anunciarlo
+## Cambiar la tasa
 
-En *Read Contract*:
+Safe → staking → `setRate` → la tasa en **puntos básicos al año**:
+
+| Tasa | Escribes |
+|---|---|
+| 14,9 % al año | `1490` |
+| 25 % al año | `2500` |
+| 10 % al mes | `12000` |
+| 100 % al mes | `120000` |
+| Parar recompensas | `0` |
+
+% al mes × 1200 = lo que escribes. Solo hay un tope técnico (`1e12`) para que
+las cuentas nunca desborden.
+
+- El cambio cuenta desde ese segundo: lo ya ganado no se recalcula.
+- **Revisa el número antes de firmar:** un cero de más reparte el fondo entero
+  en poco tiempo entre quienes tengan depositado, y eso no tiene vuelta.
+- Después de subirla, mira `runwaySeconds()`.
+
+## Retirar el fondo
+
+- **`withdrawAllRewards(to)`**: saca todo lo que nadie ha ganado todavía. Es
+  la que conviene usar.
+- `withdrawRewards(to, amount)`: una cantidad concreta (18 decimales). Si
+  pides justo lo que marcaba `rewardPool` hace un momento, puede fallar por
+  muy poco, porque el fondo baja cada segundo. Pide algo menos o usa la de
+  arriba.
+- Ninguna de las dos toca depósitos ni recompensas ya ganadas. No se puede
+  usar el propio contrato como destino.
+
+## Recuperar envíos por error
+
+- **`recoverSurplus(to)`**: devuelve los #SECT que llegaron al contrato fuera
+  de `deposit`/`fundRewards`, por ejemplo con "Enviar". Solo sale lo que
+  sobra después de cubrir todos los depósitos, el fondo y todo lo ganado
+  pendiente de cobrar.
+- **`rescueToken(token, to, amount)`**: devuelve **otros** tokens enviados por
+  error (USDT, etc.). No puede tocar #SECT.
+
+## Cerrar el programa (si algún día hace falta)
+
+1. `setDepositsPaused(true)`: no entra nadie nuevo.
+2. `setRate(0)`: deja de sumar.
+3. `withdrawAllRewards(Safe)`: recuperas el fondo no ganado.
+4. Cada holder retira y cobra lo suyo cuando quiera.
+
+---
+
+## Comprobaciones (Read Contract)
 
 - `token()` → `0x8C9984B06281f1CA9416e493c2E602AaB08513db`
-- `rateBps()` → `1490`
+- `owner()` → **la Safe** · `pendingOwner()` → `0x0000…0000`
+- `rateBps()` → `1490` (o la que hayas puesto)
 - `MAX_RATE_BPS()` → `1000000000000` (tope técnico)
-- `rewardPool()` → lo que cargaste
-- `depositsPaused()` → `false`
-- `owner()` → tu wallet
-
-Luego una prueba real con poco desde otra wallet: `approve` de 10 #SECT,
-`deposit` de 10, espera unos minutos, mira que `earned(tu wallet)` sube,
-`claim`, y `withdraw` de 10.
-
----
+- `rewardPool()` → lo que queda en el fondo
+- `totalDeposited()`, `depositorCount()`, `totalUnclaimed()`
+- `runwaySeconds()` → días de fondo × 86400
+- `depositsPaused()` → `false` cuando esté abierto
 
 ## Lo que el contrato protege
 
-- El depósito de un holder **nunca** puede salir como recompensa de otro, y
-  ninguna función del dueño toca depósitos ni recompensas ya ganadas.
-- `withdraw` funciona siempre, aunque el fondo esté vacío o los depósitos
-  cerrados.
-- Sin tope de depósitos. La tasa la cambia solo el dueño, sin límite de
-  negocio, y sin tocar lo ya ganado. Nunca se paga más de lo que hay en el
-  fondo, sea cual sea la tasa o lo depositado.
-- No se crean tokens: todo lo que se paga entró antes con `fundRewards`.
-- `nonReentrant` en toda función que mueve tokens, y la cantidad recibida se
-  mide en vez de suponerse.
+- **Los depósitos de los holders no los puede tocar nadie**, tampoco el dueño
+  ni quien le robe las llaves. `withdraw` funciona siempre, aunque el fondo
+  esté vacío o los depósitos cerrados.
+- **Lo ya ganado tampoco:** sale del fondo al ganarse y queda fuera del
+  alcance del dueño.
+- **Nunca se paga más de lo que hay en el fondo**, sea cual sea la tasa o lo
+  depositado.
+- **Redondeo siempre a favor del contrato:** a cada holder se le acredita su
+  parte exacta redondeada hacia abajo, así el último en salir siempre puede
+  retirar entero.
+- **Propiedad en dos pasos y sin renuncia:** un error al escribir la dirección
+  no entrega el contrato, y no se puede dejar sin dueño por accidente.
+- **Sin reentrada:** `nonReentrant` en todo lo que mueve tokens. La cantidad
+  recibida se mide en vez de suponerse.
+- **Sin bucles**, así que no hay límite de gas que alcanzar con muchos
+  holders.
 
-Probado en cadena local: **51 pruebas, todas pasan**
-(`node scripts/test-rewards.js`), incluido un año completo que paga
-exactamente el 14,9 %, depósitos por encima de 10M sin tope, cambios de tasa (14,9 % → 25 % → 0 % → 14,9 %) que
-no tocan lo ya ganado, un mes al 10 % mensual que paga exactamente el 10 %, y
-la tasa al tope técnico durante 10 años sin que se bloquee ningún retiro.
+## Revisión
+
+- **71 pruebas propias, todas pasan** (`node scripts/test-rewards.js`).
+- **Cuatro revisiones independientes:**
+  - permisos del dueño;
+  - cuentas y solvencia, con un fuzzing de miles de operaciones al azar
+    comparado wei a wei con un modelo exacto;
+  - ataques externos (reentrada, préstamos flash, adelantarse a las
+    transacciones del dueño, donaciones);
+  - la web y la operativa.
+- **Ninguna encontró forma de robar depósitos ni recompensas.** Lo que sí
+  encontraron ya está corregido:
+  - redondeo de 1 wei;
+  - propiedad en dos pasos;
+  - renuncia desactivada;
+  - destino inválido al retirar el fondo;
+  - recuperación de envíos por error;
+  - vistas del fondo en tiempo real.
 
 ## Lo que depende de ti
 
-- **No está auditado.** Las pruebas comprueban lo que se me ocurrió comprobar.
-  Una auditoría antes de abrirlo al público es lo recomendable.
-- **El fondo sin bloqueo.** Lo elegiste así para tener flexibilidad: puedes
-  retirar la parte no ganada cuando quieras. La otra cara es que los holders
-  no tienen la garantía de que el fondo vaya a seguir ahí; lo que ya ganaron
-  sí está protegido. Si algún día quieres dar más confianza, puedes anunciar
-  públicamente un calendario de recargas.
+- **No es una auditoría profesional.** Para un contrato que puede llegar a
+  guardar mucho dinero de holders, una auditoría externa sigue siendo lo
+  recomendable.
+- **Las llaves:** hardware wallet + Safe. Es la protección más importante;
+  ningún código protege unas llaves robadas.
+- **Avisos:** pon alertas (Etherscan → *Watch list*, o un servicio como
+  Tenderly) para `RateChanged`, `RewardsWithdrawn`, `OwnershipTransferStarted`,
+  `OwnershipTransferred`, `DepositsPausedChanged` y `SurplusRecovered`. Vigila
+  también que `runwaySeconds` no baje demasiado.
+- **Legal:** un APY pagado a holders puede considerarse producto de inversión
+  regulado. Consúltalo.
