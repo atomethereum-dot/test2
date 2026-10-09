@@ -875,9 +875,10 @@ abstract contract ReentrancyGuard {
 ///
 ///  1. 14.9% APY AT LAUNCH. Rewards accrue every second at the current
 ///     rate (rateBps) on the deposit, linear, no compounding. The owner can
-///     change the rate with setRate(), up to MAX_RATE_BPS. A change only
-///     applies from that second on: everything accrued before it was booked
-///     at the old rate and is never recalculated.
+///     change the rate with setRate() with no business ceiling (10% a month
+///     is 12000). A change only applies from that second on: everything
+///     accrued before it was booked at the old rate and is never
+///     recalculated.
 ///  2. NO LOCK. withdraw() always works, immediately, in full or in part,
 ///     whatever state the reward pool is in.
 ///  3. CLAIM ANY TIME. Accrued rewards are the depositor's to collect
@@ -910,9 +911,12 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
     uint256 public constant BPS = 10_000;
     uint256 public constant YEAR = 365 days;
 
-    /// @notice Ceiling for setRate(): 10000 bps = 100% a year. It bounds a
-    /// fat-fingered or compromised owner key; the pool bounds it anyway.
-    uint256 public constant MAX_RATE_BPS = 10_000;
+    /// @notice Technical ceiling for setRate(), not a business limit: 1e12
+    /// bps is ten billion percent a year. It only exists so that
+    /// totalDeposited * rate * elapsed can never overflow; an overflow there
+    /// would make _update() revert and lock every withdrawal. Payouts are
+    /// bounded by the funded pool whatever the rate.
+    uint256 public constant MAX_RATE_BPS = 1e12;
 
     /// @notice Most #SECT the program can hold in deposits at once.
     uint256 public constant MAX_TOTAL_DEPOSITED = 10_000_000 ether;
@@ -1126,8 +1130,8 @@ contract SectoraHolderRewards is Ownable, ReentrancyGuard {
         emit DepositsPausedChanged(paused);
     }
 
-    /// @notice Change the reward rate, in basis points (1490 = 14.90% APY,
-    /// 0 stops rewards). Accrual is settled at the old rate first, so the
+    /// @notice Change the reward rate, in basis points a year (1490 =
+    /// 14.90% APY, 12000 = 10% a month, 0 stops rewards). Accrual is settled at the old rate first, so the
     /// new rate only counts from this second on: nobody gains or loses
     /// anything already earned.
     function setRate(uint256 newRateBps) external onlyOwner {

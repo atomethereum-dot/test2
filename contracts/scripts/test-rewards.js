@@ -191,9 +191,9 @@ async function main() {
   await (await r2.connect(dueno).setDepositsPaused(false, GAS)).wait();
   await (await tok.connect(alice).approve(r2a, E("100000000"), GAS)).wait();
   ok((await r2.rateBps()) === 1490n, "arranca en 14,9%");
-  ok((await r2.MAX_RATE_BPS()) === 10000n, "techo del 100%");
+  ok((await r2.MAX_RATE_BPS()) === 10n ** 12n, "techo solo tecnico: 1e12 bps");
   await revierte(() => r2.connect(alice).setRate.staticCall(2500, GAS), "solo el dueño cambia la tasa");
-  await revierte(() => r2.connect(dueno).setRate.staticCall(10001, GAS), "no puede pasar del techo", "rate above max");
+  await revierte(() => r2.connect(dueno).setRate.staticCall(10n ** 12n + 1n, GAS), "no puede pasar del techo tecnico", "rate above max");
 
   await (await r2.connect(alice).deposit(E("10000"), GAS)).wait();
   await avanzar(100 * DIA);
@@ -220,8 +220,25 @@ async function main() {
   await (await r2.connect(alice).claim(GAS)).wait();
   await (await r2.connect(alice).withdraw(E("10000"), GAS)).wait();
   cerca((await saldo(alice)) - antes, deber + 10000, 0.05, "cobra todo y recupera su deposito");
-  await (await r2.connect(dueno).setRate(10000, GAS)).wait();
-  ok((await r2.rateBps()) === 10000n, "el techo exacto se acepta");
+
+  // 10% al mes = 120% al año = 12000 bps
+  await (await r2.connect(alice).deposit(E("10000"), GAS)).wait();
+  await (await r2.connect(dueno).setRate(12000, GAS)).wait();
+  const antesMes = N(await r2.earned(await dir(alice)));
+  await avanzar(ANO / 12);
+  cerca(N(await r2.earned(await dir(alice))) - antesMes, 1000, 0.05, "al 10% mensual, un mes sobre 10.000 -> 1.000");
+
+  // el techo tecnico: el fondo se vacia de golpe pero nada se bloquea
+  await (await r2.connect(dueno).setRate(10n ** 12n, GAS)).wait();
+  ok((await r2.rateBps()) === 10n ** 12n, "el techo exacto se acepta");
+  await avanzar(10 * ANO);
+  antes = await saldo(alice);
+  const todo = N(await r2.earned(await dir(alice)));
+  await (await r2.connect(alice).claim(GAS)).wait();
+  ok((await r2.poolView()).paused === true && (await r2.rewardPool()) === 0n, "a esa tasa el fondo se agota y el devengo se para");
+  await (await r2.connect(alice).withdraw(E("10000"), GAS)).wait();
+  cerca((await saldo(alice)) - antes, todo + 10000, 0.05, "aun asi cobra y retira sin bloqueo (10 años sin tocarlo)");
+  ok(todo <= 1000000, "nunca paga mas de lo que habia en el fondo");
   const bal2 = N(await tok.balanceOf(r2a));
   ok(bal2 + 1e-9 >= N(await r2.totalDeposited()) + N(await r2.rewardPool()), "el contrato nuevo tambien cuadra");
 

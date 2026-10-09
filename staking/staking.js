@@ -207,7 +207,7 @@
 
   const apyRing = document.getElementById("apyRing");
   function paintRings() {
-    drawRingGauge(apyRing, [{ frac: APY, color: "#4d8dff" }], { stroke: 9, glow: true });
+    drawRingGauge(apyRing, [{ frac: Math.min(APY, 1), color: "#4d8dff" }], { stroke: 9, glow: true });
   }
   paintRings();
   window.addEventListener("resize", () => { clearTimeout(window.__ringRt); window.__ringRt = setTimeout(paintRings, 150); });

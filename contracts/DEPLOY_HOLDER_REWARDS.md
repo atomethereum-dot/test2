@@ -8,7 +8,7 @@ cuando quiera con `setRate`.
 
 | | |
 |---|---|
-| Recompensa | **14,9 % APY** al arrancar, se acumula cada segundo, sin interés compuesto. **Ajustable** por el dueño (`setRate`, máximo 100 %) |
+| Recompensa | **14,9 % APY** al arrancar, se acumula cada segundo, sin interés compuesto. **Ajustable** por el dueño (`setRate`), sin límite de negocio |
 | Cobro | **Cuando quieran** (`claim`) |
 | Retiro | **Cuando quieran, sin penalización** (`withdraw`). Lo ganado sigue cobrable después de retirar |
 | Tope | **10.000.000 #SECT** depositados como máximo |
@@ -134,9 +134,15 @@ dueña → `setRate` → escribe la tasa en **puntos básicos** (1 % = 100):
 | 14,9 % | `1490` |
 | 20 % | `2000` |
 | 25 % | `2500` |
+| 100 % | `10000` |
+| 120 % (10 % al mes) | `12000` |
 | 0 % (parar las recompensas) | `0` |
 
-Máximo `10000` (100 %). **Write** → confirma en MetaMask. En *Read Contract*,
+Para pasar de % al mes a lo que escribes: **% mensual × 1200** (10 % al mes →
+`12000`). No hay máximo de negocio: el único tope es técnico (`1e12`), para
+que las cuentas del contrato nunca desborden y bloqueen los retiros.
+**Revisa el número antes de confirmar**: un cero de más paga el fondo entero
+en muy poco tiempo a quien tenga depositado. **Write** → confirma en MetaMask. En *Read Contract*,
 `rateBps()` devuelve la tasa actual, y la web la lee del contrato y la
 muestra sola.
 
@@ -160,7 +166,7 @@ En *Read Contract*:
 
 - `token()` → `0x8C9984B06281f1CA9416e493c2E602AaB08513db`
 - `rateBps()` → `1490`
-- `MAX_RATE_BPS()` → `10000`
+- `MAX_RATE_BPS()` → `1000000000000` (tope técnico)
 - `MAX_TOTAL_DEPOSITED()` → `10000000000000000000000000`
 - `rewardPool()` → lo que cargaste
 - `depositsPaused()` → `false`
@@ -178,16 +184,18 @@ Luego una prueba real con poco desde otra wallet: `approve` de 10 #SECT,
   ninguna función del dueño toca depósitos ni recompensas ya ganadas.
 - `withdraw` funciona siempre, aunque el fondo esté vacío o los depósitos
   cerrados.
-- El tope no se puede cambiar. La tasa sí, pero solo el dueño, con un
-  máximo del 100 %, y sin tocar lo ya ganado.
+- El tope no se puede cambiar. La tasa sí, solo el dueño, sin límite de
+  negocio, y sin tocar lo ya ganado. Nunca se paga más de lo que hay en el
+  fondo, sea cual sea la tasa.
 - No se crean tokens: todo lo que se paga entró antes con `fundRewards`.
 - `nonReentrant` en toda función que mueve tokens, y la cantidad recibida se
   mide en vez de suponerse.
 
-Probado en cadena local: **49 pruebas, todas pasan**
+Probado en cadena local: **53 pruebas, todas pasan**
 (`node scripts/test-rewards.js`), incluido un año completo que paga
-exactamente el 14,9 % y cambios de tasa (14,9 % → 25 % → 0 % → 14,9 %) que
-no tocan lo ya ganado.
+exactamente el 14,9 %, cambios de tasa (14,9 % → 25 % → 0 % → 14,9 %) que
+no tocan lo ya ganado, un mes al 10 % mensual que paga exactamente el 10 %, y
+la tasa al tope técnico durante 10 años sin que se bloquee ningún retiro.
 
 ## Lo que depende de ti
 
