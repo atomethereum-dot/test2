@@ -46,7 +46,7 @@
       const slot = W / MONTHS, barW = Math.max(3, slot * 0.5);
       const y = (v) => padT + plotH - (v / max) * plotH;
       const a = vacio ? 0.35 : 1;
-      ctx.strokeStyle = "rgba(255,255,255,.05)"; ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgba(0,0,0,.07)"; ctx.lineWidth = 1;
       for (let g = 0; g <= 3; g++) {
         const gy = Math.round(padT + (plotH / 3) * g) + 0.5;
         ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
@@ -54,9 +54,9 @@
       ctx.font = "9.5px 'IBM Plex Mono', monospace"; ctx.textAlign = "center";
       for (let m = 1; m <= MONTHS; m++) {
         const cx = slot * (m - 0.5), top = y(porMes * m), base = y(0);
-        ctx.fillStyle = m === MONTHS ? "rgba(255,255,255," + a + ")" : "rgba(21,105,255," + a + ")";
+        ctx.fillStyle = m === MONTHS ? "rgba(7,8,10," + a + ")" : "rgba(21,105,255," + a + ")";
         ctx.fillRect(Math.round(cx - barW / 2), top, Math.round(barW), base - top);
-        ctx.fillStyle = "rgba(255,255,255,.32)";
+        ctx.fillStyle = "rgba(7,8,10,.4)";
         ctx.fillText(String(m), cx, H - 4);
       }
     }

@@ -274,43 +274,40 @@ html:not(.js) .hw h2{transform:none}
 .band span{color:var(--p-ink-3)}
 .band b{color:var(--blue);font-weight:500}
 
-/* la consola es una pieza oscura dentro del marco claro */
-.console{position:relative;background:#05070b;color:var(--ink);padding:clamp(20px,2.4vw,32px);overflow:hidden;isolation:isolate}
-.console::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-  background-size:27px 27px;
-  -webkit-mask-image:radial-gradient(90% 70% at 70% 0%,#000,transparent 80%);mask-image:radial-gradient(90% 70% at 70% 0%,#000,transparent 80%)}
-.console::after{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:var(--blue)}
+/* la consola: tarjeta blanca dentro del marco, en el papel de la seccion */
+.console{position:relative;background:#fff;color:var(--p-ink);padding:clamp(20px,2.4vw,32px);border:1px solid rgba(0,0,0,.08);
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 24px 60px -36px rgba(7,8,10,.28)}
+.console::after{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:var(--blue)}
 .con-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:16px;margin-bottom:22px;
-  border-bottom:1px solid var(--hair);font-size:9.5px;color:var(--ink-4)}
-.con-net{display:inline-flex;align-items:center;gap:9px;color:#3ecf8e}
-.con-lbl{display:block;font-size:10px;color:var(--ink-4);margin-bottom:10px}
-.input-wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--hair);
-  background:rgba(255,255,255,.02);padding:14px 16px;transition:border-color .3s var(--ease)}
-.input-wrap:focus-within{border-color:var(--blue)}
-.input-wrap input{flex:1;min-width:0;background:none;border:none;outline:none;color:var(--ink);
+  border-bottom:1px solid var(--p-line);font-size:9.5px;color:var(--p-ink-4)}
+.con-net{display:inline-flex;align-items:center;gap:9px;color:var(--p-live)}
+.con-lbl{display:block;font-size:10px;color:var(--p-ink-3);margin-bottom:10px}
+.input-wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(0,0,0,.14);
+  background:#f7f7f5;padding:14px 16px;transition:border-color .3s var(--ease),background .3s var(--ease)}
+.input-wrap:focus-within{border-color:var(--blue);background:#fff}
+.input-wrap input{flex:1;min-width:0;background:none;border:none;outline:none;color:var(--p-ink);
   font-family:'IBM Plex Sans',sans-serif;font-weight:200;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.02em;
   font-variant-numeric:tabular-nums;-moz-appearance:textfield;appearance:textfield}
 .input-wrap input::-webkit-outer-spin-button,.input-wrap input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.input-wrap input::placeholder{color:var(--ink-4)}
-.input-suffix{font-size:10.5px;color:var(--ink-3);flex:none}
+.input-wrap input::placeholder{color:#b4b9c2}
+.input-suffix{font-size:10.5px;color:var(--p-ink-3);flex:none}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.chips button{cursor:pointer;background:none;border:1px solid var(--hair);color:var(--ink-3);padding:7px 11px;font-size:9.5px;
+.chips button{cursor:pointer;background:none;border:1px solid var(--p-line);color:var(--p-ink-3);padding:7px 11px;font-size:9.5px;
   letter-spacing:.12em;transition:color .3s var(--ease),border-color .3s var(--ease),background .3s var(--ease)}
-.chips button:hover{color:#fff;border-color:var(--ink-3)}
-.chips button.on{color:#fff;border-color:var(--blue);background:rgba(21,105,255,.18)}
+.chips button:hover{color:var(--p-ink);border-color:var(--p-ink-3)}
+.chips button.on{color:var(--blue-deep);border-color:var(--blue);background:rgba(21,105,255,.08)}
 
-.out{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:20px 0 16px;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.out{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:20px 0 16px;border-top:1px solid var(--p-line);border-bottom:1px solid var(--p-line)}
 .out > div{padding:14px 14px 14px 0;min-width:0}
-.out > div + div{padding-left:14px;border-left:1px solid var(--hair-soft)}
-.out dt{font-size:9px;color:var(--ink-4);margin-bottom:8px}
-.out dd{font-size:clamp(14px,1.2vw,16px);font-weight:300;color:var(--ink-2);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.out .out-key dd{color:#fff}
+.out > div + div{padding-left:14px;border-left:1px solid rgba(0,0,0,.06)}
+.out dt{font-size:9px;color:var(--p-ink-4);margin-bottom:8px}
+.out dd{font-size:clamp(14px,1.2vw,16px);font-weight:300;color:var(--p-ink-2);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.out .out-key dd{color:var(--p-ink);font-weight:400}
 .out .out-key dt{color:var(--blue)}
 
-.chart-wrap{border:1px solid var(--hair-soft);padding:14px 14px 6px;margin-bottom:18px}
-.chart-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:8px;font-size:9.5px;color:var(--ink-4)}
-.chart-head b{font-weight:400;font-size:11px;color:#fff;letter-spacing:.06em}
+.chart-wrap{border:1px solid rgba(0,0,0,.07);background:#fbfbfa;padding:14px 14px 6px;margin-bottom:18px}
+.chart-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:8px;font-size:9.5px;color:var(--p-ink-4)}
+.chart-head b{font-weight:400;font-size:11px;color:var(--p-ink);letter-spacing:.06em}
 #growthChart{display:block;width:100%;height:150px}
 
 /* lo que staking-chain.js cuelga junto al boton, en un orden fijo */
@@ -321,30 +318,33 @@ html:not(.js) .hw h2{transform:none}
 #chainMsg{order:3}
 #stakeAddr{order:4}
 #chainActions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px!important;margin-top:8px!important}
-#chainActions button{border-radius:0!important;padding:13px 8px!important;border:1px solid var(--hair)!important;
-  background:transparent!important;font-size:9.5px!important;color:var(--ink-2)!important;
+#chainActions button{border-radius:0!important;padding:13px 8px!important;border:1px solid rgba(0,0,0,.16)!important;
+  background:#fff!important;font-size:9.5px!important;color:var(--p-ink)!important;
   transition:border-color .3s var(--ease),color .3s var(--ease),background .3s var(--ease)}
-#chainActions button:hover:not(:disabled){border-color:var(--ink-3)!important;color:#fff!important;background:rgba(255,255,255,.06)!important}
+#chainActions button:hover:not(:disabled){border-color:var(--p-ink)!important;background:#f4f4f1!important}
 #chainActions button:disabled{opacity:.4;cursor:not-allowed}
-#chainMsg{text-align:center}
-.stake-note{margin-top:14px;font-size:11px;color:var(--ink-3);text-align:center;line-height:1.6}
+/* los avisos los pinta staking-chain.js con un gris y un rojo pensados para
+   fondo oscuro: aqui se oscurecen para que se lean sobre blanco */
+#chainMsg{text-align:center;color:var(--p-ink-3)!important}
+#chainMsg[style*="255, 110, 124"]{color:#d4283a!important}
+.stake-note{margin-top:14px;font-size:11px;color:var(--p-ink-3);text-align:center;line-height:1.6}
 .stake-addr{overflow-wrap:anywhere}
-.stake-addr a{color:#8fb4ff;font-family:'IBM Plex Mono',monospace;font-size:.95em;text-decoration:underline;text-underline-offset:3px;
-  text-decoration-color:rgba(143,180,255,.35)}
-.stake-addr a:hover{color:#fff}
+.stake-addr a{color:var(--blue-deep);font-family:'IBM Plex Mono',monospace;font-size:.95em;text-decoration:underline;text-underline-offset:3px;
+  text-decoration-color:rgba(13,79,216,.35)}
+.stake-addr a:hover{color:var(--blue)}
 
 /* contador en vivo (lo monta staking-chain.js con la wallet conectada) */
-.earn-live{margin:0 0 12px;padding:16px;border:1px solid rgba(62,207,142,.32);background:rgba(62,207,142,.05)}
+.earn-live{margin:0 0 12px;padding:16px;border:1px solid rgba(15,143,82,.32);background:rgba(15,143,82,.06)}
 .earn-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:'IBM Plex Mono',monospace;
-  font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--p-ink-3)}
 .earn-head i{position:relative;width:6px;height:6px;border-radius:50%;flex:none;background:#25d366;box-shadow:0 0 8px 1px rgba(37,211,102,.65)}
 .earn-head i::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid #25d366;animation:ping 2.6s var(--ease) infinite}
-.earn-n{display:block;margin-top:10px;font-size:clamp(26px,3vw,36px);font-weight:200;color:#fff;font-variant-numeric:tabular-nums;
+.earn-n{display:block;margin-top:10px;font-size:clamp(26px,3vw,36px);font-weight:200;color:var(--p-ink);font-variant-numeric:tabular-nums;
   letter-spacing:-.02em;overflow-wrap:anywhere}
-.earn-n small{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--ink-3)}
+.earn-n small{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--p-ink-3)}
 .earn-sub{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;margin-top:6px;font-family:'IBM Plex Mono',monospace;
-  font-size:10px;letter-spacing:.06em;color:var(--ink-4)}
-.earn-sub b{color:#8fb4ff;font-weight:400;font-variant-numeric:tabular-nums}
+  font-size:10px;letter-spacing:.06em;color:var(--p-ink-3)}
+.earn-sub b{color:var(--blue-deep);font-weight:400;font-variant-numeric:tabular-nums}
 .earn-claim{margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
 
 /* los pasos: los del Hash Market */
@@ -538,99 +538,6 @@ html:not(.js) .hw h2{transform:none}
 }
 
 
-/* ============ ojo de buey: transicion entre secciones ligada al scroll ============
-   El mismo motor que el iris de la portada: la escena queda fija y un
-   circulo con el filo encendido se abre desde el centro hasta descubrir
-   el fondo de la seccion siguiente. "to-light" va de noche a papel y
-   "to-dark" de papel a noche. El titular va en modo diferencia, asi que
-   se invierte solo segun lo que tenga detras. */
-.port{position:relative;height:230vh;height:230dvh}
-.port-pin{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;display:grid;place-items:center;isolation:isolate}
-.port.to-light{background:#000}
-.port.to-light .port-pin{background:
-  radial-gradient(70% 55% at 50% 52%,rgba(21,105,255,.13),transparent 62%),
-  radial-gradient(120% 90% at 50% 100%,rgba(13,60,150,.18),transparent 60%),#000}
-.port.to-dark{background:#f2f2ef}
-.port.to-dark .port-pin{background:radial-gradient(75% 60% at 50% 46%,#ffffff,transparent 70%),#f2f2ef}
-.port-grid,.port-panel-grid{position:absolute;inset:0;z-index:0;pointer-events:none;background-size:54px 54px;
-  -webkit-mask-image:radial-gradient(68% 62% at 50% 52%,#000,transparent 82%);mask-image:radial-gradient(68% 62% at 50% 52%,#000,transparent 82%)}
-.to-light .port-grid,.to-dark .port-panel-grid{background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px)}
-.to-dark .port-grid,.to-light .port-panel-grid{background-image:linear-gradient(rgba(0,0,0,.055) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(0,0,0,.055) 1px,transparent 1px)}
-.port-rings{position:absolute;inset:-20%;z-index:0;pointer-events:none;
-  background:repeating-radial-gradient(circle at 50% 50%,transparent 0 92px,rgba(110,170,255,.17) 92px 94px);
-  -webkit-mask-image:radial-gradient(46% 46% at 50% 50%,#000,transparent 76%);mask-image:radial-gradient(46% 46% at 50% 50%,#000,transparent 76%);
-  animation:ringOut 5.2s linear infinite;will-change:transform,opacity}
-.port-rings.b{animation-delay:-2.6s}
-.to-dark .port-rings{background:repeating-radial-gradient(circle at 50% 50%,transparent 0 92px,rgba(21,105,255,.14) 92px 94px)}
-@keyframes ringOut{0%{transform:scale(.55);opacity:0}18%{opacity:.9}100%{transform:scale(1.5);opacity:0}}
-.port-cells{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
-
-.aurora{position:absolute;left:0;right:0;bottom:0;height:52vh;z-index:1;pointer-events:none;overflow:hidden}
-.aurora span{position:absolute;bottom:-22vh;will-change:transform}
-.aurora span:nth-child(1){left:-8%;width:56vw;height:40vh;opacity:.85;
-  background:radial-gradient(closest-side,#1569ff 0%,#1569ff 30%,transparent 100%);animation:driftIzq 22s ease-in-out infinite}
-.aurora span:nth-child(2){right:-8%;width:56vw;height:40vh;opacity:.85;
-  background:radial-gradient(closest-side,#1569ff 0%,#1569ff 30%,transparent 100%);animation:driftDer 22s ease-in-out infinite}
-.aurora span:nth-child(3){left:50%;width:64vw;height:36vh;margin-left:-32vw;opacity:.6;
-  background:radial-gradient(closest-side,#3f86ff 0%,#3f86ff 30%,transparent 100%);animation:driftCentro 17s ease-in-out infinite}
-.to-dark .aurora span{opacity:.32}
-@keyframes driftIzq{0%,100%{transform:translate3d(-4%,0,0) scale(1)}50%{transform:translate3d(9%,-6%,0) scale(1.14)}}
-@keyframes driftDer{0%,100%{transform:translate3d(4%,0,0) scale(1)}50%{transform:translate3d(-9%,-6%,0) scale(1.14)}}
-@keyframes driftCentro{0%,100%{transform:translate3d(0,2%,0) scale(1)}50%{transform:translate3d(0,-5%,0) scale(1.12)}}
-.sweep{position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:linear-gradient(104deg,transparent 42%,rgba(255,255,255,.5) 50%,transparent 58%);
-  transform:translate3d(-130%,0,0);animation:sweep 11s cubic-bezier(.5,0,.2,1) infinite;will-change:transform}
-.port-pin > .sweep{opacity:.16}
-.port-panel .sweep{mix-blend-mode:overlay}
-@keyframes sweep{0%{transform:translate3d(-130%,0,0)}55%,100%{transform:translate3d(130%,0,0)}}
-
-/* lo que hay detras del circulo: el fondo de la seccion que viene */
-.port-panel{position:absolute;inset:0;z-index:2;clip-path:circle(0px at 50% 50%);will-change:clip-path}
-.to-light .port-panel{background:radial-gradient(75% 60% at 50% 46%,#ffffff,transparent 70%),#f2f2ef}
-.to-dark .port-panel{background:radial-gradient(70% 55% at 50% 52%,rgba(21,105,255,.16),transparent 62%),#000}
-.port-panel > .port-cells{z-index:1}
-
-/* el filo del circulo: el aro azul encendido de la portada */
-.port-edge{position:absolute;left:50%;top:50%;z-index:3;width:0;height:0;transform:translate(-50%,-50%);border-radius:50%;
-  pointer-events:none;opacity:0;will-change:width,height;
-  background:radial-gradient(circle at 50% 50%,
-    rgba(21,105,255,0) calc(50% - 40px),rgba(21,105,255,.30) calc(50% - 12px),rgba(150,195,255,.95) calc(50% - 2px),
-    rgba(190,225,255,1) 50%,rgba(90,160,255,.75) calc(50% + 2px),rgba(21,105,255,.35) calc(50% + 16px),rgba(21,105,255,0) calc(50% + 46px))}
-.port-edge::after{content:'';position:absolute;inset:0;border-radius:50%;
-  background:conic-gradient(from 0deg,rgba(255,255,255,0) 0deg,rgba(255,255,255,.9) 26deg,rgba(120,190,255,.5) 62deg,rgba(255,255,255,0) 120deg,rgba(255,255,255,0) 360deg);
-  -webkit-mask:radial-gradient(circle at 50% 50%,transparent calc(50% - 7px),#000 calc(50% - 4px),#000 calc(50% + 3px),transparent calc(50% + 7px));
-  mask:radial-gradient(circle at 50% 50%,transparent calc(50% - 7px),#000 calc(50% - 4px),#000 calc(50% + 3px),transparent calc(50% + 7px));
-  animation:rimSpin 4.6s linear infinite}
-@keyframes rimSpin{to{transform:rotate(360deg)}}
-/* el modo diferencia va en la capa que forma el contexto de apilado: puesto
-   en los hijos, se mezclarian solo con su caja transparente y no se invertirian */
-.port-marks{position:absolute;inset:38px;z-index:3;pointer-events:none;mix-blend-mode:difference}
-.port-marks i{position:absolute;width:11px;height:11px}
-.port-marks i::before,.port-marks i::after{content:'';position:absolute;background:#fff;opacity:.55}
-.port-marks i::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-.5px)}
-.port-marks i::after{top:50%;left:0;right:0;height:1px;transform:translateY(-.5px)}
-.port-marks i:nth-child(1){left:0;top:0}
-.port-marks i:nth-child(2){right:0;top:0}
-.port-marks i:nth-child(3){left:0;bottom:0}
-.port-marks i:nth-child(4){right:0;bottom:0}
-.port-txt{position:relative;z-index:4;text-align:center;padding:0 var(--pad);mix-blend-mode:difference;color:#fff}
-.port-kicker{opacity:.55;margin-bottom:26px}
-.port-title{font-size:clamp(34px,7vw,96px);font-weight:200;letter-spacing:-.032em;line-height:1}
-.port-title b{font-weight:400}
-.port-sub{opacity:.72;margin:clamp(22px,3.2vh,36px) auto 0;max-width:34ch;
-  font-size:clamp(15px,1.5vw,22px);font-weight:300;line-height:1.5;letter-spacing:-.01em;text-wrap:balance}
-.zoom-cue{position:absolute;left:50%;bottom:clamp(58px,9vh,86px);z-index:6;transform:translateX(-50%);display:flex;flex-direction:column;
-  align-items:center;gap:9px;pointer-events:none;color:#fff;mix-blend-mode:difference;font-family:'IBM Plex Mono',monospace;
-  font-size:9px;letter-spacing:.24em;text-transform:uppercase;transition:opacity .5s ease}
-.zoom-cue svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;
-  animation:zoomCue 1.9s ease-in-out infinite}
-.zoom-cue.off{opacity:0;transition:opacity .8s ease}
-@keyframes zoomCue{0%,100%{transform:translateY(-3px);opacity:.5}50%{transform:translateY(4px);opacity:1}}
-/* la seccion que sigue a un ojo de buey arranca ya con su color: sin hueco */
-.port + .paper,.port + .night{margin-top:0}
-
 /* ============ intro: la de la portada ============ */
 .intro{display:none;position:fixed;inset:0;z-index:200;overflow:hidden;place-items:center;background:#1569ff}
 html.js .intro{display:grid}
@@ -688,10 +595,6 @@ html.js:not(.intro-lock) .intro{animation:introRescue 1ms linear 8s forwards}
   *,*::before,*::after{transition:none!important;animation:none!important}
   .lift{opacity:1;transform:none}
   h1 .ln > span,.hw h2{transform:none}
-  .port{height:auto}
-  .port-pin{position:relative}
-  .port-panel{clip-path:none!important}
-  .port-edge{display:none}
   .eyebrow i{width:30px}
   .rule{width:74px}
 }
