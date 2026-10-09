@@ -1,415 +1,317 @@
+/* ---- Sectora Staking: interfaz.
+   Calculadora, titulos que entran palabra a palabra, cabecera, barra de
+   progreso, preguntas, botones magneticos y el cursor de coordenadas del
+   sitio. Lo visual pesado (intro, cielo, anillos, cinta, pasos en
+   horizontal) va en staking-fx.js; la cadena, en staking-chain.js. ---- */
 (() => {
+  "use strict";
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const coarse = window.matchMedia("(pointer:coarse)").matches;
+  const $ = (id) => document.getElementById(id);
 
-  // ---- hero pixel grid: same ambient cell system as the main site's cover
-  // and the security page (walkers + random pops + decay), recolored to gray ----
-  (() => {
-    const canvas = document.getElementById("stakeGrid");
-    if (!canvas) return;
-    const hero = canvas.closest(".hero");
-    const ctx = canvas.getContext("2d");
-    const CELL = 54;
-    let cols = 0, rows = 0, heat = null, tone = null, W = 0, H = 0, dpr = 1;
-
-    const lineLayer = document.createElement("canvas");
-    const lctx = lineLayer.getContext("2d");
-
-    function paintLines() {
-      lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      lctx.clearRect(0, 0, W, H);
-      lctx.lineWidth = 1;
-      lctx.strokeStyle = "rgba(255,255,255,.034)";
-      lctx.beginPath();
-      for (let c = 0; c <= cols; c++) { lctx.moveTo(c * CELL + 0.5, 0); lctx.lineTo(c * CELL + 0.5, H); }
-      for (let r = 0; r <= rows; r++) { lctx.moveTo(0, r * CELL + 0.5); lctx.lineTo(W, r * CELL + 0.5); }
-      lctx.stroke();
-    }
-
-    function rnd(c, r) {
-      const x = Math.sin(c * 127.1 + r * 311.7) * 43758.5453;
-      return x - Math.floor(x);
-    }
-
-    function resize() {
-      const w = hero.clientWidth, h = hero.clientHeight;
-      if (w < 1 || h < 1) return;
-      W = w; H = h;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = W * dpr; canvas.height = H * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      cols = Math.ceil(W / CELL); rows = Math.ceil(H / CELL);
-      heat = new Float32Array(cols * rows);
-      tone = new Float32Array(cols * rows);
-      for (let i = 0; i < tone.length; i++) tone[i] = rnd(i % cols, (i / cols) | 0);
-      lineLayer.width = W * dpr; lineLayer.height = H * dpr;
-      paintLines();
-      seedWalkers();
-    }
-    const idx = (c, r) => r * cols + c;
-
-    let walkers = [];
-    function seedWalkers() {
-      const n = W < 700 ? 4 : 7;
-      walkers = [];
-      for (let i = 0; i < n; i++) walkers.push({
-        c: (Math.random() * cols) | 0, r: (Math.random() * rows) | 0,
-        dc: Math.random() < 0.5 ? 1 : -1, dr: 0, next: 0,
-      });
-    }
-    function stepWalkers(t) {
-      for (const w of walkers) {
-        if (t < w.next) continue;
-        w.next = t + 105 + Math.random() * 130;
-        if (Math.random() < 0.3) {
-          if (w.dc !== 0) { w.dr = Math.random() < 0.5 ? 1 : -1; w.dc = 0; }
-          else { w.dc = Math.random() < 0.5 ? 1 : -1; w.dr = 0; }
-        }
-        w.c += w.dc; w.r += w.dr;
-        if (w.c < 0) { w.c = 0; w.dc = 1; }
-        if (w.c >= cols) { w.c = cols - 1; w.dc = -1; }
-        if (w.r < 0) { w.r = 0; w.dr = 1; }
-        if (w.r >= rows) { w.r = rows - 1; w.dr = -1; }
-        heat[idx(w.c, w.r)] = 0.5;
-      }
-    }
-
-    let nextPop = 0;
-    function pops(t) {
-      if (t < nextPop) return;
-      nextPop = t + 80 + Math.random() * 90;
-      const n = 2 + ((Math.random() * 3) | 0);
-      for (let k = 0; k < n; k++) {
-        const i = idx((Math.random() * cols) | 0, (Math.random() * rows) | 0);
-        const v = 0.55 + Math.random() * 0.4;
-        if (heat[i] < v) heat[i] = v;
-      }
-    }
-
-    function draw() {
-      if (!heat) return;
-      ctx.clearRect(0, 0, W, H);
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const i = idx(c, r);
-          const v = heat[i];
-          if (v > 0.015) {
-            const g = tone[i];
-            const s = (100 + 70 * g) | 0;
-            ctx.fillStyle = "rgba(" + s + "," + s + "," + s + "," + (Math.min(v, 1) * 0.5).toFixed(3) + ")";
-            ctx.fillRect(c * CELL, r * CELL, CELL, CELL);
-          }
-        }
-      }
-      if (lineLayer.width > 1) ctx.drawImage(lineLayer, 0, 0, W, H);
-    }
-
-    // solo se detiene si la portada sale del viewport por scroll; sigue
-    // corriendo aunque se cambie de pestana (setInterval, a diferencia de
-    // requestAnimationFrame, el navegador no lo suspende en segundo plano)
-    let last = performance.now(), visible = true;
-    new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { rootMargin: "10% 0px" }).observe(hero);
-
-    function frame() {
-      const t = performance.now();
-      if (!visible) { last = t; return; }
-      if (!lineLayer.width) { resize(); if (!lineLayer.width) { last = t; return; } }
-      const dt = Math.min(t - last, 50); last = t;
-      stepWalkers(t);
-      pops(t);
-      const decay = Math.pow(0.922, dt / 16.7);
-      for (let i = 0; i < heat.length; i++) heat[i] *= decay;
-      draw();
-    }
-
-    let rt;
-    window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(resize, 120); });
-    resize();
-    if (reduced) { draw(); } else { setInterval(frame, 16); }
-
-    // ---- pointer: lights up the exact cell under the cursor, same effect
-    // used across the site's other grid covers ----
-    window.addEventListener("pointermove", (e) => {
-      if (!heat) return;
-      const rect = canvas.getBoundingClientRect();
-      const c = ((e.clientX - rect.left) / CELL) | 0;
-      const r = ((e.clientY - rect.top) / CELL) | 0;
-      if (c >= 0 && r >= 0 && c < cols && r < rows &&
-          e.clientY >= rect.top && e.clientY <= rect.bottom) heat[idx(c, r)] = 1;
-    }, { passive: true });
-  })();
-
-  function rand(min, max) { return min + Math.random() * (max - min); }
-  function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
-  function randHex(len) {
-    let s = "";
-    for (let i = 0; i < len; i++) s += Math.floor(Math.random() * 16).toString(16);
-    return s;
-  }
-  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-  function fmtNum(n) { return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-
-  // APY lineal. Arranca en 14,9% (rateBps = 1490 de SectoraHolderRewards);
-  // la fundacion puede cambiarla con setRate, asi que con el contrato en
-  // vivo staking-chain.js lee la tasa y avisa con "sectora:apy".
+  // ---------------------------------------------------------------
+  // calculadora
+  // ---------------------------------------------------------------
+  // APY lineal, sin compuesto. Arranca en 14,9% (rateBps = 1490 de
+  // SectoraHolderRewards); la fundacion puede cambiarla con setRate, y con el
+  // contrato en vivo staking-chain.js lee la tasa y avisa con "sectora:apy".
   let APY = 0.149;
   const MONTHS = 12;
+  const ANO_S = 365 * 86400;
+  const fmt2 = (n) => n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const fmtSeg = (n) => {
+    const d = n >= 100 ? 4 : n >= 1 ? 6 : 8;
+    return n.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+  };
 
-  // ---- rewards calculator ----
+  const entrada = $("sectIn");
+  const chips = document.querySelectorAll(".chips button");
+
   function recalc() {
-    const input = document.getElementById("sectIn");
-    const amt = input ? parseFloat(input.value) || 0 : 0;
+    const amt = entrada ? parseFloat(entrada.value) || 0 : 0;
     const yearly = amt * APY;
-    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = fmtNum(v) + " #SECT"; };
-    set("outDay", yearly / 365);
-    set("outMonth", yearly / 12);
-    set("outYear", yearly);
-    set("outYearSm", yearly);
-    drawGrowthChart(amt || 1000);
+    const put = (id, txt) => { const el = $(id); if (el) el.textContent = txt; };
+    put("outSec", fmtSeg(yearly / ANO_S) + " #SECT");
+    put("outDay", fmt2(yearly / 365) + " #SECT");
+    put("outMonth", fmt2(yearly / 12) + " #SECT");
+    put("outYear", fmt2(yearly) + " #SECT");
+    put("outYearSm", fmt2(yearly) + " #SECT");
+    chips.forEach((c) => c.classList.toggle("on", Number(c.dataset.v) === amt));
+    grafico.objetivo(amt);
   }
-  const sectInput = document.getElementById("sectIn");
-  if (sectInput) sectInput.addEventListener("input", recalc);
 
-  // ---- APY ring gauge ----
-  function drawRingGauge(canvas, segments, opts) {
-    if (!canvas) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const cssW = canvas.clientWidth || canvas.width;
-    const cssH = canvas.clientHeight || canvas.height;
-    canvas.width = cssW * dpr; canvas.height = cssH * dpr;
-    const ctx = canvas.getContext("2d");
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const cx = cssW / 2, cy = cssH / 2;
-    const r = Math.min(cx, cy) - (opts.stroke / 2) - 2;
-    const start = -Math.PI / 2;
-    ctx.clearRect(0, 0, cssW, cssH);
+  // solo rellenan la casilla para la estimacion; no tocan la cadena
+  chips.forEach((c) => c.addEventListener("click", () => {
+    if (!entrada) return;
+    entrada.value = c.dataset.v;
+    entrada.dispatchEvent(new Event("input", { bubbles: true }));
+  }));
 
-    // track
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(255,255,255,.07)";
-    ctx.lineWidth = opts.stroke;
-    ctx.stroke();
+  // ---- grafico: recompensa acumulada mes a mes, una barra por mes ----
+  const grafico = (() => {
+    const cv = $("growthChart");
+    let actual = 0, meta = 0, raf = 0, vacio = true;
+    function dibujar(principal) {
+      if (!cv) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const W = cv.clientWidth || 600, H = cv.clientHeight || 170;
+      if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) {
+        cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      }
+      const ctx = cv.getContext("2d");
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      const p = principal > 0 ? principal : 1000;     // sin cantidad: forma de referencia, atenuada
+      const porMes = p * APY / MONTHS;
+      const max = porMes * MONTHS * 1.12 || 1;
+      const padT = 12, padB = 20, plotH = H - padT - padB;
+      const slot = W / MONTHS, barW = Math.max(3, slot * 0.34);
+      const y = (v) => padT + plotH - (v / max) * plotH;
+      const a = vacio ? 0.35 : 1;
 
-    let a0 = start;
-    segments.forEach((seg) => {
-      const a1 = a0 + Math.PI * 2 * seg.frac;
+      ctx.strokeStyle = "rgba(255,255,255,.06)"; ctx.lineWidth = 1;
+      for (let g = 0; g <= 3; g++) {
+        const gy = Math.round(padT + (plotH / 3) * g) + 0.5;
+        ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+      }
+      // linea de tendencia por las cimas
       ctx.beginPath();
-      ctx.arc(cx, cy, r, a0, a1);
-      ctx.strokeStyle = seg.color;
-      ctx.lineWidth = opts.stroke;
-      ctx.lineCap = opts.butt ? "butt" : "round";
-      if (opts.glow) { ctx.shadowColor = seg.color; ctx.shadowBlur = 10; }
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-      a0 = a1;
-    });
-  }
+      for (let m = 1; m <= MONTHS; m++) {
+        const cx = slot * (m - 0.5), cy = y(porMes * m);
+        if (m === 1) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+      }
+      ctx.strokeStyle = "rgba(52,231,255," + (0.45 * a) + ")"; ctx.lineWidth = 1; ctx.stroke();
 
-  const apyRing = document.getElementById("apyRing");
-  function paintRings() {
-    drawRingGauge(apyRing, [{ frac: Math.min(APY, 1), color: "#4d8dff" }], { stroke: 9, glow: true });
-  }
-  paintRings();
-  window.addEventListener("resize", () => { clearTimeout(window.__ringRt); window.__ringRt = setTimeout(paintRings, 150); });
+      ctx.font = "9.5px 'IBM Plex Mono', monospace"; ctx.textAlign = "center";
+      for (let m = 1; m <= MONTHS; m++) {
+        const cx = slot * (m - 0.5), top = y(porMes * m), base = y(0);
+        const gr = ctx.createLinearGradient(0, top, 0, base);
+        if (m === MONTHS) { gr.addColorStop(0, "rgba(255,255,255," + a + ")"); gr.addColorStop(1, "rgba(255,255,255," + 0.15 * a + ")"); }
+        else { gr.addColorStop(0, "rgba(77,141,255," + a + ")"); gr.addColorStop(1, "rgba(21,105,255," + 0.08 * a + ")"); }
+        ctx.fillStyle = gr;
+        ctx.fillRect(cx - barW / 2, top, barW, base - top);
+        ctx.fillStyle = m === MONTHS ? "rgba(255,255,255," + a + ")" : "rgba(52,231,255," + 0.9 * a + ")";
+        ctx.beginPath(); ctx.arc(cx, top, m === MONTHS ? 3 : 1.8, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,.34)";
+        ctx.fillText(String(m), cx, H - 5);
+      }
+    }
+    function paso() {
+      actual += (meta - actual) * 0.16;
+      if (Math.abs(meta - actual) < Math.max(0.001, meta * 0.0005)) actual = meta;
+      dibujar(actual);
+      raf = actual === meta ? 0 : requestAnimationFrame(paso);
+    }
+    return {
+      objetivo(v) {
+        vacio = !(v > 0);
+        meta = v > 0 ? v : 0;
+        if (reduced || !actual) { actual = meta; dibujar(actual); return; }
+        if (!raf) raf = requestAnimationFrame(paso);
+      },
+      redibujar() { dibujar(actual); },
+    };
+  })();
 
-  /* tasa leida del contrato: cada cifra de APY de la pagina (.apy-n), el
-     anillo, la calculadora y el grafico pasan a la tasa real */
+  if (entrada) entrada.addEventListener("input", recalc);
+  window.addEventListener("resize", () => { clearTimeout(window.__chartRt); window.__chartRt = setTimeout(grafico.redibujar, 150); });
+
+  /* tasa leida del contrato: cada cifra de APY de la pagina (.apy-n), la
+     calculadora y el grafico pasan a la tasa real */
   window.addEventListener("sectora:apy", (e) => {
     const bps = Number(e.detail);
     if (!(bps >= 0)) return;
     APY = bps / 10000;
     const txt = (bps / 100).toFixed(2).replace(/\.?0+$/, "");
     document.querySelectorAll(".apy-n").forEach((el) => { el.textContent = txt; });
-    paintRings();
     recalc();
+    window.dispatchEvent(new Event("sectora:relayout"));
   });
-
-  // ---- 12-month chart: cumulative rewards at the current APY, one bar a month ----
-  function drawGrowthChart(principal) {
-    const canvas = document.getElementById("growthChart");
-    if (!canvas) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const cssW = canvas.clientWidth || 600;
-    const cssH = canvas.clientHeight || 180;
-    canvas.width = cssW * dpr; canvas.height = cssH * dpr;
-    const ctx = canvas.getContext("2d");
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, cssW, cssH);
-
-    const perMonth = principal * APY / MONTHS;
-    const max = perMonth * MONTHS * 1.08;
-    const padL = 4, padR = 4, padT = 10, padB = 18;
-    const plotW = cssW - padL - padR, plotH = cssH - padT - padB;
-    const slot = plotW / MONTHS;
-    const barW = Math.max(4, slot * 0.56);
-    const y = (val) => padT + plotH - (val / (max || 1)) * plotH;
-
-    // gridlines
-    ctx.strokeStyle = "rgba(255,255,255,.06)";
-    ctx.lineWidth = 1;
-    for (let g = 0; g <= 3; g++) {
-      const gy = padT + (plotH / 3) * g;
-      ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(cssW - padR, gy); ctx.stroke();
-    }
-
-    ctx.font = "10px 'IBM Plex Mono', monospace";
-    ctx.textAlign = "center";
-    for (let m = 1; m <= MONTHS; m++) {
-      const cx = padL + slot * (m - 0.5);
-      const top = y(perMonth * m), base = y(0);
-      ctx.fillStyle = m === MONTHS ? "#ffffff" : "#1569ff";
-      ctx.fillRect(cx - barW / 2, top, barW, base - top);
-      ctx.fillStyle = "rgba(255,255,255,.38)";
-      ctx.fillText(String(m), cx, cssH - 4);
-    }
-  }
   recalc();
 
-  // ---- 3D tilt on every panel card: pointer-tracked perspective rotation
-  // plus a glare sweep, matching a premium fintech "hover depth" feel ----
-  if (!reduced && !window.matchMedia("(pointer:coarse)").matches) {
-    const TILT_MAX = 7; // degrees
-    document.querySelectorAll(".panel").forEach((card) => {
-      let raf = 0;
-      function onMove(e) {
-        if (raf) return;
-        raf = requestAnimationFrame(() => {
-          raf = 0;
-          const r = card.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width;
-          const py = (e.clientY - r.top) / r.height;
-          const ry = (px - 0.5) * TILT_MAX * 2;
-          const rx = (0.5 - py) * TILT_MAX * 2;
-          card.style.setProperty("--rx", rx.toFixed(2) + "deg");
-          card.style.setProperty("--ry", ry.toFixed(2) + "deg");
-          card.style.setProperty("--mx", (px * 100).toFixed(1) + "%");
-          card.style.setProperty("--my", (py * 100).toFixed(1) + "%");
-        });
+  // ---------------------------------------------------------------
+  // cifras en vivo: "1,234 #SECT" -> numero grande y la unidad en pequeño,
+  // con un destello cuando cambian. staking-chain.js sustituye estos nodos
+  // por clones al arrancar, asi que se vigila la tarjeta, no el nodo.
+  // ---------------------------------------------------------------
+  document.querySelectorAll(".stats .st").forEach((st) => {
+    let previo = "";
+    const ordenar = () => {
+      const n = st.querySelector(".st-n.num");
+      if (!n || n.querySelector("small")) return;
+      const t = n.textContent.trim();
+      const m = t.match(/^(.*?)\s*#SECT$/);
+      if (m) { n.textContent = m[1]; const s = document.createElement("small"); s.textContent = "#SECT"; n.appendChild(s); }
+      if (t !== previo && previo && previo !== "—") {
+        n.classList.add("flash"); setTimeout(() => n.classList.remove("flash"), 900);
       }
-      card.addEventListener("pointerenter", () => card.classList.add("tilting"));
-      card.addEventListener("pointermove", onMove, { passive: true });
-      card.addEventListener("pointerleave", () => {
-        card.classList.remove("tilting");
-        card.style.setProperty("--rx", "0deg");
-        card.style.setProperty("--ry", "0deg");
-      });
+      previo = t;
+    };
+    new MutationObserver(ordenar).observe(st, { childList: true, subtree: true, characterData: true });
+  });
+
+  // ---------------------------------------------------------------
+  // titulos palabra a palabra y apariciones al hacer scroll
+  // ---------------------------------------------------------------
+  function partir(el) {
+    const nodos = Array.from(el.childNodes);
+    el.textContent = "";
+    let i = 0;
+    const palabra = (contenido) => {
+      const w = document.createElement("span"); w.className = "w";
+      const s = document.createElement("span"); s.style.setProperty("--i", i++);
+      s.append(contenido); w.appendChild(s); el.appendChild(w);
+    };
+    nodos.forEach((n) => {
+      if (n.nodeType === 3) {
+        n.textContent.split(/(\s+)/).forEach((p) => {
+          if (!p) return;
+          if (/^\s+$/.test(p)) el.appendChild(document.createTextNode(" "));
+          else palabra(p);
+        });
+      } else palabra(n);   // un elemento (por ejemplo .apy-n) entra entero
     });
   }
+  document.querySelectorAll(".split").forEach(partir);
 
-  // ---- hero parallax: background layers drift at different rates as the
-  // pointer moves, giving the cover a sense of depth ----
-  (() => {
-    const hero = document.querySelector(".hero");
-    if (!hero || reduced || window.matchMedia("(pointer:coarse)").matches) return;
-    let raf = 0, tx = 0, ty = 0;
-    hero.addEventListener("pointermove", (e) => {
-      const r = hero.getBoundingClientRect();
-      tx = (e.clientX - r.left) / r.width - 0.5;
-      ty = (e.clientY - r.top) / r.height - 0.5;
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        hero.style.setProperty("--px", tx.toFixed(3));
-        hero.style.setProperty("--py", ty.toFixed(3));
-      });
-    }, { passive: true });
-    hero.addEventListener("pointerleave", () => {
-      hero.style.setProperty("--px", "0");
-      hero.style.setProperty("--py", "0");
-    });
-  })();
-
-  // ---- reveal on scroll ----
-  if ("IntersectionObserver" in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.15, rootMargin: "0px 0px -6% 0px" });
-    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  const vistos = document.querySelectorAll(".reveal, .split");
+  if ("IntersectionObserver" in window && !reduced) {
+    const io = new IntersectionObserver((es) => {
+      es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+    vistos.forEach((el) => io.observe(el));
   } else {
-    document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
+    vistos.forEach((el) => el.classList.add("in"));
   }
 
-  // ---- network stats ----
-  // Aqui habia una simulacion: arrancaba en 1.840.000 #SECT depositados y 612
-  // stakers y los hacia crecer cada 4,6 s. Se enseñaban bajo las etiquetas
-  // "Total staked" y "Stakers", sin ninguna advertencia, en una pagina donde
-  // no hay contrato desplegado y por tanto no hay ni un token depositado ni
-  // un staker. Eso es inventarse la traccion del proyecto, asi que fuera.
-  // Los dos numeros se quedan en el 0 del marcado, que es la verdad, y los
-  // rellena staking-chain.js desde poolView() cuando haya contrato.
+  // ---------------------------------------------------------------
+  // cabecera: se esconde al bajar, vuelve al subir; barra de progreso;
+  // seccion activa en el menu
+  // ---------------------------------------------------------------
+  const top = $("top"), barra = $("progBar");
+  const enlaces = Array.from(document.querySelectorAll(".top-nav a"));
+  const secciones = enlaces.map((a) => document.querySelector(a.getAttribute("href")));
+  let ultimoY = window.scrollY, pendiente = false;
+  function alScroll() {
+    pendiente = false;
+    const y = window.scrollY;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (barra) barra.style.transform = "scaleX(" + (max > 0 ? Math.min(1, y / max) : 0) + ")";
+    if (top) {
+      top.classList.toggle("scrolled", y > 30);
+      const bajando = y > ultimoY + 4, subiendo = y < ultimoY - 4;
+      if (bajando && y > window.innerHeight * 0.6) top.classList.add("hide");
+      else if (subiendo || y < 80) top.classList.remove("hide");
+    }
+    let activa = -1;
+    secciones.forEach((s, i) => { if (s && s.getBoundingClientRect().top < window.innerHeight * 0.45) activa = i; });
+    enlaces.forEach((a, i) => a.classList.toggle("on", i === activa));
+    ultimoY = y;
+  }
+  window.addEventListener("scroll", () => { if (!pendiente) { pendiente = true; requestAnimationFrame(alScroll); } }, { passive: true });
+  alScroll();
 
-  // ---- wallet connect ----
-  // Este archivo ya NO toca el boton. Antes fingia la conexion: mostraba
-  // "Connecting…" y luego inventaba una direccion con randHex y la enseñaba
-  // como si fuera la cartera del visitante. En una pagina donde se deposita
-  // dinero eso no se puede hacer. El boton lo gobierna staking-chain.js, que
-  // es el unico que habla con una cartera de verdad; mientras el contrato no
-  // este desplegado el boton se queda inerte, como viene en el marcado.
+  // ---------------------------------------------------------------
+  // preguntas: abren y cierran con altura animada
+  // ---------------------------------------------------------------
+  document.querySelectorAll(".faq-item").forEach((d) => {
+    const s = d.querySelector("summary"), a = d.querySelector(".faq-a");
+    if (!s || !a || reduced || !a.animate) return;
+    s.addEventListener("click", (e) => {
+      e.preventDefault();
+      const ops = { duration: 520, easing: "cubic-bezier(.16,1,.3,1)" };
+      if (d.open) {
+        const h = a.offsetHeight;
+        a.animate([{ height: h + "px", opacity: 1 }, { height: "0px", opacity: 0 }], ops).onfinish = () => { d.open = false; };
+      } else {
+        d.open = true;
+        const h = a.offsetHeight;
+        a.animate([{ height: "0px", opacity: 0 }, { height: h + "px", opacity: 1 }], ops);
+      }
+    });
+  });
 
-  // ---- network staking activity feed ----
-  // Aqui habia un feed simulado con direcciones y cantidades inventadas.
-  // Se quito junto con su seccion: en una pagina de staking no se enseñan
-  // depositos que no existen.
+  // ---------------------------------------------------------------
+  // botones magneticos y luz que sigue al puntero en los paneles
+  // ---------------------------------------------------------------
+  if (!reduced && !coarse) {
+    document.querySelectorAll(".mag").forEach((el) => {
+      const fuerza = el.classList.contains("badge") ? 0.35 : 0.22;
+      el.addEventListener("pointermove", (e) => {
+        const r = el.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+        el.classList.add("pull");
+        el.style.transform = "translate3d(" + (dx * fuerza).toFixed(1) + "px," + (dy * fuerza).toFixed(1) + "px,0)";
+      });
+      el.addEventListener("pointerleave", () => { el.classList.remove("pull"); el.style.transform = ""; });
+    });
+    document.querySelectorAll(".panel").forEach((p) => {
+      p.addEventListener("pointermove", (e) => {
+        const r = p.getBoundingClientRect();
+        p.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        p.style.setProperty("--my", (e.clientY - r.top) + "px");
+      }, { passive: true });
+    });
+  }
+
+  // ---------------------------------------------------------------
+  // reloj UTC de la portada: el segundo en que se acumula lo ganado
+  // ---------------------------------------------------------------
+  const reloj = $("utcClock");
+  if (reloj) {
+    const tic = () => { reloj.textContent = "UTC " + new Date().toISOString().slice(11, 19); };
+    tic();
+    setInterval(tic, 1000);
+  }
+
+  // el boton pasa a mostrar la direccion conectada: sin mayusculas ("0x", no "0X")
+  const acciones = document.querySelector(".con-actions");
+  if (acciones) {
+    const mirar = () => {
+      const bt = $("connectBtn");
+      if (bt) bt.classList.toggle("addr", /^0x[0-9a-f]{4}/i.test(bt.textContent.trim()));
+    };
+    new MutationObserver(mirar).observe(acciones, { childList: true, subtree: true, characterData: true });
+  }
+
+  // marcas del dial del paso 02 (60 segundos)
+  const dial = document.querySelector(".art-earn .a-ticks");
+  if (dial) {
+    const ns = "http://www.w3.org/2000/svg";
+    for (let i = 0; i < 60; i++) {
+      const a = (i / 60) * Math.PI * 2, big = i % 5 === 0;
+      const r1 = big ? 44 : 47, r2 = 52;
+      const l = document.createElementNS(ns, "line");
+      l.setAttribute("x1", (100 + Math.sin(a) * r1).toFixed(2)); l.setAttribute("y1", (70 - Math.cos(a) * r1).toFixed(2));
+      l.setAttribute("x2", (100 + Math.sin(a) * r2).toFixed(2)); l.setAttribute("y2", (70 - Math.cos(a) * r2).toFixed(2));
+      if (big) l.setAttribute("class", "big");
+      dial.appendChild(l);
+    }
+  }
 })();
 
-/* ===== coordinate cursor: reticle + readout, same system used on the main
-   site, security and dashboard — a thin crosshair plus a coordinate readout
-   that follows the pointer, snapped to the same 54px cell grid, switching to
-   a darker tone over light backgrounds. ===== */
+/* ===== cursor de coordenadas: reticula + lectura, el mismo sistema de la
+   portada, la de seguridad y el panel, ajustado a la celda de 54 px ===== */
 (() => {
   const reticle = document.getElementById("reticle");
   const readout = document.getElementById("readout");
   if (!reticle || !readout) return;
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const rx = reticle.querySelector(".rx");
-  const ry = reticle.querySelector(".ry");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const rx = reticle.querySelector(".rx"), ry = reticle.querySelector(".ry");
   const CELL = 54;
-
-  let claro = false, ultimaLum = 0;
-  function fondoClaro(x, y) {
-    if (performance.now() - ultimaLum < 140) return claro;
-    ultimaLum = performance.now();
-    let el = document.elementFromPoint(x, y);
-    let n = 0;
-    while (el && n < 6) {
-      const bg = getComputedStyle(el).backgroundColor;
-      const m = bg && bg.match(/rgba?\(([^)]+)\)/);
-      if (m) {
-        const v = m[1].split(",").map(parseFloat);
-        const a = v.length > 3 ? v[3] : 1;
-        if (a > 0.35) {
-          const L = (0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]) / 255;
-          claro = L > 0.5;
-          return claro;
-        }
-      }
-      el = el.parentElement; n++;
-    }
-    return claro;
-  }
-
   window.addEventListener("pointermove", (e) => {
-    if (reduced) return;
     const gx = Math.floor((e.clientX + window.scrollX) / CELL) * CELL - window.scrollX;
     const gy = Math.floor((e.clientY + window.scrollY) / CELL) * CELL - window.scrollY;
     const cc = Math.floor((e.clientX + window.scrollX) / CELL);
     const cr = Math.floor((e.clientY + window.scrollY) / CELL);
-
     readout.style.transform = "translate3d(" + gx + "px," + gy + "px,0)";
     readout.textContent = String(Math.abs(cc) % 100).padStart(2, "0") + " · " + String(Math.abs(cr) % 100).padStart(2, "0");
     rx.style.transform = "translate3d(0," + gy + "px,0)";
     ry.style.transform = "translate3d(" + gx + "px,0,0)";
     reticle.classList.add("on");
     readout.classList.add("on");
-
-    const cl2 = fondoClaro(e.clientX, e.clientY);
-    reticle.classList.toggle("on-light", cl2);
-    readout.classList.toggle("on-light", cl2);
   }, { passive: true });
-
-  window.addEventListener("pointerleave", () => {
+  document.documentElement.addEventListener("pointerleave", () => {
     reticle.classList.remove("on");
     readout.classList.remove("on");
   });

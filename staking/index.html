@@ -6,6 +6,7 @@
 <title>Sectora Foundation — #SECT Holder Rewards</title>
 <!-- Oculta mientras Blockaid revisa el contrato: sin enlaces desde la web y fuera de buscadores. Quitar esta linea al volver a publicarla. -->
 <meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="dark">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sectoraorg.com/staking">
 <meta property="og:title" content="Sectora Foundation — #SECT Holder Rewards">
@@ -29,305 +30,379 @@
 <link rel="apple-touch-icon" href="/icons/v2/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="canonical" href="https://sectoraorg.com/staking/">
-<meta name="theme-color" content="#05070b">
+<meta name="theme-color" content="#020409">
 <link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="staking.css?v=20261010">
+<script>
+  /* La intro solo existe con JavaScript (sin JS la pagina se ve directa).
+     Primera visita de la sesion: intro completa. Despues (por ejemplo al
+     recargar cuando la wallet cambia de red): solo el zoom, corto. */
+  (function () {
+    var h = document.documentElement, corta = false;
+    h.classList.add("js");
+    try { corta = sessionStorage.getItem("sectStkIntro") === "1"; } catch (e) {}
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) h.classList.add("sin-intro");
+    else h.classList.add("intro-on", corta ? "intro-corta" : "intro-larga");
+  })();
+</script>
+<link rel="stylesheet" href="staking.css?v=20261015">
 </head>
 <body>
-<div class="vig" aria-hidden="true"></div>
+
+<!-- ============ intro: el anillo de la marca se ensambla entre estrellas y
+     la camara entra por su centro hasta abrir la pagina ============ -->
+<div class="intro" id="intro" aria-hidden="true">
+  <canvas id="introSky"></canvas>
+  <div class="intro-frame"><i></i><i></i><i></i><i></i></div>
+  <div class="intro-hud">
+    <span class="tl">Sectora Foundation</span>
+    <span class="tr">#SECT · Holder rewards</span>
+    <div class="intro-log" id="introLog">
+      <span>Ethereum mainnet</span>
+      <span>Exact-amount approvals</span>
+      <span>No lock-up · No deposit cap</span>
+      <span class="hi">Accrual · every second</span>
+    </div>
+    <span class="br"><b id="introPct">000</b></span>
+    <div class="intro-bar"><i id="introBar"></i></div>
+  </div>
+  <div class="intro-core" id="introCore">
+    <svg class="intro-mark" viewBox="0 0 100 100">
+      <rect class="im-sq" width="100" height="100" rx="9"/>
+      <circle class="im-ring" cx="50" cy="50" r="27.2" pathLength="1"/>
+    </svg>
+  </div>
+  <span class="intro-word" id="introWord">SECTORA</span>
+  <button class="intro-skip" type="button" id="introSkip">Skip intro</button>
+</div>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="nebula" aria-hidden="true"><span></span><span></span><span></span></div>
+<div class="grain" aria-hidden="true"></div>
 <div class="reticle" id="reticle" aria-hidden="true"><span class="rx"></span><span class="ry"></span></div>
 <div class="readout" id="readout" aria-hidden="true">00 · 00</div>
+<div class="progress" aria-hidden="true"><i id="progBar"></i></div>
 
-<header class="top">
-  <div class="top-l">
-    <a class="brand" href="../index.html">
-      <span class="mark" aria-hidden="true"><i></i></span>
-      <span class="word">SECTORA</span>
-    </a>
-    <span class="crumb">Holder rewards</span>
-  </div>
+<header class="top" id="top">
+  <a class="brand" href="../index.html" aria-label="Sectora Foundation, main site">
+    <span class="mark" aria-hidden="true"><i></i></span>
+    <span class="word">SECTORA</span>
+  </a>
+  <nav class="top-nav" aria-label="Sections">
+    <a href="#earn"><b>01</b>Stake</a>
+    <a href="#how"><b>02</b>How it works</a>
+    <a href="#verify"><b>03</b>Security</a>
+    <a href="#faq"><b>04</b>FAQ</a>
+  </nav>
   <div class="top-r">
-    <span class="pill live solo-vivo"><i class="dot"></i>Live</span>
-    <span class="pill solo-previa">Coming soon</span>
-    <span class="pill"><span class="apy-n">14.9</span>% APY</span>
-    <span class="pill">No lock-up</span>
-    <span class="pill">No deposit cap</span>
-    <a class="btn ghost" href="../index.html">← Main site</a>
+    <span class="pill live"><i class="dot"></i><span>Live · <span class="apy-n">14.9</span>% APY</span></span>
+    <a class="btn ghost top-main" href="../index.html">Main site</a>
+    <a class="btn primary top-stake mag" href="#earn">Stake</a>
   </div>
 </header>
 
-<main>
+<main id="page">
 
-  <section class="hero">
-    <canvas id="stakeGrid" aria-hidden="true"></canvas>
-    <span class="hero-vig" aria-hidden="true"></span>
+  <!-- ============ portada: el 14.9% como planeta y sus anillos ============ -->
+  <section class="hero" id="hero">
+    <canvas id="orbitBack" aria-hidden="true"></canvas>
     <div class="hero-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
     <div class="hero-in">
-      <div class="hero-txt">
-        <p class="eyebrow"><i></i>#SECT Holder Rewards</p>
-        <h1><span class="apy-n">14.9</span>% APY for holders.</h1>
-        <span class="hero-rule" aria-hidden="true"></span>
-        <p class="lead">Deposit #SECT and earn <span class="apy-n">14.9</span>% a year, accrued every second and paid by the
-          Sectora Foundation treasury. No lock-up: withdraw whenever you want and claim your
-          rewards at any time. There is no cap on deposits.</p>
-        <p class="lead solo-previa">The contract is written and tested but not deployed yet, so
-          nothing can be deposited today.</p>
-        <div class="hero-cta">
-          <a class="btn primary" href="#earn">Estimate your rewards <em>↓</em></a>
-          <a class="btn ghost" href="../index.html">Main site</a>
-        </div>
+      <p class="hero-eyebrow rise" style="--d:0s"><i class="dot"></i>Live on Ethereum mainnet<span class="he-x">&nbsp;· #SECT holder rewards</span></p>
+      <h1 class="hx">
+        <span class="hx-n rise" style="--d:.08s"><span class="apy-n">14.9</span><i>%</i></span>
+        <span class="hx-k rise" style="--d:.2s">APY, accrued every second</span>
+      </h1>
+      <p class="hero-lead rise" style="--d:.3s">Deposit #SECT and watch it earn second by second, paid by the
+        Sectora Foundation treasury. No lock-up, no deposit cap, claim whenever you want.</p>
+      <div class="hero-cta rise" style="--d:.4s">
+        <a class="btn primary mag" href="#earn">Start staking <em>↓</em></a>
+        <a class="btn ghost mag" href="#how">How it works</a>
       </div>
+    </div>
 
-      <div class="stat-card panel">
-        <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
-        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
-        <div class="panel-in">
-        <div class="gauge-row">
-          <div class="gauge-wrap">
-            <canvas id="apyRing" width="152" height="152" aria-hidden="true"></canvas>
-            <div class="gauge-mid"><b><span class="apy-n">14.9</span><small>%</small></b><span>APY</span></div>
-          </div>
-          <div class="gauge-side">
-            <div>
-              <span class="s-lbl">Accrual</span>
-              <span class="s-big">Every second</span>
-              <span class="s-note">Claim whenever you want</span>
-            </div>
-            <div>
-              <span class="s-lbl">Lock-up</span>
-              <span class="s-big">None</span>
-              <span class="s-note">Withdraw any time, keep what you earned</span>
-            </div>
-          </div>
-        </div>
+    <canvas id="orbitFront" aria-hidden="true"></canvas>
 
-        <div class="stat-live">
-          <div><span class="lv-lbl">Total deposited</span><b class="num" id="lvStaked">0</b></div>
-          <div><span class="lv-lbl">Holders in</span><b class="num" id="lvStakers">0</b></div>
-        </div>
-        <p class="lv-previa solo-previa">Zero because the contract is not deployed yet. These
-          figures are read straight from the contract once it is.</p>
-        </div>
-      </div>
+    <div class="hero-hud" aria-hidden="true">
+      <span class="hh-l"><i class="dot"></i>Accrual clock <b id="utcClock">UTC --:--:--</b></span>
+      <span class="hh-v">N° 05 — Holder rewards</span>
+      <a class="badge mag" href="#earn" tabindex="-1">
+        <svg viewBox="0 0 120 120">
+          <defs><path id="badgePath" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs>
+          <text><textPath href="#badgePath" textLength="286" lengthAdjust="spacing">No lock-up · Claim any time · No deposit cap ·</textPath></text>
+        </svg>
+        <span class="badge-c">↓</span>
+      </a>
     </div>
   </section>
 
+  <!-- ============ cinta: lo que nunca cambia ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="mq-track" id="mqTrack">
+      <div class="mq-set">
+        <span>Accrued every second</span><i></i>
+        <span>No lock-up</span><i></i>
+        <span>Claim any time</span><i></i>
+        <span>No deposit cap</span><i></i>
+        <span>Exact-amount approvals</span><i></i>
+        <span>Paid by the Sectora Foundation</span><i></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ cifras: solo lo que lee del contrato ============ -->
+  <section class="stats" aria-label="Program figures">
+    <div class="st reveal"><span class="st-l">Reward rate</span><b class="st-n"><span class="apy-n">14.9</span>%<small>APY</small></b><span class="st-s">Read from the contract</span></div>
+    <div class="st reveal" style="--d:.06s"><span class="st-l">Total deposited</span><b class="st-n num" id="lvStaked">—</b><span class="st-s">Live on-chain</span></div>
+    <div class="st reveal" style="--d:.12s"><span class="st-l">Holders in</span><b class="st-n num" id="lvStakers">—</b><span class="st-s">Live on-chain</span></div>
+    <div class="st reveal" style="--d:.18s"><span class="st-l">Lock-up</span><b class="st-n">0<small> days</small></b><span class="st-s">Withdraw any time</span></div>
+  </section>
+
+  <!-- ============ consola: calcular y depositar ============ -->
   <section class="sect" id="earn">
-    <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
-    <div class="head reveal">
-      <h2>Estimate your rewards</h2>
-      <span><span class="apy-n">14.9</span>% a year on what you deposit, accrued every second</span>
+    <div class="sect-head">
+      <p class="kicker reveal"><b>01</b>Stake</p>
+      <h2 class="split">Estimate it, then stake it.</h2>
+      <p class="sect-sub reveal"><span class="apy-n">14.9</span>% a year on what you deposit, accrued every second, straight from your own wallet.</p>
     </div>
 
-    <div class="stake-grid">
-      <div class="stake-card panel reveal">
+    <div class="console-grid">
+      <div class="console panel reveal">
         <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
-        <div class="stake-row">
-          <label for="sectIn">You deposit</label>
+          <div class="con-head">
+            <span>Console</span>
+            <span class="con-net"><i class="dot"></i>Ethereum mainnet</span>
+          </div>
+
+          <label class="con-lbl" for="sectIn">You deposit</label>
           <div class="input-wrap">
-            <input type="number" id="sectIn" inputmode="decimal" min="0" step="1" placeholder="0.00">
+            <input type="number" id="sectIn" inputmode="decimal" min="0" step="1" placeholder="0.00" autocomplete="off">
             <span class="input-suffix">#SECT</span>
           </div>
-        </div>
-        <div class="chart-wrap">
-          <div class="chart-head">
-            <span>12 months · cumulative rewards</span>
-            <b id="outYear">0.00 #SECT</b>
+          <div class="chips" role="group" aria-label="Quick amounts for the estimate">
+            <button type="button" data-v="1000">1K</button>
+            <button type="button" data-v="10000">10K</button>
+            <button type="button" data-v="100000">100K</button>
+            <button type="button" data-v="1000000">1M</button>
           </div>
-          <canvas id="growthChart" width="600" height="180" aria-hidden="true"></canvas>
-        </div>
-        <div class="stake-out">
-          <div><span>Per day</span><b id="outDay">0.00 #SECT</b></div>
-          <div><span>Per month</span><b id="outMonth">0.00 #SECT</b></div>
-          <div><span>Per year</span><b id="outYearSm">0.00 #SECT</b></div>
-        </div>
-        <button type="button" class="btn primary wide" id="connectBtn" disabled>Connect wallet</button>
-        <p class="stake-note solo-previa"><b>Not live yet.</b> The contract has not been deployed
-          to Ethereum mainnet, so nothing can be deposited from this page today. The figures
-          above are a calculator at <span class="apy-n">14.9</span>% APY.</p>
-        <p class="stake-note solo-vivo">No lock-up · claim any time · rewards accrue every second at <span class="apy-n">14.9</span>% APY</p>
+
+          <div class="per-sec">
+            <span class="ps-orb" aria-hidden="true"><i></i></span>
+            <div>
+              <span class="ps-l">Every second</span>
+              <b class="ps-n" id="outSec">0.00000000 #SECT</b>
+            </div>
+          </div>
+
+          <div class="stake-out">
+            <div><span>Per day</span><b id="outDay">0.00 #SECT</b></div>
+            <div><span>Per month</span><b id="outMonth">0.00 #SECT</b></div>
+            <div><span>Per year</span><b id="outYearSm">0.00 #SECT</b></div>
+          </div>
+
+          <div class="chart-wrap">
+            <div class="chart-head">
+              <span>12 months · cumulative rewards</span>
+              <b id="outYear">0.00 #SECT</b>
+            </div>
+            <canvas id="growthChart" width="600" height="170" aria-hidden="true"></canvas>
+          </div>
+
+          <!-- staking-chain.js cuelga aqui el contador en vivo, las acciones,
+               los avisos y la direccion oficial del contrato -->
+          <div class="con-actions">
+            <button type="button" class="btn primary wide" id="connectBtn" disabled>Connect wallet</button>
+          </div>
+          <p class="stake-note">No lock-up · claim any time · rewards accrue every second at <span class="apy-n">14.9</span>% APY</p>
         </div>
       </div>
 
-      <div class="terms-card panel reveal" style="--d:.08s">
+      <div class="terms panel reveal" style="--d:.08s">
         <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
         <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
         <div class="panel-in">
-        <h3>Terms</h3>
-        <ul class="terms-list">
-          <li><span>Rewards</span><b><span class="apy-n">14.9</span>% APY</b></li>
-          <li><span>Accrual</span><b>Every second, no compounding</b></li>
-          <li><span>Claim</span><b>Any time</b></li>
-          <li><span>Lock-up</span><b>None</b></li>
-          <li><span>Withdraw</span><b>Any time, no penalty</b></li>
-          <li><span>Deposit cap</span><b>None</b></li>
-          <li><span>Funded by</span><b>Sectora Foundation treasury</b></li>
-        </ul>
-        <div class="terms-disclosure">
-          <p>Rewards are paid from #SECT the treasury deposits into the contract in advance;
-            nothing is minted. If the reward pool ran dry, rewards would stop accruing until it
-            is refilled, rather than promise what is not there. The contract has been tested
-            but not externally audited.</p>
-        </div>
+          <div class="con-head"><span>Terms</span><span>SectoraHolderRewards</span></div>
+          <ul class="terms-list">
+            <li><span>Rewards</span><b><span class="apy-n">14.9</span>% APY</b></li>
+            <li><span>Accrual</span><b>Every second, no compounding</b></li>
+            <li><span>Claim</span><b>Any time</b></li>
+            <li><span>Lock-up</span><b>None</b></li>
+            <li><span>Withdraw</span><b>Any time, no penalty</b></li>
+            <li><span>Deposit cap</span><b>None</b></li>
+            <li><span>Approval</span><b>Exact amount only</b></li>
+            <li><span>Funded by</span><b>Sectora Foundation treasury</b></li>
+          </ul>
+          <div class="terms-disclosure">
+            <p>Rewards are paid from #SECT the treasury deposits into the contract in advance;
+              nothing is minted. The foundation can top up the reward pool, take back the part
+              not yet earned and adjust the rate, which only counts from that second on. Deposits
+              and rewards already earned stay yours. If the pool ran dry, rewards would stop
+              accruing until it is refilled. The contract has been tested but not externally
+              audited.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="sect" id="how">
-    <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
-    <div class="head reveal">
-      <h2>How it works</h2>
-      <span>Three steps, all from your own wallet</span>
-    </div>
-    <div class="grid3">
-      <div class="pqc-card panel reveal" style="--d:0.00s">
-        <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
-        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
-        <div class="panel-in">
-        <span class="panel-num" aria-hidden="true">01</span>
-        <span class="pqc-tag">Deposit</span>
-        <h3>Put #SECT in</h3>
-        <p>Connect your wallet, approve the exact amount you want to deposit and confirm the deposit. Rewards start accruing that second.</p>
-        </div>
+  <!-- ============ como funciona: tres pasos en horizontal ============ -->
+  <section class="how" id="how">
+    <div class="how-pin">
+      <div class="how-head">
+        <p class="kicker"><b>02</b>How it works</p>
+        <h2 class="split">Three moves, all from your own wallet.</h2>
+        <div class="how-prog" aria-hidden="true"><span id="howNow">01</span><i><b id="howBar"></b></i><span>03</span></div>
       </div>
-      <div class="pqc-card panel reveal" style="--d:0.06s">
-        <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
-        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
-        <div class="panel-in">
-        <span class="panel-num" aria-hidden="true">02</span>
-        <span class="pqc-tag">Earn</span>
-        <h3><span class="apy-n">14.9</span>% a year, every second</h3>
-        <p>Your rewards grow continuously at <span class="apy-n">14.9</span>% APY on what you have deposited. Collect them whenever you like; there is no date to wait for.</p>
-        </div>
-      </div>
-      <div class="pqc-card panel reveal" style="--d:0.12s">
-        <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
-        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
-        <div class="panel-in">
-        <span class="panel-num" aria-hidden="true">03</span>
-        <span class="pqc-tag">Withdraw</span>
-        <h3>Take it out any time</h3>
-        <p>Withdraw part or all of your deposit whenever you want, with no penalty. Rewards you already earned stay yours to claim.</p>
-        </div>
+      <div class="how-track" id="howTrack">
+        <article class="how-card">
+          <span class="how-n" aria-hidden="true">01</span>
+          <svg class="how-art art-in" viewBox="0 0 200 140" aria-hidden="true">
+            <ellipse class="a-orb" cx="100" cy="92" rx="78" ry="22"/>
+            <circle class="a-ring" cx="100" cy="92" r="20"/>
+            <g class="a-drop"><circle cx="100" cy="22" r="7"/><path d="M100 34 V58 M92 50 L100 58 L108 50"/></g>
+          </svg>
+          <span class="how-tag">Deposit</span>
+          <h3>Put #SECT in</h3>
+          <p>Connect your wallet, approve the exact amount you want to deposit and confirm the deposit. Rewards start accruing that second.</p>
+        </article>
+        <article class="how-card">
+          <span class="how-n" aria-hidden="true">02</span>
+          <svg class="how-art art-earn" viewBox="0 0 200 140" aria-hidden="true">
+            <g class="a-ticks"></g>
+            <circle class="a-ring" cx="100" cy="70" r="20"/>
+            <g class="a-spin"><circle class="a-sat" cx="100" cy="18" r="5"/></g>
+          </svg>
+          <span class="how-tag">Earn</span>
+          <h3><span class="apy-n">14.9</span>% a year, every second</h3>
+          <p>Your rewards grow continuously at <span class="apy-n">14.9</span>% APY on what you have deposited. Collect them whenever you like; there is no date to wait for.</p>
+        </article>
+        <article class="how-card">
+          <span class="how-n" aria-hidden="true">03</span>
+          <svg class="how-art art-out" viewBox="0 0 200 140" aria-hidden="true">
+            <ellipse class="a-orb" cx="100" cy="92" rx="78" ry="22"/>
+            <circle class="a-ring" cx="100" cy="92" r="20"/>
+            <g class="a-lift"><path d="M100 58 V30 M92 38 L100 30 L108 38"/><circle cx="100" cy="16" r="7"/></g>
+          </svg>
+          <span class="how-tag">Withdraw</span>
+          <h3>Take it out any time</h3>
+          <p>Withdraw part or all of your deposit whenever you want, with no penalty. Rewards you already earned stay yours to claim.</p>
+        </article>
       </div>
     </div>
   </section>
 
+  <!-- ============ seguridad: las reglas viven en el contrato ============ -->
   <section class="sect" id="verify">
-    <div class="sect-aura" aria-hidden="true"><span></span><span></span></div>
-    <div class="head reveal">
-      <h2>Why this isn't just a promised number</h2>
-      <span>The rules live in the contract</span>
+    <div class="sect-head">
+      <p class="kicker reveal"><b>03</b>Security</p>
+      <h2 class="split">Why this isn't just a promised number.</h2>
+      <p class="sect-sub reveal">The rules live in the contract, and the contract is public.</p>
     </div>
-    <div class="grid3">
-      <div class="pqc-card panel reveal" style="--d:0.00s">
-        <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
-        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
-        <div class="panel-in">
-        <span class="panel-num" aria-hidden="true">01</span>
-        <span class="pqc-tag">Funded before it's paid</span>
-        <h3>Every reward is deposited first</h3>
-        <p>#SECT has no mint function and its ownership is renounced. The treasury transfers the reward budget into the contract before it is paid out, and the size of that pool is public on-chain.</p>
-        </div>
-      </div>
-      <div class="pqc-card panel reveal" style="--d:0.06s">
-        <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
-        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
-        <div class="panel-in">
-        <span class="panel-num" aria-hidden="true">02</span>
-        <span class="pqc-tag">Written in code</span>
-        <h3>What you earn stays earned</h3>
-        <p>The APY starts at 14.9% and the foundation can adjust it on-chain; a change only counts from that second on, so nothing already earned is ever recalculated.</p>
-        </div>
-      </div>
-      <div class="pqc-card panel reveal" style="--d:0.12s">
-        <span class="panel-glow" aria-hidden="true"></span>
-        <span class="panel-grid" aria-hidden="true"></span>
-        <span class="panel-vig" aria-hidden="true"></span>
-        <span class="panel-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="panel-shine" aria-hidden="true"></span>
-        <div class="panel-in">
-        <span class="panel-num" aria-hidden="true">03</span>
-        <span class="pqc-tag">Your deposit is yours</span>
-        <h3>Deposits never pay anyone else</h3>
-        <p>Deposits and rewards are accounted separately. No function lets the owner touch a deposit or a reward already earned, and withdrawing always works.</p>
-        </div>
-      </div>
-    </div>
+    <ol class="proof">
+      <li class="reveal">
+        <span class="pf-n">01</span>
+        <span class="pf-k">Funded before it's paid</span>
+        <div class="pf-b"><h3>Every reward is deposited first</h3>
+          <p>#SECT has no mint function and its ownership is renounced. The treasury transfers the reward budget into the contract before it is paid out, and the size of that pool is public on-chain.</p></div>
+      </li>
+      <li class="reveal">
+        <span class="pf-n">02</span>
+        <span class="pf-k">Written in code</span>
+        <div class="pf-b"><h3>What you earn stays earned</h3>
+          <p>The APY starts at 14.9% and the foundation can adjust it on-chain; a change only counts from that second on, so nothing already earned is ever recalculated.</p></div>
+      </li>
+      <li class="reveal">
+        <span class="pf-n">03</span>
+        <span class="pf-k">Your deposit is yours</span>
+        <div class="pf-b"><h3>Deposits never pay anyone else</h3>
+          <p>Deposits and rewards are accounted separately. No function lets the owner touch a deposit or a reward already earned, and withdrawing always works.</p></div>
+      </li>
+      <li class="reveal">
+        <span class="pf-n">04</span>
+        <span class="pf-k">Exact approvals</span>
+        <div class="pf-b"><h3>You approve only what you deposit</h3>
+          <p>This page asks your wallet to approve the exact amount you are depositing, never an unlimited allowance. The deposit uses all of it, so nothing stays approved afterwards.</p></div>
+      </li>
+    </ol>
+    <a class="verify-link mag reveal" href="https://etherscan.io/address/0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0#code" target="_blank" rel="noopener noreferrer">
+      <span>Read the verified contract on Etherscan</span>
+      <b>0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0</b>
+      <em>↗</em>
+    </a>
   </section>
 
-  <section class="sect" id="faq">
-    <div class="head reveal">
-      <h2>Frequently asked</h2>
-      <span>What to know before depositing #SECT</span>
-    </div>
-    <div class="faq-list reveal">
-      <details class="faq-item" open>
-        <summary>Can I deposit right now?</summary>
-        <p class="solo-previa">Not yet. The contract is written and covered by an automated test
-          suite, but it has not been deployed to Ethereum mainnet. When it goes live this page
-          switches over on its own.</p>
-        <p class="solo-vivo">Yes. Connect your wallet above, enter an amount and deposit. Rewards
-          start accruing from that moment.</p>
-      </details>
-      <details class="faq-item">
-        <summary>When can I collect my rewards?</summary>
-        <p>Whenever you want. Rewards accrue every second and you can claim them at any time,
-          including after you have withdrawn your deposit.</p>
-      </details>
-      <details class="faq-item">
-        <summary>Can I withdraw whenever I want?</summary>
-        <p>Yes. There is no lock-up and no penalty. You can take out part or all of your deposit
-          at any moment, and everything you earned until then stays claimable.</p>
-      </details>
-      <details class="faq-item">
-        <summary>Where does the reward money come from?</summary>
-        <p>From the Sectora Foundation treasury, deposited into the contract in advance. No new
-          tokens are created. If the reward pool ever ran out, rewards would pause until it is
-          refilled.</p>
-      </details>
-      <details class="faq-item">
-        <summary>Is there a limit on how much can be deposited?</summary>
-        <p>No. There is no cap on deposits. The foundation can close the program to new
-          deposits; anyone already in can still withdraw and claim at any time.</p>
-      </details>
+  <!-- ============ preguntas ============ -->
+  <section class="sect faq" id="faq">
+    <div class="faq-grid">
+      <div class="sect-head faq-head">
+        <p class="kicker reveal"><b>04</b>FAQ</p>
+        <h2 class="split">Frequently asked.</h2>
+        <p class="sect-sub reveal">What to know before depositing #SECT.</p>
+      </div>
+      <div class="faq-list reveal">
+        <details class="faq-item" open>
+          <summary>Can I deposit right now?</summary>
+          <div class="faq-a"><p>Yes. Connect your wallet in the console above, enter an amount and deposit.
+            Rewards start accruing from that moment.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>When can I collect my rewards?</summary>
+          <div class="faq-a"><p>Whenever you want. Rewards accrue every second and you can claim them at any
+            time, including after you have withdrawn your deposit.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I withdraw whenever I want?</summary>
+          <div class="faq-a"><p>Yes. There is no lock-up and no penalty. You can take out part or all of your
+            deposit at any moment, and everything you earned until then stays claimable.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>Where does the reward money come from?</summary>
+          <div class="faq-a"><p>From the Sectora Foundation treasury, deposited into the contract in advance.
+            No new tokens are created. If the reward pool ever ran out, rewards would pause until
+            it is refilled.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>Is there a limit on how much can be deposited?</summary>
+          <div class="faq-a"><p>No. There is no cap on deposits. The foundation can close the program to new
+            deposits; anyone already in can still withdraw and claim at any time.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary>How do I know I'm on the real contract?</summary>
+          <div class="faq-a"><p>When you approve, your wallet shows the address that will receive the
+            approval. It must be 0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0, the same one shown in
+            the console and on Etherscan. If it is different, stop.</p></div>
+        </details>
+      </div>
     </div>
   </section>
 
 </main>
 
-<script src="staking.js?v=20261009b"></script>
-<!-- cableado on-chain. Mientras CONTRACTS siga con direcciones a cero el
-     modulo se retira solo y la pagina queda exactamente como esta hoy. -->
+<footer class="ft">
+  <div class="ft-top">
+    <div class="ft-col">
+      <span class="ft-l">Sectora Foundation</span>
+      <span>Illinois file no. 18523639</span>
+    </div>
+    <div class="ft-col">
+      <span class="ft-l">Links</span>
+      <a href="../index.html">Main site</a>
+      <a href="../docs/">Whitepaper</a>
+      <a href="https://etherscan.io/address/0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0#code" target="_blank" rel="noopener noreferrer">Contract ↗</a>
+    </div>
+    <a class="ft-up mag" href="#hero">Back to top ↑</a>
+  </div>
+  <div class="ft-word" aria-hidden="true"><span>SECTORA</span></div>
+  <p class="ft-legal">Rewards are paid in #SECT from a pool funded in advance; the rate can change. Nothing on this page is a promise about the price of #SECT.</p>
+</footer>
+
+<script src="staking.js?v=20261015"></script>
+<script src="staking-fx.js?v=20261015"></script>
+<!-- cableado on-chain: wallet, deposito, cobro y retiro -->
 <script src="../ethers.min.js"></script>
 <script src="staking-chain.js?v=20261012"></script>
 </body>
