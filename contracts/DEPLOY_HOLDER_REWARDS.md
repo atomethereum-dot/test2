@@ -70,7 +70,7 @@ contrato en la página y robar a los usuarios que aprueben.
 | Red | **Ethereum Mainnet** (chainId 1) |
 | Token | **`0x8C9984B06281f1CA9416e493c2E602AaB08513db`** (#SECT, 18 decimales) |
 | Contrato a desplegar | `SectoraHolderRewards` |
-| Código para pegar | `flattened/SectoraHolderRewards.flattened.sol` |
+| Código para pegar | `flattened/SectoraHolderRewards.copy.sol` (sin comentarios, 692 líneas) o `flattened/SectoraHolderRewards.flattened.sol` (con comentarios). Compilan al mismo contrato; usa el mismo archivo para desplegar y para verificar |
 | Compilador | **0.8.24**, optimizador **activado**, runs **200**, EVM version **por defecto** |
 | Constructor | un solo campo: `_token` = la dirección del token de arriba |
 
