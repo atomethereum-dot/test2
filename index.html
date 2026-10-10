@@ -989,7 +989,14 @@
   .spine,.gauge{display:block}
 
   /* ---- el lomo ---- */
-  .spine{left:calc(var(--pad) * .34);width:1px;background:var(--rail-line,rgba(0,0,0,.10))}
+  /* z-index 2 y no 1: el rotulo es sticky y el navegador lo pone en su
+     propia capa. Con z-index 1 se pintaba antes que el contenido de la
+     seccion (que va en 1 y detras en el documento), y todo ese contenido
+     tenia que ir en otra capa encima por si el rotulo, que se mueve, le
+     pasaba por debajo: una pantalla entera mas que componer en cada
+     fotograma. Pintado despues no hay nada encima que separar. Vive en el
+     margen y no toca el contenido, asi que el orden no se ve */
+  .spine{left:calc(var(--pad) * .34);width:1px;background:var(--rail-line,rgba(0,0,0,.10));z-index:2}
   /* dentro del borde, no a caballo sobre el: la seccion recorta y a
      medio salir solo se veia la mitad del numero */
   /* el indice y el rotulo van pegados a la ventana mientras la seccion
@@ -1099,9 +1106,14 @@
       rgba(21,105,255,.05) 38%,
       transparent 66%);
     opacity:0;transition:opacity 1s var(--ease-out);
-    will-change:transform;
   }
-  .lux.on{opacity:1}
+  /* la capa propia solo mientras luce. Con will-change fijo, las cinco
+     luces (apagadas, a opacidad 0) obligaban a separar en otra capa todo
+     el contenido de su seccion, por si la luz pasaba por debajo: una
+     pantalla mas que componer en cada fotograma aunque el puntero
+     estuviera en otra parte. Al apagarse, la transicion de opacidad la
+     mantiene en su capa hasta terminar el fundido */
+  .lux.on{opacity:1;will-change:transform}
   @media (hover:none),(prefers-reduced-motion:reduce){ .lux{display:none} }
 
   .cells-soft{
@@ -1617,6 +1629,57 @@
   .m-link:hover i{transform:translate(3px,-3px)}
   @supports not (backdrop-filter: blur(1px)){
     .m-card{background:var(--sec-bg);opacity:.97}
+  }
+
+  /* ---- cristal sin desenfoque: el acta y las tarjetas ----
+     El backdrop-filter de .of-panel y .m-card obligaba al compositor a
+     copiar lo que hay detras y desenfocarlo en cada fotograma de scroll:
+     era lo mas caro de las dos secciones, y en movil, con cuatro tarjetas
+     a la vez, mas aun. Detras solo hay papel (un degradado liso, que
+     desenfocado queda igual) y la reticula del ::before, cuyos filetes al
+     5% son lo unico que el desenfoque borraba. Asi que se pinta lo que el
+     desenfoque dejaba ver: el papel sin reticula.
+
+     Las tarjetas de Verificacion llevan debajo de su blanco translucido
+     un calco del propio fondo de la seccion (el mismo degradado, con su
+     pie que se aclara), colocado a la altura exacta de cada tarjeta. Es
+     opaco, asi que la reticula queda tapada sin tocar la mascara.
+
+     El acta de Distribucion no puede ser opaca: la luz que sigue al
+     puntero pasa por debajo de ella. Ahi la mascara del ::before lleva
+     una segunda capa que recorta el hueco del acta, y el blanco
+     translucido queda sobre el papel y la luz de siempre. Espera a .on,
+     cuando el acta empieza a aparecer: antes es invisible y la reticula
+     debe verse entera.
+
+     Las medidas las toma un script y nada cambia hasta tenerlas: sin el,
+     o en un navegador sin composicion de mascaras (solo el acta la
+     necesita), se queda el desenfoque de siempre. El calco solo donde hay
+     backdrop-filter sin prefijo: donde no lo hay manda la alternativa de
+     arriba (papel opaco al 97%) y esa se deja tal cual. */
+  @supports (backdrop-filter:blur(1px)){
+    .mandates.calco .m-card{
+      background:linear-gradient(var(--card-bg),var(--card-bg)),
+                 linear-gradient(180deg,var(--sec-bg) 0%,var(--sec-bg) 84%,var(--sec-pie) 100%)
+                   0 var(--calco-y,0px) / 100% var(--calco-h,100%) no-repeat;
+      background-origin:padding-box,border-box;
+      -webkit-backdrop-filter:none;backdrop-filter:none;
+    }
+  }
+  @supports (mask-composite:subtract) or (-webkit-mask-composite:source-out){
+    .offer.on.hueco::before{
+      -webkit-mask-image:radial-gradient(85% 62% at 50% 50%,#000,transparent 78%),
+                         var(--hueco,linear-gradient(transparent,transparent));
+              mask-image:radial-gradient(85% 62% at 50% 50%,#000,transparent 78%),
+                         var(--hueco,linear-gradient(transparent,transparent));
+      -webkit-mask-size:100% 100%,var(--hueco-w,0px) 100%;
+              mask-size:100% 100%,var(--hueco-w,0px) 100%;
+      -webkit-mask-position:0 0,var(--hueco-x,0px) 0;
+              mask-position:0 0,var(--hueco-x,0px) 0;
+      -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+      -webkit-mask-composite:source-out;mask-composite:subtract;
+    }
+    .offer.on.hueco .of-panel{-webkit-backdrop-filter:none;backdrop-filter:none}
   }
 
 
@@ -3337,6 +3400,12 @@
      sobre lo que viene despues. El envoltorio ocupa exactamente la fila
      y el sticky se mueve dentro de el, que es predecible en todos. */
   .m-col,.p-col,.rsm-col,.sp-col{position:relative;height:100%}
+  /* el titulo fijo se pinta despues de la lista de su lado. Con el orden
+     del documento iba antes, y como es sticky (capa propia, en movimiento)
+     cada fila de la otra columna tenia que separarse en otra capa encima,
+     por si el titulo le pasaba por debajo. Las dos columnas no se tocan,
+     asi que pintarlo al final no cambia nada a la vista */
+  .m-col,.p-col,.sp-col{z-index:1}
   @media (max-width:980px){
     /* en movil la banda fija si debe recorrer la seccion, asi que el
        envoltorio desaparece y el sticky vuelve a ser el propio item */
@@ -4039,6 +4108,23 @@ html[dir="rtl"] body{direction:ltr}
   animation-play-state:paused !important;
 }
 
+/* ============ pilotos con pulso: un recorte holgado ============
+   El aro que late alrededor de cada piloto es una animacion en el
+   compositor, y el navegador no calcula hasta donde llega: da por hecho
+   que puede tocar cualquier cosa de su seccion (o de la pagina entera,
+   si la seccion no recorta). Todo lo que se pinta despues acababa en
+   capas aparte, encima, por si el aro le pasaba por debajo: filas de
+   proyectos, pasos del hash market, tarjetas de producto.
+
+   Un clip-path con margen negativo le pone limite sin recortar nada: el
+   aro mas grande (14px escalado a 1.9) y el halo del piloto caben de
+   sobra en los 18px de holgura. */
+.hmk .led,.of-v .led,.p-live .led,.p-tag .led,.hb .led,.p-soon .led,.cap-live .led{clip-path:inset(-18px)}
+/* el nodo de "hoy" lleva aro de 11px escalado y halo de 14px */
+.wh-stop.now .wh-node{clip-path:inset(-26px)}
+/* el punto que parpadea en "Final testing" va dentro del dd */
+.wh-prod dd.wh-tst{clip-path:inset(-12px)}
+
 /* ============ navegacion de la cabecera ============
    Va dentro de la cabecera estatica de arriba, asi que sube con la pagina
    como cualquier otro contenido. No hay barra flotante: nada queda pegado
@@ -4278,8 +4364,11 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     text-wrap:balance;color:var(--fs-ink)}
   .hmk-head p{color:var(--fs-ink-2);font-size:clamp(15px,1.15vw,18px);line-height:1.65;font-weight:300;max-width:50ch}
   .hmk-body{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,3.4vw,56px);align-items:start}
-  /* el video acompana mientras se leen los pasos */
-  .hmk-film{position:sticky;top:clamp(84px,12vh,120px);margin:0;padding:clamp(14px,1.4vw,20px);border:1px solid var(--fs-line)}
+  /* el video acompana mientras se leen los pasos. Va en z-index 1 para
+     pintarse despues de los pasos: igual que los titulos fijos, un sticky
+     pintado antes obligaba a separar en otra capa todo lo que venia
+     detras. Las dos columnas no se tocan */
+  .hmk-film{position:sticky;top:clamp(84px,12vh,120px);margin:0;padding:clamp(14px,1.4vw,20px);border:1px solid var(--fs-line);z-index:1}
   .hmk-band{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;font-size:10.5px}
   .hmk-band span{color:var(--fs-ink-3)}
   .hmk-band b{color:var(--blue);font-weight:500}
@@ -7842,13 +7931,9 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
   function setStatus(){
     if(!stamp) return;
-    if(live){
-      stamp.textContent = 'Live · updated ' + agoLabel(updatedAt);
-      if(led) led.style.background = '#25d366';
-    } else {
-      stamp.textContent = 'Reference snapshot';
-      if(led) led.style.background = '#9aa0ab';
-    }
+    const txt = live ? 'Live · updated ' + agoLabel(updatedAt) : 'Reference snapshot';
+    if(stamp.textContent !== txt) stamp.textContent = txt;
+    if(led) led.style.background = live ? '#25d366' : '#9aa0ab';
   }
 
   /* Dos fuentes, por orden de frescura:
@@ -7881,6 +7966,18 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     });
     live = true;
     updatedAt = sello;
+    version++;
+  }
+
+  /* la tabla se rehace solo si llego un dato nuevo. Antes se borraba y se
+     volvia a construir cada segundo mientras estaba en pantalla, con los
+     mismos numeros: ocho filas nuevas, estilo, diseno y pintado para
+     dejarla igual. La primera pasada se hace siempre, como antes */
+  let version = 0, pintada = -1;
+  function pintarSiCambia(){
+    if(version === pintada) return;
+    pintada = version;
+    build(); render(true);
   }
 
   async function desdeCoinGecko(){
@@ -7919,7 +8016,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       cgReintentoTras = ahora + CG_VIGENCIA;
       if(await desdeCoinGecko()){
         cgVigenteHasta = Date.now() + CG_VIGENCIA;
-        setStatus(); build(); render(true);
+        setStatus(); pintarSiCambia();
         return;
       }
     }
@@ -7929,8 +8026,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       await desdeArchivo();
     }
     setStatus();
-    build();
-    render(true);
+    pintarSiCambia();
   }
 
   seg.addEventListener('click', e => {
@@ -7986,6 +8082,12 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   if(!sec || !pin || !wrap) return;
 
   const rows = [...wrap.querySelectorAll('.rwa-row')];
+  /* las piezas se buscan una vez, no en cada fotograma, y de cada valor
+     se guarda el ultimo escrito: solo se toca el estilo si cambia */
+  const barras = rows.map(r => r.querySelector('i'));
+  const anios  = rows.map(r => r.querySelector('.rwa-year'));
+  const escrito = rows.map(() => '');
+  let fondo = '', cifra = '';
 
   const vals = rows.map(r => parseFloat(r.dataset.v));
   const MAX  = 16.1;                     // el valor de 2030 llena la pista exacta
@@ -8010,15 +8112,17 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     // final ya esta en negro, listo para el pie
     const g = ease(clamp((p - .12) / .72));
     const c = FROM.map((f,i) => Math.round(f + (TO[i]-f)*g));
-    pin.style.backgroundColor = 'rgb(' + c.join(',') + ')';
+    const bg = 'rgb(' + c.join(',') + ')';
+    if(bg !== fondo){ fondo = bg; pin.style.backgroundColor = bg; }
 
     // barras escalonadas: cada ano entra en su turno
     let alcanzado = 0;
     rows.forEach((row, i) => {
       const k = clamp((p - .015 - i*.104) / .30);
       const e = ease(k);
-      const b = row.querySelector('i');
-      if(b) b.style.transform = 'scaleX(' + (e * vals[i]/MAX).toFixed(4) + ')';
+      const b = barras[i];
+      const tr = 'scaleX(' + (e * vals[i]/MAX).toFixed(4) + ')';
+      if(b && tr !== escrito[i]){ escrito[i] = tr; b.style.transform = tr; }
       row.classList.toggle('on', k > .12);
       if(k > .5) alcanzado = i;
     });
@@ -8027,9 +8131,10 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     const t = clamp((p - .06) / .70) * (vals.length - 1);
     const k = Math.min(vals.length - 2, Math.floor(t));
     const v = vals[k] + (vals[k+1] - vals[k]) * ease(t - k);
-    if(bigEl) bigEl.textContent = '$' + v.toFixed(1);
+    const cf = '$' + v.toFixed(1);
+    if(bigEl && cf !== cifra){ cifra = cf; bigEl.textContent = cf; }
 
-    const ye = rows[alcanzado] && rows[alcanzado].querySelector('.rwa-year');
+    const ye = anios[alcanzado];
     const yr = ye ? ye.textContent : '';
     if(yrEl && yr && yr !== lastYr){ lastYr = yr; yrEl.textContent = yr; }
   }
@@ -9080,7 +9185,19 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     h.textContent = dos(hh); m.textContent = dos(mm); s.textContent = dos(r);
   }
   tic();
-  setInterval(tic, 1000);
+  /* el reloj solo corre con la seccion cerca y la pestana delante. Antes
+     daba su tic cada segundo durante toda la visita, y cada tic cambia
+     texto: diseno y pintado de nuevo aunque la seccion estuviera a veinte
+     pantallas. Al volver arranca con un tic inmediato, asi que nunca se ve
+     una cifra vieja */
+  let reloj = 0, cerca = false;
+  const decidir = () => {
+    if(cerca && !document.hidden){ if(!reloj){ tic(); reloj = setInterval(tic, 1000); } }
+    else if(reloj){ clearInterval(reloj); reloj = 0; }
+  };
+  new IntersectionObserver((es) => { cerca = es[es.length - 1].isIntersecting; decidir(); },
+                           {rootMargin:'100% 0px'}).observe(sec);
+  document.addEventListener('visibilitychange', decidir);
 })();
 </script>
 <script>
@@ -9101,11 +9218,12 @@ window.__sectGeo = (function(){
   addEventListener('resize', () => { sy = scrollY; vaciar(); }, {passive:true});
   addEventListener('load', vaciar);
   if('ResizeObserver' in window) new ResizeObserver(vaciar).observe(document.body);
+  /* left va tal cual: la pagina no tiene scroll horizontal (overflow-x:clip) */
   return function(el){
     let g = cache.get(el);
-    if(!g){ sy = scrollY; const r = el.getBoundingClientRect(); g = {top: r.top + sy, h: r.height}; cache.set(el, g); }
+    if(!g){ sy = scrollY; const r = el.getBoundingClientRect(); g = {top: r.top + sy, h: r.height, left: r.left}; cache.set(el, g); }
     const top = g.top - sy;
-    return {top: top, bottom: top + g.h, height: g.h};
+    return {top: top, bottom: top + g.h, height: g.h, left: g.left};
   };
 })();
 /* una escena esta "lejos" si ninguna parte suya se ve ni esta a media pantalla
@@ -9142,7 +9260,7 @@ window.__lejos = function(el){
   const secs = [['what',1], ['statement',1], ['hashmarket',1], ['offer',1], ['why',1], ['mandates',1]]
     .map(function(par){
       const el = document.getElementById(par[0]);
-      return el ? {el: el, tope: par[1], v: -1, n: 0, vf: -1} : null;
+      return el ? {el: el, tope: par[1], v: -1, n: 0, vf: -1, cerca: false} : null;
     })
     .filter(Boolean);
   if(!secs.length) return;
@@ -9154,9 +9272,14 @@ window.__lejos = function(el){
     const vh = innerHeight;
 
     for(const s of secs){
-      /* fuera de pantalla no hay nada que atenuar, y medirla cuesta igual */
-      if(s.el.classList.contains('fuera-de-vista')) continue;
+      /* la geometria va en cache, asi que el avance se calcula para todas:
+         son cuatro cuentas. Lo que cuesta es escribir, y eso solo se hace
+         con la seccion a menos de media pantalla de verse. Lejos no hay
+         nada que atenuar; al acercarse, el valor pendiente se escribe en
+         ese mismo fotograma, sin esperar al aviso del observador, que llega
+         un fotograma tarde */
       const c = window.__sectGeo(s.el);
+      s.cerca = c.bottom > -vh * .5 && c.top < vh * 1.5;
 
       /* 0 mientras el pie sigue por debajo del pliegue, 1 cuando la
          seccion ha terminado de salir por arriba */
@@ -9189,7 +9312,7 @@ window.__lejos = function(el){
          porque la seccion de arriba toma este mismo valor. */
       const v = Math.round(noche * 40) / 40;
       s.n = v;
-      if(v !== s.v){
+      if(s.cerca && v !== s.v){
         s.v = v;
         s.el.style.setProperty('--noche', v);
         s.el.style.setProperty('--tinta', Math.round(tinta * 40) / 40);
@@ -9204,8 +9327,14 @@ window.__lejos = function(el){
        ser una sola superficie que se apaga por tramos.
 
        Debajo de la ultima esta "Our projects", que es papel y no se
-       apaga: su pie tiende a 0. */
+       apaga: su pie tiende a 0.
+
+       Tampoco aqui se escribe en una seccion lejana. Antes se hacia: al
+       apagarse una seccion, la de arriba, ya fuera de pantalla, recibia
+       su nuevo pie en cada peldano y recalculaba los estilos de todo su
+       contenido sin que nadie la viera. */
     for(let i = 0; i < secs.length; i++){
+      if(!secs[i].cerca) continue;
       const pie = i < secs.length - 1 ? secs[i+1].n : 0;
       const rp = Math.round(pie * 1000) / 1000;
       if(rp !== secs[i].vf){ secs[i].vf = rp; secs[i].el.style.setProperty('--nf', rp); }
@@ -9258,7 +9387,8 @@ window.__lejos = function(el){
          seccion por delante de los ojos */
       const t = (vh - c.top) / (vh + c.height);
       const p = Math.max(0, Math.min(1, t));
-      r.cursor.style.transform = 'translateY(' + (p * c.height).toFixed(1) + 'px)';
+      const y = (p * c.height).toFixed(1);
+      if(y !== r.v){ r.v = y; r.cursor.style.transform = 'translateY(' + y + 'px)'; }
     }
   }
 
@@ -9296,9 +9426,12 @@ window.__lejos = function(el){
     }
   }
 
+  /* la geometria sale de la cache comun: medir las cinco secciones con
+     getBoundingClientRect en cada movimiento obligaba a rehacer el
+     diseno si algo habia cambiado estilos en ese fotograma */
   addEventListener('pointermove', function(e){
     for(const l of luces){
-      const c = l.host.getBoundingClientRect();
+      const c = window.__sectGeo ? window.__sectGeo(l.host) : l.host.getBoundingClientRect();
       const dentro = e.clientY >= c.top && e.clientY <= c.bottom;
       l.on = dentro;
       if(dentro){ l.x = e.clientX - c.left; l.y = e.clientY - c.top; }
@@ -9310,6 +9443,94 @@ window.__lejos = function(el){
     for(const l of luces) l.on = false;
     if(!pendiente){ pendiente = true; requestAnimationFrame(pintar); }
   }, {passive:true});
+})();
+</script>
+<script>
+/* ---------- el cristal sin desenfoque: medidas ----------
+   Dos piezas, dos maneras (ver "cristal sin desenfoque" en el CSS):
+
+   - El acta de Distribucion: un degradado vertical opaco justo en el
+     tramo del acta, colocado en su columna, que el CSS usa como segunda
+     capa de la mascara del ::before para recortar la reticula.
+   - Las tarjetas de Verificacion: cada una recibe en --calco-y la
+     distancia (en negativo) desde el techo de la seccion hasta su borde
+     de arriba, y en --calco-h el alto de la seccion. Con eso el calco del
+     fondo cae en cada tarjeta exactamente donde esta el papel de detras.
+     Las variables van en cada tarjeta y no en la seccion: asi solo se
+     recalcula la tarjeta.
+
+   Las medidas salen de offsetTop/offsetLeft, que ignoran los transform:
+   ni la subida del acta al aparecer ni el levantamiento de la tarjeta al
+   pasar el raton las mueven. Se rehacen solo cuando cambia algun tamano
+   (fuentes, idioma, ventana), nunca durante el scroll. */
+(function(){
+  const mascaras = !!(window.CSS && CSS.supports &&
+    (CSS.supports('mask-composite', 'subtract') || CSS.supports('-webkit-mask-composite', 'source-out')));
+  const calcable = !!(window.CSS && CSS.supports && CSS.supports('backdrop-filter', 'blur(1px)'));
+
+  const pieza = function(id, sel){
+    const sec = document.getElementById(id);
+    const piezas = sec ? [...sec.querySelectorAll(sel)] : [];
+    return piezas.length ? {sec: sec, piezas: piezas, valor: ''} : null;
+  };
+  const acta = mascaras ? pieza('offer', '.of-panel') : null;
+  const tarjetas = calcable ? pieza('mandates', '.m-card') : null;
+  if(!acta && !tarjetas) return;
+
+  /* posicion de la caja de borde dentro de la seccion, sin transform */
+  function dentro(el, sec){
+    let x = 0, y = 0, n = el;
+    while(n && n !== sec){ x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+    return n === sec ? {x: x, y: y, w: el.offsetWidth, h: el.offsetHeight} : null;
+  }
+
+  function medir(){
+    if(acta){
+      const c = dentro(acta.piezas[0], acta.sec);
+      if(!c || c.w < 1){ acta.sec.classList.remove('hueco'); acta.valor = ''; }
+      else {
+        const valor = 'linear-gradient(180deg,transparent ' + c.y + 'px,#000 ' + c.y + 'px,#000 ' +
+                      (c.y + c.h) + 'px,transparent ' + (c.y + c.h) + 'px)|' + c.x + '|' + c.w;
+        if(valor !== acta.valor){
+          acta.valor = valor;
+          const partes = valor.split('|');
+          acta.sec.style.setProperty('--hueco', partes[0]);
+          acta.sec.style.setProperty('--hueco-x', partes[1] + 'px');
+          acta.sec.style.setProperty('--hueco-w', partes[2] + 'px');
+          acta.sec.classList.add('hueco');
+        }
+      }
+    }
+    if(tarjetas){
+      const alto = tarjetas.sec.offsetHeight;
+      const cajas = tarjetas.piezas.map(function(p){ return dentro(p, tarjetas.sec); });
+      /* si alguna no se puede medir, todas se quedan con el desenfoque */
+      if(!alto || !cajas.every(Boolean)){ tarjetas.sec.classList.remove('calco'); tarjetas.valor = ''; }
+      else {
+        const valor = alto + '|' + cajas.map(function(c){ return c.y; }).join(',');
+        if(valor !== tarjetas.valor){
+          tarjetas.valor = valor;
+          tarjetas.piezas.forEach(function(p, i){
+            p.style.setProperty('--calco-y', -cajas[i].y + 'px');
+            p.style.setProperty('--calco-h', alto + 'px');
+          });
+          tarjetas.sec.classList.add('calco');
+        }
+      }
+    }
+  }
+
+  let pendiente = false;
+  const programar = function(){
+    if(!pendiente){ pendiente = true; requestAnimationFrame(function(){ pendiente = false; medir(); }); }
+  };
+  medir();
+  if('ResizeObserver' in window){
+    const ro = new ResizeObserver(programar);
+    for(const g of [acta, tarjetas]){ if(!g) continue; ro.observe(g.sec); g.piezas.forEach(function(p){ ro.observe(p); }); }
+  }
+  addEventListener('resize', programar, {passive:true});
+  addEventListener('load', programar);
 })();
 </script>
 <script>
