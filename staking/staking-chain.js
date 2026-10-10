@@ -10,13 +10,13 @@
    esta hoy, con su vista previa simulada. En cuanto se peguen las direcciones
    desplegadas, este archivo toma el mando y no hace falta cambiar nada mas.
 
-   Depende solo de ../ethers.min.js. La conexion de cartera va aqui dentro
-   porque dashboard-wallet.js no sirve en esta pagina: arranca con
-   "if (!root || !btn) return" sobre el widget del panel, que aqui no existe,
-   asi que nunca llega a definir window.SectoraWallet. Traer ese widget y su
-   CSS a esta pagina seria mas codigo y le cambiaria el diseno; se usa el
-   boton que la pagina ya tiene. Si algun dia SectoraWallet existiera aqui,
-   se prefiere ese.
+   Depende de ../ethers.min.js y de staking-wallet.js, que pone el selector
+   de wallet (inyectada, WalletConnect desde Chrome o Safari del movil, o QR
+   en el ordenador) y entrega aqui el proveedor EIP-1193 elegido. Sin ese
+   modulo se conecta, como antes, a la wallet inyectada. dashboard-wallet.js
+   no sirve en esta pagina: arranca con "if (!root || !btn) return" sobre el
+   widget del panel, que aqui no existe. Si algun dia SectoraWallet existiera
+   aqui, se prefiere ese.
 ---- */
 (function () {
   "use strict";
@@ -248,9 +248,14 @@
     };
   }
 
+  // las wallets inyectadas dan la red como "0x1"; WalletConnect, como 1
+  function hexRed(c) {
+    try { return "0x" + BigInt(c).toString(16); } catch (e) { return String(c); }
+  }
+
   /** La red y la cuenta de la wallet, comprobadas justo antes de firmar. */
   async function mismaWallet() {
-    const red = await proveedor.send("eth_chainId", []);
+    const red = hexRed(await proveedor.send("eth_chainId", []));
     const cs = await proveedor.send("eth_accounts", []);
     if (red !== CONTRACTS.chainId) throw new Error("Your wallet is not on the Ethereum network.");
     if (!cs || !cs[0] || cs[0].toLowerCase() !== cuenta.toLowerCase())
@@ -272,10 +277,18 @@
   }
 
   async function enviar(nombre, hacer) {
+    const SW = window.SectoraStakeWallet;
     try {
       await mismaWallet();
       aviso(nombre + "…");
-      const tx = await hacer();
+      // con WalletConnect la firma se hace en la app del movil: boton para ir
+      if (SW) SW.firmando(true);
+      let tx;
+      try {
+        tx = await hacer();
+      } finally {
+        if (SW) SW.firmando(false);
+      }
       aviso(nombre + ": confirming…");
       await tx.wait();
       aviso(nombre + ": done.");
@@ -369,7 +382,7 @@
     firmante = await proveedor.getSigner();
     cuenta = direccion;
 
-    const red = await eip1193.request({ method: "eth_chainId" });
+    const red = hexRed(await eip1193.request({ method: "eth_chainId" }));
     if (red !== CONTRACTS.chainId) {
       aviso("Switch your wallet to the Ethereum network.", true);
       return;
@@ -433,34 +446,51 @@
     return window.ethereum || null;
   }
 
+  /** Sin wallet: la consola vuelve a como estaba antes de conectar. */
+  let activo = null;   // el proveedor en uso
+  function olvidar() {
+    clearInterval(refrescoId); cuenta = null; firmante = null; activo = null; aviso("");
+    clearInterval(contador.id); contador.t0 = 0;
+    ["earnLive", "chainActions"].forEach((id) => { const n = $(id); if (n) n.remove(); });
+    if (btn) btn.textContent = "Connect wallet";
+  }
+
   const oyentes = new WeakSet();
+  async function usar(eip1193) {
+    try {
+      const cuentas = await eip1193.request({ method: "eth_requestAccounts" });
+      if (!cuentas || !cuentas.length) return;
+      activo = eip1193;
+      await conectar(eip1193, cuentas[0]);
+
+      if (oyentes.has(eip1193)) return;   // volver a conectar no duplica oyentes
+      oyentes.add(eip1193);
+      eip1193.on && eip1193.on("accountsChanged", (c) => {
+        if (activo !== eip1193) return;
+        if (c && c.length) conectar(eip1193, c[0]);
+        else olvidar();
+      });
+      // un cambio de red invalida los contratos ya instanciados: lo mas
+      // seguro y lo que hacen las dapps serias es recargar
+      eip1193.on && eip1193.on("chainChanged", () => { if (activo === eip1193) window.location.reload(); });
+    } catch (e) {
+      aviso(explicar(e), true);
+    }
+  }
+
   async function pedirConexion() {
+    const SW = window.SectoraStakeWallet;
+    if (SW) {
+      // con la wallet ya conectada, el boton muestra con que y como desconectar
+      SW.abrir(cuenta || undefined);
+      return;
+    }
     const eip1193 = elegirProveedor();
     if (!eip1193) {
       aviso("No wallet detected in this browser.", true);
       return;
     }
-    try {
-      const cuentas = await eip1193.request({ method: "eth_requestAccounts" });
-      if (!cuentas || !cuentas.length) return;
-      await conectar(eip1193, cuentas[0]);
-
-      if (oyentes.has(eip1193)) return;   // volver a pulsar no duplica oyentes
-      oyentes.add(eip1193);
-      eip1193.on && eip1193.on("accountsChanged", (c) => {
-        if (c && c.length) conectar(eip1193, c[0]);
-        else {
-          clearInterval(refrescoId); cuenta = null; aviso("");
-          clearInterval(contador.id); contador.t0 = 0;
-          const caja = $("earnLive"); if (caja) caja.remove();
-        }
-      });
-      // un cambio de red invalida los contratos ya instanciados: lo mas
-      // seguro y lo que hacen las dapps serias es recargar
-      eip1193.on && eip1193.on("chainChanged", () => window.location.reload());
-    } catch (e) {
-      aviso(explicar(e), true);
-    }
+    await usar(eip1193);
   }
 
   /* Sin wallet tambien se lee el contrato: la tasa puede haber cambiado
@@ -521,6 +551,14 @@
     });
     elStaked = $("lvStaked");
     elStakers = $("lvStakers");
+
+    // el selector de wallet entrega aqui lo que la persona elige
+    const SW = window.SectoraStakeWallet;
+    if (SW) {
+      SW.alConectar((eip1193) => usar(eip1193));
+      SW.alDesconectar(olvidar);
+      SW.restaurar();   // una sesion de WalletConnect abierta antes, si la hay
+    }
 
     // si algun dia el conector compartido existe en esta pagina, manda el
     if (window.SectoraWallet) {
