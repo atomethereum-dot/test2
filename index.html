@@ -292,7 +292,7 @@
   .sheet dl > *:nth-last-child(-n+2){border-bottom:0}
   .sheet dd b{color:var(--ink);font-weight:400}
   /* dato verificable de un vistazo */
-  .sheet dd.ok{color:#fff;display:inline-flex;align-items:center;gap:7px;justify-content:flex-end}
+  .sheet dd.wh-ok{color:#fff;display:inline-flex;align-items:center;gap:7px;justify-content:flex-end}
   /* la direccion va abreviada: entera no cabe en la columna de la hoja */
   .sheet a.sheet-addr{
     font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.02em;
@@ -302,7 +302,7 @@
   }
   .sheet a.sheet-addr i{font-style:normal}
   .sheet a.sheet-addr:hover{color:#fff;text-decoration-color:var(--blue)}
-  .sheet dd.ok::before{
+  .sheet dd.wh-ok::before{
     content:'';width:5px;height:5px;border-radius:50%;background:var(--blue);flex:none;
     box-shadow:0 0 0 3px rgba(21,105,255,.18);
   }
@@ -1416,7 +1416,44 @@
   .wh-punch b{font-weight:500;color:var(--wh-ink)}
   .wh-fine{margin:16px 0 0;font-size:9.5px;letter-spacing:.08em;line-height:1.8;color:var(--wh-ink-4);text-transform:none;max-width:90ch}
 
-  /* el film: la misma secuencia contada en 48 s, con el marco del video
+  /* lo ya construido: cuatro productos con la interfaz terminada y en
+     pruebas finales, cada uno con su enlace. Cristal claro como el panel */
+  .wh-built{margin:clamp(32px,4.8vh,56px) 0 0;
+    opacity:0;transform:translateY(22px);transition:opacity 1s var(--ease-out) .3s,transform 1s var(--ease-out) .3s}
+  #why.on .wh-built{opacity:1;transform:none}
+  .wh-bhead{display:flex;justify-content:space-between;align-items:flex-end;gap:14px 32px;flex-wrap:wrap}
+  .wh-bt{margin:10px 0 0;font-size:clamp(20px,1.9vw,27px);font-weight:300;letter-spacing:-.018em;line-height:1.2;color:var(--wh-ink);text-wrap:balance}
+  .wh-bcount{font-size:10px;color:var(--wh-ink-4)}
+  .wh-bcount b{font-weight:500;color:var(--wh-ink-2)}
+  .wh-prods{list-style:none;margin:clamp(16px,2vw,22px) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.3vw,18px)}
+  .wh-prod{position:relative;display:flex;flex-direction:column;padding:clamp(18px,1.7vw,24px);overflow:hidden;
+    background:color-mix(in srgb,rgba(255,255,255,.62),rgba(255,255,255,.05) calc(var(--tinta,0)*100%));
+    border:1px solid color-mix(in srgb,rgba(0,0,0,.09),rgba(255,255,255,.12) calc(var(--tinta,0)*100%));border-radius:3px;
+    backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.92),0 20px 50px -34px rgba(7,8,10,.24)}
+  .wh-prod::before{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:0 50%;
+    transition:transform .55s var(--ease)}
+  .wh-prod:hover::before{transform:scaleX(1)}
+  .wh-pn{font-size:10px;color:var(--wh-blue)}
+  .wh-prod h3{margin:14px 0 6px;font-size:clamp(19px,1.55vw,23px);font-weight:400;letter-spacing:-.014em;line-height:1.2;color:var(--wh-ink)}
+  .wh-prod p{margin:0;font-size:9.5px;line-height:1.7;color:var(--wh-ink-3)}
+  .wh-prod dl{margin:18px 0 0;border-top:1px solid var(--wh-line)}
+  .wh-prod dl div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--wh-line)}
+  .wh-prod dt{font-size:9px;color:var(--wh-ink-4)}
+  .wh-prod dd{margin:0;display:inline-flex;align-items:center;gap:8px;font-size:9.5px}
+  .wh-prod dd.wh-ok{color:var(--wh-live)}
+  .wh-prod dd.wh-ok::before{content:'';width:4px;height:8px;margin:-3px 2px 0 0;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+  .wh-prod dd.wh-tst{color:var(--wh-blue)}
+  .wh-prod dd.wh-tst::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 3px rgba(21,105,255,.16);
+    animation:whBlink 2.4s ease-in-out infinite}
+  @keyframes whBlink{0%,100%{opacity:1}50%{opacity:.35}}
+  .wh-open{display:inline-flex;align-items:center;gap:8px;margin-top:auto;padding-top:18px;font-size:10px;color:var(--wh-ink);text-decoration:none;
+    transition:color .3s var(--ease)}
+  .wh-open i{font-style:normal;transition:transform .38s var(--ease)}
+  .wh-open:hover{color:var(--blue)}
+  .wh-open:hover i{transform:translate(3px,-3px)}
+
+  /* el film: la misma secuencia contada en 53 s, con el marco del video
      del hash market (esquinas azules, banda y boton de sonido) */
   .wh-film{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:clamp(26px,3.6vw,60px);align-items:center;
     margin:clamp(36px,5vh,64px) 0 clamp(8px,1vh,12px);
@@ -1462,15 +1499,19 @@
     .wh-stop p{max-width:none}
     .wh-film{grid-template-columns:minmax(0,1fr)}
     .wh-ft{max-width:20ch}
+    .wh-prods{grid-template-columns:repeat(2,minmax(0,1fr))}
   }
   @media (max-width:560px){
     .wh-dl{width:100%}
+    .wh-prods{grid-template-columns:minmax(0,1fr)}
+    .wh-bcount{display:none}
     /* ficha en filas: etiqueta a la izquierda, dato a la derecha */
     .wh-fmeta{grid-template-columns:minmax(0,1fr)}
     .wh-fmeta div{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:12px 0}
   }
   @media (prefers-reduced-motion:reduce){
-    .wh-hw h2,.wh-sub,.wh-lede,.wh-panel,.wh-stop,.wh-film{opacity:1!important;transform:none!important}
+    .wh-hw h2,.wh-sub,.wh-lede,.wh-panel,.wh-stop,.wh-film,.wh-built{opacity:1!important;transform:none!important}
+    .wh-prod dd.wh-tst::before{animation:none}
     .wh-seq::before,.wh-seq::after{transform:none!important}
     .why .eyebrow i{width:30px}
     .wh-run{display:none}
@@ -4942,7 +4983,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
           <dt>Initial supply</dt><dd>50,000,000</dd>
           <dt>Supply after burn</dt><dd><b>25,000,000</b></dd>
           <dt>Buy/Sell tax</dt><dd><b>0%</b></dd>
-          <dt>Contract</dt><dd class="ok">Renounced</dd>
+          <dt>Contract</dt><dd class="wh-ok">Renounced</dd>
           <dt>Address</dt><dd><a class="sheet-addr" href="https://etherscan.io/token/0x8c9984b06281f1ca9416e493c2e602aab08513db?a=0xa12a11fc202827b7c734cf2019f2c7a6cf061d69" target="_blank" rel="noopener noreferrer">0x8C99…13db <i>↗</i></a></dd>
           <dt>Listed on</dt><dd><a class="sheet-addr" href="https://www.coingecko.com/en/coins/sectora" target="_blank" rel="noopener noreferrer">CoinGecko <i>↗</i></a></dd>
         </dl>
@@ -5149,8 +5190,48 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       </div>
       <div class="wh-body">
         <p class="wh-lede">Every milestone Sectora describes is still in front of the token. That is the whole of the case, and it is a matter of record rather than opinion.</p>
-        <p class="wh-lede">#SECT trades on Uniswap, on Ethereum. The supply reduction has not happened and no centralized exchange has listed it. The DEX, the blockchain and the hash node market run on testnet and are not yet in production. The NYSE process has not started.</p>
+        <p class="wh-lede">#SECT trades on Uniswap, on Ethereum. The supply reduction has not happened and no centralized exchange has listed it. Four products — the Layer 3 blockchain, the DEX, the hash market and the cybersecurity software — have finished interfaces and are in final testing on testnet, not yet in production. The NYSE process has not started.</p>
       </div>
+    </div>
+
+    <div class="wh-built">
+      <div class="wh-bhead">
+        <div>
+          <span class="wh-k mono">Already built</span>
+          <p class="wh-bt">Four products with finished interfaces, now in final testing.</p>
+        </div>
+        <span class="wh-bcount mono"><b>04</b> interfaces finished · <b>04</b> in final testing</span>
+      </div>
+      <ul class="wh-prods">
+        <li class="wh-prod">
+          <span class="wh-pn mono">01</span>
+          <h3>Blockchain Layer 3</h3>
+          <p class="mono">SectoraScan · asset tokenization</p>
+          <dl class="mono"><div><dt>Interface</dt><dd class="wh-ok">Finished</dd></div><div><dt>Status</dt><dd class="wh-tst">Final testing</dd></div></dl>
+          <a class="wh-open mono" href="https://sectoraorg.com/sectorascan" target="_blank" rel="noopener noreferrer">Open SectoraScan <i aria-hidden="true">↗</i></a>
+        </li>
+        <li class="wh-prod">
+          <span class="wh-pn mono">02</span>
+          <h3>DEX</h3>
+          <p class="mono">Swaps and liquidity</p>
+          <dl class="mono"><div><dt>Interface</dt><dd class="wh-ok">Finished</dd></div><div><dt>Status</dt><dd class="wh-tst">Final testing</dd></div></dl>
+          <a class="wh-open mono" href="https://sectoraorg.com/dex" target="_blank" rel="noopener noreferrer">Open DEX <i aria-hidden="true">↗</i></a>
+        </li>
+        <li class="wh-prod">
+          <span class="wh-pn mono">03</span>
+          <h3>Hash Market</h3>
+          <p class="mono">Security node validation</p>
+          <dl class="mono"><div><dt>Interface</dt><dd class="wh-ok">Finished</dd></div><div><dt>Status</dt><dd class="wh-tst">Final testing</dd></div></dl>
+          <a class="wh-open mono" href="https://sectoraorg.com/dash" target="_blank" rel="noopener noreferrer">Open dashboard <i aria-hidden="true">↗</i></a>
+        </li>
+        <li class="wh-prod">
+          <span class="wh-pn mono">04</span>
+          <h3>Sectora Shield</h3>
+          <p class="mono">Post-quantum security</p>
+          <dl class="mono"><div><dt>Interface</dt><dd class="wh-ok">Finished</dd></div><div><dt>Status</dt><dd class="wh-tst">Final testing</dd></div></dl>
+          <a class="wh-open mono" href="https://sectoraorg.com/security" target="_blank" rel="noopener noreferrer">Open security <i aria-hidden="true">↗</i></a>
+        </li>
+      </ul>
     </div>
 
     <div class="wh-panel">
@@ -5174,7 +5255,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
           <span class="wh-node"><i></i></span>
           <span class="wh-when mono">Today</span>
           <h3>Trading on Uniswap</h3>
-          <p class="mono">Testnet live · contract renounced</p>
+          <p class="mono">4 products in final testing · contract renounced</p>
           <span class="wh-tag is-now mono"><i class="led"></i>You are here</span>
         </li>
         <li class="wh-stop">
@@ -5219,20 +5300,20 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
         <div class="wh-band mono"><span>Film · Why hold #SECT</span><b>SF·WH·01·26</b></div>
         <div class="wh-media">
-          <video data-poster="images/why-hold-poster.jpg" data-src="media/sectora-why-hold-X-1080p.mp4" playsinline preload="none" aria-label="Video: Why hold #SECT?"></video>
+          <video data-poster="images/why-hold-poster.jpg" data-src="media/sectora-why-hold-X-1080p.mp4?v=2" playsinline preload="none" aria-label="Video: Why hold #SECT?"></video>
           <button class="pr-snd wh-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
       </figure>
       <div class="wh-fside">
         <span class="wh-k mono">The film</span>
-        <h3 class="wh-ft">The sequence, in forty-eight seconds.</h3>
-        <p class="wh-fp">From where #SECT stands today to the opening of the NYSE process: the supply reduction, the listings and the products, stop by stop, on the published schedule.</p>
+        <h3 class="wh-ft">The sequence, in fifty-three seconds.</h3>
+        <p class="wh-fp">From where #SECT stands today, with four products built and in final testing, to the opening of the NYSE process: the supply reduction, the listings and the launch into production, stop by stop, on the published schedule.</p>
         <dl class="wh-fmeta mono">
-          <div><dt>Runtime</dt><dd>0:48</dd></div>
+          <div><dt>Runtime</dt><dd>0:53</dd></div>
           <div><dt>Format</dt><dd>1080p · 60 fps</dd></div>
           <div><dt>Sound</dt><dd>Original score</dd></div>
         </dl>
-        <a class="wh-dl mono" href="media/sectora-why-hold-4k.mp4" download="sectora-why-hold-4k.mp4"><span>Download in 4K</span><i aria-hidden="true">↓</i></a>
+        <a class="wh-dl mono" href="media/sectora-why-hold-4k.mp4?v=2" download="sectora-why-hold-4k.mp4"><span>Download in 4K</span><i aria-hidden="true">↓</i></a>
       </div>
     </div>
     <p class="wh-fine mono">Dates are the schedule published by Sectora Foundation. Nothing in this section is a promise about the price of #SECT or investment advice.</p>
@@ -8710,7 +8791,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261016';
+      sc.src = 'i18n-home.js?v=20261017';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
