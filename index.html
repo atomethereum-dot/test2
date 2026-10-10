@@ -2880,12 +2880,23 @@
   .ev-cel .v,.ev-cel .k{text-shadow:0 1px 12px rgba(0,0,0,.8)}
   .ev-dot{
     width:9px;height:9px;border-radius:50%;background:#34d382;flex:none;
-    box-shadow:0 0 0 0 rgba(52,211,130,.5);animation:ev-lat 2.6s ease-out infinite;
+  }
+  /* El latido es un disco del mismo verde que solo cambia de escala y de
+     opacidad. Animado como box-shadow se repintaba en el hilo principal a
+     cada fotograma mientras la ficha estuviera en pantalla; asi lo mueve
+     el compositor. Escala 3 es el mismo aro de antes (4.5px de radio mas
+     9 de extension) con la misma curva, y como el color es el del punto,
+     lo que cae encima de el no se nota. Va en el flujo, no posicionado:
+     se pinta donde se pintaba la sombra, antes del texto y de su sombra. */
+  .ev-dot::after{
+    content:'';display:block;width:100%;height:100%;border-radius:50%;
+    background:#34d382;opacity:0;
+    animation:ev-lat 2.6s ease-out infinite;
   }
   @keyframes ev-lat{
-    0%{box-shadow:0 0 0 0 rgba(52,211,130,.45)}
-    70%{box-shadow:0 0 0 9px rgba(52,211,130,0)}
-    100%{box-shadow:0 0 0 0 rgba(52,211,130,0)}
+    0%{transform:scale(1);opacity:.45}
+    70%{transform:scale(3);opacity:0}
+    100%{transform:scale(1);opacity:0}
   }
 
   /* ---- pista de avance: es la señalizacion del recorrido ---- */
@@ -2986,7 +2997,7 @@
   /* Sin movimiento no hay shader ni latidos, pero la escena sigue
      funcionando: la mueve el scroll, que es cosa del lector. */
   @media (prefers-reduced-motion:reduce){
-    .ev-dot,.ev-cue svg{animation:none}
+    .ev-dot::after,.ev-cue svg{animation:none}
     .ev-ent.on .ev-cel{animation:none}
   }
 
@@ -7387,28 +7398,40 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       float onda = (fbm(uv*3.2 + uT*0.04) - 0.5) * 0.30;
       float frente = uP*1.50 - 0.25 + onda;
       float d = eje - frente;
-      float m = smoothstep(0.07, -0.07, d);
-      float filo = exp(-d*d/0.0035);
 
-      vec2 dir = vec2(0.9701, 0.2425);
-      vec2 arrastre = dir * filo * 0.085;
-      vec2 temblor  = vec2(fbm(uv*8.0 + uT*0.35) - 0.5,
-                           fbm(uv*8.0 - uT*0.31) - 0.5) * filo * 0.030;
-      float ca = filo * 0.0055;
+      vec3 col;
+      if(abs(d) < 0.20){
+        float m = smoothstep(0.07, -0.07, d);
+        float filo = exp(-d*d/0.0035);
 
-      vec2 ua = cubre(uv + arrastre + temblor, uSa);
-      vec2 ub = cubre(uv - arrastre*0.5 + temblor*0.6, uSb);
+        vec2 dir = vec2(0.9701, 0.2425);
+        vec2 arrastre = dir * filo * 0.085;
+        vec2 temblor  = vec2(fbm(uv*8.0 + uT*0.35) - 0.5,
+                             fbm(uv*8.0 - uT*0.31) - 0.5) * filo * 0.030;
+        float ca = filo * 0.0055;
 
-      vec3 A = vec3(texture2D(uA, ua + vec2(ca,0.0)).r,
-                    texture2D(uA, ua).g,
-                    texture2D(uA, ua - vec2(ca,0.0)).b);
-      vec3 B = vec3(texture2D(uB, ub + vec2(ca,0.0)).r,
-                    texture2D(uB, ub).g,
-                    texture2D(uB, ub - vec2(ca,0.0)).b);
-      vec3 col = mix(A, B, m);
+        vec2 ua = cubre(uv + arrastre + temblor, uSa);
+        vec2 ub = cubre(uv - arrastre*0.5 + temblor*0.6, uSb);
 
-      float vivo = smoothstep(0.0,0.14,uP) * smoothstep(1.0,0.86,uP);
-      col += vec3(0.42,0.62,1.0) * filo * 0.62 * vivo;
+        /* con m en 0 o en 1 la otra pieza no pesa en la mezcla: no se lee */
+        vec3 A = vec3(0.0), B = vec3(0.0);
+        if(m < 1.0) A = vec3(texture2D(uA, ua + vec2(ca,0.0)).r,
+                             texture2D(uA, ua).g,
+                             texture2D(uA, ua - vec2(ca,0.0)).b);
+        if(m > 0.0) B = vec3(texture2D(uB, ub + vec2(ca,0.0)).r,
+                             texture2D(uB, ub).g,
+                             texture2D(uB, ub - vec2(ca,0.0)).b);
+        col = mix(A, B, m);
+
+        float vivo = smoothstep(0.0,0.14,uP) * smoothstep(1.0,0.86,uP);
+        col += vec3(0.42,0.62,1.0) * filo * 0.62 * vivo;
+      } else {
+        /* A 0.2 del frente el filo ya vale menos de 1e-5: arrastre,
+           temblor, canales y brillo no mueven ni una milesima de pixel ni
+           medio nivel de gris. Basta una lectura de la pieza que toca. */
+        col = d < 0.0 ? texture2D(uB, cubre(uv, uSb)).rgb
+                      : texture2D(uA, cubre(uv, uSa)).rgb;
+      }
 
       col += (hash(vUv*uRes + fract(uT)*97.3) - 0.5) * 0.038;
       vec2 q = vUv - 0.5;
@@ -7417,20 +7440,82 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       gl_FragColor = vec4(col, 1.0);
     }`;
 
-  let gl = null, prog = null, tex = [], uni = {}, pidiendo = false;
+  /* Lejos del frente el shader de arriba se queda en esto: una lectura
+     de la pieza, grano y viñeta. La onda se mueve como mucho 0.15 a cada
+     lado, asi que a mas de 0.35 del frente sin onda ningun pixel llega a
+     0.2 del de verdad. Ese resto del plano se pinta con este programa, que
+     no calcula ruido, y el caro solo corre en la franja por donde el
+     frente puede pasar. En reposo esa franja es la esquina de arriba a la
+     derecha y poco mas. */
+  const FS_PIEZA = `precision highp float;
+    varying vec2 vUv;
+    uniform sampler2D uC;
+    uniform vec2  uSc;
+    uniform float uT;
+    uniform vec2  uRes;
+
+    float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }
+
+    void main(){
+      vec3 col = texture2D(uC, (vUv-0.5)*uSc + 0.5).rgb;
+      col += (hash(vUv*uRes + fract(uT)*97.3) - 0.5) * 0.038;
+      vec2 q = vUv - 0.5;
+      col *= 1.0 - dot(q,q) * 0.40;
+      gl_FragColor = vec4(col, 1.0);
+    }`;
+  const LEJOS = 0.35;
+
+  let gl = null, prog = null, pieza = null, tex = [], medido = false, encendido = false;
   let iA = 0, iB = 0, pCruce = 1;
+
+  /* tres franjas paralelas al frente (eje = 0.8x + 0.2y, como en el
+     shader), en coordenadas de recorte y listas para TRIANGLE_STRIP:
+     detras del frente, el frente y delante. Cada vertice se lleva a un
+     borde de pixel entero: un vertice a media celda lo redondea el
+     rasterizador, el vUv interpolado se corre una fraccion de pixel y la
+     pieza se leeria movida respecto al cuadro entero de siempre. */
+  const vert = new Float32Array(24);
+  function franja(k, e0, e1){
+    const W = lienzo.width;
+    const x = (e, y) => Math.round((e - 0.2*y) / 0.8 * W) / W * 2 - 1;
+    vert.set([x(e0,0),-1, x(e1,0),-1, x(e0,1),1, x(e1,1),1], k*8);
+  }
 
   function compilar(t, src){
     const s = gl.createShader(t);
     gl.shaderSource(s, src); gl.compileShader(s);
-    return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+    return s;
   }
 
-  function textura(img){
+  /* Se manda compilar y enlazar sin preguntar el resultado: la pregunta
+     obliga a esperar a la GPU, y se deja para el encendido, cuando ya ha
+     tenido tiempo. Los dos programas leen el vertice en el mismo hueco,
+     asi el buffer se ata una sola vez. */
+  function programa(fs){
+    const v = compilar(gl.VERTEX_SHADER, VS), f = compilar(gl.FRAGMENT_SHADER, fs);
+    const p = gl.createProgram();
+    gl.attachShader(p, v); gl.attachShader(p, f);
+    gl.bindAttribLocation(p, 0, 'p');
+    gl.linkProgram(p);
+    return {p, v, f, u: {}};
+  }
+  function enlazado(pr, nombres){
+    if(!gl.getShaderParameter(pr.v, gl.COMPILE_STATUS) ||
+       !gl.getShaderParameter(pr.f, gl.COMPILE_STATUS) ||
+       !gl.getProgramParameter(pr.p, gl.LINK_STATUS)) return false;
+    for(const k of nombres) pr.u[k] = gl.getUniformLocation(pr.p, k);
+    return true;
+  }
+
+  /* La pieza se sube tal cual viene, con la primera fila arriba: un
+     ImageBitmap no admite volteo al subirlo, y asi los dos caminos (desde
+     la <img> o desde el mapa ya descodificado) dejan la misma textura. El
+     volteo lo hace cubre(). */
+  function textura(src, img){
     const t = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, t);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, src);
     /* sin mipmaps y con borde fijado: las piezas no son potencia de dos */
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -7439,16 +7524,24 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     return {t, ar: img.naturalWidth / img.naturalHeight};
   }
 
-  /* el mismo recorte que object-fit:cover, pero en coordenadas de textura */
+  /* el mismo recorte que object-fit:cover, pero en coordenadas de textura.
+     El alto va en negativo: el recorte esta centrado en 0.5, asi que
+     invertir la escala es voltear la pieza, que se subio sin voltear */
   function cubre(ar){
     const arE = lienzo.width / lienzo.height;
-    return ar > arE ? [arE/ar, 1] : [1, ar/arE];
+    return ar > arE ? [arE/ar, -1] : [1, -ar/arE];
   }
 
+  /* el lienzo solo cambia de tamaño con la ventana o con la densidad de
+     pantalla: medirlo en cada fotograma obligaba a resolver la maqueta a
+     mitad del scroll para nada */
+  let dprUlt = 0;
   function medir(){
     const r = lienzo.getBoundingClientRect();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const w = Math.round(r.width*dpr), h = Math.round(r.height*dpr);
+    dprUlt = window.devicePixelRatio;
+    medido = !!(w && h);
     if(w && h && (lienzo.width !== w || lienzo.height !== h)){
       lienzo.width = w; lienzo.height = h;
       gl.viewport(0, 0, w, h);
@@ -7456,46 +7549,129 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   }
 
   function pintarGL(){
-    if(!gl) return;
-    medir();
+    if(!encendido) return;
+    if(!medido || window.devicePixelRatio !== dprUlt) medir();
     const a = tex[iA], b = tex[iB];
-    gl.useProgram(prog);
-    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, a.t); gl.uniform1i(uni.uA, 0);
-    gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, b.t); gl.uniform1i(uni.uB, 1);
-    gl.uniform2fv(uni.uSa, cubre(a.ar));
-    gl.uniform2fv(uni.uSb, cubre(b.ar));
-    gl.uniform1f(uni.uP, pCruce);
-    gl.uniform1f(uni.uT, performance.now() * 0.001);
-    gl.uniform2f(uni.uRes, lienzo.width, lienzo.height);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    const t = performance.now() * 0.001, W = lienzo.width, H = lienzo.height;
+
+    /* el frente sin onda, el mismo uP*1.50 - 0.25 del shader, y la franja
+       que la onda puede llegar a mover */
+    const f = pCruce*1.50 - 0.25, e0 = f - LEJOS, e1 = f + LEJOS;
+    franja(0, -1, e0); franja(1, e0, e1); franja(2, e1, 2);
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, vert);
+
+    /* detras del frente ya esta la que entra y delante sigue la que sale.
+       El eje va de 0 a 1 en el plano: una franja fuera de ese tramo no
+       tiene pixeles y ni se manda */
+    gl.useProgram(pieza.p);
+    gl.uniform1f(pieza.u.uT, t);
+    gl.uniform2f(pieza.u.uRes, W, H);
+    gl.activeTexture(gl.TEXTURE0);
+    if(e0 > 0){
+      gl.bindTexture(gl.TEXTURE_2D, b.t);
+      gl.uniform2fv(pieza.u.uSc, cubre(b.ar));
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+    if(e1 < 1){
+      gl.bindTexture(gl.TEXTURE_2D, a.t);
+      gl.uniform2fv(pieza.u.uSc, cubre(a.ar));
+      gl.drawArrays(gl.TRIANGLE_STRIP, 8, 4);
+    }
+    if(e0 < 1 && e1 > 0){
+      gl.useProgram(prog.p);
+      gl.bindTexture(gl.TEXTURE_2D, a.t);
+      gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, b.t);
+      gl.uniform2fv(prog.u.uSa, cubre(a.ar));
+      gl.uniform2fv(prog.u.uSb, cubre(b.ar));
+      gl.uniform1f(prog.u.uP, pCruce);
+      gl.uniform1f(prog.u.uT, t);
+      gl.uniform2f(prog.u.uRes, W, H);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 4, 4);
+    }
+  }
+
+  /* ---------------------------------------------------------- arranque
+     Encenderlo todo de golpe al entrar la escena eran varios cientos de
+     ms de hilo principal justo cuando se esta mirando: dos programas que
+     compilar y tres piezas que, subidas desde la <img>, se vuelven a
+     descodificar ahi mismo. Lo que se puede se adelanta a un plano de
+     distancia: el contexto y los programas se crean (la GPU compila
+     mientras tanto) y cada pieza se descodifica fuera del hilo con
+     createImageBitmap, a partir de los bytes que ya estan en la cache, y
+     se sube en cuanto esta, cada una en su tarea. El encendido sigue en
+     el umbral de siempre y ahi ya solo queda encender. Lo que no haya
+     dado tiempo a preparar, o lo que el navegador no permita, se sube
+     desde la <img> como antes. */
+  let previas = [], pedidos = false, turno = 0;
+  const imgs = slides.map(s => s.querySelector('img'));
+  const fuente = im => im.currentSrc || im.src;
+
+  function contexto(){
+    if(gl) return true;
+    if(!lienzo || quieto.matches) return false;
+    try{ gl = lienzo.getContext('webgl', {antialias:false, alpha:false, depth:false}); }
+    catch(e){ gl = null; }
+    if(!gl) return false;
+    prog = programa(FS); pieza = programa(FS_PIEZA);
+    return true;
+  }
+
+  /* si la escena se aleja sin haberse encendido, lo subido se suelta */
+  function soltar(){
+    turno++; pedidos = false;
+    if(gl) previas.forEach(x => { if(x && tex.indexOf(x) < 0) gl.deleteTexture(x.t); });
+    previas = [];
+  }
+
+  function adelantar(){
+    if(pedidos || encendido || !contexto()) return;
+    pedidos = true;
+    if(!window.createImageBitmap || !window.fetch) return;
+    const mio = ++turno;
+    const cargada = im => im.complete && im.naturalWidth ? Promise.resolve() :
+      new Promise((ok, ko) => { im.addEventListener('load', ok, {once:true}); im.addEventListener('error', ko, {once:true}); });
+    /* se pide cuando la <img> ya ha cargado, asi que los bytes salen de
+       la cache aunque esten pasados de fecha: no hay segunda descarga */
+    imgs.forEach((im, k) => {
+      if(!im) return;
+      cargada(im).then(() => {
+        const url = fuente(im);
+        return fetch(url, {cache:'force-cache'})
+          .then(r => r.ok ? r.blob() : Promise.reject())
+          .then(b => createImageBitmap(b))
+          .then(m => {
+            if(mio === turno && !encendido && gl){ previas[k] = textura(m, im); previas[k].url = url; }
+            m.close();
+          });
+      }).catch(() => {});
+    });
   }
 
   function arrancarGL(){
-    if(gl || !lienzo || quieto.matches) return;
-    try{ gl = lienzo.getContext('webgl', {antialias:false, alpha:false, depth:false}); }
-    catch(e){ gl = null; }
-    if(!gl) return;
-    const imgs = slides.map(s => s.querySelector('img'));
-    if(imgs.some(im => !im || !im.complete || !im.naturalWidth)){ gl = null; return; }
-    const vs = compilar(gl.VERTEX_SHADER, VS), fs = compilar(gl.FRAGMENT_SHADER, FS);
-    if(!vs || !fs){ gl = null; return; }
-    prog = gl.createProgram();
-    gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
-    if(!gl.getProgramParameter(prog, gl.LINK_STATUS)){ gl = null; return; }
+    if(encendido || !contexto()) return;
+    /* una pieza previa vale si sale del mismo archivo que muestra la
+       <img>: el srcset puede haber cambiado de candidato desde entonces */
+    const lista = k => !!previas[k] && previas[k].url === fuente(imgs[k]);
+    if(imgs.some((im, k) => !im || (!lista(k) && (!im.complete || !im.naturalWidth)))) return;
+    if(!enlazado(prog, ['uA','uB','uSa','uSb','uP','uT','uRes']) ||
+       !enlazado(pieza, ['uC','uSc','uT','uRes'])){ gl = null; return; }
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
-    const loc = gl.getAttribLocation(prog, 'p');
-    gl.enableVertexAttribArray(loc);
-    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    for(const k of ['uA','uB','uSa','uSb','uP','uT','uRes']) uni[k] = gl.getUniformLocation(prog, k);
-    tex = imgs.map(textura);
+    gl.bufferData(gl.ARRAY_BUFFER, vert.byteLength, gl.DYNAMIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    /* cada muestreador va siempre a la misma unidad: se fija una vez */
+    gl.useProgram(prog.p);  gl.uniform1i(prog.u.uA, 0); gl.uniform1i(prog.u.uB, 1);
+    gl.useProgram(pieza.p); gl.uniform1i(pieza.u.uC, 0);
+    tex = imgs.map((im, k) => lista(k) ? previas[k] : textura(im, im));
+    soltar();
+    encendido = true;
     car.classList.add('gl');
     pintarGL();
   }
 
   /* ---------------------------------------------------------- escena */
-  let iUlt = -1;
+  let iUlt = -1, pintado = '';
 
   function reponer(el, clase){
     el.classList.remove(clase); void el.offsetWidth; el.classList.add(clase);
@@ -7519,7 +7695,15 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     iA = a; iB = b; pCruce = p;
     const vig = p > .5 ? b : a;
 
-    if(gl) pintarGL();
+    /* A menos de media pantalla se sigue llamando a pintar() (la pista y
+       la ficha tienen que llegar al dia), pero ahi el plano no se ve:
+       solo se redibuja si cambia lo que tiene pintado, no para renovar un
+       grano que nadie mira. Al volver ya tiene la pieza que toca. */
+    const estado = iA + ' ' + iB + ' ' + pCruce;
+    if(encendido && (estado !== pintado || (r.top < window.innerHeight && r.bottom > 0))){
+      pintado = estado;
+      pintarGL();
+    }
 
     if(vig !== iUlt){
       iUlt = vig;
@@ -7539,15 +7723,27 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     segs.forEach((s, j) => {
       const ini = j === 0 ? 0 : CRUCES[j-1][1];
       const fin = j < CRUCES.length ? CRUCES[j][0] : 1;
-      s.style.setProperty('--f', lim((u - ini) / (fin - ini)).toFixed(3));
+      poner(s, '--f', lim((u - ini) / (fin - ini)).toFixed(3));
     });
 
     /* la cartela se retira antes del primer cruce y la señal de scroll
        se apaga cuando ya no queda recorrido que señalar. El valor va en
        el carrusel, no en el titular: el velo lateral es hermano suyo y
        tiene que apagarse con el. */
-    car.style.setProperty('--cartela', (1 - lim((u - .12) / .12)).toFixed(3));
-    if(cue)  cue.style.setProperty('--cue', (1 - lim((u - .80) / .10)).toFixed(3));
+    poner(car, '--cartela', (1 - lim((u - .12) / .12)).toFixed(3));
+    if(cue)  poner(cue, '--cue', (1 - lim((u - .80) / .10)).toFixed(3));
+  }
+
+  /* solo se escribe lo que cambia. Casi todo el recorrido la cartela, la
+     señal y dos de los tres segmentos estan quietos, y --cartela cuelga
+     del carrusel entero: reescribirla igual hacia recalcular sus estilos */
+  const escrito = new WeakMap();
+  function poner(el, prop, v){
+    let m = escrito.get(el);
+    if(!m) escrito.set(el, m = {});
+    if(m[prop] === v) return;
+    m[prop] = v;
+    el.style.setProperty(prop, v);
   }
 
   let pedido = false;
@@ -7572,7 +7768,17 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   }));
 
   window.addEventListener('scroll', alScroll, {passive:true});
-  window.addEventListener('resize', () => { if(gl) medir(); alScroll(); });
+  /* se vuelve a medir el lienzo en el siguiente dibujo, no a cada paso */
+  window.addEventListener('resize', () => { medido = false; alScroll(); });
+  if(lienzo && window.ResizeObserver)
+    new ResizeObserver(() => { medido = false; alScroll(); }).observe(lienzo);
+
+  /* a un plano de distancia se prepara; si se aleja sin haber llegado a
+     encenderse, las piezas ya subidas se sueltan */
+  new IntersectionObserver(es => {
+    if(es[0].isIntersecting) adelantar();
+    else if(!encendido) soltar();
+  }, {rootMargin:'100% 0px'}).observe(sec);
 
   new IntersectionObserver(es => {
     if(es[0].isIntersecting){ arrancarGL(); pintar(); }
