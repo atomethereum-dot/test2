@@ -128,6 +128,9 @@
     wcPromesa = cargar(WC_JS, () => !!window.WalletConnectEthereumProvider)
       .then(() => window.WalletConnectEthereumProvider.EthereumProvider.init({
         projectId: WC_PROJECT_ID,
+        // chains marca mainnet como la red de la sesion; al ir tambien
+        // optionalChains, el SDK no la exige y ninguna wallet la rechaza
+        chains: [1],
         optionalChains: [1],
         rpcMap: { 1: RPC },
         showQrModal: false,
@@ -151,10 +154,27 @@
     return wcPromesa;
   }
 
-  function entregar(p) {
+  /* MetaMask y otras aprueban la sesion con todas sus redes (Linea, Base...)
+     y el SDK toma la primera que la wallet lista, que no tiene por que ser
+     Ethereum. Si mainnet esta entre las aprobadas, el propio SDK cambia de
+     red en local, sin pedir nada a la wallet; si no esta, staking-chain.js
+     avisa de que hay que cambiar de red. */
+  async function aMainnet(p) {
+    const ns = (p.session && p.session.namespaces && p.session.namespaces.eip155) || {};
+    const conMainnet = (ns.accounts || []).some((a) => a.indexOf("eip155:1:") === 0);
+    if (!conMainnet) return;
+    try {
+      await p.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x1" }] });
+    } catch (e) {
+      console.warn("[sectora] no pude fijar mainnet en la sesion", e);
+    }
+  }
+
+  async function entregar(p) {
     if (!p.session || !p.accounts || !p.accounts.length) return;
     if (conectadoCon === p) return;
     conectadoCon = p;
+    await aMainnet(p);
     guardar(MARCA, "1");
     if (MOVIL) recordarApp(p); else guardar(DEEPLINK, null);   // en el PC el SDK no debe abrir apps
     cerrar();
