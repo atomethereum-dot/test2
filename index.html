@@ -3123,6 +3123,11 @@
     animation:ringOut 5.2s linear infinite;will-change:transform,opacity;
   }
   .jiris-rings.b{animation-delay:-2.6s}
+  /* el circulo blanco ya tapa todo el bloque: lo de debajo no se ve y no
+     tiene por que componerse (la clase la pone el JS de la apertura) */
+  .jiris-pin.tapado #jb-canvas,
+  .jiris-pin.tapado .jiris-grid,
+  .jiris-pin.tapado .jiris-rings{visibility:hidden}
   .jiris-panel{
     position:absolute;inset:0;z-index:2;
     background:
@@ -3239,15 +3244,22 @@
     .join-cards{grid-template-columns:1fr}
   }
   /* las dos primeras son acciones sobre el token: fondo mas denso y
-     numeracion en azul, para separarlas de los canales de comunidad */
-  .jc.key{background:rgba(13,79,216,.05);border-color:rgba(13,79,216,.22)}
+     numeracion en azul, para separarlas de los canales de comunidad.
+     El fondo es el azul al 5% ya compuesto sobre el papel (ver .jc) */
+  .jc.key{background:rgb(230.55,233.85,237.85);border-color:rgba(13,79,216,.22)}
   .jc.key .jc-num{color:#0d4fd8}
   .jc{
     position:relative;display:block;text-decoration:none;color:#07080a;
     padding:26px 24px 24px;
-    background:rgba(255,255,255,.6);
+    /* blanco al 60% ya compuesto sobre el papel. Antes iba translucido con
+       un backdrop-filter de 10px, pero detras solo hay papel liso (#f2f2ef)
+       y una reticula al 5% que el desenfoque disolvia en menos de un nivel
+       de color: salia este mismo color plano, recalculado en cada
+       fotograma de scroll. El paso a blanco del hover no cambia: interpolar
+       desde el color compuesto da los mismos valores que interpolar el
+       translucido sobre el papel */
+    background:rgb(249.8,249.8,248.6);
     border:1px solid rgba(0,0,0,.12);
-    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     transition:transform .45s var(--ease),border-color .45s var(--ease),background .45s var(--ease);
   }
   .jc:hover,.jc:focus-visible{transform:translateY(-4px);border-color:#0d4fd8;background:#fff}
@@ -8408,37 +8420,72 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
   const ok = initGL();
 
+  /* filas del buffer de WebGL. La luz solo tiene filo en horizontal: las
+     bandas cortan en seco. En vertical todo es suave (rampas del 14% de la
+     altura y un titileo de tres celdas por pantalla), asi que basta con
+     resolverlo en unas pocas filas y dejar que el lienzo las estire. Con
+     180, frente al buffer completo, la diferencia media es de una decima de
+     nivel de color y la maxima de unos pocos niveles en las rampas: a la
+     vista es lo mismo, y el shader corre entre seis y doce veces menos.
+     El ancho no se toca */
+  const FILAS = 180;
+
   function resize(){
     const w = pin.clientWidth, h = pin.clientHeight;
     if(w < 1 || h < 1) return;
     W = w; H = h;
     const dpr = window.SECT_DPR();
-    cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
-    if(ok) gl.viewport(0,0,cv.width,cv.height);
+    cv.width = Math.round(W*dpr);
+    cv.height = ok ? Math.min(Math.round(H*dpr), FILAS) : Math.round(H*dpr);
+    vacio = true;                                   // el buffer queda vacio
+    if(ok){
+      gl.viewport(0,0,cv.width,cv.height);
+      // solo cambian con el tamano: no se suben en cada fotograma
+      gl.uniform2f(U.uRes, cv.width, cv.height);
+      gl.uniform1f(U.uQual, W >= 700 ? 1 : 0);
+    }
     else initFallback();
+    despertar();
   }
 
-  let raf = 0, visible = false, t0 = performance.now();
+  let raf = 0, visible = false, vacio = true, t0 = performance.now();
+  function despertar(){ if(visible && !raf) raf = requestAnimationFrame(loop); }
   new IntersectionObserver(es => {
     visible = es[0].isIntersecting;
-    if(visible && !raf) raf = requestAnimationFrame(loop);
+    despertar();
   }, {rootMargin:'15% 0px'}).observe(sec);
+  // la intensidad solo depende del scroll: es lo que vuelve a encender el bucle
+  window.addEventListener('scroll', despertar, {passive:true});
 
   function loop(now){
     raf = visible ? requestAnimationFrame(loop) : 0;
     if(!visible || document.hidden || !W) return;
     if(cv.width <= 1 || cv.height <= 1) return;   // lienzo liberado
 
-    const inten = intensidad(scrollProg());
-    const t = (now - t0) / 1000;
+    const p = scrollProg();
+    const inten = intensidad(p);
+
+    /* sin intensidad no queda ni un pixel: el shader descarta todo lo que
+       no llega a .004 de alfa, y el alfa nunca pasa de uInt (la reserva en
+       2D se queda vacia por debajo de .01). Pasa al acercarse, en todo
+       el tramo del circulo blanco y al salir. Se limpia una vez y el bucle
+       se duerme hasta el siguiente scroll: un lienzo que no se toca no le
+       cuesta nada al navegador */
+    if(ok ? inten < .004 : inten <= .01){
+      if(!vacio){
+        if(ok){ gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT); }
+        else ctx.clearRect(0,0,W,H);
+        vacio = true;
+      }
+      cancelAnimationFrame(raf); raf = 0;
+      return;
+    }
+    vacio = false;
 
     if(ok){
-      gl.useProgram(prog);
-      gl.uniform2f(U.uRes, cv.width, cv.height);
-      gl.uniform1f(U.uTime, t);
+      gl.uniform1f(U.uTime, (now - t0) / 1000);
       gl.uniform1f(U.uInt, inten);
-      gl.uniform1f(U.uOpen, apertura(scrollProg()));
-      gl.uniform1f(U.uQual, W >= 700 ? 1 : 0);
+      gl.uniform1f(U.uOpen, apertura(p));
       gl.clearColor(0,0,0,0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -8450,7 +8497,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   let rt;
   window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 140); });
   resize();
-  if(reduce && !ok) draw2D(0, .5);
+  if(reduce && !ok){ draw2D(0, .5); vacio = false; }
 })();
 
 
@@ -8460,7 +8507,14 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const panel = document.getElementById('jiris-panel');
   const edge  = document.getElementById('jiris-edge');
   const jCue  = document.getElementById('jiris-cue');
-  if(!sec || !panel) return;
+  const pin   = sec ? sec.querySelector('.jiris-pin') : null;
+  if(!sec || !panel || !pin) return;
+
+  /* radio a partir del cual el circulo tapa la escena entera: la mitad de
+     la diagonal del bloque fijo, mas dos pixeles por el antialias del borde.
+     Se mide una vez y se vuelve a medir solo si cambia la ventana */
+  let cubre = 0, clipPrev = '', visPrev = null, tapado = false;
+  window.addEventListener('resize', () => { cubre = 0; });
 
   let queued = false;
   function paint(){
@@ -8491,12 +8545,34 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       k = k*k*(3 - 2*k);
 
       const rad = k * Math.hypot(window.innerWidth, vh) * .58;
-      panel.style.clipPath = 'circle(' + rad.toFixed(1) + 'px at 50% 50%)';
+      /* solo se escribe lo que cambia: buena parte de la escena el circulo
+         esta cerrado o abierto del todo y el valor es el mismo fotograma
+         tras fotograma */
+      const clip = 'circle(' + rad.toFixed(1) + 'px at 50% 50%)';
+      const vis = k > .004 && k < .985;
+      if(clip !== clipPrev || vis !== visPrev){
+        clipPrev = clip; visPrev = vis;
+        panel.style.clipPath = clip;
 
-      const d = (rad*2).toFixed(1);
-      edge.style.width = d + 'px';
-      edge.style.height = d + 'px';
-      edge.style.opacity = (k > .004 && k < .985) ? '1' : '0';
+        // el aro solo se redimensiona mientras se ve: con opacidad cero,
+        // cambiarle el tamano es rehacer el diseno y repintarlo para nada
+        if(vis){
+          const d = (rad*2).toFixed(1) + 'px';
+          edge.style.width = d;
+          edge.style.height = d;
+        }
+        edge.style.opacity = vis ? '1' : '0';
+      }
+
+      /* con el circulo cubriendo el bloque entero, lo que hay debajo (los
+         haces, la rejilla y los dos anillos, que siguen animandose) ya no
+         se ve, pero el navegador lo seguia componiendo en cada fotograma.
+         Se oculta con visibility y no con display: los anillos siguen su
+         ciclo por debajo y, al volver a subir, aparecen donde tocaba */
+      if(!cubre && pin.clientWidth && pin.clientHeight)
+        cubre = Math.hypot(pin.clientWidth, pin.clientHeight) / 2 + 2;
+      const t = cubre > 0 && rad >= cubre;
+      if(t !== tapado){ tapado = t; pin.classList.toggle('tapado', t); }
     });
   }
 
@@ -8594,7 +8670,9 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     pend = true;
     requestAnimationFrame(() => {
       pend = false;
-      const r = ft.getBoundingClientRect();
+      // la geometria cacheada: pedirla al navegador en pleno fotograma, con
+      // estilos recien escritos por otras escenas, le obliga a recalcular
+      const r = window.__sectGeo ? window.__sectGeo(ft) : ft.getBoundingClientRect();
       const p = Math.max(0, Math.min(1, 1 - r.top / window.innerHeight));
       word.style.transform = 'translateX(-50%) translateY(' + ((1-p)*34).toFixed(1) + 'px)';
       word.style.opacity = (.012 + p*.030).toFixed(3);
