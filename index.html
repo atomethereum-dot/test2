@@ -571,6 +571,15 @@
      (opaco) tapa cada pixel de lo que queda debajo. visibility y no
      display, para que las animaciones sigan en su punto y al volver no
      haya ningun salto. Las clases las pone el JS del iris */
+  /* equipos que no llegan: los anillos y el pulso del fondo del iris se
+     apagan y la aurora se queda quieta (sin capa propia se pinta una vez
+     con el fondo y deja de costar en cada fotograma). Lo decide una
+     medicion en el propio equipo (ver "iris en equipos lentos"); en uno
+     normal no se toca nada */
+  .iris-pin.ligero > .iris-rings,
+  .iris-pin.ligero > .iris-pulse{display:none}
+  .iris-pin.ligero > .aurora span{animation:none;will-change:auto}
+
   .iris-pin.sin-panel > .iris-ventana,
   .iris-pin.panel-lleno > .iris-grid,
   .iris-pin.panel-lleno > .iris-pulse,
@@ -7247,6 +7256,49 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   });
   resize();
   if(reduce){ draw(); } else { requestAnimationFrame(frame); }
+})();
+
+/* ===== iris en equipos lentos =====
+   El iris compone unas diez capas animadas a pantalla completa. Con
+   aceleracion grafica eso es casi gratis; sin ella (equipos viejos, la
+   aceleracion desactivada, maquinas virtuales) el circulo se abre a
+   tirones. Mientras se ve el iris se miden los fotogramas: si la mediana
+   pasa de 28 ms (menos de unos 35 por segundo), se apagan los anillos y el
+   pulso del fondo y la aurora se queda quieta, que es lo que mas cuesta
+   componer. Se mide una vez por visita; en un equipo que llega no cambia
+   nada. */
+(function(){
+  const iris = document.getElementById('iris');
+  const pin = iris ? iris.querySelector('.iris-pin') : null;
+  if(!pin || !window.IntersectionObserver) return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let previo = null;
+  try{ previo = sessionStorage.getItem('sect-iris-ligero'); }catch(e){}
+  if(previo === '1'){ pin.classList.add('ligero'); return; }
+  if(previo === '0') return;
+
+  const LIMITE = 28, MUESTRAS = 50;
+  let visto = false, midiendo = false, hecho = false, ultimo = 0;
+  const tiempos = [];
+  function medir(t){
+    if(hecho || !visto || document.hidden){ midiendo = false; return; }
+    /* solo cuenta mientras el fondo animado esta a la vista: con el panel
+       claro abierto del todo lo tapa y los fotogramas salen baratos */
+    const av = window.__irisAvance ? window.__irisAvance() : null;
+    if(av && av.k >= 1){ ultimo = 0; requestAnimationFrame(medir); return; }
+    if(ultimo){ const dt = t - ultimo; if(dt < 250) tiempos.push(dt); }
+    ultimo = t;
+    if(tiempos.length < MUESTRAS){ requestAnimationFrame(medir); return; }
+    hecho = true; midiendo = false;
+    const orden = tiempos.slice().sort((a,b) => a - b);
+    const lento = orden[orden.length >> 1] > LIMITE;
+    if(lento) pin.classList.add('ligero');
+    try{ sessionStorage.setItem('sect-iris-ligero', lento ? '1' : '0'); }catch(e){}
+  }
+  new IntersectionObserver(es => {
+    visto = es[0].isIntersecting;
+    if(visto && !midiendo && !hecho){ midiendo = true; ultimo = 0; requestAnimationFrame(medir); }
+  }, {threshold:.6}).observe(pin);
 })();
 
 /* ===== barrido por celdas: de claro a negro, ligado al scroll =====
