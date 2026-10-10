@@ -36,7 +36,7 @@
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
 <!-- la intro solo existe con JavaScript: sin el, la pagina se ve directa -->
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="staking.css?v=20261020">
+<link rel="stylesheet" href="staking.css?v=20261022">
 </head>
 <body>
 
@@ -83,6 +83,7 @@
     </div>
     <div class="topnav">
       <a class="tn-a" href="#stake">Stake</a>
+      <a class="tn-a" href="#guide">Guide</a>
       <a class="tn-a" href="#terms">Terms</a>
       <a class="tn-a" href="#verify">Security</a>
       <a class="tn-a" href="#faq">FAQ</a>
@@ -148,7 +149,8 @@
     <div class="pp-head">
       <div class="hw"><h2>Estimate it, then stake it.</h2></div>
       <p><span class="apy-n">14.9</span>% a year on what you deposit, accrued every second, straight
-        from your own wallet. Type an amount to see what it earns, then connect and deposit.</p>
+        from your own wallet. Type an amount to see what it earns, then connect and deposit.
+        <a class="pp-guide" href="#guide">First time? Follow the step-by-step guide&nbsp;<i aria-hidden="true">↓</i></a></p>
     </div>
 
     <div class="pp-body">
@@ -220,7 +222,101 @@
   </div>
 </section>
 
-<!-- ============ 02 · terms: noche con rejilla, como el roadmap ============ -->
+<!-- ============ 02 · guide: el paso a paso, filas numeradas como el FAQ.
+     Va justo despues de la consola: quien no sabe como seguir lo tiene a
+     un paso, y quien ya sabe no tiene que pasar por aqui para depositar ============ -->
+<section class="night" id="guide">
+  <div class="night-glow" aria-hidden="true"></div>
+  <div class="nt-in">
+    <div class="nt-sticky">
+      <p class="eyebrow mono"><i></i>Guide</p>
+      <h2>How to stake, step by step.</h2>
+      <p class="nt-lede">From buying #SECT to claiming your first rewards. Depositing takes two confirmations in your wallet; claiming and withdrawing take one.</p>
+      <p class="nt-count mono">08 steps &middot; about 5 minutes</p>
+    </div>
+    <ol class="guide">
+      <li class="gd">
+        <span class="gd-n mono">01</span>
+        <div class="gd-b">
+          <h3>Get #SECT and a little ETH</h3>
+          <p>Buy #SECT on Uniswap, on Ethereum mainnet, and keep a little ETH in the same wallet: every confirmation pays a small network fee in ETH.</p>
+          <a class="gd-link mono" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener noreferrer">Buy #SECT on Uniswap <i aria-hidden="true">↗</i></a>
+          <p class="gd-fine mono">#SECT token &middot; 0x8C9984B06281f1CA9416e493c2E602AaB08513db</p>
+        </div>
+      </li>
+      <li class="gd">
+        <span class="gd-n mono">02</span>
+        <div class="gd-b">
+          <h3>Open sectoraorg.com/staking</h3>
+          <p>In Chrome, Safari or your wallet&rsquo;s own browser, on a phone or a computer. Check the address bar: the only real page is <b>sectoraorg.com/staking</b>.</p>
+        </div>
+      </li>
+      <li class="gd">
+        <span class="gd-n mono">03</span>
+        <div class="gd-b">
+          <h3>Connect your wallet</h3>
+          <p>Tap <b>Connect wallet</b> in the console and pick yours. On a phone the wallet app opens: approve the connection there and come back to this tab. On a computer, use your browser extension or scan the QR code with your phone.</p>
+          <span class="gd-tag mono">MetaMask &middot; Trust &middot; Binance &middot; Coinbase &middot; OKX &middot; WalletConnect</span>
+        </div>
+      </li>
+      <li class="gd">
+        <span class="gd-n mono">04</span>
+        <div class="gd-b">
+          <h3>Check you are on Ethereum</h3>
+          <p>The blue button now shows your address and the console reads <b>Mainnet</b>. If a red message asks you to switch to the Ethereum network, change the network in your wallet.</p>
+        </div>
+      </li>
+      <li class="gd">
+        <span class="gd-n mono">05</span>
+        <div class="gd-b">
+          <h3>Type the amount</h3>
+          <p>Enter how many #SECT you want to deposit. The console shows what it earns per second, day, month and year before you sign anything.</p>
+          <span class="gd-tag mono">Estimate first, sign after</span>
+        </div>
+      </li>
+      <li class="gd key">
+        <span class="gd-n mono">06</span>
+        <div class="gd-b">
+          <span class="gd-wal mono">Wallet &middot; confirmation 1 of 2</span>
+          <h3>Approve the exact amount</h3>
+          <p>Tap <b>Deposit #SECT</b>. Your wallet asks you to let the staking contract take exactly that amount, never more. Nothing moves yet. Before confirming, check:</p>
+          <dl class="gd-check">
+            <div><dt class="mono">Request</dt><dd class="mono">Approve &middot; spending cap</dd></div>
+            <div><dt class="mono">Amount</dt><dd class="mono">The exact #SECT you typed</dd></div>
+            <div><dt class="mono">Spender</dt><dd class="mono">0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0</dd></div>
+          </dl>
+        </div>
+      </li>
+      <li class="gd key">
+        <span class="gd-n mono">07</span>
+        <div class="gd-b">
+          <span class="gd-wal mono">Wallet &middot; confirmation 2 of 2</span>
+          <h3>Confirm the deposit</h3>
+          <p>Once the approval is confirmed on-chain, your wallet asks for the deposit itself. Confirm it and your #SECT start earning that same second.</p>
+          <dl class="gd-check">
+            <div><dt class="mono">Request</dt><dd class="mono">Deposit</dd></div>
+            <div><dt class="mono">Contract</dt><dd class="mono">0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0</dd></div>
+          </dl>
+        </div>
+      </li>
+      <li class="gd">
+        <span class="gd-n mono">08</span>
+        <div class="gd-b">
+          <h3>Claim or withdraw whenever you want</h3>
+          <p>Your rewards grow live in the console. <b>Claim rewards</b>, <b>Withdraw</b> and <b>Withdraw all</b> take a single confirmation each, with no lock-up and no penalty. Every new deposit repeats steps 05 to 07.</p>
+          <span class="gd-tag mono">No lock-up &middot; one confirmation</span>
+        </div>
+      </li>
+    </ol>
+    <div class="gd-end">
+      <a class="btn btn-primary mono" href="#stake"><span>Go to the console</span><span class="arrow">↑</span></a>
+      <p class="nt-fine mono">Network fees are paid in ETH to Ethereum, not to Sectora. Nobody from Sectora will ever ask for your
+        seed phrase or private key, or message you first to help you stake. If someone does, it is a scam.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 · terms: noche con rejilla, como el roadmap ============ -->
 <section class="night" id="terms">
   <div class="night-glow" aria-hidden="true"></div>
   <div class="nt-in">
@@ -248,9 +344,9 @@
   </div>
 </section>
 
-<!-- ============ 03 · security: hoja clara con tarjetas, como Verification ============ -->
+<!-- ============ 04 · security: hoja clara con tarjetas, como Verification ============ -->
 <section class="paper paper-cards" id="verify">
-  <div class="spine" aria-hidden="true"><em><b>03</b><span>Security</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>04</b><span>Security</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="mc-in">
@@ -289,7 +385,7 @@
   </div>
 </section>
 
-<!-- ============ 04 · faq: noche, filas numeradas como Developments ============ -->
+<!-- ============ 05 · faq: noche, filas numeradas como Developments ============ -->
 <section class="night" id="faq">
   <div class="nt-in">
     <div class="nt-sticky">
@@ -350,6 +446,7 @@
       <div class="ft-col">
         <h4>Staking</h4>
         <a href="#stake">Stake</a>
+        <a href="#guide">Guide</a>
         <a href="#terms">Terms</a>
         <a href="#verify">Security</a>
         <a href="#faq">FAQ</a>
