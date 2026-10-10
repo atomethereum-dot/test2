@@ -431,12 +431,17 @@
     -webkit-mask-image:radial-gradient(68% 62% at 50% 52%,#000,transparent 82%);
     mask-image:radial-gradient(68% 62% at 50% 52%,#000,transparent 82%);
   }
+  /* la caja era un 140% de la pantalla (inset:-20%), pero la mascara la
+     deja transparente mas alla del 49% del ancho y del alto desde el
+     centro: todo lo visible cabe en la pantalla. Con inset:0 y la mascara
+     reescalada al mismo tamano real (46% de 140% = 64.4%) los aros son
+     identicos y la capa que se compone en cada fotograma mide la mitad */
   .iris-rings{
-    position:absolute;inset:-20%;z-index:0;pointer-events:none;
+    position:absolute;inset:0;z-index:0;pointer-events:none;
     background:repeating-radial-gradient(circle at 50% 50%,
       transparent 0 92px, rgba(110,170,255,.17) 92px 94px);
-    -webkit-mask-image:radial-gradient(46% 46% at 50% 50%,#000,transparent 76%);
-    mask-image:radial-gradient(46% 46% at 50% 50%,#000,transparent 76%);
+    -webkit-mask-image:radial-gradient(64.4% 64.4% at 50% 50%,#000,transparent 76%);
+    mask-image:radial-gradient(64.4% 64.4% at 50% 50%,#000,transparent 76%);
     animation:ringOut 5.2s linear infinite;
     will-change:transform,opacity;
   }
@@ -447,11 +452,14 @@
     100%{transform:scale(1.5);opacity:0}
   }
   /* sin filter:blur: el degradado radial ya llega suave a cero, y un
-     desenfoque encima solo cuesta relleno en cada fotograma */
+     desenfoque encima solo cuesta relleno en cada fotograma. Y por lo
+     mismo la caja se ciñe: el degradado mide 60vmax, como siempre, pero
+     llega a cero a 26.3vmax del centro, asi que basta una caja de 53vmax
+     y lo que sobraba, transparente, deja de componerse en cada fotograma */
   .iris-pulse{
     position:absolute;left:50%;top:50%;z-index:0;pointer-events:none;
-    width:60vmax;height:60vmax;margin:-30vmax 0 0 -30vmax;border-radius:50%;
-    background:radial-gradient(circle,rgba(21,105,255,.20),transparent 62%);
+    width:53vmax;height:53vmax;margin:-26.5vmax 0 0 -26.5vmax;border-radius:50%;
+    background:radial-gradient(circle,rgba(21,105,255,.20),transparent 62%) 50% 50% / 60vmax 60vmax;
     animation:pulseOut 5.2s ease-out infinite;will-change:transform,opacity;
   }
   @keyframes pulseOut{
@@ -526,6 +534,11 @@
         rgba(90,160,255,.75)  calc(50% + 2px),
         rgba(21,105,255,.35)  calc(50% + 16px),
         rgba(21,105,255,0)    calc(50% + 46px));
+    /* la caja se ciñe al anillo (la mide el JS) y el degradado conserva su
+       tamano de siempre, --d, centrado en ella: el mismo dibujo con mucha
+       menos superficie que rasterizar cada vez que el circulo crece */
+    background-size:var(--d,100%) var(--d,100%);
+    background-position:50% 50%;
   }
   .iris-edge::after{
     content:'';position:absolute;inset:0;border-radius:50%;
@@ -543,18 +556,64 @@
     mask:radial-gradient(circle at 50% 50%,
       transparent calc(50% - 7px), #000 calc(50% - 4px),
       #000 calc(50% + 3px), transparent calc(50% + 7px));
+    background-size:var(--d,100%) var(--d,100%);
+    background-position:50% 50%;
+    -webkit-mask-size:var(--d,100%) var(--d,100%);
+    mask-size:var(--d,100%) var(--d,100%);
+    -webkit-mask-position:50% 50%;
+    mask-position:50% 50%;
     animation:rimSpin 4.6s linear infinite;
   }
   @keyframes rimSpin{to{transform:rotate(360deg)}}
 
+  /* lo que no se ve no se compone: con el circulo a cero el panel claro
+     esta recortado entero, y con el circulo abierto del todo el panel
+     (opaco) tapa cada pixel de lo que queda debajo. visibility y no
+     display, para que las animaciones sigan en su punto y al volver no
+     haya ningun salto. Las clases las pone el JS del iris */
+  .iris-pin.sin-panel > .iris-ventana,
+  .iris-pin.panel-lleno > .iris-grid,
+  .iris-pin.panel-lleno > .iris-pulse,
+  .iris-pin.panel-lleno > .iris-rings,
+  .iris-pin.panel-lleno > .iris-cells,
+  .iris-pin.panel-lleno > .aurora,
+  .iris-pin.panel-lleno > .sweep{visibility:hidden}
+
+  /* la ventana envuelve al panel claro. En escritorio no hace nada: el
+     circulo es el clip-path del propio panel, como siempre */
+  .iris-ventana{position:absolute;inset:0;z-index:2}
   .iris-panel{
-    position:absolute;inset:0;z-index:2;
+    position:absolute;inset:0;
     background:
       radial-gradient(75% 60% at 50% 46%, #ffffff, transparent 70%),
       radial-gradient(120% 80% at 50% 100%, rgba(21,105,255,.10), transparent 62%),
       #ececea;
     clip-path:circle(0px at 50% 50%);
     will-change:clip-path;
+  }
+  /* En el telefono el circulo es la propia ventana: redonda (border-radius
+     y overflow), crece desde el centro con el panel dentro, quieto y del
+     tamano del bloque fijo (--panel-w/-h, los mide el JS). Con el clip-path
+     el navegador volvia a rasterizar las baldosas del panel que cruzaba el
+     borde en cada fotograma del scroll; asi recorta el compositor y no se
+     repinta nada. El circulo es el mismo.
+     La ventana se coloca con transform y el panel con el transform opuesto,
+     los dos desde la esquina: con left:50% el navegador redondeaba a pixel
+     la posicion del panel dentro de la ventana y quedaba sin cubrir la
+     ultima columna de la pantalla.
+     Solo aqui porque dentro del panel no queda ningun modo de fusion (el
+     barrido en overlay esta oculto por debajo de 900px): en escritorio, ese
+     barrido dentro de una ventana redonda no se compone bien */
+  @media (max-width:900px){
+    .iris-ventana{
+      inset:auto;left:0;top:0;width:0;height:0;
+      border-radius:50%;overflow:hidden;will-change:transform;
+    }
+    .iris-panel{
+      inset:auto;left:0;top:0;
+      width:var(--panel-w,100vw);height:var(--panel-h,100vh);
+      clip-path:none;will-change:transform;
+    }
   }
   .iris-panel-grid{
     position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -2180,21 +2239,23 @@
   .zoom-pin{
     position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;background:#000;
   }
-  /* aros de sonar: identicos a los del iris, mismo ciclo y desfase */
+  /* aros de sonar: identicos a los del iris, mismo ciclo y desfase, y con
+     la misma poda: caja a pantalla y mascara reescalada (64.4% = 46% de
+     140%), pulso ceñido a lo que no es transparente */
   .zoom-rings{
-    position:absolute;inset:-20%;z-index:0;pointer-events:none;
+    position:absolute;inset:0;z-index:0;pointer-events:none;
     background:repeating-radial-gradient(circle at 50% 50%,
       transparent 0 92px, rgba(110,170,255,.17) 92px 94px);
-    -webkit-mask-image:radial-gradient(46% 46% at 50% 50%,#000,transparent 76%);
-    mask-image:radial-gradient(46% 46% at 50% 50%,#000,transparent 76%);
+    -webkit-mask-image:radial-gradient(64.4% 64.4% at 50% 50%,#000,transparent 76%);
+    mask-image:radial-gradient(64.4% 64.4% at 50% 50%,#000,transparent 76%);
     animation:ringOut 5.2s linear infinite;
     will-change:transform,opacity;
   }
   .zoom-rings.b{animation-delay:-2.6s}
   .zoom-pulse{
     position:absolute;left:50%;top:50%;z-index:0;pointer-events:none;
-    width:60vmax;height:60vmax;margin:-30vmax 0 0 -30vmax;border-radius:50%;
-    background:radial-gradient(circle,rgba(21,105,255,.20),transparent 62%);
+    width:53vmax;height:53vmax;margin:-26.5vmax 0 0 -26.5vmax;border-radius:50%;
+    background:radial-gradient(circle,rgba(21,105,255,.20),transparent 62%) 50% 50% / 60vmax 60vmax;
     animation:pulseOut 5.2s ease-out infinite;will-change:transform,opacity;
   }
 
@@ -4470,7 +4531,10 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
                    ang:a/(Math.PI*2),
                    diag:((i+nX)+(j+nY))/diag,
                    // umbral de disolucion: del centro hacia fuera, con azar
-                   muerte: (d/diagMax)*.62 + sem*.34};
+                   muerte: (d/diagMax)*.62 + sem*.34,
+                   // el valor que muestran las celdas de texto no cambia: se
+                   // calcula aqui una vez y no en cada fotograma
+                   hex: sem > .935 ? ((sem*65535)|0).toString(16).toUpperCase().padStart(4,'0') : ''};
         todas.push(q);
         if(esAro){
           const t = Math.atan2(dy,dx);
@@ -4489,9 +4553,19 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   const out= t => { t=cl(t); return 1-Math.pow(1-t,3); };
   const dAng = (a,b) => { const d=Math.abs(a-b)%1; return d>.5 ? 1-d : d; };
 
+  /* las celdas repiten las mismas opacidades fotograma tras fotograma: el
+     color se guarda ya compuesto, por milesimas (la precision de antes),
+     en lugar de rehacer la cadena para cientos de celdas cada vez */
+  const BLANCOS = [], CIANES = [];
+  const tono = (cache, rgb, a) => {
+    const q = Math.round(a*1000);
+    return cache[q] || (cache[q] = 'rgba(' + rgb + ',' + (q/1000) + ')');
+  };
+
   /* ---------- fase de montaje ---------- */
   function pintar(t){
-    ctx.clearRect(0,0,W,H);
+    // el azul es opaco y cubre el lienzo entero: borrarlo antes era una
+    // pasada completa de mas en cada fotograma
     ctx.fillStyle = AZUL;
     ctx.fillRect(0,0,W,H);
 
@@ -4511,6 +4585,10 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 
     const huida = sw(cl((pN-.05)/.55));
     if(huida < .995){
+      // la fuente y la alineacion de los valores se fijan una vez por
+      // fotograma, no en cada celda
+      ctx.font = MONO;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       for(let k=0;k<sweep.length;k++){
         const q = sweep[k];
         const kk = (pS - q.diag*.82 + q.sem*.06)/.16;
@@ -4525,14 +4603,11 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         const px = q.x+ux*emp, py = q.y+uy*emp;
 
         // una de cada quince celdas muestra un valor en lugar de un bloque
-        if(q.sem > .935){
-          ctx.font = MONO;
-          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          ctx.fillStyle = 'rgba('+CIAN+','+Math.min(1,a*3).toFixed(3)+')';
-          const hex = ((q.sem*65535)|0).toString(16).toUpperCase().padStart(4,'0');
-          ctx.fillText(hex, px+CELL/2, py+CELL/2);
+        if(q.hex){
+          ctx.fillStyle = tono(CIANES, CIAN, Math.min(1,a*3));
+          ctx.fillText(q.hex, px+CELL/2, py+CELL/2);
         } else {
-          ctx.fillStyle = 'rgba(255,255,255,'+a.toFixed(3)+')';
+          ctx.fillStyle = tono(BLANCOS, '255,255,255', a);
           ctx.fillRect(px, py, CELL-1, CELL-1);
         }
       }
@@ -4709,16 +4784,28 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       ctx.fillRect(cxG-R*1.6, cyG-R*1.6, R*3.2, R*3.2);
     }
 
-    ring.style.opacity = apar.toFixed(3);
-    ring.style.transform = 'scale('+(1+(1-apar)*.02).toFixed(4)+')';
+    /* el aro y el rotulo pasan casi toda la intro quietos: solo se escribe
+       cuando el valor cambia. Reescribir el mismo cada fotograma obligaba
+       igualmente a reinterpretar el estilo, y el espaciado, a recomponer */
+    const ao = apar.toFixed(3), as = (1+(1-apar)*.02).toFixed(4);
+    if(ao + as !== antAro){
+      antAro = ao + as;
+      ring.style.opacity = ao;
+      ring.style.transform = 'scale('+as+')';
+    }
 
     if(word){
       const wv = sw(cl((pK-.2)/.8));
-      word.style.opacity = wv.toFixed(3);
-      word.style.letterSpacing = (.9-.48*wv).toFixed(3)+'em';
-      word.style.transform = 'translateX(-50%) translateY('+((1-wv)*8).toFixed(1)+'px)';
+      const wo = wv.toFixed(3), wl = (.9-.48*wv).toFixed(3), wt = ((1-wv)*8).toFixed(1);
+      if(wo + wl + wt !== antPal){
+        antPal = wo + wl + wt;
+        word.style.opacity = wo;
+        word.style.letterSpacing = wl+'em';
+        word.style.transform = 'translateX(-50%) translateY('+wt+'px)';
+      }
     }
   }
+  let antAro = '', antPal = '';
 
   /* ---------- salida: el aro estalla y el azul se deshace ---------- */
   let trozos = [];
@@ -4784,8 +4871,9 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   medir();
   window.addEventListener('resize', medir);
 
+  const marco = el.querySelector('.intro-frame'), hud = el.querySelector('.intro-hud');
   const t0 = performance.now();
-  let saliendo=false, tSal=0, estado=0, preparado=false;
+  let saliendo=false, tSal=0, estado=0, preparado=false, antPct='';
 
   function rotulo(txt){ if(est && est.lastChild) est.lastChild.nodeValue = txt; }
 
@@ -4801,7 +4889,10 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       pintar(t);
       const porTiempo = cl(t/T_TOTAL);
       const p = cargado ? porTiempo : Math.min(porTiempo,.96);
-      if(pctE) pctE.textContent = String(Math.round(p*100)).padStart(2,'0');
+      // el porcentaje cambia cada dos o tres fotogramas: reescribir el texto
+      // sin que cambie obligaba a recomponer esa linea cada vez
+      const pc = String(Math.round(p*100)).padStart(2,'0');
+      if(pctE && pc !== antPct){ antPct = pc; pctE.textContent = pc; }
       if(fill) fill.style.transform = 'scaleX('+p.toFixed(4)+')';
       while(logN < logEls.length && t > logT[logN]){ logEls[logN].classList.add('on'); logN++; }
       if(estado===0 && t > T0_LOCK){ estado=1; rotulo('Signal locked'); }
@@ -4823,9 +4914,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       const k = cl((now - tSal) / T_EXIT);
       salir(k);
       if(word) word.style.opacity = (1 - cl(k*2.6)).toFixed(3);
-      const fr = el.querySelector('.intro-frame'), hu = el.querySelector('.intro-hud');
-      if(fr) fr.style.opacity = (1-cl(k*2.0)).toFixed(3);
-      if(hu) hu.style.opacity = (1-cl(k*2.0)).toFixed(3);
+      if(marco) marco.style.opacity = (1-cl(k*2.0)).toFixed(3);
+      if(hud) hud.style.opacity = (1-cl(k*2.0)).toFixed(3);
       if(k >= 1){ fin(); return; }
     }
     requestAnimationFrame(ciclo);
@@ -4835,6 +4925,12 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     document.documentElement.classList.remove('intro-lock');
     document.body.classList.remove('intro-lock');
     el.remove();
+    /* el lienzo de la intro es tan grande como la pantalla y su textura
+       seguia reservada: el oyente de resize mantenia vivo todo esto despues
+       de quitar el panel. Se suelta todo de una vez */
+    window.removeEventListener('resize', medir);
+    cv.width = 1; cv.height = 1;
+    todas = []; sweep = []; aro = []; trozos = [];
     try{ sessionStorage.setItem('sect_intro','1'); }catch(e){}
     listo();
   }
@@ -4976,11 +5072,13 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="sweep" aria-hidden="true"></div>
 
-    <div class="iris-panel" id="iris-panel" aria-hidden="true">
-      <div class="iris-panel-grid"></div>
-      <canvas class="iris-cells" id="cells-light"></canvas>
-      <div class="aurora"><span></span><span></span><span></span></div>
-      <div class="sweep"></div>
+    <div class="iris-ventana" id="iris-ventana" aria-hidden="true">
+      <div class="iris-panel" id="iris-panel">
+        <div class="iris-panel-grid"></div>
+        <canvas class="iris-cells" id="cells-light"></canvas>
+        <div class="aurora"><span></span><span></span><span></span></div>
+        <div class="sweep"></div>
+      </div>
     </div>
 
     <div class="iris-edge" id="iris-edge" aria-hidden="true"></div>
@@ -6223,11 +6321,11 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     ).join('');
   }
 
-  let hasPlayed = false;
+  let hasPlayed = false, partido = false;
   function play(){
     if(hasPlayed) return;
     hasPlayed = true;
-    if(!reduce) splitTitle();
+    if(!reduce && !partido) splitTitle();
     requestAnimationFrame(() => document.body.classList.add('played'));
   }
 
@@ -6236,12 +6334,19 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const fuentes  = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
   Promise.all([fuentes, arranque]).then(play);
   setTimeout(play, 7500);
+  /* el troceado necesita la fuente definitiva, no que la intro termine:
+     se hace bajo el azul en cuanto la fuente esta lista. Asi el instante
+     de la apertura, que es el que se ve, solo tiene que encender la
+     transicion, sin recomponer el titular en ese mismo fotograma */
+  fuentes.then(() => { if(!hasPlayed && !reduce){ splitTitle(); partido = true; } });
 
   let titleRT;
   window.addEventListener('resize', () => {
     clearTimeout(titleRT);
     titleRT = setTimeout(() => {
-      if(!hasPlayed || reduce) return;
+      if(reduce) return;
+      // troceado de antemano y aun sin revelar: las lineas pueden cambiar
+      if(!hasPlayed){ if(partido) splitTitle(); return; }
       splitTitle();
       h1El.querySelectorAll('.ln > span').forEach(el => {
         el.style.transition = 'none'; el.style.transform = 'none';
@@ -6333,10 +6438,56 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
   /* ========== iris: el recorte sigue al scroll ========== */
   const iris = document.getElementById('iris');
+  const irisPin = iris.querySelector('.iris-pin');
+  const irisVentana = document.getElementById('iris-ventana');
   const irisPanel = document.getElementById('iris-panel');
   const irisEdge = document.getElementById('iris-edge');
   const irisCue = document.getElementById('iris-cue');
-  let irisQueued = false;
+  let irisQueued = false, irisEstado = '', aroVisto = null, recorteAnt = '';
+
+  /* en el telefono el circulo es una ventana redonda (ver el CSS), en
+     escritorio el clip-path del panel. Al cruzar el corte se limpia el
+     recorte del otro modo y se vuelve a pintar */
+  const redonda = window.matchMedia('(max-width: 900px)');
+  const cambioModo = () => {
+    irisVentana.style.width = irisVentana.style.height = irisVentana.style.transform = '';
+    irisPanel.style.transform = irisPanel.style.clipPath = '';
+    recorteAnt = '';
+    paintIris();
+  };
+  if(redonda.addEventListener) redonda.addEventListener('change', cambioModo);
+  else if(redonda.addListener) redonda.addListener(cambioModo);
+
+  /* dentro de la ventana el panel mide exactamente lo que el bloque fijo y
+     se desplaza al reves que ella: al crecer el circulo, el dibujo no se
+     mueve. Se mide al cargar y con cada cambio de tamano, nunca en el scroll */
+  let panelW = 0, panelH = 0;
+  function medirPanel(){
+    const r = irisPin.getBoundingClientRect();
+    if(r.width < 1 || r.height < 1) return;
+    panelW = r.width; panelH = r.height;
+    irisPanel.style.setProperty('--panel-w', panelW + 'px');
+    irisPanel.style.setProperty('--panel-h', panelH + 'px');
+    recorteAnt = '';
+  }
+  medirPanel();
+  window.addEventListener('resize', medirPanel);
+
+  /* avance de la escena (p) y apertura del circulo (k) en la posicion de
+     scroll actual. Lo leen tambien las celdas del iris: en el mismo
+     fotograma ven lo mismo que el recorte y no pintan lo que queda tapado */
+  function irisAvance(){
+    const r = window.__sectGeo ? window.__sectGeo(iris) : iris.getBoundingClientRect();
+    const span = r.height - window.innerHeight;
+    if(span <= 0) return null;
+    let p = (-r.top) / span;
+    p = p < 0 ? 0 : p > 1 ? 1 : p;
+    let k = (p - .18) / .64;
+    k = k < 0 ? 0 : k > 1 ? 1 : k;
+    k = k*k*(3 - 2*k);
+    return {p, k};
+  }
+  window.__irisAvance = irisAvance;
 
   function paintIris(){
     if(irisQueued) return;
@@ -6345,29 +6496,60 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       irisQueued = false;
       /* fuera de pantalla no hay nada que pintar, y medirla cuesta igual */
       if(iris.classList.contains('fuera-de-vista') || (window.__lejos && window.__lejos(iris))) return;
-      const r = window.__sectGeo ? window.__sectGeo(iris) : iris.getBoundingClientRect();
+      const a = irisAvance();
+      if(!a) return;
+      const p = a.p, k = a.k;
       const vh = window.innerHeight;
-      const span = r.height - vh;
-      if(span <= 0) return;
-
-      let p = (-r.top) / span;
-      p = p < 0 ? 0 : p > 1 ? 1 : p;
 
       // el aviso acompana toda la escena y se retira al entrar en la siguiente
       if(irisCue) irisCue.classList.toggle('off', p > .93);
 
-      let k = (p - .18) / .64;
-      k = k < 0 ? 0 : k > 1 ? 1 : k;
-      k = k*k*(3 - 2*k);
-
       const maxR = Math.hypot(window.innerWidth, vh) * .58;
       const rad = k * maxR;
-      irisPanel.style.clipPath = 'circle(' + rad.toFixed(1) + 'px at 50% 50%)';
+      if(redonda.matches){
+        /* la ventana redonda: su lado es el diametro y su esquina queda a
+           medio diametro del centro del bloque; el panel hace el camino
+           contrario y vuelve exactamente a su sitio */
+        const d = Math.round(rad*20) / 10;
+        if(d + 'x' + panelW + 'x' + panelH !== recorteAnt){
+          recorteAnt = d + 'x' + panelW + 'x' + panelH;
+          const x = panelW/2 - d/2, y = panelH/2 - d/2;
+          irisVentana.style.width = d + 'px';
+          irisVentana.style.height = d + 'px';
+          irisVentana.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+          irisPanel.style.transform = 'translate(' + (-x) + 'px,' + (-y) + 'px)';
+        }
+      }else{
+        const recorte = 'circle(' + rad.toFixed(1) + 'px at 50% 50%)';
+        if(recorte !== recorteAnt){ recorteAnt = recorte; irisPanel.style.clipPath = recorte; }
+      }
 
-      const d = (rad*2).toFixed(1);
-      irisEdge.style.width = d + 'px';
-      irisEdge.style.height = d + 'px';
-      irisEdge.style.opacity = (k > .004 && k < .985) ? '1' : '0';
+      /* con el circulo a cero el panel claro no se ve, y con el circulo
+         abierto del todo (su radio pasa de la media diagonal) tapa por
+         completo lo que tiene debajo, porque es opaco. En los dos casos se
+         deja de componer lo que nadie puede ver: lo resuelve el CSS */
+      const estado = k <= 0 ? 'sin-panel' : k >= 1 ? 'panel-lleno' : '';
+      if(estado !== irisEstado){
+        irisEstado = estado;
+        irisPin.classList.toggle('sin-panel', estado === 'sin-panel');
+        irisPin.classList.toggle('panel-lleno', estado === 'panel-lleno');
+      }
+
+      /* el aro solo se redimensiona mientras se ve: cada cambio de tamano
+         obliga a rasterizarlo entero de nuevo. La caja se ciñe al anillo
+         (el degradado va a su tamano de siempre con --d, centrado), asi
+         que hay bastante menos superficie que rasterizar en cada fotograma
+         y se ve exactamente igual: el brillo cae a cero a 46px del filo y
+         el resto de la caja original era transparente */
+      const verAro = k > .004 && k < .985;
+      if(verAro){
+        const d = (rad*2).toFixed(1);
+        const lado = Math.min(rad*2, rad*Math.SQRT2 + 96).toFixed(1);
+        irisEdge.style.width = lado + 'px';
+        irisEdge.style.height = lado + 'px';
+        irisEdge.style.setProperty('--d', d + 'px');
+      }
+      if(verAro !== aroVisto){ aroVisto = verAro; irisEdge.style.opacity = verAro ? '1' : '0'; }
     });
   }
   window.addEventListener('scroll', paintIris, {passive:true});
@@ -6375,10 +6557,17 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   paintIris();
 
   /* ========== rejilla del hero ========== */
+  const stageEl = document.getElementById('stage');
   const canvas = document.getElementById('grid');
   const ctx = canvas.getContext('2d');
   const CELL = 54;
   let cols=0, rows=0, heat=null, tone=null, W=0, H=0, dpr=1;
+  /* El lienzo ya no se borra y se rehace entero en cada fotograma: se
+     guarda lo que hay pintado en cada casilla y solo se tocan las que
+     cambian, con su trozo de rejilla encima. Para que una casilla no
+     comparta pixeles con su vecina, sus bordes van redondeados a pixel
+     entero del lienzo (xs, ys), como en el barrido por celdas */
+  let pintado=null, tinte=null, xs=null, ys=null, PW=0, PH=0, entero=true, remedir=false;
 
   const lineLayer = document.createElement('canvas');
   const lctx = lineLayer.getContext('2d');
@@ -6395,23 +6584,41 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   }
 
   function resize(){
-    const stage = document.getElementById('stage');
-    const w = stage.clientWidth, h = stage.clientHeight;
+    remedir = false;
+    const w = stageEl.clientWidth, h = stageEl.clientHeight;
     // si el elemento no esta en pantalla mide 0: reconstruir aqui dejaria
     // el lienzo de lineas a 0x0 y drawImage fallaria en cada fotograma
     if(w < 1 || h < 1) return;
+    /* el aviso de resize llega tambien cada vez que la pagina recupera el
+       lienzo de otra seccion: si aqui no ha cambiado nada y el lienzo sigue
+       entero, no hay nada que rehacer */
+    if(heat && w === W && h === H && window.SECT_DPR() === dpr &&
+       canvas.width === PW && canvas.height === PH) return;
     W = w; H = h;
     dpr = window.SECT_DPR();
     canvas.width = W*dpr; canvas.height = H*dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
+    PW = canvas.width; PH = canvas.height;
+    ctx.setTransform(1,0,0,1,0,0);
     cols = Math.ceil(W/CELL); rows = Math.ceil(H/CELL);
     heat = new Float32Array(cols*rows);
     tone = new Float32Array(cols*rows);
-    for(let i=0;i<tone.length;i++) tone[i] = rnd(i % cols, (i / cols) | 0);
+    pintado = new Uint16Array(cols*rows);
+    tinte = new Array(cols*rows);
+    for(let i=0;i<tone.length;i++){
+      const g = tone[i] = rnd(i % cols, (i / cols) | 0);
+      // el color de cada casilla es fijo: solo cambia su opacidad
+      tinte[i] = 'rgba(' + ((12 + 62*g)|0) + ',' + ((74 + 96*g)|0) + ',' + ((198 + 57*g)|0) + ',';
+    }
+    xs = new Int32Array(cols+1); ys = new Int32Array(rows+1);
+    for(let c=0;c<=cols;c++) xs[c] = Math.min(PW, Math.round(c*CELL*dpr));
+    for(let r=0;r<=rows;r++) ys[r] = Math.min(PH, Math.round(r*CELL*dpr));
     lineLayer.width = W*dpr; lineLayer.height = H*dpr;
     paintLines();
     seedWalkers();
+    entero = true;     // lienzo recien creado: el proximo dibujo lo rehace todo
   }
+  // si el navegador pierde el contexto y lo devuelve en blanco, se repinta todo
+  canvas.addEventListener('contextrestored', () => { entero = true; if(reduce) draw(); });
   const idx = (c,r) => r*cols + c;
 
   /* ruido estable por celda: al recalcular por un cambio de alto (las
@@ -6539,6 +6746,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     return claro;
   }
 
+  let antGX = NaN, antGY = NaN, antLect = '';
   window.addEventListener('pointermove', e => {
     if(reduce) return;
 
@@ -6548,20 +6756,30 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     const cc = Math.floor((e.clientX + window.scrollX) / CELL);
     const cr = Math.floor((e.clientY + window.scrollY) / CELL);
 
-    readout.style.transform = 'translate3d(' + gx + 'px,' + gy + 'px,0)';
-    readout.textContent = String(Math.abs(cc)%100).padStart(2,'0') + ' · ' + String(Math.abs(cr)%100).padStart(2,'0');
-    rx.style.transform = 'translate3d(0,' + gy + 'px,0)';
-    ry.style.transform = 'translate3d(' + gx + 'px,0,0)';
+    /* primero todas las lecturas y despues las escrituras: mirar el fondo
+       o la caja del lienzo justo despues de escribir estilos obligaba a
+       rehacer el diseno de la pagina en cada movimiento del raton */
+    const cl2 = fondoClaro(e.clientX, e.clientY);
+    const rect = (heat && heroVisible) ? canvas.getBoundingClientRect() : null;
+
+    // la reticula salta de casilla en casilla: entre medias no hay nada
+    // que escribir
+    if(gx !== antGX || gy !== antGY){
+      antGX = gx; antGY = gy;
+      readout.style.transform = 'translate3d(' + gx + 'px,' + gy + 'px,0)';
+      rx.style.transform = 'translate3d(0,' + gy + 'px,0)';
+      ry.style.transform = 'translate3d(' + gx + 'px,0,0)';
+    }
+    const lect = String(Math.abs(cc)%100).padStart(2,'0') + ' · ' + String(Math.abs(cr)%100).padStart(2,'0');
+    if(lect !== antLect){ antLect = lect; readout.textContent = lect; }
     reticle.classList.add('on');
     readout.classList.add('on');
 
-    const cl2 = fondoClaro(e.clientX, e.clientY);
     reticle.classList.toggle('on-light', cl2);
     readout.classList.toggle('on-light', cl2);
 
     // las celdas de la cubierta solo se encienden sobre la cubierta
-    if(heat){
-      const rect = canvas.getBoundingClientRect();
+    if(rect){
       const c = ((e.clientX - rect.left)/CELL)|0;
       const r = ((e.clientY - rect.top)/CELL)|0;
       if(c>=0 && r>=0 && c<cols && r<rows &&
@@ -6578,29 +6796,49 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     // si el lienzo medía 0 al iniciarse, resize() salio antes de reservar el
     // bufer: sin esta guarda se lee heat[0] sobre null
     if(!heat) return;
-    ctx.clearRect(0,0,W,H);
+    const lineas = lineLayer.width > 1;
+    if(entero){
+      // lienzo nuevo (o recuperado tras liberarse): rejilla entera una vez
+      entero = false;
+      ctx.clearRect(0,0,PW,PH);
+      pintado.fill(0);
+      if(lineas) ctx.drawImage(lineLayer, 0, 0);
+    }
     for(let r=0;r<rows;r++){
+      const y = ys[r], h = ys[r+1] - y;
       for(let c=0;c<cols;c++){
         const i = idx(c,r);
         const v = heat[i];
-        if(v > .015){
-          const g = tone[i];
-          const R = (12 + 62*g)|0, G = (74 + 96*g)|0, B = (198 + 57*g)|0;
-          ctx.fillStyle = 'rgba(' + R + ',' + G + ',' + B + ',' + (Math.min(v,1)*.82).toFixed(3) + ')';
-          ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
+        // la opacidad en milesimas, la misma precision que antes daba toFixed(3)
+        const a = v > .015 ? Math.round((v < 1 ? v : 1)*820) : 0;
+        if(a === pintado[i]) continue;
+        pintado[i] = a;
+        const x = xs[c], w = xs[c+1] - x;
+        ctx.clearRect(x, y, w, h);
+        if(a){
+          ctx.fillStyle = tinte[i] + (a/1000) + ')';
+          ctx.fillRect(x, y, w, h);
         }
+        // la rejilla va por encima de la casilla, como cuando se pintaba entera
+        if(lineas) ctx.drawImage(lineLayer, x, y, w, h, x, y, w, h);
       }
     }
-    if(lineLayer.width > 1) ctx.drawImage(lineLayer, 0, 0, W, H);
   }
 
   /* la intro llama a esto al abrirse: la rejilla de la cubierta se
      enciende en un frente circular desde el centro, de modo que la energia
      de la intro no se corta, pasa a la pagina */
   let ignicion = -1;
+  /* mientras la intro tapa la portada no hay nada que ver: su azul es opaco
+     hasta que empieza a deshacerse, y en ese instante llama a SECT_IGNITE.
+     La rejilla se sigue simulando debajo, para llegar a ese momento igual
+     que antes, pero no se pinta. Si la intro no llegara a abrirse, la
+     misma espera que usa el titular la da por terminada */
+  let bajoIntro = document.documentElement.classList.contains('intro-lock');
+  const t0Intro = performance.now();
   /* la cascada diagonal de la cubierta corria bajo la intro y se agotaba
      antes de verse: se reinicia justo cuando el azul empieza a deshacerse */
-  window.SECT_IGNITE = () => { ignicion = performance.now(); startT = 0; sweepStart = -1; };
+  window.SECT_IGNITE = () => { ignicion = performance.now(); startT = 0; sweepStart = -1; bajoIntro = false; };
 
   let last = 0, tabVisible = true, heroVisible = true;
   document.addEventListener('visibilitychange', () => { tabVisible = !document.hidden; });
@@ -6608,14 +6846,35 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   /* sin esta guarda, la rejilla de la cubierta seguia repintandose a
      pantalla completa durante todo el documento, incluso a diez
      secciones de distancia */
-  new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; },
-    {rootMargin:'10% 0px'}).observe(document.getElementById('stage'));
+  /* y la capa de lineas, que es otro lienzo del tamano de la pantalla, se
+     suelta mientras la cubierta no se ve: se vuelve a trazar al regresar */
+  new IntersectionObserver(es => {
+    heroVisible = es[0].isIntersecting;
+    if(!heroVisible && !reduce){ lineLayer.width = 1; lineLayer.height = 1; }
+    // sin movimiento no hay bucle que lo recoja: el lienzo pendiente se
+    // rehace y se pinta aqui, al volver
+    if(heroVisible && remedir && reduce){ resize(); draw(); }
+  }, {rootMargin:'10% 0px'}).observe(stageEl);
+
+  /* el observador deja un margen por delante: dentro de el se simula,
+     pero solo se pinta si la cubierta asoma de verdad en la ventana */
+  function aLaVista(){
+    if(!window.__sectGeo) return true;
+    const g = window.__sectGeo(stageEl);
+    return g.bottom > 0 && g.top < window.innerHeight;
+  }
 
   function frame(t){
     requestAnimationFrame(frame);
     if(!tabVisible || !heroVisible){ last = t; return; }
-    // vuelve a medir si aun no hay lienzo: cubre el caso de arrancar oculto
-    if(!lineLayer.width){ resize(); if(!lineLayer.width){ last = t; return; } }
+    // vuelve a medir si aun no hay lienzo (cubre el caso de arrancar oculto)
+    // o si un cambio de tamano llego mientras la cubierta quedaba lejos
+    if(!heat || remedir){ resize(); if(!heat){ last = t; return; } }
+    if(lineLayer.width !== PW || lineLayer.height !== PH){
+      lineLayer.width = PW; lineLayer.height = PH;
+      paintLines();
+      entero = true;
+    }
     const dt = Math.min(t-last, 50); last = t;
     if(!startT){ startT = t; sweepStart = t + INTRO_MS + 4500; }
     const intoIntro = (t - startT) < INTRO_MS;
@@ -6626,8 +6885,10 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       const e = (performance.now() - ignicion) / 620;
       if(e >= 1.2) ignicion = -1;
       else {
-        const rect = canvas.getBoundingClientRect();
-        const ccx = (W/2)/CELL, ccy = (rect.height/2)/CELL;
+        // el alto de la cubierta sale de la geometria en cache: pedirle la
+        // caja al lienzo aqui obligaba a rehacer el diseno en cada fotograma
+        const alto = window.__sectGeo ? window.__sectGeo(stageEl).height : canvas.getBoundingClientRect().height;
+        const ccx = (W/2)/CELL, ccy = (alto/2)/CELL;
         const frente = e * (Math.hypot(cols, rows) * .62);
         for(let r=0;r<rows;r++){
           for(let c=0;c<cols;c++){
@@ -6648,11 +6909,24 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     sweep(t);
     const decay = Math.pow(intoIntro ? .915 : .922, dt/16.7);
     for(let i=0;i<heat.length;i++) heat[i] *= decay;
+
+    if(bajoIntro && (t - t0Intro > 7500 || !document.documentElement.classList.contains('intro-lock'))) bajoIntro = false;
+    if(bajoIntro || !aLaVista()) return;
     draw();
   }
 
   let rt;
-  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 120); });
+  /* con la cubierta lejos no se reserva ningun lienzo: se apunta y se
+     rehace al volver. Y sin movimiento la rejilla se pinta una sola vez:
+     al rehacer el lienzo (o al recuperarlo tras liberarse) hay que volver
+     a pintarla, o se quedaba en blanco */
+  window.addEventListener('resize', () => {
+    clearTimeout(rt);
+    rt = setTimeout(() => {
+      if(stageEl.classList.contains('fuera-de-vista')){ remedir = true; return; }
+      resize(); if(reduce) draw();
+    }, 120);
+  });
   resize();
   if(reduce){ draw(); } else { requestAnimationFrame(frame); }
 })();
@@ -6668,23 +6942,48 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const cl = document.getElementById('cells-light');
   if(!pin || !cd || !cl) return;
 
+  const iris = document.getElementById('iris');
   const dx = cd.getContext('2d'), lx = cl.getContext('2d');
   const CELL = 54;
-  let cols=0, rows=0, heat=null, W=0, H=0;
+  let cols=0, rows=0, heat=null, W=0, H=0, PW=0, PH=0, xs=null, ys=null;
 
+  /* como en la cubierta, los lienzos ya no se borran y se rehacen enteros
+     en cada fotograma: cada uno guarda lo que tiene pintado en cada casilla
+     y solo toca las que cambian, con los bordes a pixel entero. Llevan
+     cuentas separadas porque cada uno deja de pintarse mientras el panel
+     lo tapa (o lo recorta entero), y al volver se pone al dia el solo */
+  const lienzos = [
+    {g:dx, alfa:850, color:'rgba(21,105,255,', pintado:null, entero:true, tonos:[]},
+    {g:lx, alfa:300, color:'rgba(13,63,216,',  pintado:null, entero:true, tonos:[]}
+  ];
+
+  let remedir = false;
   function resize(){
+    remedir = false;
     const w = pin.clientWidth, h = pin.clientHeight;
     if(w < 1 || h < 1) return;
-    W = w; H = h;
     const dpr = window.SECT_DPR();
+    /* el aviso de resize llega tambien cada vez que la pagina recupera el
+       lienzo de otra seccion: si aqui no ha cambiado nada y los dos lienzos
+       siguen enteros, no hay nada que rehacer */
+    if(heat && w === W && h === H && cd.width === Math.trunc(W*dpr) && cd.height === Math.trunc(H*dpr) &&
+       cl.width === cd.width && cl.height === cd.height) return;
+    W = w; H = h;
     [cd, cl].forEach((c, i) => {
       c.width = W*dpr; c.height = H*dpr;
-      (i ? lx : dx).setTransform(dpr,0,0,dpr,0,0);
+      (i ? lx : dx).setTransform(1,0,0,1,0,0);
     });
+    PW = cd.width; PH = cd.height;
     cols = Math.ceil(W/CELL); rows = Math.ceil(H/CELL);
+    xs = new Int32Array(cols+1); ys = new Int32Array(rows+1);
+    for(let c=0;c<=cols;c++) xs[c] = Math.min(PW, Math.round(c*CELL*dpr));
+    for(let r=0;r<=rows;r++) ys[r] = Math.min(PH, Math.round(r*CELL*dpr));
     heat = new Float32Array(cols*rows);
+    for(const L of lienzos){ L.pintado = new Uint16Array(cols*rows); L.entero = true; }
     seed();
   }
+  // si el navegador pierde el contexto y lo devuelve en blanco, se repinta todo
+  [cd, cl].forEach((c, i) => c.addEventListener('contextrestored', () => { lienzos[i].entero = true; }));
   const idx = (c,r) => r*cols + c;
 
   let walkers = [];
@@ -6723,39 +7022,80 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     }
   }
 
-  function draw(){
-    if(!heat) return;
-    dx.clearRect(0,0,W,H); lx.clearRect(0,0,W,H);
+  function pintar(L){
+    const g = L.g, pintado = L.pintado, tonos = L.tonos, alfa = L.alfa;
+    if(L.entero){ L.entero = false; g.clearRect(0,0,PW,PH); pintado.fill(0); }
     for(let r=0;r<rows;r++){
+      const y = ys[r], h = ys[r+1] - y;
       for(let c=0;c<cols;c++){
-        const v = heat[idx(c,r)];
-        if(v > .015){
-          const x = c*CELL, y = r*CELL;
-          dx.fillStyle = 'rgba(21,105,255,' + (Math.min(v,1)*.85).toFixed(3) + ')';
-          lx.fillStyle = 'rgba(13,63,216,'  + (Math.min(v,1)*.30).toFixed(3) + ')';
-          dx.fillRect(x,y,CELL,CELL);
-          lx.fillRect(x,y,CELL,CELL);
+        const i = idx(c,r);
+        const v = heat[i];
+        // la opacidad en milesimas, la misma precision que antes daba toFixed(3)
+        const a = v > .015 ? Math.round((v < 1 ? v : 1)*alfa) : 0;
+        if(a === pintado[i]) continue;
+        pintado[i] = a;
+        const x = xs[c], w = xs[c+1] - x;
+        g.clearRect(x, y, w, h);
+        if(a){
+          g.fillStyle = tonos[a] || (tonos[a] = L.color + (a/1000) + ')');
+          g.fillRect(x, y, w, h);
         }
       }
     }
   }
 
+  function draw(oscuro, claro){
+    if(!heat) return;
+    if(oscuro !== false) pintar(lienzos[0]);
+    if(claro !== false) pintar(lienzos[1]);
+  }
+
   let visible = false, last = 0;
-  new IntersectionObserver(es => { visible = es[0].isIntersecting; })
-    .observe(document.getElementById('iris'));
+  new IntersectionObserver(es => {
+    visible = es[0].isIntersecting;
+    // sin movimiento no hay bucle que lo recoja: se rehace aqui, al volver
+    if(visible && remedir && reduce){ resize(); draw(); }
+  }).observe(iris);
 
   function frame(t){
     requestAnimationFrame(frame);
     if(!visible || document.hidden){ last = t; return; }
+    // un cambio de tamano que llego con la seccion lejos se aplica ahora
+    if(remedir) resize();
+    if(!heat){ last = t; return; }
     const dt = Math.min(t-last, 50); last = t;
     step(t); pops(t);
     const decay = Math.pow(.93, dt/16.7);
     for(let i=0;i<heat.length;i++) heat[i] *= decay;
-    draw();
+
+    /* el observador da por visible la seccion que solo roza el borde de la
+       ventana: al cargar arriba del todo, en escritorio, se pintaban los dos
+       lienzos en cada fotograma sin que asomara ni un pixel. Se simula
+       igual, pero solo se pinta lo que de verdad esta en pantalla */
+    if(window.__sectGeo){
+      const g = window.__sectGeo(iris);
+      if(g.bottom <= 0 || g.top >= window.innerHeight) return;
+    }
+    /* y de los dos lienzos, solo el que se ve: con el circulo a cero el
+       claro esta recortado entero, y abierto del todo el panel tapa al
+       oscuro. Se deja de pintar uno solo si lo dicen a la vez el scroll de
+       este fotograma y la clase que ya aplico el recorte: asi nunca se
+       queda viejo un lienzo que ya asoma */
+    const av = window.__irisAvance ? window.__irisAvance() : null;
+    const k = av ? av.k : .5;
+    draw(k < 1 || !pin.classList.contains('panel-lleno'),
+         k > 0 || !pin.classList.contains('sin-panel'));
   }
 
   let rt;
-  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 120); });
+  // con la seccion lejos no se reserva nada: se apunta y se rehace al volver
+  window.addEventListener('resize', () => {
+    clearTimeout(rt);
+    rt = setTimeout(() => {
+      if(iris.classList.contains('fuera-de-vista')){ remedir = true; return; }
+      resize();
+    }, 120);
+  });
   resize();
   if(reduce){ draw(); } else { requestAnimationFrame(frame); }
 })();
@@ -6785,16 +7125,28 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const fill    = document.getElementById('wipe-fill');
   const pct     = document.getElementById('wipe-pct');
   const state   = document.getElementById('wipe-state');
-  let lastN = -1, stateDone = null;
+  let lastN = -1, stateDone = null, pctAnt = -1;
   const CELL = 54;
   const RAMP = .10;                 // cuanto tarda una celda en llenarse
   let cols=0, rows=0, thr=null, W=0, H=0, PW=0, PH=0, xs=null, ys=null, lastP=-1;
+  /* lo que hay pintado en cada celda, en milesimas de llenado. Las celdas
+     ya negras y las aun vacias no cambian de un fotograma a otro: solo se
+     repinta la franja del frente, no el lienzo entero */
+  let pintado=null, entero=true;
+  const negros = [], azules = [];
 
+  let pendiente = false;
   function build(){
+    pendiente = false;
     const w = pin.clientWidth, h = pin.clientHeight;
     if(w < 1 || h < 1) return;
-    W = w; H = h;
     const dpr = window.SECT_DPR();
+    /* el aviso de resize llega tambien cada vez que la pagina recupera el
+       lienzo de otra seccion: si aqui no ha cambiado nada y el lienzo sigue
+       entero, basta con ponerlo al dia */
+    if(thr && w === W && h === H && cv.width === PW && cv.height === PH &&
+       PW === Math.round(W*dpr) && PH === Math.round(H*dpr)){ paint(); return; }
+    W = w; H = h;
     PW = cv.width = Math.round(W*dpr); PH = cv.height = Math.round(H*dpr);
     /* Se dibuja en pixeles del lienzo, con los bordes de cada celda
        redondeados a pixel entero y compartidos con la vecina. Con escalas
@@ -6809,6 +7161,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     for(let c=0;c<=cols;c++) xs[c] = Math.min(PW, Math.round(c*CELL*dpr));
     for(let r=0;r<=rows;r++) ys[r] = Math.min(PH, Math.round(r*CELL*dpr));
     lastP = -1;
+    pintado = new Uint16Array(cols*rows); entero = true;
     thr = new Float32Array(cols*rows);
     const span = (cols-1) + (rows-1) || 1;
     for(let r=0;r<rows;r++){
@@ -6843,29 +7196,36 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(p === lastP) return;
     lastP = p;
 
-    ctx.clearRect(0,0,PW,PH);
-    if(p >= 1){
-      /* barrido completo: un solo rectangulo negro */
-      ctx.fillStyle = '#000';
-      ctx.fillRect(0,0,PW,PH);
-    }else if(p > 0){
+    if(entero){ entero = false; ctx.clearRect(0,0,PW,PH); pintado.fill(0); }
+    if(p >= 1 || p <= 0){
+      /* barrido completo (todo negro) o sin empezar (todo vacio): un solo
+         rectangulo, como antes, y las cuentas de cada celda al dia. Solo
+         ocurre al llegar: despues p no cambia y se sale arriba */
+      ctx.clearRect(0,0,PW,PH);
+      if(p >= 1){ ctx.fillStyle = '#000'; ctx.fillRect(0,0,PW,PH); }
+      pintado.fill(p >= 1 ? 1000 : 0);
+    }else{
       for(let r=0;r<rows;r++){
         const y = ys[r], h = ys[r+1] - y;
         for(let c=0;c<cols;c++){
           const i = r*cols + c;
           let a = (p - thr[i]) / RAMP;
-          if(a <= 0) continue;
-          if(a > 1) a = 1;
+          // llenado en milesimas, la misma precision que antes daba toFixed(3)
+          const q = a <= 0 ? 0 : a >= 1 ? 1000 : Math.round(a*1000);
+          if(q === pintado[i]) continue;
+          pintado[i] = q;
 
           const x = xs[c], w = xs[c+1] - x;
-          ctx.fillStyle = a === 1 ? '#000' : 'rgba(0,0,0,' + a.toFixed(3) + ')';
+          ctx.clearRect(x, y, w, h);
+          if(!q) continue;
+          a = q / 1000;
+          ctx.fillStyle = q === 1000 ? '#000' : (negros[q] || (negros[q] = 'rgba(0,0,0,' + a + ')'));
           ctx.fillRect(x, y, w, h);
 
           // filo: solo las celdas a medio llenar
-          if(a < 1){
+          if(q < 1000){
             // mismo azul y misma intensidad que las celdas del iris
-            const glow = Math.sin(a * Math.PI) * .92;
-            ctx.fillStyle = 'rgba(21,105,255,' + glow.toFixed(3) + ')';
+            ctx.fillStyle = azules[q] || (azules[q] = 'rgba(21,105,255,' + (Math.sin(a * Math.PI) * .92).toFixed(3) + ')');
             ctx.fillRect(x, y, w, h);
           }
         }
@@ -6890,7 +7250,10 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     // HUD: lectura de progreso del escaneo
     if(fill){
       fill.style.transform = 'scaleX(' + p.toFixed(4) + ')';
-      pct.textContent = Math.round(p * 100);
+      // la cifra cambia cada varios fotogramas: reescribirla igual obligaba
+      // a recomponer el renglon en cada uno
+      const pc = Math.round(p * 100);
+      if(pc !== pctAnt){ pctAnt = pc; pct.textContent = pc; }
       const done = p > .995;
       if(done !== stateDone){
         stateDone = done;
@@ -6921,15 +7284,30 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
          la pagina. La clase la pone el observador de secciones, con margen
          por delante para que la escena llegue al dia antes de verse. */
       if(sec.classList.contains('fuera-de-vista') || (window.__lejos && window.__lejos(sec))) return;
-      paint();
+      if(pendiente) build(); else paint();
     });
+  }
+
+  /* la escena queda lejos de la portada: reservar su lienzo al cargar era
+     trabajo en plena carga para algo que la pagina libera acto seguido. Se
+     monta al acercarse, igual que tras un resize que llegue estando lejos */
+  function lejos(){
+    if(sec.classList.contains('fuera-de-vista')) return true;
+    const r = window.__sectGeo ? window.__sectGeo(sec) : sec.getBoundingClientRect();
+    return r.bottom < -window.innerHeight || r.top > window.innerHeight * 2;
   }
 
   let rt;
   window.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(build, 120); });
-  build();
-  if(reduce){ ctx.fillStyle = '#000'; ctx.fillRect(0,0,PW,PH); }
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if(lejos()) pendiente = true; else build(); }, 120); });
+  if(!reduce && lejos()) pendiente = true; else build();
+  // al acercarse (tambien si se llega de un salto, sin mas scroll) se monta
+  new IntersectionObserver(es => { if(es[0].isIntersecting && pendiente) build(); },
+    {rootMargin:'50% 0px'}).observe(sec);
+  // el lienzo queda todo negro: sus cuentas tambien, para que el siguiente
+  // repintado parcial parta de lo que de verdad hay dibujado
+  if(reduce){ ctx.fillStyle = '#000'; ctx.fillRect(0,0,PW,PH); if(pintado) pintado.fill(1000); }
+  cv.addEventListener('contextrestored', () => { entero = true; lastP = -1; paint(); });
 })();
 
 /* ===== eventos: escena anclada, transicion por shader =====
@@ -7512,6 +7890,12 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const BEFORE = '50,000,000', AFTER = '25,000,000';
   const SWAP = .34;                 // donde ocurre la reduccion
   let W=0, H=0, base=0, focus={x:.5,y:.5}, lastTxt='';
+  /* el foco y el ancho de cada cifra no cambian mientras no cambie la
+     fuente: se calculan una vez por texto. Antes el foco se recalculaba
+     (rasterizar y recorrer 600x200 pixeles) cada vez que el scroll cruzaba
+     el punto de la reduccion, en mitad del gesto */
+  const focos = new Map(), anchos = new Map();
+  let pendiente = false, lienzoLleno = false, lAnt = -1, fadeAnt = '';
 
   // localiza un punto que sea tinta: el de mayor densidad cerca del centro
   function findFocus(txt, size){
@@ -7545,11 +7929,19 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   function resize(){
     const w = pin.clientWidth, h = pin.clientHeight;
     if(w < 1 || h < 1) return;
-    W = w; H = h;
+    pendiente = false;
     const dpr = window.SECT_DPR();
-    cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    base = Math.min(W*.10, H*.16);
+    const cw = Math.round(w*dpr), ch = Math.round(h*dpr);
+    /* el aviso de resize llega tambien cuando la pagina recupera el lienzo
+       de otra seccion: si aqui no ha cambiado nada y el lienzo sigue
+       entero, no se reserva otro, basta con repintar */
+    if(w !== W || h !== H || cv.width !== cw || cv.height !== ch){
+      W = w; H = h;
+      cv.width = cw; cv.height = ch;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      base = Math.min(W*.10, H*.16);
+      anchos.clear(); lienzoLleno = false; lAnt = -1;
+    }
     paint();
   }
 
@@ -7575,59 +7967,75 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
     if(txt !== lastTxt){
       lastTxt = txt;
-      focus = findFocus(txt, base);
+      if(!focos.has(txt)) focos.set(txt, findFocus(txt, base));
+      focus = focos.get(txt);
       if(tag) tag.textContent = txt + (p < SWAP ? ' · pre-reduction' : ' · fixed');
+      lienzoLleno = false;
     }
-
-    ctx.clearRect(0,0,W,H);   // el negro lo pone el fondo; asi se ven los aros
-
-    // ampliacion exponencial: lenta al principio, imparable al final
-    const s = Math.pow(2, p * 9.4);
-
-    ctx.font = '200 ' + base + 'px "IBM Plex Sans", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    const w0 = ctx.measureText(txt).width;
-    const h0 = base;
-
-    // el foco, en coordenadas del texto dibujado a tamano base
-    const fx = W/2 + (focus.x - .5) * w0;
-    const fy = H/2 + (focus.y - .5) * h0 * 1.34;
-
-    ctx.save();
-    ctx.translate(W/2, H/2);
-    ctx.scale(s, s);
-    ctx.translate(-fx, -fy);
-
-    // destello azul en el instante de la reduccion
-    const flash = Math.max(0, 1 - Math.abs(p - SWAP) * 26);
-    ctx.fillStyle = flash > .01
-      ? 'rgb(' + (255 - 150*flash).toFixed(0) + ',' + (255 - 90*flash).toFixed(0) + ',255)'
-      : '#fff';
-    ctx.fillText(txt, W/2, H/2);
-    ctx.restore();
 
     // el blanco pleno llega en el 72%: el resto del recorrido lo ocupa
     // el aterrizaje, en lugar de quedarse en vacio
     const w = Math.max(0, (p - .60) / .12);
-    if(w > 0){
-      ctx.fillStyle = 'rgba(242,242,239,' + Math.min(1,w).toFixed(3) + ')';
-      ctx.fillRect(0,0,W,H);
+
+    /* desde ahi el lienzo es un solo plano opaco encima de la cifra: una
+       vez pintado asi, los fotogramas siguientes darian el mismo dibujo y
+       no se repinta hasta que el scroll vuelva por debajo */
+    if(w < 1 || !lienzoLleno){
+      ctx.clearRect(0,0,W,H);   // el negro lo pone el fondo; asi se ven los aros
+
+      // ampliacion exponencial: lenta al principio, imparable al final
+      const s = Math.pow(2, p * 9.4);
+
+      ctx.font = '200 ' + base + 'px "IBM Plex Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      if(!anchos.has(txt)) anchos.set(txt, ctx.measureText(txt).width);
+      const w0 = anchos.get(txt);
+      const h0 = base;
+
+      // el foco, en coordenadas del texto dibujado a tamano base
+      const fx = W/2 + (focus.x - .5) * w0;
+      const fy = H/2 + (focus.y - .5) * h0 * 1.34;
+
+      ctx.save();
+      ctx.translate(W/2, H/2);
+      ctx.scale(s, s);
+      ctx.translate(-fx, -fy);
+
+      // destello azul en el instante de la reduccion
+      const flash = Math.max(0, 1 - Math.abs(p - SWAP) * 26);
+      ctx.fillStyle = flash > .01
+        ? 'rgb(' + (255 - 150*flash).toFixed(0) + ',' + (255 - 90*flash).toFixed(0) + ',255)'
+        : '#fff';
+      ctx.fillText(txt, W/2, H/2);
+      ctx.restore();
+
+      if(w > 0){
+        ctx.fillStyle = 'rgba(242,242,239,' + Math.min(1,w).toFixed(3) + ')';
+        ctx.fillRect(0,0,W,H);
+      }
+      lienzoLleno = w >= 1;
     }
 
     // la rotulacion se retira cuando el numero deja de leerse
     const fade = 1 - Math.max(0, Math.min(1, (p - .30) / .18));
-    if(cap)  cap.style.opacity = fade.toFixed(2);
-    if(top) top.style.opacity = fade.toFixed(2);
-    if(note) note.style.opacity = fade.toFixed(2);
+    const fs = fade.toFixed(2);
+    if(fs !== fadeAnt){
+      fadeAnt = fs;
+      if(cap)  cap.style.opacity = fs;
+      if(top) top.style.opacity = fs;
+      if(note) note.style.opacity = fs;
+    }
 
     /* el dato aterriza por partes: primero el bloque se enfoca, luego los
-       digitos encajan uno a uno, despues la tacha, la regla y el filete */
-    if(land){
-      const cl = t => t < 0 ? 0 : t > 1 ? 1 : t;
+       digitos encajan uno a uno, despues la tacha, la regla y el filete.
+       Antes del 66% y despues del 92% del recorrido todo esta quieto (sin
+       empezar o ya asentado): si el punto no cambia, no se escribe nada */
+    const cl = t => t < 0 ? 0 : t > 1 ? 1 : t;
+    const l = cl((p - .66) / .26);
+    if(land && l !== lAnt){
+      lAnt = l;
       const sw = t => { t = cl(t); return t*t*(3-2*t); };
-
-      let l = cl((p - .66) / .26);
 
       const ent = sw(cl(l / .22));                   // el bloque entra rapido
       land.style.opacity = ent.toFixed(3);
@@ -7712,15 +8120,35 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
          la pagina. La clase la pone el observador de secciones, con margen
          por delante para que la escena llegue al dia antes de verse. */
       if(sec.classList.contains('fuera-de-vista') || (window.__lejos && window.__lejos(sec))) return;
-      paint();
+      if(pendiente) resize(); else paint();
     });
+  }
+
+  /* La escena queda muy por debajo de la portada. Reservar y pintar aqui
+     su lienzo al cargar (y otra vez al llegar las fuentes) era trabajo en
+     plena carga para un lienzo que la pagina libera acto seguido. Se
+     prepara cuando la seccion se acerca: el mismo aviso de scroll que la
+     pinta la monta antes si hace falta. Igual con los avisos de resize que
+     llegan mientras esta lejos */
+  function lejos(){
+    if(sec.classList.contains('fuera-de-vista')) return true;
+    const r = window.__sectGeo ? window.__sectGeo(sec) : sec.getBoundingClientRect();
+    return r.bottom < -window.innerHeight || r.top > window.innerHeight * 2;
   }
 
   let rt;
   window.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 140); });
-  resize();
-  if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => { lastTxt=''; resize(); });
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if(lejos()) pendiente = true; else resize(); }, 140); });
+  if(lejos()) pendiente = true; else resize();
+  // al acercarse (tambien si se llega de un salto, sin mas scroll) se monta
+  new IntersectionObserver(es => { if(es[0].isIntersecting && pendiente) resize(); },
+    {rootMargin:'50% 0px'}).observe(sec);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => {
+    // con la fuente buena el foco y el ancho de la cifra cambian
+    focos.clear(); anchos.clear(); lastTxt = ''; lienzoLleno = false;
+    if(W && !lejos()) resize(); else pendiente = true;
+  });
+  cv.addEventListener('contextrestored', () => { lienzoLleno = false; if(W) paint(); });
 })();
 
 /* ===== tabla comparativa con datos en vivo =====
@@ -9423,6 +9851,14 @@ window.__lejos = function(el){
         /* distancia al centro, normalizada: gobierna el turno de llegada */
         const d = Math.hypot(u - 50, v - 50) / 70.7;
         const n1 = ruido(c, r), n2 = ruido(r + 17, c + 5);
+        /* del azul de marca al azul profundo, en diagonal. El color de
+           cada casilla es fijo: se compone aqui una vez y en cada
+           fotograma solo se le añade la opacidad */
+        const hondo = Math.min(1, Math.max(0, (u + v) / 200 + .08));
+        const m = hondo * .55;
+        const color = 'rgba(' + ((21 + (13 - 21) * m) | 0) + ',' +
+                      ((105 + (79 - 105) * m) | 0) + ',' +
+                      ((255 + (216 - 255) * m) | 0) + ',';
         /* sale de un punto cualquiera del lienzo, no de un anillo:
            asi parece que las casillas ya estaban dispersas por ahi */
         piezas.push({
@@ -9435,7 +9871,8 @@ window.__lejos = function(el){
           tono: cob * (.9 + ruido(c + 31, r + 7) * .1),
           /* mezcla hacia el azul profundo en diagonal: da volumen sin
              sacar ningun color que no sea de la marca */
-          hondo: Math.min(1, Math.max(0, (u + v) / 200 + .08)),
+          hondo: hondo,
+          color: color,
           diag: (c + r) / (2*N),
           calor: 0
         });
@@ -9504,14 +9941,8 @@ window.__lejos = function(el){
       const e = (.34 + .66 * q) * cuadro;
       const c = (cuadro - e) / 2;
 
-      /* del azul de marca al azul profundo, en diagonal */
-      const m = p.hondo * .55;
-      const rr = (21 + (13 - 21) * m) | 0;
-      const gg = (105 + (79 - 105) * m) | 0;
-      const bb = (255 + (216 - 255) * m) | 0;
-
-      ctx.fillStyle = 'rgba(' + rr + ',' + gg + ',' + bb + ',' +
-                      (p.tono * q).toFixed(3) + ')';
+      /* del azul de marca al azul profundo, en diagonal (ya compuesto) */
+      ctx.fillStyle = p.color + (p.tono * q).toFixed(3) + ')';
       ctx.fillRect(x + margen + c, y + margen + c, e, e);
 
       if(p.calor > .01){
@@ -9562,6 +9993,12 @@ window.__lejos = function(el){
     clearTimeout(remedir);
     remedir = setTimeout(function(){
       const antes = montado;
+      /* el aviso de resize llega tambien cada vez que la pagina recupera el
+         lienzo de otra seccion: si la marca mide lo mismo no hay que
+         rehacerla (rehacerla a medio montar apagaba sus destellos) */
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      if(host.clientWidth === W && host.clientHeight === H &&
+         cv.width === Math.round(W * dpr) && cv.height === Math.round(H * dpr)) return;
       /* medir() reasigna cv.width, y eso borra el lienzo: si ya estaba
          montada hay que volver a dibujarla en el acto */
       if(!medir()) return;
