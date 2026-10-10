@@ -1453,10 +1453,9 @@
   .wh-open:hover{color:var(--blue)}
   .wh-open:hover i{transform:translate(3px,-3px)}
 
-  /* el film: la misma secuencia contada en 53 s, con el marco del video
-     del hash market (esquinas azules, banda y boton de sonido) */
-  .wh-film{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:clamp(26px,3.6vw,60px);align-items:center;
-    margin:clamp(36px,5vh,64px) 0 clamp(8px,1vh,12px);
+  /* el film: la misma secuencia contada en 53 s, a todo el ancho y con el
+     marco del video del hash market (esquinas azules, banda y sonido) */
+  .wh-film{margin:clamp(36px,5vh,64px) 0 clamp(8px,1vh,12px);
     opacity:0;transform:translateY(22px);transition:opacity 1s var(--ease-out) .5s,transform 1s var(--ease-out) .5s}
   #why.on .wh-film{opacity:1;transform:none}
   .wh-fig{position:relative;margin:0;padding:clamp(14px,1.4vw,20px);border:1px solid var(--wh-line);
@@ -1466,19 +1465,6 @@
   .wh-band b{color:var(--blue);font-weight:500}
   .wh-media{position:relative;aspect-ratio:16/9;background:#05070b;overflow:hidden}
   .wh-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-  .wh-ft{margin:14px 0 0;font-size:clamp(26px,2.7vw,40px);font-weight:300;letter-spacing:-.025em;line-height:1.08;
-    color:var(--wh-ink);text-wrap:balance;max-width:16ch}
-  .wh-fp{margin:16px 0 0;font-size:15px;font-weight:300;line-height:1.7;color:var(--wh-ink-2);max-width:44ch;text-wrap:pretty}
-  .wh-fmeta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:26px 0 0;border-top:1px solid var(--wh-line)}
-  .wh-fmeta div{display:grid;gap:7px;padding:13px 10px 13px 0;border-bottom:1px solid var(--wh-line);min-width:0}
-  .wh-fmeta dt{font-size:9px;color:var(--wh-ink-4)}
-  .wh-fmeta dd{margin:0;font-size:10.5px;color:var(--wh-ink)}
-  .wh-dl{display:inline-flex;align-items:center;justify-content:space-between;gap:16px;margin-top:24px;height:52px;padding:0 20px;
-    border:1px solid var(--wh-ink);color:var(--wh-ink);font-size:11px;text-decoration:none;
-    transition:border-color .3s var(--ease),color .3s var(--ease)}
-  .wh-dl i{font-style:normal;transition:transform .38s var(--ease)}
-  .wh-dl:hover{border-color:var(--blue);color:var(--blue)}
-  .wh-dl:hover i{transform:translateY(3px)}
 
   @media (max-width:980px){
     .wh-top{grid-template-columns:minmax(0,1fr);gap:clamp(16px,2.4vh,24px)}
@@ -1497,17 +1483,11 @@
     .wh-stop:last-child{padding-bottom:0}
     .wh-node{left:-25px;top:3px}
     .wh-stop p{max-width:none}
-    .wh-film{grid-template-columns:minmax(0,1fr)}
-    .wh-ft{max-width:20ch}
     .wh-prods{grid-template-columns:repeat(2,minmax(0,1fr))}
   }
   @media (max-width:560px){
-    .wh-dl{width:100%}
     .wh-prods{grid-template-columns:minmax(0,1fr)}
     .wh-bcount{display:none}
-    /* ficha en filas: etiqueta a la izquierda, dato a la derecha */
-    .wh-fmeta{grid-template-columns:minmax(0,1fr)}
-    .wh-fmeta div{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:12px 0}
   }
   @media (prefers-reduced-motion:reduce){
     .wh-hw h2,.wh-sub,.wh-lede,.wh-panel,.wh-stop,.wh-film,.wh-built{opacity:1!important;transform:none!important}
@@ -5304,17 +5284,6 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
           <button class="pr-snd wh-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
       </figure>
-      <div class="wh-fside">
-        <span class="wh-k mono">The film</span>
-        <h3 class="wh-ft">The sequence, in fifty-three seconds.</h3>
-        <p class="wh-fp">From where #SECT stands today, with four products built and in final testing, to the opening of the NYSE process: the supply reduction, the listings and the launch into production, stop by stop, on the published schedule.</p>
-        <dl class="wh-fmeta mono">
-          <div><dt>Runtime</dt><dd>0:53</dd></div>
-          <div><dt>Format</dt><dd>1080p · 60 fps</dd></div>
-          <div><dt>Sound</dt><dd>Original score</dd></div>
-        </dl>
-        <a class="wh-dl mono" href="media/sectora-why-hold-4k.mp4?v=2" download="sectora-why-hold-4k.mp4"><span>Download in 4K</span><i aria-hidden="true">↓</i></a>
-      </div>
     </div>
     <p class="wh-fine mono">Dates are the schedule published by Sectora Foundation. Nothing in this section is a promise about the price of #SECT or investment advice.</p>
   </div>
@@ -8791,7 +8760,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261017';
+      sc.src = 'i18n-home.js?v=20261018';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
