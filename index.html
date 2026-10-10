@@ -2036,6 +2036,8 @@
   .plate-marks i:nth-child(3){left:0;bottom:0}
   .plate-marks i:nth-child(4){right:0;bottom:0}
 
+  /* a panel completo hasta que el JS lo recorta a la caja del dibujo:
+     fuera del aro y sus cartelas no hay nada que pintar ni que componer */
   #plate-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
 
   .plate-card{
@@ -7254,16 +7256,75 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const N = M.length;
 
   let W=0, H=0, R=0, cx=0, cy=0, last=-1;
+  /* densidad del lienzo y su esquina dentro del panel: el lienzo ya no
+     cubre el panel entero, solo la caja donde de verdad hay dibujo */
+  let dpr = 1, ox = 0, oy = 0;
+  /* p del ultimo fotograma pintado. Mientras el panel entra o sale de
+     pantalla p esta clavado en 0 o en 1 y la lamina no cambia, asi que no
+     hay nada que repintar (antes se redibujaba entera en cada fotograma
+     mientras se leia el roadmap de debajo). NaN obliga a pintar. */
+  let pintado = NaN;
+  const FUENTE = "500 9.5px 'IBM Plex Mono', monospace";
+
+  /* la caja del lienzo arranca en un pixel entero del lienzo y de la
+     pantalla a la vez: cada trazo cae exactamente donde caia con el lienzo
+     a panel completo y nada se remuestrea. Si la densidad no lo permite se
+     vuelve al borde del panel, como antes. */
+  function exacto(u){
+    const a = u * dpr, b = u * (window.devicePixelRatio || 1);
+    return Math.abs(a - Math.round(a)) < 1e-6 && Math.abs(b - Math.round(b)) < 1e-6;
+  }
+  function borde(v, paso){
+    let u = paso < 0 ? Math.floor(v) : Math.ceil(v);
+    for(let n=0;n<64;n++, u += paso) if(exacto(u)) return u;
+    return paso < 0 ? 0 : Infinity;
+  }
 
   function resize(){
     const w = pin.clientWidth, h = pin.clientHeight;
     if(w < 1 || h < 1) return;
     W = w; H = h;
-    const dpr = window.SECT_DPR();
-    cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
+    dpr = window.SECT_DPR();
     cx = W/2; cy = H/2;
     R = Math.min(W, H) * (W < 700 ? .40 : .36);
+
+    /* hasta donde llega el dibujo desde el centro: el aro con sus marcas y
+       los halos (tres sigmas del mayor desenfoque, 30px de lienzo), y las
+       cartelas de hito, que miden lo que mida su texto. Las rosetas, con
+       su halo, quedan siempre por dentro del aro. */
+    let hx = R*1.14 + Math.max(12, 1 + 30/dpr) + 2, hy = hx;
+    ctx.font = FUENTE;
+    for(let i=0;i<N;i++){
+      const rad = (i*(360/N) - 90) * Math.PI/180, rr = R*1.14 + 26;
+      hx = Math.max(hx, Math.abs(Math.cos(rad))*rr + ctx.measureText(M[i].q).width/2 + 4);
+      hy = Math.max(hy, Math.abs(Math.sin(rad))*rr + 8);
+    }
+    ox = borde(Math.max(0, cx - hx), -1);
+    oy = borde(Math.max(0, cy - hy), -1);
+    const cw = Math.min(W, borde(cx + hx, 1)) - ox;
+    const ch = Math.min(H, borde(cy + hy, 1)) - oy;
+    const st = cv.style;
+    st.left = ox + 'px'; st.top = oy + 'px'; st.right = 'auto'; st.bottom = 'auto';
+    st.width = cw + 'px'; st.height = ch + 'px';
+    cv.width = Math.round(cw*dpr); cv.height = Math.round(ch*dpr);
+    ctx.setTransform(dpr,0,0,dpr,-ox*dpr,-oy*dpr);
+
+    // las tintas solo dependen del centro y del radio: se hacen aqui
+    capas = [0,1,2,3,4].map(i => tinta(ctx, R*(1 - i*0.13), .34 - i*0.045,
+      i === 0 ? 'rgba(214,222,236,A)' : i === 1 ? 'rgba(150,186,255,A)' : 'rgba(96,152,255,A)'));
+    contra = [0,1,2].map(i => tinta(ctx, R*(.94 - i*0.13), .20 - i*0.03, 'rgba(120,170,255,A)'));
+    brillo = tinta(ctx, R*0.995, .22, 'rgba(150,190,255,A)');
+
+    // el lienzo del halo cubre la roseta mas su desenfoque, en px de lienzo
+    const hh = R*1.08*dpr + 36, px = (cx - ox)*dpr, py = (cy - oy)*dpr;
+    haloX = Math.max(0, Math.floor((px - hh)/Q)*Q);
+    haloY = Math.max(0, Math.floor((py - hh)/Q)*Q);
+    haloCv.width  = Math.ceil((Math.min(cv.width,  px + hh) - haloX)/Q);
+    haloCv.height = Math.ceil((Math.min(cv.height, py + hh) - haloY)/Q);
+    brilloH = tinta(haloCtx, R*0.995, .22, 'rgba(150,190,255,A)');
+
+    aroIdx = -1;
+    pintado = NaN;
     paint();
   }
 
@@ -7281,48 +7342,94 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   /* hipotrocoide: circulo rodando dentro de otro. El numero de petalos es
      el cociente de radios; al usar un cociente NO entero la curva no cierra
      y precesa vuelta tras vuelta, que es exactamente como se teje el
-     guilloche de un billete. */
-  function rosette(k, amp, radius, turns, frac, alpha, width, tint){
-    const r = radius / k;              // radio del circulo rodante
-    const d = r * amp;                 // excentricidad del punto trazador
-    const freq = (radius - r) / r;     // = k - 1 petalos por vuelta
-    const total = Math.floor(300 * turns);
-    const steps = Math.floor(total * frac);
-    if(steps < 2) return;
-    ctx.beginPath();
-    for(let i=0;i<=steps;i++){
-      const t = (i / total) * Math.PI * 2 * turns;
-      const x = cx + (radius - r)*Math.cos(t) + d*Math.cos(freq*t);
-      const y = cy + (radius - r)*Math.sin(t) - d*Math.sin(freq*t);
-      i ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+     guilloche de un billete.
+     Con radio de giro r = radio/k y excentricidad d = r*amp, cada punto es
+     centro + radio * curva unitaria, y la curva unitaria solo depende de
+     la firma (k, amp). Todas las capas de una firma comparten la curva y
+     solo cambia la escala: se calcula una vez por fotograma, no una vez
+     por capa. El coseno y el seno de t ni eso: van en tabla. Trescientos
+     puntos por vuelta, nueve vueltas (la pasada de resplandor usa las tres
+     primeras, que son los mismos puntos). */
+  const VUELTAS = 9, TOTAL = 300 * VUELTAS;
+  const COS = new Float64Array(TOTAL + 1), SIN = new Float64Array(TOTAL + 1);
+  for(let i=0;i<=TOTAL;i++){
+    const t = (i / TOTAL) * Math.PI * 2 * VUELTAS;
+    COS[i] = Math.cos(t); SIN[i] = Math.sin(t);
+  }
+  const UX = new Float64Array(TOTAL + 1), UY = new Float64Array(TOTAL + 1);   // trama
+  const KX = new Float64Array(TOTAL + 1), KY = new Float64Array(TOTAL + 1);   // contratrazo
+  function curva(k, amp, n, ux, uy){
+    const a = 1 - 1/k, b = amp / k, freq = k - 1;   // k - 1 petalos por vuelta
+    for(let i=0;i<=n;i++){
+      const t = (i / TOTAL) * Math.PI * 2 * VUELTAS;
+      ux[i] = a*COS[i] + b*Math.cos(freq*t);
+      uy[i] = a*SIN[i] - b*Math.sin(freq*t);
     }
-    // el trazo no lleva un color plano: se apaga hacia el borde, como en
-    // una plancha entintada de verdad
-    const gr = ctx.createRadialGradient(cx, cy, radius*0.12, cx, cy, radius*1.06);
-    const base = tint || 'rgba(198,204,216,A)';
-    gr.addColorStop(0,   base.replace('A', (alpha*1.5).toFixed(3)));
-    gr.addColorStop(.55, base.replace('A', alpha.toFixed(3)));
-    gr.addColorStop(1,   base.replace('A', (alpha*.35).toFixed(3)));
-    ctx.strokeStyle = gr;
-    ctx.lineWidth = width;
-    ctx.stroke();
+  }
+  function traza(c, ux, uy, radius, n){
+    c.beginPath();
+    c.moveTo(cx + radius*ux[0], cy + radius*uy[0]);
+    for(let i=1;i<=n;i++) c.lineTo(cx + radius*ux[i], cy + radius*uy[i]);
+  }
+  const gira = (c, a) => { c.translate(cx, cy); c.rotate(a); c.translate(-cx, -cy); };
+
+  /* el trazo no lleva un color plano: se apaga hacia el borde, como en
+     una plancha entintada de verdad. La tinta va centrada en el eje de
+     giro, asi que no cambia al girar la plancha y se prepara una vez por
+     tamano, no una vez por trazo y fotograma. */
+  function tinta(c, radius, alpha, tint){
+    const gr = c.createRadialGradient(cx, cy, radius*0.12, cx, cy, radius*1.06);
+    gr.addColorStop(0,   tint.replace('A', (alpha*1.5).toFixed(3)));
+    gr.addColorStop(.55, tint.replace('A', alpha.toFixed(3)));
+    gr.addColorStop(1,   tint.replace('A', (alpha*.35).toFixed(3)));
+    return gr;
+  }
+  let capas = [], contra = [], brillo = null, brilloH = null;
+
+  /* el halo de la pasada de resplandor es un desenfoque de 8px de una
+     roseta entera. Hecho con shadowBlur a resolucion completa era el paso
+     mas caro de cada fotograma; un desenfoque asi no tiene detalle que
+     perder a un cuarto de resolucion, de modo que se calcula en un lienzo
+     pequeno y se amplia al componerlo. Es la misma sombra (mismo color,
+     mismo radio en px de pantalla) y no se distingue de la original. La
+     roseta se dibuja fuera del lienzo y solo su sombra, desplazada, cae
+     dentro. */
+  const Q = 4;
+  const haloCv = document.createElement('canvas');
+  const haloCtx = haloCv.getContext('2d');
+  let haloX = 0, haloY = 0;   // esquina del halo, en px del lienzo
+  function halo(n, giro){
+    const c = haloCtx, lejos = haloCv.width + 64;
+    c.setTransform(1,0,0,1,0,0);
+    c.clearRect(0, 0, haloCv.width, haloCv.height);
+    c.setTransform(dpr/Q, 0, 0, dpr/Q, (-ox*dpr - haloX)/Q - lejos, (-oy*dpr - haloY)/Q);
+    c.shadowColor = 'rgba(21,105,255,.85)';
+    c.shadowBlur = 16 / Q;
+    c.shadowOffsetX = lejos;
+    gira(c, giro);
+    traza(c, UX, UY, R*0.995, n);
+    c.strokeStyle = brilloH; c.lineWidth = 1.1;
+    c.stroke();
+    ctx.save(); ctx.setTransform(1,0,0,1,0,0);
+    ctx.drawImage(haloCv, haloX, haloY, haloCv.width*Q, haloCv.height*Q);
+    ctx.restore();
   }
 
   /* El aro, sus 72 marcas y los hitos solo cambian al pasar de hito o al
      cambiar el tamano: se pintan una vez en un lienzo aparte y en cada
      fotograma se copian de un golpe. Antes se redibujaban enteros (con su
      halo difuminado) en cada fotograma del scroll. El resultado es el mismo
-     pixel a pixel: se compone igual, encima de la trama. */
-  let aroCv = null, aroIdx = -1, aroW = 0, aroH = 0;
+     pixel a pixel: se compone igual, encima de la trama. El lienzo aparte
+     tiene la caja del principal y se rehace al cambiar esta. */
+  let aroCv = null, aroIdx = -1;
   function bezel(p, idx){
-    const dpr = cv.width / W;
-    if(!aroCv || aroIdx !== idx || aroW !== cv.width || aroH !== cv.height){
+    if(!aroCv || aroIdx !== idx){
       aroCv = aroCv || document.createElement('canvas');
       aroCv.width = cv.width; aroCv.height = cv.height;
-      aroW = cv.width; aroH = cv.height; aroIdx = idx;
+      aroIdx = idx;
       const real = ctx;
       ctx = aroCv.getContext('2d');
-      ctx.setTransform(dpr,0,0,dpr,0,0);
+      ctx.setTransform(dpr,0,0,dpr,-ox*dpr,-oy*dpr);
       aroFijo(idx);
       ctx = real;
     }
@@ -7351,7 +7458,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     }
 
     // las marcas de hito, repartidas a partes iguales alrededor del aro
-    ctx.font = "500 9.5px 'IBM Plex Mono', monospace";
+    ctx.font = FUENTE;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     for(let i=0;i<N;i++){
       const rad = (i*(360/N) - 90) * Math.PI/180;
@@ -7366,15 +7473,38 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       ctx.fill();
     }
   }
+  /* arco de avance. Su halo cuesta lo que mide la caja del trazo, no el
+     trazo: con el arco ya largo era desenfocar un cuadrado del tamano del
+     aro en cada fotograma. Se tira en tramos de 22,5 grados, cada uno con
+     su caja pequena. El desenfoque es lineal y el halo es tenue, asi que
+     la suma de los tramos da la misma sombra que el arco de una pieza; el
+     trazo en si va despues, de una pieza y sin sombra, como siempre.
+     Mismo truco que el halo de la roseta: el tramo se dibuja fuera del
+     lienzo y solo su sombra cae dentro. */
+  const TRAMO = Math.PI / 8;
   function arcoAvance(p){
-    // arco de avance
+    const fin = -Math.PI/2 + Math.PI*2*p;
+    if(p > 0){
+      const lejos = cv.width + 64;
+      ctx.save();
+      ctx.setTransform(dpr,0,0,dpr,-ox*dpr - lejos,-oy*dpr);
+      ctx.shadowColor = 'rgba(21,105,255,.95)';
+      ctx.shadowBlur = 14;
+      ctx.shadowOffsetX = lejos;
+      ctx.strokeStyle = 'rgba(90,160,255,.95)';
+      ctx.lineWidth = 1.8;
+      for(let a = -Math.PI/2; a < fin; a += TRAMO){
+        ctx.beginPath();
+        ctx.arc(cx, cy, R*1.14, a, Math.min(fin, a + TRAMO));
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
     ctx.save();
-    ctx.shadowColor = 'rgba(21,105,255,.95)';
-    ctx.shadowBlur = 14;
     ctx.strokeStyle = 'rgba(90,160,255,.95)';
     ctx.lineWidth = 1.8;
     ctx.beginPath();
-    ctx.arc(cx, cy, R*1.14, -Math.PI/2, -Math.PI/2 + Math.PI*2*p);
+    ctx.arc(cx, cy, R*1.14, -Math.PI/2, fin);
     ctx.stroke();
     ctx.restore();
   }
@@ -7384,6 +7514,9 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   function paint(){
     if(!W) return;
     const p = progress();
+    // nada ha cambiado desde el ultimo fotograma: el lienzo ya muestra esto
+    if(p === pintado) return;
+    pintado = p;
     if(cueP) cueP.classList.toggle('off', p > .93);
     const t = p * (N - 1);
     const k = Math.min(N-2, Math.floor(t));
@@ -7399,40 +7532,55 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     const dd = lerp(A.d, B.d, e);
     const ll = Math.round(lerp(A.l, B.l, e));
 
-    ctx.clearRect(0,0,W,H);
+    ctx.save(); ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.restore();
 
     // trazado progresivo dentro de cada lamina
     const frac = reduce ? 1 : Math.min(1, .18 + raw*1.9);
+    const n  = Math.floor(TOTAL * frac);     // nueve vueltas
+    const nb = Math.floor(300 * 3 * frac);   // tres vueltas
 
     // la plancha gira despacio, como sobre el plato del torno
-    ctx.save();
-    ctx.translate(cx, cy); ctx.rotate(p * 0.62); ctx.translate(-cx, -cy);
+    const giro = p * 0.62;
+    if(n >= 2){
+      curva(kk, dd, n, UX, UY);
+      ctx.save();
+      gira(ctx, giro);
 
-    // capas concentricas: es lo que da el aspecto de torneado
-    for(let i=0;i<ll;i++){
-      const s = 1 - i*0.13;
-      // la capa exterior en plata; las interiores viran a azul
-      const tint = i === 0 ? 'rgba(214,222,236,A)'
-                 : i === 1 ? 'rgba(150,186,255,A)'
-                           : 'rgba(96,152,255,A)';
-      rosette(kk, dd, R*s, 9, frac, .34 - i*0.045, i === 0 ? 0.9 : 0.6, tint);
+      // capas concentricas: es lo que da el aspecto de torneado. La capa
+      // exterior en plata; las interiores viran a azul (ver tinta)
+      for(let i=0;i<ll;i++){
+        traza(ctx, UX, UY, R*(1 - i*0.13), n);
+        ctx.strokeStyle = capas[i];
+        ctx.lineWidth = i === 0 ? 0.9 : 0.6;
+        ctx.stroke();
+      }
+      // contratrazo mas fino, girado: la trama cruzada del grabado
+      curva(kk*1.13, dd*.92, n, KX, KY);
+      ctx.save();
+      gira(ctx, Math.PI/N);
+      for(let i=0;i<Math.max(1,ll-2);i++){
+        traza(ctx, KX, KY, R*(.94 - i*0.13), n);
+        ctx.strokeStyle = contra[i];
+        ctx.lineWidth = 0.55;
+        ctx.stroke();
+      }
+      ctx.restore();
+      ctx.restore();
     }
-    // contratrazo mas fino, girado: la trama cruzada del grabado
-    ctx.save();
-    ctx.translate(cx, cy); ctx.rotate(Math.PI/N); ctx.translate(-cx, -cy);
-    for(let i=0;i<Math.max(1,ll-2);i++){
-      const s = .94 - i*0.13;
-      rosette(kk*1.13, dd*.92, R*s, 9, frac, .20 - i*0.03, 0.55, 'rgba(120,170,255,A)');
-    }
-    ctx.restore();
 
     // pasada de resplandor: pocas vueltas, con halo, sobre la trama fina
-    ctx.save();
-    ctx.shadowColor = 'rgba(21,105,255,.85)';
-    ctx.shadowBlur = 16;
-    rosette(kk, dd, R*0.995, 3, frac, .22, 1.1, 'rgba(150,190,255,A)');
-    ctx.restore();
-    ctx.restore();
+    if(nb >= 2){
+      halo(nb, giro);
+      ctx.save();
+      gira(ctx, giro);
+      traza(ctx, UX, UY, R*0.995, nb);
+      ctx.strokeStyle = brillo;
+      ctx.lineWidth = 1.1;
+      ctx.stroke();
+      ctx.restore();
+    }
 
     const idx = Math.min(N-1, Math.round(t));
     bezel(p, idx);
