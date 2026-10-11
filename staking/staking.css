@@ -27,8 +27,6 @@
   /* papel de las hojas claras */
   --p-ink:#07080a;--p-ink-2:#3c414c;--p-ink-3:#6b7280;--p-ink-4:#9aa0ab;
   --p-line:rgba(0,0,0,.11);--p-live:#0f8f52;
-  /* el azul en que acaba la marea de la grafica y en el que vive la guia */
-  --guia-azul:#1150d8;
 }
 section[id]{scroll-margin-top:18px}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -492,15 +490,14 @@ img.wpick-ico{background:none}
   background:radial-gradient(80% 60% at 70% 80%,rgba(21,105,255,.12),transparent 64%),radial-gradient(50% 40% at 85% 30%,rgba(62,207,142,.05),transparent 70%),#000}
 /* la rejilla va en el fondo del bloque (se pinta una vez); los ejes en su
    propio lienzo, que solo se repinta al cambiar de mes; el lienzo de la
-   linea mide lo que la grafica y la marea es una capa que solo se desliza */
+   linea mide lo que la grafica. Al subir la guia por encima, el bloque se
+   encoge un poco y se oscurece con una capa: las dos cosas, en el compositor */
 .curva-pin::before{content:'';position:absolute;inset:0;pointer-events:none;
   background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
   background-size:54px 54px}
 .curva-ejes{position:absolute;inset:0;width:100%;height:100%;z-index:0}
 .curva-cv{position:absolute;left:0;top:0;z-index:1}
-.curva-marea{position:absolute;left:0;right:0;top:-2px;height:calc(100% + 2px);z-index:1;pointer-events:none;transform:translateY(102%);will-change:transform;
-  background:radial-gradient(90% 55% at 50% 0%,rgba(255,255,255,.10),transparent 70%),var(--guia-azul);
-  border-top:2px solid rgba(255,255,255,.9);box-shadow:0 -18px 50px -10px rgba(21,105,255,.75)}
+.curva-sombra{position:absolute;inset:0;z-index:4;background:#000;opacity:0;pointer-events:none}
 
 /* titular y cifras en flujo normal, uno junto al otro (o uno bajo el otro en
    el movil): asi no se pisan nunca, con la barra del navegador o sin ella */
@@ -581,73 +578,87 @@ html.js .curva.on .curva-head .eyebrow,html.js .curva.on .curva-sub,html.js .cur
   html.js .curva-head h2 .ln > span,html.js .curva-head .eyebrow,html.js .curva-sub,html.js .curva-stats{transition:none;transform:none;opacity:1}
 }
 
-/* ============ 01 · guide: paso a paso, filas numeradas como el FAQ ============ */
+/* ============ 01 · guide: hoja clara, como el Hash Market y el Why hold ============
+   Sube como una hoja por encima de la grafica fijada: el margen negativo la
+   monta sobre la ultima pantalla de .curva, que sigue fija debajo mientras
+   esta la tapa. Sombra hacia arriba y el filo azul de Sectora. */
 .pp-guide{display:table;margin-top:14px;color:var(--blue-deep);font-weight:400;text-decoration:none;
   border-bottom:1px solid rgba(13,79,216,.32);padding-bottom:2px;transition:color .3s var(--ease),border-color .3s var(--ease)}
 .pp-guide i{display:inline-block;font-style:normal;transition:transform .38s var(--ease)}
 .pp-guide:hover{color:var(--blue);border-color:var(--blue)}
 .pp-guide:hover i{transform:translateY(-3px)}
-.guide{list-style:none;margin:0;padding:0;border-top:1px solid var(--hair)}
-.gd{display:grid;grid-template-columns:56px minmax(0,1fr);gap:10px;padding:clamp(22px,3vh,30px) 0;border-bottom:1px solid var(--hair)}
-.gd-n{padding-top:7px;color:var(--ink-4);font-size:10.5px}
-.gd.key .gd-n{color:var(--blue)}
-.gd h3{font-size:clamp(18px,1.7vw,24px);font-weight:300;letter-spacing:-.012em;line-height:1.3;color:#fff}
-.gd p{margin-top:10px;font-size:14.5px;line-height:1.75;color:var(--ink-3);max-width:60ch}
-.gd p b{font-weight:400;color:var(--ink-2)}
-.gd-wal{display:inline-flex;align-items:center;gap:9px;margin-bottom:10px;font-size:9.5px;color:#4d8dff}
-.gd-wal::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px 1px rgba(21,105,255,.7)}
-.gd-tag{display:inline-block;margin-top:14px;padding:6px 10px;border:1px solid var(--hair);font-size:9.5px;color:var(--ink-2)}
-.gd-link{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding-bottom:5px;font-size:10.5px;color:#fff;text-decoration:none;
-  border-bottom:1px solid rgba(21,105,255,.6);transition:color .3s var(--ease),border-color .3s var(--ease)}
+.guia{z-index:3;margin-top:-100vh;margin-top:-100dvh;border-top:2px solid var(--blue);
+  box-shadow:0 -40px 90px -30px rgba(0,0,0,.85)}
+.gd-body{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(24px,3.4vw,56px);align-items:start}
+/* el seguidor se queda fijo mientras se leen los pasos */
+.gd-track{position:sticky;top:clamp(76px,11vh,112px)}
+.gd-con{padding:clamp(20px,2vw,28px)}
+.gd-k{font-size:9.5px;color:var(--p-ink-4);margin-bottom:8px}
+.gd-big{display:flex;align-items:baseline;gap:10px;line-height:1}
+.gd-big b{font-size:clamp(56px,6vw,88px);font-weight:200;letter-spacing:-.04em;color:var(--p-ink);font-variant-numeric:tabular-nums}
+.gd-big span{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--p-ink-4)}
+.gd-tt{margin-top:8px;min-height:2.6em;font-size:clamp(18px,1.6vw,22px);font-weight:400;letter-spacing:-.012em;line-height:1.3;color:var(--p-ink)}
+.gd-segs{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px;margin:18px 0 22px}
+.gd-segs i{height:4px;background:rgba(0,0,0,.08);transition:background .4s var(--ease)}
+.gd-segs i.on{background:var(--blue)}
+.gd-segs i.now{background:var(--p-live);box-shadow:0 0 8px rgba(15,143,82,.5)}
+.gd-rows{border-top:1px solid var(--p-line);margin-bottom:20px}
+.gd-rows > div{display:grid;grid-template-columns:86px minmax(0,1fr);gap:12px;padding:11px 0;border-bottom:1px solid var(--p-line)}
+.gd-rows dt{font-size:9.5px;color:var(--p-ink-4)}
+.gd-rows dd{font-size:11px;letter-spacing:.04em;text-transform:none;color:var(--p-ink);overflow-wrap:anywhere}
+.gd-rows.cambia{animation:gdCambia .5s var(--ease-out)}
+@keyframes gdCambia{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* en el movil el seguidor es una barra fija arriba */
+.gd-bar{display:none}
+
+/* los ocho pasos: los del Hash Market, y entran al llegar */
+.gd-steps .step{transition:opacity .8s var(--ease-out),transform .8s var(--ease-out),background .4s var(--ease)}
+/* el numero ocupa toda la altura del paso y todo lo demas va en la columna
+   del texto: sin esto, lo que pasa de tres filas caia en la columna estrecha
+   del numero y salia una letra por linea */
+.gd-steps .step-n{grid-row:1 / span 8}
+.gd-steps .step > :not(.step-n){grid-column:2}
+html.js .gd-steps .step{opacity:0;transform:translateY(18px)}
+html.js .gd-steps .step.vis{opacity:1;transform:none}
+.gd-steps .step.act{background:linear-gradient(90deg,rgba(21,105,255,.06),transparent 70%)}
+.gd-steps .step.act::before{transform:scaleX(1)}
+.gd-steps .step:not(.act) .step-n{color:var(--p-ink-4)}
+.gd-steps .step.key .step-n{color:var(--blue)}
+.gd-wal{display:inline-flex;align-items:center;gap:9px;margin-bottom:8px;font-size:9.5px;color:var(--blue-deep)}
+.gd-wal::before{content:'';width:6px;height:6px;border-radius:50%;background:#25d366;box-shadow:0 0 8px 1px rgba(37,211,102,.6)}
+.gd-steps .step p b{font-weight:500;color:var(--p-ink)}
+.gd-link{justify-self:start;display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding-bottom:4px;font-size:10.5px;color:var(--p-ink);
+  text-decoration:none;border-bottom:1px solid var(--blue);transition:color .3s var(--ease)}
 .gd-link i{font-style:normal;transition:transform .38s var(--ease)}
-.gd-link:hover{color:#4d8dff;border-color:#4d8dff}
+.gd-link:hover{color:var(--blue)}
 .gd-link:hover i{transform:translate(3px,-3px)}
-.gd p.gd-fine{margin-top:12px;font-size:9.5px;letter-spacing:.06em;text-transform:none;color:var(--ink-4);overflow-wrap:anywhere}
-.gd-check{margin-top:16px;max-width:560px;border:1px solid rgba(21,105,255,.34);background:rgba(21,105,255,.06)}
-.gd-check div{display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;padding:11px 14px;border-top:1px solid rgba(255,255,255,.07)}
-.gd-check div:first-child{border-top:0}
-.gd-check dt{font-size:9.5px;color:var(--ink-4)}
-.gd-check dd{font-size:11px;letter-spacing:.04em;text-transform:none;color:#fff;overflow-wrap:anywhere}
-.gd-end{grid-column:2;display:grid;gap:22px;justify-items:start}
-.gd-end .nt-fine{margin-top:0;color:var(--ink-3)}
+.gd-steps .step p.gd-fine{margin-top:10px;font-size:9.5px;letter-spacing:.06em;text-transform:none;color:var(--p-ink-4);overflow-wrap:anywhere}
+.gd-check{justify-self:stretch;margin-top:14px;max-width:520px;border:1px solid rgba(21,105,255,.35);background:rgba(255,255,255,.7)}
+.gd-check > div{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;padding:10px 14px;border-top:1px solid var(--p-line)}
+.gd-check > div:first-child{border-top:0}
+.gd-check dt{font-size:9.5px;color:var(--p-ink-4)}
+.gd-check dd{font-size:11px;letter-spacing:.04em;text-transform:none;color:var(--p-ink);overflow-wrap:anywhere}
+.gd-end{display:flex;flex-wrap:wrap;align-items:center;gap:18px 28px;margin-top:clamp(34px,5vh,56px);padding-top:clamp(22px,3vh,30px);
+  border-top:1px solid var(--p-line)}
+.gd-note{flex:1;min-width:260px;max-width:70ch;font-size:12.5px;line-height:1.7;color:var(--p-ink-3)}
 @media (max-width:980px){
-  .gd{grid-template-columns:40px minmax(0,1fr)}
-  .gd-end{grid-column:1;margin-top:28px}
+  .gd-body{grid-template-columns:minmax(0,1fr);gap:0}
+  .gd-track{display:none}
+  .gd-bar{position:sticky;top:0;z-index:4;display:grid;gap:9px;margin:0 calc(var(--pad) * -1) 6px;padding:12px var(--pad) 11px;
+    font-size:9.5px;color:var(--p-ink-3);background:#f6f6f4;border-bottom:1px solid var(--p-line)}
+  .gd-bar b{font-weight:500;color:var(--blue)}
+  .gd-bar > span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gd-bar i{display:block;height:3px;background:rgba(0,0,0,.08)}
+  .gd-bar u{display:block;height:100%;width:12.5%;background:var(--blue);text-decoration:none;transition:width .4s var(--ease)}
+  .gd-end .btn{flex:1 1 100%}
 }
 @media (max-width:520px){
-  .gd-check div{grid-template-columns:74px minmax(0,1fr);gap:10px;padding:10px 12px}
-  .gd-end .btn{width:100%}
+  .gd-check > div{grid-template-columns:70px minmax(0,1fr);gap:10px;padding:9px 11px}
 }
-
-/* la guia en azul: el mismo con que termina la marea de la grafica, asi
-   que al soltarse el bloque fijo el color sigue sin corte. Su rejilla
-   aparece poco a poco desde arriba para no marcar una linea en la union */
-.night.azul{background:var(--guia-azul)}
-.night.azul::before{background-image:linear-gradient(rgba(255,255,255,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.075) 1px,transparent 1px);
-  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 340px,#000 82%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 340px,#000 82%,transparent 100%)}
-.night.azul .eyebrow{color:rgba(255,255,255,.75)}
-.night.azul .eyebrow i{background:#fff}
-.night.azul .nt-lede{color:rgba(255,255,255,.78)}
-.night.azul .nt-count{color:rgba(255,255,255,.62);border-top-color:rgba(255,255,255,.22)}
-.night.azul .guide{border-top-color:rgba(255,255,255,.24)}
-.night.azul .gd{border-bottom-color:rgba(255,255,255,.18)}
-.night.azul .gd-n{color:rgba(255,255,255,.55)}
-.night.azul .gd.key .gd-n{color:#fff}
-.night.azul .gd p{color:rgba(255,255,255,.8)}
-.night.azul .gd p b{color:#fff}
-.night.azul .gd-wal{color:#fff}
-.night.azul .gd-wal::before{background:var(--live);box-shadow:0 0 8px 1px rgba(62,207,142,.8)}
-.night.azul .gd-tag{color:#fff;border-color:rgba(255,255,255,.32)}
-.night.azul .gd-link{border-bottom-color:rgba(255,255,255,.75)}
-.night.azul .gd-link:hover{color:#fff;border-bottom-color:#fff;opacity:.85}
-.night.azul .gd p.gd-fine{color:rgba(255,255,255,.6)}
-.night.azul .gd-check{border-color:rgba(255,255,255,.3);background:rgba(4,20,70,.28)}
-.night.azul .gd-check div{border-top-color:rgba(255,255,255,.12)}
-.night.azul .gd-check dt{color:rgba(255,255,255,.62)}
-.night.azul .gd-end .nt-fine{color:rgba(255,255,255,.75)}
-/* el boton azul no se veria sobre azul: aqui va en blanco */
-.night.azul .gd-end .btn-primary{background:#fff;color:#0b3fb3}
-.night.azul .gd-end .btn-primary::before{background:#e8efff}
+@media (prefers-reduced-motion:reduce){
+  html.js .gd-steps .step{opacity:1;transform:none;transition:none}
+  .gd-rows.cambia{animation:none}
+}
 
 /* ============ 04 · security: tarjetas de cristal claro ============ */
 .mc-in{position:relative;z-index:1;max-width:1280px;color:var(--p-ink);display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);

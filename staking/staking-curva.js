@@ -8,8 +8,9 @@
    Tramos del scroll (p de 0 a 1 mientras el bloque esta fijo):
      0.06 - 0.60  la linea avanza mes a mes con su punto vivo y su etiqueta
      0.60 - 0.68  quieta, completa
-     0.66 - 0.86  el azul sube como una marea hasta cubrir la pantalla
-     0.86 - 1     se queda en azul, el de la guia que viene detras
+     ultima pantalla: la guia sube por encima como una hoja (su margen
+                  negativo la monta sobre este bloque) y la grafica se
+                  oscurece y se encoge un poco debajo
 
    El lienzo solo se repinta cuando cambia el avance, y la posicion sale de
    scrollY con la geometria medida al cargar y al cambiar de tamano. ---- */
@@ -25,7 +26,6 @@
   const tip = $("curva-tip"), tipM = $("curva-tip-m"), tipV = $("curva-tip-v");
   const ganado = $("curva-ganado"), elDia = $("curva-dia"), elMes = $("curva-mes"), elAno = $("curva-ano");
   const st = $("curva-st"), fill = $("curva-fill"), pc = $("curva-pc"), pasoEl = $("curva-paso");
-  const stats = sec.querySelector(".curva-stats"), hud = sec.querySelector(".curva-hud");
   const cue = $("curva-cue"), cueSub = $("curva-cue-sub");
   const quieto = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -63,7 +63,9 @@
   // ---------------------------------------------------------------
   // geometria
   // ---------------------------------------------------------------
-  const ejesCv = $("curva-ejes"), ejes = ejesCv.getContext("2d"), marea = $("curva-marea");
+  const ejesCv = $("curva-ejes"), ejes = ejesCv.getContext("2d"), sombra = $("curva-sombra");
+  const guia = document.getElementById("guide");
+  let guiaTop = 0;
   let top = 0, alto = 0, W = 0, H = 0, dpr = 1, movil = false;
   let x0 = 0, x1 = 0, y0 = 0, yT = 0, bx = 0, by = 0, mesEjes = -1;
 
@@ -71,6 +73,7 @@
     const r = sec.getBoundingClientRect();
     top = r.top + window.scrollY;
     alto = sec.offsetHeight;
+    guiaTop = guia ? guia.getBoundingClientRect().top + window.scrollY : top + alto;
     const b = pin.getBoundingClientRect();
     W = Math.round(b.width); H = Math.round(b.height);
     dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -190,16 +193,19 @@
     if (Math.abs(p - ant) < 0.0004) return;
     ant = p;
 
-    const a = suave(seg(p, 0.06, 0.6)), b = suave(seg(p, 0.66, 0.86)), c = seg(p, 0.86, 0.93);
+    const a = suave(seg(p, 0.06, 0.6));
+    // q: cuanto ha subido ya la guia sobre este bloque (0 abajo, 1 lo tapa entero)
+    const vh = window.innerHeight;
+    const q = clamp((window.scrollY - (guiaTop - vh)) / vh);
     const mes = Math.floor(a * 12 + 1e-6);
     if (mes !== mesEjes) { mesEjes = mes; pintarEjes(mes); }
-    if (b < 1) pintar(a);
-    ejesCv.style.opacity = b > 0 ? String(1 - suave(b * 2.2)) : "";
-    // llega justo a 0: cubre hasta el ultimo pixel de abajo y su filo blanco queda fuera por arriba
-    marea.style.transform = "translateY(" + (102 * (1 - b)).toFixed(2) + "%)";
+    if (q < 1) pintar(a);
+    // la grafica se aleja: se encoge un poco y se oscurece bajo la hoja que sube
+    pin.style.transform = q > 0 ? "scale(" + (1 - 0.06 * q).toFixed(4) + ")" : "";
+    sombra.style.opacity = (0.7 * q).toFixed(3);
 
     // etiqueta del punto vivo
-    const verTip = a > 0.02 && b <= 0;
+    const verTip = a > 0.02 && q < 0.5;
     tip.style.opacity = verTip ? "1" : "0";
     if (verTip) {
       const meses = a * 12;
@@ -219,17 +225,16 @@
     st.textContent = pct >= 100 ? "12 months accrued" : "Accruing";
     const k = Math.min(8, Math.floor(seg(p, 0.06, 0.6) * 8) + 1);
     if (k !== pasoAnt) { pasoAnt = k; pasoEl.textContent = String(k).padStart(2, "0") + " / 08 · " + PASOS[k - 1]; }
-    // las cifras se retiran al subir la marea; antes, las maneja la entrada del CSS
-    if (stats) stats.style.opacity = b > 0 ? String(1 - suave(b * 2)) : "";
-    // el panel de abajo se retira al final: queda el azul, el titular y el aviso
-    hud.style.opacity = c > 0 ? String(1 - c) : "";
 
-    // aviso de seguir bajando: antes de que arranque la linea y al terminar
-    const final = p > 0.9, inicio = p < 0.05;
+    // aviso de seguir bajando: antes de que arranque la linea (en el centro
+    // de la grafica vacia) y con la linea completa, hasta que sube la guia
+    // (arriba a la izquierda, por encima de la recta, donde no tapa nada)
+    const inicio = p < 0.05, final = a >= 1 && q < 0.05;
     cue.classList.toggle("on", inicio || final);
     if (inicio || final) {
-      const cy = final ? H * 0.5 : (yT + y0) / 2;
-      cue.style.transform = "translate(" + Math.round(W / 2) + "px," + Math.round(cy) + "px) translate(-50%,-50%)";
+      const cx = final ? x0 + (x1 - x0) * 0.3 : W / 2;
+      const cy = final ? yT + (y0 - yT) * 0.28 : (yT + y0) / 2;
+      cue.style.transform = "translate(" + Math.round(cx) + "px," + Math.round(cy) + "px) translate(-50%,-50%)";
       const txt = final ? "Next · the guide, 8 steps" : "Scroll to draw 12 months";
       if (cueSub.textContent !== txt) cueSub.textContent = txt;
     }
