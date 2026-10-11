@@ -480,6 +480,88 @@ img.wpick-ico{background:none}
   .q-a p{padding:0 0 22px 50px}
 }
 
+/* ============ curva: transicion de la portada a la guia ============
+   La recompensa de un ejemplo de 1.000 #SECT se dibuja al bajar. Azul de
+   Sectora para el area, un verde sutil (--live) solo para lo que se gana:
+   el punto vivo, las cifras con "+" y el piloto. El lienzo lo pinta
+   staking-curva.js; aqui va lo que es texto. */
+.curva{position:relative;height:420vh;background:#000}
+.curva-pin{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;isolation:isolate;
+  background:radial-gradient(80% 60% at 70% 80%,rgba(21,105,255,.12),transparent 64%),radial-gradient(50% 40% at 85% 30%,rgba(62,207,142,.05),transparent 70%),#000}
+/* la rejilla va en el fondo del bloque (se pinta una vez); los ejes en su
+   propio lienzo, que solo se repinta al cambiar de mes; el lienzo de la
+   linea mide lo que la grafica y la marea es una capa que solo se desliza */
+.curva-pin::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:54px 54px}
+.curva-ejes{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.curva-cv{position:absolute;left:0;top:0;z-index:1}
+.curva-marea{position:absolute;left:0;right:0;top:0;height:100%;z-index:1;pointer-events:none;transform:translateY(101%);will-change:transform;
+  background:linear-gradient(#1569ff,#0b3fb3);border-top:2px solid rgba(255,255,255,.9);box-shadow:0 -18px 50px -10px rgba(21,105,255,.75)}
+
+.curva-head{position:absolute;left:var(--pad);top:clamp(84px,13vh,128px);z-index:2;max-width:min(620px,52vw)}
+.curva .eyebrow{margin-bottom:22px}
+.curva .eyebrow i{width:30px}
+.curva-head h2{font-size:clamp(34px,5vw,74px);font-weight:200;line-height:1.02;letter-spacing:-.03em}
+.curva-head h2 .ln{display:block;overflow:hidden;padding-bottom:.08em}
+.curva-head h2 .ln > span{display:inline-block}
+.curva-head h2 b{font-weight:400}
+.curva-sub{margin-top:18px;max-width:44ch;font-size:clamp(13.5px,1.05vw,15.5px);line-height:1.7;color:var(--ink-3)}
+.curva-sub b{font-weight:400;color:var(--ink-2)}
+/* entrada al llegar: las dos lineas suben desde su renglon */
+html.js .curva-head h2 .ln > span{transform:translateY(110%);transition:transform 1.2s var(--ease-out)}
+html.js .curva-head h2 .ln + .ln > span{transition-delay:.12s}
+html.js .curva-head .eyebrow,html.js .curva-sub,html.js .curva-stats{opacity:0;transform:translateY(12px);transition:opacity .9s var(--ease-out),transform .9s var(--ease-out)}
+html.js .curva-sub{transition-delay:.25s}
+html.js .curva-stats{transition-delay:.4s}
+html.js .curva.on .curva-head h2 .ln > span{transform:none}
+html.js .curva.on .curva-head .eyebrow,html.js .curva.on .curva-sub,html.js .curva.on .curva-stats{opacity:1;transform:none}
+
+.curva-stats{position:absolute;right:var(--pad);top:clamp(92px,14vh,138px);z-index:2;display:grid;grid-template-columns:repeat(3,minmax(0,auto));
+  gap:1px;background:var(--hair);border:1px solid var(--hair)}
+.curva-stats > div{padding:14px 18px 15px;background:rgba(0,0,0,.82);min-width:128px}
+.curva-stats dt{font-size:9.5px;color:var(--ink-4);margin-bottom:8px}
+.curva-stats dd{font-size:clamp(18px,1.6vw,24px);font-weight:200;letter-spacing:-.01em;color:#fff;font-variant-numeric:tabular-nums}
+.curva-stats .key{grid-column:1 / -1}
+.curva-stats .key dt{color:var(--live)}
+.curva-stats .key dd{font-size:clamp(28px,2.6vw,40px);color:var(--live)}
+.curva-stats small{font-size:10px;letter-spacing:.12em;color:var(--ink-3)}
+
+/* la etiqueta que acompana al punto vivo */
+.curva-tip{position:absolute;left:0;top:0;z-index:3;display:grid;gap:5px;padding:9px 12px;pointer-events:none;
+  font-size:9.5px;color:var(--ink-3);background:rgba(4,10,22,.86);border:1px solid rgba(62,207,142,.35);
+  box-shadow:0 10px 30px -12px rgba(0,0,0,.8);opacity:0;will-change:transform}
+.curva-tip b{font-size:12px;font-weight:500;letter-spacing:.06em;color:var(--live)}
+
+.curva-hud{position:absolute;left:var(--pad);right:var(--pad);bottom:clamp(22px,4vh,38px);z-index:3;display:flex;align-items:center;gap:18px;
+  font-size:9.5px;color:var(--ink-3)}
+.curva-st{display:inline-flex;align-items:center;gap:9px;color:#fff}
+.curva-st i{width:6px;height:6px;border-radius:50%;background:var(--live);box-shadow:0 0 8px 1px rgba(62,207,142,.8)}
+.curva-st b{font-weight:400}
+.curva-rail{position:relative;flex:1;height:1px;background:rgba(255,255,255,.16)}
+.curva-rail i{position:absolute;left:0;top:-1px;height:3px;width:0;background:#fff}
+.curva-pc{color:#fff;min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}
+.curva-paso{max-width:40ch;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* el negro con que abre la guia: se funde al final, sin costura */
+.curva-fin{position:absolute;inset:0;z-index:4;background:#000;opacity:0;pointer-events:none}
+
+@media (max-width:760px){
+  .curva{height:380vh}
+  .curva-head{top:clamp(70px,10vh,96px);right:var(--pad);max-width:none}
+  .curva-sub{display:none}
+  .curva-stats{left:var(--pad);right:var(--pad);top:auto;bottom:calc(52vh + 10px);grid-template-columns:repeat(3,minmax(0,1fr))}
+  .curva-stats > div{min-width:0;padding:10px 12px 11px}
+  .curva-stats .key{grid-column:1 / -1}
+  .curva-stats dd{font-size:16px}
+  .curva-stats .key dd{font-size:26px}
+  .curva-paso{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .curva{height:auto}
+  .curva-pin{position:relative;height:100vh}
+  html.js .curva-head h2 .ln > span,html.js .curva-head .eyebrow,html.js .curva-sub,html.js .curva-stats{transition:none;transform:none;opacity:1}
+}
+
 /* ============ 01 · guide: paso a paso, filas numeradas como el FAQ ============ */
 .pp-guide{display:table;margin-top:14px;color:var(--blue-deep);font-weight:400;text-decoration:none;
   border-bottom:1px solid rgba(13,79,216,.32);padding-bottom:2px;transition:color .3s var(--ease),border-color .3s var(--ease)}
