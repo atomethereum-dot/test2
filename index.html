@@ -5727,10 +5727,9 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       <article class="m-card reveal" style="--d:.26s">
         <div class="m-top"><span class="mono">03</span><em class="m-ok mono">Verifiable</em></div>
         <h3>Open market data</h3>
-        <p>Liquidity, holders and every transaction are visible on Dexscreener in real time. Nothing about the token has to be taken on our word.</p>
-        <p class="m-src mono"><b>Source</b> · Dexscreener · CoinGecko</p>
+        <p>Price, liquidity and trading volume are visible on CoinGecko in real time. Nothing about the token has to be taken on our word.</p>
+        <p class="m-src mono"><b>Source</b> · CoinGecko</p>
         <a class="m-link mono" href="https://www.coingecko.com/en/coins/sectora" target="_blank" rel="noopener noreferrer">View on CoinGecko <i>↗</i></a>
-        <a class="m-link mono" href="https://dexscreener.com/ethereum/0xa12a11fc202827b7c734cf2019f2c7a6cf061d69" target="_blank" rel="noopener noreferrer">View on Dexscreener <i>↗</i></a>
       </article>
       <article class="m-card reveal" style="--d:.34s">
         <div class="m-top"><span class="mono">04</span><em class="m-ok mono">Verifiable</em></div>
@@ -6065,7 +6064,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     <p class="sp-fine reveal" style="--d:.48s">
       Figures describe token supply and initial parameters only. They are not a
       price forecast, a valuation, or investment advice. Live market data is
-      published on Dexscreener; nothing here should be read as a projection.
+      published on CoinGecko; nothing here should be read as a projection.
     </p>
 
     <div class="cap" id="cap">
@@ -10086,7 +10085,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261032';
+      sc.src = 'i18n-home.js?v=20261033';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
