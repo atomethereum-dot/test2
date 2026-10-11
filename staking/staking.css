@@ -449,6 +449,20 @@ img.wpick-ico{background:none}
 .night.nf-bot{padding-bottom:calc(var(--nf) + clamp(50px,7vh,90px));background:linear-gradient(180deg,var(--nf-abajo))}
 .night.nf-top.nf-bot{background:linear-gradient(180deg,var(--nf-arriba),var(--nf-abajo))}
 .nf-top .night-glow{top:var(--nf)}
+/* y al cruzar la costura, la seccion de arriba tambien cambia de color: un
+   velo del color de la de abajo, mas fuerte junto a la costura, cuya
+   opacidad sube con el scroll (staking-fx.js). Va dentro de la seccion
+   oscura; el de una costura de arriba asoma por encima de su borde y tapa
+   el final de la hoja clara */
+.night{--nf-sube:85vh}
+.nf-velo{position:absolute;left:0;right:0;z-index:2;pointer-events:none;opacity:0;will-change:opacity}
+.nf-velo.arriba{top:calc(var(--nf-sube) * -1);height:calc(var(--nf-sube) + var(--nf));background:#000;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.22) calc(var(--nf-sube) * .45),rgba(0,0,0,.62) calc(var(--nf-sube) * .78),#000 var(--nf-sube));
+  mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.22) calc(var(--nf-sube) * .45),rgba(0,0,0,.62) calc(var(--nf-sube) * .78),#000 var(--nf-sube))}
+.nf-velo.abajo{bottom:0;height:calc(var(--nf-sube) + var(--nf));background:#f2f2ef;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.22) 45%,rgba(0,0,0,.62) 78%,#000 100%);
+  mask-image:linear-gradient(180deg,transparent 0,rgba(0,0,0,.22) 45%,rgba(0,0,0,.62) 78%,#000 100%)}
+@media (prefers-reduced-motion:reduce){.nf-velo{display:none}}
 .nt-in{position:relative;z-index:1;max-width:1280px;display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);
   gap:clamp(36px,5vw,104px);align-items:start}
 .nt-sticky{position:sticky;top:clamp(30px,7vh,72px);align-self:start;height:fit-content}

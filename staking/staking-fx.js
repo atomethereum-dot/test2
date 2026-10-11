@@ -651,3 +651,41 @@
     secs.forEach((s) => io.observe(s));
   } else secs.forEach((s) => s.classList.add("on"));
 })();
+
+/* ===== costuras entre hojas claras y noche: ademas del degradado fijo de
+   la seccion oscura, al cruzarlas la seccion de arriba tambien cambia de
+   color. Un velo del color de la de abajo (staking.css, .nf-velo) sube de
+   opacidad mientras la costura va del borde de abajo de la pantalla al de
+   arriba; solo se escribe opacity ===== */
+(function () {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const velos = [];
+  function crear(sec, lado) {
+    const el = document.createElement("div");
+    el.className = "nf-velo " + lado;
+    el.setAttribute("aria-hidden", "true");
+    sec.appendChild(el);
+    velos.push({ el, sec, lado, o: -1 });
+  }
+  document.querySelectorAll(".night.nf-top, .night.nf-bot").forEach((sec) => {
+    if (sec.classList.contains("nf-top")) crear(sec, "arriba");
+    if (sec.classList.contains("nf-bot")) crear(sec, "abajo");
+  });
+  if (!velos.length) return;
+  let pend = false;
+  function pintar() {
+    pend = false;
+    const vh = innerHeight;
+    for (const v of velos) {
+      const r = v.sec.getBoundingClientRect();
+      // 0 con la costura en el borde de abajo de la pantalla, 1 en el de arriba
+      let x = (vh - (v.lado === "arriba" ? r.top : r.bottom)) / vh;
+      x = x < 0 ? 0 : x > 1 ? 1 : x;
+      const o = Math.round(x * x * (3 - 2 * x) * 1000) / 1000;
+      if (o !== v.o) { v.o = o; v.el.style.opacity = o; }
+    }
+  }
+  addEventListener("scroll", () => { if (!pend) { pend = true; requestAnimationFrame(pintar); } }, { passive: true });
+  addEventListener("resize", pintar);
+  pintar();
+})();
