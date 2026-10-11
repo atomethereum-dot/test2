@@ -4555,6 +4555,14 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   #staking.on .stk-hw h2{transform:none}
   #staking.on .stk-head p{opacity:1;transform:none}
   .stk-body{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,3.4vw,56px);align-items:start}
+  /* el film del staking: a todo el ancho entre el titular y la consola, con
+     el marco del video del Hash Market (esquinas azules, banda y sonido) */
+  .stk-film{margin:0 0 clamp(36px,4.6vw,64px);
+    opacity:0;transform:translateY(22px);transition:opacity 1s var(--ease-out) .35s,transform 1s var(--ease-out) .35s}
+  #staking.on .stk-film{opacity:1;transform:none}
+  .stk-fig{position:relative;margin:0;padding:clamp(14px,1.4vw,20px);border:1px solid var(--fs-line)}
+  .stk-media{position:relative;aspect-ratio:16/9;background:#05070b;overflow:hidden}
+  .stk-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 
   /* la consola: el mismo marco que el video del Hash Market, con pantalla negra */
   .stk-con{position:sticky;top:clamp(84px,12vh,120px);margin:0;padding:clamp(14px,1.4vw,20px);border:1px solid var(--fs-line);z-index:1}
@@ -4632,7 +4640,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     .stk-btns{width:100%}
   }
   @media (prefers-reduced-motion:reduce){
-    .stk-hw h2,.stk-head p,.stk-pt{transform:none!important;opacity:1!important;transition:none!important}
+    .stk-hw h2,.stk-head p,.stk-pt,.stk-film{transform:none!important;opacity:1!important;transition:none!important}
   }
   .hero > div{position:relative}
   .press{position:relative;background:#000;color:#fff;padding:clamp(96px,14vh,170px) var(--pad) clamp(90px,13vh,150px)}
@@ -5433,6 +5441,16 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     <div class="stk-head">
       <div class="stk-hw"><h2 id="stk-h">Stake #SECT. <b>Earn every second.</b></h2></div>
       <p>Deposit #SECT in the Sectora Foundation’s holder-rewards contract and earn rewards every second, paid in #SECT from a pool the treasury funds in advance. No lock-up: claim or withdraw whenever you want.</p>
+    </div>
+    <div class="stk-film">
+      <figure class="stk-fig">
+        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+        <div class="stk-band mono"><span>Film · Stake #SECT</span><b>SF·HR·FM·26</b></div>
+        <div class="stk-media">
+          <video data-poster="images/stake-poster.jpg" data-src="media/sectora-stake-web-1080.mp4" data-src-m="media/sectora-stake-web-720.mp4" playsinline preload="none" aria-label="Video: Stake #SECT. Earn every second."></video>
+          <button class="pr-snd stk-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+        </div>
+      </figure>
     </div>
     <div class="stk-body">
       <figure class="stk-con">
@@ -10016,7 +10034,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   let quiere=true, visto=false, propia=false;
   const carga=()=>{ if(!v.src){ v.preload='auto'; v.src=v.dataset.src; } };
   const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
-  const callaPrensa=()=>document.querySelectorAll('.press video, .why video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
+  const callaPrensa=()=>document.querySelectorAll('.press video, .why video, .stk video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
   const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
   const para=()=>{ if(!v.paused){ propia=true; v.pause(); } };
   const juega=()=>{
@@ -10064,7 +10082,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const ligero=matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
   const carga=()=>{ if(!v.src){ v.preload='auto'; v.src=(ligero && v.dataset.srcM) || v.dataset.src; } };
   const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
-  const callaOtros=()=>document.querySelectorAll('.press video, .hmk video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
+  const callaOtros=()=>document.querySelectorAll('.press video, .hmk video, .stk video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
   const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
   const para=()=>{ if(!v.paused){ propia=true; v.pause(); } };
   const juega=()=>{
@@ -10119,7 +10137,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261031';
+      sc.src = 'i18n-home.js?v=20261032';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
@@ -10783,6 +10801,50 @@ window.__lejos = function(el){
     }
   }, {rootMargin:'-10% 0px -14% 0px', threshold:0});
   io.observe(sec);
+})();
+</script>
+<script>
+/* film del staking: como el de "Why hold". Se descarga al acercarse (a 720p
+   en pantallas pequenas o con ahorro de datos), arranca con musica al verse
+   (mudo si el navegador aun no deja sonar; el sonido entra con el primer
+   toque) y se para al salir. Cuando suena, calla los demas videos. */
+(() => {
+  const v=document.querySelector('.stk video'), b=document.querySelector('.stk-snd'); if(!v||!b) return;
+  let quiere=true, visto=false, propia=false;
+  const ligero=matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
+  const carga=()=>{ if(!v.src){ v.preload='auto'; v.src=(ligero && v.dataset.srcM) || v.dataset.src; } };
+  const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
+  const callaOtros=()=>document.querySelectorAll('.press video, .hmk video, .why video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
+  const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
+  const para=()=>{ if(!v.paused){ propia=true; v.pause(); } };
+  const juega=()=>{
+    carga(); if(v.ended) v.currentTime=0;
+    v.muted=!quiere; if(quiere) callaOtros();
+    const p=v.play();
+    if(p&&p.catch) p.catch(e=>{ if(e && e.name==='NotAllowedError' && visto && !document.hidden) mudo(); });
+    marca();
+  };
+  v.addEventListener('pause',()=>{ if(!propia && !v.ended && visto && !document.hidden) mudo(); propia=false; });
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(es=>{ if(es[0].isIntersecting) carga(); },{rootMargin:'100% 0px'}).observe(v);
+    new IntersectionObserver(es=>{
+      visto=es[0].isIntersecting;
+      if(visto && !document.hidden) juega(); else para();
+    },{threshold:.5}).observe(v);
+  }
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden) para(); else if(visto) juega(); });
+  const gesto=e=>{
+    if(e.target.closest && e.target.closest('.stk-snd')) return;
+    if(navigator.userActivation && !navigator.userActivation.isActive) return;
+    if(quiere && visto && v.muted && !v.paused){ v.muted=false; callaOtros(); marca(); }
+  };
+  ['click','touchend','keydown'].forEach(t=>document.addEventListener(t,gesto,{capture:true,passive:true}));
+  b.addEventListener('click',()=>{
+    quiere=v.muted;
+    if(quiere){ v.muted=false; callaOtros(); if(v.paused) juega(); }
+    else v.muted=true;
+    marca();
+  });
 })();
 </script>
 <script>
