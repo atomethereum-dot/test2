@@ -4554,8 +4554,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     opacity:0;transform:translateY(12px);transition:opacity .9s var(--ease-out) .2s,transform .9s var(--ease-out) .2s}
   #staking.on .stk-hw h2{transform:none}
   #staking.on .stk-head p{opacity:1;transform:none}
-  .stk-body{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,3.4vw,56px);align-items:start}
-  /* el film del staking: a todo el ancho entre el titular y la consola, con
+  .stk-body{display:block}
+  /* el film del staking: a todo el ancho entre el titular y los puntos, con
      el marco del video del Hash Market (esquinas azules, banda y sonido) */
   .stk-film{margin:0 0 clamp(36px,4.6vw,64px);
     opacity:0;transform:translateY(22px);transition:opacity 1s var(--ease-out) .35s,transform 1s var(--ease-out) .35s}
@@ -4564,54 +4564,28 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .stk-media{position:relative;aspect-ratio:16/9;background:#05070b;overflow:hidden}
   .stk-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 
-  /* la consola: el mismo marco que el video del Hash Market, con pantalla negra */
-  .stk-con{position:sticky;top:clamp(84px,12vh,120px);margin:0;padding:clamp(14px,1.4vw,20px);border:1px solid var(--fs-line);z-index:1}
   .stk-band{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;font-size:10.5px}
   .stk-band span{color:var(--fs-ink-3)}
   .stk-band b{color:var(--blue);font-weight:500}
-  .stk-scr{position:relative;overflow:hidden;color:#fff;padding:clamp(18px,2vw,28px) clamp(18px,2vw,28px) clamp(6px,.8vw,10px);
-    background:radial-gradient(80% 70% at 78% 88%,rgba(21,105,255,.18),transparent 64%),
-               radial-gradient(46% 40% at 92% 18%,rgba(62,207,142,.07),transparent 70%),#05070b;
-    box-shadow:0 30px 70px -40px rgba(7,8,10,.55)}
-  .stk-scr::before{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:var(--blue)}
-  .stk-scr-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px 20px;flex-wrap:wrap}
-  .stk-k{font-size:9.5px;color:rgba(255,255,255,.52)}
-  .stk-apy{display:flex;align-items:baseline;gap:10px;margin-top:10px;line-height:.86}
-  .stk-apy b{font-size:clamp(58px,6.6vw,100px);font-weight:200;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
-  .stk-apy small{font-size:12px;color:rgba(255,255,255,.7)}
-  .stk-src{display:inline-flex;align-items:center;gap:9px;padding:7px 11px;border:1px solid rgba(62,207,142,.32);
-    background:rgba(62,207,142,.07);color:#3ecf8e;font-size:9.5px;white-space:nowrap}
-  .stk-src.off{border-color:rgba(255,255,255,.18);background:none;color:rgba(255,255,255,.6)}
-  .stk-ex{margin-top:clamp(18px,2.4vw,26px);font-size:9.5px;color:rgba(255,255,255,.52)}
-  .stk-cv{display:block;width:100%;height:clamp(170px,18vw,236px);margin-top:6px}
-  .stk-tick{display:flex;justify-content:space-between;align-items:baseline;gap:6px 16px;flex-wrap:wrap;
-    padding:14px 0;border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
-  .stk-tick span{font-size:9.5px;color:rgba(255,255,255,.52)}
-  .stk-tick b{font-family:'IBM Plex Mono',monospace;font-size:clamp(16px,1.5vw,20px);font-weight:400;letter-spacing:.02em;color:#3ecf8e;
-    font-variant-numeric:tabular-nums}
-  .stk-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0}
-  .stk-stats > div{min-width:0;padding:14px 12px 14px 0}
-  .stk-stats > div + div{padding-left:14px;border-left:1px solid rgba(255,255,255,.12)}
-  .stk-stats dt{font-size:9px;color:rgba(255,255,255,.5);margin-bottom:8px}
-  .stk-stats dd{margin:0;font-size:clamp(15px,1.25vw,18px);font-weight:300;color:#fff;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-  .stk-stats dd small{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;color:rgba(255,255,255,.55)}
 
-  /* los cuatro puntos: los pasos del Hash Market */
-  .stk-pts{list-style:none;margin:0;padding:0;border-top:1px solid var(--fs-line)}
-  .stk-pt{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);column-gap:16px;
-    padding:clamp(18px,2vw,26px) 0;border-bottom:1px solid var(--fs-line);
+  /* los cuatro puntos: una fila de cuatro casillas bajo el video */
+  .stk-pts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+    border-top:1px solid var(--fs-line);border-bottom:1px solid var(--fs-line)}
+  .stk-pt{position:relative;display:flex;flex-direction:column;align-items:flex-start;
+    padding:clamp(20px,2.2vw,28px) clamp(16px,1.8vw,26px) clamp(20px,2.2vw,26px);
     opacity:0;transform:translateY(12px);transition:opacity .8s var(--ease-out),transform .8s var(--ease-out)}
   #staking.on .stk-pt{opacity:1;transform:none}
   #staking.on .stk-pt:nth-child(2){transition-delay:.08s}
   #staking.on .stk-pt:nth-child(3){transition-delay:.16s}
   #staking.on .stk-pt:nth-child(4){transition-delay:.24s}
-  .stk-pt::before{content:'';position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--blue);
+  .stk-pt + .stk-pt{border-left:1px solid var(--fs-line)}
+  .stk-pt::before{content:'';position:absolute;left:0;top:-1px;height:1.5px;width:100%;background:var(--blue);
     transform:scaleX(0);transform-origin:0 50%;transition:transform .55s var(--ease)}
   .stk-pt:hover::before{transform:scaleX(1)}
-  .stk-n{grid-row:1/span 3;color:var(--blue);font-size:11px;padding-top:7px}
+  .stk-n{color:var(--blue);font-size:11px;margin-bottom:14px}
   .stk-pt h3{font-size:clamp(20px,1.7vw,25px);font-weight:400;letter-spacing:-.016em;line-height:1.2;color:var(--fs-ink)}
-  .stk-pt p{margin-top:8px;color:var(--fs-ink-3);font-size:14.5px;line-height:1.65;max-width:46ch}
-  .stk-fact{justify-self:start;margin-top:14px;padding:6px 10px;border:1px solid var(--fs-line);color:var(--fs-ink);font-size:10px}
+  .stk-pt p{margin:8px 0 16px;color:var(--fs-ink-3);font-size:14.5px;line-height:1.65;max-width:46ch}
+  .stk-fact{margin-top:auto;padding:6px 10px;border:1px solid var(--fs-line);color:var(--fs-ink);font-size:10px}
   .stk-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px 30px;
     margin-top:clamp(36px,4vw,56px);padding-top:clamp(24px,2.6vw,32px);border-top:1px solid var(--fs-line)}
   .stk-btns{display:flex;flex-wrap:wrap;gap:12px}
@@ -4625,15 +4599,17 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .stk-btn.go:hover{background:#0f57db;border-color:#0f57db;color:#fff}
   .stk-note{color:var(--fs-ink-3);font-size:13px;line-height:1.6;max-width:56ch}
   @media (max-width:1000px){
-    .stk-head,.stk-body{grid-template-columns:1fr}
+    .stk-head{grid-template-columns:1fr}
     .stk-hw h2{max-width:16ch}
-    .stk-con{position:relative;top:auto}
+    .stk-pts{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .stk-pt:nth-child(3){border-left:0}
+    .stk-pt:nth-child(n+3){border-top:1px solid var(--fs-line)}
     .stk-cta{border-top:0;padding-top:0}
   }
   @media (max-width:620px){
-    .stk-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .stk-stats > div:nth-child(3){padding-left:0;border-left:0}
-    .stk-stats > div:nth-child(n+3){border-top:1px solid rgba(255,255,255,.12)}
+    .stk-pts{grid-template-columns:minmax(0,1fr)}
+    .stk-pt + .stk-pt{border-left:0;border-top:1px solid var(--fs-line)}
+    .stk-pt{padding-left:0;padding-right:0}
   }
   @media (max-width:560px){
     .stk-btn{width:100%;justify-content:space-between}
@@ -5425,10 +5401,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 </section>
 
 <!-- ============ staking: recompensas para holders en Ethereum mainnet ============
-     La tasa y el fondo de recompensas se leen del contrato en vivo (poolView)
-     al acercarse la seccion; mientras tanto, y si los nodos publicos no
-     contestan, se ven las cifras escritas aqui. Lo mueve el script
-     "staking en la portada" del final. -->
+     Titular, el film del staking y, debajo, los cuatro puntos en una fila y
+     los botones. La entrada la da el script "staking en la portada". -->
 <section class="fst stk" id="staking" aria-labelledby="stk-h">
   <div class="spine" aria-hidden="true"><em><b>03</b><span>Holder rewards</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
@@ -5453,31 +5427,6 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       </figure>
     </div>
     <div class="stk-body">
-      <figure class="stk-con">
-        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
-        <figcaption class="stk-band mono"><span>Live from the contract</span><b>SF·HR·01·26</b></figcaption>
-        <div class="stk-scr">
-          <div class="stk-scr-top">
-            <div>
-              <p class="stk-k mono">Annual rate</p>
-              <p class="stk-apy"><b id="stk-apy" translate="no">14.9</b><small class="mono">% APY</small></p>
-            </div>
-            <p class="stk-src mono" id="stk-src"><span class="led" aria-hidden="true"></span>Read from the contract</p>
-          </div>
-          <p class="stk-ex mono">Example · 1,000 #SECT for 12 months</p>
-          <canvas class="stk-cv" id="stk-cv" aria-hidden="true"></canvas>
-          <div class="stk-tick" aria-hidden="true">
-            <span class="mono">Earned by 1,000 #SECT since you opened this page</span>
-            <b id="stk-tick" translate="no">+0.00000000</b>
-          </div>
-          <dl class="stk-stats">
-            <div><dt class="mono">Per day</dt><dd><span id="stk-dia" translate="no">0.41</span> <small>#SECT</small></dd></div>
-            <div><dt class="mono">Reward pool</dt><dd><span id="stk-pool" translate="no">—</span> <small>#SECT</small></dd></div>
-            <div><dt class="mono">Lock-up</dt><dd>None</dd></div>
-            <div><dt class="mono">Accrual</dt><dd>Every second</dd></div>
-          </dl>
-        </div>
-      </figure>
       <ol class="stk-pts">
         <li class="stk-pt">
           <span class="stk-n mono">01</span>
@@ -10848,168 +10797,17 @@ window.__lejos = function(el){
 })();
 </script>
 <script>
-/* ---------- staking en la portada: contrato en vivo ----------
-   - Al acercarse la seccion se lee poolView() del contrato de recompensas
-     en dos nodos publicos de mainnet, con un eth_call a mano (sin ethers:
-     la portada no carga esa libreria). Si contestan los dos, la tasa tiene
-     que coincidir; si no contesta ninguno, se quedan las cifras escritas.
-   - Al entrar se dibuja la recta de 1.000 #SECT en 12 meses (el contrato
-     no capitaliza: cada segundo paga lo mismo) y arranca el contador, que
-     solo corre mientras la seccion se ve. */
+/* ---------- staking en la portada: entrada ----------
+   El titular sube, y el film y los cuatro puntos aparecen, al llegar la
+   seccion (la clase .on, como en la declaracion de los fundadores). */
 (function(){
   const sec = document.getElementById('staking');
   if(!sec) return;
-  const $ = (id) => document.getElementById(id);
-  const cv = $('stk-cv'), elApy = $('stk-apy'), elTick = $('stk-tick'), elDia = $('stk-dia'), elPool = $('stk-pool'), elSrc = $('stk-src');
-  const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const CONTRATO = '0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0';
-  const POOLVIEW = '0xe5bc0303';   // poolView()
-  const RPCS = ['https://ethereum-rpc.publicnode.com', 'https://eth.drpc.org', 'https://1rpc.io/eth'];
-  const DEPOSITO = 1000, ANO_S = 365 * 86400;
-  let apy = 0.149;
-  const f2 = (v) => v.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
-
-  function pintarTasa(){
-    if(elApy) elApy.textContent = (apy * 100).toFixed(2).replace(/\.?0+$/, '');
-    if(elDia) elDia.textContent = f2(DEPOSITO * apy / 365);
-    dibujar(avance);
-  }
-
-  /* ---- lectura del contrato ---- */
-  function llamar(url){
-    const ctl = 'AbortController' in window ? new AbortController() : null;
-    const t = setTimeout(() => ctl && ctl.abort(), 6000);
-    return fetch(url, {method:'POST', headers:{'content-type':'application/json'}, signal: ctl ? ctl.signal : undefined,
-      body: JSON.stringify({jsonrpc:'2.0', id:1, method:'eth_call', params:[{to:CONTRATO, data:POOLVIEW}, 'latest']})})
-      .then((r) => r.json())
-      .then((j) => {
-        clearTimeout(t);
-        const h = j && j.result;
-        if(typeof h !== 'string' || h.length < 2 + 64 * 7) throw new Error('respuesta corta');
-        const w = (i) => BigInt('0x' + h.slice(2 + 64 * i, 2 + 64 * (i + 1)));
-        return {pool: w(1), rate: Number(w(2)), paused: w(3) !== 0n};
-      }, (e) => { clearTimeout(t); throw e; });
-  }
-  let leido = false;
-  function leer(){
-    if(leido || !window.fetch || typeof BigInt === 'undefined') return;
-    leido = true;
-    Promise.allSettled([llamar(RPCS[0]), llamar(RPCS[1])]).then((rs) => {
-      const ok = rs.filter((r) => r.status === 'fulfilled').map((r) => r.value);
-      if(ok.length === 2 && ok[0].rate !== ok[1].rate) return null;   // un nodo no puede inventar la tasa
-      return ok.length ? ok[0] : llamar(RPCS[2]).catch(() => null);
-    }).then((pv) => {
-      if(!pv || !(pv.rate > 0 && pv.rate <= 100000)) return;
-      apy = pv.rate / 10000;
-      pintarTasa();
-      const entero = pv.pool / (10n ** 18n);
-      if(elPool && entero > 0n) elPool.textContent = Number(entero).toLocaleString('en-US');
-      if(elSrc && pv.paused){ elSrc.classList.add('off'); elSrc.lastChild.nodeValue = 'Rewards paused'; }
-    });
-  }
-
-  /* ---- la recta ---- */
-  const ctx = cv && cv.getContext('2d');
-  let W = 0, H = 0, dpr = 1, avance = quieto ? 1 : 0;
-  function medir(){
-    if(!cv) return;
-    const r = cv.getBoundingClientRect();
-    dpr = Math.min(2, devicePixelRatio || 1);
-    const w = Math.round(r.width), h = Math.round(r.height);
-    if(w === W && h === H) return;
-    W = w; H = h;
-    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
-    dibujar(avance);
-  }
-  function dibujar(a){
-    if(!ctx || !W) return;
-    const movil = W < 420;
-    const x0 = movil ? 30 : 40, x1 = W - 8, y0 = H - 22, yT = 30;
-    const X = (u) => x0 + (x1 - x0) * u, Y = (u) => y0 - (y0 - yT) * u;
-    const ano = DEPOSITO * apy;
-    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.font = "9.5px 'IBM Plex Mono', monospace";
-    // niveles y meses
-    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
-    for(let i = 0; i <= 2; i++){
-      const y = Y(i / 2);
-      ctx.strokeStyle = i ? 'rgba(255,255,255,.08)' : 'rgba(255,255,255,.24)'; ctx.setLineDash(i ? [2, 6] : []);
-      ctx.beginPath(); ctx.moveTo(x0, y + .5); ctx.lineTo(x1, y + .5); ctx.stroke();
-      ctx.fillStyle = 'rgba(255,255,255,.42)'; ctx.fillText((i ? '+' : '') + Math.round(ano * i / 2), x0 - 8, y);
-    }
-    ctx.setLineDash([]); ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-    const mes = Math.floor(a * 12 + 1e-6);
-    for(let m = 0; m <= 12; m++){
-      const x = X(m / 12), pasado = m <= mes;
-      ctx.strokeStyle = pasado ? 'rgba(255,255,255,.45)' : 'rgba(255,255,255,.18)';
-      ctx.beginPath(); ctx.moveTo(x + .5, y0); ctx.lineTo(x + .5, y0 + 5); ctx.stroke();
-      if(m % 3 === 0){ ctx.fillStyle = pasado ? 'rgba(255,255,255,.72)' : 'rgba(255,255,255,.32)'; ctx.fillText(m ? 'M' + String(m).padStart(2, '0') : 'Start', Math.min(Math.max(x, x0 + 14), x1 - 12), y0 + 9); }
-    }
-    // hacia donde va
-    ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.setLineDash([4, 7]);
-    ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(1), Y(1)); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
-    ctx.fillText('+' + f2(ano), X(1), Y(1) - 10);
-    if(a <= 0) return;
-    const hx = X(a), hy = Y(a);
-    const g = ctx.createLinearGradient(0, yT, 0, y0);
-    g.addColorStop(0, 'rgba(21,105,255,.72)'); g.addColorStop(1, 'rgba(21,105,255,.05)');
-    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(hx, hy); ctx.lineTo(hx, y0); ctx.closePath(); ctx.fill();
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = 'rgba(21,105,255,.45)'; ctx.lineWidth = 7;
-    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(hx, hy); ctx.stroke();
-    const u0 = Math.max(0, a - .14), gv = ctx.createLinearGradient(X(u0), 0, hx, 0);
-    gv.addColorStop(0, 'rgba(62,207,142,0)'); gv.addColorStop(1, 'rgba(62,207,142,.55)');
-    ctx.strokeStyle = gv; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(X(u0), Y(u0)); ctx.lineTo(hx, hy); ctx.stroke();
-    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(hx, hy); ctx.stroke();
-    ctx.lineCap = 'butt'; ctx.lineWidth = 1;
-    for(let m = 1; m <= 12; m++){
-      const u = m / 12; if(u > a + 1e-6) break;
-      ctx.fillStyle = a * 12 - m < .6 ? 'rgb(62,207,142)' : '#fff';
-      ctx.beginPath(); ctx.arc(X(u), Y(u), 2.4, 0, 6.283); ctx.fill();
-    }
-    const halo = ctx.createRadialGradient(hx, hy, 0, hx, hy, 20);
-    halo.addColorStop(0, 'rgba(62,207,142,.45)'); halo.addColorStop(1, 'rgba(62,207,142,0)');
-    ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(hx, hy, 20, 0, 6.283); ctx.fill();
-    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(hx, hy, 4.5, 0, 6.283); ctx.fill();
-    ctx.fillStyle = 'rgb(62,207,142)'; ctx.beginPath(); ctx.arc(hx, hy, 2.7, 0, 6.283); ctx.fill();
-  }
-  function trazar(){
-    if(quieto || avance >= 1){ avance = 1; dibujar(1); return; }
-    const t0 = performance.now(), dur = 2400, desde = avance;
-    (function paso(t){
-      const k = Math.min(1, (t - t0) / dur), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-      avance = desde + (1 - desde) * e; dibujar(avance);
-      if(k < 1) requestAnimationFrame(paso);
-    })(t0);
-  }
-
-  /* ---- el contador: lo que suma un deposito de 1.000 #SECT desde que se abrio la pagina ---- */
-  const abierta = performance.now();
-  let reloj = null;
-  function contar(){ if(elTick) elTick.textContent = '+' + (DEPOSITO * apy * (performance.now() - abierta) / 1000 / ANO_S).toFixed(8); }
-  function correr(si){
-    if(si && !reloj){ contar(); reloj = setInterval(contar, 100); }
-    else if(!si && reloj){ clearInterval(reloj); reloj = null; }
-  }
-
-  medir();
-  pintarTasa();
-  addEventListener('resize', medir, {passive:true});
-  if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => dibujar(avance));
-  if(!('IntersectionObserver' in window)){ sec.classList.add('on'); leer(); trazar(); correr(true); return; }
-  // la lectura, con margen para que llegue antes de verse
-  const cerca = new IntersectionObserver((es) => { if(es[0].isIntersecting){ leer(); cerca.disconnect(); } }, {rootMargin:'900px 0px'});
-  cerca.observe(sec);
-  // la entrada: titular, puntos y la recta
-  const entra = new IntersectionObserver((es) => {
-    if(es[0].isIntersecting){ sec.classList.add('on'); medir(); trazar(); entra.disconnect(); }
+  if(!('IntersectionObserver' in window)){ sec.classList.add('on'); return; }
+  const io = new IntersectionObserver((es) => {
+    if(es[0].isIntersecting){ sec.classList.add('on'); io.disconnect(); }
   }, {rootMargin:'-10% 0px -14% 0px', threshold:0});
-  entra.observe(sec);
-  // el contador, solo mientras la consola se ve
-  const consola = sec.querySelector('.stk-scr');
-  new IntersectionObserver((es) => correr(es[0].isIntersecting), {threshold:0}).observe(consola || sec);
+  io.observe(sec);
 })();
 </script>
 <script>
