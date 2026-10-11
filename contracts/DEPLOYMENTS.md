@@ -33,7 +33,12 @@ Pendiente:
 
 Blockaid (avisos de MetaMask) marcó el contrato como malicioso tras el lanzamiento; se envió un informe de falso positivo.
 
-Mientras Blockaid no quite la alerta, el staking está oculto en la web (el contrato sigue funcionando):
+**11 oct 2026: Blockaid quitó la alerta y el staking vuelve a estar publicado.** Portada: nueva sección
+"03 Holder rewards" encima del Hash Market (tasa y fondo leídos del contrato en vivo), menú, fila 05 de
+Developments, hoja de ruta y placa en "live"; whitepaper (web y PDF) como antes de ocultarlo; `/staking/`
+sin `noindex` y de vuelta en `sitemap.xml`.
+
+Lo que se hizo mientras estuvo marcado (ya revertido):
 - Portada: menú, fila 05 de Developments, hoja de ruta y placa vuelven a "In progress", sin enlace a /staking.
 - Whitepaper (web y PDF): §04 ya no menciona el staking; la hoja de ruta dice "Staking — in progress".
 - `/staking/` sigue funcionando con el enlace directo (para que quien ya depositó pueda reclamar o retirar), pero lleva `noindex` y salió de `sitemap.xml`.

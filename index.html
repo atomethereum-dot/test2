@@ -4527,6 +4527,113 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     .hmk-btn{width:100%;justify-content:space-between}
     .hmk-btns{width:100%}
   }
+  /* ============ staking: recompensas para holders, en mainnet ============
+     Hoja clara entre la declaracion y el Hash Market. Lleva .fst, asi que
+     hereda su papel y entra en la cadena de noche como sus vecinas. Su
+     pieza es una consola negra con lo que se lee del contrato en vivo (la
+     tasa y el fondo de recompensas), la recta de lo que gana un ejemplo de
+     1.000 #SECT en 12 meses, que se dibuja al llegar, y un contador que
+     suma cada segundo. Es una recta: el contrato no capitaliza. */
+  .stk{scroll-margin-top:70px}
+  .stk-in{position:relative;z-index:1;max-width:1280px}
+  .stk-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:30px}
+  .stk-live{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border:1px solid rgba(15,143,82,.38);
+    background:rgba(15,143,82,.07);color:#0f8f52;font-size:11px}
+  .stk .led{position:relative;width:6px;height:6px;border-radius:50%;flex:none;background:#25d366;
+    box-shadow:0 0 10px 1px rgba(37,211,102,.65);clip-path:inset(-18px)}
+  .stk .led::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid #25d366;
+    animation:ping 2.6s var(--ease) infinite}
+  .stk-ser{color:var(--fs-ink-3);font-size:11px}
+  .stk-head{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,90px);align-items:end;
+    margin-bottom:clamp(40px,5vw,72px)}
+  .stk-hw{overflow:hidden;padding-bottom:.12em}
+  .stk-hw h2{font-size:clamp(34px,4.6vw,68px);font-weight:300;line-height:1.02;letter-spacing:-.03em;max-width:18ch;
+    text-wrap:balance;color:var(--fs-ink);transform:translateY(104%);transition:transform 1.1s var(--ease-out)}
+  .stk-hw h2 b{display:block;font-weight:400;color:var(--blue)}
+  .stk-head p{color:var(--fs-ink-2);font-size:clamp(15px,1.15vw,18px);line-height:1.65;font-weight:300;max-width:50ch;
+    opacity:0;transform:translateY(12px);transition:opacity .9s var(--ease-out) .2s,transform .9s var(--ease-out) .2s}
+  #staking.on .stk-hw h2{transform:none}
+  #staking.on .stk-head p{opacity:1;transform:none}
+  .stk-body{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,3.4vw,56px);align-items:start}
+
+  /* la consola: el mismo marco que el video del Hash Market, con pantalla negra */
+  .stk-con{position:sticky;top:clamp(84px,12vh,120px);margin:0;padding:clamp(14px,1.4vw,20px);border:1px solid var(--fs-line);z-index:1}
+  .stk-band{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;font-size:10.5px}
+  .stk-band span{color:var(--fs-ink-3)}
+  .stk-band b{color:var(--blue);font-weight:500}
+  .stk-scr{position:relative;overflow:hidden;color:#fff;padding:clamp(18px,2vw,28px) clamp(18px,2vw,28px) clamp(6px,.8vw,10px);
+    background:radial-gradient(80% 70% at 78% 88%,rgba(21,105,255,.18),transparent 64%),
+               radial-gradient(46% 40% at 92% 18%,rgba(62,207,142,.07),transparent 70%),#05070b;
+    box-shadow:0 30px 70px -40px rgba(7,8,10,.55)}
+  .stk-scr::before{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:var(--blue)}
+  .stk-scr-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px 20px;flex-wrap:wrap}
+  .stk-k{font-size:9.5px;color:rgba(255,255,255,.52)}
+  .stk-apy{display:flex;align-items:baseline;gap:10px;margin-top:10px;line-height:.86}
+  .stk-apy b{font-size:clamp(58px,6.6vw,100px);font-weight:200;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+  .stk-apy small{font-size:12px;color:rgba(255,255,255,.7)}
+  .stk-src{display:inline-flex;align-items:center;gap:9px;padding:7px 11px;border:1px solid rgba(62,207,142,.32);
+    background:rgba(62,207,142,.07);color:#3ecf8e;font-size:9.5px;white-space:nowrap}
+  .stk-src.off{border-color:rgba(255,255,255,.18);background:none;color:rgba(255,255,255,.6)}
+  .stk-ex{margin-top:clamp(18px,2.4vw,26px);font-size:9.5px;color:rgba(255,255,255,.52)}
+  .stk-cv{display:block;width:100%;height:clamp(170px,18vw,236px);margin-top:6px}
+  .stk-tick{display:flex;justify-content:space-between;align-items:baseline;gap:6px 16px;flex-wrap:wrap;
+    padding:14px 0;border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
+  .stk-tick span{font-size:9.5px;color:rgba(255,255,255,.52)}
+  .stk-tick b{font-family:'IBM Plex Mono',monospace;font-size:clamp(16px,1.5vw,20px);font-weight:400;letter-spacing:.02em;color:#3ecf8e;
+    font-variant-numeric:tabular-nums}
+  .stk-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0}
+  .stk-stats > div{min-width:0;padding:14px 12px 14px 0}
+  .stk-stats > div + div{padding-left:14px;border-left:1px solid rgba(255,255,255,.12)}
+  .stk-stats dt{font-size:9px;color:rgba(255,255,255,.5);margin-bottom:8px}
+  .stk-stats dd{margin:0;font-size:clamp(15px,1.25vw,18px);font-weight:300;color:#fff;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+  .stk-stats dd small{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;color:rgba(255,255,255,.55)}
+
+  /* los cuatro puntos: los pasos del Hash Market */
+  .stk-pts{list-style:none;margin:0;padding:0;border-top:1px solid var(--fs-line)}
+  .stk-pt{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);column-gap:16px;
+    padding:clamp(18px,2vw,26px) 0;border-bottom:1px solid var(--fs-line);
+    opacity:0;transform:translateY(12px);transition:opacity .8s var(--ease-out),transform .8s var(--ease-out)}
+  #staking.on .stk-pt{opacity:1;transform:none}
+  #staking.on .stk-pt:nth-child(2){transition-delay:.08s}
+  #staking.on .stk-pt:nth-child(3){transition-delay:.16s}
+  #staking.on .stk-pt:nth-child(4){transition-delay:.24s}
+  .stk-pt::before{content:'';position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--blue);
+    transform:scaleX(0);transform-origin:0 50%;transition:transform .55s var(--ease)}
+  .stk-pt:hover::before{transform:scaleX(1)}
+  .stk-n{grid-row:1/span 3;color:var(--blue);font-size:11px;padding-top:7px}
+  .stk-pt h3{font-size:clamp(20px,1.7vw,25px);font-weight:400;letter-spacing:-.016em;line-height:1.2;color:var(--fs-ink)}
+  .stk-pt p{margin-top:8px;color:var(--fs-ink-3);font-size:14.5px;line-height:1.65;max-width:46ch}
+  .stk-fact{justify-self:start;margin-top:14px;padding:6px 10px;border:1px solid var(--fs-line);color:var(--fs-ink);font-size:10px}
+  .stk-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px 30px;
+    margin-top:clamp(36px,4vw,56px);padding-top:clamp(24px,2.6vw,32px);border-top:1px solid var(--fs-line)}
+  .stk-btns{display:flex;flex-wrap:wrap;gap:12px}
+  .stk-btn{display:inline-flex;align-items:center;gap:12px;height:56px;padding:0 22px;border:1px solid var(--fs-ink);
+    color:var(--fs-ink);font-size:11px;text-decoration:none;
+    transition:background .3s var(--ease),border-color .3s var(--ease),color .3s var(--ease)}
+  .stk-btn i{font-style:normal;transition:transform .38s var(--ease)}
+  .stk-btn:hover{border-color:var(--blue);color:var(--blue)}
+  .stk-btn:hover i{transform:translate(3px,-3px)}
+  .stk-btn.go{background:var(--blue);border-color:var(--blue);color:#fff}
+  .stk-btn.go:hover{background:#0f57db;border-color:#0f57db;color:#fff}
+  .stk-note{color:var(--fs-ink-3);font-size:13px;line-height:1.6;max-width:56ch}
+  @media (max-width:1000px){
+    .stk-head,.stk-body{grid-template-columns:1fr}
+    .stk-hw h2{max-width:16ch}
+    .stk-con{position:relative;top:auto}
+    .stk-cta{border-top:0;padding-top:0}
+  }
+  @media (max-width:620px){
+    .stk-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .stk-stats > div:nth-child(3){padding-left:0;border-left:0}
+    .stk-stats > div:nth-child(n+3){border-top:1px solid rgba(255,255,255,.12)}
+  }
+  @media (max-width:560px){
+    .stk-btn{width:100%;justify-content:space-between}
+    .stk-btns{width:100%}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .stk-hw h2,.stk-head p,.stk-pt{transform:none!important;opacity:1!important;transition:none!important}
+  }
   .hero > div{position:relative}
   .press{position:relative;background:#000;color:#fff;padding:clamp(96px,14vh,170px) var(--pad) clamp(90px,13vh,150px)}
   .gs-in{position:relative;max-width:1600px;margin:0 auto}
@@ -5149,10 +5256,10 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
           <span class="nvp-n">Cybersecurity Software</span>
           <span class="nvp-s"><span class="nvp-led"></span>Open security</span>
         </a>
-        <span class="nvp-item soon">
+        <a class="nvp-item" href="https://sectoraorg.com/staking/" target="_blank" rel="noopener">
           <span class="nvp-n">Staking</span>
-          <span class="nvp-s"><span class="nvp-led"></span>In progress</span>
-        </span>
+          <span class="nvp-s"><span class="nvp-led"></span>Open staking</span>
+        </a>
         <a class="nvp-item" href="https://sectoraorg.com/dex" target="_blank" rel="noopener noreferrer">
           <span class="nvp-n">DEX</span>
           <span class="nvp-s"><span class="nvp-led"></span>Open DEX</span>
@@ -5309,8 +5416,90 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   </div>
 </section>
 
+<!-- ============ staking: recompensas para holders en Ethereum mainnet ============
+     La tasa y el fondo de recompensas se leen del contrato en vivo (poolView)
+     al acercarse la seccion; mientras tanto, y si los nodos publicos no
+     contestan, se ven las cifras escritas aqui. Lo mueve el script
+     "staking en la portada" del final. -->
+<section class="fst stk" id="staking" aria-labelledby="stk-h">
+  <div class="spine" aria-hidden="true"><em><b>03</b><span>Holder rewards</span></em><i></i></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
+  <div class="lux" aria-hidden="true"></div>
+  <div class="stk-in">
+    <div class="stk-top">
+      <span class="stk-live mono"><span class="led" aria-hidden="true"></span>Mainnet live</span>
+      <span class="stk-ser mono">Holder rewards · Ethereum mainnet</span>
+    </div>
+    <div class="stk-head">
+      <div class="stk-hw"><h2 id="stk-h">Stake #SECT. <b>Earn every second.</b></h2></div>
+      <p>Deposit #SECT in the Sectora Foundation’s holder-rewards contract and earn rewards every second, paid in #SECT from a pool the treasury funds in advance. No lock-up: claim or withdraw whenever you want.</p>
+    </div>
+    <div class="stk-body">
+      <figure class="stk-con">
+        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+        <figcaption class="stk-band mono"><span>Live from the contract</span><b>SF·HR·01·26</b></figcaption>
+        <div class="stk-scr">
+          <div class="stk-scr-top">
+            <div>
+              <p class="stk-k mono">Annual rate</p>
+              <p class="stk-apy"><b id="stk-apy" translate="no">14.9</b><small class="mono">% APY</small></p>
+            </div>
+            <p class="stk-src mono" id="stk-src"><span class="led" aria-hidden="true"></span>Read from the contract</p>
+          </div>
+          <p class="stk-ex mono">Example · 1,000 #SECT for 12 months</p>
+          <canvas class="stk-cv" id="stk-cv" aria-hidden="true"></canvas>
+          <div class="stk-tick" aria-hidden="true">
+            <span class="mono">Earned by 1,000 #SECT since you opened this page</span>
+            <b id="stk-tick" translate="no">+0.00000000</b>
+          </div>
+          <dl class="stk-stats">
+            <div><dt class="mono">Per day</dt><dd><span id="stk-dia" translate="no">0.41</span> <small>#SECT</small></dd></div>
+            <div><dt class="mono">Reward pool</dt><dd><span id="stk-pool" translate="no">—</span> <small>#SECT</small></dd></div>
+            <div><dt class="mono">Lock-up</dt><dd>None</dd></div>
+            <div><dt class="mono">Accrual</dt><dd>Every second</dd></div>
+          </dl>
+        </div>
+      </figure>
+      <ol class="stk-pts">
+        <li class="stk-pt">
+          <span class="stk-n mono">01</span>
+          <h3>No lock-up</h3>
+          <p>Withdraw part or all of your deposit at any time, with no penalty, and claim your rewards whenever you like.</p>
+          <span class="stk-fact mono">Withdraw any time</span>
+        </li>
+        <li class="stk-pt">
+          <span class="stk-n mono">02</span>
+          <h3>Paid every second</h3>
+          <p>Rewards start the second your deposit lands and grow continuously. The rate is read from the contract, not written on a page.</p>
+          <span class="stk-fact mono">APY read on-chain</span>
+        </li>
+        <li class="stk-pt">
+          <span class="stk-n mono">03</span>
+          <h3>Funded in advance</h3>
+          <p>The treasury deposits the reward budget into the contract before it is paid out. The size of the pool is public on Etherscan.</p>
+          <span class="stk-fact mono">Nothing is minted</span>
+        </li>
+        <li class="stk-pt">
+          <span class="stk-n mono">04</span>
+          <h3>Exact approvals only</h3>
+          <p>Your wallet approves exactly the amount you deposit, never an unlimited allowance. Depositing takes two confirmations; claiming and withdrawing take one.</p>
+          <span class="stk-fact mono">Two confirmations to deposit</span>
+        </li>
+      </ol>
+    </div>
+    <div class="stk-cta">
+      <div class="stk-btns">
+        <a class="stk-btn go mono" href="https://sectoraorg.com/staking/" target="_blank" rel="noopener"><span class="led" aria-hidden="true"></span><span>Open staking</span><i aria-hidden="true">↗</i></a>
+        <a class="stk-btn mono" href="https://sectoraorg.com/staking/#guide" target="_blank" rel="noopener"><span>Step-by-step guide</span><i aria-hidden="true">↗</i></a>
+        <a class="stk-btn mono" href="https://etherscan.io/address/0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0#code" target="_blank" rel="noopener noreferrer"><span>Verify on Etherscan</span><i aria-hidden="true">↗</i></a>
+      </div>
+      <p class="stk-note">Rewards are paid in #SECT from a pool funded in advance. The rate can change and only applies from that second on. Nothing here is a promise about the price of #SECT.</p>
+    </div>
+  </div>
+</section>
+
 <section class="fst hmk" id="hashmarket" aria-labelledby="hmk-h">
-  <div class="spine" aria-hidden="true"><em><b>03</b><span>Hash Market</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>04</b><span>Hash Market</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="hmk-in">
@@ -5370,7 +5559,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 
 <section class="offer" id="offer">
   <!-- aqui iba <div class="of-halo">: la mancha de luz azul de la derecha. Retirada a peticion. -->
-  <div class="spine" aria-hidden="true"><em><b>04</b><span>Distribution</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>05</b><span>Distribution</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="of-inner">
@@ -5397,7 +5586,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 </section>
 
 <section class="why" id="why">
-  <div class="spine" aria-hidden="true"><em><b>05</b><span>Why hold #SECT</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>06</b><span>Why hold #SECT</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="wh-inner">
@@ -5532,7 +5721,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   <!-- fuera de .m-bg, como en las otras dos secciones: ese envoltorio
        lleva z-index y recorte para contener los halos, y dentro de el
        el lomo quedaba por debajo del velo del titulo fijo -->
-  <div class="spine" aria-hidden="true"><em><b>06</b><span>Verification</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>07</b><span>Verification</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="m-bg" aria-hidden="true">
     <!-- aqui iban los dos <div class="halo">: las manchas de luz azul detras del titular. Retiradas a peticion. -->
@@ -5631,9 +5820,9 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       <p class="eyebrow mono reveal"><i></i>Developments</p>
       <h2 class="reveal" style="--d:.06s">Seven products on one security layer.</h2>
       <p class="p-lede reveal" style="--d:.12s">
-        Each one runs on the same security layer. Five are open on testnet; staking and the stablecoin are still in progress.
+        Each one runs on the same security layer. Staking is live on Ethereum mainnet, five are open on testnet and the stablecoin is still in progress.
       </p>
-      <p class="p-count mono reveal" style="--d:.18s">07 products · 05 live</p>
+      <p class="p-count mono reveal" style="--d:.18s">07 products · 06 live</p>
 
       <div class="p-index reveal" style="--d:.24s" aria-hidden="true">
         <span class="p-index-num" id="p-index-num">01</span>
@@ -5688,8 +5877,12 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <span class="p-num">05</span>
         <span class="p-name">Staking</span>
         <div class="p-meta">
-          <span class="p-desc">The staking program is being finalised. Its terms will be published before launch.</span>
-          <span class="p-soon"><span class="led"></span>In progress</span>
+          <span class="p-tag"><span class="led" aria-hidden="true"></span>Mainnet live</span>
+          <span class="p-desc">Deposit #SECT and earn 14.9% APY, accrued every second and paid by the Sectora Foundation from a funded reward pool. Claim your rewards and withdraw your deposit any time: no lock-up, no fees.</span>
+          <span class="hb">
+            <a class="vivo" href="https://sectoraorg.com/staking/" target="_blank" rel="noopener noreferrer"><span class="led"></span>Open staking · APY 14.9% <i>↗</i></a>
+            <a href="https://sectoraorg.com/staking/#guide" target="_blank" rel="noopener noreferrer">How it works <i>↗</i></a>
+          </span>
         </div>
       </div>
       <div class="p-row reveal" style="--d:0.36s">
@@ -5774,7 +5967,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <span class="tl-q">Aug 2026 · Phase 2</span><span class="tl-tag">Testing Phase · Testnet</span>
         <h3>Testnet</h3>
         <ul class="tl-ml">
-          <li>Staking — in progress</li>
+          <li>Staking — live on Ethereum mainnet</li>
           <li>Testnet infrastructure deployed: Sectora L3 blockchain, node validation, DEX</li>
           <li>Hash market (Dashboard) — Testnet live: tSECT faucet, hash purchases with 80% burn, APY rewards and node registration</li>
         </ul>
@@ -8028,7 +8221,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 
   const M = [
     {q:'Aug 2026 · Phase 1', n:'Foundation & audit',                     s:'Contract renounced · Audit approved · Illinois registered',                 c:'SF·RM·P1·26', k:5.07,  d:1.35, l:3},
-    {q:'Aug 2026 · Phase 2', n:'Testnet live · staking in progress',      s:'Sectora L3 blockchain · Hash market · Node validation · DEX · Staking in progress',              c:'SF·RM·P2·26', k:6.69,  d:1.25, l:3},
+    {q:'Aug 2026 · Phase 2', n:'Testnet live · staking live',             s:'Sectora L3 blockchain · Hash market · Node validation · DEX · Staking live on mainnet',              c:'SF·RM·P2·26', k:6.69,  d:1.25, l:3},
     {q:'15 Mar 2027 · Phase 3', n:'Supply reduction & exchange listings',   s:'50% supply reduction · Exchange listings',                                  c:'SF·RM·P3·27', k:8.31,  d:1.14, l:3},
     {q:'2027 · Phase 4',     n:'Mainnet infrastructure launch',          s:'L3 RWA blockchain · Hash market & Hash Nodes',                                             c:'SF·RM·P4·27', k:11.55, d:0.93, l:4},
     {q:'2027 · Phase 5',     n:'DEX, tokenization & security software',  s:'Multi-trade DEX · RWA tokenization · Security software',                   c:'SF·RM·P5·27', k:14.79, d:0.72, l:5},
@@ -9926,7 +10119,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261019';
+      sc.src = 'i18n-home.js?v=20261031';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
@@ -10302,7 +10495,7 @@ window.__lejos = function(el){
      que ella: si llegara a negro, el titulo quedaria carbon con papel
      justo debajo. Se queda en un atenuado suave, y como su avance nunca
      alcanza el punto de cruce, su texto sigue siendo oscuro. */
-  const secs = [['what',1], ['statement',1], ['hashmarket',1], ['offer',1], ['why',1], ['mandates',1]]
+  const secs = [['what',1], ['statement',1], ['staking',1], ['hashmarket',1], ['offer',1], ['why',1], ['mandates',1]]
     .map(function(par){
       const el = document.getElementById(par[0]);
       return el ? {el: el, tope: par[1], v: -1, n: 0, vf: -1, cerca: false} : null;
@@ -10590,6 +10783,171 @@ window.__lejos = function(el){
     }
   }, {rootMargin:'-10% 0px -14% 0px', threshold:0});
   io.observe(sec);
+})();
+</script>
+<script>
+/* ---------- staking en la portada: contrato en vivo ----------
+   - Al acercarse la seccion se lee poolView() del contrato de recompensas
+     en dos nodos publicos de mainnet, con un eth_call a mano (sin ethers:
+     la portada no carga esa libreria). Si contestan los dos, la tasa tiene
+     que coincidir; si no contesta ninguno, se quedan las cifras escritas.
+   - Al entrar se dibuja la recta de 1.000 #SECT en 12 meses (el contrato
+     no capitaliza: cada segundo paga lo mismo) y arranca el contador, que
+     solo corre mientras la seccion se ve. */
+(function(){
+  const sec = document.getElementById('staking');
+  if(!sec) return;
+  const $ = (id) => document.getElementById(id);
+  const cv = $('stk-cv'), elApy = $('stk-apy'), elTick = $('stk-tick'), elDia = $('stk-dia'), elPool = $('stk-pool'), elSrc = $('stk-src');
+  const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const CONTRATO = '0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0';
+  const POOLVIEW = '0xe5bc0303';   // poolView()
+  const RPCS = ['https://ethereum-rpc.publicnode.com', 'https://eth.drpc.org', 'https://1rpc.io/eth'];
+  const DEPOSITO = 1000, ANO_S = 365 * 86400;
+  let apy = 0.149;
+  const f2 = (v) => v.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+
+  function pintarTasa(){
+    if(elApy) elApy.textContent = (apy * 100).toFixed(2).replace(/\.?0+$/, '');
+    if(elDia) elDia.textContent = f2(DEPOSITO * apy / 365);
+    dibujar(avance);
+  }
+
+  /* ---- lectura del contrato ---- */
+  function llamar(url){
+    const ctl = 'AbortController' in window ? new AbortController() : null;
+    const t = setTimeout(() => ctl && ctl.abort(), 6000);
+    return fetch(url, {method:'POST', headers:{'content-type':'application/json'}, signal: ctl ? ctl.signal : undefined,
+      body: JSON.stringify({jsonrpc:'2.0', id:1, method:'eth_call', params:[{to:CONTRATO, data:POOLVIEW}, 'latest']})})
+      .then((r) => r.json())
+      .then((j) => {
+        clearTimeout(t);
+        const h = j && j.result;
+        if(typeof h !== 'string' || h.length < 2 + 64 * 7) throw new Error('respuesta corta');
+        const w = (i) => BigInt('0x' + h.slice(2 + 64 * i, 2 + 64 * (i + 1)));
+        return {pool: w(1), rate: Number(w(2)), paused: w(3) !== 0n};
+      }, (e) => { clearTimeout(t); throw e; });
+  }
+  let leido = false;
+  function leer(){
+    if(leido || !window.fetch || typeof BigInt === 'undefined') return;
+    leido = true;
+    Promise.allSettled([llamar(RPCS[0]), llamar(RPCS[1])]).then((rs) => {
+      const ok = rs.filter((r) => r.status === 'fulfilled').map((r) => r.value);
+      if(ok.length === 2 && ok[0].rate !== ok[1].rate) return null;   // un nodo no puede inventar la tasa
+      return ok.length ? ok[0] : llamar(RPCS[2]).catch(() => null);
+    }).then((pv) => {
+      if(!pv || !(pv.rate > 0 && pv.rate <= 100000)) return;
+      apy = pv.rate / 10000;
+      pintarTasa();
+      const entero = pv.pool / (10n ** 18n);
+      if(elPool && entero > 0n) elPool.textContent = Number(entero).toLocaleString('en-US');
+      if(elSrc && pv.paused){ elSrc.classList.add('off'); elSrc.lastChild.nodeValue = 'Rewards paused'; }
+    });
+  }
+
+  /* ---- la recta ---- */
+  const ctx = cv && cv.getContext('2d');
+  let W = 0, H = 0, dpr = 1, avance = quieto ? 1 : 0;
+  function medir(){
+    if(!cv) return;
+    const r = cv.getBoundingClientRect();
+    dpr = Math.min(2, devicePixelRatio || 1);
+    const w = Math.round(r.width), h = Math.round(r.height);
+    if(w === W && h === H) return;
+    W = w; H = h;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    dibujar(avance);
+  }
+  function dibujar(a){
+    if(!ctx || !W) return;
+    const movil = W < 420;
+    const x0 = movil ? 30 : 40, x1 = W - 8, y0 = H - 22, yT = 30;
+    const X = (u) => x0 + (x1 - x0) * u, Y = (u) => y0 - (y0 - yT) * u;
+    const ano = DEPOSITO * apy;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.font = "9.5px 'IBM Plex Mono', monospace";
+    // niveles y meses
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    for(let i = 0; i <= 2; i++){
+      const y = Y(i / 2);
+      ctx.strokeStyle = i ? 'rgba(255,255,255,.08)' : 'rgba(255,255,255,.24)'; ctx.setLineDash(i ? [2, 6] : []);
+      ctx.beginPath(); ctx.moveTo(x0, y + .5); ctx.lineTo(x1, y + .5); ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,.42)'; ctx.fillText((i ? '+' : '') + Math.round(ano * i / 2), x0 - 8, y);
+    }
+    ctx.setLineDash([]); ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    const mes = Math.floor(a * 12 + 1e-6);
+    for(let m = 0; m <= 12; m++){
+      const x = X(m / 12), pasado = m <= mes;
+      ctx.strokeStyle = pasado ? 'rgba(255,255,255,.45)' : 'rgba(255,255,255,.18)';
+      ctx.beginPath(); ctx.moveTo(x + .5, y0); ctx.lineTo(x + .5, y0 + 5); ctx.stroke();
+      if(m % 3 === 0){ ctx.fillStyle = pasado ? 'rgba(255,255,255,.72)' : 'rgba(255,255,255,.32)'; ctx.fillText(m ? 'M' + String(m).padStart(2, '0') : 'Start', Math.min(Math.max(x, x0 + 14), x1 - 12), y0 + 9); }
+    }
+    // hacia donde va
+    ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.setLineDash([4, 7]);
+    ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(1), Y(1)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+    ctx.fillText('+' + f2(ano), X(1), Y(1) - 10);
+    if(a <= 0) return;
+    const hx = X(a), hy = Y(a);
+    const g = ctx.createLinearGradient(0, yT, 0, y0);
+    g.addColorStop(0, 'rgba(21,105,255,.72)'); g.addColorStop(1, 'rgba(21,105,255,.05)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(hx, hy); ctx.lineTo(hx, y0); ctx.closePath(); ctx.fill();
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = 'rgba(21,105,255,.45)'; ctx.lineWidth = 7;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(hx, hy); ctx.stroke();
+    const u0 = Math.max(0, a - .14), gv = ctx.createLinearGradient(X(u0), 0, hx, 0);
+    gv.addColorStop(0, 'rgba(62,207,142,0)'); gv.addColorStop(1, 'rgba(62,207,142,.55)');
+    ctx.strokeStyle = gv; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(X(u0), Y(u0)); ctx.lineTo(hx, hy); ctx.stroke();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(hx, hy); ctx.stroke();
+    ctx.lineCap = 'butt'; ctx.lineWidth = 1;
+    for(let m = 1; m <= 12; m++){
+      const u = m / 12; if(u > a + 1e-6) break;
+      ctx.fillStyle = a * 12 - m < .6 ? 'rgb(62,207,142)' : '#fff';
+      ctx.beginPath(); ctx.arc(X(u), Y(u), 2.4, 0, 6.283); ctx.fill();
+    }
+    const halo = ctx.createRadialGradient(hx, hy, 0, hx, hy, 20);
+    halo.addColorStop(0, 'rgba(62,207,142,.45)'); halo.addColorStop(1, 'rgba(62,207,142,0)');
+    ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(hx, hy, 20, 0, 6.283); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(hx, hy, 4.5, 0, 6.283); ctx.fill();
+    ctx.fillStyle = 'rgb(62,207,142)'; ctx.beginPath(); ctx.arc(hx, hy, 2.7, 0, 6.283); ctx.fill();
+  }
+  function trazar(){
+    if(quieto || avance >= 1){ avance = 1; dibujar(1); return; }
+    const t0 = performance.now(), dur = 2400, desde = avance;
+    (function paso(t){
+      const k = Math.min(1, (t - t0) / dur), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+      avance = desde + (1 - desde) * e; dibujar(avance);
+      if(k < 1) requestAnimationFrame(paso);
+    })(t0);
+  }
+
+  /* ---- el contador: lo que suma un deposito de 1.000 #SECT desde que se abrio la pagina ---- */
+  const abierta = performance.now();
+  let reloj = null;
+  function contar(){ if(elTick) elTick.textContent = '+' + (DEPOSITO * apy * (performance.now() - abierta) / 1000 / ANO_S).toFixed(8); }
+  function correr(si){
+    if(si && !reloj){ contar(); reloj = setInterval(contar, 100); }
+    else if(!si && reloj){ clearInterval(reloj); reloj = null; }
+  }
+
+  medir();
+  pintarTasa();
+  addEventListener('resize', medir, {passive:true});
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => dibujar(avance));
+  if(!('IntersectionObserver' in window)){ sec.classList.add('on'); leer(); trazar(); correr(true); return; }
+  // la lectura, con margen para que llegue antes de verse
+  const cerca = new IntersectionObserver((es) => { if(es[0].isIntersecting){ leer(); cerca.disconnect(); } }, {rootMargin:'900px 0px'});
+  cerca.observe(sec);
+  // la entrada: titular, puntos y la recta
+  const entra = new IntersectionObserver((es) => {
+    if(es[0].isIntersecting){ sec.classList.add('on'); medir(); trazar(); entra.disconnect(); }
+  }, {rootMargin:'-10% 0px -14% 0px', threshold:0});
+  entra.observe(sec);
+  // el contador, solo mientras la consola se ve
+  const consola = sec.querySelector('.stk-scr');
+  new IntersectionObserver((es) => correr(es[0].isIntersecting), {threshold:0}).observe(consola || sec);
 })();
 </script>
 <script>
