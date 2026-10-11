@@ -27,6 +27,8 @@
   /* papel de las hojas claras */
   --p-ink:#07080a;--p-ink-2:#3c414c;--p-ink-3:#6b7280;--p-ink-4:#9aa0ab;
   --p-line:rgba(0,0,0,.11);--p-live:#0f8f52;
+  /* el azul en que acaba la marea de la grafica y en el que vive la guia */
+  --guia-azul:#1150d8;
 }
 section[id]{scroll-margin-top:18px}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -496,15 +498,16 @@ img.wpick-ico{background:none}
   background-size:54px 54px}
 .curva-ejes{position:absolute;inset:0;width:100%;height:100%;z-index:0}
 .curva-cv{position:absolute;left:0;top:0;z-index:1}
-.curva-marea{position:absolute;left:0;right:0;top:0;height:100%;z-index:1;pointer-events:none;transform:translateY(101%);will-change:transform;
-  background:linear-gradient(#1569ff,#0b3fb3);border-top:2px solid rgba(255,255,255,.9);box-shadow:0 -18px 50px -10px rgba(21,105,255,.75)}
+.curva-marea{position:absolute;left:0;right:0;top:-2px;height:calc(100% + 2px);z-index:1;pointer-events:none;transform:translateY(102%);will-change:transform;
+  background:radial-gradient(90% 55% at 50% 0%,rgba(255,255,255,.10),transparent 70%),var(--guia-azul);
+  border-top:2px solid rgba(255,255,255,.9);box-shadow:0 -18px 50px -10px rgba(21,105,255,.75)}
 
 /* titular y cifras en flujo normal, uno junto al otro (o uno bajo el otro en
    el movil): asi no se pisan nunca, con la barra del navegador o sin ella */
 .curva-top{position:absolute;left:var(--pad);right:var(--pad);top:clamp(84px,13vh,128px);z-index:2;display:flex;justify-content:space-between;
   align-items:flex-start;gap:32px}
 .curva-head{position:relative;max-width:min(620px,52vw)}
-.curva .eyebrow{margin-bottom:22px}
+.curva .eyebrow{margin-bottom:22px;color:rgba(255,255,255,.66)}
 .curva .eyebrow i{width:30px}
 .curva-head h2{font-size:clamp(34px,5vw,74px);font-weight:200;line-height:1.02;letter-spacing:-.03em}
 .curva-head h2 .ln{display:block;overflow:hidden;padding-bottom:.08em}
@@ -547,17 +550,13 @@ html.js .curva.on .curva-head .eyebrow,html.js .curva.on .curva-sub,html.js .cur
 .curva-pc{color:#fff;min-width:4ch;text-align:right;font-variant-numeric:tabular-nums}
 .curva-paso{max-width:40ch;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* el negro con que abre la guia: se funde al final, sin costura */
-/* al final no queda un negro vacio: abajo asoma la luz azul con que abre la
-   guia, y el aviso de seguir bajando dice que viene */
-.curva-fin{position:absolute;inset:0;z-index:4;opacity:0;pointer-events:none;
-  background:radial-gradient(70% 42% at 50% 112%,rgba(21,105,255,.26),transparent 70%),#000}
 /* aviso de seguir bajando: al empezar, en el centro de la grafica vacia; al
    terminar, en el centro de la pantalla. Lo coloca staking-curva.js */
 .curva-cue{position:absolute;left:0;top:0;z-index:5;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;
   color:rgba(255,255,255,.75);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;
   opacity:0;transition:opacity .5s ease;will-change:transform}
 .curva-cue.on{opacity:1}
-.curva-cue small{font-size:9px;letter-spacing:.16em;color:var(--ink-3)}
+.curva-cue small{font-size:9px;letter-spacing:.16em;color:rgba(255,255,255,.66)}
 .curva-cue svg{width:18px;height:18px;margin-top:4px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;
   animation:curvaCue 1.9s ease-in-out infinite}
 @keyframes curvaCue{0%,100%{transform:translateY(-3px);opacity:.5}50%{transform:translateY(5px);opacity:1}}
@@ -619,6 +618,36 @@ html.js .curva.on .curva-head .eyebrow,html.js .curva.on .curva-sub,html.js .cur
   .gd-check div{grid-template-columns:74px minmax(0,1fr);gap:10px;padding:10px 12px}
   .gd-end .btn{width:100%}
 }
+
+/* la guia en azul: el mismo con que termina la marea de la grafica, asi
+   que al soltarse el bloque fijo el color sigue sin corte. Su rejilla
+   aparece poco a poco desde arriba para no marcar una linea en la union */
+.night.azul{background:var(--guia-azul)}
+.night.azul::before{background-image:linear-gradient(rgba(255,255,255,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.075) 1px,transparent 1px);
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 340px,#000 82%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 340px,#000 82%,transparent 100%)}
+.night.azul .eyebrow{color:rgba(255,255,255,.75)}
+.night.azul .eyebrow i{background:#fff}
+.night.azul .nt-lede{color:rgba(255,255,255,.78)}
+.night.azul .nt-count{color:rgba(255,255,255,.62);border-top-color:rgba(255,255,255,.22)}
+.night.azul .guide{border-top-color:rgba(255,255,255,.24)}
+.night.azul .gd{border-bottom-color:rgba(255,255,255,.18)}
+.night.azul .gd-n{color:rgba(255,255,255,.55)}
+.night.azul .gd.key .gd-n{color:#fff}
+.night.azul .gd p{color:rgba(255,255,255,.8)}
+.night.azul .gd p b{color:#fff}
+.night.azul .gd-wal{color:#fff}
+.night.azul .gd-wal::before{background:var(--live);box-shadow:0 0 8px 1px rgba(62,207,142,.8)}
+.night.azul .gd-tag{color:#fff;border-color:rgba(255,255,255,.32)}
+.night.azul .gd-link{border-bottom-color:rgba(255,255,255,.75)}
+.night.azul .gd-link:hover{color:#fff;border-bottom-color:#fff;opacity:.85}
+.night.azul .gd p.gd-fine{color:rgba(255,255,255,.6)}
+.night.azul .gd-check{border-color:rgba(255,255,255,.3);background:rgba(4,20,70,.28)}
+.night.azul .gd-check div{border-top-color:rgba(255,255,255,.12)}
+.night.azul .gd-check dt{color:rgba(255,255,255,.62)}
+.night.azul .gd-end .nt-fine{color:rgba(255,255,255,.75)}
+/* el boton azul no se veria sobre azul: aqui va en blanco */
+.night.azul .gd-end .btn-primary{background:#fff;color:#0b3fb3}
+.night.azul .gd-end .btn-primary::before{background:#e8efff}
 
 /* ============ 04 · security: tarjetas de cristal claro ============ */
 .mc-in{position:relative;z-index:1;max-width:1280px;color:var(--p-ink);display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);

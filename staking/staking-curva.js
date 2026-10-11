@@ -8,8 +8,8 @@
    Tramos del scroll (p de 0 a 1 mientras el bloque esta fijo):
      0.06 - 0.60  la linea avanza mes a mes con su punto vivo y su etiqueta
      0.60 - 0.68  quieta, completa
-     0.68 - 0.90  el azul sube como una marea hasta cubrir la pantalla
-     0.90 - 0.99  se funde en el negro con que abre la guia
+     0.66 - 0.86  el azul sube como una marea hasta cubrir la pantalla
+     0.86 - 1     se queda en azul, el de la guia que viene detras
 
    El lienzo solo se repinta cuando cambia el avance, y la posicion sale de
    scrollY con la geometria medida al cargar y al cambiar de tamano. ---- */
@@ -25,7 +25,7 @@
   const tip = $("curva-tip"), tipM = $("curva-tip-m"), tipV = $("curva-tip-v");
   const ganado = $("curva-ganado"), elDia = $("curva-dia"), elMes = $("curva-mes"), elAno = $("curva-ano");
   const st = $("curva-st"), fill = $("curva-fill"), pc = $("curva-pc"), pasoEl = $("curva-paso");
-  const fin = $("curva-fin"), stats = sec.querySelector(".curva-stats");
+  const stats = sec.querySelector(".curva-stats"), hud = sec.querySelector(".curva-hud");
   const cue = $("curva-cue"), cueSub = $("curva-cue-sub");
   const quieto = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -195,7 +195,8 @@
     if (mes !== mesEjes) { mesEjes = mes; pintarEjes(mes); }
     if (b < 1) pintar(a);
     ejesCv.style.opacity = b > 0 ? String(1 - suave(b * 2.2)) : "";
-    marea.style.transform = "translateY(" + (101 - 104 * b).toFixed(2) + "%)";
+    // llega justo a 0: cubre hasta el ultimo pixel de abajo y su filo blanco queda fuera por arriba
+    marea.style.transform = "translateY(" + (102 * (1 - b)).toFixed(2) + "%)";
 
     // etiqueta del punto vivo
     const verTip = a > 0.02 && b <= 0;
@@ -220,7 +221,8 @@
     if (k !== pasoAnt) { pasoAnt = k; pasoEl.textContent = String(k).padStart(2, "0") + " / 08 · " + PASOS[k - 1]; }
     // las cifras se retiran al subir la marea; antes, las maneja la entrada del CSS
     if (stats) stats.style.opacity = b > 0 ? String(1 - suave(b * 2)) : "";
-    fin.style.opacity = c.toFixed(3);
+    // el panel de abajo se retira al final: queda el azul, el titular y el aviso
+    hud.style.opacity = c > 0 ? String(1 - c) : "";
 
     // aviso de seguir bajando: antes de que arranque la linea y al terminar
     const final = p > 0.9, inicio = p < 0.05;
