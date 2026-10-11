@@ -36,7 +36,7 @@
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
 <!-- la intro solo existe con JavaScript: sin el, la pagina se ve directa -->
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="staking.css?v=20261029">
+<link rel="stylesheet" href="staking.css?v=20261030">
 </head>
 <body>
 
@@ -176,10 +176,10 @@
 
 <!-- ============ 01 · guide: el paso a paso, en hoja clara como el Hash
      Market y el Why hold de la portada. Sube como una hoja por encima de la
-     grafica fijada (su margen negativo tapa la ultima pantalla de esta), asi
-     que no queda ninguna pantalla vacia entre las dos. A la izquierda, un
-     seguidor fijo con el paso que se esta leyendo y lo que se vera en la
-     wallet; a la derecha, los ocho pasos. Lo anima staking-guia.js ============ -->
+     grafica fijada (su margen negativo tapa la ultima pantalla de esta).
+     El titular se queda fijo arriba con el paso en curso, y los ocho pasos
+     suben por debajo como tarjetas que se apilan (position:sticky); las que
+     quedan debajo se hunden un poco. Lo mide y lo anima staking-guia.js ============ -->
 <section class="paper guia" id="guide" aria-labelledby="guia-t">
   <div class="spine" aria-hidden="true"><em><b>01</b><span>Guide</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
@@ -189,100 +189,202 @@
       <span class="live-tag mono"><span class="led" aria-hidden="true"></span>8 steps &middot; about 5 minutes</span>
       <span class="pp-ser mono">Holder rewards &middot; Step by step</span>
     </div>
-    <div class="pp-head">
-      <div class="hw"><h2 id="guia-t">How to stake, <b>step by step.</b></h2></div>
-      <p>From buying #SECT to claiming your first rewards. Depositing takes two confirmations in your wallet; claiming and withdrawing take one.</p>
-    </div>
 
-    <div class="gd-body">
-      <!-- el seguidor: repite lo de la lista para quien mira, por eso va oculto a los lectores de pantalla -->
-      <figure class="frame gd-track" aria-hidden="true">
-        <span class="frame-plus"><i></i><i></i><i></i><i></i></span>
-        <figcaption class="band mono"><span>Step tracker</span><b>SF&middot;HR&middot;GD&middot;26</b></figcaption>
-        <div class="console gd-con">
-          <div class="con-head mono">
-            <span>Sectora<span class="cx"> &nbsp;//&nbsp; guide</span></span>
-            <span class="con-net"><span class="led"></span>Mainnet</span>
-          </div>
-          <p class="gd-k mono">Step</p>
-          <p class="gd-big"><b id="gd-n">01</b><span>/ 08</span></p>
-          <p class="gd-tt" id="gd-tt">Get #SECT and a little ETH</p>
+    <div class="gd-stack">
+      <div class="gd-head" id="gd-head">
+        <div class="hw"><h2 id="guia-t">How to stake, <b>step by step.</b></h2></div>
+        <!-- el paso en curso: repite el de las tarjetas para quien mira, por eso va oculto a los lectores de pantalla -->
+        <div class="gd-trk" aria-hidden="true">
+          <p class="gd-trk-n mono">Step <b id="gd-n">01</b> / 08</p>
+          <p class="gd-trk-w mono" id="gd-w"></p>
           <div class="gd-segs" id="gd-segs"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <p class="gd-k mono">What you will see</p>
-          <dl class="gd-rows" id="gd-rows">
-            <div><dt class="mono">Where</dt><dd class="mono">Uniswap &middot; Ethereum</dd></div>
-            <div><dt class="mono">Swap</dt><dd class="mono">USDT &rarr; #SECT</dd></div>
-            <div><dt class="mono">Keep</dt><dd class="mono">A little ETH for fees</dd></div>
-          </dl>
-          <a class="btn btn-primary wide mono gd-go" href="#stake"><span>Go to the console</span><span class="arrow">↓</span></a>
+          <p class="gd-tt" id="gd-tt">Get #SECT and a little ETH</p>
         </div>
-      </figure>
-
-      <!-- en el movil el seguidor es esta barra fija en lo alto de la seccion -->
-      <div class="gd-bar mono" id="gd-bar" aria-hidden="true">
-        <span><b id="gd-bn">01</b> / 08 &middot; <span id="gd-bt">Get #SECT and a little ETH</span></span>
-        <i><u id="gd-bf"></u></i>
       </div>
+      <p class="gd-lede">From buying #SECT to claiming your first rewards. Depositing takes two confirmations in your wallet; claiming and withdrawing take one.</p>
 
-      <ol class="steps gd-steps">
-        <li class="step gd-step" data-n="1">
-          <span class="step-n mono">01</span>
-          <h3>Get #SECT and a little ETH</h3>
-          <p>Buy #SECT on Uniswap, on Ethereum mainnet, and keep a little ETH in the same wallet: every confirmation pays a small network fee in ETH.</p>
-          <a class="gd-link mono" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener noreferrer">Buy #SECT on Uniswap <i aria-hidden="true">↗</i></a>
-          <p class="gd-fine mono">#SECT token &middot; 0x8C9984B06281f1CA9416e493c2E602AaB08513db</p>
+      <ol class="gd-deck">
+        <li class="gd-card" style="--i:0">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span>Before you start</span><b>SF&middot;GD&middot;01</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">01<small>/ 08</small></span>
+                <h3>Get #SECT and a little ETH</h3>
+                <p>Buy #SECT on Uniswap, on Ethereum mainnet, and keep a little ETH in the same wallet: every confirmation pays a small network fee in ETH.</p>
+                <a class="gd-link mono" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener noreferrer">Buy #SECT on Uniswap <i aria-hidden="true">↗</i></a>
+              </div>
+              <div class="gd-side">
+                <p class="gd-k mono">What you will see</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Where</dt><dd class="mono">Uniswap &middot; Ethereum</dd></div>
+                  <div><dt class="mono">Swap</dt><dd class="mono">USDT &rarr; #SECT</dd></div>
+                  <div><dt class="mono">Keep</dt><dd class="mono">A little ETH for fees</dd></div>
+                  <div><dt class="mono">Token</dt><dd class="mono">0x8C9984B06281f1CA9416e493c2E602AaB08513db</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
         </li>
-        <li class="step gd-step" data-n="2">
-          <span class="step-n mono">02</span>
-          <h3>Open sectoraorg.com/staking</h3>
-          <p>In Chrome, Safari or your wallet&rsquo;s own browser, on a phone or a computer. Check the address bar: the only real page is <b>sectoraorg.com/staking</b>.</p>
-          <span class="fact mono">Check the address bar</span>
+        <li class="gd-card" style="--i:1">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span>Any browser</span><b>SF&middot;GD&middot;02</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">02<small>/ 08</small></span>
+                <h3>Open sectoraorg.com/staking</h3>
+                <p>In Chrome, Safari or your wallet&rsquo;s own browser, on a phone or a computer. Check the address bar: the only real page is <b>sectoraorg.com/staking</b>.</p>
+                <span class="fact mono">Check the address bar</span>
+              </div>
+              <div class="gd-side">
+                <p class="gd-k mono">What you will see</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Address</dt><dd class="mono">sectoraorg.com/staking</dd></div>
+                  <div><dt class="mono">Browser</dt><dd class="mono">Chrome, Safari or your wallet&rsquo;s</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
         </li>
-        <li class="step gd-step" data-n="3">
-          <span class="step-n mono">03</span>
-          <h3>Connect your wallet</h3>
-          <p>Tap <b>Connect wallet</b> in the console below and pick yours. On a phone the wallet app opens: approve the connection there and come back to this tab. On a computer, use your browser extension or scan the QR code with your phone.</p>
-          <span class="fact mono">MetaMask &middot; Trust &middot; Binance &middot; Coinbase &middot; OKX &middot; WalletConnect</span>
+        <li class="gd-card" style="--i:2">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span>Connect</span><b>SF&middot;GD&middot;03</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">03<small>/ 08</small></span>
+                <h3>Connect your wallet</h3>
+                <p>Tap <b>Connect wallet</b> in the console below and pick yours. On a phone the wallet app opens: approve the connection there and come back to this tab. On a computer, use your browser extension or scan the QR code with your phone.</p>
+                <span class="fact mono">MetaMask &middot; Trust &middot; Binance &middot; Coinbase &middot; OKX &middot; WalletConnect</span>
+              </div>
+              <div class="gd-side">
+                <p class="gd-k mono">What you will see</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Button</dt><dd class="mono">Connect wallet</dd></div>
+                  <div><dt class="mono">Phone</dt><dd class="mono">Approve in the app, come back</dd></div>
+                  <div><dt class="mono">Computer</dt><dd class="mono">Extension or QR code</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
         </li>
-        <li class="step gd-step" data-n="4">
-          <span class="step-n mono">04</span>
-          <h3>Check you are on Ethereum</h3>
-          <p>The blue button now shows your address and the console reads <b>Mainnet</b>. If a red message asks you to switch to the Ethereum network, change the network in your wallet.</p>
-          <span class="fact mono">Mainnet &middot; your address on the button</span>
+        <li class="gd-card" style="--i:3">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span>Network</span><b>SF&middot;GD&middot;04</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">04<small>/ 08</small></span>
+                <h3>Check you are on Ethereum</h3>
+                <p>The blue button now shows your address and the console reads <b>Mainnet</b>. If a red message asks you to switch to the Ethereum network, change the network in your wallet.</p>
+              </div>
+              <div class="gd-side">
+                <p class="gd-k mono">What you will see</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Button</dt><dd class="mono">Your address, 0x&hellip;</dd></div>
+                  <div><dt class="mono">Console</dt><dd class="mono">Mainnet</dd></div>
+                  <div><dt class="mono">If not</dt><dd class="mono">Switch to Ethereum</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
         </li>
-        <li class="step gd-step" data-n="5">
-          <span class="step-n mono">05</span>
-          <h3>Type the amount</h3>
-          <p>Enter how many #SECT you want to deposit. The console shows what it earns per second, day, month and year before you sign anything.</p>
-          <span class="fact mono">Estimate first, sign after</span>
+        <li class="gd-card" style="--i:4">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span>Estimate</span><b>SF&middot;GD&middot;05</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">05<small>/ 08</small></span>
+                <h3>Type the amount</h3>
+                <p>Enter how many #SECT you want to deposit. The console shows what it earns per second, day, month and year before you sign anything.</p>
+                <span class="fact mono">Estimate first, sign after</span>
+              </div>
+              <div class="gd-side">
+                <p class="gd-k mono">What you will see</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Field</dt><dd class="mono">You deposit</dd></div>
+                  <div><dt class="mono">Preview</dt><dd class="mono">Second &middot; day &middot; month &middot; year</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
         </li>
-        <li class="step gd-step key" data-n="6">
-          <span class="step-n mono">06</span>
-          <span class="gd-wal mono">Wallet &middot; confirmation 1 of 2</span>
-          <h3>Approve the exact amount</h3>
-          <p>Tap <b>Deposit #SECT</b>. Your wallet asks you to let the staking contract take exactly that amount, never more. Nothing moves yet. Before confirming, check:</p>
-          <dl class="gd-check">
-            <div><dt class="mono">Request</dt><dd class="mono">Approve &middot; spending cap</dd></div>
-            <div><dt class="mono">Amount</dt><dd class="mono">The exact #SECT you typed</dd></div>
-            <div><dt class="mono">Spender</dt><dd class="mono">0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0</dd></div>
-          </dl>
+        <li class="gd-card key" style="--i:5">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span class="gd-wal">Wallet &middot; confirmation 1 of 2</span><b>SF&middot;GD&middot;06</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">06<small>/ 08</small></span>
+                <h3>Approve the exact amount</h3>
+                <p>Tap <b>Deposit #SECT</b>. Your wallet asks you to let the staking contract take exactly that amount, never more. Nothing moves yet.</p>
+              </div>
+              <div class="gd-side key">
+                <p class="gd-k mono">Check before you confirm</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Request</dt><dd class="mono">Approve &middot; spending cap</dd></div>
+                  <div><dt class="mono">Amount</dt><dd class="mono">The exact #SECT you typed</dd></div>
+                  <div><dt class="mono">Spender</dt><dd class="mono">0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
         </li>
-        <li class="step gd-step key" data-n="7">
-          <span class="step-n mono">07</span>
-          <span class="gd-wal mono">Wallet &middot; confirmation 2 of 2</span>
-          <h3>Confirm the deposit</h3>
-          <p>Once the approval is confirmed on-chain, your wallet asks for the deposit itself. Confirm it and your #SECT start earning that same second.</p>
-          <dl class="gd-check">
-            <div><dt class="mono">Request</dt><dd class="mono">Deposit</dd></div>
-            <div><dt class="mono">Contract</dt><dd class="mono">0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0</dd></div>
-          </dl>
+        <li class="gd-card key" style="--i:6">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span class="gd-wal">Wallet &middot; confirmation 2 of 2</span><b>SF&middot;GD&middot;07</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">07<small>/ 08</small></span>
+                <h3>Confirm the deposit</h3>
+                <p>Once the approval is confirmed on-chain, your wallet asks for the deposit itself. Confirm it and your #SECT start earning that same second.</p>
+              </div>
+              <div class="gd-side key">
+                <p class="gd-k mono">Check before you confirm</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Request</dt><dd class="mono">Deposit</dd></div>
+                  <div><dt class="mono">Contract</dt><dd class="mono">0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0</dd></div>
+                  <div><dt class="mono">Starts</dt><dd class="mono">Earning that same second</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
         </li>
-        <li class="step gd-step" data-n="8">
-          <span class="step-n mono">08</span>
-          <h3>Claim or withdraw whenever you want</h3>
-          <p>Your rewards grow live in the console. <b>Claim rewards</b>, <b>Withdraw</b> and <b>Withdraw all</b> take a single confirmation each, with no lock-up and no penalty. Every new deposit repeats steps 05 to 07.</p>
-          <span class="fact mono">No lock-up &middot; one confirmation</span>
+        <li class="gd-card" style="--i:7">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span>Any time</span><b>SF&middot;GD&middot;08</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">08<small>/ 08</small></span>
+                <h3>Claim or withdraw whenever you want</h3>
+                <p>Your rewards grow live in the console. <b>Claim rewards</b>, <b>Withdraw</b> and <b>Withdraw all</b> take a single confirmation each, with no lock-up and no penalty. Every new deposit repeats steps 05 to 07.</p>
+                <span class="fact mono">No lock-up &middot; one confirmation</span>
+              </div>
+              <div class="gd-side">
+                <p class="gd-k mono">What you will see</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Buttons</dt><dd class="mono">Claim &middot; Withdraw &middot; Withdraw all</dd></div>
+                  <div><dt class="mono">Wallet</dt><dd class="mono">One confirmation each</dd></div>
+                  <div><dt class="mono">Lock-up</dt><dd class="mono">None</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
         </li>
+        <li class="gd-sp" aria-hidden="true"></li>
       </ol>
     </div>
 
@@ -544,8 +646,8 @@
 
 <script src="staking-fx.js?v=20261018"></script>
 <script src="staking.js?v=20261018"></script>
-<script src="staking-curva.js?v=20261029"></script>
-<script src="staking-guia.js?v=20261029"></script>
+<script src="staking-curva.js?v=20261030"></script>
+<script src="staking-guia.js?v=20261030"></script>
 <!-- cableado on-chain: wallet, deposito, cobro y retiro -->
 <script src="../ethers.min.js"></script>
 <script src="staking-wallet.js?v=20261021"></script>

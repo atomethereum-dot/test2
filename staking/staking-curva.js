@@ -13,7 +13,8 @@
                   oscurece y se encoge un poco debajo
 
    El lienzo solo se repinta cuando cambia el avance, y la posicion sale de
-   scrollY con la geometria medida al cargar y al cambiar de tamano. ---- */
+   scrollY con la geometria medida al cargar y al cambiar de tamano (al
+   medir se repinta en el mismo cuadro, para que nunca salga vacio). ---- */
 (function () {
   "use strict";
 
@@ -91,15 +92,25 @@
     const fondo = arriba ? arriba.offsetTop + arriba.offsetHeight : 0;
     yT = Math.max(H * (movil ? 0.5 : 0.47), fondo + (movil ? 56 : 48));
     yT = Math.min(yT, y0 - (movil ? 150 : 170));
-    ejesCv.width = Math.round(W * dpr); ejesCv.height = Math.round(H * dpr);
+    // dar ancho o alto a un lienzo lo borra aunque sea el mismo valor: solo se
+    // tocan si cambian de verdad (el ResizeObserver salta con cualquier cambio
+    // de alto de la pagina, y en iOS con cada vaiven de la barra)
+    const ew = Math.round(W * dpr), eh = Math.round(H * dpr);
+    if (ejesCv.width !== ew || ejesCv.height !== eh) { ejesCv.width = ew; ejesCv.height = eh; }
     // el lienzo de la linea solo cubre la grafica (y el halo del punto)
     bx = Math.floor(x0 - 24); by = Math.floor(yT - 30);
     const bw = Math.ceil(x1 + 30 - bx), bh = Math.ceil(y0 + 8 - by);
-    cv.width = Math.round(bw * dpr); cv.height = Math.round(bh * dpr);
-    cv.style.width = bw + "px"; cv.style.height = bh + "px";
+    const cw = Math.round(bw * dpr), ch = Math.round(bh * dpr);
+    if (cv.width !== cw || cv.height !== ch) {
+      cv.width = cw; cv.height = ch;
+      cv.style.width = bw + "px"; cv.style.height = bh + "px";
+    }
     cv.style.transform = "translate(" + bx + "px," + by + "px)";
+    // y se repinta ya, en este mismo cuadro: el ResizeObserver corre despues
+    // de los requestAnimationFrame, asi que esperar al siguiente dejaba salir
+    // a pantalla un cuadro con el lienzo vacio (el parpadeo)
     mesEjes = -1; ant = -1;
-    pedir();
+    cuadro();
   }
 
   const X = (u) => x0 + (x1 - x0) * u;          // u: fraccion del ano
@@ -201,7 +212,7 @@
     if (mes !== mesEjes) { mesEjes = mes; pintarEjes(mes); }
     if (q < 1) pintar(a);
     // la grafica se aleja: se encoge un poco y se oscurece bajo la hoja que sube
-    pin.style.transform = q > 0 ? "scale(" + (1 - 0.06 * q).toFixed(4) + ")" : "";
+    pin.style.transform = "scale(" + (1 - 0.06 * q).toFixed(4) + ")";
     sombra.style.opacity = (0.7 * q).toFixed(3);
 
     // etiqueta del punto vivo

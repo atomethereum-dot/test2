@@ -486,15 +486,14 @@ img.wpick-ico{background:none}
    el punto vivo, las cifras con "+" y el piloto. El lienzo lo pinta
    staking-curva.js; aqui va lo que es texto. */
 .curva{position:relative;height:420vh;background:#000}
-.curva-pin{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;isolation:isolate;
+/* sin rejilla de fondo: solo la luz azul. Los ejes van en su propio lienzo,
+   que solo se repinta al cambiar de mes; el lienzo de la linea mide lo que
+   la grafica. Al subir la guia por encima, el bloque se encoge un poco y se
+   oscurece con una capa: las dos cosas, en el compositor. Va siempre en su
+   propia capa (will-change): si se crea y se destruye al empezar a encogerse,
+   Safari vuelve a rasterizar los lienzos y se ve un parpadeo */
+.curva-pin{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;isolation:isolate;will-change:transform;
   background:radial-gradient(80% 60% at 70% 80%,rgba(21,105,255,.12),transparent 64%),radial-gradient(50% 40% at 85% 30%,rgba(62,207,142,.05),transparent 70%),#000}
-/* la rejilla va en el fondo del bloque (se pinta una vez); los ejes en su
-   propio lienzo, que solo se repinta al cambiar de mes; el lienzo de la
-   linea mide lo que la grafica. Al subir la guia por encima, el bloque se
-   encoge un poco y se oscurece con una capa: las dos cosas, en el compositor */
-.curva-pin::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
-  background-size:54px 54px}
 .curva-ejes{position:absolute;inset:0;width:100%;height:100%;z-index:0}
 .curva-cv{position:absolute;left:0;top:0;z-index:1}
 .curva-sombra{position:absolute;inset:0;z-index:4;background:#000;opacity:0;pointer-events:none}
@@ -589,75 +588,116 @@ html.js .curva.on .curva-head .eyebrow,html.js .curva.on .curva-sub,html.js .cur
 .pp-guide:hover i{transform:translateY(-3px)}
 .guia{z-index:3;margin-top:-100vh;margin-top:-100dvh;border-top:2px solid var(--blue);
   box-shadow:0 -40px 90px -30px rgba(0,0,0,.85)}
-.gd-body{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(24px,3.4vw,56px);align-items:start}
-/* el seguidor se queda fijo mientras se leen los pasos */
-.gd-track{position:sticky;top:clamp(76px,11vh,112px)}
-.gd-con{padding:clamp(20px,2vw,28px)}
-.gd-k{font-size:9.5px;color:var(--p-ink-4);margin-bottom:8px}
-.gd-big{display:flex;align-items:baseline;gap:10px;line-height:1}
-.gd-big b{font-size:clamp(56px,6vw,88px);font-weight:200;letter-spacing:-.04em;color:var(--p-ink);font-variant-numeric:tabular-nums}
-.gd-big span{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--p-ink-4)}
-.gd-tt{margin-top:8px;min-height:2.6em;font-size:clamp(18px,1.6vw,22px);font-weight:400;letter-spacing:-.012em;line-height:1.3;color:var(--p-ink)}
-.gd-segs{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px;margin:18px 0 22px}
-.gd-segs i{height:4px;background:rgba(0,0,0,.08);transition:background .4s var(--ease)}
+
+/* el titular se queda fijo arriba con el paso en curso; staking-guia.js mide
+   su alto y lo pasa a --gd-top, el tope donde se pegan las tarjetas */
+.gd-head{position:sticky;top:0;z-index:6;display:flex;justify-content:space-between;align-items:flex-end;gap:clamp(20px,4vw,64px);
+  padding:clamp(16px,2.6vh,28px) 0 clamp(14px,2vh,20px);border-bottom:1px solid var(--p-line);
+  background:rgba(246,246,244,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.gd-head .hw{padding-bottom:.08em}
+.gd-head h2{font-size:clamp(30px,3.6vw,54px);font-weight:300;line-height:1.04;letter-spacing:-.03em;color:var(--p-ink)}
+.gd-head h2 b{font-weight:400}
+.gd-trk{flex:0 1 400px;min-width:0;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:baseline;column-gap:14px;
+  grid-template-areas:"n w" "s s" "t t"}
+.gd-trk-n{grid-area:n;font-size:10px;color:var(--p-ink-4)}
+.gd-trk-n b{font-weight:500;color:var(--blue)}
+.gd-trk-w{grid-area:w;justify-self:end;font-size:9.5px;color:var(--p-live);white-space:nowrap}
+.gd-segs{grid-area:s;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px;margin:11px 0 10px}
+.gd-segs i{height:3px;background:rgba(0,0,0,.09);transition:background .4s var(--ease)}
 .gd-segs i.on{background:var(--blue)}
 .gd-segs i.now{background:var(--p-live);box-shadow:0 0 8px rgba(15,143,82,.5)}
-.gd-rows{border-top:1px solid var(--p-line);margin-bottom:20px}
-.gd-rows > div{display:grid;grid-template-columns:86px minmax(0,1fr);gap:12px;padding:11px 0;border-bottom:1px solid var(--p-line)}
-.gd-rows dt{font-size:9.5px;color:var(--p-ink-4)}
-.gd-rows dd{font-size:11px;letter-spacing:.04em;text-transform:none;color:var(--p-ink);overflow-wrap:anywhere}
-.gd-rows.cambia{animation:gdCambia .5s var(--ease-out)}
-@keyframes gdCambia{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-/* en el movil el seguidor es una barra fija arriba */
-.gd-bar{display:none}
+.gd-tt{grid-area:t;font-size:15px;font-weight:400;letter-spacing:-.005em;color:var(--p-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gd-lede{margin:clamp(20px,3vh,30px) 0 clamp(26px,4.4vh,44px);max-width:56ch;color:var(--p-ink-2);
+  font-size:clamp(15px,1.15vw,18px);line-height:1.65;font-weight:300}
 
-/* los ocho pasos: los del Hash Market, y entran al llegar */
-.gd-steps .step{transition:opacity .8s var(--ease-out),transform .8s var(--ease-out),background .4s var(--ease)}
-/* el numero ocupa toda la altura del paso y todo lo demas va en la columna
-   del texto: sin esto, lo que pasa de tres filas caia en la columna estrecha
-   del numero y salia una letra por linea */
-.gd-steps .step-n{grid-row:1 / span 8}
-.gd-steps .step > :not(.step-n){grid-column:2}
-html.js .gd-steps .step{opacity:0;transform:translateY(18px)}
-html.js .gd-steps .step.vis{opacity:1;transform:none}
-.gd-steps .step.act{background:linear-gradient(90deg,rgba(21,105,255,.06),transparent 70%)}
-.gd-steps .step.act::before{transform:scaleX(1)}
-.gd-steps .step:not(.act) .step-n{color:var(--p-ink-4)}
-.gd-steps .step.key .step-n{color:var(--blue)}
-.gd-wal{display:inline-flex;align-items:center;gap:9px;margin-bottom:8px;font-size:9.5px;color:var(--blue-deep)}
+/* las tarjetas: cada una se pega un poco mas abajo que la anterior y la
+   siguiente sube por encima; el script iguala su borde de abajo para que
+   al final el mazo salga entero, y hunde (escala y vela) las de debajo */
+.gd-deck{list-style:none;margin:0;padding:0}
+.gd-card{position:sticky;top:calc(var(--gd-top,150px) + var(--i,0) * 12px)}
+.gd-card + .gd-card{margin-top:clamp(90px,17vh,180px)}
+.gd-sp{height:34vh}
+.gd-c{position:relative;display:flex;flex-direction:column;min-height:100%;padding:clamp(18px,2vw,28px) clamp(18px,2.4vw,34px) clamp(20px,2.4vw,32px);
+  background:#fff;border:1px solid rgba(0,0,0,.09);transform-origin:50% 0;
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 -8px 22px -16px rgba(7,8,10,.22),0 28px 60px -40px rgba(7,8,10,.3)}
+.gd-c::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:rgba(0,0,0,.14);
+  transition:background .4s var(--ease)}
+.gd-c.act::before{background:var(--blue)}
+/* las cruces de registro solo en la tarjeta en curso: en el mazo serian ruido */
+.gd-c .frame-plus{inset:-7px;opacity:0;transition:opacity .4s var(--ease)}
+.gd-c.act .frame-plus{opacity:1}
+.gd-velo{position:absolute;inset:-1px;z-index:3;pointer-events:none;background:#eceef1;opacity:0}
+.gd-band{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:12px;margin-bottom:clamp(14px,2vh,22px);
+  border-bottom:1px solid var(--p-line);font-size:10px;color:var(--p-ink-3)}
+.gd-band b{color:var(--blue);font-weight:500;white-space:nowrap}
+.gd-cin{flex:1;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(22px,3vw,52px);align-items:start}
+.gd-main{display:grid;justify-items:start}
+.gd-num{display:flex;align-items:baseline;gap:8px;margin-bottom:10px;font-size:clamp(40px,4.2vw,64px);font-weight:200;line-height:1;
+  letter-spacing:-.04em;color:var(--p-ink-4);font-family:'IBM Plex Sans',sans-serif;font-variant-numeric:tabular-nums;text-transform:none}
+.gd-num small{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--p-ink-4)}
+.gd-c.act .gd-num{color:var(--p-ink)}
+.gd-card.key .gd-num{color:var(--blue)}
+.gd-main h3{font-size:clamp(21px,1.9vw,28px);font-weight:400;letter-spacing:-.018em;line-height:1.18;color:var(--p-ink)}
+.gd-main p{margin-top:10px;color:var(--p-ink-3);font-size:14.5px;line-height:1.65;max-width:48ch}
+.gd-main p b{font-weight:500;color:var(--p-ink)}
+.gd-side{padding:clamp(14px,1.4vw,18px);border:1px solid var(--p-line);background:#fafaf8}
+.gd-side.key{border-color:rgba(21,105,255,.4);background:rgba(21,105,255,.035)}
+.gd-k{font-size:9.5px;color:var(--p-ink-4);margin-bottom:10px}
+.gd-side.key .gd-k{color:var(--blue-deep)}
+.gd-see > div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--p-line)}
+.gd-see dt{font-size:9.5px;color:var(--p-ink-4)}
+.gd-see dd{font-size:11px;letter-spacing:.04em;text-transform:none;color:var(--p-ink);overflow-wrap:anywhere}
+.gd-wal{display:inline-flex;align-items:center;gap:9px;color:var(--blue-deep)}
 .gd-wal::before{content:'';width:6px;height:6px;border-radius:50%;background:#25d366;box-shadow:0 0 8px 1px rgba(37,211,102,.6)}
-.gd-steps .step p b{font-weight:500;color:var(--p-ink)}
-.gd-link{justify-self:start;display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding-bottom:4px;font-size:10.5px;color:var(--p-ink);
+.gd-link{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding-bottom:4px;font-size:10.5px;color:var(--p-ink);
   text-decoration:none;border-bottom:1px solid var(--blue);transition:color .3s var(--ease)}
 .gd-link i{font-style:normal;transition:transform .38s var(--ease)}
 .gd-link:hover{color:var(--blue)}
 .gd-link:hover i{transform:translate(3px,-3px)}
-.gd-steps .step p.gd-fine{margin-top:10px;font-size:9.5px;letter-spacing:.06em;text-transform:none;color:var(--p-ink-4);overflow-wrap:anywhere}
-.gd-check{justify-self:stretch;margin-top:14px;max-width:520px;border:1px solid rgba(21,105,255,.35);background:rgba(255,255,255,.7)}
-.gd-check > div{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;padding:10px 14px;border-top:1px solid var(--p-line)}
-.gd-check > div:first-child{border-top:0}
-.gd-check dt{font-size:9.5px;color:var(--p-ink-4)}
-.gd-check dd{font-size:11px;letter-spacing:.04em;text-transform:none;color:var(--p-ink);overflow-wrap:anywhere}
 .gd-end{display:flex;flex-wrap:wrap;align-items:center;gap:18px 28px;margin-top:clamp(34px,5vh,56px);padding-top:clamp(22px,3vh,30px);
   border-top:1px solid var(--p-line)}
 .gd-note{flex:1;min-width:260px;max-width:70ch;font-size:12.5px;line-height:1.7;color:var(--p-ink-3)}
-@media (max-width:980px){
-  .gd-body{grid-template-columns:minmax(0,1fr);gap:0}
-  .gd-track{display:none}
-  .gd-bar{position:sticky;top:0;z-index:4;display:grid;gap:9px;margin:0 calc(var(--pad) * -1) 6px;padding:12px var(--pad) 11px;
-    font-size:9.5px;color:var(--p-ink-3);background:#f6f6f4;border-bottom:1px solid var(--p-line)}
-  .gd-bar b{font-weight:500;color:var(--blue)}
-  .gd-bar > span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .gd-bar i{display:block;height:3px;background:rgba(0,0,0,.08)}
-  .gd-bar u{display:block;height:100%;width:12.5%;background:var(--blue);text-decoration:none;transition:width .4s var(--ease)}
+@media (max-width:860px){
+  .gd-head{flex-direction:column;align-items:stretch;gap:12px}
+  .gd-trk{flex:none;grid-template-areas:"n t" "s s";column-gap:12px}
+  .gd-trk-w{display:none}
+  .gd-segs{margin:8px 0 0}
+  .gd-tt{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--p-ink-2)}
+  .gd-cin{grid-template-columns:minmax(0,1fr);gap:16px}
   .gd-end .btn{flex:1 1 100%}
 }
-@media (max-width:520px){
-  .gd-check > div{grid-template-columns:70px minmax(0,1fr);gap:10px;padding:9px 11px}
+@media (max-width:760px){
+  .gd-head h2{font-size:clamp(25px,7vw,30px)}
+  .gd-head .hw h2 b{display:block}
+  .gd-card{top:calc(var(--gd-top,130px) + var(--i,0) * 7px)}
+  .gd-card + .gd-card{margin-top:clamp(70px,13vh,120px)}
+  .gd-c{padding:14px 16px 16px}
+  .gd-band{padding-bottom:10px;margin-bottom:12px;font-size:9.5px}
+  .gd-num{font-size:34px;margin-bottom:6px}
+  .gd-main h3{font-size:20px}
+  .gd-main p{margin-top:6px;font-size:13.5px;line-height:1.58}
+  .fact,.gd-link{margin-top:10px}
+  .gd-side{padding:10px 12px}
+  .gd-k{margin-bottom:6px}
+  .gd-see > div{grid-template-columns:76px minmax(0,1fr);gap:10px;padding:7px 0}
+  .gd-see dd{font-size:10.5px}
+}
+@media (max-width:420px){
+  .gd-card.key .gd-band b{display:none}
+}
+/* telefonos bajos: titular en una linea y sin el numero grande, para que
+   la tarjeta mas alta quepa entera bajo el titular */
+@media (max-width:760px) and (max-height:640px){
+  .gd-head{gap:8px;padding:10px 0 9px}
+  .gd-head h2{font-size:clamp(19px,5.6vw,23px)}
+  .gd-head .hw h2 b{display:inline}
+  .gd-segs{margin-top:6px}
+  .gd-num{display:none}
+  .gd-band{margin-bottom:10px}
+  .gd-main p{font-size:13px;line-height:1.52}
 }
 @media (prefers-reduced-motion:reduce){
-  html.js .gd-steps .step{opacity:1;transform:none;transition:none}
-  .gd-rows.cambia{animation:none}
+  .gd-velo{display:none}
 }
 
 /* ============ 04 · security: tarjetas de cristal claro ============ */
