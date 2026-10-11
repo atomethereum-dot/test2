@@ -26,6 +26,7 @@
   const ganado = $("curva-ganado"), elDia = $("curva-dia"), elMes = $("curva-mes"), elAno = $("curva-ano");
   const st = $("curva-st"), fill = $("curva-fill"), pc = $("curva-pc"), pasoEl = $("curva-paso");
   const fin = $("curva-fin"), stats = sec.querySelector(".curva-stats");
+  const cue = $("curva-cue"), cueSub = $("curva-cue-sub");
   const quieto = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const VERDE = "62,207,142";
@@ -189,7 +190,7 @@
     if (Math.abs(p - ant) < 0.0004) return;
     ant = p;
 
-    const a = suave(seg(p, 0.06, 0.6)), b = suave(seg(p, 0.68, 0.9)), c = seg(p, 0.9, 0.99);
+    const a = suave(seg(p, 0.06, 0.6)), b = suave(seg(p, 0.66, 0.86)), c = seg(p, 0.86, 0.93);
     const mes = Math.floor(a * 12 + 1e-6);
     if (mes !== mesEjes) { mesEjes = mes; pintarEjes(mes); }
     if (b < 1) pintar(a);
@@ -220,6 +221,16 @@
     // las cifras se retiran al subir la marea; antes, las maneja la entrada del CSS
     if (stats) stats.style.opacity = b > 0 ? String(1 - suave(b * 2)) : "";
     fin.style.opacity = c.toFixed(3);
+
+    // aviso de seguir bajando: antes de que arranque la linea y al terminar
+    const final = p > 0.9, inicio = p < 0.05;
+    cue.classList.toggle("on", inicio || final);
+    if (inicio || final) {
+      const cy = final ? H * 0.5 : (yT + y0) / 2;
+      cue.style.transform = "translate(" + Math.round(W / 2) + "px," + Math.round(cy) + "px) translate(-50%,-50%)";
+      const txt = final ? "Next · the guide, 8 steps" : "Scroll to draw 12 months";
+      if (cueSub.textContent !== txt) cueSub.textContent = txt;
+    }
   }
   function pedir() { if (!cola) { cola = true; requestAnimationFrame(cuadro); } }
 

@@ -36,7 +36,7 @@
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
 <!-- la intro solo existe con JavaScript: sin el, la pagina se ve directa -->
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="staking.css?v=20261026">
+<link rel="stylesheet" href="staking.css?v=20261027">
 </head>
 <body>
 
@@ -171,6 +171,7 @@
       <span class="curva-paso" id="curva-paso">01 / 08 &middot; Get #SECT and a little ETH</span>
     </div>
     <div class="curva-fin" id="curva-fin" aria-hidden="true"></div>
+    <div class="curva-cue" id="curva-cue" aria-hidden="true"><span>Keep scrolling</span><small id="curva-cue-sub">Scroll to draw 12 months</small><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
   </div>
 </section>
 
@@ -520,7 +521,7 @@
 
 <script src="staking-fx.js?v=20261018"></script>
 <script src="staking.js?v=20261018"></script>
-<script src="staking-curva.js?v=20261026"></script>
+<script src="staking-curva.js?v=20261027"></script>
 <!-- cableado on-chain: wallet, deposito, cobro y retiro -->
 <script src="../ethers.min.js"></script>
 <script src="staking-wallet.js?v=20261021"></script>
