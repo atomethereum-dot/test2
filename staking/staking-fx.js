@@ -667,9 +667,11 @@
     sec.appendChild(el);
     velos.push({ el, sec, lado, o: -1 });
   }
-  document.querySelectorAll(".night.nf-top, .night.nf-bot").forEach((sec) => {
+  document.querySelectorAll(".night.nf-top, .night.nf-bot, .night.nf-pie").forEach((sec) => {
     if (sec.classList.contains("nf-top")) crear(sec, "arriba");
     if (sec.classList.contains("nf-bot")) crear(sec, "abajo");
+    // la ultima seccion y el pie: un halo azul centrado en la costura
+    if (sec.classList.contains("nf-pie")) crear(sec, "pie");
   });
   if (!velos.length) return;
   let pend = false;
