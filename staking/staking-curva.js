@@ -78,7 +78,15 @@
     x0 = pad + (movil ? 30 : 58);
     x1 = W - pad;
     y0 = H - (movil ? 84 : Math.max(96, H * 0.13));
-    yT = H * (movil ? 0.6 : 0.47);
+    // la grafica empieza bajo el titular y las cifras, midiendo donde acaban de
+    // verdad (en el movil cambian de sitio al mostrarse u ocultarse la barra
+    // del navegador); en pantallas muy bajas se le guarda una altura minima
+    // en telefonos muy bajos solo queda "Earned": la fila de cifras no cabe
+    pin.classList.toggle("bajo", movil && H < 640);
+    const arriba = sec.querySelector(".curva-top");
+    const fondo = arriba ? arriba.offsetTop + arriba.offsetHeight : 0;
+    yT = Math.max(H * (movil ? 0.5 : 0.47), fondo + (movil ? 56 : 48));
+    yT = Math.min(yT, y0 - (movil ? 150 : 170));
     ejesCv.width = Math.round(W * dpr); ejesCv.height = Math.round(H * dpr);
     // el lienzo de la linea solo cubre la grafica (y el halo del punto)
     bx = Math.floor(x0 - 24); by = Math.floor(yT - 30);
@@ -222,6 +230,6 @@
   window.addEventListener("resize", medir);
   window.addEventListener("load", medir);
   if ("ResizeObserver" in window) new ResizeObserver(medir).observe(document.body);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { mesEjes = -1; ant = -1; pedir(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(medir);   // las fuentes cambian la altura del titular
   medir();
 })();
