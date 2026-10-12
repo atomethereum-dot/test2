@@ -1367,9 +1367,9 @@
     --rail-fuerte:color-mix(in srgb,color-mix(in srgb,#3c414c,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#e2e7f0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
     --rail-line:color-mix(in srgb,rgba(0,0,0,.11),rgba(255,255,255,.13) calc(var(--noche,0)*100%));
     --rail-plate:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*100%));
-    --papel-1:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*100%));
+    --papel-1:color-mix(in srgb,#f6f6f4,#05070c calc(var(--noche,0)*100%));
     --papel-2:color-mix(in srgb,#f6f6f4,#05070c calc(var(--noche,0)*100%));
-    --papel-pie:color-mix(in srgb,#f2f2ef,#05070c calc(var(--nf,0)*100%));
+    --papel-pie:color-mix(in srgb,#f6f6f4,#05070c calc(var(--nf,0)*100%));
     position:relative;isolation:isolate;overflow:clip;
     padding:clamp(58px,9vh,100px) var(--pad) clamp(48px,7vh,80px);
     background:linear-gradient(180deg,var(--papel-1) 0%,var(--papel-2) 50%,var(--papel-2) 84%,var(--papel-pie) 100%);
@@ -5400,160 +5400,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   </div>
 </section>
 
-<!-- ============ staking: recompensas para holders en Ethereum mainnet ============
-     Titular, el film del staking y, debajo, los cuatro puntos en una fila y
-     los botones. La entrada la da el script "staking en la portada". -->
-<section class="fst stk" id="staking" aria-labelledby="stk-h">
-  <div class="spine" aria-hidden="true"><em><b>03</b><span>Holder rewards</span></em><i></i></div>
-  <div class="gauge" aria-hidden="true"><u></u></div>
-  <div class="lux" aria-hidden="true"></div>
-  <div class="stk-in">
-    <div class="stk-top">
-      <span class="stk-live mono"><span class="led" aria-hidden="true"></span>Mainnet live</span>
-      <span class="stk-ser mono">Holder rewards · Ethereum mainnet</span>
-    </div>
-    <div class="stk-head">
-      <div class="stk-hw"><h2 id="stk-h">Stake #SECT. <b>Earn every second.</b></h2></div>
-      <p>Deposit #SECT in the Sectora Foundation’s holder-rewards contract and earn rewards every second, paid in #SECT from a pool the treasury funds in advance. No lock-up: claim or withdraw whenever you want.</p>
-    </div>
-    <div class="stk-film">
-      <figure class="stk-fig">
-        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
-        <div class="stk-band mono"><span>Film · Stake #SECT</span><b>SF·HR·FM·26</b></div>
-        <div class="stk-media">
-          <video data-poster="images/stake-poster.jpg" data-src="media/sectora-stake-web-1080.mp4" data-src-m="media/sectora-stake-web-720.mp4" playsinline preload="none" aria-label="Video: Stake #SECT. Earn every second."></video>
-          <button class="pr-snd stk-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
-        </div>
-      </figure>
-    </div>
-    <div class="stk-body">
-      <ol class="stk-pts">
-        <li class="stk-pt">
-          <span class="stk-n mono">01</span>
-          <h3>No lock-up</h3>
-          <p>Withdraw part or all of your deposit at any time, with no penalty, and claim your rewards whenever you like.</p>
-          <span class="stk-fact mono">Withdraw any time</span>
-        </li>
-        <li class="stk-pt">
-          <span class="stk-n mono">02</span>
-          <h3>Paid every second</h3>
-          <p>Rewards start the second your deposit lands and grow continuously. The rate is read from the contract, not written on a page.</p>
-          <span class="stk-fact mono">APY read on-chain</span>
-        </li>
-        <li class="stk-pt">
-          <span class="stk-n mono">03</span>
-          <h3>Funded in advance</h3>
-          <p>The treasury deposits the reward budget into the contract before it is paid out. The size of the pool is public on Etherscan.</p>
-          <span class="stk-fact mono">Nothing is minted</span>
-        </li>
-        <li class="stk-pt">
-          <span class="stk-n mono">04</span>
-          <h3>Exact approvals only</h3>
-          <p>Your wallet approves exactly the amount you deposit, never an unlimited allowance. Depositing takes two confirmations; claiming and withdrawing take one.</p>
-          <span class="stk-fact mono">Two confirmations to deposit</span>
-        </li>
-      </ol>
-    </div>
-    <div class="stk-cta">
-      <div class="stk-btns">
-        <a class="stk-btn go mono" href="https://sectoraorg.com/staking/" target="_blank" rel="noopener"><span class="led" aria-hidden="true"></span><span>Open staking</span><i aria-hidden="true">↗</i></a>
-        <a class="stk-btn mono" href="https://sectoraorg.com/staking/#guide" target="_blank" rel="noopener"><span>Step-by-step guide</span><i aria-hidden="true">↗</i></a>
-        <a class="stk-btn mono" href="https://etherscan.io/address/0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0#code" target="_blank" rel="noopener noreferrer"><span>Verify on Etherscan</span><i aria-hidden="true">↗</i></a>
-      </div>
-      <p class="stk-note">Rewards are paid in #SECT from a pool funded in advance. The rate can change and only applies from that second on. Nothing here is a promise about the price of #SECT.</p>
-    </div>
-  </div>
-</section>
-
-<section class="fst hmk" id="hashmarket" aria-labelledby="hmk-h">
-  <div class="spine" aria-hidden="true"><em><b>04</b><span>Hash Market</span></em><i></i></div>
-  <div class="gauge" aria-hidden="true"><u></u></div>
-  <div class="lux" aria-hidden="true"></div>
-  <div class="hmk-in">
-    <div class="hmk-top">
-      <span class="hmk-live mono"><span class="led" aria-hidden="true"></span>Testnet live</span>
-      <span class="hmk-ser mono">Hash Market · Sepolia testnet</span>
-    </div>
-    <div class="hmk-head">
-      <h2 id="hmk-h">The Hash Market is live on testnet.</h2>
-      <p>Buy hash power, watch 80% of every purchase burn on the spot, earn rewards every second and register your own security node. It all runs on Sepolia with free test tokens, so you can try the full flow before mainnet.</p>
-    </div>
-    <div class="hmk-body">
-      <figure class="hmk-film">
-        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
-        <div class="hmk-band mono"><span>Launch film</span><b>SF·HM·01·26</b></div>
-        <div class="hmk-media">
-          <video data-poster="images/hashmarket-testnet-poster.jpg" data-src="media/sectora-hash-market-testnet-X-1080p.mp4" playsinline preload="none" aria-label="Video: the Sectora Hash Market, live on testnet"></video>
-          <button class="pr-snd hmk-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
-        </div>
-      </figure>
-      <ol class="hmk-steps">
-        <li class="hmk-step">
-          <span class="hmk-n mono">01</span>
-          <h3>Claim free tSECT</h3>
-          <p>Connect MetaMask on Sepolia and claim 5,000 free tSECT from the faucet, once every 24 hours.</p>
-          <span class="hmk-fact mono">5,000 tSECT · every 24 h</span>
-        </li>
-        <li class="hmk-step">
-          <span class="hmk-n mono">02</span>
-          <h3>Buy hash</h3>
-          <p>Pick a package. 80% of what you pay is burned on the spot and 20% funds the reward pool.</p>
-          <span class="hmk-fact mono">80% burned on the spot</span>
-        </li>
-        <li class="hmk-step">
-          <span class="hmk-n mono">03</span>
-          <h3>Earn every second</h3>
-          <p>Rewards accrue every second on the tSECT you spent. Claim them whenever you want.</p>
-          <span class="hmk-fact mono">25% APY · testnet rate</span>
-        </li>
-        <li class="hmk-step">
-          <span class="hmk-n mono">04</span>
-          <h3>Register your node</h3>
-          <p>Reach 50 TH/s and register your security node. It appears live on the network map.</p>
-          <span class="hmk-fact mono">50 TH/s to validate</span>
-        </li>
-      </ol>
-    </div>
-    <div class="hmk-cta">
-      <div class="hmk-btns">
-        <a class="hmk-btn go mono" href="https://sectoraorg.com/dash" target="_blank" rel="noopener noreferrer"><span class="led" aria-hidden="true"></span><span>Open the testnet dashboard</span><i aria-hidden="true">↗</i></a>
-        <a class="hmk-btn mono" href="https://sectoraorg.com/docs#s08" target="_blank" rel="noopener noreferrer"><span>How it works</span><i aria-hidden="true">↗</i></a>
-      </div>
-      <p class="hmk-note">Free test tokens on Sepolia. tSECT has no monetary value. The same rules will run on mainnet with $SECT.</p>
-    </div>
-  </div>
-</section>
-
-<section class="offer" id="offer">
-  <!-- aqui iba <div class="of-halo">: la mancha de luz azul de la derecha. Retirada a peticion. -->
-  <div class="spine" aria-hidden="true"><em><b>05</b><span>Distribution</span></em><i></i></div>
-  <div class="gauge" aria-hidden="true"><u></u></div>
-  <div class="lux" aria-hidden="true"></div>
-  <div class="of-inner">
-    <p class="eyebrow mono"><i></i>Distribution</p>
-    <div class="of-top">
-      <div class="of-hw"><h2>No presale. No rounds. Only the open market.</h2></div>
-      <div class="of-body">
-        <p class="of-lede">Sectora has never sold #SECT ahead of its listing. There was no presale, no private round, no seed allocation and no venture financing, so no one is holding tokens bought at a price the public was never offered.</p>
-        <p class="of-lede">The token lives entirely on the open market. Liquidity is live on Uniswap, where anyone can buy or sell #SECT at any moment, at the price the market sets — with no allowlist, no minimum, no lock-up and no permission from the foundation.</p>
-      </div>
-    </div>
-
-    <div class="of-panel">
-      <dl class="of-ledger">
-        <div class="of-row"><dt class="of-k"><i>01</i>Presale</dt><dd class="of-v mono none"><span>None</span></dd></div>
-        <div class="of-row"><dt class="of-k"><i>02</i>Private round</dt><dd class="of-v mono none"><span>None</span></dd></div>
-        <div class="of-row"><dt class="of-k"><i>03</i>Seed or venture allocation</dt><dd class="of-v mono none"><span>None</span></dd></div>
-        <div class="of-row is-live"><dt class="of-k"><i>04</i>Public trading</dt><dd class="of-v mono"><i class="led"></i>Live on Uniswap</dd></div>
-      </dl>
-      <a class="btn btn-primary of-cta" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&chain=ethereum" target="_blank" rel="noopener noreferrer"><span>Buy or sell on Uniswap</span><span class="arrow">↗</span></a>
-      <p class="of-tip">If your wallet app cannot calculate the network cost, open app.uniswap.org from a computer or from the wallet's own browser. The pair is live and the route is the same.</p>
-    </div>
-  </div>
-</section>
-
 <section class="why" id="why">
-  <div class="spine" aria-hidden="true"><em><b>06</b><span>Why hold #SECT</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>03</b><span>Why hold #SECT</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="wh-inner">
@@ -5681,6 +5529,158 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       </figure>
     </div>
     <p class="wh-fine mono">Dates are the schedule published by Sectora Foundation. Nothing in this section is a promise about the price of #SECT or investment advice.</p>
+  </div>
+</section>
+
+<!-- ============ staking: recompensas para holders en Ethereum mainnet ============
+     Titular, el film del staking y, debajo, los cuatro puntos en una fila y
+     los botones. La entrada la da el script "staking en la portada". -->
+<section class="fst stk" id="staking" aria-labelledby="stk-h">
+  <div class="spine" aria-hidden="true"><em><b>04</b><span>Holder rewards</span></em><i></i></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
+  <div class="lux" aria-hidden="true"></div>
+  <div class="stk-in">
+    <div class="stk-top">
+      <span class="stk-live mono"><span class="led" aria-hidden="true"></span>Mainnet live</span>
+      <span class="stk-ser mono">Holder rewards · Ethereum mainnet</span>
+    </div>
+    <div class="stk-head">
+      <div class="stk-hw"><h2 id="stk-h">Stake #SECT. <b>Earn every second.</b></h2></div>
+      <p>Deposit #SECT in the Sectora Foundation’s holder-rewards contract and earn rewards every second, paid in #SECT from a pool the treasury funds in advance. No lock-up: claim or withdraw whenever you want.</p>
+    </div>
+    <div class="stk-film">
+      <figure class="stk-fig">
+        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+        <div class="stk-band mono"><span>Film · Stake #SECT</span><b>SF·HR·FM·26</b></div>
+        <div class="stk-media">
+          <video data-poster="images/stake-poster.jpg" data-src="media/sectora-stake-web-1080.mp4" data-src-m="media/sectora-stake-web-720.mp4" playsinline preload="none" aria-label="Video: Stake #SECT. Earn every second."></video>
+          <button class="pr-snd stk-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+        </div>
+      </figure>
+    </div>
+    <div class="stk-body">
+      <ol class="stk-pts">
+        <li class="stk-pt">
+          <span class="stk-n mono">01</span>
+          <h3>No lock-up</h3>
+          <p>Withdraw part or all of your deposit at any time, with no penalty, and claim your rewards whenever you like.</p>
+          <span class="stk-fact mono">Withdraw any time</span>
+        </li>
+        <li class="stk-pt">
+          <span class="stk-n mono">02</span>
+          <h3>Paid every second</h3>
+          <p>Rewards start the second your deposit lands and grow continuously. The rate is read from the contract, not written on a page.</p>
+          <span class="stk-fact mono">APY read on-chain</span>
+        </li>
+        <li class="stk-pt">
+          <span class="stk-n mono">03</span>
+          <h3>Funded in advance</h3>
+          <p>The treasury deposits the reward budget into the contract before it is paid out. The size of the pool is public on Etherscan.</p>
+          <span class="stk-fact mono">Nothing is minted</span>
+        </li>
+        <li class="stk-pt">
+          <span class="stk-n mono">04</span>
+          <h3>Exact approvals only</h3>
+          <p>Your wallet approves exactly the amount you deposit, never an unlimited allowance. Depositing takes two confirmations; claiming and withdrawing take one.</p>
+          <span class="stk-fact mono">Two confirmations to deposit</span>
+        </li>
+      </ol>
+    </div>
+    <div class="stk-cta">
+      <div class="stk-btns">
+        <a class="stk-btn go mono" href="https://sectoraorg.com/staking/" target="_blank" rel="noopener"><span class="led" aria-hidden="true"></span><span>Open staking</span><i aria-hidden="true">↗</i></a>
+        <a class="stk-btn mono" href="https://sectoraorg.com/staking/#guide" target="_blank" rel="noopener"><span>Step-by-step guide</span><i aria-hidden="true">↗</i></a>
+        <a class="stk-btn mono" href="https://etherscan.io/address/0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0#code" target="_blank" rel="noopener noreferrer"><span>Verify on Etherscan</span><i aria-hidden="true">↗</i></a>
+      </div>
+      <p class="stk-note">Rewards are paid in #SECT from a pool funded in advance. The rate can change and only applies from that second on. Nothing here is a promise about the price of #SECT.</p>
+    </div>
+  </div>
+</section>
+
+<section class="fst hmk" id="hashmarket" aria-labelledby="hmk-h">
+  <div class="spine" aria-hidden="true"><em><b>05</b><span>Hash Market</span></em><i></i></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
+  <div class="lux" aria-hidden="true"></div>
+  <div class="hmk-in">
+    <div class="hmk-top">
+      <span class="hmk-live mono"><span class="led" aria-hidden="true"></span>Testnet live</span>
+      <span class="hmk-ser mono">Hash Market · Sepolia testnet</span>
+    </div>
+    <div class="hmk-head">
+      <h2 id="hmk-h">The Hash Market is live on testnet.</h2>
+      <p>Buy hash power, watch 80% of every purchase burn on the spot, earn rewards every second and register your own security node. It all runs on Sepolia with free test tokens, so you can try the full flow before mainnet.</p>
+    </div>
+    <div class="hmk-body">
+      <figure class="hmk-film">
+        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+        <div class="hmk-band mono"><span>Launch film</span><b>SF·HM·01·26</b></div>
+        <div class="hmk-media">
+          <video data-poster="images/hashmarket-testnet-poster.jpg" data-src="media/sectora-hash-market-testnet-X-1080p.mp4" playsinline preload="none" aria-label="Video: the Sectora Hash Market, live on testnet"></video>
+          <button class="pr-snd hmk-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+        </div>
+      </figure>
+      <ol class="hmk-steps">
+        <li class="hmk-step">
+          <span class="hmk-n mono">01</span>
+          <h3>Claim free tSECT</h3>
+          <p>Connect MetaMask on Sepolia and claim 5,000 free tSECT from the faucet, once every 24 hours.</p>
+          <span class="hmk-fact mono">5,000 tSECT · every 24 h</span>
+        </li>
+        <li class="hmk-step">
+          <span class="hmk-n mono">02</span>
+          <h3>Buy hash</h3>
+          <p>Pick a package. 80% of what you pay is burned on the spot and 20% funds the reward pool.</p>
+          <span class="hmk-fact mono">80% burned on the spot</span>
+        </li>
+        <li class="hmk-step">
+          <span class="hmk-n mono">03</span>
+          <h3>Earn every second</h3>
+          <p>Rewards accrue every second on the tSECT you spent. Claim them whenever you want.</p>
+          <span class="hmk-fact mono">25% APY · testnet rate</span>
+        </li>
+        <li class="hmk-step">
+          <span class="hmk-n mono">04</span>
+          <h3>Register your node</h3>
+          <p>Reach 50 TH/s and register your security node. It appears live on the network map.</p>
+          <span class="hmk-fact mono">50 TH/s to validate</span>
+        </li>
+      </ol>
+    </div>
+    <div class="hmk-cta">
+      <div class="hmk-btns">
+        <a class="hmk-btn go mono" href="https://sectoraorg.com/dash" target="_blank" rel="noopener noreferrer"><span class="led" aria-hidden="true"></span><span>Open the testnet dashboard</span><i aria-hidden="true">↗</i></a>
+        <a class="hmk-btn mono" href="https://sectoraorg.com/docs#s08" target="_blank" rel="noopener noreferrer"><span>How it works</span><i aria-hidden="true">↗</i></a>
+      </div>
+      <p class="hmk-note">Free test tokens on Sepolia. tSECT has no monetary value. The same rules will run on mainnet with $SECT.</p>
+    </div>
+  </div>
+</section>
+
+<section class="offer" id="offer">
+  <!-- aqui iba <div class="of-halo">: la mancha de luz azul de la derecha. Retirada a peticion. -->
+  <div class="spine" aria-hidden="true"><em><b>06</b><span>Distribution</span></em><i></i></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
+  <div class="lux" aria-hidden="true"></div>
+  <div class="of-inner">
+    <p class="eyebrow mono"><i></i>Distribution</p>
+    <div class="of-top">
+      <div class="of-hw"><h2>No presale. No rounds. Only the open market.</h2></div>
+      <div class="of-body">
+        <p class="of-lede">Sectora has never sold #SECT ahead of its listing. There was no presale, no private round, no seed allocation and no venture financing, so no one is holding tokens bought at a price the public was never offered.</p>
+        <p class="of-lede">The token lives entirely on the open market. Liquidity is live on Uniswap, where anyone can buy or sell #SECT at any moment, at the price the market sets — with no allowlist, no minimum, no lock-up and no permission from the foundation.</p>
+      </div>
+    </div>
+
+    <div class="of-panel">
+      <dl class="of-ledger">
+        <div class="of-row"><dt class="of-k"><i>01</i>Presale</dt><dd class="of-v mono none"><span>None</span></dd></div>
+        <div class="of-row"><dt class="of-k"><i>02</i>Private round</dt><dd class="of-v mono none"><span>None</span></dd></div>
+        <div class="of-row"><dt class="of-k"><i>03</i>Seed or venture allocation</dt><dd class="of-v mono none"><span>None</span></dd></div>
+        <div class="of-row is-live"><dt class="of-k"><i>04</i>Public trading</dt><dd class="of-v mono"><i class="led"></i>Live on Uniswap</dd></div>
+      </dl>
+      <a class="btn btn-primary of-cta" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&chain=ethereum" target="_blank" rel="noopener noreferrer"><span>Buy or sell on Uniswap</span><span class="arrow">↗</span></a>
+      <p class="of-tip">If your wallet app cannot calculate the network cost, open app.uniswap.org from a computer or from the wallet's own browser. The pair is live and the route is the same.</p>
+    </div>
   </div>
 </section>
 
@@ -10461,7 +10461,7 @@ window.__lejos = function(el){
      que ella: si llegara a negro, el titulo quedaria carbon con papel
      justo debajo. Se queda en un atenuado suave, y como su avance nunca
      alcanza el punto de cruce, su texto sigue siendo oscuro. */
-  const secs = [['what',1], ['statement',1], ['staking',1], ['hashmarket',1], ['offer',1], ['why',1], ['mandates',1]]
+  const secs = [['what',1], ['statement',1], ['why',1], ['staking',1], ['hashmarket',1], ['offer',1], ['mandates',1]]
     .map(function(par){
       const el = document.getElementById(par[0]);
       return el ? {el: el, tope: par[1], v: -1, n: 0, vf: -1, cerca: false} : null;
