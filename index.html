@@ -1582,8 +1582,8 @@
   /* ============ mandatos, tarjetas de cristal ============ */
   .mandates{
     --noche:0;--tinta:0;--refuerzo:0;--nf:0;
-    --sec-bg:color-mix(in srgb,#f2f2ef,#05070c calc(var(--noche,0)*100%));
-    --sec-pie:color-mix(in srgb,#f2f2ef,#05070c calc(var(--nf,0)*100%));
+    --sec-bg:color-mix(in srgb,#f6f6f4,#05070c calc(var(--noche,0)*100%));
+    --sec-pie:color-mix(in srgb,#f6f6f4,#05070c calc(var(--nf,0)*100%));
     --sec-ink:color-mix(in srgb,#07080a,#ffffff calc(var(--tinta,0)*100%));
     --sec-ink-2:color-mix(in srgb,color-mix(in srgb,#3c414c,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#e2e7f0,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
     --sec-ink-3:color-mix(in srgb,color-mix(in srgb,#6b7280,#07080a calc(var(--refuerzo,0)*100%)),color-mix(in srgb,#b9c1cf,#ffffff calc(var(--refuerzo,0)*100%)) calc(var(--tinta,0)*100%));
@@ -1601,9 +1601,9 @@
     --m-live-brd:color-mix(in srgb,rgba(15,143,82,.38),rgba(61,220,151,.38) calc(var(--tinta,0)*100%));
     --m-live-bg:color-mix(in srgb,rgba(15,143,82,.07),rgba(61,220,151,.08) calc(var(--tinta,0)*100%));
     position:relative;isolation:isolate;
-    /* llega al mismo negro que las dos de arriba, pero con un pie corto
-       que se aclara: debajo esta "Our projects", que es papel y se ve a
-       la vez, y sin esa transicion el encuentro seria un corte recto */
+    /* llega al mismo negro que las demas, con un pie corto que toma la
+       oscuridad de la seccion de abajo (la declaracion de los fundadores):
+       sin esa transicion el encuentro seria un corte recto */
     background:linear-gradient(180deg,var(--sec-bg) 0%,var(--sec-bg) 84%,
                                       var(--sec-pie) 100%);
     padding:clamp(62px,10vh,114px) var(--pad) clamp(48px,8vh,88px);
@@ -5353,8 +5353,66 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   </div>
 </section>
 
+<section class="mandates" id="mandates">
+  <!-- fuera de .m-bg, como en las otras dos secciones: ese envoltorio
+       lleva z-index y recorte para contener los halos, y dentro de el
+       el lomo quedaba por debajo del velo del titulo fijo -->
+  <div class="spine" aria-hidden="true"><em><b>02</b><span>Verification</span></em><i></i></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
+  <div class="m-bg" aria-hidden="true">
+    <!-- aqui iban los dos <div class="halo">: las manchas de luz azul detras del titular. Retiradas a peticion. -->
+  </div>
+  <div class="m-inner">
+    <div class="m-col">
+      <div class="m-sticky">
+      <p class="eyebrow mono reveal"><i></i>Verification</p>
+      <h2 class="reveal" style="--d:.06s">Security you can <b>verify</b>, not take on trust.</h2>
+      <p class="m-lede reveal" style="--d:.12s">
+        Four independent records, none of them held by us. Each one can be
+        checked without asking the foundation for anything.
+      </p>
+      <div class="m-stats mono reveal" style="--d:.18s">
+        <div><b>04</b><span>Independent records</span></div>
+        <div><b>00</b><span>Held by us</span></div>
+        <div><b>4/4</b><span>Public, no sign-up</span></div>
+      </div>
+    </div></div>
+
+    <div class="m-list">
+      <article class="m-card reveal" style="--d:.10s">
+        <div class="m-top"><span class="mono">01</span><em class="m-ok mono">Verifiable</em></div>
+        <h3>Contract audit</h3>
+        <p>The SECT contract passed an independent security review by Cyberscope. The full report, including every finding and how it was resolved, is public.</p>
+        <p class="m-src mono"><b>Source</b> · Cyberscope</p>
+        <a class="m-link mono" href="https://www.cyberscope.io/audits/sect" target="_blank" rel="noopener noreferrer">View the audit report <i>↗</i></a>
+      </article>
+      <article class="m-card reveal" style="--d:.18s">
+        <div class="m-top"><span class="mono">02</span><em class="m-ok mono">Verifiable</em></div>
+        <h3>Registered company</h3>
+        <p>Sectora Foundation is a company incorporated in Illinois, United States. Its filing is a matter of public record and can be checked with the state registry.</p>
+        <p class="m-src mono"><b>Source</b> · Illinois Secretary of State</p>
+        <a class="m-link mono" href="https://sectoraorg.com/legal" target="_blank" rel="noopener noreferrer">Check the registry <i>↗</i></a>
+      </article>
+      <article class="m-card reveal" style="--d:.26s">
+        <div class="m-top"><span class="mono">03</span><em class="m-ok mono">Verifiable</em></div>
+        <h3>Open market data</h3>
+        <p>Price, liquidity and trading volume are visible on CoinGecko in real time. Nothing about the token has to be taken on our word.</p>
+        <p class="m-src mono"><b>Source</b> · CoinGecko</p>
+        <a class="m-link mono" href="https://www.coingecko.com/en/coins/sectora" target="_blank" rel="noopener noreferrer">View on CoinGecko <i>↗</i></a>
+      </article>
+      <article class="m-card reveal" style="--d:.34s">
+        <div class="m-top"><span class="mono">04</span><em class="m-ok mono">Verifiable</em></div>
+        <h3>Liquidity lock</h3>
+        <p>The initial liquidity was handed over to Team Finance, a third-party locker. Ethereum itself shows the position is held by the locker contract, not by the foundation.</p>
+        <p class="m-src mono"><b>Source</b> · Team Finance · Etherscan</p>
+        <a class="m-link mono" href="https://etherscan.io/nft/0xc36442b4a4522e871399cd717abdd847ab11fe88/1360231" target="_blank" rel="noopener noreferrer">Verify the lock <i>↗</i></a>
+      </article>
+    </div>
+  </div>
+</section>
+
 <section class="fst" id="statement">
-  <div class="spine" aria-hidden="true"><em><b>02</b><span>Founders' statement</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>03</b><span>Founders' statement</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="fst-inner">
@@ -5401,7 +5459,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 </section>
 
 <section class="why" id="why">
-  <div class="spine" aria-hidden="true"><em><b>03</b><span translate="no">Why hold #SECT</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>04</b><span translate="no">Why hold #SECT</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="wh-inner">
@@ -5536,7 +5594,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
      Titular, el film del staking y, debajo, los cuatro puntos en una fila y
      los botones. La entrada la da el script "staking en la portada". -->
 <section class="fst stk" id="staking" aria-labelledby="stk-h">
-  <div class="spine" aria-hidden="true"><em><b>04</b><span>Holder rewards</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>05</b><span>Holder rewards</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="stk-in">
@@ -5598,7 +5656,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 </section>
 
 <section class="fst hmk" id="hashmarket" aria-labelledby="hmk-h">
-  <div class="spine" aria-hidden="true"><em><b>05</b><span>Hash Market</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>06</b><span>Hash Market</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="hmk-in">
@@ -5658,7 +5716,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 
 <section class="offer" id="offer">
   <!-- aqui iba <div class="of-halo">: la mancha de luz azul de la derecha. Retirada a peticion. -->
-  <div class="spine" aria-hidden="true"><em><b>06</b><span>Distribution</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>07</b><span>Distribution</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="of-inner">
@@ -5680,64 +5738,6 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       </dl>
       <a class="btn btn-primary of-cta" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&chain=ethereum" target="_blank" rel="noopener noreferrer"><span>Buy or sell on Uniswap</span><span class="arrow">↗</span></a>
       <p class="of-tip">If your wallet app cannot calculate the network cost, open app.uniswap.org from a computer or from the wallet's own browser. The pair is live and the route is the same.</p>
-    </div>
-  </div>
-</section>
-
-<section class="mandates" id="mandates">
-  <!-- fuera de .m-bg, como en las otras dos secciones: ese envoltorio
-       lleva z-index y recorte para contener los halos, y dentro de el
-       el lomo quedaba por debajo del velo del titulo fijo -->
-  <div class="spine" aria-hidden="true"><em><b>07</b><span>Verification</span></em><i></i></div>
-  <div class="gauge" aria-hidden="true"><u></u></div>
-  <div class="m-bg" aria-hidden="true">
-    <!-- aqui iban los dos <div class="halo">: las manchas de luz azul detras del titular. Retiradas a peticion. -->
-  </div>
-  <div class="m-inner">
-    <div class="m-col">
-      <div class="m-sticky">
-      <p class="eyebrow mono reveal"><i></i>Verification</p>
-      <h2 class="reveal" style="--d:.06s">Security you can <b>verify</b>, not take on trust.</h2>
-      <p class="m-lede reveal" style="--d:.12s">
-        Four independent records, none of them held by us. Each one can be
-        checked without asking the foundation for anything.
-      </p>
-      <div class="m-stats mono reveal" style="--d:.18s">
-        <div><b>04</b><span>Independent records</span></div>
-        <div><b>00</b><span>Held by us</span></div>
-        <div><b>4/4</b><span>Public, no sign-up</span></div>
-      </div>
-    </div></div>
-
-    <div class="m-list">
-      <article class="m-card reveal" style="--d:.10s">
-        <div class="m-top"><span class="mono">01</span><em class="m-ok mono">Verifiable</em></div>
-        <h3>Contract audit</h3>
-        <p>The SECT contract passed an independent security review by Cyberscope. The full report, including every finding and how it was resolved, is public.</p>
-        <p class="m-src mono"><b>Source</b> · Cyberscope</p>
-        <a class="m-link mono" href="https://www.cyberscope.io/audits/sect" target="_blank" rel="noopener noreferrer">View the audit report <i>↗</i></a>
-      </article>
-      <article class="m-card reveal" style="--d:.18s">
-        <div class="m-top"><span class="mono">02</span><em class="m-ok mono">Verifiable</em></div>
-        <h3>Registered company</h3>
-        <p>Sectora Foundation is a company incorporated in Illinois, United States. Its filing is a matter of public record and can be checked with the state registry.</p>
-        <p class="m-src mono"><b>Source</b> · Illinois Secretary of State</p>
-        <a class="m-link mono" href="https://sectoraorg.com/legal" target="_blank" rel="noopener noreferrer">Check the registry <i>↗</i></a>
-      </article>
-      <article class="m-card reveal" style="--d:.26s">
-        <div class="m-top"><span class="mono">03</span><em class="m-ok mono">Verifiable</em></div>
-        <h3>Open market data</h3>
-        <p>Price, liquidity and trading volume are visible on CoinGecko in real time. Nothing about the token has to be taken on our word.</p>
-        <p class="m-src mono"><b>Source</b> · CoinGecko</p>
-        <a class="m-link mono" href="https://www.coingecko.com/en/coins/sectora" target="_blank" rel="noopener noreferrer">View on CoinGecko <i>↗</i></a>
-      </article>
-      <article class="m-card reveal" style="--d:.34s">
-        <div class="m-top"><span class="mono">04</span><em class="m-ok mono">Verifiable</em></div>
-        <h3>Liquidity lock</h3>
-        <p>The initial liquidity was handed over to Team Finance, a third-party locker. Ethereum itself shows the position is held by the locker contract, not by the foundation.</p>
-        <p class="m-src mono"><b>Source</b> · Team Finance · Etherscan</p>
-        <a class="m-link mono" href="https://etherscan.io/nft/0xc36442b4a4522e871399cd717abdd847ab11fe88/1360231" target="_blank" rel="noopener noreferrer">Verify the lock <i>↗</i></a>
-      </article>
     </div>
   </div>
 </section>
@@ -10490,7 +10490,7 @@ window.__lejos = function(el){
      que ella: si llegara a negro, el titulo quedaria carbon con papel
      justo debajo. Se queda en un atenuado suave, y como su avance nunca
      alcanza el punto de cruce, su texto sigue siendo oscuro. */
-  const secs = [['what',1], ['statement',1], ['why',1], ['staking',1], ['hashmarket',1], ['offer',1], ['mandates',1]]
+  const secs = [['what',1], ['mandates',1], ['statement',1], ['why',1], ['staking',1], ['hashmarket',1], ['offer',1]]
     .map(function(par){
       const el = document.getElementById(par[0]);
       return el ? {el: el, tope: par[1], v: -1, n: 0, vf: -1, cerca: false} : null;
