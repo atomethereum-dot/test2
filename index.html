@@ -5401,14 +5401,14 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 </section>
 
 <section class="why" id="why">
-  <div class="spine" aria-hidden="true"><em><b>03</b><span>Why hold #SECT</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>03</b><span translate="no">Why hold #SECT</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="wh-inner">
     <p class="eyebrow mono"><i></i>Before the sequence runs</p>
     <div class="wh-top">
       <div>
-        <div class="wh-hw"><h2>Why hold <b>#SECT?</b></h2></div>
+        <div class="wh-hw"><h2 translate="no">Why hold <b>#SECT?</b></h2></div>
         <p class="wh-sub">Everything is still ahead.</p>
       </div>
       <div class="wh-body">
@@ -5513,7 +5513,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       </ol>
 
       <div class="wh-foot">
-        <p class="wh-punch">A holder today is positioned <b>before every one of those events</b>, not after them. Nothing about that is a forecast — it is simply where the calendar is.</p>
+        <p class="wh-punch" translate="no">A holder today is positioned <b>before every one of those events</b>, not after them. Nothing about that is a forecast — it is simply where the calendar is.</p>
         <a class="btn btn-primary mono" href="https://sectoraorg.com/docs#s04"><span>Read section 04 of the whitepaper</span><span class="arrow">→</span></a>
       </div>
     </div>
@@ -5521,7 +5521,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     <div class="wh-film">
       <figure class="wh-fig">
         <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
-        <div class="wh-band mono"><span>Film · Why hold #SECT</span><b>SF·WH·01·26</b></div>
+        <div class="wh-band mono"><span translate="no">Film · Why hold #SECT</span><b>SF·WH·01·26</b></div>
         <div class="wh-media">
           <video data-poster="images/why-hold-poster.jpg" data-src="media/sectora-why-hold-web-1080.mp4" data-src-m="media/sectora-why-hold-web-720.mp4" playsinline preload="none" aria-label="Video: Why hold #SECT?"></video>
           <button class="pr-snd wh-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
@@ -6509,7 +6509,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <a href="https://sectoraorg.com/docs#s01"><b>01</b>Introduction</a>
         <a href="https://sectoraorg.com/docs#s02"><b>02</b>Legal Documentation</a>
         <a href="https://sectoraorg.com/docs#s03"><b>03</b>Audit Contract - SECT</a>
-        <a href="https://sectoraorg.com/docs#s04"><b>04</b>Why hold #SECT?</a>
+        <a href="https://sectoraorg.com/docs#s04" translate="no"><b>04</b>Why hold #SECT?</a>
       </div>
       <div class="ft-col reveal" style="--d:.10s">
         <h4>05&ndash;09</h4>
@@ -10085,7 +10085,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261033';
+      sc.src = 'i18n-home.js?v=20261034';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
@@ -10187,6 +10187,35 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   });
   document.addEventListener('click', e => { if(!sel.contains(e.target)) abrir(false); });
   document.addEventListener('keydown', e => { if(e.key === 'Escape') abrir(false); });
+
+  /* ---- el traductor del navegador ----
+     Lo marcado con translate="no" (los titulares de Why hold) no lo toca
+     Google Translate: "hold" es jerga cripto y el traductor lo vuelve
+     "tener" o "mantener". Cuando el navegador traduce la pagina pone en
+     <html> la clase translated-ltr/rtl y el idioma de destino en lang;
+     entonces esos trozos se rellenan con nuestro propio diccionario, y al
+     volver al original recuperan el idioma elegido en el selector. */
+  const protegidos = nodos.filter(([n]) => n.parentElement && n.parentElement.closest('[translate="no"]'));
+  let gt = '';
+  function rellenar(cod){
+    const d = cod && cod !== 'en' && TR ? TR[cod] : null;
+    for(const [n, orig] of protegidos){
+      const t = d ? traducir(orig, d) : null;
+      n.nodeValue = t === null ? orig : t;
+    }
+  }
+  function vigilarTraductor(){
+    const h = document.documentElement;
+    const activo = h.classList.contains('translated-ltr') || h.classList.contains('translated-rtl');
+    const cod = activo ? (h.getAttribute('lang') || '').slice(0, 2).toLowerCase() : '';
+    if(cod === gt) return;
+    gt = cod;
+    if(!cod){ rellenar(actual); return; }
+    if(!IDIOMAS.some(x => x[0] === cod)) return;
+    cargarTR().then(() => { if(gt === cod) rellenar(cod); }, () => {});
+  }
+  if(protegidos.length && window.MutationObserver)
+    new MutationObserver(vigilarTraductor).observe(document.documentElement, {attributes:true, attributeFilter:['class','lang']});
 
   /* la pagina abre siempre en ingles */
   marcar('en');
