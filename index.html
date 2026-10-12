@@ -10085,7 +10085,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261034';
+      sc.src = 'i18n-home.js?v=20261035';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
