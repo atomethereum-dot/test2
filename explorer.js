@@ -523,7 +523,7 @@
       '<a class="ex-link ex-mono" href="#/block/' + b.number + '">' + fmtInt(b.number) + "</a>" +
       '<span class="ex-age" data-ts="' + b.timestamp + '">' + timeAgo(b.timestamp) + "</span>" +
       "</div>" +
-      '<div class="ex-row-card-sub">Validator ' + addrLink(b.validator) + "</div>" +
+      '<div class="ex-row-card-sub">' + addrLink(b.validator) + "</div>" +
       '<div class="ex-row-card-end"><span>' + b.txCount + " txns</span><small>" + fmtAmount(b.reward, 3) + " SECT</small></div>" +
       "</div>"
     );

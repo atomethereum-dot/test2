@@ -1418,3 +1418,41 @@ body{background:var(--ex-page)}
 :root:not([data-theme="dark"]) .readout{color:#6b7280}
 :root:not([data-theme="dark"]) .readout::before{border-color:#0d4fd8}
 @media (pointer:coarse){.reticle,.readout{display:none}}
+
+/* ============================================================
+   Alineacion: la cabecera cabe en el mismo ancho que el contenido
+   (antes se salia 53px por la derecha), todos sus controles miden
+   lo mismo de alto y el aviso de testnet queda centrado aunque
+   lleve el punto a la izquierda.
+   ============================================================ */
+.ex-header-row{gap:16px}
+.ex-header-right{gap:6px}
+.ex-navlink{padding:9px 8px}
+.ex-header-search{width:200px;height:38px;padding:0 12px}
+.ex-back{height:38px;padding:0 14px}
+.ex-signin{height:38px;justify-content:center;padding:0 14px}
+.ex-theme-toggle,.ex-nav-toggle{width:38px;height:38px}
+.ex-banner::after{content:'';width:5px;flex:none}
+@media (max-width:1320px){
+  .ex-header-search{width:180px}
+}
+@media (max-width:1200px){
+  .ex-back{padding:0 12px}
+}
+@media (max-width:1000px){
+  .ex-header-search{width:150px}
+  .ex-navlink{padding:9px 6px}
+}
+@media (max-width:900px){
+  .ex-back{height:auto;padding:8px 4px}
+}
+
+/* ---------- movil: filas y pie sin cortes raros ---------- */
+.ex-footer-links{flex-wrap:wrap;row-gap:10px}
+.ex-footer-links a{white-space:nowrap}
+@media (max-width:560px){
+  .ex-row-card-main{flex-wrap:wrap;row-gap:2px}
+  .ex-row-card-main > a,.ex-row-card-main .ex-age{white-space:nowrap}
+  .ex-row-card-sub .ex-addr-sub,.ex-row-card-sub .ex-copy{display:none}
+  .ex-row-card-end{white-space:nowrap}
+}
