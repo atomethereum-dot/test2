@@ -1493,7 +1493,7 @@ body{background:var(--ex-page)}
 .ex-charts-preview>.ex-chart-card>.ex-chart{flex:1;min-height:110px}
 .ex-pc-card{padding:20px 22px 14px}
 .ex-pc{--pc:var(--ex-green);--pc-ink:#fff;display:flex;flex-direction:column;height:100%}
-.ex-pc--down{--pc:var(--ex-red)}
+/* la grafica va siempre en verde, suba o baje; solo los porcentajes cambian de color */
 :root[data-theme="dark"] .ex-pc{--pc-ink:#05070c}
 .ex-pc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px 20px;flex-wrap:wrap;margin-bottom:18px}
 .ex .ex-pc-pair{display:flex;align-items:center;gap:9px;margin:0 0 10px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--ex-text-dim)}

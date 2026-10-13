@@ -445,7 +445,7 @@
     const yMin = lo - span * 0.16, yMax = hi + span * 0.24;
     const X = (t) => (t - t0) / (t1 - t0 || 1);
     const Y = (v) => 1 - (v - yMin) / (yMax - yMin);
-    PC_VIS = { pts: vis, t0: t0, t1: t1, yMin: yMin, yMax: yMax, first: first[1] };
+    PC_VIS = { pts: vis, t0: t0, t1: t1, yMin: yMin, yMax: yMax, first: first[1], yLast: Y(last[1]) * 100 };
 
     const up = last[1] >= first[1];
     const rangeChg = (last[1] / first[1] - 1) * 100;
@@ -540,6 +540,8 @@
     q(".ex-pc-cy").style.top = y + "%";
     const hd = q(".ex-pc-hd"); hd.style.left = x + "%"; hd.style.top = y + "%";
     const ht = q(".ex-pc-htag"); ht.style.top = y + "%"; ht.textContent = pcFmt(p[1]);
+    // si la etiqueta del cursor cae encima de la del ultimo precio, esta se aparta
+    q(".ex-pc-tag").style.visibility = Math.abs(y - v.yLast) < 7 ? "hidden" : "";
     const dt = new Date(p[0]);
     q(".ex-pc-tip-t").textContent = WEEKDAYS[dt.getDay()] + ", " + pcDate(p[0]) + " · " + pcTime(p[0]);
     q(".ex-pc-tip-p").textContent = "$" + pcFmt(p[1]);
@@ -553,7 +555,11 @@
   }
   function pcHideHover() {
     PC_HOVER = null;
-    document.querySelectorAll(".ex-pc.is-hover").forEach((el) => el.classList.remove("is-hover"));
+    document.querySelectorAll(".ex-pc.is-hover").forEach((el) => {
+      el.classList.remove("is-hover");
+      const tag = el.querySelector(".ex-pc-tag");
+      if (tag) tag.style.visibility = "";
+    });
   }
   function pcPointer(e) {
     const plot = e.target && e.target.closest ? e.target.closest(".ex-pc-plot") : null;
