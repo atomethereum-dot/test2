@@ -1456,3 +1456,11 @@ body{background:var(--ex-page)}
   .ex-row-card-sub .ex-addr-sub,.ex-row-card-sub .ex-copy{display:none}
   .ex-row-card-end{white-space:nowrap}
 }
+
+/* ---------- monitores grandes: la misma pagina que en 1440px, ampliada ---------- */
+.ex{zoom:var(--exz,1)}
+.ex-wide .ex-main,.ex-wide .ex-header-row,.ex-wide .ex-ticker-inner,.ex-wide .ex-footer-inner{max-width:1680px}
+.ex-wider .ex-main,.ex-wider .ex-header-row,.ex-wider .ex-ticker-inner,.ex-wider .ex-footer-inner{max-width:2100px}
+/* las cinco tarjetas de activos llenan la fila en cualquier ancho, sin hueco a la derecha */
+.ex-rwa-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+@media (max-width:560px){.ex-rwa-grid{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}}

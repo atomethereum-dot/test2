@@ -33,12 +33,18 @@
 <link rel="preload" href="fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260810x" />
-<link rel="stylesheet" href="explorer.css?v=20261013e" />
+<link rel="stylesheet" href="explorer.css?v=20261013i" />
 <!-- Sectorascan es oscuro por defecto: solo se queda en claro si el visitante
      lo eligio antes. Si localStorage no se puede leer (ventana privada, cookies
      bloqueadas) tambien va oscuro, para que el fallo no lo deje en claro.
      Va aqui, antes de la hoja de estilos, para que no haya destello blanco. -->
 <script>(function(){var d=document.documentElement;try{if(localStorage.getItem("sectorascanTheme")!=="light")d.setAttribute("data-theme","dark");}catch(e){d.setAttribute("data-theme","dark");}})();</script>
+<!-- En monitores grandes Sectorascan se ve como en un portatil de 1440px, solo
+     que mas grande: se amplia en proporcion al ancho (y sin pasarse del alto,
+     para que una pantalla ultrapanoramica no la deje gigante). En las
+     ultrapanoramicas, donde manda el alto, el contenido se ensancha para no
+     quedarse en una columna. Por debajo de 1440px no cambia nada. -->
+<script>(function(){var d=document.documentElement;function f(){var z=Math.min(innerWidth/1440,innerHeight/720);z=Math.max(1,Math.min(z,4));d.style.setProperty("--exz",z.toFixed(4));d.classList.toggle("ex-wide",innerWidth/z>1800);d.classList.toggle("ex-wider",innerWidth/z>2400);}f();addEventListener("resize",f);})();</script>
 <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -152,10 +158,12 @@
 (function(){
   if(!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
   if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  var CELL = 54, ret = document.getElementById("reticle"), rd = document.getElementById("readout");
+  var ret = document.getElementById("reticle"), rd = document.getElementById("readout");
   if(!ret || !rd) return;
   var rx = ret.querySelector(".rx"), ry = ret.querySelector(".ry"), gx0 = NaN, gy0 = NaN, lect0 = "";
   addEventListener("pointermove", function(e){
+    // la casilla crece con la ampliacion de monitores grandes, como la rejilla del fondo
+    var CELL = 54 * (parseFloat(document.documentElement.style.getPropertyValue("--exz")) || 1);
     var cc = Math.floor((e.clientX + scrollX) / CELL), cr = Math.floor((e.clientY + scrollY) / CELL);
     var gx = cc * CELL - scrollX, gy = cr * CELL - scrollY;
     // salta de casilla en casilla: entre medias no hay nada que escribir
