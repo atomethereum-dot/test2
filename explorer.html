@@ -33,7 +33,7 @@
 <link rel="preload" href="fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260810x" />
-<link rel="stylesheet" href="explorer.css?v=20261013i" />
+<link rel="stylesheet" href="explorer.css?v=20261013j" />
 <!-- Sectorascan es oscuro por defecto: solo se queda en claro si el visitante
      lo eligio antes. Si localStorage no se puede leer (ventana privada, cookies
      bloqueadas) tambien va oscuro, para que el fallo no lo deje en claro.
@@ -181,5 +181,39 @@
 })();
 </script>
 <script src="explorer.js?v=20261013b"></script>
+<script>
+/* la barra de datos pasa sola cuando no cabe (movil y tableta): se duplica
+   el juego de datos para que el bucle no tenga costura, y la copia se
+   mantiene al dia con lo que explorer.js escribe en el original. Si cabe
+   entera, se queda quieta. */
+(function(){
+  var inner = document.querySelector(".ex-ticker-inner");
+  if(!inner) return;
+  var track = document.createElement("div"), a = document.createElement("div");
+  track.className = "ex-ticker-track"; a.className = "ex-ticker-set";
+  [].slice.call(inner.children).forEach(function(it){ a.appendChild(it); });
+  var b = a.cloneNode(true);
+  b.setAttribute("aria-hidden", "true");
+  [].slice.call(b.querySelectorAll("[id]")).forEach(function(el){ el.setAttribute("data-mirror", el.id); el.removeAttribute("id"); });
+  track.appendChild(a); track.appendChild(b); inner.appendChild(track);
+  function sync(){
+    [].slice.call(b.querySelectorAll("[data-mirror]")).forEach(function(el){
+      var o = document.getElementById(el.getAttribute("data-mirror"));
+      if(o && el.textContent !== o.textContent) el.textContent = o.textContent;
+    });
+  }
+  new MutationObserver(sync).observe(a, {subtree: true, childList: true, characterData: true});
+  sync();
+  function fit(){
+    var cs = getComputedStyle(inner), avail = inner.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    var need = a.scrollWidth > avail + 1;
+    inner.classList.toggle("is-marquee", need);
+    if(need) inner.style.setProperty("--tk-dur", Math.max(8, a.getBoundingClientRect().width / 40).toFixed(1) + "s");
+  }
+  fit();
+  addEventListener("resize", fit);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+})();
+</script>
 </body>
 </html>
