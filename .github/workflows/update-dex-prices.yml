@@ -26,6 +26,7 @@ jobs:
           git config user.name "sectora-dex-bot"
           git config user.email "actions@github.com"
           git add dex-prices.json
+          [ -f sect-price-30d.json ] && git add sect-price-30d.json
           if git diff --cached --quiet; then
             echo "No price change, nothing to commit."
           else

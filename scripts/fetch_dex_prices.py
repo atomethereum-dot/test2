@@ -17,6 +17,12 @@ COIN_IDS = [
 INDEX_SYMBOLS = ["^DJI", "^GSPC", "^IXIC"]
 OUT_PATH = "dex-prices.json"
 
+# Precio real de $SECT en CoinGecko, ultimos 30 dias, para la grafica de
+# Sectorascan. Se busca por la direccion del contrato (no depende de como
+# CoinGecko haya llamado a la moneda) y, si falla, por su id.
+SECT_CONTRACT = "0x8c9984b06281f1ca9416e493c2e602aab08513db"
+SECT_OUT_PATH = "sect-price-30d.json"
+
 
 def fetch_json(url):
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (SectoraDexBot)"})
@@ -52,7 +58,43 @@ def fetch_indices():
     return out
 
 
+def fetch_sect_chart():
+    urls = [
+        "https://api.coingecko.com/api/v3/coins/ethereum/contract/" + SECT_CONTRACT + "/market_chart?vs_currency=usd&days=30",
+        "https://api.coingecko.com/api/v3/coins/sectora/market_chart?vs_currency=usd&days=30",
+    ]
+    for url in urls:
+        try:
+            data = fetch_json(url)
+            pts = []
+            for p in data.get("prices", []):
+                if isinstance(p, list) and len(p) >= 2 and p[1]:
+                    pts.append([int(p[0]), float("%.6g" % float(p[1]))])
+            if len(pts) >= 2:
+                return pts
+        except Exception as e:
+            print("coingecko sect chart failed (" + url + "): " + str(e), file=sys.stderr)
+    return None
+
+
+def write_sect_chart():
+    """Escribe sect-price-30d.json solo si CoinGecko respondio: un fallo deja
+    el archivo anterior tal cual."""
+    pts = fetch_sect_chart()
+    if not pts:
+        return
+    out = {"updatedAt": int(time.time() * 1000), "source": "coingecko", "contract": SECT_CONTRACT, "prices": pts}
+    with open(SECT_OUT_PATH, "w") as f:
+        json.dump(out, f, separators=(",", ":"))
+    print("wrote " + SECT_OUT_PATH + " (" + str(len(pts)) + " points)")
+
+
 def main():
+    try:
+        write_sect_chart()
+    except Exception as e:
+        print("sect chart step failed: " + str(e), file=sys.stderr)
+
     coins = {}
     indices = {}
     try:

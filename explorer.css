@@ -1481,3 +1481,4 @@ body{background:var(--ex-page)}
   .ex-ticker-inner.is-marquee .ex-ticker-track{animation:none}
   .ex-ticker-inner.is-marquee{overflow-x:auto}
 }
+.ex-chart--empty{display:flex;align-items:center;justify-content:center;border:1px dashed var(--ex-border-strong);font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ex-text-faint)}

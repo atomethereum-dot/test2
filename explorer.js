@@ -351,6 +351,11 @@
     }
     return '<svg class="ex-chart" viewBox="0 0 ' + w + " " + h + '" preserveAspectRatio="none">' + bars + "</svg>";
   }
+  function priceChart() {
+    if (PRICE_HIST.length >= 2) return lineChart(PRICE_HIST, { color: "var(--ex-green)" });
+    const msg = PRICE_STATE === "error" ? "CoinGecko data unavailable right now" : "Loading CoinGecko data…";
+    return '<div class="ex-chart ex-chart--empty"><span>' + msg + "</span></div>";
+  }
   function lineChart(values, opts) {
     opts = opts || {};
     const w = opts.w || 560, h = opts.h || 120, pad = 6;
@@ -385,7 +390,13 @@
   }
   const DAILY_TX = days14Values(2400, 500);
   const DAILY_ADDR = days14Values(180, 40);
-  const PRICE_HIST = (() => { const out = []; let v = 0.095; for (let i = 0; i < 30; i++) { v = Math.max(0.05, v + (rand() - 0.47) * 0.006); out.push(v); } return out; })();
+  /* precio real de SECT: lo llena loadSectMarket() con el historial de
+     CoinGecko que publica el robot de precios (sect-price-30d.json). Hasta
+     que llega, la grafica avisa de que esta cargando: nada inventado */
+  let PRICE_HIST = [];
+  let PRICE_LABEL = "30 days · CoinGecko";
+  let PRICE_STATE = "loading";
+  let SECT_REAL = null;
   const TVL_HIST = days14Values(24500000, 900000);
 
   /* ============================================================
@@ -424,7 +435,7 @@
      ============================================================ */
   function statCards() {
     const sect = TOKEN_BY_SYMBOL.get("sect");
-    const change = ((sect.price / 0.1034 - 1) * 100).toFixed(2);
+    const change = (SECT_REAL ? SECT_REAL.change24h : (sect.price / 0.1034 - 1) * 100).toFixed(2);
     return (
       '<div class="ex-stats">' +
       statCard("SECT PRICE", "$" + fmtAmount(sect.price, 4), (change >= 0 ? "+" : "") + change + "% (24h)", change >= 0 ? "up" : "down") +
@@ -511,7 +522,7 @@
       "</section>" +
       '<section class="ex-charts-preview">' +
       chartCard("Daily Transactions", "14 Days", barChart(DAILY_TX, { color: "var(--ex-blue)" })) +
-      chartCard("SECT Price", "30 Days", lineChart(PRICE_HIST, { color: "var(--ex-green)" })) +
+      chartCard("SECT Price", PRICE_LABEL, priceChart()) +
       "</section>"
     );
   }
@@ -985,7 +996,7 @@
       '<div class="ex-charts-grid">' +
       chartCard("Daily Transactions", "14 Days", barChart(DAILY_TX, { color: "var(--ex-blue)" })) +
       chartCard("Daily Active Addresses", "14 Days", barChart(DAILY_ADDR, { color: "var(--ex-purple)" })) +
-      chartCard("SECT Price", "30 Days", lineChart(PRICE_HIST, { color: "var(--ex-green)" })) +
+      chartCard("SECT Price", PRICE_LABEL, priceChart()) +
       chartCard("Total Value Tokenized", "14 Days", lineChart(TVL_HIST, { color: "var(--ex-gold)" })) +
       "</div>"
     );
@@ -1126,6 +1137,7 @@
   TOKENS.forEach((t) => { t.baseline = t.price; });
   function jitterPrices() {
     TOKENS.forEach((t) => {
+      if (SECT_REAL && t.symbol === "SECT") return;   // el precio real no se toca
       const drift = (rand() - 0.5) * 0.004;
       t.price = Math.max(t.baseline * 0.85, t.price * (1 + drift));
     });
@@ -1208,11 +1220,38 @@
     window.addEventListener("hashchange", () => render());
   }
 
+  /* ============================================================
+     Precio real de SECT (CoinGecko, ultimos 30 dias)
+     ============================================================ */
+  function loadSectMarket() {
+    fetch("sect-price-30d.json?t=" + Math.floor(Date.now() / 300000), { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        const pts = d && Array.isArray(d.prices) ? d.prices.filter((p) => Array.isArray(p) && isFinite(p[1]) && p[1] > 0) : [];
+        if (pts.length < 2) { if (!PRICE_HIST.length) { PRICE_STATE = "error"; render({ preserveScroll: true }); } return; }
+        PRICE_HIST = pts.map((p) => p[1]);
+        const first = pts[0], last = pts[pts.length - 1];
+        const days = (last[0] - first[0]) / 86400000;
+        PRICE_LABEL = (days >= 29 ? "30 days" : "Since listing · " + Math.max(1, Math.round(days)) + (Math.round(days) === 1 ? " day" : " days")) + " · CoinGecko";
+        let prev = first;
+        for (const p of pts) { if (p[0] <= last[0] - 86400000) prev = p; else break; }
+        const sect = TOKEN_BY_SYMBOL.get("sect");
+        sect.price = last[1]; sect.baseline = last[1];
+        SECT_REAL = { price: last[1], change24h: (last[1] / prev[1] - 1) * 100 };
+        PRICE_STATE = "ok";
+        updateHeaderTicker();
+        render({ preserveScroll: true });
+      })
+      .catch(() => { if (!PRICE_HIST.length) { PRICE_STATE = "error"; render({ preserveScroll: true }); } });
+  }
+
   function init() {
     if (!location.hash) location.hash = "#/";
     wireEvents();
     render();
     updateHeaderTicker();
+    loadSectMarket();
+    setInterval(loadSectMarket, 300000);
     setInterval(() => { pushLiveBlock(); }, CHAIN.blockTimeMs);
     setInterval(() => {
       const { parts, params } = parseRoute();
