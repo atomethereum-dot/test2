@@ -8991,7 +8991,15 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     chainlink:{price:12.62,  cap:9.44e9,    sup:748e6},
     cardano:{price:0.2283,   cap:8.57e9,    sup:37.52e9}
   };
-  const SELF = {n:'Sectora', t:'#SECT', price:0.10, sup:'50.0M → 25.0M', cap:5.00e6};
+  // fila de #SECT: precio real de CoinGecko (por contrato), con la serie que
+  // publica el robot (sect-price-30d.json) como red de seguridad. Hasta que
+  // llega un dato real no se ensena ninguna cifra
+  const SECT_ADDR = '0x8c9984b06281f1ca9416e493c2e602aab08513db';
+  const SECT_CG   = 'https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses='
+    + SECT_ADDR + '&vs_currencies=usd';
+  const SECT_SUP  = 50000000;         // supply de hoy; la cap de la fila sale de aqui
+  const SELF = {n:'Sectora', t:'#SECT', price:null, sup:'50.0M → 25.0M', cap:null};
+  let sectTras = 0;
 
   let pct = 1, live = false, rows = [];
   let data = COINS.map(c => Object.assign({}, c, FALLBACK[c.id]));
@@ -9001,6 +9009,9 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     : v >= 1
       ? '$' + v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})
       : '$' + v.toFixed(4).replace(/0+$/,'').replace(/\.$/,'');
+
+  // #SECT con cinco cifras significativas, igual que en SectoraScan
+  const sectMoney = v => '$' + (v >= 1 ? v.toFixed(4) : v.toPrecision(5));
 
   const big = v =>
     v >= 1e12 ? '$' + (v/1e12).toFixed(2) + 'T' :
@@ -9048,12 +9059,13 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       // cada consulta puede no encontrar nada si el marcado cambia:
       // sin la comprobacion, una sola ausencia rompe todo el render
       const set = (sel, txt) => { const n = el.querySelector(sel); if(n) n.textContent = txt; };
-      set('[data-price]', money(a.price));
+      const sinDato = self && !(a.price > 0);
+      set('[data-price]', sinDato ? '—' : self ? sectMoney(a.price) : money(a.price));
       set('[data-sup]',   self ? a.sup : units(a.sup));
-      set('[data-cap]',   big(a.cap));
+      set('[data-cap]',   sinDato ? '—' : big(a.cap));
       const b = el.querySelector('.cap-bar i');
-      if(b) b.style.transform = 'scaleX(' + (fill ? bar(a.cap) : 0) + ')';
-      set('[data-out]', self ? money(a.price) : money(a.cap * (pct/100) / SUPPLY));
+      if(b) b.style.transform = 'scaleX(' + (fill && !sinDato ? bar(a.cap) : 0) + ')';
+      set('[data-out]', sinDato ? '—' : self ? sectMoney(a.price) : money(a.cap * (pct/100) / SUPPLY));
     });
   }
 
@@ -9142,8 +9154,46 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     }catch(e){ return false; }
   }
 
+  function sectPrecio(v){
+    if(!(v > 0) || v === SELF.price) return;
+    SELF.price = v;
+    SELF.cap   = v * SECT_SUP;
+    version++;
+  }
+  async function sectDesdeCoinGecko(){
+    try{
+      const r = await fetch(SECT_CG, {cache:'no-store'});
+      if(!r.ok) return false;
+      const j = await r.json();
+      const v = j && j[SECT_ADDR] && j[SECT_ADDR].usd;
+      if(!(v > 0)) return false;
+      sectPrecio(v);
+      return true;
+    }catch(e){ return false; }
+  }
+  async function sectDesdeArchivo(){
+    try{
+      const r = await fetch('sect-price-30d.json?t=' + Date.now(), {cache:'no-store'});
+      if(!r.ok) return false;
+      const j = await r.json();
+      const p = j && Array.isArray(j.prices) ? j.prices[j.prices.length - 1] : null;
+      if(!p || !(p[1] > 0)) return false;
+      sectPrecio(p[1]);
+      return true;
+    }catch(e){ return false; }
+  }
+  // el precio de #SECT se relee cada minuto, por su lado
+  async function sectLive(){
+    const ahora = Date.now();
+    if(ahora < sectTras) return;
+    sectTras = ahora + CG_VIGENCIA;
+    if(!(await sectDesdeCoinGecko())) await sectDesdeArchivo();
+    pintarSiCambia();
+  }
+
   async function fetchLive(){
     const ahora = Date.now();
+    sectLive();
 
     // dato de CoinGecko todavia fresco: solo se refresca el "hace Xs"
     if(ahora < cgVigenteHasta){ setStatus(); return; }

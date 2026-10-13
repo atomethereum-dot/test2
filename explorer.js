@@ -268,8 +268,19 @@
   function copyBtn(text) {
     return '<button type="button" class="ex-copy" data-copy="' + esc(text) + '" title="Copy to clipboard" aria-label="Copy">' + ICO.copy + "</button>";
   }
+  // SECT lleva el logo de Sectora (el mismo de la cabecera)
+  const SECT_LOGO =
+    '<svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" ry="9" fill="#1569ff"/>' +
+    '<circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>';
+  // el precio de SECT solo se ensena cuando llego el real de CoinGecko
+  function tokenPrice(t) {
+    if (t.symbol !== "SECT") return "$" + fmtAmount(t.price, 4);
+    return SECT_REAL ? "$" + pcFmt(SECT_REAL.price) : "$—";
+  }
+  function tokenCap(t) { return t.symbol === "SECT" && !SECT_REAL ? "—" : fmtUsd(t.price * t.supply); }
   function tokenIcon(t, size) {
     size = size || 22;
+    if (t.symbol === "SECT") return '<span class="ex-tk-icon ex-tk-icon--logo" style="width:' + size + "px;height:" + size + 'px">' + SECT_LOGO + "</span>";
     const initials = t.symbol.replace(/^x/, "").slice(0, 2).toUpperCase();
     return '<span class="ex-tk-icon" style="width:' + size + "px;height:" + size + "px;background:" + t.color + '22;color:' + t.color + ';border-color:' + t.color + '44">' + esc(initials) + "</span>";
   }
@@ -351,10 +362,225 @@
     }
     return '<svg class="ex-chart" viewBox="0 0 ' + w + " " + h + '" preserveAspectRatio="none">' + bars + "</svg>";
   }
-  function priceChart() {
-    if (PRICE_HIST.length >= 2) return lineChart(PRICE_HIST, { color: "var(--ex-green)" });
-    const msg = PRICE_STATE === "error" ? "CoinGecko data unavailable right now" : "Loading CoinGecko data…";
-    return '<div class="ex-chart ex-chart--empty"><span>' + msg + "</span></div>";
+  /* ============================================================
+     Grafica de precio de SECT: datos reales de CoinGecko, nada inventado.
+     Ejes con precio y fecha, rangos 24H / 7D / 30D, cursor con tooltip y
+     el ultimo precio marcado. Se actualiza sola cada minuto.
+     ============================================================ */
+  const PC_RANGES = [["24h", "24H", 86400000], ["7d", "7D", 7 * 86400000], ["30d", "30D", 30 * 86400000]];
+  const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  let PC_RANGE = "30d";
+  try { const r = localStorage.getItem("sectorascanPriceRange"); if (PC_RANGES.some((x) => x[0] === r)) PC_RANGE = r; } catch (e) {}
+  let PC_ANIM = true;      // la linea se dibuja al aparecer y al cambiar de rango
+  let PC_FLASH = "";       // el precio parpadea en verde/rojo cuando cambia
+  let PC_SEQ = 0;          // ids unicos para los degradados del SVG
+  let PC_VIS = null;       // serie visible, la usa el cursor
+  let PC_HOVER = null;     // posicion del cursor (0-1), se repone tras repintar
+
+  function pcFmt(v) { return v >= 1 ? v.toFixed(4) : v.toPrecision(5); }
+  function pcPct(v) { return (v >= 0 ? "+" : "") + v.toFixed(2) + "%"; }
+  function pcTwo(n) { return (n < 10 ? "0" : "") + n; }
+  function pcDate(ms) { const d = new Date(ms); return MONTHS[d.getMonth()] + " " + pcTwo(d.getDate()); }
+  function pcTime(ms) { const d = new Date(ms); return pcTwo(d.getHours()) + ":" + pcTwo(d.getMinutes()); }
+  function pcNiceStep(span, n) {
+    const raw = span / n;
+    const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    const f = raw / mag;
+    return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * mag;
+  }
+  // marcas del eje de tiempo alineadas a horas o medianoches locales
+  function pcTimeTicks(t0, t1) {
+    const H = 3600000, D = 86400000;
+    const steps = [H, 2 * H, 3 * H, 4 * H, 6 * H, 12 * H, D, 2 * D, 3 * D, 4 * D, 5 * D, 7 * D];
+    let step = steps[steps.length - 1];
+    for (const s of steps) if ((t1 - t0) / s <= 6) { step = s; break; }
+    const d = new Date(t0);
+    if (step >= D) d.setHours(0, 0, 0, 0);
+    else { d.setMinutes(0, 0, 0); d.setHours(d.getHours() - (d.getHours() % (step / H))); }
+    const out = [];
+    for (let t = d.getTime(), guard = 0; t <= t1 && guard < 40; guard++) {
+      if (t >= t0) out.push(t);
+      if (step >= D) { const n = new Date(t); n.setDate(n.getDate() + step / D); t = n.getTime(); }
+      else t += step;
+    }
+    return { ticks: out, daily: step >= D };
+  }
+  function pcVisible() {
+    if (PRICE_PTS.length < 2) return [];
+    const r = PC_RANGES.find((x) => x[0] === PC_RANGE) || PC_RANGES[2];
+    const from = PRICE_PTS[PRICE_PTS.length - 1][0] - r[2];
+    const vis = PRICE_PTS.filter((p) => p[0] >= from);
+    return vis.length >= 2 ? vis : PRICE_PTS.slice(-2);
+  }
+  function pcLive() { return Date.now() - PRICE_LIVE_AT < 150000; }
+  function pcKey(variant) { return [variant, PC_RANGE, PRICE_VER, PRICE_STATE, pcLive() ? 1 : 0].join("|"); }
+
+  function priceChart(variant) {
+    const sect = TOKEN_BY_SYMBOL.get("sect");
+    const tabs = PC_RANGES.map((r) =>
+      '<button type="button" class="ex-pc-tab' + (r[0] === PC_RANGE ? " is-active" : "") + '" data-pc-range="' + r[0] + '" aria-pressed="' + (r[0] === PC_RANGE) + '">' + r[1] + "</button>"
+    ).join("");
+    const pair = '<p class="ex-pc-pair">' + tokenIcon(sect, 20) + "SECT / USD <span>&middot; CoinGecko</span></p>";
+    const vis = pcVisible();
+    if (vis.length < 2) {
+      const msg = PRICE_STATE === "error" ? "CoinGecko data unavailable right now" : "Loading CoinGecko data…";
+      return (
+        '<div class="ex-pc ex-pc--' + variant + '" data-pc-key="' + pcKey(variant) + '">' +
+        '<div class="ex-pc-head"><div class="ex-pc-id">' + pair + '<div class="ex-pc-now"><b class="ex-pc-price">$—</b></div></div>' +
+        '<div class="ex-pc-tabs">' + tabs + "</div></div>" +
+        '<div class="ex-pc-plot ex-pc-plot--empty"><span>' + msg + "</span></div></div>"
+      );
+    }
+
+    const n = vis.length;
+    const first = vis[0], last = vis[n - 1];
+    const t0 = first[0], t1 = last[0];
+    let lo = Infinity, hi = -Infinity, iLo = 0, iHi = 0;
+    vis.forEach((p, i) => {
+      if (p[1] < lo) { lo = p[1]; iLo = i; }
+      if (p[1] > hi) { hi = p[1]; iHi = i; }
+    });
+    const span = hi - lo || hi * 0.01 || 0.001;
+    const yMin = lo - span * 0.16, yMax = hi + span * 0.24;
+    const X = (t) => (t - t0) / (t1 - t0 || 1);
+    const Y = (v) => 1 - (v - yMin) / (yMax - yMin);
+    PC_VIS = { pts: vis, t0: t0, t1: t1, yMin: yMin, yMax: yMax, first: first[1] };
+
+    const up = last[1] >= first[1];
+    const rangeChg = (last[1] / first[1] - 1) * 100;
+    const chg24 = SECT_REAL ? SECT_REAL.change24h : rangeChg;
+
+    let d = "";
+    for (let i = 0; i < n; i++) d += (i ? "L" : "M") + (X(vis[i][0]) * 1000).toFixed(1) + "," + (Y(vis[i][1]) * 300).toFixed(1);
+    const gid = "exPcG" + ++PC_SEQ;
+    const svg =
+      '<svg class="ex-pc-svg" viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true">' +
+      '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0" style="stop-color:var(--pc);stop-opacity:.28"></stop>' +
+      '<stop offset=".75" style="stop-color:var(--pc);stop-opacity:.04"></stop>' +
+      '<stop offset="1" style="stop-color:var(--pc);stop-opacity:0"></stop></linearGradient></defs>' +
+      '<path d="' + d + 'L1000,300L0,300Z" fill="url(#' + gid + ')"></path>' +
+      '<path class="ex-pc-line" d="' + d + '" vector-effect="non-scaling-stroke"></path>' +
+      "</svg>";
+
+    // eje de precio: marcas redondas; se ocultan las que pisarian la etiqueta del ultimo precio
+    const yLast = Y(last[1]) * 100;
+    const step = pcNiceStep(yMax - yMin, 4);
+    const dec = Math.max(yMax < 1 ? 4 : 2, Math.min(8, Math.ceil(-Math.log10(step) - 1e-9)));
+    let grid = "", yLabels = "";
+    for (let v = Math.ceil(yMin / step) * step; v <= yMax; v += step) {
+      const y = Y(v) * 100;
+      if (y < 3 || y > 97) continue;
+      grid += '<i class="ex-pc-gl" style="top:' + y.toFixed(2) + '%"></i>';
+      if (Math.abs(y - yLast) > 7) yLabels += '<span class="ex-pc-yt" style="top:' + y.toFixed(2) + '%">' + v.toFixed(dec) + "</span>";
+    }
+    // eje de tiempo
+    const tt = pcTimeTicks(t0, t1);
+    let xLabels = "";
+    tt.ticks.forEach((t, i) => {
+      const x = X(t) * 100;
+      if (x < 5 || x > 95) return;
+      const h = new Date(t).getHours();
+      const label = tt.daily || h === 0 ? pcDate(t) : pcTime(t);
+      xLabels += '<span class="ex-pc-xt' + (i % 2 ? " ex-pc-xt--minor" : "") + '" style="left:' + x.toFixed(2) + '%">' + label + "</span>";
+    });
+    // maximo y minimo del rango (no se marcan si caen sobre el ultimo precio)
+    const marker = (i, kind, label) => {
+      const x = X(vis[i][0]) * 100, y = Y(vis[i][1]) * 100;
+      if (x > 94) return "";
+      const al = x < 12 ? " ex-pc-mk--l" : x > 80 ? " ex-pc-mk--r" : "";
+      return '<span class="ex-pc-mk ex-pc-mk--' + kind + al + '" style="left:' + x.toFixed(2) + "%;top:" + y.toFixed(2) + '%"><i></i><em>' + label + " " + pcFmt(vis[i][1]) + "</em></span>";
+    };
+    const markers = (hi > lo ? marker(iHi, "hi", "High") + marker(iLo, "lo", "Low") : "");
+
+    const days = (t1 - t0) / 86400000;
+    const rangeName = PC_RANGE === "30d" && days < 29 ? "Since listing &middot; " + pcDate(t0) : (PC_RANGES.find((x) => x[0] === PC_RANGE) || PC_RANGES[2])[1];
+    const live = pcLive();
+    const flash = PC_FLASH ? " is-flash-" + PC_FLASH : "";
+    PC_FLASH = "";
+
+    return (
+      '<div class="ex-pc ex-pc--' + variant + " ex-pc--" + (up ? "up" : "down") + (PC_ANIM ? " is-anim" : "") + '" data-pc-key="' + pcKey(variant) + '" data-pc-ready="1">' +
+      '<div class="ex-pc-head"><div class="ex-pc-id">' + pair +
+      '<div class="ex-pc-now"><b class="ex-pc-price' + flash + '">$' + pcFmt(last[1]) + "</b>" +
+      '<span class="ex-pc-chg ex-pc-chg--' + (chg24 >= 0 ? "up" : "down") + '">' + (chg24 >= 0 ? "&#9650; " : "&#9660; ") + Math.abs(chg24).toFixed(2) + "%<small>24H</small></span></div></div>" +
+      '<div class="ex-pc-tabs" role="group" aria-label="Chart range">' + tabs + "</div></div>" +
+      '<div class="ex-pc-plot"><div class="ex-pc-canvas">' +
+      grid + '<i class="ex-pc-base"></i>' + svg + markers +
+      '<i class="ex-pc-last" style="top:' + yLast.toFixed(2) + '%"></i>' +
+      '<span class="ex-pc-tag" style="top:' + yLast.toFixed(2) + '%">' + pcFmt(last[1]) + "</span>" +
+      '<i class="ex-pc-dot" style="left:100%;top:' + yLast.toFixed(2) + '%"></i>' +
+      yLabels + xLabels +
+      '<i class="ex-pc-cx"></i><i class="ex-pc-cy"></i><i class="ex-pc-hd"></i><span class="ex-pc-htag"></span>' +
+      '<div class="ex-pc-tip"><span class="ex-pc-tip-t"></span><b class="ex-pc-tip-p"></b><span class="ex-pc-tip-c"></span></div>' +
+      "</div></div>" +
+      '<div class="ex-pc-foot">' +
+      '<span class="ex-pc-live">' + (live ? '<i class="ex-led" aria-hidden="true"></i><span>Live' : '<i class="ex-pc-led-off" aria-hidden="true"></i><span>Snapshot') +
+      ' &middot; Auto-updates every minute &middot; Updated <span class="ex-age ex-pc-upd" data-ts="' + PRICE_UPDATED + '">' + timeAgo(PRICE_UPDATED) + "</span></span></span>" +
+      '<span class="ex-pc-range">' + rangeName + " &middot; High <b>" + pcFmt(hi) + "</b> &middot; Low <b>" + pcFmt(lo) + '</b> &middot; <b class="ex-pc-rc--' + (rangeChg >= 0 ? "up" : "down") + '">' + pcPct(rangeChg) + "</b>" +
+      ' &middot; <a href="https://www.coingecko.com/en/coins/sectora" target="_blank" rel="noopener">CoinGecko &#8599;</a></span>' +
+      "</div></div>"
+    );
+  }
+
+  // cursor: linea vertical y horizontal, punto sobre la curva y tooltip
+  function pcShowHover(root, ratio) {
+    const v = PC_VIS;
+    if (!root || !v || !root.hasAttribute("data-pc-ready")) return;
+    const t = v.t0 + ratio * (v.t1 - v.t0);
+    let a = 0, b = v.pts.length - 1;
+    while (b - a > 1) { const m = (a + b) >> 1; if (v.pts[m][0] < t) a = m; else b = m; }
+    const p = t - v.pts[a][0] < v.pts[b][0] - t ? v.pts[a] : v.pts[b];
+    const x = ((p[0] - v.t0) / (v.t1 - v.t0 || 1)) * 100;
+    const y = (1 - (p[1] - v.yMin) / (v.yMax - v.yMin)) * 100;
+    const q = (s) => root.querySelector(s);
+    root.classList.add("is-hover");
+    q(".ex-pc-cx").style.left = x + "%";
+    q(".ex-pc-cy").style.top = y + "%";
+    const hd = q(".ex-pc-hd"); hd.style.left = x + "%"; hd.style.top = y + "%";
+    const ht = q(".ex-pc-htag"); ht.style.top = y + "%"; ht.textContent = pcFmt(p[1]);
+    const dt = new Date(p[0]);
+    q(".ex-pc-tip-t").textContent = WEEKDAYS[dt.getDay()] + ", " + pcDate(p[0]) + " · " + pcTime(p[0]);
+    q(".ex-pc-tip-p").textContent = "$" + pcFmt(p[1]);
+    const c = (p[1] / v.first - 1) * 100;
+    const tc = q(".ex-pc-tip-c");
+    tc.textContent = pcPct(c) + " vs " + pcDate(v.t0);
+    tc.className = "ex-pc-tip-c ex-pc-rc--" + (c >= 0 ? "up" : "down");
+    const tip = q(".ex-pc-tip");
+    if (x > 55) { tip.style.left = "auto"; tip.style.right = "calc(" + (100 - x) + "% + 14px)"; }
+    else { tip.style.right = "auto"; tip.style.left = "calc(" + x + "% + 14px)"; }
+  }
+  function pcHideHover() {
+    PC_HOVER = null;
+    document.querySelectorAll(".ex-pc.is-hover").forEach((el) => el.classList.remove("is-hover"));
+  }
+  function pcPointer(e) {
+    const plot = e.target && e.target.closest ? e.target.closest(".ex-pc-plot") : null;
+    const root = plot && plot.closest(".ex-pc");
+    if (!root || !root.hasAttribute("data-pc-ready")) { if (PC_HOVER !== null) pcHideHover(); return; }
+    const r = plot.querySelector(".ex-pc-canvas").getBoundingClientRect();
+    PC_HOVER = Math.min(1, Math.max(0, (e.clientX - r.left) / (r.width || 1)));
+    pcShowHover(root, PC_HOVER);
+  }
+  // repinta solo las graficas de precio (al llegar un dato o cambiar de rango)
+  function refreshPriceCharts() {
+    document.querySelectorAll(".ex-pc").forEach((el) => {
+      const variant = el.classList.contains("ex-pc--home") ? "home" : "full";
+      const hovered = el.classList.contains("is-hover");
+      const tmp = document.createElement("div");
+      tmp.innerHTML = priceChart(variant);
+      const next = tmp.firstElementChild;
+      el.replaceWith(next);
+      pcSettle(next);
+      if (hovered && PC_HOVER !== null) pcShowHover(next, PC_HOVER);
+    });
+  }
+  // la animacion de entrada se hace una vez: luego se quita la clase
+  function pcSettle(node) {
+    if (!node.hasAttribute("data-pc-ready") || !node.classList.contains("is-anim")) return;
+    PC_ANIM = false;
+    setTimeout(() => node.classList.remove("is-anim"), 1700);
   }
   function lineChart(values, opts) {
     opts = opts || {};
@@ -391,10 +617,14 @@
   const DAILY_TX = days14Values(2400, 500);
   const DAILY_ADDR = days14Values(180, 40);
   /* precio real de SECT: lo llena loadSectMarket() con el historial de
-     CoinGecko que publica el robot de precios (sect-price-30d.json). Hasta
-     que llega, la grafica avisa de que esta cargando: nada inventado */
-  let PRICE_HIST = [];
-  let PRICE_LABEL = "30 days · CoinGecko";
+     CoinGecko, leido directamente desde el navegador y, como red de
+     seguridad, del archivo que publica el robot de precios
+     (sect-price-30d.json). Hasta que llega, la grafica avisa de que esta
+     cargando: nada inventado */
+  let PRICE_PTS = [];      // [[ms, precio usd], ...] ordenado por tiempo
+  let PRICE_VER = 0;       // sube cada vez que cambian los datos
+  let PRICE_UPDATED = 0;   // ultima lectura buena (ms)
+  let PRICE_LIVE_AT = 0;   // ultima lectura directa de CoinGecko (ms)
   let PRICE_STATE = "loading";
   let SECT_REAL = null;
   const TVL_HIST = days14Values(24500000, 900000);
@@ -435,10 +665,12 @@
      ============================================================ */
   function statCards() {
     const sect = TOKEN_BY_SYMBOL.get("sect");
-    const change = (SECT_REAL ? SECT_REAL.change24h : (sect.price / 0.1034 - 1) * 100).toFixed(2);
+    const change = SECT_REAL ? SECT_REAL.change24h.toFixed(2) : 0;
     return (
       '<div class="ex-stats">' +
-      statCard("SECT PRICE", "$" + fmtAmount(sect.price, 4), (change >= 0 ? "+" : "") + change + "% (24h)", change >= 0 ? "up" : "down") +
+      (SECT_REAL
+        ? statCard("SECT PRICE", "$" + pcFmt(SECT_REAL.price), (change >= 0 ? "+" : "") + change + "% (24h)", change >= 0 ? "up" : "down")
+        : statCard("SECT PRICE", "$—", PRICE_STATE === "error" ? "CoinGecko unavailable" : "Loading CoinGecko…", "flat")) +
       statCard("TRANSACTIONS", fmtInt(TXS.length) + " txns", fmtInt(Math.round(DAILY_TX[DAILY_TX.length - 1])) + " today", "flat") +
       statCard("MED GAS PRICE", fmtAmount(1.6, 2) + " Gwei", "~$0.00002 / txn", "flat") +
       statCard("WALLETS", fmtInt(ADDR_TXS.size) + " addresses", "tracked this session", "flat") +
@@ -521,8 +753,10 @@
       "</div>" +
       "</section>" +
       '<section class="ex-charts-preview">' +
-      chartCard("Daily Transactions", "14 Days", barChart(DAILY_TX, { color: "var(--ex-blue)" })) +
-      chartCard("SECT Price", PRICE_LABEL, priceChart()) +
+      '<div class="ex-chart-card ex-pc-card">' + priceChart("home") + "</div>" +
+      chartCard("Daily Transactions", "14 Days",
+        '<p class="ex-txd-big"><b>' + fmtInt(DAILY_TX[DAILY_TX.length - 1]) + "</b>txns today</p>" +
+        barChart(DAILY_TX, { color: "var(--ex-blue)" })) +
       "</section>"
     );
   }
@@ -702,7 +936,7 @@
       pageHeader(tok ? "Token Contract" : "Address", "") +
       '<div class="ex-detail-card">' +
       detailRow("Address", '<span class="ex-mono ex-break">' + addr + "</span>" + copyBtn(addr) + (lbl ? ' <span class="ex-tag">' + esc(lbl) + "</span>" : "") + (tok ? ' <span class="ex-tag ex-tag--blue">Token Contract</span>' : "")) +
-      detailRow("Balance", fmtAmount(balance, 4) + " SECT <span class=\"ex-dim\">(≈ " + fmtUsd(balance * TOKEN_BY_SYMBOL.get("sect").price) + ")</span>") +
+      detailRow("Balance", fmtAmount(balance, 4) + " SECT <span class=\"ex-dim\">(≈ " + (SECT_REAL ? fmtUsd(balance * SECT_REAL.price) : "$—") + ")</span>") +
       (holdings.length
         ? detailRow("Token Holdings", '<div class="ex-holdings">' + holdings.map((h) => '<a class="ex-holding-chip" href="#/token/' + h.token.addr + '">' + tokenIcon(h.token, 16) + esc(h.token.symbol) + ": " + fmtAmount(h.balance, 2) + "</a>").join("") + "</div>")
         : "") +
@@ -715,14 +949,15 @@
   }
 
   function renderTokensList() {
+    // SECT siempre primero; el resto por capitalizacion
     const rows = TOKENS.slice()
-      .sort((a, b) => b.price * b.supply - a.price * a.supply)
+      .sort((a, b) => (b.symbol === "SECT") - (a.symbol === "SECT") || b.price * b.supply - a.price * a.supply)
       .map((t, i) => (
         '<tr><td>' + (i + 1) + "</td>" +
         '<td><a class="ex-link ex-token-cell" href="#/token/' + t.addr + '">' + tokenIcon(t, 24) + '<span>' + esc(t.symbol) + "<small>" + esc(t.name) + "</small></span></a></td>" +
         '<td class="ex-hide-sm">' + esc(t.kind) + "</td>" +
-        '<td class="ex-num">$' + fmtAmount(t.price, 4) + "</td>" +
-        '<td class="ex-num">' + fmtUsd(t.price * t.supply) + "</td>" +
+        '<td class="ex-num">' + tokenPrice(t) + "</td>" +
+        '<td class="ex-num">' + tokenCap(t) + "</td>" +
         '<td class="ex-num ex-hide-sm">' + fmtInt(t.holders) + "</td>" +
         '<td class="ex-num ex-hide-sm">' + fmtAmount(t.supply, 0) + " " + esc(t.symbol) + "</td></tr>"
       ))
@@ -774,8 +1009,8 @@
       '<div class="ex-detail-card ex-detail-card--token">' +
       '<div class="ex-token-head">' + tokenIcon(t, 44) + '<div><h2>' + esc(t.name) + '</h2><span class="ex-dim">' + esc(t.symbol) + " · " + esc(t.kind) + "</span></div></div>" +
       detailRow("Contract Address", '<span class="ex-mono ex-break">' + t.addr + "</span>" + copyBtn(t.addr)) +
-      detailRow("Price", "$" + fmtAmount(t.price, 4)) +
-      detailRow("Market Cap", fmtUsd(t.price * t.supply)) +
+      detailRow("Price", tokenPrice(t)) +
+      detailRow("Market Cap", tokenCap(t)) +
       detailRow("Total Supply", fmtAmount(t.supply, 0) + " " + esc(t.symbol)) +
       detailRow("Holders", fmtInt(t.holders)) +
       detailRow("Decimals", "18") +
@@ -994,9 +1229,9 @@
     return (
       pageHeader("Charts &amp; Statistics", "Network activity across " + CHAIN.name) +
       '<div class="ex-charts-grid">' +
+      '<div class="ex-chart-card ex-pc-card">' + priceChart("full") + "</div>" +
       chartCard("Daily Transactions", "14 Days", barChart(DAILY_TX, { color: "var(--ex-blue)" })) +
       chartCard("Daily Active Addresses", "14 Days", barChart(DAILY_ADDR, { color: "var(--ex-purple)" })) +
-      chartCard("SECT Price", PRICE_LABEL, priceChart()) +
       chartCard("Total Value Tokenized", "14 Days", lineChart(TVL_HIST, { color: "var(--ex-gold)" })) +
       "</div>"
     );
@@ -1095,7 +1330,29 @@
         html = notFound("Page", view);
     }
     const el = mainEl();
-    if (el) el.innerHTML = html;
+    // la grafica de precio se conserva si no cambio: la portada se repinta
+    // cada pocos segundos y asi no se pierde el cursor ni las animaciones
+    // (sin sacarla del documento: al reinsertarla, sus animaciones empezarian de cero)
+    if (el) {
+      const oldPc = el.querySelector(".ex-pc");
+      const tpl = document.createElement("div");
+      tpl.innerHTML = html;
+      const newPc = tpl.querySelector(".ex-pc");
+      if (oldPc && newPc && oldPc.getAttribute("data-pc-key") === newPc.getAttribute("data-pc-key")) {
+        const top = (node, root) => { while (node.parentNode !== root) node = node.parentNode; return node; };
+        const keep = top(oldPc, el), skip = top(newPc, tpl);
+        Array.from(el.childNodes).forEach((c) => { if (c !== keep) el.removeChild(c); });
+        let before = true;
+        Array.from(tpl.childNodes).forEach((c) => {
+          if (c === skip) { before = false; return; }
+          if (before) el.insertBefore(c, keep); else el.appendChild(c);
+        });
+      } else {
+        el.innerHTML = "";
+        while (tpl.firstChild) el.appendChild(tpl.firstChild);
+      }
+      el.querySelectorAll(".ex-pc.is-anim").forEach(pcSettle);
+    }
     updateNavActive(view);
     if (!preserveScroll) window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
     updateAges();
@@ -1128,7 +1385,8 @@
     const hb = document.getElementById("exHeroBlock");
     if (hb) hb.textContent = fmtInt(currentTip);
     if (gp) gp.textContent = fmtAmount(1.2 + rand() * 0.8, 2) + " Gwei";
-    if (pr) pr.textContent = "$" + fmtAmount(sect.price, 4);
+    // sin dato real de CoinGecko no se muestra ningun precio
+    if (pr) pr.textContent = SECT_REAL ? "$" + pcFmt(SECT_REAL.price) : "$—";
   }
 
   /* ============================================================
@@ -1148,6 +1406,17 @@
      ============================================================ */
   function wireEvents() {
     document.addEventListener("click", (e) => {
+      const pcTab = e.target.closest(".ex-pc-tab");
+      if (pcTab) {
+        const r = pcTab.getAttribute("data-pc-range");
+        if (r && r !== PC_RANGE) {
+          PC_RANGE = r;
+          PC_ANIM = true;
+          try { localStorage.setItem("sectorascanPriceRange", r); } catch (err) {}
+          refreshPriceCharts();
+        }
+        return;
+      }
       const copyEl = e.target.closest(".ex-copy");
       if (copyEl) {
         const text = copyEl.getAttribute("data-copy");
@@ -1217,32 +1486,137 @@
       });
     }
 
+    document.addEventListener("pointermove", pcPointer, { passive: true });
+    document.addEventListener("pointerdown", pcPointer, { passive: true });
+    // con el dedo el tooltip se queda hasta tocar fuera; con raton se va al salir
+    document.documentElement.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") pcHideHover(); });
+
     window.addEventListener("hashchange", () => render());
   }
 
   /* ============================================================
-     Precio real de SECT (CoinGecko, ultimos 30 dias)
+     Precio real de SECT (CoinGecko)
+     Dos fuentes, por orden de frescura:
+       1. CoinGecko directo desde el navegador: 30 dias por horas al abrir
+          y las ultimas 24 h cada 5 min, releidas cada minuto.
+       2. sect-price-30d.json del repo: lo escribe el robot de GitHub
+          Actions, que en la practica se retrasa horas, asi que solo sirve
+          de red de seguridad (CoinGecko caido, limite de peticiones, etc).
      ============================================================ */
-  function loadSectMarket() {
-    fetch("sect-price-30d.json?t=" + Math.floor(Date.now() / 300000), { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => {
-        const pts = d && Array.isArray(d.prices) ? d.prices.filter((p) => Array.isArray(p) && isFinite(p[1]) && p[1] > 0) : [];
-        if (pts.length < 2) { if (!PRICE_HIST.length) { PRICE_STATE = "error"; render({ preserveScroll: true }); } return; }
-        PRICE_HIST = pts.map((p) => p[1]);
-        const first = pts[0], last = pts[pts.length - 1];
-        const days = (last[0] - first[0]) / 86400000;
-        PRICE_LABEL = (days >= 29 ? "30 days" : "Since listing · " + Math.max(1, Math.round(days)) + (Math.round(days) === 1 ? " day" : " days")) + " · CoinGecko";
-        let prev = first;
-        for (const p of pts) { if (p[0] <= last[0] - 86400000) prev = p; else break; }
-        const sect = TOKEN_BY_SYMBOL.get("sect");
-        sect.price = last[1]; sect.baseline = last[1];
-        SECT_REAL = { price: last[1], change24h: (last[1] / prev[1] - 1) * 100 };
-        PRICE_STATE = "ok";
-        updateHeaderTicker();
-        render({ preserveScroll: true });
+  const SECT_CONTRACT = "0x8c9984b06281f1ca9416e493c2e602aab08513db";
+  const CG_PATHS = [
+    "https://api.coingecko.com/api/v3/coins/ethereum/contract/" + SECT_CONTRACT + "/market_chart",
+    "https://api.coingecko.com/api/v3/coins/sectora/market_chart",
+  ];
+  let cgPath = 0, cgPausedUntil = 0, cgLastTry = 0;
+
+  function cgFetch(days) {
+    if (Date.now() < cgPausedUntil) return Promise.resolve(null);
+    return fetch(CG_PATHS[cgPath] + "?vs_currency=usd&days=" + days)
+      .then((r) => {
+        if (r.status === 429) { cgPausedUntil = Date.now() + 300000; return null; }
+        if (!r.ok) { if (r.status === 404 && cgPath < CG_PATHS.length - 1) cgPath++; return null; }
+        return r.json();
       })
-      .catch(() => { if (!PRICE_HIST.length) { PRICE_STATE = "error"; render({ preserveScroll: true }); } });
+      .then((d) => (d && Array.isArray(d.prices) ? d.prices : null))
+      .catch(() => null);
+  }
+
+  // mezcla una serie nueva: sustituye lo que habia en su tramo de tiempo
+  function mergePrices(raw, live) {
+    let pts = (raw || [])
+      .filter((p) => Array.isArray(p) && isFinite(p[0]) && isFinite(p[1]) && p[1] > 0)
+      .map((p) => [+p[0], +p[1]])
+      .sort((a, b) => a[0] - b[0]);
+    if (!live && PRICE_PTS.length) {
+      // el archivo del robot solo aporta lo que sea mas nuevo que lo que hay
+      const lastT = PRICE_PTS[PRICE_PTS.length - 1][0];
+      pts = pts.filter((p) => p[0] > lastT);
+    }
+    if (!pts.length || (!PRICE_PTS.length && pts.length < 2)) return false;
+    const from = pts[0][0], to = pts[pts.length - 1][0];
+    let all = PRICE_PTS.filter((p) => p[0] < from || p[0] > to).concat(pts).sort((a, b) => a[0] - b[0]);
+    const endT = all[all.length - 1][0];
+    all = all.filter((p) => p[0] >= endT - 31 * 86400000);
+    const before = PRICE_PTS.length ? PRICE_PTS[PRICE_PTS.length - 1] : null;
+    const same = before && all.length === PRICE_PTS.length && before[0] === endT && before[1] === all[all.length - 1][1] && all[0][0] === PRICE_PTS[0][0];
+    if (same) return false;
+    if (before && before[1] !== all[all.length - 1][1]) PC_FLASH = all[all.length - 1][1] > before[1] ? "up" : "down";
+    PRICE_PTS = all;
+    PRICE_VER++;
+    return true;
+  }
+
+  // aplica los datos al resto de la pagina: cinta, tarjeta de precio y graficas
+  function onPrices(changed) {
+    if (PRICE_PTS.length >= 2) {
+      PRICE_STATE = "ok";
+      const last = PRICE_PTS[PRICE_PTS.length - 1];
+      if (!PRICE_UPDATED) PRICE_UPDATED = last[0];
+      let prev = PRICE_PTS[0];
+      for (const p of PRICE_PTS) { if (p[0] <= last[0] - 86400000) prev = p; else break; }
+      const sect = TOKEN_BY_SYMBOL.get("sect");
+      sect.price = last[1]; sect.baseline = last[1];
+      SECT_REAL = { price: last[1], change24h: (last[1] / prev[1] - 1) * 100 };
+      updateHeaderTicker();
+    } else if (PRICE_STATE === "loading") {
+      PRICE_STATE = "error";
+      changed = true;
+    }
+    // las paginas de tokens ensenan el precio de SECT: se repintan con el dato nuevo
+    const view = parseRoute().parts[0] || "home";
+    if (changed && (view === "tokens" || view === "token" || view === "address")) render({ preserveScroll: true });
+    const hasLive = document.querySelector(".ex-pc-live .ex-led") !== null;
+    if (changed || hasLive !== pcLive()) refreshPriceCharts();
+    document.querySelectorAll(".ex-pc-upd").forEach((el) => el.setAttribute("data-ts", PRICE_UPDATED));
+    updateAges();
+  }
+
+  function loadSectFile() {
+    return fetch("sect-price-30d.json?t=" + Math.floor(Date.now() / 300000), { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null);
+  }
+
+  // primera carga: archivo del robot + CoinGecko (30 dias y 24 h) a la vez;
+  // se pinta una sola vez con lo que haya llegado en 2.5 s
+  function loadSectMarket() {
+    cgLastTry = Date.now();
+    const cap = (pr) => Promise.race([pr, new Promise((res) => setTimeout(() => res(undefined), 2500))]);
+    const file = loadSectFile();
+    const cg30 = cgFetch(30);
+    const cg1 = cg30.then(() => cgFetch(1));
+    Promise.all([file, cap(cg30), cap(cg1)]).then(([f, a, b]) => {
+      let changed = false;
+      if (f && Array.isArray(f.prices) && mergePrices(f.prices, false)) { changed = true; PRICE_UPDATED = Math.max(PRICE_UPDATED, +f.updatedAt || 0); }
+      [a, b].forEach((pr) => { if (pr) { changed = mergePrices(pr, true) || changed; PRICE_LIVE_AT = PRICE_UPDATED = Date.now(); } });
+      onPrices(changed);
+      // si CoinGecko tardo mas de 2.5 s, su dato entra cuando llegue
+      [[a, cg30], [b, cg1]].forEach(([got, pr]) => {
+        if (got !== undefined) return;
+        pr.then((late) => { if (late) { const c = mergePrices(late, true); PRICE_LIVE_AT = PRICE_UPDATED = Date.now(); onPrices(c); } });
+      });
+    });
+  }
+
+  // cada minuto, con la pestana visible: ultimas 24 h de CoinGecko
+  function liveTick() {
+    if (document.hidden || Date.now() - cgLastTry < 55000) return;
+    cgLastTry = Date.now();
+    cgFetch(1).then((pr) => {
+      if (pr) {
+        const c = mergePrices(pr, true);
+        PRICE_LIVE_AT = PRICE_UPDATED = Date.now();
+        onPrices(c);
+      } else if (!pcLive()) {
+        // CoinGecko no responde: se mira si el robot dejo algo mas nuevo
+        loadSectFile().then((f) => {
+          const c = !!(f && Array.isArray(f.prices) && mergePrices(f.prices, false));
+          if (c) PRICE_UPDATED = Math.max(PRICE_UPDATED, +f.updatedAt || 0);
+          onPrices(c);
+        });
+      }
+    });
   }
 
   function init() {
@@ -1251,7 +1625,8 @@
     render();
     updateHeaderTicker();
     loadSectMarket();
-    setInterval(loadSectMarket, 300000);
+    setInterval(liveTick, 60000);
+    document.addEventListener("visibilitychange", liveTick);
     setInterval(() => { pushLiveBlock(); }, CHAIN.blockTimeMs);
     setInterval(() => {
       const { parts, params } = parseRoute();

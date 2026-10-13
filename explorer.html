@@ -33,7 +33,7 @@
 <link rel="preload" href="fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260810x" />
-<link rel="stylesheet" href="explorer.css?v=20261013k" />
+<link rel="stylesheet" href="explorer.css?v=20261013n" />
 <!-- Sectorascan es oscuro por defecto: solo se queda en claro si el visitante
      lo eligio antes. Si localStorage no se puede leer (ventana privada, cookies
      bloqueadas) tambien va oscuro, para que el fallo no lo deje en claro.
@@ -111,7 +111,7 @@
     <div class="ex-ticker">
       <div class="ex-ticker-inner">
         <span class="ex-ticker-item"><b>Sectora L3 Testnet</b></span>
-        <span class="ex-ticker-item">SECT Price: <b id="exTickerPrice">$0.1034</b></span>
+        <span class="ex-ticker-item">SECT Price: <b id="exTickerPrice">$—</b></span>
         <span class="ex-ticker-item">Block Height: <b id="exTickerBlock">—</b></span>
         <span class="ex-ticker-item">Gas: <b id="exTickerGas">—</b></span>
       </div>
@@ -180,7 +180,7 @@
   document.documentElement.addEventListener("mouseleave", function(){ ret.classList.remove("on"); rd.classList.remove("on"); });
 })();
 </script>
-<script src="explorer.js?v=20261013c"></script>
+<script src="explorer.js?v=20261013e"></script>
 <script>
 /* la barra de datos pasa sola cuando no cabe (movil y tableta): se duplica
    el juego de datos para que el bucle no tenga costura, y la copia se
