@@ -8,8 +8,10 @@
    trading activity layered on top of those real prices — no wallet ever
    actually connects and no funds move; every action-taking button opens
    the same "development preview" disclaimer modal.
-   #SECT has no public market yet and is intentionally NOT listed here —
-   there is nothing real to quote it against. ---- */
+   SECT/USDT is the exception: it is #SECT's real market (Uniswap V3 on
+   Ethereum). Its price, 24h stats and chart come only from CoinGecko,
+   it has no simulated order book or trades, and its Buy button opens the
+   official Uniswap link. ---- */
 (function () {
   "use strict";
 
@@ -93,11 +95,168 @@
 
   let ASSETS = [];
   let BY_ID = {};
-  let activeSymbol = "bitcoin";
+  let activeSymbol = "sect";      // el DEX abre en el mercado real SECT/USDT
   let activeTf = "1m";
   let dataReady = false;
   let activeCategory = "all";
   let searchQuery = "";
+
+  // ---------------------------------------------------------------------
+  // SECT/USDT: el mercado real de #SECT en Uniswap V3 (Ethereum).
+  // Todo lo que se ve de este par sale de CoinGecko: precio, cambio,
+  // maximo y minimo de 24 h, volumen y la grafica. No tiene libro de
+  // ordenes ni operaciones simuladas; la compra se hace en Uniswap.
+  //   1. CoinGecko directo desde el navegador: 30 dias por horas al abrir
+  //      y las ultimas 24 h cada 5 min, releidas cada minuto.
+  //   2. sect-price-30d.json del repo (el robot de precios), solo como red
+  //      de seguridad si CoinGecko no responde.
+  // ---------------------------------------------------------------------
+  const SECT_ID = "sect";
+  const SECT_CONTRACT = "0x8c9984b06281f1ca9416e493c2e602aab08513db";
+  const SECT_SUPPLY = 50000000;
+  const SECT_UNISWAP = "https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&chain=ethereum";
+  const SECT_CG = [
+    "https://api.coingecko.com/api/v3/coins/ethereum/contract/" + SECT_CONTRACT + "/market_chart",
+    "https://api.coingecko.com/api/v3/coins/sectora/market_chart",
+  ];
+  // [duracion visible, tamano de vela] por rango
+  const SECT_RANGES = { "24h": [86400000, 1200000], "7d": [7 * 86400000, 7200000], "30d": [30 * 86400000, 21600000] };
+  const SECT = {
+    id: SECT_ID, ticker: "SECT", name: "Sectora", category: "sect",
+    pts: [], price: null, change24h: null, high24h: null, low24h: null, vol24h: null,
+    updatedAt: 0, liveAt: 0,
+  };
+  let sectRange = "30d";
+  let sectCgPath = 0, sectPausedUntil = 0, sectLastTry = 0;
+
+  function sectFetch(days) {
+    if (Date.now() < sectPausedUntil) return Promise.resolve(null);
+    return fetch(SECT_CG[sectCgPath] + "?vs_currency=usd&days=" + days)
+      .then((r) => {
+        if (r.status === 429) { sectPausedUntil = Date.now() + 300000; return null; }
+        if (!r.ok) { if (r.status === 404 && sectCgPath < SECT_CG.length - 1) sectCgPath++; return null; }
+        return r.json();
+      })
+      .then((d) => (d && Array.isArray(d.prices) ? d : null))
+      .catch(() => null);
+  }
+  function sectFile() {
+    return fetch("sect-price-30d.json?t=" + Math.floor(Date.now() / 300000), { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null);
+  }
+  // mezcla una serie: sustituye lo que habia en su tramo de tiempo
+  function sectMerge(raw, live) {
+    let pts = (raw || [])
+      .filter((p) => Array.isArray(p) && isFinite(p[0]) && isFinite(p[1]) && p[1] > 0)
+      .map((p) => [+p[0], +p[1]])
+      .sort((a, b) => a[0] - b[0]);
+    if (!live && SECT.pts.length) {
+      const lastT = SECT.pts[SECT.pts.length - 1][0];
+      pts = pts.filter((p) => p[0] > lastT);
+    }
+    if (!pts.length || (!SECT.pts.length && pts.length < 2)) return false;
+    const from = pts[0][0], to = pts[pts.length - 1][0];
+    let all = SECT.pts.filter((p) => p[0] < from || p[0] > to).concat(pts).sort((a, b) => a[0] - b[0]);
+    const endT = all[all.length - 1][0];
+    SECT.pts = all.filter((p) => p[0] >= endT - 31 * 86400000);
+    return true;
+  }
+  function sectApply(d) {
+    if (!d) return;
+    sectMerge(d.prices, true);
+    SECT.liveAt = SECT.updatedAt = Date.now();
+    const vols = d.total_volumes;
+    if (Array.isArray(vols) && vols.length && isFinite(vols[vols.length - 1][1])) SECT.vol24h = +vols[vols.length - 1][1];
+  }
+  function sectRecompute() {
+    const P = SECT.pts;
+    if (P.length < 2) return;
+    const last = P[P.length - 1];
+    const from = last[0] - 86400000;
+    let prev = P[0], hi = -Infinity, lo = Infinity;
+    for (const p of P) {
+      if (p[0] <= from) prev = p;
+      else { if (p[1] > hi) hi = p[1]; if (p[1] < lo) lo = p[1]; }
+    }
+    if (prev[1] > hi) hi = prev[1];
+    if (prev[1] < lo) lo = prev[1];
+    SECT.price = last[1];
+    SECT.change24h = (last[1] / prev[1] - 1) * 100;
+    SECT.high24h = hi;
+    SECT.low24h = lo;
+    if (!SECT.updatedAt) SECT.updatedAt = last[0];
+  }
+  // velas a partir de los precios reales de CoinGecko: apertura = cierre
+  // de la vela anterior; maximo, minimo y cierre, los precios de su tramo
+  function sectCandles() {
+    const P = SECT.pts;
+    if (P.length < 2) return [];
+    const r = SECT_RANGES[sectRange] || SECT_RANGES["30d"];
+    const start = P[P.length - 1][0] - r[0];
+    const out = [];
+    let cur = null;
+    for (const p of P) {
+      if (p[0] < start) continue;
+      const b = Math.floor(p[0] / r[1]) * r[1];
+      if (!cur || cur.t !== b) {
+        if (cur) out.push(cur);
+        const o = cur ? cur.c : p[1];
+        cur = { t: b, o: o, h: Math.max(o, p[1]), l: Math.min(o, p[1]), c: p[1], v: 0 };
+      } else {
+        if (p[1] > cur.h) cur.h = p[1];
+        if (p[1] < cur.l) cur.l = p[1];
+        cur.c = p[1];
+      }
+    }
+    if (cur) out.push(cur);
+    return out;
+  }
+  function sectLive() { return Date.now() - SECT.liveAt < 150000; }
+  function sectMatches(q) {
+    q = (q || "").trim().toLowerCase();
+    return !q || "sect sectora usdt sect/usdt".indexOf(q) !== -1;
+  }
+  function sectBuyHref() {
+    const pay = parseFloat(((sectPayEl && sectPayEl.value) || "").replace(/,/g, ""));
+    return SECT_UNISWAP + (pay > 0 ? "&exactAmount=" + encodeURIComponent(String(pay)) + "&exactField=input" : "");
+  }
+  // primera carga: archivo del robot + CoinGecko (30 dias y 24 h) a la
+  // vez; se pinta con lo que haya llegado en 2.5 s
+  function sectLoad() {
+    sectLastTry = Date.now();
+    const cap = (pr) => Promise.race([pr, new Promise((res) => setTimeout(() => res(undefined), 2500))]);
+    const file = sectFile();
+    const a = sectFetch(30);
+    const b = a.then(() => sectFetch(1));
+    Promise.all([file, cap(a), cap(b)]).then(([f, x, y]) => {
+      if (f && Array.isArray(f.prices) && sectMerge(f.prices, false)) SECT.updatedAt = Math.max(SECT.updatedAt, +f.updatedAt || 0);
+      if (x) sectApply(x);
+      if (y) sectApply(y);
+      sectRecompute();
+      sectRender();
+      [[x, a], [y, b]].forEach(([got, pr]) => {
+        if (got !== undefined) return;
+        pr.then((d) => { if (d) { sectApply(d); sectRecompute(); sectRender(); } });
+      });
+    });
+  }
+  // cada minuto, con la pestana visible: ultimas 24 h de CoinGecko
+  function sectTick() {
+    if (document.hidden || Date.now() - sectLastTry < 55000) return;
+    sectLastTry = Date.now();
+    sectFetch(1).then((d) => {
+      if (d) { sectApply(d); sectRecompute(); sectRender(); return; }
+      if (sectLive()) return;
+      sectFile().then((f) => {
+        if (f && Array.isArray(f.prices) && sectMerge(f.prices, false)) {
+          SECT.updatedAt = Math.max(SECT.updatedAt, +f.updatedAt || 0);
+          sectRecompute();
+        }
+        sectRender();
+      });
+    });
+  }
 
   // ---------------------------------------------------------------------
   // Formatters
@@ -119,11 +278,21 @@
     if (v == null || !isFinite(v)) return "—";
     return v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
+  function fmtSect(v) {
+    if (v == null || !isFinite(v)) return "—";
+    return v >= 1 ? v.toFixed(4) : v.toPrecision(5);
+  }
   function displayPrice(asset, v) {
+    if (asset.category === "sect") return v == null || !isFinite(v) ? "—" : "$" + fmtSect(v);
     return asset.category === "index" ? fmtIndexValue(v) : fmtPrice(v);
   }
   function displayPricePlain(asset, v) {
+    if (asset.category === "sect") return fmtSect(v);
     return asset.category === "index" ? fmtIndexValue(v) : fmtPricePlain(v);
+  }
+  // CSS zoom de monitores grandes (lo pone dex.html en --dxz)
+  function dxZoom() {
+    return parseFloat(document.documentElement.style.getPropertyValue("--dxz")) || 1;
   }
   function fmtAmt(v, max) {
     if (v == null || !isFinite(v)) return "0";
@@ -184,8 +353,15 @@
     "kinesis-silver": { bg: "#b8bec4", fg: "#20242a", type: "ingot" },
   };
 
+  const SECT_LOGO_SVG =
+    '<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true"><rect width="100" height="100" rx="9" ry="9" fill="#1569ff"/>' +
+    '<circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>';
+  let iconSeq = 0;
   function iconHTML(asset, size) {
     size = size || 22;
+    if (asset.id === "sect") {
+      return '<span class="dx-icon-disc dx-icon-logo" style="width:' + size + "px;height:" + size + 'px">' + SECT_LOGO_SVG + "</span>";
+    }
     const def = ICON_DEFS[asset.id];
     if (!def) {
       const letters = asset.ticker.replace(/[#^]/g, "").slice(0, 3);
@@ -196,7 +372,7 @@
         "</span>"
       );
     }
-    const uid = "dxic-" + asset.id.replace(/[^a-z0-9]/gi, "");
+    const uid = "dxic-" + asset.id.replace(/[^a-z0-9]/gi, "") + "-" + (++iconSeq);
     let inner = "";
     if (def.type === "glyph") {
       inner = '<text x="16" y="21.5" text-anchor="middle" font-size="17" font-weight="700" font-family="inherit" fill="' + def.fg + '">' + def.glyph + "</text>";
@@ -690,7 +866,7 @@
   function onFirstReadyOrTick() {
     if (!dataReady && ASSETS.length > 0) {
       dataReady = true;
-      if (!BY_ID[activeSymbol] && ASSETS[0]) activeSymbol = ASSETS[0].id;
+      if (activeSymbol !== SECT_ID && !BY_ID[activeSymbol] && ASSETS[0]) activeSymbol = ASSETS[0].id;
       hideLoading();
     }
     onDataChanged();
@@ -713,7 +889,13 @@
   const tickerDupEl = document.getElementById("dexTickerDup");
 
   function tickerRowHTML() {
-    return ASSETS.filter((a) => a.price != null).map((a) => {
+    const sectItem = SECT.price == null ? "" :
+      '<span class="dx-ticker-item dx-ticker-item--sect dx-ticker-item--' + ((SECT.change24h || 0) >= 0 ? "up" : "down") + '" data-symbol="' + SECT_ID + '">' +
+      '<span class="dx-ticker-sym">SECT/USDT</span>' +
+      '<span class="mono">$' + fmtSect(SECT.price) + "</span>" +
+      '<span class="dx-ticker-chg mono">' + fmtPct(SECT.change24h) + "</span>" +
+      "</span>";
+    return sectItem + ASSETS.filter((a) => a.price != null).map((a) => {
       const dir = (a.change24h || 0) >= 0 ? "up" : "down";
       return (
         '<span class="dx-ticker-item dx-ticker-item--' + dir + '" data-symbol="' + a.id + '">' +
@@ -746,7 +928,7 @@
     const ctx = canvas ? canvas.getContext("2d") : null;
     function resize() {
       if (!canvas) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2) * dxZoom();
       const w = canvas.clientWidth;
       const h = canvas.clientHeight;
       if (!w || !h) return;
@@ -766,23 +948,29 @@
 
   const tradeChart = createChartController("dexChart", () => BY_ID[activeSymbol], () => activeTf);
   function resizeChart() { tradeChart.resize(); }
-  function drawChart() { tradeChart.draw(); }
+  function drawChart() {
+    if (activeSymbol === SECT_ID) drawSectChart();
+    else tradeChart.draw();
+  }
 
   let perpSymbol = "bitcoin", perpTf = "1m";
   let futSymbol = "bitcoin", futTf = "1m";
   const perpChart = createChartController("dexPerpChart", () => BY_ID[perpSymbol], () => perpTf);
   const futChart = createChartController("dexFutChart", () => BY_ID[futSymbol], () => futTf);
 
-  function renderCandles(chartCtx, chartCanvas, asset, candles) {
+  const UP_COLOR = "#3ddc97", DOWN_COLOR = "#ff6e7c";
+  function renderCandles(chartCtx, chartCanvas, asset, candles, opts) {
     if (!chartCtx) return;
+    opts = opts || {};
     const w = chartCanvas.clientWidth;
     const h = chartCanvas.clientHeight;
     if (!asset || !w || !h || !candles || !candles.length) return;
     chartCtx.clearRect(0, 0, w, h);
 
-    const volH = Math.round(h * 0.16);
+    // SECT/USDT no tiene volumen por vela: esa franja lleva las fechas
+    const volH = opts.times ? 22 : Math.round(h * 0.16);
     const chartH = h - volH - 4;
-    const visible = candles.slice(-72);
+    const visible = opts.all ? candles : candles.slice(-72);
     let min = Infinity, max = -Infinity, maxVol = 0;
     visible.forEach((c) => {
       if (c.l < min) min = c.l;
@@ -818,8 +1006,8 @@
     visible.forEach((c, i) => {
       const cx = i * slot + slot / 2;
       const up = c.c >= c.o;
-      chartCtx.strokeStyle = up ? "#14e0a0" : "#ff5c6c";
-      chartCtx.fillStyle = up ? "#14e0a0" : "#ff5c6c";
+      chartCtx.strokeStyle = up ? UP_COLOR : DOWN_COLOR;
+      chartCtx.fillStyle = up ? UP_COLOR : DOWN_COLOR;
       chartCtx.lineWidth = 1;
       chartCtx.beginPath();
       chartCtx.moveTo(cx, y(c.h));
@@ -830,16 +1018,41 @@
       const bh = Math.max(1.5, Math.abs(yc - yo));
       chartCtx.fillRect(cx - bodyW / 2, top, bodyW, bh);
 
-      const vh = (c.v / (maxVol || 1)) * (volH - 2);
-      chartCtx.globalAlpha = 0.35;
-      chartCtx.fillRect(cx - bodyW / 2, h - vh, bodyW, vh);
-      chartCtx.globalAlpha = 1;
+      if (!opts.times) {
+        const vh = (c.v / (maxVol || 1)) * (volH - 2);
+        chartCtx.globalAlpha = 0.35;
+        chartCtx.fillRect(cx - bodyW / 2, h - vh, bodyW, vh);
+        chartCtx.globalAlpha = 1;
+      }
     });
+
+    if (opts.times && n > 1) {
+      const span = visible[n - 1].t - visible[0].t;
+      const daily = span > 2 * 86400000;
+      chartCtx.font = "10px " + getComputedStyle(document.body).getPropertyValue("--font-mono");
+      chartCtx.fillStyle = "rgba(255,255,255,0.38)";
+      chartCtx.strokeStyle = "rgba(255,255,255,0.10)";
+      chartCtx.beginPath();
+      chartCtx.moveTo(0, chartH + 0.5);
+      chartCtx.lineTo(w, chartH + 0.5);
+      chartCtx.stroke();
+      const marks = Math.max(2, Math.min(6, Math.floor(w / 130)));
+      for (let k = 1; k < marks; k++) {
+        const i = Math.round((k / marks) * (n - 1));
+        const d = new Date(visible[i].t);
+        const label = daily
+          ? d.toLocaleDateString("en-US", { month: "short", day: "2-digit" }).toUpperCase()
+          : String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+        const cx = i * slot + slot / 2;
+        const tw = chartCtx.measureText(label).width;
+        chartCtx.fillText(label, Math.min(w - tw - 2, Math.max(2, cx - tw / 2)), h - 6);
+      }
+    }
 
     const last = visible[visible.length - 1];
     const py = y(last.c);
     chartCtx.setLineDash([4, 4]);
-    chartCtx.strokeStyle = last.c >= last.o ? "rgba(20,224,160,0.7)" : "rgba(255,92,108,0.7)";
+    chartCtx.strokeStyle = last.c >= last.o ? "rgba(61,220,151,0.7)" : "rgba(255,110,124,0.7)";
     chartCtx.beginPath();
     chartCtx.moveTo(0, py + 0.5);
     chartCtx.lineTo(w, py + 0.5);
@@ -848,9 +1061,9 @@
     const label = displayPricePlain(asset, last.c);
     chartCtx.font = "11px " + getComputedStyle(document.body).getPropertyValue("--font-mono");
     const tw = chartCtx.measureText(label).width + 10;
-    chartCtx.fillStyle = last.c >= last.o ? "#14e0a0" : "#ff5c6c";
+    chartCtx.fillStyle = last.c >= last.o ? UP_COLOR : DOWN_COLOR;
     chartCtx.fillRect(w - tw, py - 8, tw, 16);
-    chartCtx.fillStyle = "#04120c";
+    chartCtx.fillStyle = "#05070c";
     chartCtx.fillText(label, w - tw + 5, py + 4);
   }
 
@@ -944,6 +1157,24 @@
     if (tradeTape.length > 40) tradeTape.length = 40;
     renderTrades();
   }
+  function seedTape(asset) {
+    if (!asset || asset.price == null) return;
+    if (tradeTape.filter((tr) => tr.assetId === asset.id).length >= 8) return;
+    const tier = tierOf(asset);
+    let ts = Date.now();
+    for (let i = 0; i < 18; i++) {
+      ts -= rand(1500, 6000);
+      tradeTape.push({
+        price: asset.price * (1 + rand(-0.0006, 0.0006)),
+        size: rand(0.01, tier === 1 ? 0.6 : tier === 2 ? 20 : 300),
+        side: Math.random() > 0.5 ? "buy" : "sell",
+        ts: ts,
+        assetId: asset.id,
+      });
+    }
+    tradeTape.sort((a, b) => b.ts - a.ts);
+    if (tradeTape.length > 60) tradeTape.length = 60;
+  }
   function renderTrades() {
     if (!tradesListEl) return;
     const asset = BY_ID[activeSymbol];
@@ -976,16 +1207,30 @@
       return (a.ticker || "").toLowerCase().indexOf(q) !== -1 || (a.name || "").toLowerCase().indexOf(q) !== -1;
     });
   }
+  function sectRowHTML() {
+    const up = (SECT.change24h || 0) >= 0;
+    return (
+      '<button class="dx-market-row dx-market-row--sect' + (activeSymbol === SECT_ID ? " is-active" : "") + '" type="button" data-symbol="' + SECT_ID + '">' +
+      '<span class="dx-market-row-name">' + iconHTML(SECT, 20) +
+      '<span class="dx-market-row-text"><span class="dx-market-row-ticker">SECT/USDT<span class="dx-sect-badge">' + t("dex.sect.tag", "Real market") + "</span></span>" +
+      '<span class="dx-market-row-sub">Sectora · Uniswap V3</span></span></span>' +
+      '<span class="mono">' + displayPrice(SECT, SECT.price) + "</span>" +
+      '<span class="mono ' + (SECT.change24h == null ? "" : up ? "is-up" : "is-down") + '">' + fmtPct(SECT.change24h) + "</span>" +
+      '<span class="mono dx-market-row-vol">' + fmtCompactUSD(SECT.vol24h) + "</span>" +
+      "</button>"
+    );
+  }
   function renderMarketTable() {
     if (!marketTableEl) return;
     const list = filteredAssets();
-    if (!list.length) {
+    const showSect = (activeCategory === "all" || activeCategory === "crypto") && sectMatches(searchQuery);
+    if (!list.length && !showSect) {
       marketTableEl.innerHTML = '<div class="dx-market-empty">' +
         (dataReady ? t("dex.trade.markets.empty", "No markets match your search.") : t("dex.trade.markets.loading", "Loading live prices…")) +
         "</div>";
       return;
     }
-    marketTableEl.innerHTML = list.map((a) => {
+    marketTableEl.innerHTML = (showSect ? sectRowHTML() : "") + list.map((a) => {
       const up = (a.change24h || 0) >= 0;
       const sub = a.subLabel || (a.category === "index" ? a.name : null);
       return (
@@ -1038,6 +1283,7 @@
   const priceInputEl = document.getElementById("dexPriceInput");
 
   function renderSymbolHeader() {
+    if (activeSymbol === SECT_ID) { renderSectHeader(); return; }
     const a = BY_ID[activeSymbol];
     if (!a || a.price == null) return;
     if (symbolIconEl) symbolIconEl.innerHTML = iconHTML(a, 30);
@@ -1058,21 +1304,219 @@
   }
 
   function setSymbol(id) {
-    if (!BY_ID[id] || id === activeSymbol) return;
+    if ((!BY_ID[id] && id !== SECT_ID) || id === activeSymbol) return;
     activeSymbol = id;
+    applySectMode();
     if (priceInputEl) delete priceInputEl.dataset.userEdited;
     bookState = { asks: [], bids: [] };
+    if (id !== SECT_ID) seedTape(BY_ID[id]);
     renderSymbolHeader();
     renderMarketTable();
     regenerateBook();
     renderBook();
     renderTrades();
+    if (id === SECT_ID) renderSectPanels();
     resizeChart();
     drawChart();
   }
 
   document.getElementById("dexSymbolBtn").addEventListener("click", (e) => {
-    openPicker(e.currentTarget, setSymbol);
+    openPicker(e.currentTarget, setSymbol, { sect: true });
+  });
+
+  // ---------------------------------------------------------------------
+  // SECT/USDT: cabecera, ficha del mercado, compra en Uniswap y grafica
+  // ---------------------------------------------------------------------
+
+  const tradeGridEl = document.querySelector("#dexTrade .dx-trade-grid");
+  const sectPayEl = document.getElementById("dexSectPay");
+  const sectReceiveEl = document.getElementById("dexSectReceive");
+  const sectRateEl = document.getElementById("dexSectRate");
+  const sectBuyBtnEl = document.getElementById("dexSectBuyBtn");
+  const sectHeadBuyEl = document.getElementById("dexSectHeadBuy");
+
+  function applySectMode() {
+    if (tradeGridEl) tradeGridEl.classList.toggle("is-sect", activeSymbol === SECT_ID);
+  }
+  function setText(id, txt, cls) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = txt;
+    if (cls !== undefined) el.className = cls;
+  }
+  function renderSectHeader() {
+    if (symbolIconEl) symbolIconEl.innerHTML = iconHTML(SECT, 30);
+    if (symbolPairEl) symbolPairEl.textContent = "SECT-USDT";
+    if (symbolFullEl) symbolFullEl.textContent = "Sectora · Uniswap V3";
+    const up = (SECT.change24h || 0) >= 0;
+    if (statMarkEl) statMarkEl.textContent = displayPrice(SECT, SECT.price);
+    if (statChangeEl) {
+      statChangeEl.textContent = fmtPct(SECT.change24h);
+      statChangeEl.className = "dx-stat-value mono " + (SECT.change24h == null ? "" : up ? "is-up" : "is-down");
+    }
+    if (statHighEl) statHighEl.textContent = displayPrice(SECT, SECT.high24h);
+    if (statLowEl) statLowEl.textContent = displayPrice(SECT, SECT.low24h);
+    if (statVolEl) statVolEl.textContent = fmtCompactUSD(SECT.vol24h);
+    document.title = "SECT/USDT " + displayPrice(SECT, SECT.price) + " · Sectora DEX";
+  }
+  function renderSectBuy() {
+    const pay = parseFloat(((sectPayEl && sectPayEl.value) || "").replace(/,/g, ""));
+    if (sectReceiveEl) sectReceiveEl.textContent = SECT.price && pay > 0 ? "≈ " + fmtAmt(pay / SECT.price, 2) : "—";
+    if (sectRateEl) sectRateEl.textContent = SECT.price ? "1 SECT = $" + fmtSect(SECT.price) : "—";
+    const href = sectBuyHref();
+    if (sectBuyBtnEl) sectBuyBtnEl.href = href;
+    if (sectHeadBuyEl) sectHeadBuyEl.href = href;
+  }
+  function renderSectPanels() {
+    const up = (SECT.change24h || 0) >= 0;
+    setText("dexSectPrice", displayPrice(SECT, SECT.price));
+    setText("dexSectChange", fmtPct(SECT.change24h), "mono " + (SECT.change24h == null ? "" : up ? "is-up" : "is-down"));
+    setText("dexSectHigh", displayPrice(SECT, SECT.high24h));
+    setText("dexSectLow", displayPrice(SECT, SECT.low24h));
+    setText("dexSectVol", fmtCompactUSD(SECT.vol24h));
+    setText("dexSectCap", SECT.price == null ? "—" : fmtCompactUSD(SECT.price * SECT_SUPPLY));
+    setText("dexSectUpdated", SECT.updatedAt ? new Date(SECT.updatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "—");
+    const live = sectLive();
+    setText("dexSectSrcText", "CoinGecko · " + (live ? t("dex.sect.live", "Live") : t("dex.sect.snapshot", "Snapshot")));
+    root.querySelectorAll("#dexSectSrc, #dexSectChartSrc").forEach((el) => el.classList.toggle("is-stale", !live));
+    renderSectBuy();
+    renderSectRecent();
+  }
+  // ultimos precios reales de CoinGecko, del mas nuevo al mas viejo
+  function renderSectRecent() {
+    const el = document.getElementById("dexSectRecent");
+    if (!el) return;
+    const P = SECT.pts;
+    if (P.length < 2) {
+      el.innerHTML = '<div class="dx-recent-empty">' + (SECT.price == null ? "Loading CoinGecko data…" : "—") + "</div>";
+      return;
+    }
+    const today = new Date().toDateString();
+    const rows = [];
+    for (let i = P.length - 1; i > 0 && rows.length < 12; i--) {
+      const d = new Date(P[i][0]);
+      const hm = String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+      const when = d.toDateString() === today ? hm : d.toLocaleDateString("en-US", { month: "short", day: "2-digit" }).toUpperCase() + " " + hm;
+      let chg = (P[i][1] / P[i - 1][1] - 1) * 100;
+      if (Math.abs(chg) < 0.005) chg = 0;
+      rows.push(
+        '<div class="dx-recent-row"><span>' + when + "</span><span>$" + fmtSect(P[i][1]) + '</span><span class="' +
+        (chg > 0 ? "is-up" : chg < 0 ? "is-down" : "") + '">' + (chg > 0 ? "+" : "") + chg.toFixed(2) + "%</span></div>"
+      );
+    }
+    el.innerHTML = rows.join("");
+  }
+
+  // ---------------------------------------------------------------------
+  // Tarjetas que rellenan las columnas: el mercado real SECT/USDT y los
+  // activos que mas suben y bajan en 24 h (datos reales del feed)
+  // ---------------------------------------------------------------------
+  function sectSparkSVG() {
+    const P = SECT.pts;
+    if (P.length < 2) return "";
+    const from = P[P.length - 1][0] - 7 * 86400000;
+    let pts = P.filter((p) => p[0] >= from);
+    if (pts.length < 2) pts = P.slice(-2);
+    const step = Math.max(1, Math.floor(pts.length / 140));
+    pts = pts.filter((p, i) => i % step === 0 || i === pts.length - 1);
+    let lo = Infinity, hi = -Infinity;
+    pts.forEach((p) => { if (p[1] < lo) lo = p[1]; if (p[1] > hi) hi = p[1]; });
+    const span = hi - lo || hi * 0.01 || 1;
+    const t0 = pts[0][0], t1 = pts[pts.length - 1][0];
+    let d = "";
+    pts.forEach((p, i) => {
+      const x = ((p[0] - t0) / (t1 - t0 || 1)) * 300;
+      const y = 54 - ((p[1] - lo) / span) * 48;
+      d += (i ? "L" : "M") + x.toFixed(1) + "," + y.toFixed(1);
+    });
+    return (
+      '<svg class="dx-promo-spark" viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true">' +
+      '<defs><linearGradient id="dxSpkG' + (++iconSeq) + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3ddc97" stop-opacity=".28"/>' +
+      '<stop offset="1" stop-color="#3ddc97" stop-opacity="0"/></linearGradient></defs>' +
+      '<path d="' + d + 'L300,60L0,60Z" fill="url(#dxSpkG' + iconSeq + ')"/>' +
+      '<path d="' + d + '" fill="none" stroke="#3ddc97" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>'
+    );
+  }
+  function promoHTML() {
+    const up = (SECT.change24h || 0) >= 0;
+    return (
+      '<div class="dx-card-head"><span>' + t("dex.sect.promoTitle", "Our market") + '</span><span class="dx-sect-badge">' + t("dex.sect.tag", "Real market") + "</span></div>" +
+      '<div class="dx-promo-main">' + iconHTML(SECT, 34) +
+      '<span class="dx-promo-name"><b>SECT/USDT</b><small>Sectora · Uniswap V3</small></span>' +
+      '<span class="dx-promo-price"><b>' + displayPrice(SECT, SECT.price) + "</b>" +
+      '<small class="' + (SECT.change24h == null ? "" : up ? "is-up" : "is-down") + '">' + fmtPct(SECT.change24h) + " · 24H</small></span></div>" +
+      sectSparkSVG() +
+      '<div class="dx-promo-range"><span>7D · CoinGecko</span><span>Uniswap V3 · Ethereum</span></div>' +
+      '<div class="dx-promo-btns"><button type="button" data-go-symbol="' + SECT_ID + '">' + t("dex.sect.promoTrade", "Trade SECT/USDT") + "</button>" +
+      '<a href="' + SECT_UNISWAP + '" target="_blank" rel="noopener">' + t("dex.sect.promoBuy", "Buy on Uniswap") + " ↗</a></div>"
+    );
+  }
+  function moversHTML() {
+    const list = ASSETS.filter((a) => a.price != null && isFinite(a.change24h));
+    if (!list.length) return "";
+    const sorted = list.slice().sort((a, b) => b.change24h - a.change24h);
+    const row = (a) =>
+      '<button type="button" class="dx-mover" data-go-symbol="' + a.id + '">' + iconHTML(a, 16) +
+      '<span class="dx-mover-sym">' + a.ticker + "</span>" +
+      '<span class="mono ' + (a.change24h >= 0 ? "is-up" : "is-down") + '">' + fmtPct(a.change24h) + "</span></button>";
+    return (
+      '<div class="dx-card-head"><span>' + t("dex.sect.moversTitle", "Top movers · 24h") + '</span><span class="dx-live-dot" aria-hidden="true"></span></div>' +
+      '<div class="dx-movers"><div><span class="dx-movers-label">' + t("dex.sect.gainers", "Gainers") + "</span>" +
+      sorted.filter((a) => a.change24h > 0).slice(0, 4).map(row).join("") + "</div>" +
+      "<div><span class=\"dx-movers-label\">" + t("dex.sect.losers", "Losers") + "</span>" +
+      sorted.filter((a) => a.change24h < 0).slice(-4).reverse().map(row).join("") + "</div></div>"
+    );
+  }
+  // cada tarjeta se genera aparte: los iconos con degradado llevan ids
+  // unicos y no pueden repetirse entre copias
+  function renderExtras() {
+    root.querySelectorAll('[data-dx-extra="promo"]').forEach((el) => { el.innerHTML = promoHTML(); });
+    root.querySelectorAll('[data-dx-extra="movers"]').forEach((el) => { const h = moversHTML(); el.innerHTML = h; el.hidden = !h; });
+  }
+  // un clic en la tarjeta lleva al mercado en la pestana Trade
+  root.addEventListener("click", (e) => {
+    const go = e.target.closest("[data-go-symbol]");
+    if (!go) return;
+    const tabBtn = root.querySelector('#dexTabs [data-tab="trade"]');
+    if (tabBtn && !tabBtn.classList.contains("is-active")) tabBtn.click();
+    setSymbol(go.getAttribute("data-go-symbol"));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  function drawSectChart() {
+    const ctx = tradeChart.ctx, cv = tradeChart.canvas;
+    if (!ctx || !cv) return;
+    const candles = sectCandles();
+    if (candles.length >= 2) { renderCandles(ctx, cv, SECT, candles, { all: true, times: true }); return; }
+    const w = cv.clientWidth, h = cv.clientHeight;
+    ctx.clearRect(0, 0, w, h);
+    ctx.font = "11px " + getComputedStyle(document.body).getPropertyValue("--font-mono");
+    ctx.fillStyle = "rgba(255,255,255,0.38)";
+    const msg = "LOADING COINGECKO DATA…";
+    ctx.fillText(msg, (w - ctx.measureText(msg).width) / 2, h / 2);
+  }
+  function sectRender() {
+    renderMarketTable();
+    renderTicker();
+    renderExtras();
+    if (activeSymbol === SECT_ID) {
+      renderSectHeader();
+      renderSectPanels();
+      drawChart();
+    }
+  }
+  root.querySelectorAll("#dexSectRange [data-srange]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      sectRange = btn.dataset.srange;
+      root.querySelectorAll("#dexSectRange [data-srange]").forEach((b) => b.classList.toggle("is-active", b === btn));
+      drawChart();
+    });
+  });
+  if (sectPayEl) sectPayEl.addEventListener("input", renderSectBuy);
+  root.querySelectorAll("#dexSectQuick [data-usdt]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (sectPayEl) sectPayEl.value = btn.dataset.usdt;
+      renderSectBuy();
+    });
   });
 
   // ---------------------------------------------------------------------
@@ -1102,20 +1546,33 @@
         "</button>"
     ).join("");
   }
-  function openPicker(anchor, onPick) {
+  function openPicker(anchor, onPick, opts) {
+    opts = opts || {};
     closePicker();
     pickerEl = document.createElement("div");
     pickerEl.className = "dx-picker";
     const all = ASSETS.filter((a) => a.price != null).sort((a, b) => (a.rank || 0) - (b.rank || 0));
+    const rowsFor = (q) => {
+      const list = !q ? all : all.filter((a) => a.ticker.toLowerCase().indexOf(q) !== -1 || a.name.toLowerCase().indexOf(q) !== -1);
+      const sectRow = opts.sect && sectMatches(q)
+        ? '<button type="button" class="dx-picker-row dx-picker-row--sect" data-symbol="' + SECT_ID + '">' + iconHTML(SECT, 22) +
+          '<span class="dx-picker-name">Sectora<span class="dx-picker-ticker">SECT/USDT · Uniswap V3</span></span>' +
+          '<span class="mono">' + displayPrice(SECT, SECT.price) + "</span></button>"
+        : "";
+      return sectRow + (list.length || !sectRow ? pickerRowsHTML(list) : "");
+    };
     pickerEl.innerHTML =
       '<div class="dx-picker-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>' +
       '<input type="text" id="dexPickerSearch" placeholder="' + t("dex.trade.markets.search", "Search markets…") + '" /></div>' +
-      '<div id="dexPickerRows">' + pickerRowsHTML(all) + "</div>";
+      '<div id="dexPickerRows">' + rowsFor("") + "</div>";
     root.appendChild(pickerEl);
+    // el picker vive dentro de .dx, que lleva el zoom de monitores grandes:
+    // las coordenadas de pantalla se pasan a las suyas
+    const z = dxZoom();
     const r = anchor.getBoundingClientRect();
-    const top = r.bottom + window.scrollY + 6;
-    let left = r.left + window.scrollX;
-    const maxLeft = window.scrollX + document.documentElement.clientWidth - pickerEl.offsetWidth - 12;
+    const top = (r.bottom + window.scrollY) / z + 6;
+    let left = (r.left + window.scrollX) / z;
+    const maxLeft = (window.scrollX + document.documentElement.clientWidth) / z - pickerEl.offsetWidth - 12;
     pickerEl.style.top = top + "px";
     pickerEl.style.left = Math.min(left, Math.max(12, maxLeft)) + "px";
     function wireRows() {
@@ -1132,8 +1589,7 @@
     if (searchInput) {
       searchInput.addEventListener("input", () => {
         const q = searchInput.value.trim().toLowerCase();
-        const filtered = !q ? all : all.filter((a) => a.ticker.toLowerCase().indexOf(q) !== -1 || a.name.toLowerCase().indexOf(q) !== -1);
-        rowsEl.innerHTML = pickerRowsHTML(filtered);
+        rowsEl.innerHTML = rowsFor(q);
         wireRows();
       });
       setTimeout(() => searchInput.focus(), 30);
@@ -1460,7 +1916,7 @@
           '<div class="dx-swap-feed-row">' +
           '<span class="mono">' + fmtAmt(s.amt, 3) + " " + s.a.ticker + "</span>" +
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>' +
-          '<span class="mono">' + fmtAmt(s.out, 3) + " " + s.b.ticker + "</span>" +
+          '<span class="mono">' + fmtAmt(s.out, s.out < 0.01 ? 6 : 3) + " " + s.b.ticker + "</span>" +
           '<span class="dx-swap-feed-time mono">' + fmtClock(s.ts) + "</span>" +
           "</div>"
       )
@@ -1547,6 +2003,43 @@
     const premium = 1 + (0.04 * days) / 365;
     return asset.price * premium;
   }
+
+  // tablas de mercados de perpetuos y futuros (precio y cambio reales; la
+  // financiacion, el interes abierto y la base son parte de la vista previa)
+  function renderLevMarkets() {
+    const list = ASSETS.filter((a) => a.price != null && a.category !== "index");
+    const exp = nextExpiry();
+    const perpEl = document.getElementById("dexPerpMarkets");
+    const futEl = document.getElementById("dexFutMarkets");
+    const row = (a, kind) => {
+      const up = (a.change24h || 0) >= 0;
+      const isFut = kind === "fut";
+      const active = isFut ? a.id === futSymbol : a.id === perpSymbol;
+      const price = isFut ? futuresPriceFor(a, exp) : a.price;
+      const extra = isFut
+        ? ((price / a.price - 1) * 100).toFixed(2) + "%"
+        : (fundingRateFor(a) >= 0 ? "+" : "") + fundingRateFor(a).toFixed(4) + "%";
+      const last = isFut ? fmtExpiryCountdown(exp) : fmtCompactUSD(openInterestFor(a));
+      return (
+        '<button type="button" class="dx-lev-mk-row' + (active ? " is-active" : "") + '" data-lev-pick="' + kind + '" data-id="' + a.id + '">' +
+        '<span class="dx-market-row-name">' + iconHTML(a, 18) + '<span class="dx-market-row-ticker">' + a.ticker + (isFut ? "-" + contractLabel(exp) : "-PERP") + "</span></span>" +
+        '<span class="mono">' + displayPrice(a, price) + "</span>" +
+        '<span class="mono ' + (up ? "is-up" : "is-down") + '">' + fmtPct(a.change24h) + "</span>" +
+        '<span class="mono">' + extra + "</span>" +
+        '<span class="mono dx-lev-hide">' + last + "</span></button>"
+      );
+    };
+    if (perpEl) perpEl.innerHTML = list.map((a) => row(a, "perp")).join("");
+    if (futEl) futEl.innerHTML = list.map((a) => row(a, "fut")).join("");
+  }
+  root.addEventListener("click", (e) => {
+    const r = e.target.closest("[data-lev-pick]");
+    if (!r) return;
+    const id = r.getAttribute("data-id");
+    if (r.getAttribute("data-lev-pick") === "fut") { futSymbol = id; renderFutHeader(); futChart.resize(); futChart.draw(); }
+    else { perpSymbol = id; renderPerpHeader(); perpChart.resize(); perpChart.draw(); }
+    renderLevMarkets();
+  });
 
   function renderPositionsRows(list, containerId, withExpiry, onClose) {
     const el = document.getElementById(containerId);
@@ -1950,7 +2443,11 @@
   function onDataChanged() {
     renderTicker();
     renderMarketTable();
-    if (BY_ID[activeSymbol] && BY_ID[activeSymbol].price != null) {
+    renderExtras();
+    if (activeSymbol === SECT_ID) {
+      renderSectHeader();
+      renderSectPanels();
+    } else if (BY_ID[activeSymbol] && BY_ID[activeSymbol].price != null) {
       renderSymbolHeader();
       if (!bookState.asks.length) regenerateBook();
       renderBook();
@@ -1965,6 +2462,7 @@
     if (BY_ID[botSymbol] && BY_ID[botSymbol].price != null) renderBotSymbol();
     tickActiveBots();
     renderActiveBots();
+    renderLevMarkets();
   }
 
   window.addEventListener("resize", () => {
@@ -1977,6 +2475,7 @@
   });
 
   document.addEventListener("sectora:langchange", () => {
+    sectRender();
     renderBook();
     renderTrades();
     renderP2p();
@@ -1997,7 +2496,8 @@
     // assets (e.g. SUI, XRP, HYPE, PAXG, KAG) can be far enough off the
     // live price to render as one giant outlier candle against a flat
     // synthetic history.
-    if (!BY_ID[activeSymbol] && ASSETS[0]) activeSymbol = ASSETS[0].id;
+    if (activeSymbol !== SECT_ID && !BY_ID[activeSymbol] && ASSETS[0]) activeSymbol = ASSETS[0].id;
+    applySectMode();
 
     renderMarketTable();
     renderTicker();
@@ -2005,6 +2505,10 @@
     renderSwapFeed();
     renderBotStrategies();
     onDataChanged();
+    for (let i = 0; i < 7; i++) pushSimSwap();
+    let swapT = Date.now();
+    swapFeed.forEach((sw) => { swapT -= rand(9000, 26000); sw.ts = swapT; });
+    renderSwapFeed();
 
     tick();
     setInterval(tick, CRYPTO_POLL_MS);
@@ -2019,6 +2523,11 @@
     resizeChart();
     perpChart.resize();
     futChart.resize();
+    drawChart();
+
+    sectLoad();
+    setInterval(sectTick, 60000);
+    document.addEventListener("visibilitychange", sectTick);
   }
 
   if (document.readyState === "loading") {
