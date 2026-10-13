@@ -445,11 +445,11 @@
   function rwaSection() {
     const rwaTokens = TOKENS.filter((t) => t.kind.startsWith("RWA"));
     let cards = rwaTokens
-      .map((t) => {
+      .map((t, i) => {
         const chg = (((t.price / (t.baseline || t.price)) - 1) * 100);
         return (
           '<a class="ex-rwa-card" href="#/token/' + t.addr + '">' +
-          tokenIcon(t, 30) +
+          '<span class="ex-rwa-top"><span class="ex-rwa-idx">' + String(i + 1).padStart(2, "0") + '</span>' + tokenIcon(t, 30) + '</span>' +
           '<span class="ex-rwa-name">' + esc(t.symbol) + '<small>' + esc(t.name) + "</small></span>" +
           '<span class="ex-rwa-price">$' + fmtAmount(t.price, 2) + "</span>" +
           '<span class="ex-rwa-cap">Mkt Cap ' + fmtUsd(t.price * t.supply) + "</span></a>"
@@ -459,6 +459,7 @@
     return (
       '<section class="ex-rwa">' +
       '<div class="ex-rwa-head">' +
+      '<p class="ex-eyebrow"><i></i>Real-world assets &middot; On Sectora L3</p>' +
       '<h2>Tokenized Real-World Assets</h2>' +
       '<p>Sectora is a ' + CHAIN.layer + ' network purpose-built to mint, settle and track on-chain representations of off-chain assets &mdash; metals, indices and more &mdash; anchored to ' + CHAIN.settlesTo + '.</p>' +
       "</div>" +
@@ -476,8 +477,13 @@
     const latestTxs = TXS.slice(0, 7);
     return (
       '<section class="ex-hero">' +
-      '<h1>The Sectora ' + CHAIN.layer + ' Explorer</h1>' +
+      '<p class="ex-eyebrow"><i></i>Sectora L3 &middot; Testnet explorer</p>' +
+      '<div class="ex-hero-top">' +
+      '<h1>The Sectora <b>' + CHAIN.layer + '</b> Explorer</h1>' +
+      '<div class="ex-hero-side">' +
       '<p>Search the Sectora Testnet for blocks, transactions, addresses and tokenized real-world assets.</p>' +
+      '<span class="ex-live"><i class="ex-led" aria-hidden="true"></i>Testnet live &middot; Block <b id="exHeroBlock">' + fmtInt(currentTip) + '</b></span>' +
+      '</div></div>' +
       '<form class="ex-hero-search" id="exHeroSearch">' +
       '<span class="ex-hero-search-icon">' + ICO.search + "</span>" +
       '<input type="text" id="exHeroSearchInput" placeholder="Search by Address / Txn Hash / Block / Token" autocomplete="off" spellcheck="false" />' +
@@ -986,7 +992,7 @@
   }
 
   function pageHeader(title, sub) {
-    return '<div class="ex-page-head"><h1>' + title + "</h1>" + (sub ? "<p>" + sub + "</p>" : "") + "</div>";
+    return '<div class="ex-page-head"><p class="ex-eyebrow"><i></i>Sectorascan &middot; Sectora L3 testnet</p><h1>' + title + "</h1>" + (sub ? "<p>" + sub + "</p>" : "") + "</div>";
   }
   function detailRow(label, valueHtml) {
     return '<div class="ex-detail-row"><div class="ex-detail-label">' + label + '</div><div class="ex-detail-value">' + valueHtml + "</div></div>";
@@ -1108,6 +1114,8 @@
     const gp = document.getElementById("exTickerGas");
     const pr = document.getElementById("exTickerPrice");
     if (bh) bh.textContent = fmtInt(currentTip);
+    const hb = document.getElementById("exHeroBlock");
+    if (hb) hb.textContent = fmtInt(currentTip);
     if (gp) gp.textContent = fmtAmount(1.2 + rand() * 0.8, 2) + " Gwei";
     if (pr) pr.textContent = "$" + fmtAmount(sect.price, 4);
   }
@@ -1182,7 +1190,7 @@
       const syncLabel = () => {
         const isDark = document.documentElement.getAttribute("data-theme") === "dark";
         themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
-        if (themeMeta) themeMeta.setAttribute("content", isDark ? "#0a0c10" : "#ffffff");
+        if (themeMeta) themeMeta.setAttribute("content", isDark ? "#05070c" : "#f2f2ef");
       };
       syncLabel();
       themeToggle.addEventListener("click", () => {

@@ -29,11 +29,11 @@
 <link rel="canonical" href="https://sectoraorg.com/explorer.html">
 <meta name="msapplication-TileImage" content="/icons/mstile-150.png">
 <meta name="msapplication-TileColor" content="#1569ff">
-<meta name="theme-color" content="#0a0c10" id="exThemeColor">
-<link rel="preload" href="fonts/SpaceGrotesk.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin />
+<meta name="theme-color" content="#05070c" id="exThemeColor">
+<link rel="preload" href="fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="styles.css?v=20260810x" />
-<link rel="stylesheet" href="explorer.css?v=20260810b" />
+<link rel="stylesheet" href="explorer.css?v=20261013b" />
 <!-- Sectorascan es oscuro por defecto: solo se queda en claro si el visitante
      lo eligio antes. Si localStorage no se puede leer (ventana privada, cookies
      bloqueadas) tambien va oscuro, para que el fallo no lo deje en claro.
@@ -58,7 +58,8 @@
             <circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/>
           </svg>
         </span>
-        <span class="ex-logo-word">SECTORASCAN</span>
+        <span class="ex-logo-word">Sectorascan</span>
+        <span class="ex-logo-tag">L3 Explorer</span>
       </a>
 
       <nav class="ex-nav" id="exNavDesktop">
@@ -142,11 +143,35 @@
   </footer>
 </div>
 
-<div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
-<div class="cursor-ring" id="cursorRing" aria-hidden="true"><span class="cursor-ring-label" id="cursorLabel"></span></div>
-<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
-
-<script src="cursor.js?v=20260808h"></script>
-<script src="explorer.js?v=20260810b"></script>
+<!-- el cursor de coordenadas de la portada: reticula azul anclada a la
+     casilla de 54px y la lectura de la casilla. Sin luz que siga al raton
+     y con la flecha normal del sistema. -->
+<div class="reticle" id="reticle" aria-hidden="true"><span class="rx"></span><span class="ry"></span></div>
+<div class="readout" id="readout" aria-hidden="true">00 · 00</div>
+<script>
+(function(){
+  if(!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var CELL = 54, ret = document.getElementById("reticle"), rd = document.getElementById("readout");
+  if(!ret || !rd) return;
+  var rx = ret.querySelector(".rx"), ry = ret.querySelector(".ry"), gx0 = NaN, gy0 = NaN, lect0 = "";
+  addEventListener("pointermove", function(e){
+    var cc = Math.floor((e.clientX + scrollX) / CELL), cr = Math.floor((e.clientY + scrollY) / CELL);
+    var gx = cc * CELL - scrollX, gy = cr * CELL - scrollY;
+    // salta de casilla en casilla: entre medias no hay nada que escribir
+    if(gx !== gx0 || gy !== gy0){
+      gx0 = gx; gy0 = gy;
+      rd.style.transform = "translate3d(" + gx + "px," + gy + "px,0)";
+      rx.style.transform = "translate3d(0," + gy + "px,0)";
+      ry.style.transform = "translate3d(" + gx + "px,0,0)";
+    }
+    var l = String(Math.abs(cc) % 100).padStart(2, "0") + " · " + String(Math.abs(cr) % 100).padStart(2, "0");
+    if(l !== lect0){ lect0 = l; rd.textContent = l; }
+    ret.classList.add("on"); rd.classList.add("on");
+  }, {passive: true});
+  document.documentElement.addEventListener("mouseleave", function(){ ret.classList.remove("on"); rd.classList.remove("on"); });
+})();
+</script>
+<script src="explorer.js?v=20261013a"></script>
 </body>
 </html>

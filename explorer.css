@@ -1064,3 +1064,353 @@ body { background: var(--ex-bg); }
   .ex-rwa-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   .ex-footer-inner { flex-direction: column; align-items: flex-start; }
 }
+
+/* ============================================================
+   Piel de la portada
+   Sectorascan con la misma letra y los mismos colores que
+   sectoraorg.com: IBM Plex Sans y Mono, el azul #1569ff, papel
+   (#f2f2ef) en claro y noche (#05070c) en oscuro, filetes finos,
+   esquinas casi rectas, rotulos en mono y el filo azul arriba de
+   las tarjetas importantes. Va al final para pisar lo de arriba
+   sin tocar el resto de la hoja.
+   ============================================================ */
+@font-face{font-family:'IBM Plex Sans';src:url("fonts/IBMPlexSans.woff2") format("woff2");font-weight:200 500;font-style:normal;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url("fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url("fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+
+:root{
+  --ex-page:#f2f2ef;
+  --ex-bg:#fafaf8;
+  --ex-bg-soft:#f0f0ec;
+  --ex-bg-soft2:#e8e8e3;
+  --ex-border:#dedfda;
+  --ex-border-strong:#c9cac4;
+  --ex-text:#07080a;
+  --ex-text-dim:#3c414c;
+  --ex-text-faint:#7a808c;
+  --ex-blue:#0d4fd8;
+  --ex-blue-bright:#1569ff;
+  --ex-blue-dim:rgba(21,105,255,.08);
+  --ex-green:#0f8f52;
+  --ex-green-dim:rgba(15,143,82,.08);
+  --ex-radius:3px;
+  --ex-shadow:none;
+  --ex-grid:rgba(0,0,0,.045);
+  --ex-purple:#7ea5ff;
+  --ex-gold:#1569ff;
+}
+:root[data-theme="dark"]{
+  --ex-page:#05070c;
+  --ex-bg:#0a0d14;
+  --ex-bg-soft:#0e121b;
+  --ex-bg-soft2:#141926;
+  --ex-border:#1c2130;
+  --ex-border-strong:#2a3142;
+  --ex-text:#ffffff;
+  --ex-text-dim:#c6ccd8;
+  --ex-text-faint:#7c8496;
+  --ex-blue:#4d8dff;
+  --ex-blue-bright:#1569ff;
+  --ex-blue-dim:rgba(21,105,255,.16);
+  --ex-green:#3ddc97;
+  --ex-green-dim:rgba(61,220,151,.09);
+  --ex-shadow:none;
+  --ex-grid:rgba(255,255,255,.04);
+  --ex-purple:#8fb3ff;
+  --ex-gold:#4d8dff;
+}
+.ex{
+  --font-sans:'IBM Plex Sans',system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  background:var(--ex-page);font-weight:300;-webkit-font-smoothing:antialiased;
+}
+body{background:var(--ex-page)}
+.ex b,.ex strong{font-weight:500}
+
+/* rotulos: mono en mayusculas y espaciado, como .mono en la portada */
+.ex-stat-label,.ex-table thead th,.ex-tokz-step-label,.ex-gas-label,.ex-detail-label,
+.ex-ticker-item,.ex-banner,.ex-footer-inner,.ex-signin small,.ex-panel-head h3,
+.ex-chart-card-head span,.ex-pager-info,.ex-tokz-label,.ex-rwa-more,.ex-panel-more,
+.ex-back,.ex-pill,.ex-tag,.ex-method{
+  font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.14em;font-weight:500;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---------- banda de testnet ---------- */
+.ex-banner{background:#000;color:rgba(255,255,255,.72);font-size:10px;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.ex-banner-dot{background:var(--ex-blue-bright);border-radius:0;width:5px;height:5px}
+
+/* ---------- cabecera ---------- */
+.ex-header{background:color-mix(in srgb,var(--ex-page) 88%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
+.ex-header-row{padding:16px 24px;gap:22px}
+.ex-logo{gap:11px}
+.ex-logo-word{font-weight:500;font-size:17px;letter-spacing:-.005em;text-transform:none}
+.ex-logo-tag{font-family:var(--font-mono);font-size:9.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ex-text-faint);
+  padding:3px 7px;border:1px solid var(--ex-border-strong);margin-left:2px}
+.ex-navlink{border-radius:0;font-size:14px;font-weight:400;color:var(--ex-text-dim);padding:9px 10px}
+.ex-navlink:hover{background:none;color:var(--ex-text)}
+.ex-navlink.is-active{background:none;color:var(--ex-text);box-shadow:inset 0 -1px 0 var(--ex-blue-bright)}
+.ex-navdrop-menu{border-radius:3px;box-shadow:0 18px 40px rgba(0,0,0,.12);padding:6px;background:var(--ex-bg)}
+.ex-navdrop-menu::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:var(--ex-blue-bright)}
+.ex-navdrop-menu a{border-radius:0;font-size:13.5px;font-weight:400}
+.ex-header-search{border-radius:0;background:var(--ex-bg);padding:8px 12px;width:240px}
+.ex-header-search input{font-size:13px}
+.ex-header-search:focus-within{border-color:var(--ex-blue-bright)}
+.ex-back{font-size:10.5px}
+.ex-signin{border-radius:0;background:none;font-weight:400;font-size:13px}
+.ex-theme-toggle,.ex-nav-toggle{border-radius:0;background:none}
+.ex-ticker{background:var(--ex-page)}
+.ex-ticker-inner{padding:8px 24px;gap:28px}
+.ex-ticker-item{font-size:10.5px;letter-spacing:.12em}
+.ex-ticker-item b{font-weight:500;color:var(--ex-text)}
+
+/* ---------- portada del explorador ---------- */
+.ex-hero{position:relative;padding:64px 16px 46px;isolation:isolate}
+.ex-hero::after{content:'';position:absolute;inset:-32px -24px 0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(var(--ex-grid) 1px,transparent 1px),linear-gradient(90deg,var(--ex-grid) 1px,transparent 1px);background-size:54px 54px;
+  -webkit-mask-image:radial-gradient(70% 80% at 50% 40%,#000,transparent 75%);mask-image:radial-gradient(70% 80% at 50% 40%,#000,transparent 75%)}
+.ex-hero h1{font-family:var(--font-sans);font-weight:200;font-size:clamp(34px,5vw,64px);line-height:1.08;letter-spacing:-.024em;margin:0 0 16px}
+.ex-hero h1 b{font-weight:400;color:var(--ex-blue-bright)}
+.ex-hero p{font-size:16px;line-height:1.7;max-width:58ch;margin-bottom:34px}
+.ex-hero-search{border-radius:0;border:1px solid var(--ex-border-strong);background:var(--ex-bg);padding:6px 6px 6px 18px;box-shadow:none}
+.ex-hero-search:focus-within{border-color:var(--ex-blue-bright);box-shadow:0 0 0 3px var(--ex-blue-dim)}
+.ex-hero-search input{font-size:15px}
+.ex-hero-search button,.ex-tokz-submit{border-radius:0;background:var(--ex-blue-bright);font-family:var(--font-mono);font-weight:500;font-size:11.5px;
+  letter-spacing:.16em;text-transform:uppercase;padding:13px 24px;transition:background .3s ease}
+.ex-hero-search button:hover,.ex-tokz-submit:hover{background:#0d4fd8}
+.ex-hero-error{border-radius:0}
+
+/* tarjetas con el filo azul de la portada */
+.ex-stat-card,.ex-panel,.ex-chart-card,.ex-detail-card,.ex-tokz-card,.ex-gas-card,.ex-rwa{position:relative}
+.ex-stat-card::before,.ex-panel::before,.ex-detail-card::before,.ex-tokz-card::before,.ex-tokz-preview::before,.ex-gas-card::before,.ex-rwa::before{
+  content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;border-radius:3px 3px 0 0;background:var(--ex-blue-bright);z-index:1}
+.ex-stats{gap:16px;margin-bottom:32px}
+.ex-stat-card{padding:20px 22px 18px;border-radius:3px}
+.ex-stat-label{font-size:10px;color:var(--ex-text-faint);margin-bottom:12px}
+.ex-stat-value{font-family:var(--font-sans);font-weight:300;font-size:28px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;margin-bottom:6px}
+.ex-stat-sub{font-size:12px}
+
+.ex-rwa{background:var(--ex-bg);border-radius:3px;padding:30px 30px 26px}
+.ex-rwa-head h2{font-weight:300;font-size:clamp(22px,2.2vw,30px);letter-spacing:-.016em;margin-bottom:10px}
+.ex-rwa-head p{font-size:14px;line-height:1.7}
+.ex-rwa-card{border-radius:3px;background:var(--ex-page);padding:16px}
+.ex-rwa-card:hover{border-color:var(--ex-blue-bright)}
+.ex-rwa-name{font-weight:500;font-size:14.5px}
+.ex-rwa-name small{font-weight:400}
+.ex-rwa-price{font-family:var(--font-sans);font-weight:400;font-size:19px;font-variant-numeric:tabular-nums}
+.ex-rwa-more,.ex-panel-more{font-size:10.5px;color:var(--ex-blue)}
+
+.ex-panel{border-radius:3px}
+.ex-panel-head{background:var(--ex-bg);padding:16px 20px}
+.ex-panel-head h3{font-size:11px;color:var(--ex-text);letter-spacing:.16em}
+.ex-panel-head svg{color:var(--ex-blue-bright)}
+.ex-row-card{padding:12px 20px}
+.ex-row-card-icon{border-radius:0;background:none;border:1px solid var(--ex-border-strong);color:var(--ex-blue-bright)}
+.ex-row-card-icon--tx{color:var(--ex-green)}
+.ex-row-card-main{font-size:13.5px}
+.ex-row-card-end{font-weight:500}
+.ex-panel-more{background:var(--ex-bg)}
+
+.ex-chart-card{border-radius:3px}
+.ex-chart-card-head h4{font-weight:500;font-size:14px}
+.ex-chart-card-head span{font-size:10px}
+
+/* ---------- paginas internas ---------- */
+.ex-page-head{margin-bottom:24px}
+.ex-page-head h1{font-weight:300;font-size:clamp(26px,2.8vw,38px);letter-spacing:-.02em;margin-bottom:10px}
+.ex-page-head p{font-size:14px;line-height:1.7}
+.ex-subhead{font-weight:400;font-size:18px;letter-spacing:-.01em}
+.ex-table-wrap{border-radius:3px}
+.ex-table{font-size:13px}
+.ex-table thead th{font-size:10px;font-weight:500;background:var(--ex-bg);color:var(--ex-text-faint)}
+.ex-table tbody tr:hover{background:var(--ex-blue-dim)}
+.ex-link{font-weight:400}
+.ex-pill{border-radius:0;font-size:9.5px;padding:5px 9px;border:1px solid currentColor;background:none}
+.ex-pill--ok{color:var(--ex-green);background:var(--ex-green-dim);border-color:color-mix(in srgb,var(--ex-green) 40%,transparent)}
+.ex-pill--fail{background:none}
+.ex-tag{border-radius:0;font-size:9.5px;padding:3px 8px}
+.ex-method{border-radius:0;font-size:9.5px;padding:4px 9px}
+.ex-pager-btn{border-radius:0;font-family:var(--font-mono);font-weight:500;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.ex-detail-card{border-radius:3px;padding:8px 24px}
+.ex-detail-label{font-size:10px;color:var(--ex-text-faint)}
+.ex-detail-value{font-size:13.5px}
+.ex-input-data,.ex-copy{border-radius:0}
+.ex-holding-chip{border-radius:0}
+.ex-token-head h2{font-weight:400;font-size:22px}
+.ex-tab2{font-family:var(--font-mono);font-weight:500;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.ex-tab2.is-active{color:var(--ex-text);border-bottom-color:var(--ex-blue-bright)}
+.ex-empty{border-radius:3px}
+.ex-gas-card{border-radius:3px}
+.ex-gas-value{font-family:var(--font-sans);font-weight:300;font-size:30px}
+
+/* ---------- tokenizar ---------- */
+.ex-tokz-card,.ex-tokz-preview{border-radius:3px}
+.ex-tokz-preview{background:var(--ex-bg)}
+.ex-tokz-step-label{font-size:10px;color:var(--ex-blue)}
+.ex-tokz-class{border-radius:0;border-width:1px;background:var(--ex-page)}
+.ex-tokz-class span{font-weight:500;font-size:13px}
+.ex-tokz-class.is-selected{border-color:var(--ex-blue-bright);box-shadow:inset 0 2px 0 var(--ex-blue-bright)}
+.ex-tokz-label{font-size:10px;color:var(--ex-text-dim)}
+.ex-tokz-label small{text-transform:none;letter-spacing:0;font-family:var(--font-sans);font-weight:400}
+.ex-tokz-input,.ex-tokz-select,.ex-tokz-textarea,.ex-tokz-prefix{border-radius:0;border-width:1px;font-size:14px}
+.ex-tokz-input:focus,.ex-tokz-select:focus,.ex-tokz-textarea:focus,.ex-tokz-prefix:focus-within{box-shadow:0 0 0 3px var(--ex-blue-dim)}
+.ex-tokz-drop,.ex-tokz-note{border-radius:0}
+.ex-tokz-preview-head span{font-weight:500}
+
+/* ---------- pie ---------- */
+.ex-footer{background:var(--ex-page)}
+.ex-footer-inner{font-size:10px;padding:26px 24px}
+.ex-footer-links a{font-size:10px}
+
+@media (max-width:1320px){
+  .ex-logo-tag{display:none}
+  .ex-header-search{width:200px}
+}
+@media (max-width:1200px){
+  .ex-signin{display:none}
+  .ex-back span{display:none}
+  .ex-navlink{padding:9px 8px;font-size:13.5px}
+}
+@media (max-width:1000px){
+  .ex-header-search{width:150px}
+  .ex-header-row{gap:14px}
+}
+@media (max-width:900px){
+  .ex-header-row{padding:12px 16px}
+  .ex-hero{padding:40px 4px 32px}
+  .ex-logo-tag{display:none}
+}
+@media (max-width:560px){
+  .ex-stat-value{font-size:24px}
+}
+
+/* ============================================================
+   Piel de la portada, segunda pasada: los mismos recursos que
+   usa sectoraorg.com en sus secciones
+   ============================================================ */
+/* rotulo con su raya azul, como .eyebrow */
+.ex p.ex-eyebrow{display:flex;align-items:center;gap:14px;margin:0 0 22px;max-width:none;font-family:var(--font-mono);font-size:11px;line-height:1.5;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ex-text-faint)}
+.ex-eyebrow i{display:block;width:30px;height:1px;background:var(--ex-blue-bright);flex:none}
+
+/* LED de "en vivo", el mismo verde con halo de la portada */
+.ex-led{position:relative;display:inline-block;width:6px;height:6px;border-radius:50%;flex:none;background:var(--ex-green);
+  box-shadow:0 0 9px 1px color-mix(in srgb,var(--ex-green) 55%,transparent)}
+.ex-led::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid color-mix(in srgb,var(--ex-green) 60%,transparent);
+  animation:exLed 2.4s ease-out infinite}
+@keyframes exLed{0%{transform:scale(.6);opacity:1}100%{transform:scale(1.9);opacity:0}}
+
+/* grano de pelicula, igual de suave que en la portada */
+.ex::after{content:'';position:fixed;inset:-50%;z-index:60;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:exGrain 7s steps(6) infinite}
+@keyframes exGrain{0%,100%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}60%{transform:translate(-5%,-2%)}80%{transform:translate(4%,4%)}}
+@media (prefers-reduced-motion:reduce){.ex::after,.ex-led::after{animation:none}}
+
+/* ---------- portada: titular a la izquierda, texto a la derecha ---------- */
+.ex-hero{text-align:left;padding:72px 0 48px}
+.ex-hero-top{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(28px,5vw,80px);align-items:end;margin-bottom:40px}
+.ex-hero h1{font-size:clamp(40px,5.6vw,78px);line-height:1.04;margin:0;max-width:12ch;text-wrap:balance}
+.ex-hero p{margin:0 0 22px;max-width:44ch;font-size:16.5px;color:var(--ex-text-dim)}
+.ex-hero-side{padding-bottom:10px}
+.ex-live{display:inline-flex;align-items:center;gap:12px;padding:9px 14px;border:1px solid var(--ex-border-strong);background:var(--ex-bg);
+  font-family:var(--font-mono);font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ex-text-dim)}
+.ex-live b{color:var(--ex-text);font-weight:500;font-variant-numeric:tabular-nums}
+.ex-hero-search{max-width:none;margin:0;padding:8px 8px 8px 22px}
+.ex-hero-search input{font-size:16px;padding:12px 0}
+.ex-hero-search button{padding:16px 30px}
+.ex-hero-search button::after{content:'→';margin-left:12px;letter-spacing:0;display:inline-block;transition:transform .38s cubic-bezier(.22,.72,.24,1)}
+.ex-hero-search button:hover::after{transform:translateX(4px)}
+.ex-hero-error{max-width:none}
+.ex-hero::after{inset:-32px -24px 0}
+
+/* ---------- cifras: una sola regla, como el libro de la portada ---------- */
+.ex-stats{gap:0;border:1px solid var(--ex-border);background:var(--ex-bg);position:relative;counter-reset:st;border-radius:3px}
+.ex-stats::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;border-radius:3px 3px 0 0;background:var(--ex-blue-bright);z-index:1}
+.ex-stat-card{border:none;border-left:1px solid var(--ex-border);background:none;border-radius:0;padding:24px 26px 22px}
+.ex-stat-card:first-child{border-left:none}
+.ex-stat-card::before{display:none}
+.ex-stat-label::before{counter-increment:st;content:counter(st,decimal-leading-zero);color:var(--ex-blue);margin-right:12px}
+.ex-stat-value{font-size:32px}
+
+/* ---------- activos tokenizados ---------- */
+.ex-rwa{padding:34px 34px 30px}
+.ex .ex-rwa-head p.ex-eyebrow{margin-bottom:16px}
+.ex-rwa-card{gap:10px;padding:18px 18px 16px}
+.ex-rwa-top{display:flex;align-items:center;justify-content:space-between}
+.ex-rwa-idx{font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--ex-blue)}
+.ex-tk-icon{border-radius:3px}
+.ex-rwa-more svg,.ex-panel-more svg{transition:transform .38s cubic-bezier(.22,.72,.24,1)}
+.ex-rwa-more:hover svg,.ex-panel-more:hover svg{transform:translateX(4px)}
+
+/* ---------- paneles de ultimos bloques y transacciones ---------- */
+.ex-panel-head{display:flex;align-items:center;justify-content:space-between}
+.ex-panel-head::after{content:'Live';display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:10px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ex-green)}
+.ex-row-card{transition:background-color .2s ease,box-shadow .2s ease}
+.ex-row-card:hover{background:var(--ex-blue-dim);box-shadow:inset 2px 0 0 var(--ex-blue-bright)}
+.ex-table tbody tr:hover{box-shadow:inset 2px 0 0 var(--ex-blue-bright)}
+.ex-chart-card::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;border-radius:3px 3px 0 0;background:var(--ex-blue-bright);z-index:1}
+
+/* ---------- cabeceras de pagina ---------- */
+.ex-page-head{margin:18px 0 30px}
+.ex .ex-page-head p.ex-eyebrow{margin-bottom:18px}
+.ex-page-head h1{font-size:clamp(30px,3.4vw,48px);font-weight:200;letter-spacing:-.022em}
+
+/* ---------- cabecera y pie ---------- */
+.ex-ticker-inner > .ex-ticker-item:first-child{display:inline-flex;align-items:center;gap:10px}
+.ex-ticker-inner > .ex-ticker-item:first-child::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--ex-green);
+  box-shadow:0 0 8px 1px color-mix(in srgb,var(--ex-green) 55%,transparent)}
+.ex-back{border:1px solid var(--ex-border-strong);padding:9px 14px}
+.ex-back:hover{border-color:var(--ex-text-faint)}
+.ex-footer-inner{padding:34px 24px 40px}
+
+@media (max-width:900px){
+  .ex-hero{padding:44px 0 34px}
+  .ex-hero::after{inset:-22px -16px 0}
+  .ex-tokz-preview{position:relative;top:auto}
+  .ex-hero-top{grid-template-columns:1fr;gap:20px;margin-bottom:28px}
+  .ex-hero h1{max-width:none}
+  .ex-back{border:none;padding:8px 4px}
+  .ex-stats{grid-template-columns:1fr 1fr}
+  .ex-stat-card:nth-child(3){border-left:none}
+  .ex-stat-card:nth-child(n+3){border-top:1px solid var(--ex-border)}
+}
+@media (max-width:560px){
+  .ex-hero h1{font-size:40px}
+  .ex-banner{letter-spacing:.06em;font-size:9.5px}
+  .ex p.ex-eyebrow{font-size:10px;letter-spacing:.12em;gap:10px}
+  .ex p.ex-eyebrow i{width:22px}
+  .ex-stats{grid-template-columns:1fr}
+  .ex-stat-card{border-left:none;border-top:1px solid var(--ex-border)}
+  .ex-stat-card:first-child{border-top:none}
+  .ex-rwa{padding:22px 18px}
+  .ex-live{font-size:9.5px;letter-spacing:.1em}
+}
+
+/* ============================================================
+   Cursor: el de coordenadas de la portada. La hoja comun oculta
+   la flecha del sistema para su cursor redondo; aqui vuelve la
+   flecha y no hay luz que siga al raton.
+   ============================================================ */
+@media (hover:hover) and (pointer:fine){
+  html,body{cursor:auto}
+  .ex a,.ex button,.ex select,.ex [role="button"],.ex label,.ex .ex-tokz-drop{cursor:pointer}
+  .ex input,.ex textarea{cursor:text}
+  .ex .ex-signin{cursor:not-allowed}
+}
+.reticle{position:fixed;left:0;top:0;width:0;height:0;z-index:55;pointer-events:none;opacity:0;transition:opacity .5s cubic-bezier(.22,.72,.24,1)}
+.reticle.on{opacity:1}
+.reticle .rx,.reticle .ry{position:fixed;left:0;top:0;background:#1569ff;opacity:.22;transition:opacity .3s ease}
+.reticle .rx{right:0;height:1px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent)}
+.reticle .ry{bottom:0;width:1px;
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(180deg,transparent,#000 22%,#000 78%,transparent)}
+.readout{position:fixed;left:0;top:0;z-index:56;pointer-events:none;transform:translate3d(-200px,-200px,0);will-change:transform;
+  color:#7c8496;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;padding:12px 0 0 16px;opacity:0;transition:opacity .35s ease}
+.readout.on{opacity:1}
+.readout::before{content:'';position:absolute;left:0;top:0;width:9px;height:9px;border-left:1px solid #1569ff;border-top:1px solid #1569ff;opacity:.9}
+:root:not([data-theme="dark"]) .reticle .rx,:root:not([data-theme="dark"]) .reticle .ry{background:#0d4fd8;opacity:.3}
+:root:not([data-theme="dark"]) .readout{color:#6b7280}
+:root:not([data-theme="dark"]) .readout::before{border-color:#0d4fd8}
+@media (pointer:coarse){.reticle,.readout{display:none}}
