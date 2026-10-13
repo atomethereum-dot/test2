@@ -1596,6 +1596,3 @@ body:has(.ex-pc-plot:hover) .reticle,body:has(.ex-pc-plot:hover) .readout{opacit
 @media (max-width:560px){.ex-txd-big b{font-size:30px}}
 .ex-tk-icon--logo{border:0;background:none;overflow:hidden;border-radius:12%}
 .ex-tk-icon--logo svg{display:block;width:100%;height:100%}
-/* linea en tinta (blanca en oscuro, negra en claro); el sombreado, el punto
-   y la etiqueta del ultimo precio en verde si sube y rojo si baja */
-.ex-pc-line{stroke:var(--ex-text)}
