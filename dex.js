@@ -346,7 +346,7 @@
     "ethereum": { bg: "#627eea", type: "diamond" },
     "litecoin": { bg: "#345d9d", fg: "#fff", type: "glyph", glyph: "Ł" },
     "ripple": { bg: "#0f6fbe", fg: "#fff", type: "glyph", glyph: "X" },
-    "solana": { bg: "#0c0c14", type: "bars" },
+    "solana": { bg: "#000000", type: "bars", ring: true },
     "sui": { bg: "#4da2ff", type: "drop" },
     "hyperliquid": { bg: "#14e0a0", fg: "#06231a", type: "glyph", glyph: "H" },
     "pax-gold": { bg: "#d9b544", fg: "#3a2c05", type: "ingot" },
@@ -367,7 +367,7 @@
       const letters = asset.ticker.replace(/[#^]/g, "").slice(0, 3);
       const color = asset.color || colorForSymbol(asset.ticker || asset.id);
       return (
-        '<span class="dx-icon-disc" style="width:' + size + "px;height:" + size + "px;background:" + color + ';font-size:' + Math.round(size * 0.34) + 'px">' +
+        '<span class="dx-icon-disc" style="width:' + size + "px;height:" + size + "px;background:" + color + ';font-size:' + Math.round(size * (letters.length > 2 ? 0.3 : 0.38)) + 'px">' +
         letters +
         "</span>"
       );
@@ -395,7 +395,7 @@
         '<path d="M9 12h14l3 8H6z" fill="' + def.fg + '" fill-opacity="0.88"/>';
     }
     return (
-      '<span class="dx-icon-disc dx-icon-svg" style="width:' + size + "px;height:" + size + 'px;background:' + def.bg + '">' +
+      '<span class="dx-icon-disc dx-icon-svg' + (def.ring ? " dx-icon-ring" : "") + '" style="width:' + size + "px;height:" + size + 'px;background:' + def.bg + '">' +
       '<svg viewBox="0 0 32 32" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">' + inner + "</svg>" +
       "</span>"
     );
@@ -1211,7 +1211,7 @@
     const up = (SECT.change24h || 0) >= 0;
     return (
       '<button class="dx-market-row dx-market-row--sect' + (activeSymbol === SECT_ID ? " is-active" : "") + '" type="button" data-symbol="' + SECT_ID + '">' +
-      '<span class="dx-market-row-name">' + iconHTML(SECT, 20) +
+      '<span class="dx-market-row-name">' + iconHTML(SECT, 24) +
       '<span class="dx-market-row-text"><span class="dx-market-row-ticker">SECT/USDT<span class="dx-sect-badge">' + t("dex.sect.tag", "Real market") + "</span></span>" +
       '<span class="dx-market-row-sub">Sectora · Uniswap V3</span></span></span>' +
       '<span class="mono">' + displayPrice(SECT, SECT.price) + "</span>" +
@@ -1235,7 +1235,7 @@
       const sub = a.subLabel || (a.category === "index" ? a.name : null);
       return (
         '<button class="dx-market-row' + (a.id === activeSymbol ? " is-active" : "") + '" type="button" data-symbol="' + a.id + '">' +
-        '<span class="dx-market-row-name">' + iconHTML(a, 20) +
+        '<span class="dx-market-row-name">' + iconHTML(a, 24) +
         '<span class="dx-market-row-text"><span class="dx-market-row-ticker">' + a.ticker + (a.category === "index" ? "" : "/" + QUOTE) + "</span>" +
         (sub ? '<span class="dx-market-row-sub">' + sub + "</span>" : "") + "</span></span>" +
         '<span class="mono">' + displayPrice(a, a.price) + "</span>" +
@@ -1286,7 +1286,7 @@
     if (activeSymbol === SECT_ID) { renderSectHeader(); return; }
     const a = BY_ID[activeSymbol];
     if (!a || a.price == null) return;
-    if (symbolIconEl) symbolIconEl.innerHTML = iconHTML(a, 30);
+    if (symbolIconEl) symbolIconEl.innerHTML = iconHTML(a, 34);
     if (symbolPairEl) symbolPairEl.textContent = a.category === "index" ? a.ticker : a.ticker + "-" + QUOTE;
     if (symbolFullEl) symbolFullEl.textContent = a.subLabel || a.name;
     if (statMarkEl) statMarkEl.textContent = displayPrice(a, a.price);
@@ -1345,7 +1345,7 @@
     if (cls !== undefined) el.className = cls;
   }
   function renderSectHeader() {
-    if (symbolIconEl) symbolIconEl.innerHTML = iconHTML(SECT, 30);
+    if (symbolIconEl) symbolIconEl.innerHTML = iconHTML(SECT, 34);
     if (symbolPairEl) symbolPairEl.textContent = "SECT-USDT";
     if (symbolFullEl) symbolFullEl.textContent = "Sectora · Uniswap V3";
     const up = (SECT.change24h || 0) >= 0;
@@ -1441,7 +1441,7 @@
     const up = (SECT.change24h || 0) >= 0;
     return (
       '<div class="dx-card-head"><span>' + t("dex.sect.promoTitle", "Our market") + '</span><span class="dx-sect-badge">' + t("dex.sect.tag", "Real market") + "</span></div>" +
-      '<div class="dx-promo-main">' + iconHTML(SECT, 34) +
+      '<div class="dx-promo-main">' + iconHTML(SECT, 38) +
       '<span class="dx-promo-name"><b>SECT/USDT</b><small>Sectora · Uniswap V3</small></span>' +
       '<span class="dx-promo-price"><b>' + displayPrice(SECT, SECT.price) + "</b>" +
       '<small class="' + (SECT.change24h == null ? "" : up ? "is-up" : "is-down") + '">' + fmtPct(SECT.change24h) + " · 24H</small></span></div>" +
@@ -1456,7 +1456,7 @@
     if (!list.length) return "";
     const sorted = list.slice().sort((a, b) => b.change24h - a.change24h);
     const row = (a) =>
-      '<button type="button" class="dx-mover" data-go-symbol="' + a.id + '">' + iconHTML(a, 16) +
+      '<button type="button" class="dx-mover" data-go-symbol="' + a.id + '">' + iconHTML(a, 20) +
       '<span class="dx-mover-sym">' + a.ticker + "</span>" +
       '<span class="mono ' + (a.change24h >= 0 ? "is-up" : "is-down") + '">' + fmtPct(a.change24h) + "</span></button>";
     return (
@@ -1540,7 +1540,7 @@
     return list.map(
       (a) =>
         '<button type="button" class="dx-picker-row" data-symbol="' + a.id + '">' +
-        iconHTML(a, 22) +
+        iconHTML(a, 26) +
         '<span class="dx-picker-name">' + a.name + '<span class="dx-picker-ticker">' + a.ticker + "</span></span>" +
         '<span class="mono">' + displayPrice(a, a.price) + "</span>" +
         "</button>"
@@ -1555,7 +1555,7 @@
     const rowsFor = (q) => {
       const list = !q ? all : all.filter((a) => a.ticker.toLowerCase().indexOf(q) !== -1 || a.name.toLowerCase().indexOf(q) !== -1);
       const sectRow = opts.sect && sectMatches(q)
-        ? '<button type="button" class="dx-picker-row dx-picker-row--sect" data-symbol="' + SECT_ID + '">' + iconHTML(SECT, 22) +
+        ? '<button type="button" class="dx-picker-row dx-picker-row--sect" data-symbol="' + SECT_ID + '">' + iconHTML(SECT, 26) +
           '<span class="dx-picker-name">Sectora<span class="dx-picker-ticker">SECT/USDT · Uniswap V3</span></span>' +
           '<span class="mono">' + displayPrice(SECT, SECT.price) + "</span></button>"
         : "";
@@ -1848,8 +1848,8 @@
   function renderSwapSides() {
     const from = BY_ID[swapFrom], to = BY_ID[swapTo];
     if (!from || !to || from.price == null || to.price == null) return;
-    if (swapFromIconEl) swapFromIconEl.innerHTML = iconHTML(from, 24);
-    if (swapToIconEl) swapToIconEl.innerHTML = iconHTML(to, 24);
+    if (swapFromIconEl) swapFromIconEl.innerHTML = iconHTML(from, 26);
+    if (swapToIconEl) swapToIconEl.innerHTML = iconHTML(to, 26);
     if (swapFromSymbolEl) swapFromSymbolEl.textContent = from.ticker;
     if (swapToSymbolEl) swapToSymbolEl.textContent = to.ticker;
     if (swapFromChainEl) swapFromChainEl.textContent = from.chain || from.name;
@@ -2022,7 +2022,7 @@
       const last = isFut ? fmtExpiryCountdown(exp) : fmtCompactUSD(openInterestFor(a));
       return (
         '<button type="button" class="dx-lev-mk-row' + (active ? " is-active" : "") + '" data-lev-pick="' + kind + '" data-id="' + a.id + '">' +
-        '<span class="dx-market-row-name">' + iconHTML(a, 18) + '<span class="dx-market-row-ticker">' + a.ticker + (isFut ? "-" + contractLabel(exp) : "-PERP") + "</span></span>" +
+        '<span class="dx-market-row-name">' + iconHTML(a, 22) + '<span class="dx-market-row-ticker">' + a.ticker + (isFut ? "-" + contractLabel(exp) : "-PERP") + "</span></span>" +
         '<span class="mono">' + displayPrice(a, price) + "</span>" +
         '<span class="mono ' + (up ? "is-up" : "is-down") + '">' + fmtPct(a.change24h) + "</span>" +
         '<span class="mono">' + extra + "</span>" +
@@ -2057,7 +2057,7 @@
       const lastCol = withExpiry ? fmtExpiryCountdown(p.expiry) : displayPricePlain(asset, estLiqPrice(p.entry, p.lev, p.side));
       return (
         '<div class="dx-positions-row">' +
-        '<span class="dx-positions-symbol">' + iconHTML(asset, 20) +
+        '<span class="dx-positions-symbol">' + iconHTML(asset, 24) +
         '<span>' + asset.ticker + '</span><span class="dx-positions-side is-' + p.side + '">' + p.side + " " + p.lev + "&times;</span></span>" +
         '<span class="mono">' + fmtAmt(p.size, 4) + "</span>" +
         '<span class="mono">' + displayPricePlain(asset, p.entry) + "</span>" +
@@ -2108,7 +2108,7 @@
     const fundingEl = document.getElementById("dexPerpFunding");
     const nextFundingEl = document.getElementById("dexPerpNextFunding");
     const oiEl = document.getElementById("dexPerpOI");
-    if (iconEl) iconEl.innerHTML = iconHTML(a, 30);
+    if (iconEl) iconEl.innerHTML = iconHTML(a, 34);
     if (pairEl) pairEl.textContent = a.ticker + "-PERP";
     if (fullEl) fullEl.textContent = a.subLabel || a.name;
     if (markEl) markEl.textContent = displayPrice(a, a.price);
@@ -2189,7 +2189,7 @@
     const indexEl = document.getElementById("dexFutIndex");
     const basisEl = document.getElementById("dexFutBasis");
     const expiryEl = document.getElementById("dexFutExpiry");
-    if (iconEl) iconEl.innerHTML = iconHTML(a, 30);
+    if (iconEl) iconEl.innerHTML = iconHTML(a, 34);
     if (pairEl) pairEl.textContent = a.ticker + "-" + contractLabel(expiry);
     if (fullEl) fullEl.textContent = a.subLabel || a.name;
     const futPrice = futuresPriceFor(a, expiry);
@@ -2303,7 +2303,7 @@
     const fullEl = document.getElementById("dexBotSymbolFull");
     const lowerEl = document.getElementById("dexBotLowerInput");
     const upperEl = document.getElementById("dexBotUpperInput");
-    if (iconEl) iconEl.innerHTML = iconHTML(a, 22);
+    if (iconEl) iconEl.innerHTML = iconHTML(a, 34);
     if (pairEl) pairEl.textContent = a.ticker + "-" + QUOTE;
     if (fullEl) fullEl.textContent = a.subLabel || a.name;
     if (lowerEl && !lowerEl.dataset.userEdited) lowerEl.value = displayPricePlain(a, a.price * 0.9).replace(/,/g, "");
