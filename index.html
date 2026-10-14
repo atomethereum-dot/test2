@@ -4660,6 +4660,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .gs-foot a{color:var(--ink-3)}
   .gs-foot a:hover{color:#fff}
   .gs-head h2.wide{max-width:24ch}
+  .gs-head h2 em{white-space:nowrap}
   .pg-grp{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 22px;border-top:1px solid var(--hair);padding-top:18px;margin:0 0 clamp(22px,2.4vw,34px)}
   .pg-grp .mono{color:var(--blue)}
   .pg-grp span+span{color:var(--ink-2);font-size:clamp(16px,1.3vw,20px)}
@@ -4670,7 +4671,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   @media (min-width:1001px) and (max-width:1180px){.disp.d3 .dp-name h3{font-size:clamp(26px,2.6vw,34px)}.disp.d3 .dp-name .mono{font-size:9.5px;letter-spacing:.14em}}
   .disp.d3 .dp-meta{grid-template-columns:1fr 1fr}.disp.d3 .dp-meta div:last-child{grid-column:1/-1}
   .gs-links{display:flex;flex-wrap:wrap;gap:12px 26px}
-  @media (max-width:1000px){.disp,.disp.d3{grid-template-columns:1fr}.gs-head{grid-template-columns:1fr}}
+  .disp.d5{grid-template-columns:repeat(6,minmax(0,1fr))}.disp.d5>.dp{grid-column:span 2}.disp.d5>.dp:nth-child(n+4){grid-column:span 3}
+  @media (max-width:1000px){.disp,.disp.d3,.disp.d5{grid-template-columns:1fr}.disp.d5>.dp,.disp.d5>.dp:nth-child(n+4){grid-column:auto}.gs-head{grid-template-columns:1fr}}
   @media (max-width:560px){.gs-top .gs-ser{font-size:9.5px}.dp-meta{grid-template-columns:1fr 1fr}.dp-meta div:last-child{grid-column:1/-1}}
 </style>
 <noscript><style>.intro{display:none!important}</style></noscript>
@@ -6214,13 +6216,13 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 
 <section class="press" id="press">
   <div class="gs-in">
-    <div class="gs-top"><p class="eyebrow mono reveal"><i></i>Press</p><p class="mono gs-ser">Dispatch series SF·PR·26 · 05 outlets</p></div>
+    <div class="gs-top"><p class="eyebrow mono reveal"><i></i>Press</p><p class="mono gs-ser">Dispatch series SF·PR·26 · 07 outlets</p></div>
     <div class="gs-head">
-      <h2 class="reveal wide" style="--d:.06s">Our releases, now on the record at <em>U.Today</em>, <em>AMBCrypto</em>, <em>CoinCodex</em>, <em>AP News</em> and <em>Benzinga</em>.</h2>
-      <p class="reveal" style="--d:.12s">The final-testing update of October 14, 2026 is published on U.Today, AMBCrypto and CoinCodex. The #SECT launch of October 5, 2026, distributed by GlobeNewswire, is on AP News and Benzinga. All appear in each outlet's press release section.</p>
+      <h2 class="reveal wide" style="--d:.06s">Our releases, now on the record at <em>U.Today</em>, <em>AMBCrypto</em>, <em>CoinCodex</em>, <em>NewsBTC</em>, <em>Finbold</em>, <em>AP News</em> and <em>Benzinga</em>.</h2>
+      <p class="reveal" style="--d:.12s">The final-testing update of October 14, 2026 is published on U.Today, AMBCrypto, CoinCodex, NewsBTC and Finbold. The #SECT launch of October 5, 2026, distributed by GlobeNewswire, is on AP News and Benzinga. All appear in each outlet's press release section.</p>
     </div>
     <div class="pg-grp reveal"><span class="mono">Release 02 · Oct 14, 2026</span><span>Final testing of four products and $SECT on Uniswap</span></div>
-    <div class="disp d3">
+    <div class="disp d3 d5">
       <article class="dp reveal">
         <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
         <div class="dp-band"><span class="mono">Dispatch 03</span><b class="mono">SF·PR·03·26</b></div>
@@ -6256,6 +6258,30 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <div class="dp-meta mono"><div><span class="k">Published</span><span class="v">Oct 14, 2026</span></div><div><span class="k">Release</span><span class="v">Final testing</span></div><div><span class="k">Section</span><span class="v">Press releases</span></div></div>
         <p class="dp-title">Sectora Foundation Announces Final Testing of Four Products and $SECT Token Availability on Uniswap</p>
         <a class="dp-go mono" href="https://coincodex.com/article/93664/sectora-foundation-announces-final-testing-of-four-products-and-sect-token-availability-on-uniswap" target="_blank" rel="noopener noreferrer"><span>Read on CoinCodex</span><span aria-hidden="true">↗</span></a>
+      </article>
+      <article class="dp reveal">
+        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+        <div class="dp-band"><span class="mono">Dispatch 06</span><b class="mono">SF·PR·06·26</b></div>
+        <div class="dp-name"><h3>NewsBTC</h3><span class="mono">Press release</span></div>
+        <div class="dp-media">
+          <video src="media/sectora-newsbtc-web-720p.mp4" data-poster="images/press-newsbtc-poster.jpg" muted loop playsinline preload="none" aria-label="Video: Sectora press release on NewsBTC"></video>
+          <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+        </div>
+        <div class="dp-meta mono"><div><span class="k">Published</span><span class="v">Oct 14, 2026</span></div><div><span class="k">Release</span><span class="v">Final testing</span></div><div><span class="k">Section</span><span class="v">Press releases</span></div></div>
+        <p class="dp-title">Sectora Foundation Announces Final Testing of Four Products and $SECT Token Availability on Uniswap</p>
+        <a class="dp-go mono" href="https://www.newsbtc.com/press-releases/sectora-foundation-announces-final-testing-of-four-products-and-sect-token-availability-on-uniswap/" target="_blank" rel="noopener noreferrer"><span>Read on NewsBTC</span><span aria-hidden="true">↗</span></a>
+      </article>
+      <article class="dp reveal" style="--d:.08s">
+        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+        <div class="dp-band"><span class="mono">Dispatch 07</span><b class="mono">SF·PR·07·26</b></div>
+        <div class="dp-name"><h3>Finbold</h3><span class="mono">Press release</span></div>
+        <div class="dp-media">
+          <video src="media/sectora-finbold-web-720p.mp4" data-poster="images/press-finbold-poster.jpg" muted loop playsinline preload="none" aria-label="Video: Sectora press release on Finbold"></video>
+          <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+        </div>
+        <div class="dp-meta mono"><div><span class="k">Published</span><span class="v">Oct 14, 2026</span></div><div><span class="k">Release</span><span class="v">Final testing</span></div><div><span class="k">Section</span><span class="v">Press releases</span></div></div>
+        <p class="dp-title">Sectora Foundation Announces Final Testing of Four Products and $SECT Token Availability on Uniswap</p>
+        <a class="dp-go mono" href="https://finbold.com/sectora-foundation-announces-final-testing-of-four-products-and-sect-token-availability-on-uniswap/" target="_blank" rel="noopener noreferrer"><span>Read on Finbold</span><span aria-hidden="true">↗</span></a>
       </article>
     </div>
     <div class="pg-grp reveal"><span class="mono">Release 01 · Oct 5, 2026</span><span>Launch of $SECT</span></div>
@@ -10186,7 +10212,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261036';
+      sc.src = 'i18n-home.js?v=20261037';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
