@@ -4677,7 +4677,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   @media (min-width:1001px) and (max-width:1180px){.disp.d3 .dp-name h3{font-size:clamp(26px,2.6vw,34px)}.disp.d3 .dp-name .mono{font-size:9.5px;letter-spacing:.14em}}
   .disp.d3 .dp-meta{grid-template-columns:1fr 1fr}.disp.d3 .dp-meta div:last-child{grid-column:1/-1}
   .gs-links{display:flex;flex-wrap:wrap;gap:12px 26px}
-  @media (max-width:1000px){.disp.d3>.dp,.disp.d3>.dp:last-child:nth-child(3n+1),.disp.d3>.dp:nth-last-child(2):nth-child(3n+1){grid-column:auto}}
+  @media (max-width:1000px){.disp.d3>.dp,.disp.d3>.dp:last-child:nth-child(3n+1),.disp.d3>.dp:nth-last-child(2):nth-child(3n+1){grid-column:auto}.disp.d3>.dp{order:3}.disp.d3>.dp:nth-child(-n+2){order:1}.disp.d3>.dp.bz{order:2}}
   @media (max-width:1000px){.disp,.disp.d3{grid-template-columns:1fr}.gs-head{grid-template-columns:1fr}}
   @media (max-width:560px){.gs-top .gs-ser{font-size:9.5px}.dp-meta{grid-template-columns:1fr 1fr}.dp-meta div:last-child{grid-column:1/-1}}
 </style>
@@ -6231,18 +6231,6 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     <div class="disp d3">
       <article class="dp reveal">
         <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
-        <div class="dp-band"><span class="mono">Dispatch 02</span><b class="mono">SF·PR·02·26</b></div>
-        <div class="dp-name"><h3>Benzinga</h3><span class="mono">Press release</span></div>
-        <div class="dp-media">
-          <video src="media/sectora-benzinga-web-720p.mp4" data-poster="images/press-benzinga-poster.jpg" muted loop playsinline preload="none" aria-label="Video: Sectora press release on Benzinga"></video>
-          <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
-        </div>
-        <div class="dp-meta mono"><div><span class="k">Published</span><span class="v">Oct 5, 2026</span></div><div><span class="k">Distribution</span><span class="v">GlobeNewswire</span></div><div><span class="k">Section</span><span class="v">Press releases</span></div></div>
-        <p class="dp-title">Backed by $1,000,000 in locked initial liquidity and listed on CoinGecko.</p>
-        <a class="dp-go mono" href="https://www.benzinga.com/pressreleases/26/10/g62178300/sectora-launches-sect-quantum-cybersecurity-and-rwa-token-supply-capped-50-million" target="_blank" rel="noopener noreferrer"><span>Read on Benzinga</span><span aria-hidden="true">↗</span></a>
-      </article>
-      <article class="dp reveal">
-        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
         <div class="dp-band"><span class="mono">Dispatch 03</span><b class="mono">SF·PR·03·26</b></div>
         <div class="dp-name"><h3>U.Today</h3><span class="mono">Press release</span></div>
         <div class="dp-media">
@@ -6288,6 +6276,18 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <div class="dp-meta mono"><div><span class="k">Published</span><span class="v">Oct 14, 2026</span></div><div><span class="k">Release</span><span class="v">Final testing</span></div><div><span class="k">Section</span><span class="v">Press releases</span></div></div>
         <p class="dp-title">The SectoraScan explorer is now open to the public.</p>
         <a class="dp-go mono" href="https://www.newsbtc.com/press-releases/sectora-foundation-announces-final-testing-of-four-products-and-sect-token-availability-on-uniswap/" target="_blank" rel="noopener noreferrer"><span>Read on NewsBTC</span><span aria-hidden="true">↗</span></a>
+      </article>
+      <article class="dp reveal bz">
+        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+        <div class="dp-band"><span class="mono">Dispatch 02</span><b class="mono">SF·PR·02·26</b></div>
+        <div class="dp-name"><h3>Benzinga</h3><span class="mono">Press release</span></div>
+        <div class="dp-media">
+          <video src="media/sectora-benzinga-web-720p.mp4" data-poster="images/press-benzinga-poster.jpg" muted loop playsinline preload="none" aria-label="Video: Sectora press release on Benzinga"></video>
+          <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+        </div>
+        <div class="dp-meta mono"><div><span class="k">Published</span><span class="v">Oct 5, 2026</span></div><div><span class="k">Distribution</span><span class="v">GlobeNewswire</span></div><div><span class="k">Section</span><span class="v">Press releases</span></div></div>
+        <p class="dp-title">Backed by $1,000,000 in locked initial liquidity and listed on CoinGecko.</p>
+        <a class="dp-go mono" href="https://www.benzinga.com/pressreleases/26/10/g62178300/sectora-launches-sect-quantum-cybersecurity-and-rwa-token-supply-capped-50-million" target="_blank" rel="noopener noreferrer"><span>Read on Benzinga</span><span aria-hidden="true">↗</span></a>
       </article>
       <article class="dp reveal" style="--d:.08s">
         <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
