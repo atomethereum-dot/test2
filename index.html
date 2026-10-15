@@ -6302,7 +6302,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <div class="dp-band"><span class="mono">Dispatch 01</span><b class="mono">SF·PR·01·26</b></div>
         <div class="dp-name"><h3>AP News</h3><span class="mono">Press release</span></div>
         <div class="dp-media">
-          <video src="media/sectora-apnews-X-1080p.mp4" data-poster="images/press-apnews-poster.jpg" muted loop playsinline preload="none" aria-label="Video: Sectora press release on AP News"></video>
+          <video src="media/sectora-apnews-web-720p.mp4" data-poster="images/press-apnews-poster.jpg" muted loop playsinline preload="none" aria-label="Video: Sectora press release on AP News"></video>
           <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
         <div class="dp-meta mono"><div><span class="k">Published</span><span class="v">Oct 5, 2026</span></div><div><span class="k">Distribution</span><span class="v">GlobeNewswire</span></div><div><span class="k">Section</span><span class="v">Press releases</span></div></div>
@@ -6314,7 +6314,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <div class="dp-band"><span class="mono">Dispatch 02</span><b class="mono">SF·PR·02·26</b></div>
         <div class="dp-name"><h3>Benzinga</h3><span class="mono">Press release</span></div>
         <div class="dp-media">
-          <video src="media/sectora-benzinga-X-1080p.mp4" data-poster="images/press-benzinga-poster.jpg" muted loop playsinline preload="none" aria-label="Video: Sectora press release on Benzinga"></video>
+          <video src="media/sectora-benzinga-web-720p.mp4" data-poster="images/press-benzinga-poster.jpg" muted loop playsinline preload="none" aria-label="Video: Sectora press release on Benzinga"></video>
           <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
         <div class="dp-meta mono"><div><span class="k">Published</span><span class="v">Oct 5, 2026</span></div><div><span class="k">Distribution</span><span class="v">GlobeNewswire</span></div><div><span class="k">Section</span><span class="v">Press releases</span></div></div>
@@ -6778,8 +6778,13 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
      la cabecera va superpuesta, asi que el hueco lo reserva el
      contenido del hero aunque ella cambie de alto */
   const head = document.querySelector('.top');
+  /* la variable solo la usa la capa del hero: escrita en <html> obligaba a
+     recalcular los estilos de toda la pagina, y se reescribia aunque no cambiara */
+  const capaHero = document.querySelector('.stage .layer') || document.documentElement;
+  let headH = '';
   function measureHead(){
-    document.documentElement.style.setProperty('--head-h', head.offsetHeight + 'px');
+    const v = head.offsetHeight + 'px';
+    if(v !== headH){ headH = v; capaHero.style.setProperty('--head-h', v); }
   }
   measureHead();
   window.addEventListener('resize', measureHead);
@@ -10718,7 +10723,9 @@ window.__lejos = function(el){
   addEventListener('resize', function(){
     if(!pendiente){ pendiente = true; requestAnimationFrame(medir); }
   }, {passive:true});
-  medir();
+  /* la primera medida va al primer fotograma: hecha mientras se lee la pagina
+     obligaba a componer el documento entero a medio cargar */
+  pendiente = true; requestAnimationFrame(medir);
 })();
 </script>
 <script>
