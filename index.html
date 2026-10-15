@@ -4666,11 +4666,14 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .pg-grp span+span{color:var(--ink-2);font-size:clamp(16px,1.3vw,20px)}
   .disp+.pg-grp{margin-top:clamp(56px,6vw,96px)}
   .disp.d3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  /* una tarjeta sola en la ultima fila va al centro, no pegada a la izquierda */
+  .disp.d3>.dp:last-child:nth-child(3n+1){grid-column:2}
   .disp.d3 .dp-name h3{font-size:clamp(30px,3vw,58px)}
   .disp.d3 .dp-name .mono{white-space:nowrap}
   @media (min-width:1001px) and (max-width:1180px){.disp.d3 .dp-name h3{font-size:clamp(26px,2.6vw,34px)}.disp.d3 .dp-name .mono{font-size:9.5px;letter-spacing:.14em}}
   .disp.d3 .dp-meta{grid-template-columns:1fr 1fr}.disp.d3 .dp-meta div:last-child{grid-column:1/-1}
   .gs-links{display:flex;flex-wrap:wrap;gap:12px 26px}
+  @media (max-width:1000px){.disp.d3>.dp:last-child:nth-child(3n+1){grid-column:auto}}
   @media (max-width:1000px){.disp,.disp.d3{grid-template-columns:1fr}.gs-head{grid-template-columns:1fr}}
   @media (max-width:560px){.gs-top .gs-ser{font-size:9.5px}.dp-meta{grid-template-columns:1fr 1fr}.dp-meta div:last-child{grid-column:1/-1}}
 </style>
@@ -6215,10 +6218,10 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 
 <section class="press" id="press">
   <div class="gs-in">
-    <div class="gs-top"><p class="eyebrow mono reveal"><i></i>Press</p><p class="mono gs-ser">Dispatch series SF·PR·26 · 08 outlets</p></div>
+    <div class="gs-top"><p class="eyebrow mono reveal"><i></i>Press</p><p class="mono gs-ser">Dispatch series SF·PR·26 · 09 outlets</p></div>
     <div class="gs-head">
-      <h2 class="reveal wide" style="--d:.06s">Our releases, now on the record at <em>U.Today</em>, <em>AMBCrypto</em>, <em>CoinCodex</em>, <em>NewsBTC</em>, <em>Finbold</em>, <em>Cryptopolitan</em>, <em>AP News</em> and <em>Benzinga</em>.</h2>
-      <p class="reveal" style="--d:.12s">The final-testing update of October 14, 2026 is published on U.Today, AMBCrypto, CoinCodex, NewsBTC, Finbold and Cryptopolitan. The #SECT launch of October 5, 2026, distributed by GlobeNewswire, is on AP News and Benzinga. All appear in each outlet's press release section.</p>
+      <h2 class="reveal wide" style="--d:.06s">Our releases, now on the record at <em>U.Today</em>, <em>AMBCrypto</em>, <em>CoinCodex</em>, <em>NewsBTC</em>, <em>Finbold</em>, <em>Cryptopolitan</em>, <em>Bitcoinist</em>, <em>AP News</em> and <em>Benzinga</em>.</h2>
+      <p class="reveal" style="--d:.12s">The final-testing update of October 14, 2026 is published on U.Today, AMBCrypto, CoinCodex, NewsBTC, Finbold, Cryptopolitan and Bitcoinist. The #SECT launch of October 5, 2026, distributed by GlobeNewswire, is on AP News and Benzinga. All appear in each outlet's press release section.</p>
     </div>
     <div class="pg-grp reveal"><span class="mono">Release 02 · Oct 14, 2026</span><span>Final testing of four products and $SECT on Uniswap</span></div>
     <div class="disp d3">
@@ -6293,6 +6296,18 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <div class="dp-meta mono"><div><span class="k">Published</span><span class="v">Oct 14, 2026</span></div><div><span class="k">Release</span><span class="v">Final testing</span></div><div><span class="k">Section</span><span class="v">Press releases</span></div></div>
         <p class="dp-title">Sectora Foundation Announces Final Testing of Four Products and $SECT Token Availability on Uniswap</p>
         <a class="dp-go mono" href="https://www.cryptopolitan.com/sectora-foundation-announces-final-testing-of-four-products-and-sect-token-availability-on-uniswap/" target="_blank" rel="noopener noreferrer"><span>Read on Cryptopolitan</span><span aria-hidden="true">↗</span></a>
+      </article>
+      <article class="dp reveal">
+        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+        <div class="dp-band"><span class="mono">Dispatch 09</span><b class="mono">SF·PR·09·26</b></div>
+        <div class="dp-name"><h3>Bitcoinist</h3><span class="mono">Press release</span></div>
+        <div class="dp-media">
+          <video src="media/sectora-bitcoinist-web-720p.mp4" data-poster="images/press-bitcoinist-poster.jpg" muted loop playsinline preload="none" aria-label="Video: Sectora press release on Bitcoinist"></video>
+          <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+        </div>
+        <div class="dp-meta mono"><div><span class="k">Published</span><span class="v">Oct 14, 2026</span></div><div><span class="k">Release</span><span class="v">Final testing</span></div><div><span class="k">Section</span><span class="v">Press releases</span></div></div>
+        <p class="dp-title">Sectora Foundation Announces Final Testing of Four Products and $SECT Token Availability on Uniswap</p>
+        <a class="dp-go mono" href="https://bitcoinist.com/sectora-foundation-announces-final-testing-of-four-products-and-sect-token-availability-on-uniswap/" target="_blank" rel="noopener noreferrer"><span>Read on Bitcoinist</span><span aria-hidden="true">↗</span></a>
       </article>
     </div>
     <div class="pg-grp reveal"><span class="mono">Release 01 · Oct 5, 2026</span><span>Launch of $SECT</span></div>
@@ -10228,7 +10243,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261038';
+      sc.src = 'i18n-home.js?v=20261039';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
