@@ -6387,9 +6387,9 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <figure class="ev-slide on" aria-hidden="false">
           <span class="ev-par">
             <picture>
-              <source type="image/webp" srcset="images/btc2027-640.webp 640w, images/btc2027-960.webp 960w, images/btc2027-1280.webp 1280w, images/btc2027-1920.webp 1920w, images/btc2027-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
+              <source type="image/webp" srcset="images/btc2027-640.webp 640w, images/btc2027-960.webp 960w, images/btc2027-1280.webp 1280w, images/btc2027-1920.webp 1920w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
               <img loading="lazy" src="images/btc2027-1280.jpg"
-                   srcset="images/btc2027-640.jpg 640w, images/btc2027-960.jpg 960w, images/btc2027-1280.jpg 1280w, images/btc2027-1920.jpg 1920w, images/btc2027-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
+                   srcset="images/btc2027-640.jpg 640w, images/btc2027-960.jpg 960w, images/btc2027-1280.jpg 1280w, images/btc2027-1920.jpg 1920w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
                    width="1880" height="940" decoding="async"
                    alt="Official Bitcoin 2027 Nashville poster: the event logo over the Nashville skyline, July 15 to 17, Music City Center.">
             </picture>
@@ -6400,9 +6400,9 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <figure class="ev-slide" aria-hidden="true">
           <span class="ev-par">
             <picture>
-              <source type="image/webp" srcset="images/bf2027-640.webp 640w, images/bf2027-960.webp 960w, images/bf2027-1280.webp 1280w, images/bf2027-1920.webp 1920w, images/bf2027-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
+              <source type="image/webp" srcset="images/bf2027-640.webp 640w, images/bf2027-960.webp 960w, images/bf2027-1280.webp 1280w, images/bf2027-1920.webp 1920w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
               <img loading="lazy" src="images/bf2027-1280.jpg"
-                   srcset="images/bf2027-640.jpg 640w, images/bf2027-960.jpg 960w, images/bf2027-1280.jpg 1280w, images/bf2027-1920.jpg 1920w, images/bf2027-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
+                   srcset="images/bf2027-640.jpg 640w, images/bf2027-960.jpg 960w, images/bf2027-1280.jpg 1280w, images/bf2027-1920.jpg 1920w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
                    width="1920" height="1080" decoding="async"
                    alt="Official Blockchain Forum 2027 poster: the event logo, April 28 to 29, Moscow, over a photograph of the main stage and audience.">
             </picture>
@@ -6413,9 +6413,9 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <figure class="ev-slide" aria-hidden="true">
           <span class="ev-par">
             <picture>
-              <source type="image/webp" srcset="images/consensus-640.webp 640w, images/consensus-960.webp 960w, images/consensus-1280.webp 1280w, images/consensus-1920.webp 1920w, images/consensus-2560.webp 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
+              <source type="image/webp" srcset="images/consensus-640.webp 640w, images/consensus-960.webp 960w, images/consensus-1280.webp 1280w, images/consensus-1920.webp 1920w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)">
               <img loading="lazy" src="images/consensus-1280.jpg"
-                   srcset="images/consensus-640.jpg 640w, images/consensus-960.jpg 960w, images/consensus-1280.jpg 1280w, images/consensus-1920.jpg 1920w, images/consensus-2560.jpg 2560w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
+                   srcset="images/consensus-640.jpg 640w, images/consensus-960.jpg 960w, images/consensus-1280.jpg 1280w, images/consensus-1920.jpg 1920w" sizes="(max-width:980px) 96vw, min(100vw - 144px, 1800px)"
                    width="1920" height="1280" decoding="async"
                    alt="The Consensus show floor seen from above: attendees across the networking lounge, exhibitor stands and hanging signage for the media center.">
             </picture>
@@ -8255,6 +8255,39 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   window.addEventListener('resize', () => { medido = false; alScroll(); });
   if(lienzo && window.ResizeObserver)
     new ResizeObserver(() => { medido = false; alScroll(); }).observe(lienzo);
+
+  /* Si el navegador pierde el contexto (iOS lo hace al cambiar de app o
+     con poca memoria), el lienzo se queda negro y las <img> estan
+     apagadas debajo: la escena se veia vacia. Se vuelve a las <img> y,
+     si el contexto vuelve, se enciende otra vez. */
+  if(lienzo){
+    lienzo.addEventListener('webglcontextlost', e => {
+      e.preventDefault();
+      soltar();
+      encendido = false; gl = null; prog = pieza = null; tex = []; medido = false; pintado = '';
+      car.classList.remove('gl');
+    });
+    lienzo.addEventListener('webglcontextrestored', () => {
+      adelantar();
+      if(!window.__lejos || !window.__lejos(sec)){ arrancarGL(); pintar(); }
+    });
+  }
+
+  /* las piezas se piden con dos planos de adelanto y no al umbral de la
+     carga diferida: en un scroll rapido llegaban tarde, y el shader no se
+     enciende hasta tener las tres */
+  new IntersectionObserver((es, o) => {
+    if(!es[0].isIntersecting) return;
+    imgs.forEach(im => { if(im) im.loading = 'eager'; });
+    o.disconnect();
+  }, {rootMargin:'200% 0px'}).observe(sec);
+
+  /* el umbral de abajo solo avisa al cruzarlo: si en ese momento faltaba
+     alguna pieza, el shader no se encendia en toda la pasada. Se vuelve a
+     intentar al llegar cada una */
+  imgs.forEach(im => im && im.addEventListener('load', () => {
+    if(!encendido && !(window.__lejos && window.__lejos(sec))){ arrancarGL(); pintar(); }
+  }));
 
   /* a un plano de distancia se prepara; si se aleja sin haber llegado a
      encenderse, las piezas ya subidas se sueltan */
@@ -10178,13 +10211,17 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 (() => {
   const v=document.querySelector('.hmk video'), b=document.querySelector('.hmk-snd'); if(!v||!b) return;
   let quiere=true, visto=false, propia=false;
-  const carga=()=>{ if(!v.src){ v.preload='auto'; v.src=v.dataset.src; } };
+  /* al acercarse solo se piden los metadatos; el buffer entero solo
+     mientras suena. Con preload='auto' los tres films de la portada se
+     bajaban completos (8 a 12 MB) aunque solo se pasara de largo, y ese
+     ancho de banda se lo quitaban a las fotos de prensa y de eventos */
+  const carga=()=>{ if(!v.src){ v.preload='metadata'; v.src=v.dataset.src; } };
   const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
   const callaPrensa=()=>document.querySelectorAll('.press video, .why video, .stk video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
   const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
-  const para=()=>{ if(!v.paused){ propia=true; v.pause(); } };
+  const para=()=>{ v.preload='metadata'; if(!v.paused){ propia=true; v.pause(); } };
   const juega=()=>{
-    carga(); if(v.ended) v.currentTime=0;
+    carga(); v.preload='auto'; if(v.ended) v.currentTime=0;
     v.muted=!quiere; if(quiere) callaPrensa();
     const p=v.play();
     if(p&&p.catch) p.catch(e=>{ if(e && e.name==='NotAllowedError' && visto && !document.hidden) mudo(); });
@@ -10226,13 +10263,13 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   /* en la web va a 30 fps (la mitad de trabajo de decodificacion que el
      master de 60) y en pantallas pequenas o con ahorro de datos, a 720p */
   const ligero=matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
-  const carga=()=>{ if(!v.src){ v.preload='auto'; v.src=(ligero && v.dataset.srcM) || v.dataset.src; } };
+  const carga=()=>{ if(!v.src){ v.preload='metadata'; v.src=(ligero && v.dataset.srcM) || v.dataset.src; } };
   const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
   const callaOtros=()=>document.querySelectorAll('.press video, .hmk video, .stk video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
   const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
-  const para=()=>{ if(!v.paused){ propia=true; v.pause(); } };
+  const para=()=>{ v.preload='metadata'; if(!v.paused){ propia=true; v.pause(); } };
   const juega=()=>{
-    carga(); if(v.ended) v.currentTime=0;
+    carga(); v.preload='auto'; if(v.ended) v.currentTime=0;
     v.muted=!quiere; if(quiere) callaOtros();
     const p=v.play();
     if(p&&p.catch) p.catch(e=>{ if(e && e.name==='NotAllowedError' && visto && !document.hidden) mudo(); });
@@ -10989,13 +11026,13 @@ window.__lejos = function(el){
   const v=document.querySelector('.stk video'), b=document.querySelector('.stk-snd'); if(!v||!b) return;
   let quiere=true, visto=false, propia=false;
   const ligero=matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
-  const carga=()=>{ if(!v.src){ v.preload='auto'; v.src=(ligero && v.dataset.srcM) || v.dataset.src; } };
+  const carga=()=>{ if(!v.src){ v.preload='metadata'; v.src=(ligero && v.dataset.srcM) || v.dataset.src; } };
   const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
   const callaOtros=()=>document.querySelectorAll('.press video, .hmk video, .why video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
   const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
-  const para=()=>{ if(!v.paused){ propia=true; v.pause(); } };
+  const para=()=>{ v.preload='metadata'; if(!v.paused){ propia=true; v.pause(); } };
   const juega=()=>{
-    carga(); if(v.ended) v.currentTime=0;
+    carga(); v.preload='auto'; if(v.ended) v.currentTime=0;
     v.muted=!quiere; if(quiere) callaOtros();
     const p=v.play();
     if(p&&p.catch) p.catch(e=>{ if(e && e.name==='NotAllowedError' && visto && !document.hidden) mudo(); });
