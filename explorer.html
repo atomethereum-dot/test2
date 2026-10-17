@@ -50,8 +50,8 @@
 <body>
 <!-- intro de Sectorascan: pruebas finales 05/15. El logo como pieza de metal
      pulido trazada por rayos en WebGL; luces de estudio la barren en cada
-     prueba y al aprobarse la 05 la cara se enciende en azul. ~5 s, una vez
-     por sesion; no aparece con "reducir movimiento". Sin WebGL queda el logo
+     prueba y al aprobarse la 05 la cara se enciende en azul. ~5 s, en cada
+     visita; no aparece con "reducir movimiento". Sin WebGL queda el logo
      plano. La pieza se coloca en el hueco que deja el texto, medido en cada
      cambio de tamaño: nunca se monta sobre las letras. -->
 <style>
@@ -68,7 +68,10 @@
 #scanIntro .tp .m b{display:inline-block;width:7px;height:7px;border-radius:50%;background:#2fd17c;margin-right:10px;vertical-align:1px;box-shadow:0 0 8px rgba(47,209,124,.8)}
 #scanIntro .md{position:absolute;left:clamp(16px,4vw,56px);top:50%;transform:translateY(-50%);width:min(44vw,640px)}
 #scanIntro .k{font-size:clamp(11px,.9vw,13px);line-height:1.7;color:#4f8bff}
-#scanIntro .nm{display:flex;align-items:flex-start;line-height:.86;font-size:clamp(96px,13vw,210px);letter-spacing:-.06em;margin-top:12px;white-space:nowrap}
+/* interlineado 1 y un margen de .14em arriba y abajo: la caja del numero
+   cubre todo el trazo de las cifras y de la barra, que con un interlineado
+   mas justo invadian el texto vecino */
+#scanIntro .nm{display:flex;align-items:flex-start;line-height:1;font-size:clamp(96px,13vw,210px);letter-spacing:-.06em;margin-top:.2em;padding-bottom:.16em;white-space:nowrap}
 #scanIntro .nm .a{font-weight:500;font-variant-numeric:tabular-nums}
 #scanIntro .nm .a.blue{color:#4f8bff}
 #scanIntro .nm .b{font-weight:200;color:rgba(255,255,255,.3)}
@@ -85,17 +88,18 @@
 #scanIntro .lb{display:flex;justify-content:space-between;gap:12px;margin-top:12px;font-size:11px;color:rgba(255,255,255,.6)}
 #scanIntro .lb span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* movil y pantallas en vertical: el texto abajo, la pieza en el hueco de arriba */
-@media (max-width:700px),(max-aspect-ratio:11/10){
+@media (max-aspect-ratio:11/10){
   #scanIntro .tp .m{display:none}
   #scanIntro .md{top:auto;bottom:84px;right:clamp(16px,4vw,56px);width:auto;transform:none}
   #scanIntro .nm{font-size:clamp(72px,22vw,150px)}
   #scanIntro .st h2{font-size:clamp(24px,7vw,40px)}
 }
+@media (max-width:720px){#scanIntro .tp .m{display:none}}
 @media (max-width:380px){#scanIntro .lb{letter-spacing:.1em}#scanIntro .lg i{display:none}}
 /* moviles bajos: el bloque de texto se compacta para dejar sitio a la pieza */
-@media (max-width:700px) and (max-height:700px){
+@media (max-aspect-ratio:11/10) and (max-height:700px){
   #scanIntro .k{font-size:10px;line-height:1.6}
-  #scanIntro .nm{font-size:clamp(56px,17vw,96px);margin-top:6px}
+  #scanIntro .nm{font-size:clamp(56px,17vw,96px)}
   #scanIntro .st{margin-top:10px}
   #scanIntro .st h2{font-size:22px}
   #scanIntro .st p{margin-top:6px;font-size:13px}
@@ -106,7 +110,7 @@
 /* pantallas bajas (movil en horizontal): todo mas compacto para que quepa */
 @media (max-height:560px) and (min-aspect-ratio:11/10){
   #scanIntro .tp{padding-top:14px;padding-bottom:14px}
-  #scanIntro .nm{font-size:min(13vw,19vh);margin-top:6px}
+  #scanIntro .nm{font-size:min(13vw,17vh)}
   #scanIntro .st{margin-top:10px}
   #scanIntro .st h2{font-size:min(2.9vw,6vh)}
   #scanIntro .st p{margin-top:6px;font-size:13px}
@@ -139,8 +143,8 @@
 <script>
 (function(){
   var el=document.getElementById('scanIntro');if(!el)return;
-  var seen=false;try{seen=sessionStorage.getItem('sxIntro')==='1';sessionStorage.setItem('sxIntro','1');}catch(e){}
-  if(seen||matchMedia('(prefers-reduced-motion: reduce)').matches){el.remove();return;}
+  /* sale en cada visita; solo se salta con "reducir movimiento" */
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.remove();return;}
   var root=document.documentElement,ov=root.style.overflow;root.style.overflow='hidden';
   var $=function(i){return document.getElementById(i);};
 
@@ -197,8 +201,8 @@
   function medir(){
     var W=innerWidth,H=innerHeight;
     var r=md.getBoundingClientRect(),top=tp.getBoundingClientRect().bottom,bot=bt.getBoundingClientRect().top;
-    var vert=W<=700||W/H<1.1,cx,cy,half;
-    if(!vert){var x0=r.right+Math.max(24,W*.03),x1=W-Math.max(16,W*.03);cx=(x0+x1)/2;cy=(top+bot)/2-(bot-top)*.06;half=Math.min((x1-x0)/2,(bot-top)*.3);}
+    var vert=W/H<1.1,cx,cy,half;
+    if(!vert){var x0=r.right+Math.max(24,W*.03),x1=W-Math.max(16,W*.03);cx=(x0+x1)/2;half=Math.min((x1-x0)/2,(bot-top)*.3);cy=Math.max((top+bot)/2-(bot-top)*.06,top+12+half*1.15);}
     else{var y0=top+12,y1=r.top-16;cx=W/2;cy=(y0+y1)/2;half=Math.min((y1-y0)/2*.92,W*.4);}
     half=Math.max(half,40);
     /* la pieza gira: su silueta llega a ~1.15 de su semilado a la distancia de reposo */
@@ -211,7 +215,7 @@
     d=Math.min(d,Math.sqrt(2.6e6/(rw*rh)));
     cv.style.left=rx0+'px';cv.style.top=ry0+'px';cv.style.width=rw+'px';cv.style.height=rh+'px';
     cv.width=Math.round(rw*d);cv.height=Math.round(rh*d);if(gl)gl.viewport(0,0,cv.width,cv.height);
-    lay={cx:cx,cy:cy,half:half,Dr:Dr,uC:[(cx-W/2)/H,(H/2-cy)/H],floor:vert?0:1,cut:(H-bot+8)*d,off:[rx0*d,(H-ry1)*d],scr:[W*d,H*d]};
+    lay={cx:cx,cy:cy,half:half,Dr:Dr,uC:[(cx-W/2)/H,(H/2-cy)/H],floor:vert?0:1,cut:(H-bot+8)*d,off:[rx0*d,(H-ry1)*d],scr:[W*d,H*d],W:W,H:H,mt:r.top,mr:r.right,tb:top,bb:bot};
     fb.style.width=fb.style.height=(half*1.6)+'px';fb.style.left=(cx-half*.8)+'px';fb.style.top=(cy-half*.8)+'px';
   }
 
@@ -256,6 +260,10 @@
     if(t>=EXIT&&!tEx){if(loaded||t>8)tEx=now;else t=EXIT-.001;}
     if(tEx)t=EXIT+(now-tEx)/1000;
     if(t>=END){fin();return;}
+    /* si el texto cambia de sitio (llega la fuente, gira el movil, aparece
+       o se oculta la barra del navegador) la pieza se recoloca */
+    var q=md.getBoundingClientRect();
+    if(innerWidth!==lay.W||innerHeight!==lay.H||Math.abs(q.top-lay.mt)>1||Math.abs(q.right-lay.mr)>1||Math.abs(tp.getBoundingClientRect().bottom-lay.tb)>1||Math.abs(bt.getBoundingClientRect().top-lay.bb)>1)medir();
     draw(t);requestAnimationFrame(tick);
   }
   function begin(){if(started)return;started=true;medir();addEventListener('resize',medir);T0=performance.now();requestAnimationFrame(tick);}
