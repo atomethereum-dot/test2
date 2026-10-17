@@ -161,7 +161,7 @@
   /* ---------------------------------------------------------- WebGL */
   var cv=$('siCv'),gl=null;
   try{gl=cv.getContext('webgl',{antialias:false,alpha:false,premultipliedAlpha:false});}catch(e){gl=null;}
-  var FS='precision highp float;uniform vec2 uOff,uScr,uC;uniform float uD,uA,uB,uSweep,uOn,uScan,uScanOn,uIn,uFloor,uCut;'+
+  var FS='precision highp float;uniform vec2 uOff,uScr,uC,uG;uniform float uD,uA,uB,uSweep,uOn,uScan,uScanOn,uIn,uFloor,uCut;'+
   'mat3 rY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s,0.,1.,0.,s,0.,c);}'+
   'mat3 rX(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0.,0.,c,s,0.,-s,c);}mat3 M;'+
   'float sdRB(vec3 p,vec3 b,float r){vec3 q=abs(p)-b+r;return length(max(q,0.))+min(max(q.x,max(q.y,q.z)),0.)-r;}'+
@@ -175,13 +175,20 @@
   'c+=vec3(.08,.41,1.)*1.6*smoothstep(.8,.97,dot(d,normalize(vec3(-.7,.25,.65))));return c;}'+
   'float trace(vec3 ro,vec3 rd,out float m,out float id){float t=0.;m=9.;id=0.;for(int i=0;i<80;i++){vec2 h=map(ro+rd*t);m=min(m,h.x);if(h.x<.0015){id=h.y;return t;}t+=h.x;if(t>80.)break;}return -1.;}'+
   'vec3 shade(vec3 ro,vec3 rd,float t,float id){vec3 p=ro+rd*t,n=nor(p),po=M*p,no=M*n;vec3 r=reflect(rd,n);float fr=pow(1.-max(dot(-rd,n),0.),5.);'+
-  'vec3 col=env(r)*mix(.32,1.,fr)+vec3(.012);if(id<1.5&&po.z<-.12&&no.z<-.9)col=mix(col,col*.55+vec3(.08,.41,1.)*1.05,uOn);'+
-  'if(id>1.5)col=mix(col,vec3(1.4)+col*.3,uOn*.95);col+=vec3(.5,.7,1.)*exp(-abs(po.y-uScan)*90.)*uScanOn*1.6;return col;}'+
+  'vec3 e=env(r),col=e*mix(.32,1.,fr)+vec3(.012);'+
+  /* al aprobarse la 05 toda la pieza pasa a azul de marca brillante (cara,
+     cantos y laterales: el logo entero, sin marco oscuro) y el anillo a
+     blanco porcelana; la luz de estudio sigue dandole relieve */
+  'float lam=max(dot(n,normalize(vec3(-.3,.45,-.84))),0.);'+
+  'vec3 blu=vec3(.082,.412,1.)*(.74+.26*lam)+e*mix(.05,.42,fr)+vec3(.16,.22,.3)*pow(1.-abs(dot(n,rd)),3.)*.6;'+
+  'vec3 wht=vec3(.97,.98,1.)*(.8+.2*lam)+e*mix(.04,.3,fr);'+
+  'float gl=exp(-abs((po.x+po.y)*.7071-uG.x)*14.)*uG.y;blu+=vec3(.55,.7,1.)*gl*.55;wht+=vec3(.3)*gl;'+
+  'col=mix(col,id>1.5?wht:blu,uOn);col+=vec3(.5,.7,1.)*exp(-abs(po.y-uScan)*90.)*uScanOn*1.6;return col;}'+
   'void main(){vec2 fc=gl_FragCoord.xy+uOff;vec2 uv=(fc-.5*uScr)/uScr.y;M=rX(-uB)*rY(-uA);vec3 ro=vec3(0.,0.,-uD),rd=normalize(vec3(uv-uC,1.85));'+
   'float m,id;float t=trace(ro,rd,m,id);vec3 col=vec3(0.);if(t>0.)col=shade(ro,rd,t,id);else{'+
   'if(uFloor>0.&&rd.y<0.){float tf=(-1.3-ro.y)/rd.y;vec3 pf=ro+rd*tf;vec3 r2=vec3(rd.x,-rd.y,rd.z);float m2,id2;float t2=trace(pf,r2,m2,id2);'+
   'if(t2>0.)col+=shade(pf,r2,t2,id2)*exp(-abs(pf.z)*.3)*.22*smoothstep(uCut,uCut+uScr.y*.2,fc.y);}}'+
-  'col*=uIn;col=col/(1.+col*.18);gl_FragColor=vec4(pow(col,vec3(.92)),1.);}';
+  'col*=uIn;gl_FragColor=vec4(clamp(col,0.,1.),1.);}';
   var prog=null,U={};
   if(gl){
     var mk=function(ty,src){var s=gl.createShader(ty);gl.shaderSource(s,src);gl.compileShader(s);return s;};
@@ -190,7 +197,7 @@
     if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){gl=null;}
     else{gl.useProgram(prog);var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
       gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
-      ['uOff','uScr','uC','uD','uA','uB','uSweep','uOn','uScan','uScanOn','uIn','uFloor','uCut'].forEach(function(k){U[k]=gl.getUniformLocation(prog,k);});}
+      ['uOff','uScr','uC','uG','uD','uA','uB','uSweep','uOn','uScan','uScanOn','uIn','uFloor','uCut'].forEach(function(k){U[k]=gl.getUniformLocation(prog,k);});}
   }
 
   /* --------------------------------------------- colocacion de la pieza
@@ -202,11 +209,12 @@
     var W=innerWidth,H=innerHeight;
     var r=md.getBoundingClientRect(),top=tp.getBoundingClientRect().bottom,bot=bt.getBoundingClientRect().top;
     var vert=W/H<1.1,cx,cy,half;
-    if(!vert){var x0=r.right+Math.max(24,W*.03),x1=W-Math.max(16,W*.03);cx=(x0+x1)/2;half=Math.min((x1-x0)/2,(bot-top)*.3);cy=Math.max((top+bot)/2-(bot-top)*.06,top+12+half*1.15);}
-    else{var y0=top+12,y1=r.top-16;cx=W/2;cy=(y0+y1)/2;half=Math.min((y1-y0)/2*.92,W*.4);}
+    if(!vert){var x0=r.right+Math.max(24,W*.03),x1=W-Math.max(16,W*.03);cx=(x0+x1)/2;half=Math.min((x1-x0)/2,(bot-top)*.36);cy=Math.max((top+bot)/2-(bot-top)*.06,top+12+half*1.06);}
+    else{var y0=top+10,y1=r.top-14;cx=W/2;cy=(y0+y1)/2;half=Math.min((y1-y0)/2*.97,W*.44);}
     half=Math.max(half,40);
-    /* la pieza gira: su silueta llega a ~1.15 de su semilado a la distancia de reposo */
-    var Dr=F*H*1.15/half+1.2;
+    /* la pieza gira: su silueta llega a ~1.06 de su semilado a la distancia
+       de reposo (el canto y la perspectiva al girar) */
+    var Dr=F*H*1.06/half+1.2;
     /* solo se pinta el rectangulo de la pieza y su reflejo, a la resolucion
        de la pantalla o por encima (supermuestreo): nada se amplia, los
        bordes quedan nitidos */
@@ -219,7 +227,8 @@
     fb.style.width=fb.style.height=(half*1.6)+'px';fb.style.left=(cx-half*.8)+'px';fb.style.top=(cy-half*.8)+'px';
   }
 
-  var ev=[.45].concat(PASS,[V1]);
+  /* barridos de luz: entrada, cada prueba, la 05 y un destello final */
+  var ev=[.45].concat(PASS,[V1,V1+.95]);
   var fl=$('siFl'),a=$('siNum'),k=$('siK'),nm=$('siNm'),h2=$('siH2v'),p=$('siP'),chip=$('siChip'),fill=$('siFill'),pc=$('siPct');
   var KT='Latest final tests · Network & validators';
   function fade(e,v,dy){e.style.opacity=v;e.style.transform=v<1?'translateY('+((1-eo(v))*dy)+'px)':'';}
@@ -235,6 +244,8 @@
       gl.uniform1f(U.uD,D);gl.uniform1f(U.uA,A);gl.uniform1f(U.uB,B);gl.uniform1f(U.uSweep,sw);
       gl.uniform1f(U.uOn,eo(seg(t,V1,V1+.35)));gl.uniform1f(U.uScan,Math.sin(seg(t,V0,V1)*Math.PI*4)*1.05);
       gl.uniform1f(U.uScanOn,t>=V0&&t<V1?1:0);gl.uniform1f(U.uIn,eo(seg(t,.02,.6)));
+      /* destello diagonal que cruza la cara ya azul */
+      var gk=seg(t,V1+.55,V1+1.25);gl.uniform2f(U.uG,lerp(-1.9,1.9,eio(gk)),gk>0&&gk<1?Math.sin(gk*Math.PI):0);
       gl.uniform1f(U.uFloor,lay.floor);gl.uniform1f(U.uCut,lay.cut);
       gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
     } else {fb.style.display='block';fb.style.opacity=eo(seg(t,.1,.7));}
