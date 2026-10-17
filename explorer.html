@@ -48,74 +48,89 @@
 <script src="/analytics.js" defer></script>
 </head>
 <body>
-<!-- intro de Sectorascan: pruebas finales 05/15. Negra, ~3 s, una vez por sesion;
-     no aparece con "reducir movimiento". -->
+<!-- intro de Sectorascan: pruebas finales 05/15. El logo como pieza de metal
+     pulido trazada por rayos en WebGL; luces de estudio la barren en cada
+     prueba y al aprobarse la 05 la cara se enciende en azul. ~5 s, una vez
+     por sesion; no aparece con "reducir movimiento". Sin WebGL queda el logo
+     plano. La pieza se coloca en el hueco que deja el texto, medido en cada
+     cambio de tamaño: nunca se monta sobre las letras. -->
 <style>
-#scanIntro{position:fixed;inset:0;z-index:99999;background:#000;color:#fff;font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;overflow:hidden;transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
-#scanIntro.out{opacity:0;transform:translateY(-3%)}
-#scanIntro .sg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
-#scanIntro .gl{position:absolute;left:50%;top:46%;width:1100px;height:1100px;margin:-550px 0 0 -550px;border-radius:50%;background:radial-gradient(closest-side,rgba(21,105,255,.16),rgba(21,105,255,.04) 60%,transparent);pointer-events:none}
-#scanIntro .m{font-family:'IBM Plex Mono',ui-monospace,monospace;text-transform:uppercase;letter-spacing:.2em;white-space:nowrap}
-#scanIntro .tp{position:relative;display:flex;align-items:center;justify-content:space-between;padding:26px clamp(16px,4vw,56px) 22px;border-bottom:1px solid rgba(255,255,255,.12);opacity:0;transition:opacity .5s .05s}
-#scanIntro .lg{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:500;letter-spacing:-.01em}
-#scanIntro .lg svg{width:30px;height:30px;display:block;border-radius:4px}
+#scanIntro{position:fixed;inset:0;z-index:99999;background:#000;color:#fff;font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden;transform-origin:50% 50%}
+#scanIntro canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#scanIntro .fb{position:absolute;display:none;border-radius:9%}
+#scanIntro .m{font-family:'IBM Plex Mono',ui-monospace,monospace;text-transform:uppercase;letter-spacing:.2em}
+#scanIntro .tp{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:26px clamp(16px,4vw,56px)}
+#scanIntro .lg{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:500;letter-spacing:-.01em;white-space:nowrap}
+#scanIntro .lg svg{width:30px;height:30px;display:block;border-radius:4px;flex:none}
 #scanIntro .lg i{font-style:normal;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.2);padding:3px 7px}
-#scanIntro .tp .m{font-size:11px;color:rgba(255,255,255,.6)}
-#scanIntro .tp .m b{display:inline-block;width:7px;height:7px;border-radius:50%;background:#2fd17c;margin-right:10px;vertical-align:1px;box-shadow:0 0 10px rgba(47,209,124,.7)}
-#scanIntro .md{position:relative;flex:1;display:flex;flex-direction:column;justify-content:center;width:100%;max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,56px)}
-#scanIntro .k{font-size:clamp(11px,1vw,13px);color:#4f8bff;opacity:0;transform:translateY(8px);transition:opacity .45s .15s,transform .45s .15s}
-#scanIntro .row{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;flex-wrap:wrap;margin-top:14px}
-#scanIntro .nm{display:flex;align-items:flex-start;line-height:.86;font-size:clamp(96px,17vw,250px);letter-spacing:-.06em;opacity:0;transition:opacity .4s .2s}
-#scanIntro .nm .a{font-weight:500;font-variant-numeric:tabular-nums;transition:color .3s}
+#scanIntro .tp .m{font-size:11px;color:rgba(255,255,255,.62);white-space:nowrap}
+#scanIntro .tp .m b{display:inline-block;width:7px;height:7px;border-radius:50%;background:#2fd17c;margin-right:10px;vertical-align:1px;box-shadow:0 0 8px rgba(47,209,124,.8)}
+#scanIntro .md{position:absolute;left:clamp(16px,4vw,56px);top:50%;transform:translateY(-50%);width:min(44vw,640px)}
+#scanIntro .k{font-size:clamp(11px,.9vw,13px);line-height:1.7;color:#4f8bff}
+#scanIntro .nm{display:flex;align-items:flex-start;line-height:.86;font-size:clamp(96px,13vw,210px);letter-spacing:-.06em;margin-top:12px;white-space:nowrap}
+#scanIntro .nm .a{font-weight:500;font-variant-numeric:tabular-nums}
 #scanIntro .nm .a.blue{color:#4f8bff}
-#scanIntro .nm .b{font-weight:200;color:rgba(255,255,255,.32)}
-#scanIntro .st{padding-bottom:clamp(8px,1.4vw,22px);opacity:0;transform:translateY(12px);transition:opacity .45s,transform .45s}
-#scanIntro .st h2{margin:0;font-size:clamp(26px,3.2vw,46px);font-weight:500;letter-spacing:-.03em;line-height:1.08}
-#scanIntro .st p{margin:10px 0 0;font-size:clamp(14px,1.3vw,18px);font-weight:300;color:rgba(255,255,255,.72)}
-#scanIntro .chip{display:inline-flex;align-items:center;gap:10px;margin-top:18px;background:#1569ff;padding:8px 16px 8px 12px;font-size:clamp(13px,1.1vw,15px);font-weight:500;border-radius:2px}
+#scanIntro .nm .b{font-weight:200;color:rgba(255,255,255,.3)}
+#scanIntro .st{margin-top:clamp(14px,2vh,24px)}
+#scanIntro .st h2{position:relative;margin:0;font-size:clamp(26px,2.9vw,44px);font-weight:500;letter-spacing:-.03em;line-height:1.08}
+#scanIntro .st h2 .g{visibility:hidden}
+#scanIntro .st h2 .v{position:absolute;left:0;top:0;white-space:nowrap}
+#scanIntro .st p{margin:10px 0 0;font-size:clamp(14px,1.2vw,18px);font-weight:300;line-height:1.4;color:rgba(255,255,255,.72)}
+#scanIntro .chip{display:inline-flex;align-items:center;gap:10px;margin-top:18px;background:#1569ff;padding:8px 16px 8px 12px;font-size:clamp(13px,1vw,15px);font-weight:500;border-radius:2px;white-space:nowrap}
 #scanIntro .chip svg{width:16px;height:16px;display:block}
-#scanIntro .cl{display:grid;grid-template-columns:repeat(15,minmax(0,1fr));gap:clamp(4px,.7vw,10px);margin-top:clamp(26px,3.4vw,46px)}
-#scanIntro .c{position:relative;height:clamp(46px,6vw,84px);border:1.5px solid rgba(255,255,255,.26);overflow:hidden}
-#scanIntro .c.f{border-style:dashed;border-color:rgba(255,255,255,.2)}
-#scanIntro .c u{position:absolute;inset:0;background:#fff;transform:scaleY(0);transform-origin:50% 100%;transition:transform .28s cubic-bezier(.2,.8,.2,1)}
-#scanIntro .c.on u{transform:scaleY(1)}
-#scanIntro .c.p u{background:#1569ff}
-#scanIntro .c s{position:absolute;top:0;bottom:0;left:-12%;width:10%;background:#4f8bff;box-shadow:0 0 18px #4f8bff;opacity:0}
-#scanIntro .c.run s{opacity:1;animation:siScan .45s linear infinite}
-#scanIntro .c svg{position:absolute;left:50%;top:50%;width:46%;max-width:30px;transform:translate(-50%,-50%) scale(0);transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
-#scanIntro .c.p svg{transform:translate(-50%,-50%) scale(1)}
-#scanIntro .cn{display:grid;grid-template-columns:repeat(15,minmax(0,1fr));gap:clamp(4px,.7vw,10px);margin-top:10px;font-size:clamp(8px,.75vw,11px);letter-spacing:.12em;color:rgba(255,255,255,.45);text-align:center}
-#scanIntro .cn span.p{color:#4f8bff}
-#scanIntro .bt{position:relative;padding:0 clamp(16px,4vw,56px) 26px;opacity:0;transition:opacity .5s .1s}
-#scanIntro .br{height:2px;background:rgba(255,255,255,.14);overflow:hidden}
+#scanIntro .bt{position:absolute;left:clamp(16px,4vw,56px);right:clamp(16px,4vw,56px);bottom:26px}
+#scanIntro .br{height:2px;background:rgba(255,255,255,.12);overflow:hidden}
 #scanIntro .br i{display:block;height:100%;width:100%;background:#fff;transform:scaleX(0);transform-origin:0 0}
-#scanIntro .lb{display:flex;justify-content:space-between;margin-top:12px;font-size:11px;color:rgba(255,255,255,.6)}
-#scanIntro.go .tp,#scanIntro.go .nm,#scanIntro.go .bt{opacity:1}
-#scanIntro.go .k{opacity:1;transform:none}
-#scanIntro.ok .st{opacity:1;transform:none}
-@keyframes siScan{from{left:-12%}to{left:102%}}
-@media (max-width:700px){#scanIntro .tp .m{display:none}#scanIntro .k{white-space:normal;line-height:1.7}#scanIntro .row{align-items:flex-start}#scanIntro .cn span:nth-child(even){visibility:hidden}}
+#scanIntro .lb{display:flex;justify-content:space-between;gap:12px;margin-top:12px;font-size:11px;color:rgba(255,255,255,.6)}
+#scanIntro .lb span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* movil y pantallas en vertical: el texto abajo, la pieza en el hueco de arriba */
+@media (max-width:700px),(max-aspect-ratio:11/10){
+  #scanIntro .tp .m{display:none}
+  #scanIntro .md{top:auto;bottom:84px;right:clamp(16px,4vw,56px);width:auto;transform:none}
+  #scanIntro .nm{font-size:clamp(72px,22vw,150px)}
+  #scanIntro .st h2{font-size:clamp(24px,7vw,40px)}
+}
+@media (max-width:380px){#scanIntro .lb{letter-spacing:.1em}#scanIntro .lg i{display:none}}
+/* moviles bajos: el bloque de texto se compacta para dejar sitio a la pieza */
+@media (max-width:700px) and (max-height:700px){
+  #scanIntro .k{font-size:10px;line-height:1.6}
+  #scanIntro .nm{font-size:clamp(56px,17vw,96px);margin-top:6px}
+  #scanIntro .st{margin-top:10px}
+  #scanIntro .st h2{font-size:22px}
+  #scanIntro .st p{margin-top:6px;font-size:13px}
+  #scanIntro .chip{margin-top:10px;padding:5px 12px 5px 9px;font-size:12px}
+  #scanIntro .md{bottom:70px}
+  #scanIntro .bt{bottom:18px}
+}
+/* pantallas bajas (movil en horizontal): todo mas compacto para que quepa */
+@media (max-height:560px) and (min-aspect-ratio:11/10){
+  #scanIntro .tp{padding-top:14px;padding-bottom:14px}
+  #scanIntro .nm{font-size:min(13vw,19vh);margin-top:6px}
+  #scanIntro .st{margin-top:10px}
+  #scanIntro .st h2{font-size:min(2.9vw,6vh)}
+  #scanIntro .st p{margin-top:6px;font-size:13px}
+  #scanIntro .chip{margin-top:10px;padding:5px 12px 5px 9px;font-size:12px}
+  #scanIntro .bt{bottom:14px}
+  #scanIntro .lb{margin-top:8px}
+}
 </style>
 <div id="scanIntro" aria-hidden="true">
-  <div class="sg"></div><div class="gl"></div>
-  <div class="tp">
+  <canvas id="siCv"></canvas>
+  <svg class="fb" id="siFb" viewBox="0 0 100 100"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+  <div class="tp" id="siTp">
     <div class="lg"><svg viewBox="0 0 100 100"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>Sectorascan<i>L3 Explorer</i></div>
-    <div class="m"><b></b>Sectora L3 · Testnet</div>
+    <div class="m"><b></b>SectoraEVM Blockchain · Testnet</div>
   </div>
-  <div class="md">
-    <div class="k m">Latest final tests · Network &amp; validators</div>
-    <div class="row">
-      <div class="nm"><span class="a" id="siNum">00</span><span class="b">/15</span></div>
-      <div class="st">
-        <h2>Test 05 of 15 passed.</h2>
-        <p>Final testing of the Sectora L3 network is underway.</p>
-        <div class="chip"><svg viewBox="0 0 16 16"><path d="M2.5 8.5 6.2 12 13.5 4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Final tests · 05 / 15</div>
-      </div>
+  <div class="md" id="siMd">
+    <div class="k m" id="siK">Latest final tests · Network &amp; validators</div>
+    <div class="nm" id="siNm"><span class="a" id="siNum">00</span><span class="b">/15</span></div>
+    <div class="st">
+      <h2 id="siH2"><span class="g">Test 05 of 15 passed.</span><span class="v" id="siH2v"></span></h2>
+      <p id="siP">Final testing of the Sectora L3 network is underway.</p>
+      <div class="chip" id="siChip"><svg viewBox="0 0 16 16"><path d="M2.5 8.5 6.2 12 13.5 4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Final tests · 05 / 15</div>
     </div>
-    <div class="cl" id="siCells"></div>
-    <div class="cn m" id="siNums"></div>
   </div>
-  <div class="bt">
+  <div class="bt" id="siBt">
     <div class="br"><i id="siFill"></i></div>
     <div class="lb m"><span>Loading the Sectora L3 explorer</span><span id="siPct">0%</span></div>
   </div>
@@ -126,25 +141,118 @@
   var seen=false;try{seen=sessionStorage.getItem('sxIntro')==='1';sessionStorage.setItem('sxIntro','1');}catch(e){}
   if(seen||matchMedia('(prefers-reduced-motion: reduce)').matches){el.remove();return;}
   var root=document.documentElement,ov=root.style.overflow;root.style.overflow='hidden';
-  var cells='',nums='';for(var i=0;i<15;i++){cells+='<div class="c'+(i>4?' f':'')+(i===4?' p0':'')+'"><u></u>'+(i===4?'<s></s><svg viewBox="0 0 16 16"><path d="M2.5 8.5 6.2 12 13.5 4" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>':'')+'</div>';nums+='<span'+(i===4?' class="p"':'')+'>'+(i<9?'0':'')+(i+1)+'</span>';}
-  document.getElementById('siCells').innerHTML=cells;document.getElementById('siNums').innerHTML=nums;
-  var cs=document.getElementById('siCells').children,num=document.getElementById('siNum'),fill=document.getElementById('siFill'),pct=document.getElementById('siPct');
-  var T0=performance.now(),DUR=2400,done=false,started=false;
-  function at(ms,f){setTimeout(f,ms);}
-  function begin(){if(started)return;started=true;T0=performance.now();run();}
-  if(document.fonts&&document.fonts.load){Promise.all([document.fonts.load("500 100px 'IBM Plex Sans'"),document.fonts.load("200 100px 'IBM Plex Sans'")]).then(begin,begin);}else begin();
-  setTimeout(begin,450);
-  function run(){
-  requestAnimationFrame(function(){el.classList.add('go');});
-  [260,380,500,620].forEach(function(ms,i){at(ms,function(){cs[i].classList.add('on');num.textContent='0'+(i+1);});});
-  at(700,function(){cs[4].classList.add('run');});
-  at(1550,function(){cs[4].classList.remove('run');cs[4].classList.add('on','p');num.textContent='05';num.classList.add('blue');el.classList.add('ok');});
-  (function tick(){var k=Math.min(1,(performance.now()-T0)/DUR),e=1-Math.pow(1-k,2);fill.style.transform='scaleX('+e+')';pct.textContent=Math.round(e*100)+'%';if(k<1&&!done)requestAnimationFrame(tick);})();
-  function out(){if(done)return;done=true;el.classList.add('out');root.style.overflow=ov;setTimeout(function(){el.remove();},650);}
-  function ready(){at(Math.max(0,2900-(performance.now()-T0)),out);}
-  if(document.readyState==='complete')ready();else addEventListener('load',ready);
+  var $=function(i){return document.getElementById(i);};
+
+  /* guion: pruebas 01-04 a golpe, la 05 se verifica y pasa en 3.1 s */
+  var PASS=[.95,1.22,1.49,1.76],V0=1.95,V1=3.1,HEAD=3.15,EXIT=4.55,END=5.15;
+  var cl=function(v){return v<0?0:v>1?1:v;},seg=function(t,a,b){return cl((t-a)/(b-a));};
+  var eo=function(k){return 1-Math.pow(1-k,3);},eio=function(k){return k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;};
+  var lerp=function(a,b,k){return a+(b-a)*k;},pk=function(t,t0,d){var k=(t-t0)/d;return k<0||k>1?0:Math.pow(1-k,2.2);};
+  var hs=function(a,b){var s=Math.sin(a*127.1+b*311.7)*43758.5453;return s-Math.floor(s);};
+  var GL='ABCDEF0123456789#/<>=+';
+  function scr(txt,p,t,seed){var n=txt.length,r=Math.floor(p*n*1.0001),o='';
+    for(var i=0;i<n;i++){var c=txt[i];if(i<r||c===' ')o+=c;else o+=GL[Math.floor(hs(i+seed,Math.floor(t*28))*GL.length)];}return o;}
+
+  /* ---------------------------------------------------------- WebGL */
+  var cv=$('siCv'),gl=null;
+  try{gl=cv.getContext('webgl',{antialias:false,alpha:false,premultipliedAlpha:false});}catch(e){gl=null;}
+  var FS='precision highp float;uniform vec2 uRes,uC;uniform float uD,uA,uB,uSweep,uOn,uScan,uScanOn,uFlash,uIn,uFloor,uCut;'+
+  'mat3 rY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s,0.,1.,0.,s,0.,c);}'+
+  'mat3 rX(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0.,0.,c,s,0.,-s,c);}mat3 M;'+
+  'float sdRB(vec3 p,vec3 b,float r){vec3 q=abs(p)-b+r;return length(max(q,0.))+min(max(q.x,max(q.y,q.z)),0.)-r;}'+
+  'vec2 map(vec3 p){p=M*p;float s=sdRB(p,vec3(1.,1.,.16),.2);vec2 q=vec2(length(p.xy)-.544,abs(p.z)-.16);float r=length(q)-.072;return r<s?vec2(r,2.):vec2(s,1.);}'+
+  'vec3 nor(vec3 p){vec2 e=vec2(.0015,0.);return normalize(vec3(map(p+e.xyy).x-map(p-e.xyy).x,map(p+e.yxy).x-map(p-e.yxy).x,map(p+e.yyx).x-map(p-e.yyx).x));}'+
+  'vec3 env(vec3 d){vec3 c=vec3(0.);c+=vec3(.28)*exp(-abs(d.y)*16.);c+=vec3(.9)*smoothstep(.62,.68,d.y)*(1.-smoothstep(.5,.9,abs(d.x)));'+
+  'if(d.z<0.){vec2 q=d.xy/max(-d.z,.05);c+=vec3(2.4)*smoothstep(.09,0.,abs(q.x-uSweep))*smoothstep(2.2,1.6,abs(q.y));'+
+  'c+=vec3(.55)*smoothstep(.05,0.,abs(q.x+1.25))*smoothstep(1.5,1.1,abs(q.y));c+=vec3(.35)*smoothstep(.04,0.,abs(q.x-1.6))*smoothstep(1.2,.9,abs(q.y));'+
+  'c+=vec3(.16,.17,.19)*smoothstep(2.6,0.,length(q-vec2(.3,.5)));c+=vec3(.95)*smoothstep(.05,0.,abs((q.x+q.y)*.7071-.42))*smoothstep(1.8,1.,length(q));'+
+  'c+=vec3(.4)*smoothstep(.025,0.,abs((q.x+q.y)*.7071-.62))*smoothstep(1.6,.9,length(q));}'+
+  'c+=vec3(.08,.41,1.)*1.6*smoothstep(.8,.97,dot(d,normalize(vec3(-.7,.25,.65))));return c;}'+
+  'float trace(vec3 ro,vec3 rd,out float m,out float id){float t=0.;m=9.;id=0.;for(int i=0;i<80;i++){vec2 h=map(ro+rd*t);m=min(m,h.x);if(h.x<.0015){id=h.y;return t;}t+=h.x;if(t>80.)break;}return -1.;}'+
+  'vec3 shade(vec3 ro,vec3 rd,float t,float id){vec3 p=ro+rd*t,n=nor(p),po=M*p,no=M*n;vec3 r=reflect(rd,n);float fr=pow(1.-max(dot(-rd,n),0.),5.);'+
+  'vec3 col=env(r)*mix(.32,1.,fr)+vec3(.012);if(id<1.5&&po.z<-.12&&no.z<-.9)col=mix(col,col*.55+vec3(.08,.41,1.)*1.05,uOn);'+
+  'if(id>1.5)col=mix(col,vec3(1.)+col*.4,uOn*.9);col+=vec3(.5,.7,1.)*exp(-abs(po.y-uScan)*90.)*uScanOn*1.6;return col;}'+
+  'void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;M=rX(-uB)*rY(-uA);vec3 ro=vec3(0.,0.,-uD),rd=normalize(vec3(uv-uC,1.85));'+
+  'float m,id;float t=trace(ro,rd,m,id);vec3 col=vec3(0.);if(t>0.)col=shade(ro,rd,t,id);else{col+=vec3(.75,.8,.9)*exp(-m*14.)*.12*uIn;'+
+  'if(uFloor>0.&&rd.y<0.){float tf=(-1.3-ro.y)/rd.y;vec3 pf=ro+rd*tf;vec3 r2=vec3(rd.x,-rd.y,rd.z);float m2,id2;float t2=trace(pf,r2,m2,id2);'+
+  'if(t2>0.)col+=shade(pf,r2,t2,id2)*exp(-abs(pf.z)*.3)*.22*smoothstep(uCut,uCut+uRes.y*.2,gl_FragCoord.y);}}'+
+  'col*=uIn;col+=uFlash*vec3(.9,.95,1.);col=col/(1.+col*.18);gl_FragColor=vec4(pow(col,vec3(.92)),1.);}';
+  var prog=null,U={};
+  if(gl){
+    var mk=function(ty,src){var s=gl.createShader(ty);gl.shaderSource(s,src);gl.compileShader(s);return s;};
+    prog=gl.createProgram();gl.attachShader(prog,mk(gl.VERTEX_SHADER,'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+    gl.attachShader(prog,mk(gl.FRAGMENT_SHADER,FS));gl.bindAttribLocation(prog,0,'a');gl.linkProgram(prog);
+    if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){gl=null;}
+    else{gl.useProgram(prog);var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+      ['uRes','uC','uD','uA','uB','uSweep','uOn','uScan','uScanOn','uFlash','uIn','uFloor','uCut'].forEach(function(k){U[k]=gl.getUniformLocation(prog,k);});}
   }
-  at(6500,function(){if(!done){done=true;el.classList.add('out');root.style.overflow=ov;setTimeout(function(){el.remove();},650);}});
+
+  /* --------------------------------------------- colocacion de la pieza
+     se mide el hueco libre de texto: a la derecha de la columna en
+     escritorio, entre la cabecera y el texto en movil. La pieza (y su
+     reflejo) caben enteros dentro de ese hueco. */
+  var md=$('siMd'),tp=$('siTp'),bt=$('siBt'),fb=$('siFb'),lay={},F=1.85;
+  function medir(){
+    var W=innerWidth,H=innerHeight,d0=Math.min(window.devicePixelRatio||1,2),s=Math.min(1,Math.sqrt(1.2e6/(W*H*d0*d0))),d=d0*s;
+    cv.width=Math.round(W*d);cv.height=Math.round(H*d);if(gl)gl.viewport(0,0,cv.width,cv.height);
+    var r=md.getBoundingClientRect(),top=tp.getBoundingClientRect().bottom,bot=bt.getBoundingClientRect().top;
+    var vert=W<=700||W/H<1.1,cx,cy,half;
+    if(!vert){var x0=r.right+Math.max(24,W*.03),x1=W-Math.max(16,W*.03);cx=(x0+x1)/2;cy=(top+bot)/2-(bot-top)*.06;half=Math.min((x1-x0)/2,(bot-top)*.3);}
+    else{var y0=top+12,y1=r.top-16;cx=W/2;cy=(y0+y1)/2;half=Math.min((y1-y0)/2*.92,W*.4);}
+    half=Math.max(half,40);
+    /* la pieza gira: su silueta llega a ~1.15 de su semilado a la distancia de reposo */
+    var Dr=F*H*1.15/half+1.2;
+    lay={cx:cx,cy:cy,half:half,Dr:Dr,uC:[(cx-W/2)/H,(H/2-cy)/H],floor:vert?0:1,cut:(H-bot+8)*d,W:W,H:H};
+    fb.style.width=fb.style.height=(half*1.6)+'px';fb.style.left=(cx-half*.8)+'px';fb.style.top=(cy-half*.8)+'px';
+  }
+
+  var ev=[.45].concat(PASS,[V1]);
+  var a=$('siNum'),k=$('siK'),nm=$('siNm'),h2=$('siH2v'),p=$('siP'),chip=$('siChip'),fill=$('siFill'),pc=$('siPct');
+  var KT='Latest final tests · Network & validators';
+  function fade(e,v,dy){e.style.opacity=v;e.style.transform=v<1?'translateY('+((1-eo(v))*dy)+'px)':'';}
+  function draw(t){
+    if(gl){
+      var sw=-9;for(var i=0;i<ev.length;i++){var q=(t-ev[i]+.06)/.5;if(q>=0&&q<=1)sw=lerp(-3.2,3.2,eio(q));}
+      var lock=eo(seg(t,0,V1));
+      var A=(1-lock)*(-4*Math.PI)+lock*-.34+Math.sin(t*.8)*.03,B=(1-lock)*-.5+lock*.14+Math.sin(t*.6)*.02;
+      var D=lay.Dr*lerp(1.32,1,eo(seg(t,0,V1)))+.25*(1-eo(seg(t,V1,END)));
+      var sk=seg(t,V1,V1+.35),amp=sk>0&&sk<1?.012*Math.pow(1-sk,2):0;
+      gl.uniform2f(U.uRes,cv.width,cv.height);gl.uniform2f(U.uC,lay.uC[0]+Math.sin(t*93.1)*amp,lay.uC[1]+Math.cos(t*71.7)*amp);
+      gl.uniform1f(U.uD,D);gl.uniform1f(U.uA,A);gl.uniform1f(U.uB,B);gl.uniform1f(U.uSweep,sw);
+      gl.uniform1f(U.uOn,eo(seg(t,V1,V1+.35)));gl.uniform1f(U.uScan,Math.sin(seg(t,V0,V1)*Math.PI*4)*1.05);
+      gl.uniform1f(U.uScanOn,t>=V0&&t<V1?1:0);gl.uniform1f(U.uFlash,pk(t,V1,.32)*.9);gl.uniform1f(U.uIn,eo(seg(t,.02,.6)));
+      gl.uniform1f(U.uFloor,lay.floor);gl.uniform1f(U.uCut,lay.cut);
+      gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+    } else {fb.style.display='block';fb.style.opacity=eo(seg(t,.1,.7));}
+    /* texto */
+    fade(tp,seg(t,.1,.6),-8);fade(k,seg(t,.35,.85),10);k.textContent=scr(KT,seg(t,.35,1.1),t,3);
+    nm.style.opacity=seg(t,.5,.9);
+    var n=PASS.filter(function(x){return t>=x;}).length+(t>=V1?1:0);a.textContent=(n<10?'0':'')+n;a.classList.toggle('blue',t>=V1);
+    var kh=seg(t,HEAD,HEAD+.5);fade(h2,kh,14);h2.textContent=kh>0?scr('Test 05 of 15 passed.',seg(t,HEAD,HEAD+.55),t,9):'';
+    fade(p,seg(t,HEAD+.18,HEAD+.65),12);fade(chip,seg(t,HEAD+.32,HEAD+.8),12);
+    bt.style.opacity=seg(t,.2,.6);
+    var bb=1-Math.pow(1-seg(t,.25,EXIT-.15),2.2);fill.style.transform='scaleX('+bb+')';pc.textContent=Math.round(bb*100)+'%';
+    var x=seg(t,EXIT,END);el.style.opacity=1-eio(x);el.style.transform=x>0?'scale('+(1+.05*eio(x))+')':'';
+  }
+
+  var loaded=document.readyState==='complete',T0=0,tEx=0,done=false,started=false;
+  addEventListener('load',function(){loaded=true;});
+  function fin(){if(done)return;done=true;root.style.overflow=ov;el.remove();removeEventListener('resize',medir);}
+  function tick(){
+    if(done)return;
+    var now=performance.now(),t=(now-T0)/1000;
+    /* al final se espera a que la pagina haya cargado (como mucho hasta 8 s) */
+    if(t>=EXIT&&!tEx){if(loaded||t>8)tEx=now;else t=EXIT-.001;}
+    if(tEx)t=EXIT+(now-tEx)/1000;
+    if(t>=END){fin();return;}
+    draw(t);requestAnimationFrame(tick);
+  }
+  function begin(){if(started)return;started=true;medir();addEventListener('resize',medir);T0=performance.now();requestAnimationFrame(tick);}
+  if(document.fonts&&document.fonts.load){Promise.all([document.fonts.load("500 100px 'IBM Plex Sans'"),document.fonts.load("200 100px 'IBM Plex Sans'"),document.fonts.load("400 12px 'IBM Plex Mono'")]).then(begin,begin);}else begin();
+  setTimeout(begin,450);
+  /* red de seguridad: pase lo que pase, a los 10 s la intro no esta */
+  setTimeout(fin,10000);
 })();
 </script>
 
