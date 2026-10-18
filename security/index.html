@@ -31,7 +31,7 @@
 <link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="security.css?v=20261017a">
+<link rel="stylesheet" href="security.css?v=20261018a">
 <link rel="stylesheet" href="shield-intro.css?v=20261018a">
 <script src="/analytics.js" defer></script>
 </head>
@@ -89,10 +89,8 @@
 
     <article class="inc feat">
       <div class="inc-v">
-        <button class="vplay" type="button" data-src="../media/sectora-shield-bitget-X-1080p60.mp4" aria-label="Play: Bitget incident analysis">
-          <img src="vid-bitget.jpg" alt="$387,500,000 stolen from Bitget, the largest crypto hack of 2026" width="1280" height="720" loading="lazy" decoding="async">
-          <span class="vbtn" aria-hidden="true"><i></i></span><span class="vdur m">0:41</span>
-        </button>
+        <video data-poster="vid-bitget.jpg" data-src="../media/sectora-shield-bitget-X-1080p60.mp4" data-src-m="../media/sectora-shield-bitget-X-720.mp4" playsinline preload="none" aria-label="Video: Bitget incident analysis"></video>
+        <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
       </div>
       <div class="inc-t">
         <span class="inc-tag m">Incident analysis · Bitget · Sep 24, 2026</span>
@@ -115,24 +113,20 @@
     <div class="inc-grid">
       <article class="inc">
         <div class="inc-v">
-          <button class="vplay" type="button" data-src="../media/sectora-shield-vs-bitget-en-1080p60.mp4" aria-label="Play: Same attack, two endings">
-            <img src="vid-compare.jpg" alt="Same attack. Two endings." width="1280" height="720" loading="lazy" decoding="async">
-            <span class="vbtn" aria-hidden="true"><i></i></span><span class="vdur m">0:38</span>
-          </button>
+          <video data-poster="vid-compare.jpg" data-src="../media/sectora-shield-vs-bitget-en-1080p60.mp4" data-src-m="../media/sectora-shield-vs-bitget-en-720.mp4" playsinline preload="none" aria-label="Video: Same attack, two endings"></video>
+        <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
         <span class="inc-tag m">Comparison · same attack</span>
         <h3>Same attack. Two endings.</h3>
         <p>The Bitget attack chain replayed step by step, without Sectora Shield and with it: access granted or
           contained, 25 days unseen or flagged, signed or rejected, <span class="nw">−$387.5M</span> or $0 moved.</p>
-        <div class="inc-alt"><span class="m">Illustrative scenario</span><button class="lang m" type="button" data-src="../media/sectora-shield-vs-bitget-es-1080p60.mp4">Ver en español</button></div>
+        <div class="inc-alt"><span class="m">Illustrative scenario</span><button class="lang m" type="button" data-src="../media/sectora-shield-vs-bitget-es-1080p60.mp4" data-src-m="../media/sectora-shield-vs-bitget-es-720.mp4">Ver en español</button></div>
       </article>
 
       <article class="inc">
         <div class="inc-v">
-          <button class="vplay" type="button" data-src="../media/sectora-quantum-hacks-X-1080p.mp4" aria-label="Play: 2026 hacks and the quantum threat">
-            <img src="vid-hacks2026.jpg" alt="More than $1,000,000,000 lost to crypto hacks linked to North Korea in 2026" width="1280" height="720" loading="lazy" decoding="async">
-            <span class="vbtn" aria-hidden="true"><i></i></span><span class="vdur m">0:28</span>
-          </button>
+          <video data-poster="vid-hacks2026.jpg" data-src="../media/sectora-quantum-hacks-X-1080p.mp4" data-src-m="../media/sectora-quantum-hacks-X-720.mp4" playsinline preload="none" aria-label="Video: 2026 hacks and the quantum threat"></video>
+        <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
         <span class="inc-tag m">Threat intelligence · 2026</span>
         <h3>Four attacks, one pattern. Then quantum.</h3>
@@ -143,10 +137,8 @@
 
       <article class="inc">
         <div class="inc-v">
-          <button class="vplay" type="button" data-src="../media/sectora-shield-harvest-X-1080p.mp4" aria-label="Play: Harvest now, decrypt later">
-            <img src="vid-harvest.jpg" alt="Stolen today. Unreadable tomorrow." width="1280" height="720" loading="lazy" decoding="async">
-            <span class="vbtn" aria-hidden="true"><i></i></span><span class="vdur m">0:23</span>
-          </button>
+          <video data-poster="vid-harvest.jpg" data-src="../media/sectora-shield-harvest-X-1080p.mp4" data-src-m="../media/sectora-shield-harvest-X-720.mp4" playsinline preload="none" aria-label="Video: Harvest now, decrypt later"></video>
+        <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
         <span class="inc-tag m">Post-quantum · threat model</span>
         <h3>Stolen today. Unreadable tomorrow.</h3>
@@ -269,23 +261,61 @@
 
 <script src="security.js?v=20260820b"></script>
 <script>
-/* expedientes: el video se pide al pulsar play y suena con sus controles; al
-   arrancar uno se pausan los demas. "Ver en español" cambia la pista del
-   comparativo. */
+/* expedientes: los videos se portan como los films de la portada. Se piden
+   al acercarse (720p en pantallas pequenas o con ahorro de datos), arrancan
+   solos al verse y se paran al salir. Suena uno solo, el que mas se ve; si
+   el navegador no deja sonar antes del primer toque, arranca mudo y el
+   sonido entra con ese toque. "Sound" lo quita o lo pone, y "Ver en
+   espanol" cambia la pista del comparativo. Con "reducir movimiento" no
+   arrancan solos: quedan el poster y los controles. */
 (function(){
-  var vids=[];
-  function play(btn,src){
-    var box=btn.parentNode,v=box.querySelector('video');
-    if(!v){v=document.createElement('video');v.controls=true;v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';
-      v.poster=btn.querySelector('img').getAttribute('src');box.appendChild(v);vids.push(v);
-      v.addEventListener('play',function(){vids.forEach(function(o){if(o!==v)o.pause();});});}
-    if(v.getAttribute('src')!==src){v.setAttribute('src',src);}
-    btn.hidden=true;var p=v.play();if(p&&p.catch)p.catch(function(){});
+  var vs=[].slice.call(document.querySelectorAll('#incidents .inc-v video'));if(!vs.length)return;
+  var ligero=matchMedia('(max-width: 980px)').matches||!!(navigator.connection&&navigator.connection.saveData);
+  var quieto=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var quiere=true,dueno=null,ratio=new Map(),propia=new Set();
+  function url(v){return (ligero&&v.dataset.srcM)||v.dataset.src;}
+  function carga(v){if(!v.getAttribute('poster'))v.poster=v.dataset.poster;if(!v.getAttribute('src')){v.preload='metadata';v.src=url(v);}}
+  function boton(v){return v.parentNode.querySelector('.pr-snd');}
+  function marca(){vs.forEach(function(v){var b=boton(v),on=!v.muted&&!v.paused;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});}
+  function visto(v){return (ratio.get(v)||0)>=.5&&!document.hidden;}
+  /* el que suena: el elegido con "Sound" si sigue a la vista; si no, el que mas se ve */
+  function elige(){if(dueno&&visto(dueno))return dueno;var m=null;vs.forEach(function(v){if(visto(v)&&(!m||ratio.get(v)>ratio.get(m)))m=v;});return m;}
+  function mudo(v){v.muted=true;var q=v.play();if(q&&q.catch)q.catch(function(){});}
+  function para(v){v.preload='metadata';if(!v.paused){propia.add(v);v.pause();}}
+  function juega(v,conSonido){
+    carga(v);v.preload='auto';if(v.ended)v.currentTime=0;v.muted=!conSonido;
+    var p=v.play();if(p&&p.catch)p.catch(function(e){if(e&&e.name==='NotAllowedError'&&visto(v))mudo(v);});}
+  function ajusta(){
+    if(quieto)return;var s=quiere?elige():null;
+    vs.forEach(function(v){if(visto(v))juega(v,v===s);else para(v);});marca();}
+  vs.forEach(function(v){
+    v.addEventListener('pause',function(){if(!propia.has(v)&&!v.ended&&visto(v)&&!quieto)mudo(v);propia.delete(v);marca();});
+    v.addEventListener('play',marca);v.addEventListener('volumechange',marca);
+    boton(v).addEventListener('click',function(){
+      if(!v.muted&&!v.paused){quiere=false;dueno=null;v.muted=true;}
+      else{quiere=true;dueno=v;vs.forEach(function(o){if(o!==v)o.muted=true;});carga(v);v.muted=false;if(v.paused){var p=v.play();if(p&&p.catch)p.catch(function(){});}}
+      marca();});
+  });
+  if(quieto){vs.forEach(function(v){v.controls=true;v.poster=v.dataset.poster;v.preload='none';v.src=url(v);boton(v).hidden=true;});}
+  else if('IntersectionObserver' in window){
+    var cerca=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){carga(e.target);cerca.unobserve(e.target);}});},{rootMargin:'100% 0px'});
+    var vista=new IntersectionObserver(function(es){es.forEach(function(e){ratio.set(e.target,e.isIntersecting?e.intersectionRatio:0);});ajusta();},{threshold:[0,.25,.5,.75,1]});
+    vs.forEach(function(v){cerca.observe(v);vista.observe(v);});
+    document.addEventListener('visibilitychange',ajusta);
   }
-  document.querySelectorAll('#incidents .vplay').forEach(function(b){b.addEventListener('click',function(){play(b,b.dataset.src);});});
+  /* primer toque o clic en cualquier parte: si suena mudo el que deberia sonar, se enciende */
+  function gesto(e){
+    if(quieto||(e.target.closest&&e.target.closest('#incidents .pr-snd')))return;
+    if(navigator.userActivation&&!navigator.userActivation.isActive)return;
+    var s=quiere?elige():null;if(s&&s.muted&&!s.paused){s.muted=false;marca();}}
+  ['click','touchend','keydown'].forEach(function(t){document.addEventListener(t,gesto,{capture:true,passive:true});});
+  /* comparativo: cambia de idioma y vuelve a empezar con sonido */
   document.querySelectorAll('#incidents .lang').forEach(function(l){l.addEventListener('click',function(){
-    var b=l.closest('.inc').querySelector('.vplay'),en=b.dataset.src,es=l.dataset.src;
-    b.dataset.src=es;l.dataset.src=en;l.textContent=l.textContent==='Ver en español'?'Watch in English':'Ver en español';play(b,es);});});
+    var v=l.closest('.inc').querySelector('video'),d=v.dataset,ld=l.dataset,t;
+    t=d.src;d.src=ld.src;ld.src=t;t=d.srcM;d.srcM=ld.srcM;ld.srcM=t;
+    l.textContent=l.textContent==='Ver en español'?'Watch in English':'Ver en español';
+    v.src=url(v);v.currentTime=0;quiere=true;dueno=v;vs.forEach(function(o){if(o!==v)o.muted=true;});
+    v.muted=false;var p=v.play();if(p&&p.catch)p.catch(function(){mudo(v);});marca();});});
 })();
 </script>
 </body>
