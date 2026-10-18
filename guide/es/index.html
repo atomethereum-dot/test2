@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Guía de #SECT en Uniswap — Sectora Foundation</title>
+<meta name="description" content="Guía paso a paso para usar Uniswap con #SECT en Ethereum: enlaces oficiales, ETH o USDT, comisiones de red, carteras y seguridad. Compra y vende cuando quieras.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sectoraorg.com/guide/es/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="Guía de #SECT en Uniswap">
+<meta property="og:description" content="Guía paso a paso para usar Uniswap con #SECT en Ethereum: enlaces oficiales, ETH o USDT, comisiones de red, carteras y seguridad. Compra y vende cuando quieras.">
+<meta property="og:image" content="https://sectoraorg.com/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Guía de #SECT en Uniswap">
+<meta name="twitter:description" content="Guía paso a paso para usar Uniswap con #SECT en Ethereum: enlaces oficiales, ETH o USDT, comisiones de red, carteras y seguridad. Compra y vende cuando quieras.">
+<meta name="twitter:image" content="https://sectoraorg.com/og-image.jpg">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/v2/icon-192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/v2/favicon-32x32.png">
+<link rel="icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/icons/v2/apple-touch-icon.png">
+<link rel="canonical" href="https://sectoraorg.com/guide/es/">
+<link rel="alternate" hreflang="en" href="https://sectoraorg.com/guide/">
+<link rel="alternate" hreflang="es" href="https://sectoraorg.com/guide/es/">
+<link rel="alternate" hreflang="pt" href="https://sectoraorg.com/guide/pt/">
+<link rel="alternate" hreflang="x-default" href="https://sectoraorg.com/guide/">
+<meta name="theme-color" content="#f2f2ef">
+<link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'IBM Plex Sans';src:url("/fonts/IBMPlexSans.woff2") format("woff2");font-weight:200 600;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url("/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url("/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-display:swap}
+
+/* ======================================================================
+   Sectora · Guia de #SECT en Uniswap
+   Las hojas claras de la web: papel #f2f2ef con la rejilla de 54px y sus
+   cruces de registro, tinta casi negra, azul de marca, Plex Sans ligera
+   para los titulares y Plex Mono en mayusculas para los rotulos. Cada
+   texto sale de una plantilla con ingles, espanol y portugues; cada
+   idioma es una pagina propia (/guide/, /guide/es/, /guide/pt/).
+   ====================================================================== */
+:root{
+  --paper:#f2f2ef;--paper-2:#f7f7f5;--card:#fbfbfa;
+  --ink:#07080a;--ink-2:#3c414c;--ink-3:#6b7280;--ink-4:#9aa0ab;
+  --line:rgba(0,0,0,.11);--line-2:rgba(0,0,0,.06);
+  --blue:#1569ff;--blue-deep:#0d4fd8;--blue-soft:rgb(230.5,233.8,237.8);
+  --live:#0f8f52;--warn:#b45309;
+  --pad:clamp(18px,4.4vw,72px);
+  --ease:cubic-bezier(.22,.72,.24,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:300;font-size:15px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.m{font-family:'IBM Plex Mono',ui-monospace,monospace;text-transform:uppercase;letter-spacing:.16em}
+img{display:block;max-width:100%}
+
+/* papel: rejilla con cruces, desvanecida hacia los bordes */
+.paper{position:relative;isolation:isolate}
+.paper::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54'%3E%3Cpath d='M27 23v8M23 27h8' stroke='rgba(124,138,160,.22)' stroke-width='1'/%3E%3C/svg%3E"),
+    linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px);
+  background-size:54px 54px;
+  -webkit-mask-image:radial-gradient(90% 70% at 50% 40%,#000,transparent 82%);mask-image:radial-gradient(90% 70% at 50% 40%,#000,transparent 82%)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 var(--pad)}
+.eyebrow{display:flex;align-items:center;gap:14px;font-size:10.5px;color:var(--ink-3)}
+.eyebrow i{display:block;width:30px;height:1px;background:var(--blue-deep)}
+
+/* escuadras de registro en las esquinas */
+.reg{position:absolute;inset:-7px;pointer-events:none}
+.reg i{position:absolute;width:13px;height:13px}
+.reg i::before,.reg i::after{content:'';position:absolute;background:var(--blue)}
+.reg i::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-.5px)}
+.reg i::after{top:50%;left:0;right:0;height:1px;transform:translateY(-.5px)}
+.reg i:nth-child(1){left:0;top:0}.reg i:nth-child(2){right:0;top:0}.reg i:nth-child(3){left:0;bottom:0}.reg i:nth-child(4){right:0;bottom:0}
+
+/* ============ cabecera ============ */
+.top{position:sticky;top:0;z-index:50;background:rgba(242,242,239,.94);border-bottom:1px solid var(--line-2)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:62px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-width:0}
+.brand svg{width:26px;height:26px;flex:none;border-radius:3px}
+.brand b{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:11.5px;letter-spacing:.28em}
+.brand>span{font-size:10px;color:var(--ink-3);padding-left:12px;border-left:1px solid var(--line);white-space:nowrap}
+.top-r{display:flex;align-items:center;gap:10px}
+.lang{display:flex;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.lang a{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;letter-spacing:.14em;padding:7px 10px;color:var(--ink-3);text-decoration:none}
+.lang a:hover{color:var(--ink)}
+.lang a[aria-current="page"]{background:var(--ink);color:#fff}
+.back{font-size:10px;text-decoration:none;color:var(--ink-2);border:1px solid var(--line);padding:8px 12px;border-radius:2px;white-space:nowrap}
+.back:hover{border-color:var(--ink)}
+@media (max-width:640px){.brand span,.back{display:none}}
+
+/* ============ hero ============ */
+.hero{padding:clamp(42px,8vh,96px) 0 clamp(56px,9vh,110px);overflow:hidden}
+.hero .hero-g{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(36px,5vw,90px);align-items:center}
+.hero h1{margin-top:clamp(18px,3vh,28px);font-size:clamp(36px,4.9vw,72px);font-weight:200;line-height:.98;letter-spacing:-.04em;text-wrap:balance}
+.hero h1 b{font-weight:400;color:var(--blue-deep)}
+.lede{margin-top:clamp(18px,3vh,28px);max-width:52ch;font-size:clamp(15px,1.2vw,17px);line-height:1.7;color:var(--ink-2)}
+.lede strong{font-weight:500;color:var(--ink)}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(24px,4vh,36px)}
+.btn{display:inline-flex;align-items:center;gap:12px;height:52px;padding:0 22px;border-radius:2px;text-decoration:none;
+  font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  transition:transform .35s var(--ease),background .25s,border-color .25s,color .25s}
+.btn i{font-style:normal;transition:transform .35s var(--ease)}
+.btn:hover i{transform:translate(3px,-3px)}
+.btn.pri{background:var(--blue);color:#fff;box-shadow:0 10px 30px -12px rgba(21,105,255,.7)}
+.btn.pri:hover{background:var(--blue-deep);transform:translateY(-2px)}
+.btn.alt{border:1px solid rgba(0,0,0,.22);color:var(--ink)}
+.btn.alt:hover{border-color:var(--ink);transform:translateY(-2px)}
+.btn small{font-size:9px;letter-spacing:.14em;opacity:.75;padding-left:10px;border-left:1px solid currentColor}
+
+/* contrato oficial */
+.ca{margin-top:clamp(26px,4vh,38px);max-width:600px;border:1px solid var(--line);background:var(--card);border-radius:2px}
+.ca-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line-2);font-size:9.5px;color:var(--ink-3)}
+.ca-h b{display:inline-flex;align-items:center;gap:7px;color:var(--live);font-weight:500}
+.ca-h b::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--live);box-shadow:0 0 0 3px rgba(15,143,82,.15)}
+.ca-b{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.ca-b code{flex:1;min-width:0;font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,1.05vw,13.5px);letter-spacing:.02em;color:var(--ink);overflow-wrap:anywhere}
+.copy{flex:none;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  padding:8px 12px;border:1px solid var(--ink);border-radius:2px;transition:background .2s,color .2s}
+.copy:hover,.copy.ok{background:var(--ink);color:#fff}
+.ca-f{padding:0 14px 12px;font-size:9.5px;color:var(--ink-4)}
+.ca-f a{color:var(--blue-deep);text-decoration:none}
+.ca-f a:hover{text-decoration:underline}
+
+/* enlaces oficiales: cada fila abre app.uniswap.org */
+.ofl{position:relative;justify-self:stretch;background:#fff;border:1px solid var(--line);border-radius:4px;box-shadow:0 40px 80px -48px rgba(7,8,10,.35);
+  padding:clamp(18px,2vw,26px)}
+.ofl::before{content:'';position:absolute;inset:-20% -14%;z-index:-1;background:radial-gradient(closest-side,rgba(21,105,255,.16),transparent 72%)}
+.ofl-h{display:flex;align-items:center;gap:14px;padding-bottom:16px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+.ofl-seal{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--blue-deep);color:#fff;box-shadow:0 0 0 6px rgba(13,79,216,.12)}
+.ofl-seal svg{width:24px;height:24px}
+.ofl-h p{font-size:9.5px;color:var(--blue-deep);font-weight:500}
+.ofl-h b{display:block;font-weight:400;font-size:clamp(18px,1.7vw,22px);letter-spacing:-.015em;line-height:1.2;margin-top:3px}
+.ofl-dom{margin-left:auto;font-size:9px;color:var(--live);border:1px solid rgba(15,143,82,.35);background:rgba(15,143,82,.07);padding:5px 8px;border-radius:2px;white-space:nowrap}
+.ofl-r{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;padding:14px 10px;margin:0 -10px;border-radius:3px;
+  text-decoration:none;color:var(--ink);transition:background .25s}
+.ofl-r+.ofl-r{border-top:1px solid var(--line-2)}
+.ofl-r:hover{background:var(--blue-soft)}
+.ofl-r .ic{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;font-size:16px;flex:none}
+.ofl-r .ic.eth{background:#627eea}.ofl-r .ic.usdt{background:#26a17b}.ofl-r .ic.gr{background:#07080a}
+.ofl-r .ic.sect{border-radius:9px;overflow:hidden}.ofl-r .ic.sect svg{width:38px;height:38px}
+.ofl-r .ic.gr svg{width:20px;height:20px}
+.ofl-r .tx{min-width:0}
+.ofl-r b{display:block;font-weight:400;font-size:15.5px;line-height:1.3}
+.ofl-r small{display:block;margin-top:3px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ofl-r>i{font-style:normal;color:var(--ink-3);transition:transform .35s var(--ease),color .25s}
+.ofl-r:hover>i{color:var(--blue-deep);transform:translate(3px,-3px)}
+.ofl-f{margin-top:12px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.55;color:var(--ink-3)}
+
+/* franja de confianza bajo el hero */
+.trust{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin-top:clamp(40px,7vh,72px);background:var(--line);border:1px solid var(--line)}
+.trust li{background:rgba(251,251,250,.92);padding:18px 18px 20px;display:flex;flex-direction:column;gap:6px}
+.trust li>span{font-size:9.5px;color:var(--blue-deep);font-weight:500}
+.trust b{font-weight:400;font-size:16px;line-height:1.3}
+.trust small{font-size:13px;color:var(--ink-3);line-height:1.5}
+@media (max-width:900px){.trust{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.trust{grid-template-columns:1fr}}
+@media (max-width:900px){.hero .hero-g{grid-template-columns:1fr}}
+
+
+/* ============ secciones ============ */
+.sec{padding:clamp(64px,11vh,130px) 0;border-top:1px solid var(--line-2)}
+.sec h2{margin-top:clamp(16px,2.6vh,24px);font-size:clamp(30px,4.4vw,60px);font-weight:200;line-height:1.04;letter-spacing:-.034em;max-width:20ch;text-wrap:balance}
+.sec h2 b{font-weight:400}
+.sec .sub{margin-top:18px;max-width:60ch;color:var(--ink-2);font-size:15.5px}
+
+/* dos maneras de pagar */
+.ways{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:clamp(32px,5vh,52px)}
+.way{position:relative;display:flex;flex-direction:column;gap:16px;padding:clamp(22px,2.6vw,36px);background:var(--card);border:1px solid var(--line);border-radius:2px}
+.way.best{background:var(--blue-soft);border-color:rgba(13,79,216,.28)}
+.way-tag{align-self:flex-start;font-size:9.5px;font-weight:500;padding:6px 10px;border-radius:2px;border:1px solid var(--line);color:var(--ink-3)}
+.way.best .way-tag{background:var(--blue-deep);border-color:var(--blue-deep);color:#fff}
+.way h3{display:flex;align-items:center;gap:14px;font-size:clamp(24px,2.6vw,34px);font-weight:300;letter-spacing:-.02em;line-height:1.1}
+.way h3 .tok{font-size:13px;background:#fff;border-color:var(--line);color:var(--ink)}
+.way h3 .tok i{color:#fff}
+.way p{color:var(--ink-2)}
+.ticks{list-style:none;display:grid;gap:9px;margin-top:2px}
+.ticks li{display:flex;gap:10px;align-items:baseline;font-size:14px;color:var(--ink)}
+.ticks li::before{content:'';flex:none;width:8px;height:8px;margin-top:2px;background:var(--blue-deep);transform:translateY(-1px)}
+.way .btn{margin-top:auto;align-self:flex-start}
+.way-n{position:absolute;right:clamp(18px,2vw,28px);top:clamp(16px,2vw,26px);font-size:clamp(38px,4vw,56px);font-weight:200;color:rgba(7,8,10,.12);letter-spacing:-.04em;line-height:1}
+.way.best .way-n{color:rgba(13,79,216,.22)}
+@media (max-width:800px){.ways{grid-template-columns:1fr}}
+
+/* aviso: siempre algo de ETH */
+.gas{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(16px,2.4vw,30px);align-items:center;margin-top:18px;
+  padding:clamp(20px,2.6vw,32px);background:#07080a;color:#fff;border-radius:2px;overflow:hidden}
+.gas::after{content:'';position:absolute;right:-120px;top:-160px;width:420px;height:420px;background:radial-gradient(closest-side,rgba(21,105,255,.35),transparent);pointer-events:none}
+.gas-i{width:clamp(56px,6vw,76px);height:clamp(56px,6vw,76px);border-radius:50%;display:grid;place-items:center;background:#627eea;box-shadow:0 0 0 8px rgba(98,126,234,.18)}
+.gas-i svg{width:44%;height:auto}
+.gas h3{font-size:clamp(20px,2.2vw,28px);font-weight:300;letter-spacing:-.02em;line-height:1.15}
+.gas h3 b{font-weight:500;color:#8fb3ff}
+.gas p{margin-top:8px;color:#c6ccd8;max-width:80ch;font-size:14.5px}
+@media (max-width:560px){.gas{grid-template-columns:1fr}}
+
+/* vender cuando quieras */
+.sell{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(18px,3vw,48px);align-items:center;margin-top:18px;
+  padding:clamp(22px,2.6vw,34px);background:var(--card);border:1px solid var(--line);border-left:3px solid var(--blue-deep);border-radius:2px}
+.sell h3{margin-top:12px;font-size:clamp(24px,2.6vw,34px);font-weight:200;letter-spacing:-.03em;line-height:1.1}
+.sell h3 b{font-weight:400;color:var(--blue-deep)}
+.sell p:not(.eyebrow){margin-top:10px;color:var(--ink-2);max-width:62ch}
+.sell-b{display:flex;flex-direction:column;gap:10px}
+@media (max-width:760px){.sell{grid-template-columns:1fr}.sell-b{flex-direction:row;flex-wrap:wrap}}
+
+/* verificalo tu mismo */
+.vfs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:clamp(30px,5vh,46px)}
+.vf{position:relative;display:flex;flex-direction:column;gap:10px;padding:22px 22px 20px;background:var(--card);border:1px solid var(--line);border-radius:2px;
+  text-decoration:none;color:var(--ink);transition:transform .4s var(--ease),border-color .3s,background .3s}
+.vf::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:rgba(0,0,0,.14);transition:background .3s}
+.vf:hover{transform:translateY(-4px);border-color:rgba(13,79,216,.35);background:#fff}
+.vf:hover::before{background:var(--blue)}
+.vf-s{font-size:9.5px;color:var(--blue-deep);font-weight:500}
+.vf b{font-weight:400;font-size:19px;letter-spacing:-.01em;line-height:1.25}
+.vf p{font-size:13.5px;color:var(--ink-3);line-height:1.55}
+.vf small{margin-top:auto;padding-top:10px;border-top:1px solid var(--line-2);font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-2);overflow-wrap:anywhere}
+.vf small i{font-style:normal;color:var(--blue-deep)}
+@media (max-width:900px){.vfs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.vfs{grid-template-columns:1fr}}
+
+/* antes de empezar */
+.need{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin-top:clamp(30px,5vh,46px);background:var(--line);border:1px solid var(--line)}
+.need div{background:var(--card);padding:20px 18px 22px;display:flex;flex-direction:column;gap:10px}
+.need>div>span{font-size:10px;color:var(--blue-deep);font-weight:500}
+.need b{font-weight:400;font-size:16px;line-height:1.35}
+.need small{font-size:13px;color:var(--ink-3);line-height:1.5}
+@media (max-width:900px){.need{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.need{grid-template-columns:1fr}}
+
+/* ============ pasos ============ */
+.steps{list-style:none;margin-top:clamp(34px,5vh,56px);display:grid;gap:16px;counter-reset:s}
+.step{position:relative;display:grid;grid-template-columns:clamp(70px,9vw,120px) minmax(0,1fr) minmax(0,.7fr);gap:clamp(16px,2.6vw,40px);
+  padding:clamp(20px,2.4vw,32px);background:var(--card);border:1px solid var(--line);border-radius:2px;transition:border-color .3s,transform .4s var(--ease)}
+.step::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:rgba(0,0,0,.14)}
+.step:hover{border-color:rgba(13,79,216,.35)}
+.step:hover::before{background:var(--blue)}
+.step .reg{opacity:0;transition:opacity .35s}
+.step:hover .reg{opacity:1}
+.st-n{font-size:clamp(44px,5vw,72px);font-weight:200;line-height:.9;letter-spacing:-.05em;color:var(--ink-4)}
+.step:hover .st-n{color:var(--blue-deep)}
+.st-n small{display:block;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;color:var(--ink-4)}
+.st-k{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:9.5px;color:var(--ink-3)}
+.st-k em{font-style:normal;color:#fff;background:#26a17b;padding:4px 8px;border-radius:2px;font-weight:500}
+.step h3{margin-top:10px;font-size:clamp(21px,2.1vw,28px);font-weight:300;letter-spacing:-.02em;line-height:1.15}
+.step p{margin-top:10px;color:var(--ink-2)}
+.step p b{font-weight:500;color:var(--ink)}
+.step p code,.side code{font-family:'IBM Plex Mono',monospace;font-size:.86em;background:rgba(13,79,216,.08);color:var(--blue-deep);padding:1px 6px;border-radius:2px;overflow-wrap:anywhere}
+.side{align-self:start;border-left:1px solid var(--line);padding-left:clamp(14px,1.8vw,24px);font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.side .m{display:block;font-size:9.5px;color:var(--blue-deep);margin-bottom:8px;font-weight:500}
+.side a,.step a.lk{display:inline-flex;align-items:center;gap:7px;margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:3px}
+.side a:hover,.step a.lk:hover{color:var(--blue-deep)}
+.step.only{background:linear-gradient(90deg,rgba(38,161,123,.07),var(--card) 40%)}
+@media (max-width:900px){.step{grid-template-columns:auto minmax(0,1fr)}.side{grid-column:2;border-left:0;border-top:1px solid var(--line);padding:14px 0 0}}
+@media (max-width:520px){.step{grid-template-columns:1fr;gap:10px}.side{grid-column:1}.st-n{font-size:40px}.st-n small{display:inline;margin-left:8px}}
+
+/* ============ carteras ============ */
+.wl{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.6fr);gap:18px;margin-top:clamp(32px,5vh,52px)}
+.mm{position:relative;display:flex;flex-direction:column;gap:16px;padding:clamp(24px,3vw,40px);background:#07080a;color:#fff;border-radius:2px;overflow:hidden}
+.mm::after{content:'';position:absolute;right:-90px;bottom:-140px;width:380px;height:380px;background:radial-gradient(closest-side,rgba(246,133,27,.28),transparent);pointer-events:none}
+.mm-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.mm-top>span.m{font-size:9.5px;font-weight:500;color:#07080a;background:#fff;padding:6px 10px;border-radius:2px}
+.logo-big{width:72px;height:72px;border-radius:16px;background:#fff;display:grid;place-items:center}
+.logo-big img{width:48px;height:48px}
+.mm h3{font-size:clamp(28px,3vw,40px);font-weight:300;letter-spacing:-.03em;line-height:1}
+.mm p{color:#c6ccd8;font-size:14.5px}
+.mm ul{list-style:none;display:grid;gap:8px;font-size:13.5px;color:#dfe5f0}
+.mm li{display:flex;gap:10px}
+.mm li::before{content:'→';color:#f6851b}
+.mm a{margin-top:auto;align-self:flex-start;display:inline-flex;gap:10px;align-items:center;height:46px;padding:0 18px;border:1px solid rgba(255,255,255,.35);border-radius:2px;
+  text-decoration:none;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;position:relative;z-index:1}
+.mm a:hover{border-color:#fff}
+.wg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);align-content:start}
+.w{display:flex;flex-direction:column;gap:12px;padding:20px 18px;background:var(--card);min-height:150px;transition:background .25s}
+.w:hover{background:#fff}
+.w-h{display:flex;align-items:center;gap:12px}
+.w img{width:40px;height:40px;border-radius:10px;background:#fff;box-shadow:0 0 0 1px var(--line-2)}
+.w b{font-weight:400;font-size:16px;line-height:1.2}
+.w small{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-4);margin-top:3px}
+.w p{font-size:13px;color:var(--ink-3);line-height:1.5}
+.w.wc{grid-column:1/-1;background:var(--blue-soft)}
+.w.wc:hover{background:#eef1f6}
+@media (max-width:1000px){.wl{grid-template-columns:1fr}}
+@media (max-width:640px){.wg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ============ seguridad ============ */
+.safe{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;margin-top:clamp(30px,5vh,46px);background:var(--line);border:1px solid var(--line)}
+.safe div{position:relative;background:var(--card);padding:22px 18px 24px}
+.safe>div>span{font-size:clamp(28px,3vw,40px);font-weight:200;color:var(--blue-deep);letter-spacing:-.04em;line-height:1}
+.safe b{display:block;margin-top:14px;font-weight:400;font-size:15.5px;line-height:1.3}
+.safe p{margin-top:8px;font-size:13px;color:var(--ink-3);line-height:1.55}
+@media (max-width:1000px){.safe{grid-template-columns:repeat(2,minmax(0,1fr))}.safe div:last-child{grid-column:span 2}}
+@media (max-width:520px){.safe{grid-template-columns:1fr}.safe div:last-child{grid-column:auto}}
+
+/* ============ preguntas ============ */
+.faq{margin-top:clamp(28px,4vh,44px);border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:clamp(16px,2.4vh,22px) 0;
+  font-size:clamp(17px,1.6vw,21px);font-weight:300;letter-spacing:-.01em}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary i{flex:none;position:relative;width:14px;height:14px}
+.faq summary i::before,.faq summary i::after{content:'';position:absolute;background:var(--ink);transition:transform .3s var(--ease)}
+.faq summary i::before{left:0;right:0;top:50%;height:1px}
+.faq summary i::after{top:0;bottom:0;left:50%;width:1px}
+.faq details[open] summary i::after{transform:scaleY(0)}
+.faq details p{padding:0 0 22px;max-width:72ch;color:var(--ink-2)}
+
+/* ============ cierre ============ */
+.end{padding:clamp(70px,12vh,140px) 0;text-align:center;border-top:1px solid var(--line-2)}
+.end h2{margin:18px auto 0;max-width:18ch;font-size:clamp(34px,5.4vw,76px);font-weight:200;line-height:1;letter-spacing:-.04em}
+.end h2 b{font-weight:400;color:var(--blue-deep)}
+.end .eyebrow{justify-content:center}
+.end .ctas{justify-content:center}
+.end .next{margin-top:28px;font-size:14px;color:var(--ink-3)}
+.end .next a{color:var(--blue-deep);text-decoration:none;border-bottom:1px solid currentColor}
+footer{border-top:1px solid var(--line);padding:26px 0 34px;font-size:12px;color:var(--ink-3)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px 30px}
+footer p{max-width:80ch;line-height:1.6}
+footer nav{display:flex;gap:18px;flex-wrap:wrap}
+footer a{text-decoration:none;color:var(--ink-2)}
+footer a:hover{color:var(--ink)}
+
+/* entrada suave al aparecer (solo con JavaScript) */
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.js .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}}
+</style>
+<script>document.documentElement.classList.add('js');</script>
+<script src="/analytics.js" defer></script>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="https://sectoraorg.com/">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+      <b>SECTORA</b><span class="m">Guía #SECT</span>
+    </a>
+    <div class="top-r">
+      <nav class="lang" aria-label="Language"><a href="/guide/" hreflang="en" lang="en">EN</a><a href="/guide/es/" hreflang="es" lang="es" aria-current="page">ES</a><a href="/guide/pt/" hreflang="pt" lang="pt">PT</a></nav>
+      <a class="back m" href="https://sectoraorg.com/">← Web principal</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ hero: el texto y, al lado, los enlaces oficiales ============ -->
+<section class="hero paper">
+  <div class="wrap hero-g">
+    <div>
+      <p class="eyebrow m"><i></i>Guía · Uniswap · Ethereum</p>
+      <h1>Compra y vende #SECT en Uniswap, <b>cuando quieras.</b></h1>
+      <p class="lede">#SECT se negocia de forma abierta en <strong>Uniswap</strong>, el mayor exchange descentralizado de Ethereum. Operas desde tu propia cartera, las 24 horas: Sectora nunca guarda tus fondos ni te pide enviar dinero a ningún sitio. Paga con <strong>ETH</strong>, la vía más directa, o con <strong>USDT</strong>, manteniendo un poco de ETH para la comisión de red.</p>
+      <div class="ctas">
+        <a class="btn pri" href="https://app.uniswap.org/swap?chain=ethereum&amp;inputCurrency=ETH&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener noreferrer">Comprar en Uniswap con ETH<i aria-hidden="true">↗</i></a>
+        <a class="btn alt" href="#steps">Ver los pasos<i aria-hidden="true">↓</i></a>
+      </div>
+      <div class="ca">
+        <div class="ca-h m"><span>Contrato oficial de #SECT</span><b>Ethereum · ERC-20</b></div>
+        <div class="ca-b"><code id="ca">0x8C9984B06281f1CA9416e493c2E602AaB08513db</code><button class="copy" type="button" data-copy="0x8C9984B06281f1CA9416e493c2E602AaB08513db" data-ok="Copiado">Copiar</button></div>
+        <p class="ca-f m">Compáralo antes de cada operación · <a href="https://etherscan.io/token/0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener noreferrer">Etherscan ↗</a></p>
+      </div>
+    </div>
+
+    <aside class="ofl" aria-labelledby="ofl-t">
+      <span class="reg" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <div class="ofl-h">
+        <span class="ofl-seal" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.5 4 5.6v6.1c0 4.9 3.4 8.6 8 9.8 4.6-1.2 8-4.9 8-9.8V5.6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m8.4 12.2 2.4 2.4 4.8-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><p class="m" id="ofl-t">Enlaces oficiales</p><b>Directo a Uniswap</b></div>
+        <span class="ofl-dom m">app.uniswap.org</span>
+      </div>
+      <a class="ofl-r" href="https://app.uniswap.org/swap?chain=ethereum&amp;inputCurrency=ETH&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener noreferrer"><span class="ic eth"><svg viewBox="0 0 16 26" width="10"><path d="M8 0 0 13.2 8 18 16 13.2z" fill="#fff"/><path d="M8 19.6 0 14.8 8 26l8-11.2z" fill="#fff" opacity=".75"/></svg></span><span class="tx"><b>Comprar #SECT con ETH</b><small>app.uniswap.org/swap · ETH → SECT</small></span><i aria-hidden="true">↗</i></a>
+      <a class="ofl-r" href="https://app.uniswap.org/swap?chain=ethereum&amp;inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener noreferrer"><span class="ic usdt">₮</span><span class="tx"><b>Comprar #SECT con USDT</b><small>app.uniswap.org/swap · USDT → SECT</small></span><i aria-hidden="true">↗</i></a>
+      <a class="ofl-r" href="https://app.uniswap.org/swap?chain=ethereum&amp;inputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;outputCurrency=ETH" target="_blank" rel="noopener noreferrer"><span class="ic sect"><svg viewBox="0 0 100 100"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg></span><span class="tx"><b>Vender #SECT por ETH</b><small>app.uniswap.org/swap · SECT → ETH</small></span><i aria-hidden="true">↗</i></a>
+      <a class="ofl-r" href="https://app.uniswap.org/swap?chain=ethereum&amp;inputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;outputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7" target="_blank" rel="noopener noreferrer"><span class="ic sect"><svg viewBox="0 0 100 100"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg></span><span class="tx"><b>Vender #SECT por USDT</b><small>app.uniswap.org/swap · SECT → USDT</small></span><i aria-hidden="true">↗</i></a>
+      <a class="ofl-r" href="https://app.uniswap.org/explore/tokens/ethereum/0x8c9984b06281f1ca9416e493c2e602aab08513db" target="_blank" rel="noopener noreferrer"><span class="ic gr"><svg viewBox="0 0 24 24"><path d="M3 17.5 9 11l4 4 8-9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="tx"><b>#SECT en Uniswap: precio, gráfico, pools</b><small>app.uniswap.org/explore/tokens/ethereum/0x8c99…13db</small></span><i aria-hidden="true">↗</i></a>
+      <p class="ofl-f">Cada enlace abre directamente app.uniswap.org. La operación ocurre entre tu cartera y el pool de Uniswap: Sectora nunca toca tus fondos ni procesa pagos.</p>
+    </aside>
+  </div>
+
+  <!-- franja de confianza -->
+  <div class="wrap">
+    <ul class="trust">
+      <li><span class="m">01</span><b>Tu cartera, tus llaves</b><small>Sin custodia: operas desde tu propia cartera.</small></li>
+      <li><span class="m">02</span><b>Abierto 24/7</b><small>Compra o vende en Uniswap cuando quieras.</small></li>
+      <li><span class="m">03</span><b>0% de impuesto</b><small>Sin impuesto del token al comprar ni al vender.</small></li>
+      <li><span class="m">04</span><b>Verificable en la cadena</b><small>Contrato, auditoría y bloqueo de liquidez, todo público.</small></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ dos maneras de pagar ============ -->
+<section class="sec paper" id="ways">
+  <div class="wrap">
+    <p class="eyebrow m rv"><i></i>01 · Dos formas de pagar</p>
+    <h2 class="rv">Paga con ETH <b>o con USDT.</b></h2>
+    <div class="ways">
+      <article class="way best rv">
+        <span class="way-n" aria-hidden="true">A</span>
+        <span class="way-tag m">Recomendado · Más fácil</span>
+        <h3>Paga con ETH</h3>
+        <p>Una sola transacción y listo. Uniswap convierte tu ETH a través del pool SECT/USDT de forma automática, y la comisión de red sale del mismo ETH.</p>
+        <ul class="ticks">
+          <li>Una transacción: el intercambio</li>
+          <li>Sin aprobación previa</li>
+          <li>Solo necesitas ETH en tu cartera</li>
+        </ul>
+        <a class="btn pri" href="https://app.uniswap.org/swap?chain=ethereum&amp;inputCurrency=ETH&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener noreferrer">Comprar con ETH<i aria-hidden="true">↗</i></a>
+      </article>
+      <article class="way rv">
+        <span class="way-n" aria-hidden="true">B</span>
+        <span class="way-tag m">También se puede</span>
+        <h3>Paga con USDT</h3>
+        <p>Cambia USDT por #SECT directamente en el pool. La primera vez, Uniswap te pide aprobar el USDT: es una transacción más, y las dos se pagan en ETH.</p>
+        <ul class="ticks">
+          <li>USDT en Ethereum (ERC-20)</li>
+          <li>Apruebas una vez y luego intercambias</li>
+          <li>Mantén algo de ETH para la comisión</li>
+        </ul>
+        <a class="btn alt" href="https://app.uniswap.org/swap?chain=ethereum&amp;inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener noreferrer">Comprar con USDT<i aria-hidden="true">↗</i></a>
+      </article>
+    </div>
+    <div class="gas rv">
+      <div class="gas-i" aria-hidden="true"><svg viewBox="0 0 16 26"><path d="M8 0 0 13.2 8 18 16 13.2z" fill="#fff"/><path d="M8 19.6 0 14.8 8 26l8-11.2z" fill="#fff" opacity=".75"/></svg></div>
+      <div>
+        <h3>Mantén siempre <b>algo de ETH</b> en tu cartera.</h3>
+        <p>Cada transacción en Ethereum —la aprobación y el intercambio— paga su comisión de red en ETH, aunque compres con USDT. Sin ETH, tu cartera no puede enviar nada. Deja lo suficiente para varias transacciones; tu cartera te muestra la comisión exacta antes de confirmar.</p>
+      </div>
+    </div>
+    <div class="sell rv">
+      <div>
+        <p class="eyebrow m"><i></i>Vender</p>
+        <h3>Vende <b>cuando quieras.</b></h3>
+        <p>Vender es el mismo intercambio al revés: elige #SECT en “Sell” y ETH o USDT en “Buy”. El pool está abierto las 24 horas y no hay impuesto del token al vender.</p>
+      </div>
+      <div class="sell-b">
+        <a class="btn alt" href="https://app.uniswap.org/swap?chain=ethereum&amp;inputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;outputCurrency=ETH" target="_blank" rel="noopener noreferrer">Vender por ETH<i aria-hidden="true">↗</i></a>
+        <a class="btn alt" href="https://app.uniswap.org/swap?chain=ethereum&amp;inputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;outputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7" target="_blank" rel="noopener noreferrer">Vender por USDT<i aria-hidden="true">↗</i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ antes de empezar ============ -->
+<section class="sec paper" id="start">
+  <div class="wrap">
+    <p class="eyebrow m rv"><i></i>02 · Antes de empezar</p>
+    <h2 class="rv">Cuatro cosas <b>y estás listo.</b></h2>
+    <div class="need rv">
+      <div><span class="m">01</span><b>Una cartera</b><small>MetaMask es la más usada. Más abajo tienes otras.</small></div>
+      <div><span class="m">02</span><b>ETH en Ethereum</b><small>O USDT en Ethereum más un poco de ETH para comisiones.</small></div>
+      <div><span class="m">03</span><b>El contrato oficial</b><small><code style="font-family:'IBM Plex Mono',monospace;font-size:12px">0x8C99…13db</code> — cópialo arriba en esta página.</small></div>
+      <div><span class="m">04</span><b>Unos 5 minutos</b><small>En el ordenador o en el móvil.</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ pasos ============ -->
+<section class="sec paper" id="steps">
+  <div class="wrap">
+    <p class="eyebrow m rv"><i></i>03 · Paso a paso</p>
+    <h2 class="rv">De cero a #SECT <b>en nueve pasos.</b></h2>
+    <ol class="steps">
+      <li class="step rv"><span class="reg" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="st-n">01<small>/ 09</small></span>
+        <div><p class="st-k m">Cartera</p>
+          <h3>Instala MetaMask</h3>
+          <p>Descárgala solo desde <b>metamask.io</b> o la tienda oficial de tu móvil. Crea una cartera nueva y apunta la <b>frase secreta de recuperación</b> en papel. Nunca la escribas en una web ni la compartas.</p></div>
+        <div class="side"><span class="m">Consejo</span>En el móvil usa la app de MetaMask; en el ordenador, la extensión del navegador. Nadie de Sectora te pedirá nunca tu frase.<br><a href="https://metamask.io/download/" target="_blank" rel="noopener noreferrer">metamask.io ↗</a></div>
+      </li>
+      <li class="step rv"><span class="reg" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="st-n">02<small>/ 09</small></span>
+        <div><p class="st-k m">Fondos</p>
+          <h3>Pon ETH (o USDT) en tu cartera</h3>
+          <p>Compra ETH en un exchange, o con tarjeta dentro de MetaMask, y envíalo a la dirección de tu cartera. Al retirar desde un exchange, elige la red <b>Ethereum (ERC-20)</b>.</p></div>
+        <div class="side"><span class="m">¿Pagas con USDT?</span>Envía USDT en Ethereum —el USDT de Tron, BNB Chain u otras redes no llega a este pool— y envía también un poco de ETH para las comisiones.</div>
+      </li>
+      <li class="step rv"><span class="reg" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="st-n">03<small>/ 09</small></span>
+        <div><p class="st-k m">Uniswap</p>
+          <h3>Abre Uniswap</h3>
+          <p>Entra en <b>app.uniswap.org</b> —revisa la dirección— o usa los botones de esta página: abren Uniswap con #SECT ya seleccionado.</p>
+          <a class="lk" href="https://app.uniswap.org/swap?chain=ethereum&amp;inputCurrency=ETH&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener noreferrer">Abrir Uniswap con #SECT ↗</a></div>
+        <div class="side"><span class="m">En el móvil</span>Abre el enlace desde el navegador que trae la app de MetaMask (o la de tu cartera). Así la cartera se conecta sin salir de la página.</div>
+      </li>
+      <li class="step rv"><span class="reg" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="st-n">04<small>/ 09</small></span>
+        <div><p class="st-k m">Conectar</p>
+          <h3>Conecta tu cartera</h3>
+          <p>Pulsa <b>Connect</b>, elige MetaMask (o tu cartera) y aprueba la conexión en la cartera. Comprueba que la red sea <b>Ethereum</b>.</p></div>
+        <div class="side"><span class="m">Para saber</span>Conectar es gratis y no mueve fondos. Solo deja que Uniswap vea tu dirección y tus saldos.</div>
+      </li>
+      <li class="step rv"><span class="reg" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="st-n">05<small>/ 09</small></span>
+        <div><p class="st-k m">Tokens</p>
+          <h3>Elige con qué pagas y #SECT</h3>
+          <p>En <b>Sell</b> (vender) elige ETH o USDT. En <b>Buy</b> (comprar) elige #SECT; si no aparece, pega el contrato <code>0x8C9984B06281f1CA9416e493c2E602AaB08513db</code>.</p></div>
+        <div class="side"><span class="m">Puede salir un aviso</span>Uniswap puede avisar de que el token no está en su lista por defecto. Es normal en tokens fuera de sus listas: comprueba que la dirección coincide exactamente y continúa.</div>
+      </li>
+      <li class="step rv"><span class="reg" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="st-n">06<small>/ 09</small></span>
+        <div><p class="st-k m">Cantidad</p>
+          <h3>Escribe la cantidad y revisa</h3>
+          <p>Escribe cuánto quieres gastar. Antes de seguir, revisa el precio, el <b>impacto en el precio</b>, el <b>mínimo que recibirás</b> y la <b>comisión de red</b>.</p></div>
+        <div class="side"><span class="m">Si falla</span>Si el intercambio falla porque el precio se movió, sube un poco el deslizamiento (slippage) en los ajustes (por ejemplo a 1–3%) y vuelve a intentarlo.</div>
+      </li>
+      <li class="step only rv"><span class="reg" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="st-n">07<small>/ 09</small></span>
+        <div><p class="st-k m">Aprobación <em>Solo con USDT</em></p>
+          <h3>Aprueba el USDT (solo la primera vez)</h3>
+          <p>La primera vez que pagas con USDT, Uniswap pide permiso para usarlo. Confírmalo en tu cartera: es una transacción con comisión de red en ETH. Uniswap también puede pedirte firmar un mensaje, que es gratis.</p></div>
+        <div class="side"><span class="m">¿Pagas con ETH?</span>Sáltate este paso: el ETH no necesita aprobación.</div>
+      </li>
+      <li class="step rv"><span class="reg" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="st-n">08<small>/ 09</small></span>
+        <div><p class="st-k m">Intercambio</p>
+          <h3>Intercambia y confirma</h3>
+          <p>Pulsa <b>Swap</b>, revisa el resumen y confirma en tu cartera. Ethereum suele confirmar en menos de un minuto; Uniswap te avisa cuando termina.</p></div>
+        <div class="side"><span class="m">Revisa la comisión</span>Tu cartera muestra la comisión de red antes de confirmar. Si no tienes ETH suficiente, la cartera no te dejará continuar.</div>
+      </li>
+      <li class="step rv"><span class="reg" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="st-n">09<small>/ 09</small></span>
+        <div><p class="st-k m">Listo</p>
+          <h3>Ve tus #SECT en la cartera</h3>
+          <p>Si MetaMask todavía no muestra #SECT, elige <b>Importar tokens</b> y pega la dirección del contrato; el símbolo y los decimales se rellenan solos.</p></div>
+        <div class="side"><span class="m">Siguiente</span>Los holders pueden depositar #SECT en el contrato de recompensas y ganar recompensas cada segundo, sin bloqueo.<br><a href="https://sectoraorg.com/staking/">Recompensas para holders →</a></div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ carteras ============ -->
+<section class="sec paper" id="wallets">
+  <div class="wrap">
+    <p class="eyebrow m rv"><i></i>04 · Carteras</p>
+    <h2 class="rv">Funciona con las carteras <b>que ya usas.</b></h2>
+    <div class="wl">
+      <article class="mm rv">
+        <div class="mm-top"><span class="logo-big"><img data-w="metaMask" alt="MetaMask" width="48" height="48"></span><span class="m">Recomendada</span></div>
+        <h3>MetaMask</h3>
+        <p>La cartera más usada en Ethereum, y la que sigue esta guía. Uniswap se conecta a ella con un toque.</p>
+        <ul>
+          <li>Extensión para Chrome, Brave, Edge y Firefox</li>
+          <li>App para iPhone y Android, con navegador integrado</li>
+          <li>Compra ETH con tarjeta dentro de la cartera</li>
+        </ul>
+        <a href="https://metamask.io/download/" target="_blank" rel="noopener noreferrer">Descargar MetaMask ↗</a>
+      </article>
+      <div class="wg rv">
+        <div class="w"><div class="w-h"><img data-w="coinbase" alt="" width="40" height="40"><div><b>Coinbase Wallet</b><small>App · extensión</small></div></div><p>Cartera de autocustodia; se conecta directo a Uniswap.</p></div>
+        <div class="w"><div class="w-h"><img data-w="trust" alt="" width="40" height="40"><div><b>Trust Wallet</b><small>App · extensión</small></div></div><p>Muy usada en el móvil; conéctala con WalletConnect.</p></div>
+        <div class="w"><div class="w-h"><img data-w="rainbow" alt="" width="40" height="40"><div><b>Rainbow</b><small>App · extensión</small></div></div><p>Cartera sencilla para Ethereum con WalletConnect.</p></div>
+        <div class="w"><div class="w-h"><img data-w="okx" alt="" width="40" height="40"><div><b>OKX Wallet</b><small>App · extensión</small></div></div><p>Cartera multicadena; usa la red Ethereum.</p></div>
+        <div class="w"><div class="w-h"><img data-w="zerion" alt="" width="40" height="40"><div><b>Zerion</b><small>App · extensión</small></div></div><p>Cartera y seguimiento de portafolio en uno.</p></div>
+        <div class="w"><div class="w-h"><img data-w="safepal" alt="" width="40" height="40"><div><b>SafePal</b><small>App · hardware</small></div></div><p>Cartera de software y hardware, con WalletConnect.</p></div>
+        <div class="w wc"><div class="w-h"><img data-w="walletConnect" alt="" width="40" height="40"><div><b>WalletConnect</b><small>Cualquier cartera compatible</small></div></div><p>Escanea un código QR para conectar cientos de carteras, incluidas carteras físicas como Ledger a través de Ledger Live. Uniswap Wallet y Rabby también funcionan.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ verificalo tu mismo ============ -->
+<section class="sec paper" id="verify">
+  <div class="wrap">
+    <p class="eyebrow m rv"><i></i>05 · Compruébalo tú mismo</p>
+    <h2 class="rv">Todo es público. <b>Compruébalo tú.</b></h2>
+    <p class="sub rv">No tienes que creernos nada: cada dato enlaza a una fuente independiente.</p>
+    <div class="vfs rv">
+      <a class="vf" href="https://etherscan.io/address/0x8C9984B06281f1CA9416e493c2E602AaB08513db#code" target="_blank" rel="noopener noreferrer"><span class="m vf-s">Etherscan</span><b>Código del contrato</b><p>El código fuente verificado del contrato de #SECT, público en Ethereum.</p><small>etherscan.io/address/0x8C9984B06281f1CA9416e493c2E602AaB08513db#code <i aria-hidden="true">↗</i></small></a>
+      <a class="vf" href="https://www.cyberscope.io/audits/sect" target="_blank" rel="noopener noreferrer"><span class="m vf-s">Cyberscope</span><b>Auditoría de seguridad</b><p>Una auditoría independiente del contrato inteligente de #SECT.</p><small>cyberscope.io/audits/sect <i aria-hidden="true">↗</i></small></a>
+      <a class="vf" href="https://etherscan.io/nft/0xc36442b4a4522e871399cd717abdd847ab11fe88/1360231" target="_blank" rel="noopener noreferrer"><span class="m vf-s">Team Finance · Etherscan</span><b>Liquidez bloqueada</b><p>La liquidez inicial la guarda Team Finance, un bloqueador externo, no la fundación.</p><small>etherscan.io/nft/0xc364…fe88/1360231 <i aria-hidden="true">↗</i></small></a>
+      <a class="vf" href="https://www.coingecko.com/en/coins/sectora" target="_blank" rel="noopener noreferrer"><span class="m vf-s">CoinGecko</span><b>Datos de mercado</b><p>Precio, liquidez y volumen de negociación, visibles en tiempo real.</p><small>coingecko.com/en/coins/sectora <i aria-hidden="true">↗</i></small></a>
+      <a class="vf" href="https://sectoraorg.com/docs#s03" target="_blank" rel="noopener noreferrer"><span class="m vf-s">Auditoría del contrato</span><b>0% de impuesto</b><p>Sin impuesto del token en compras ni en ventas.</p><small>sectoraorg.com/docs#s03 <i aria-hidden="true">↗</i></small></a>
+      <a class="vf" href="https://sectoraorg.com/docs#s02" target="_blank" rel="noopener noreferrer"><span class="m vf-s">Illinois, EE. UU.</span><b>Empresa registrada</b><p>Sectora Foundation IL, registrada en Illinois, EE. UU., número de expediente 18523639.</p><small>sectoraorg.com/docs#s02 <i aria-hidden="true">↗</i></small></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ seguridad ============ -->
+<section class="sec paper" id="safety">
+  <div class="wrap">
+    <p class="eyebrow m rv"><i></i>06 · Seguridad</p>
+    <h2 class="rv">Cinco comprobaciones <b>antes de cada compra.</b></h2>
+    <div class="safe rv">
+      <div><span>01</span><b>Solo app.uniswap.org</b><p>O los enlaces de sectoraorg.com. Existen copias falsas de Uniswap.</p></div>
+      <div><span>02</span><b>Revisa el contrato</b><p>0x8C99…13db. Cualquiera puede crear tokens con el mismo nombre.</p></div>
+      <div><span>03</span><b>Nunca compartas tu frase</b><p>Ningún soporte real te la pedirá. Sectora no te escribirá primero.</p></div>
+      <div><span>04</span><b>Empieza con poco</b><p>La primera vez, prueba con una cantidad pequeña para aprender el proceso.</p></div>
+      <div><span>05</span><b>Red: Ethereum</b><p>#SECT, el pool y tus fondos tienen que estar en Ethereum mainnet.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ preguntas ============ -->
+<section class="sec paper" id="faq">
+  <div class="wrap">
+    <p class="eyebrow m rv"><i></i>07 · Preguntas</p>
+    <h2 class="rv">Preguntas frecuentes.</h2>
+    <div class="faq rv">
+      <details><summary>¿Por qué necesito ETH si pago con USDT?<i aria-hidden="true"></i></summary>
+        <p>Porque Ethereum cobra la comisión de red de cada transacción en ETH. El USDT paga los #SECT; el ETH paga la transacción que los mueve.</p></details>
+      <details><summary>¿Puedo vender cuando quiera?<i aria-hidden="true"></i></summary>
+        <p>Sí. #SECT se negocia en Uniswap las 24 horas. Vender es el mismo intercambio al revés, desde tu propia cartera y sin impuesto del token; solo pagas las comisiones que Uniswap muestra en la cotización y la comisión de red en ETH.</p></details>
+      <details><summary>Uniswap muestra un aviso sobre #SECT. ¿Es normal?<i aria-hidden="true"></i></summary>
+        <p>Sí. Uniswap marca los tokens que no están en sus listas por defecto. Confirma que la dirección es exactamente 0x8C9984B06281f1CA9416e493c2E602AaB08513db y continúa.</p></details>
+      <details><summary>La app de mi cartera no calcula la comisión de red.<i aria-hidden="true"></i></summary>
+        <p>Abre app.uniswap.org desde un ordenador o desde el navegador integrado de la propia cartera. El pool y la ruta son los mismos.</p></details>
+      <details><summary>El intercambio falló. ¿Qué pasó?<i aria-hidden="true"></i></summary>
+        <p>Normalmente el precio se movió mientras confirmabas, o no había ETH suficiente para la comisión. Tus tokens siguen en tu cartera, aunque una transacción fallida también cobra su comisión de red. Revisa tu ETH, sube un poco el slippage y vuelve a intentarlo.</p></details>
+      <details><summary>¿Puedo comprar con tarjeta?<i aria-hidden="true"></i></summary>
+        <p>#SECT directamente no. Compra ETH con tu tarjeta dentro de MetaMask o en un exchange y luego sigue los pasos de arriba.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ cierre ============ -->
+<section class="end paper">
+  <div class="wrap">
+    <p class="eyebrow m rv"><i></i>Enlaces oficiales</p>
+    <h2 class="rv">Compra y vende #SECT <b>en Uniswap.</b></h2>
+    <div class="ctas rv">
+      <a class="btn pri" href="https://app.uniswap.org/swap?chain=ethereum&amp;inputCurrency=ETH&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener noreferrer">Comprar con ETH<i aria-hidden="true">↗</i></a>
+      <a class="btn alt" href="https://app.uniswap.org/swap?chain=ethereum&amp;inputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;outputCurrency=ETH" target="_blank" rel="noopener noreferrer">Vender #SECT<i aria-hidden="true">↗</i></a>
+      <a class="btn alt" href="https://app.uniswap.org/explore/tokens/ethereum/0x8c9984b06281f1ca9416e493c2e602aab08513db" target="_blank" rel="noopener noreferrer">#SECT en Uniswap<i aria-hidden="true">↗</i></a>
+    </div>
+    <p class="next rv">¿Ya tienes #SECT? <a href="https://sectoraorg.com/staking/">Gana recompensas como holder →</a></p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Esta guía explica cómo usar Uniswap; no es asesoramiento de inversión. El precio de los criptoactivos se mueve y puedes perder dinero. #SECT se compra y se vende al precio que marca el mercado. © Sectora Foundation IL.</p>
+    <nav class="m"><a href="https://sectoraorg.com/">Sectora</a><a href="https://sectoraorg.com/docs">Whitepaper</a><a href="https://sectoraorg.com/staking/">Staking</a><a href="https://sectoraorg.com/security/">Shield</a></nav>
+  </div>
+</footer>
+
+<script src="/dashboard-wallet-logos.js" defer></script>
+<script>
+/* copiar el contrato, logos de las carteras y entrada al hacer scroll */
+(function(){
+  document.querySelectorAll('.copy').forEach(function(b){var t0=b.textContent;b.addEventListener('click',function(){
+    var v=b.dataset.copy,done=function(){b.classList.add('ok');b.textContent=b.dataset.ok;setTimeout(function(){b.classList.remove('ok');b.textContent=t0;},1800);};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,function(){sel();});else sel();
+    function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById('ca'));var s=getSelection();s.removeAllRanges();s.addRange(r);try{document.execCommand('copy');done();}catch(e){}}
+  });});
+
+  addEventListener('DOMContentLoaded',function(){var L=window.SECTORA_WALLET_LOGOS||{};
+    document.querySelectorAll('img[data-w]').forEach(function(i){if(L[i.dataset.w])i.src=L[i.dataset.w];});});
+
+  var rv=document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window)){rv.forEach(function(e){e.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.08});
+  rv.forEach(function(e){io.observe(e);});
+})();
+</script>
+</body>
+</html>
