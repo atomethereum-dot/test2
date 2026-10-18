@@ -89,7 +89,7 @@
 
     <article class="inc feat">
       <div class="inc-v">
-        <video data-poster="vid-bitget.jpg" data-src="../media/sectora-shield-bitget-X-1080p60.mp4" data-src-m="../media/sectora-shield-bitget-X-720.mp4" playsinline preload="none" aria-label="Video: Bitget incident analysis"></video><img class="vp" src="vid-bitget.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+        <video data-poster="vid-bitget.jpg" data-t0="1" data-src="../media/sectora-shield-bitget-X-1080p60.mp4" data-src-m="../media/sectora-shield-bitget-X-720.mp4" playsinline preload="none" aria-label="Video: Bitget incident analysis"></video><img class="vp" fetchpriority="low" src="vid-bitget.jpg" alt="" width="1280" height="720" decoding="async">
         <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
       </div>
       <div class="inc-t">
@@ -113,7 +113,7 @@
     <div class="inc-grid">
       <article class="inc">
         <div class="inc-v">
-          <video data-poster="vid-compare.jpg" data-src="../media/sectora-shield-vs-bitget-en-1080p60.mp4" data-src-m="../media/sectora-shield-vs-bitget-en-720.mp4" playsinline preload="none" aria-label="Video: Same attack, two endings"></video><img class="vp" src="vid-compare.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+          <video data-poster="vid-compare.jpg" data-t0="0.15" data-src="../media/sectora-shield-vs-bitget-en-1080p60.mp4" data-src-m="../media/sectora-shield-vs-bitget-en-720.mp4" playsinline preload="none" aria-label="Video: Same attack, two endings"></video><img class="vp" fetchpriority="low" src="vid-compare.jpg" alt="" width="1280" height="720" decoding="async">
         <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
         <span class="inc-tag m">Comparison · same attack</span>
@@ -125,7 +125,7 @@
 
       <article class="inc">
         <div class="inc-v">
-          <video data-poster="vid-hacks2026.jpg" data-src="../media/sectora-quantum-hacks-X-1080p.mp4" data-src-m="../media/sectora-quantum-hacks-X-720.mp4" playsinline preload="none" aria-label="Video: 2026 hacks and the quantum threat"></video><img class="vp" src="vid-hacks2026.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+          <video data-poster="vid-hacks2026.jpg" data-t0="0.4" data-src="../media/sectora-quantum-hacks-X-1080p.mp4" data-src-m="../media/sectora-quantum-hacks-X-720.mp4" playsinline preload="none" aria-label="Video: 2026 hacks and the quantum threat"></video><img class="vp" fetchpriority="low" src="vid-hacks2026.jpg" alt="" width="1280" height="720" decoding="async">
         <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
         <span class="inc-tag m">Threat intelligence · 2026</span>
@@ -137,7 +137,7 @@
 
       <article class="inc">
         <div class="inc-v">
-          <video data-poster="vid-harvest.jpg" data-src="../media/sectora-shield-harvest-X-1080p.mp4" data-src-m="../media/sectora-shield-harvest-X-720.mp4" playsinline preload="none" aria-label="Video: Harvest now, decrypt later"></video><img class="vp" src="vid-harvest.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+          <video data-poster="vid-harvest.jpg" data-t0="0" data-src="../media/sectora-shield-harvest-X-1080p.mp4" data-src-m="../media/sectora-shield-harvest-X-720.mp4" playsinline preload="none" aria-label="Video: Harvest now, decrypt later"></video><img class="vp" fetchpriority="low" src="vid-harvest.jpg" alt="" width="1280" height="720" decoding="async">
         <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
         <span class="inc-tag m">Post-quantum · threat model</span>
@@ -264,68 +264,78 @@
 /* expedientes: los videos se portan como los films de la portada: se piden al
    acercarse, arrancan solos al verse y se paran al salir. Suena uno solo, el
    que mas se ve.
-   - Encima de cada video va su poster como imagen; se funde cuando el video
-     ya esta pintando su primer fotograma, asi nunca se ve el negro de la carga.
-   - Hasta que el visitante toca la pagina, todos van mudos: el navegador no
-     deja sonar antes y, si se le quita el mudo, pausa el video. Reintentarlo
-     en cada scroll era lo que los dejaba pegados. El sonido entra con el
-     primer toque, o con "Sound".
-   - Los de la rejilla se ven pequenos y van siempre a 720p; el destacado va a
-     1080p solo en pantallas grandes sin ahorro de datos.
+   - Encima de cada video va su poster como imagen; se funde cuando el video ya
+     pinta imagen de verdad, asi nunca se ve el negro de la carga.
+   - Cada video arranca en su data-t0, despues del fundido oscuro de entrada.
+   - El sonido solo se enciende dentro de un toque, un clic o "Sound". Safari
+     y todos los navegadores del iPhone pausan un video si se le quita el mudo
+     fuera de un toque; el codigo lo volvia a arrancar mudo y en el siguiente
+     scroll lo intentaba otra vez: ese bucle era el parpadeo. En Chrome,
+     Firefox y Edge, despues del primer toque el sonido sigue al video que se
+     ve; si aun asi el navegador pausa uno, se deja mudo hasta el proximo toque.
+   - Para no encender y apagar en el borde, arranca con la mitad a la vista y
+     se para por debajo de una quinta parte.
+   - Los de la rejilla van siempre a 720p; el destacado va a 1080p solo en
+     pantallas grandes sin ahorro de datos.
    Con "reducir movimiento" no arrancan solos: quedan el poster y los controles. */
 (function(){
   var vs=[].slice.call(document.querySelectorAll('#incidents .inc-v video'));if(!vs.length)return;
   var grande=matchMedia('(min-width: 1100px)').matches&&!(navigator.connection&&navigator.connection.saveData);
   var quieto=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var ua=navigator.userActivation,activo=!!(ua&&ua.hasBeenActive);
-  var quiere=true,dueno=null,ratio=new Map(),propia=new Set();
+  var nav=navigator.userAgent,webkit=/iP(hone|ad|od)/.test(nav)||(/Macintosh/.test(nav)&&navigator.maxTouchPoints>1)||(/Safari\//.test(nav)&&!/Chrom|CriOS|FxiOS|Edg|OPR|Android/.test(nav));
+  var ua=navigator.userActivation,activo=!webkit&&!!(ua&&ua.hasBeenActive),bloq=false;
+  var quiere=true,dueno=null,ratio=new Map(),dentro=new Set(),propia=new Set();
   function caja(v){return v.parentNode;}
   function boton(v){return caja(v).querySelector('.pr-snd');}
+  function t0(v){return parseFloat(v.dataset.t0)||0;}
   function url(v){var d=v.dataset;return (grande&&v.closest('.feat'))?d.src:(d.srcM||d.src);}
   function carga(v,ya){if(!v.getAttribute('poster'))v.poster=v.dataset.poster;
     if(!v.getAttribute('src')){v.preload=ya?'auto':'metadata';v.src=url(v);}}
-  /* el poster se retira cuando el video ya muestra imagen de verdad */
-  function pinta(v){var c=caja(v);if(c.classList.contains('on'))return;
-    if(v.requestVideoFrameCallback)v.requestVideoFrameCallback(function(){c.classList.add('on');});
-    else setTimeout(function(){c.classList.add('on');},80);}
   function marca(){vs.forEach(function(v){var b=boton(v),on=!v.muted&&!v.paused;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});}
-  function visto(v){return (ratio.get(v)||0)>=.5&&!document.hidden;}
+  /* el poster se retira cuando el video ya muestra un fotograma del punto de arranque */
+  function pinta(v){var c=caja(v);if(c.classList.contains('on'))return;
+    var fin=function(){if(v.currentTime>=t0(v)-.05)c.classList.add('on');else if(v.requestVideoFrameCallback)v.requestVideoFrameCallback(fin);else setTimeout(fin,80);};
+    if(v.requestVideoFrameCallback)v.requestVideoFrameCallback(fin);else setTimeout(fin,80);}
+  function visto(v){return dentro.has(v)&&!document.hidden;}
   function elige(){if(dueno&&visto(dueno))return dueno;var m=null;vs.forEach(function(v){if(visto(v)&&(!m||ratio.get(v)>ratio.get(m)))m=v;});return m;}
-  function arranca(v){var p=v.play();if(p&&p.catch)p.catch(function(e){if(e&&e.name==='NotAllowedError'&&!v.muted){v.muted=true;arranca(v);}});}
-  function juega(v,conSonido){carga(v,true);if(v.preload!=='auto')v.preload='auto';if(v.ended)v.currentTime=0;
-    var m=!(conSonido&&activo);if(v.muted!==m)v.muted=m;if(v.paused)arranca(v);}
+  function arranca(v){var p=v.play();if(p&&p.catch)p.catch(function(e){if(e&&e.name==='NotAllowedError'&&!v.muted){v.muted=true;bloq=true;arranca(v);marca();}});}
+  function juega(v,conSonido){carga(v,true);if(v.preload!=='auto')v.preload='auto';
+    if(v.ended||v.currentTime<t0(v)-.05)try{v.currentTime=t0(v);}catch(e){}
+    var m=!(conSonido&&activo&&!bloq&&!webkit);if(v.muted!==m)v.muted=m;if(v.paused)arranca(v);}
   function para(v){if(!v.paused){propia.add(v);v.pause();}}
   function ajusta(){if(quieto)return;var s=quiere?elige():null;vs.forEach(function(v){if(visto(v))juega(v,v===s);else para(v);});marca();}
+  /* con sonido, siempre dentro del gesto del visitante */
+  function suena(v){activo=true;bloq=false;quiere=true;dueno=v;vs.forEach(function(o){if(o!==v)o.muted=true;});carga(v,true);
+    if(v.ended||v.currentTime<t0(v)-.05)try{v.currentTime=t0(v);}catch(e){}v.muted=false;if(v.paused)arranca(v);marca();}
   vs.forEach(function(v){
+    v.addEventListener('loadedmetadata',function(){if(v.currentTime<t0(v))try{v.currentTime=t0(v);}catch(e){}});
     v.addEventListener('playing',function(){pinta(v);marca();});
-    /* si el navegador lo pausa por sonar sin permiso, sigue mudo; nunca se reintenta con sonido solo */
+    /* si el navegador lo pausa por sonar sin permiso: mudo y quieto hasta el proximo toque */
     v.addEventListener('pause',function(){var mia=propia.has(v);propia.delete(v);
-      if(!mia&&!v.ended&&visto(v)&&!quieto&&!v.muted){v.muted=true;arranca(v);}marca();});
+      if(!mia&&!v.ended&&visto(v)&&!quieto&&!v.muted){bloq=true;v.muted=true;arranca(v);}marca();});
     v.addEventListener('volumechange',marca);
-    boton(v).addEventListener('click',function(){activo=true;
-      if(!v.muted&&!v.paused){quiere=false;dueno=null;v.muted=true;}
-      else{quiere=true;dueno=v;vs.forEach(function(o){if(o!==v)o.muted=true;});carga(v,true);v.muted=false;if(v.paused)arranca(v);}
-      marca();});
+    boton(v).addEventListener('click',function(){
+      if(!v.muted&&!v.paused){quiere=false;dueno=null;v.muted=true;marca();}else suena(v);});
   });
   if(quieto){vs.forEach(function(v){v.controls=true;v.poster=v.dataset.poster;v.preload='none';v.src=url(v);boton(v).hidden=true;caja(v).classList.add('on');});}
   else if('IntersectionObserver' in window){
     /* al acercarse: el destacado ya empieza a cargar en serio para arrancar sin espera */
     var cerca=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){carga(e.target,!!e.target.closest('.feat'));cerca.unobserve(e.target);}});},{rootMargin:'100% 0px'});
-    var vista=new IntersectionObserver(function(es){es.forEach(function(e){ratio.set(e.target,e.isIntersecting?e.intersectionRatio:0);});ajusta();},{threshold:[0,.25,.5,.75,1]});
+    var vista=new IntersectionObserver(function(es){es.forEach(function(e){var r=e.isIntersecting?e.intersectionRatio:0;ratio.set(e.target,r);
+        if(r>=.5)dentro.add(e.target);else if(r<.2)dentro.delete(e.target);});ajusta();},{threshold:[0,.2,.5,.75,1]});
     vs.forEach(function(v){cerca.observe(v);vista.observe(v);});
     document.addEventListener('visibilitychange',ajusta);
   }
-  /* primer toque o clic en cualquier parte: desde aqui ya puede sonar; se enciende el que toca */
-  function gesto(e){if(quieto)return;if(e.target.closest&&e.target.closest('#incidents .pr-snd'))return;
-    if(ua&&!ua.isActive)return;activo=true;var s=quiere?elige():null;if(s&&s.muted&&!s.paused){s.muted=false;marca();}}
+  /* primer toque o clic en la pagina: el video que se ve se pone con sonido, dentro del propio gesto */
+  function gesto(e){if(quieto)return;if(e.target.closest&&e.target.closest('#incidents .pr-snd, #incidents .lang'))return;
+    if(ua&&!ua.isActive)return;activo=true;bloq=false;if(!quiere)return;var s=elige();if(s&&s.muted)suena(s);}
   ['click','touchend','keydown'].forEach(function(t){document.addEventListener(t,gesto,{capture:true,passive:true});});
   /* comparativo: cambia de idioma y vuelve a empezar; el poster tapa el cambio */
-  document.querySelectorAll('#incidents .lang').forEach(function(l){l.addEventListener('click',function(){activo=true;
+  document.querySelectorAll('#incidents .lang').forEach(function(l){l.addEventListener('click',function(){
     var v=l.closest('.inc').querySelector('video'),d=v.dataset,ld=l.dataset,t;
     t=d.src;d.src=ld.src;ld.src=t;t=d.srcM;d.srcM=ld.srcM;ld.srcM=t;
     l.textContent=l.textContent==='Ver en español'?'Watch in English':'Ver en español';
-    caja(v).classList.remove('on');v.preload='auto';v.src=url(v);quiere=true;dueno=v;vs.forEach(function(o){if(o!==v)o.muted=true;});
-    v.muted=false;arranca(v);marca();});});
+    caja(v).classList.remove('on');v.preload='auto';v.src=url(v);suena(v);});});
 })();
 </script>
 </body>
