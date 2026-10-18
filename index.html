@@ -358,7 +358,12 @@
   .btn-ghost:hover::before,.btn-ghost:focus-visible::before{transform:translateY(0)}
   /* guia para adquirir $SECT: en su propia linea bajo los otros dos, con
      seis cuadros que se encienden uno tras otro como los pasos de la guia */
-  .btn-guide{flex-basis:100%;max-width:max-content;color:#fff;text-align:left;
+  /* los tres botones de la portada, uno debajo de otro y del mismo tamano:
+     la columna mide lo que pide el rotulo mas largo (o todo el ancho si no
+     cabe) y todas las filas, lo que la mas alta */
+  #hero-actions{display:grid;grid-template-columns:minmax(0,max-content);grid-auto-rows:1fr;gap:12px}
+  #hero-actions .btn .arrow{margin-left:auto}
+  .btn-guide{color:#fff;text-align:left;
     border-color:rgba(21,105,255,.5);background:linear-gradient(90deg,rgba(21,105,255,.18),rgba(21,105,255,.03) 72%)}
   .btn-guide::before{
     content:'';position:absolute;inset:0;background:rgba(21,105,255,.24);
