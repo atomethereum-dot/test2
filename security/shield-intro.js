@@ -6,7 +6,7 @@
 var el=document.getElementById('shIntro');if(!el)return;
 if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.remove();return;}
 var tc=document.createElement('canvas');if(!tc.getContext('webgl2')){el.remove();return;}
-var QS=innerWidth/innerHeight<1.1?.5:Math.min(.8,1500/(innerWidth*Math.min(devicePixelRatio||1,2)));
+var DPR=Math.min(devicePixelRatio||1,2),QS=innerWidth/innerHeight<1.1?Math.min(.85,640/(innerWidth*DPR)):Math.min(.8,1500/(innerWidth*DPR));
 /* base comun de las 10 intros de Sectora Shield. Guion: el motor arranca,
    bloquea cuatro ataques (uno por capa: orden falsificada, registro
    alterado, contraseña robada, salida anomala), resiste un ataque cuantico
@@ -154,7 +154,7 @@ S.fx=(o={})=>{
   const pass=(P,dst,tex,u)=>{g.useProgram(P.p);g.bindFramebuffer(g.FRAMEBUFFER,dst?dst.f:null);g.viewport(0,0,dst?dst.w:c.width,dst?dst.h:c.height);
     tex.forEach(([name,t],i)=>{g.activeTexture(g.TEXTURE0+i);g.bindTexture(g.TEXTURE_2D,t);g.uniform1i(P.L(name),i);});set(P,u);g.drawArrays(g.TRIANGLE_STRIP,0,4);};
   const blur=(A,B,r)=>{pass(BL,B,[['uS',A.t]],{uDir:[r/A.w,0]});pass(BL,A,[['uS',B.t]],{uDir:[0,r/A.h]});};
-  return{g,c,x,
+  return{g,c,x,ss(v){o.ss=v;size();},
     draw(t,u={},post={}){
       let base=null;
       if(SC){pass(SC,F.S,[],Object.assign({uRes:[F.S.w,F.S.h],uT:t},u));base=F.S;}
@@ -266,11 +266,13 @@ S.run=render=>{
   /* el reloj avanza como mucho 0,1 s por fotograma: si el movil se atasca
      (compilar el shader, cargar la pagina) la intro no se salta escenas;
      si va muy lento, a los 14 s se retira igualmente */
-  let done=false,t=0,last=0,w0=0;
+  let done=false,t=0,last=0,w0=0,fr=0,acc=0,q=QS;
   const end=()=>{if(done)return;done=true;root.style.overflow=ov;el.remove();removeEventListener('keydown',sk);};
   const sk=()=>{if(t<S.EXIT)t=S.EXIT;};
   el.addEventListener('pointerdown',sk);addEventListener('keydown',sk);
-  const go=()=>{if(w0)return;w0=last=performance.now()||1;el.style.animation='none';(function f(){if(done)return;const now=performance.now();t+=Math.min(Math.max(now-last,0),100)/1000;last=now;
+  const go=()=>{if(w0)return;w0=last=performance.now()||1;el.style.animation='none';(function f(){if(done)return;const now=performance.now(),dt=Math.max(now-last,0);t+=Math.min(dt,100)/1000;last=now;
+    /* si el equipo no llega a ~20 fps en los primeros fotogramas, baja la resolucion de la escena */
+    if(++fr>4&&fr<=64){acc+=dt;if(fr%15===4){if(acc/15>48&&q>.42){q=Math.max(.42,q*.72);try{S.R.ss(q);}catch(e){}}acc=0;}}
     if(t>=S.END||now-w0>14000){end();return;}try{render(t);}catch(e){end();return;}requestAnimationFrame(f);})();};
   const fl=document.fonts?Promise.all([document.fonts.load("500 100px 'IBM Plex Sans'"),document.fonts.load("300 100px 'IBM Plex Sans'"),document.fonts.load("500 12px 'IBM Plex Mono'")]):Promise.resolve();
   Promise.race([fl,new Promise(r=>setTimeout(r,1200))]).then(go,go);
@@ -282,9 +284,13 @@ S.run=render=>{
    cuantico la ciudad entera se apaga en rojo; Shield levanta una cupula
    sobre todo y la torre proyecta el logo hacia el cielo. Raymarching de una
    ciudad procedural, con niebla y reflejos en el suelo. */
-S.mountC();S.IN=.3;
-const R=S.fx({ss:QS,fx2d:true,th:.75,bw:[.6,.8,1.05],scan:.07,ca:.0016,grain:.03,scene:`
-uniform vec2 uCt;uniform vec3 uRo,uTa;uniform float uMon,uM,uOn,uIn,uDome,uDa,uWave,uFo;uniform vec4 uA0,uA1,uA2,uA3;
+S.mountC();
+/* guion mas largo: mas tiempo entre ataques y el final con la cupula se sostiene */
+S.EV=[1.,1.5,2.,2.5];S.IN=.35;S.M=[2.75,3.9];S.HEAD=4.3;S.EXIT=6.4;S.END=7.;
+/* en movil: objetivo mas angular y camara mas lejos (edificios mas pequenos), postproduccion mas limpia */
+const MOB=innerWidth/innerHeight<1.1,FOC=MOB?1.:1.5;
+const R=S.R=S.fx({ss:QS,fx2d:true,th:.75,bw:MOB?[.45,.62,.85]:[.6,.8,1.05],scan:MOB?.025:.07,ca:MOB?.0005:.0016,grain:MOB?.018:.03,scene:`
+uniform vec2 uCt;uniform vec3 uRo,uTa;uniform float uFoc;uniform float uMon,uM,uOn,uIn,uDome,uDa,uWave,uFo;uniform vec4 uA0,uA1,uA2,uA3;
 float h2(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 const float CS=1.;
 float bh(vec2 c){float h=h2(c);float d=length(c);if(d<.5)return 5.5;return (.25+pow(h,3.)*2.6)*smoothstep(14.,4.,d)*step(.18,h2(c+7.));}
@@ -309,7 +315,7 @@ vec3 bcol(vec3 p,vec3 n){vec2 cell=floor(p.xz/CS+.5);float h=bh(cell),id=h2(cell
   if(length(cell)<.5){c=vec3(.01,.015,.035)+vec3(.3,.6,1.)*(.2+uOn*.6)*smoothstep(.0,.1,fract(p.y*1.5-uT*.8))*.35+vec3(.4,.7,1.)*eg*(1.2+uOn);}
   if(uWave>0.){float q=(length(p.xz)-uWave*uDome)/.35;c+=vec3(.4,.7,1.)*exp(-q*q)*(1.-uWave)*.8;}
   return c;}
-void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;vec3 ro=uRo;vec3 fw=normalize(uTa-ro),rt=normalize(cross(vec3(0.,1.,0.),fw)),up=cross(fw,rt);vec3 rd=normalize(fw*1.5+rt*(uv.x-uCt.x)+up*(uv.y-uCt.y));
+void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;vec3 ro=uRo;vec3 fw=normalize(uTa-ro),rt=normalize(cross(vec3(0.,1.,0.),fw)),up=cross(fw,rt);vec3 rd=normalize(fw*uFoc+rt*(uv.x-uCt.x)+up*(uv.y-uCt.y));
   vec3 sky=vec3(.003,.004,.01)+vec3(.02,.05,.16)*exp(-abs(rd.y-.02)*9.)*(1.+uOn*.8);sky=mix(sky,vec3(.003)+vec3(.16,.02,.02)*exp(-abs(rd.y-.02)*7.),uMon*uM*.8);
   vec3 col=sky;float t=.05;bool hit=false;vec3 p;
   for(int i=0;i<120;i++){p=ro+rd*t;float d=map(p);if(d<.003){hit=true;break;}t+=d*.9;if(t>75.)break;}
@@ -340,21 +346,21 @@ function render(t){
   const mp=S.mp(t),mon=t>=S.M[0]&&t<S.M[1],on=S.eo(S.seg(t,S.M[1],S.M[1]+.4)),kin=S.eo(S.seg(t,0,1)),lk=S.lockK(t),sl=S.slot();
   /* al final la camara se aleja y sube para ver la cupula cubriendo toda la ciudad */
   const pull=S.eio(S.seg(t,S.M[1]-.1,S.M[1]+1.25)),DR=15.5;
-  const ang=-.6+t*.16-pull*.25,rad=S.lerp(13,10.5,S.eo(S.seg(t,0,S.END)))+pull*(mob?30:21),hgt=S.lerp(5.2,4.2,S.eo(S.seg(t,0,S.END)))+pull*(mob?10:8.5);
-  const ro=[Math.cos(ang)*rad,hgt,Math.sin(ang)*rad],ta=[0,S.lerp(2.2,mob?8:4.6,pull),0],ct=[(st.cx-W/2)/H,(H/2-st.cy)/H];
+  const ang=-.6+t*.12-pull*.25,rad=(mob?S.lerp(17.5,15,S.eo(S.seg(t,0,S.END))):S.lerp(13,10.5,S.eo(S.seg(t,0,S.END))))+pull*(mob?19:21),hgt=(mob?S.lerp(8,7,S.eo(S.seg(t,0,S.END))):S.lerp(5.2,4.2,S.eo(S.seg(t,0,S.END))))+pull*(mob?8:8.5);
+  const ro=[Math.cos(ang)*rad,hgt,Math.sin(ang)*rad],ta=[0,S.lerp(mob?1.6:2.2,mob?6.5:4.6,pull),0],ct=[(st.cx-W/2)/H,(H/2-st.cy)/H];
   const dome=DR*S.eo(S.seg(t,S.M[1],S.M[1]+1.1));
   const A=AC.map((c,i)=>{const s0=S.st(i,t);return[c[0],c[1],s0===1?S.inc(i,t):s0===2?1:0,s0===2?t-S.EV[i]:-1];});
   /* proyeccion de puntos del mundo */
   const fw=[ta[0]-ro[0],ta[1]-ro[1],ta[2]-ro[2]],fl=Math.hypot(...fw);fw.forEach((v,i)=>fw[i]=v/fl);const rt0=[fw[2],0,-fw[0]],rl=Math.hypot(...rt0);const rt=rt0.map(v=>v/rl);
   const up=[fw[1]*rt[2]-fw[2]*rt[1],fw[2]*rt[0]-fw[0]*rt[2],fw[0]*rt[1]-fw[1]*rt[0]];
-  const pj=P=>{const d=[P[0]-ro[0],P[1]-ro[1],P[2]-ro[2]];const z=d[0]*fw[0]+d[1]*fw[1]+d[2]*fw[2];const X=d[0]*rt[0]+d[1]*rt[1]+d[2]*rt[2],Y=d[0]*up[0]+d[1]*up[1]+d[2]*up[2];return[W/2+(ct[0]+1.5*X/z)*H,H/2-(ct[1]+1.5*Y/z)*H,z];};
+  const pj=P=>{const d=[P[0]-ro[0],P[1]-ro[1],P[2]-ro[2]];const z=d[0]*fw[0]+d[1]*fw[1]+d[2]*fw[2];const X=d[0]*rt[0]+d[1]*rt[1]+d[2]*rt[2],Y=d[0]*up[0]+d[1]*up[1]+d[2]*up[2];return[W/2+(ct[0]+FOC*X/z)*H,H/2-(ct[1]+FOC*Y/z)*H,z];};
   const bhJ=c=>{const h=S.h(c[0]*127.1+c[1]*311.7);return 1;};
   x.clearRect(0,0,W,H);x.save();x.globalCompositeOperation='lighter';
   /* rayos de ataque que caen del cielo */
   for(let i=0;i<4;i++){const s0=S.st(i,t);if(!s0)continue;const top=pj([AC[i][0],3.2,AC[i][1]]),sky=pj([AC[i][0]+2,14,AC[i][1]-1]);
     if(s0===1){const k=S.eio(S.inc(i,t)),hx=S.lerp(sky[0],top[0],k),hy=S.lerp(sky[1],top[1],k);
       [[10,'rgba(255,40,30,.3)'],[3,'rgba(255,90,70,1)'],[1.2,'rgba(255,235,225,1)']].forEach(([w,c])=>{x.strokeStyle=c;x.lineWidth=w;x.beginPath();x.moveTo(sky[0],sky[1]);x.lineTo(hx,hy);x.stroke();});}
-    else{const tau=t-S.EV[i];if(tau<.8){const k=S.eo(S.seg(tau,0,.3)),fd=1-S.seg(tau,.2,.8),c=pj([AC[i][0],1.2,AC[i][1]]),r=Math.max(20,H*1.5*1.6/c[2])*k;
+    else{const tau=t-S.EV[i];if(tau<.8){const k=S.eo(S.seg(tau,0,.3)),fd=1-S.seg(tau,.2,.8),c=pj([AC[i][0],1.2,AC[i][1]]),r=Math.max(mob?14:20,H*FOC*(mob?1.15:1.6)/c[2])*k;
       x.strokeStyle='rgba(150,200,255,'+fd+')';x.lineWidth=2;x.beginPath();x.ellipse(c[0],c[1],r,r*.9,0,Math.PI,TAU);x.stroke();x.beginPath();x.ellipse(c[0],c[1],r,r*.25,0,0,TAU);x.stroke();
       const g=x.createRadialGradient(c[0],c[1]-r*.4,0,c[0],c[1]-r*.4,r);g.addColorStop(0,'rgba(90,150,255,'+.35*fd+')');g.addColorStop(1,'rgba(21,105,255,0)');x.fillStyle=g;x.fillRect(c[0]-r,c[1]-r*1.4,r*2,r*2);
       const fr=S.pk(tau,0,.3);if(fr>0){const p=pj([AC[i][0],3.2,AC[i][1]]);const g2=x.createRadialGradient(p[0],p[1],0,p[0],p[1],80);g2.addColorStop(0,'rgba(255,255,255,'+fr+')');g2.addColorStop(1,'rgba(90,150,255,0)');x.fillStyle=g2;x.fillRect(p[0]-80,p[1]-80,160,160);}}}}
@@ -364,7 +370,7 @@ function render(t){
   /* haz de la torre */
   {const b=pj([0,5.6,0]),sky=pj([0,40,0]);const a=S.lerp(.25,1,on)*kin*(mon?.3:1);const g=x.createLinearGradient(b[0],b[1],sky[0],sky[1]);g.addColorStop(0,'rgba(120,180,255,'+a+')');g.addColorStop(1,'rgba(60,130,255,0)');x.strokeStyle=g;x.lineWidth=4+10*on;x.beginPath();x.moveTo(b[0],b[1]);x.lineTo(sky[0],sky[1]);x.stroke();}
   x.restore();
-  R.draw(t,{uCt:ct,uRo:ro,uTa:ta,uMon:mon?1:0,uM:mp,uOn:on,uIn:kin,uDome:dome,uDa:S.eo(S.seg(t,S.M[1],S.M[1]+.3))*(1-S.seg(lk,.4,1)*.2),uFo:pull*(Math.hypot(rad,hgt)-12),uWave:S.seg(t,S.M[1],S.M[1]+1.1),uA0:A[0],uA1:A[1],uA2:A[2],uA3:A[3]},{gl:S.glit(t),exp:1+S.pk(t,S.M[1],.4)*.5});
+  R.draw(t,{uCt:ct,uRo:ro,uTa:ta,uFoc:FOC,uMon:mon?1:0,uM:mp,uOn:on,uIn:kin,uDome:dome,uDa:S.eo(S.seg(t,S.M[1],S.M[1]+.3))*(1-S.seg(lk,.4,1)*.2),uFo:pull*(Math.hypot(rad,hgt)-12),uWave:S.seg(t,S.M[1],S.M[1]+1.1),uA0:A[0],uA1:A[1],uA2:A[2],uA3:A[3]},{gl:S.glit(t),exp:1+S.pk(t,S.M[1],.4)*.5});
   o.clearRect(0,0,W,H);o.font='500 '+(mob?9:11)+'px "IBM Plex Mono"';
   for(let i=0;i<4;i++){const s0=S.st(i,t);if(!s0)continue;const p=pj([AC[i][0],3.4,AC[i][1]]),rt2=p[0]<st.cx;
     if(s0===1)S.tagAt(o,'STRIKE · '+S.NAMES[i].toUpperCase(),p[0]+(rt2?18:-18),p[1]-18,'rgba(255,110,100,1)',!rt2);
