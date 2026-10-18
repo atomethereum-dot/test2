@@ -89,7 +89,7 @@
 
     <article class="inc feat">
       <div class="inc-v">
-        <video data-poster="vid-bitget.jpg" data-t0="1" data-src="../media/sectora-shield-bitget-X-1080p60.mp4" data-src-m="../media/sectora-shield-bitget-X-720.mp4" playsinline preload="none" aria-label="Video: Bitget incident analysis"></video><img class="vp" fetchpriority="low" src="vid-bitget.jpg" alt="" width="1280" height="720" decoding="async">
+        <video data-poster="vid-bitget.jpg" data-t0="1" data-src="../media/sectora-shield-bitget-X-1080p60.mp4" data-src-m="../media/sectora-shield-bitget-X-720.mp4" muted playsinline webkit-playsinline preload="none" aria-label="Video: Bitget incident analysis"></video><img class="vp" fetchpriority="low" src="vid-bitget.jpg" alt="" width="1280" height="720" decoding="async">
         <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
       </div>
       <div class="inc-t">
@@ -113,7 +113,7 @@
     <div class="inc-grid">
       <article class="inc">
         <div class="inc-v">
-          <video data-poster="vid-compare.jpg" data-t0="0.15" data-src="../media/sectora-shield-vs-bitget-en-1080p60.mp4" data-src-m="../media/sectora-shield-vs-bitget-en-720.mp4" playsinline preload="none" aria-label="Video: Same attack, two endings"></video><img class="vp" fetchpriority="low" src="vid-compare.jpg" alt="" width="1280" height="720" decoding="async">
+          <video data-poster="vid-compare.jpg" data-t0="0.15" data-src="../media/sectora-shield-vs-bitget-en-1080p60.mp4" data-src-m="../media/sectora-shield-vs-bitget-en-720.mp4" muted playsinline webkit-playsinline preload="none" aria-label="Video: Same attack, two endings"></video><img class="vp" fetchpriority="low" src="vid-compare.jpg" alt="" width="1280" height="720" decoding="async">
         <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
         <span class="inc-tag m">Comparison · same attack</span>
@@ -125,7 +125,7 @@
 
       <article class="inc">
         <div class="inc-v">
-          <video data-poster="vid-hacks2026.jpg" data-t0="0.4" data-src="../media/sectora-quantum-hacks-X-1080p.mp4" data-src-m="../media/sectora-quantum-hacks-X-720.mp4" playsinline preload="none" aria-label="Video: 2026 hacks and the quantum threat"></video><img class="vp" fetchpriority="low" src="vid-hacks2026.jpg" alt="" width="1280" height="720" decoding="async">
+          <video data-poster="vid-hacks2026.jpg" data-t0="0.4" data-src="../media/sectora-quantum-hacks-X-1080p.mp4" data-src-m="../media/sectora-quantum-hacks-X-720.mp4" muted playsinline webkit-playsinline preload="none" aria-label="Video: 2026 hacks and the quantum threat"></video><img class="vp" fetchpriority="low" src="vid-hacks2026.jpg" alt="" width="1280" height="720" decoding="async">
         <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
         <span class="inc-tag m">Threat intelligence · 2026</span>
@@ -137,7 +137,7 @@
 
       <article class="inc">
         <div class="inc-v">
-          <video data-poster="vid-harvest.jpg" data-t0="0" data-src="../media/sectora-shield-harvest-X-1080p.mp4" data-src-m="../media/sectora-shield-harvest-X-720.mp4" playsinline preload="none" aria-label="Video: Harvest now, decrypt later"></video><img class="vp" fetchpriority="low" src="vid-harvest.jpg" alt="" width="1280" height="720" decoding="async">
+          <video data-poster="vid-harvest.jpg" data-t0="0" data-src="../media/sectora-shield-harvest-X-1080p.mp4" data-src-m="../media/sectora-shield-harvest-X-720.mp4" muted playsinline webkit-playsinline preload="none" aria-label="Video: Harvest now, decrypt later"></video><img class="vp" fetchpriority="low" src="vid-harvest.jpg" alt="" width="1280" height="720" decoding="async">
         <button class="pr-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
         </div>
         <span class="inc-tag m">Post-quantum · threat model</span>
@@ -267,7 +267,8 @@
    - Encima de cada video va su poster como imagen; se funde cuando el video ya
      pinta imagen de verdad, asi nunca se ve el negro de la carga.
    - Cada video arranca en su data-t0, despues del fundido oscuro de entrada.
-   - El sonido solo se enciende dentro de un toque, un clic o "Sound". Safari
+   - En telefonos y tablets, y en Safari, el sonido solo se enciende dentro de
+     un toque de verdad (no el dedo que termina un scroll), un clic o "Sound". Safari
      y todos los navegadores del iPhone pausan un video si se le quita el mudo
      fuera de un toque; el codigo lo volvia a arrancar mudo y en el siguiente
      scroll lo intentaba otra vez: ese bucle era el parpadeo. En Chrome,
@@ -283,7 +284,8 @@
   var grande=matchMedia('(min-width: 1100px)').matches&&!(navigator.connection&&navigator.connection.saveData);
   var quieto=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var nav=navigator.userAgent,webkit=/iP(hone|ad|od)/.test(nav)||(/Macintosh/.test(nav)&&navigator.maxTouchPoints>1)||(/Safari\//.test(nav)&&!/Chrom|CriOS|FxiOS|Edg|OPR|Android/.test(nav));
-  var ua=navigator.userActivation,activo=!webkit&&!!(ua&&ua.hasBeenActive),bloq=false;
+  var tactil=matchMedia('(hover: none), (pointer: coarse)').matches,soloToque=webkit||tactil;
+  var ua=navigator.userActivation,activo=!soloToque&&!!(ua&&ua.hasBeenActive),bloq=false;
   var quiere=true,dueno=null,ratio=new Map(),dentro=new Set(),propia=new Set();
   function caja(v){return v.parentNode;}
   function boton(v){return caja(v).querySelector('.pr-snd');}
@@ -300,8 +302,10 @@
   function elige(){if(dueno&&visto(dueno))return dueno;var m=null;vs.forEach(function(v){if(visto(v)&&(!m||ratio.get(v)>ratio.get(m)))m=v;});return m;}
   function arranca(v){var p=v.play();if(p&&p.catch)p.catch(function(e){if(e&&e.name==='NotAllowedError'&&!v.muted){v.muted=true;bloq=true;arranca(v);marca();}});}
   function juega(v,conSonido){carga(v,true);if(v.preload!=='auto')v.preload='auto';
-    if(v.ended||v.currentTime<t0(v)-.05)try{v.currentTime=t0(v);}catch(e){}
-    var m=!(conSonido&&activo&&!bloq&&!webkit);if(v.muted!==m)v.muted=m;if(v.paused)arranca(v);}
+    if(v.ended){caja(v).classList.remove('on');try{v.currentTime=t0(v);}catch(e){}}
+    else if(v.currentTime<t0(v)-.05)try{v.currentTime=t0(v);}catch(e){}
+    /* si ya suena porque el visitante lo pidio, se respeta; encenderlo solo fuera de un toque, nunca en movil ni Safari */
+    var m=conSonido?(v.muted?!(activo&&!bloq&&!soloToque):false):true;if(v.muted!==m)v.muted=m;if(v.paused)arranca(v);}
   function para(v){if(!v.paused){propia.add(v);v.pause();}}
   function ajusta(){if(quieto)return;var s=quiere?elige():null;vs.forEach(function(v){if(visto(v))juega(v,v===s);else para(v);});marca();}
   /* con sonido, siempre dentro del gesto del visitante */
@@ -327,8 +331,11 @@
     document.addEventListener('visibilitychange',ajusta);
   }
   /* primer toque o clic en la pagina: el video que se ve se pone con sonido, dentro del propio gesto */
+  var x0=0,y0=0,tt=0;
   function gesto(e){if(quieto)return;if(e.target.closest&&e.target.closest('#incidents .pr-snd, #incidents .lang'))return;
+    if(e.type==='touchend'){var q=e.changedTouches&&e.changedTouches[0];if(!q||Math.abs(q.clientX-x0)>10||Math.abs(q.clientY-y0)>10||Date.now()-tt>600)return;}
     if(ua&&!ua.isActive)return;activo=true;bloq=false;if(!quiere)return;var s=elige();if(s&&s.muted)suena(s);}
+  document.addEventListener('touchstart',function(e){var q=e.touches&&e.touches[0];if(q){x0=q.clientX;y0=q.clientY;tt=Date.now();}},{capture:true,passive:true});
   ['click','touchend','keydown'].forEach(function(t){document.addEventListener(t,gesto,{capture:true,passive:true});});
   /* comparativo: cambia de idioma y vuelve a empezar; el poster tapa el cambio */
   document.querySelectorAll('#incidents .lang').forEach(function(l){l.addEventListener('click',function(){
