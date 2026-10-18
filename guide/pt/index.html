@@ -285,7 +285,14 @@ img{display:block;max-width:100%}
 .w.wc{grid-column:1/-1;background:var(--blue-soft)}
 .w.wc:hover{background:#eef1f6}
 @media (max-width:1000px){.wl{grid-template-columns:1fr}}
-@media (max-width:640px){.wg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.wg{grid-template-columns:repeat(2,minmax(0,1fr))}.wg .w:nth-last-child(2){grid-column:1/-1}}
+
+/* tambien compatibles: nombres en fichas */
+.wx{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin-top:18px;padding:18px 20px;background:var(--card);border:1px solid var(--line);border-radius:2px}
+.wx>p.m{font-size:10px;font-weight:500;color:var(--blue-deep)}
+.wx ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:14px;font-weight:400;padding:7px 13px;border-radius:999px;background:#fff;border:1px solid var(--line)}
+.wx-n{font-size:13px;color:var(--ink-3)}
 
 /* ============ seguridad ============ */
 .safe{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;margin-top:clamp(30px,5vh,46px);background:var(--line);border:1px solid var(--line)}
@@ -452,7 +459,7 @@ footer a:hover{color:var(--ink)}
     <p class="eyebrow m rv"><i></i>02 · Antes de começar</p>
     <h2 class="rv">Quatro coisas <b>e você está pronto.</b></h2>
     <div class="need rv">
-      <div><span class="m">01</span><b>Uma carteira</b><small>A MetaMask é a mais usada. Outras estão listadas abaixo.</small></div>
+      <div><span class="m">01</span><b>Uma carteira</b><small>MetaMask ou qualquer carteira compatível com a Uniswap. A lista está abaixo.</small></div>
       <div><span class="m">02</span><b>ETH no Ethereum</b><small>Ou USDT no Ethereum mais um pouco de ETH para as taxas.</small></div>
       <div><span class="m">03</span><b>O contrato oficial</b><small><code style="font-family:'IBM Plex Mono',monospace;font-size:12px">0x8C99…13db</code> — copie no topo desta página.</small></div>
       <div><span class="m">04</span><b>Cerca de 5 minutos</b><small>No computador ou no celular.</small></div>
@@ -469,9 +476,9 @@ footer a:hover{color:var(--ink)}
       <li class="step rv"><span class="reg" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span class="st-n">01<small>/ 09</small></span>
         <div><p class="st-k m">Carteira</p>
-          <h3>Instale a MetaMask</h3>
-          <p>Baixe somente em <b>metamask.io</b> ou na loja oficial de apps do seu celular. Crie uma carteira nova e anote a <b>Frase Secreta de Recuperação</b> em papel. Nunca a digite em um site e nunca a compartilhe.</p></div>
-        <div class="side"><span class="m">Dica</span>No celular use o app da MetaMask; no computador, a extensão do navegador. Ninguém da Sectora vai pedir a sua frase.<br><a href="https://metamask.io/download/" target="_blank" rel="noopener noreferrer">metamask.io ↗</a></div>
+          <h3>Instale a MetaMask (ou sua carteira)</h3>
+          <p>Este guia usa a MetaMask, mas <b>qualquer carteira compatível com a Uniswap</b> funciona do mesmo jeito. Baixe somente pelo site oficial ou pela loja oficial de apps do seu celular. Crie uma carteira nova e anote a <b>Frase Secreta de Recuperação</b> em papel. Nunca a digite em um site e nunca a compartilhe.</p></div>
+        <div class="side"><span class="m">Dica</span>No celular use o app da carteira; no computador, a extensão do navegador. Ninguém da Sectora vai pedir a sua frase.<br><a href="#wallets">Carteiras compatíveis ↓</a></div>
       </li>
       <li class="step rv"><span class="reg" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <span class="st-n">02<small>/ 09</small></span>
@@ -527,7 +534,7 @@ footer a:hover{color:var(--ink)}
         <span class="st-n">09<small>/ 09</small></span>
         <div><p class="st-k m">Pronto</p>
           <h3>Veja o #SECT na sua carteira</h3>
-          <p>Se a MetaMask ainda não mostrar o #SECT, escolha <b>Importar tokens</b> e cole o endereço do contrato; o símbolo e as casas decimais são preenchidos sozinhos.</p></div>
+          <p>Se a sua carteira ainda não mostrar o #SECT, use a opção de <b>importar tokens</b> (na MetaMask, “Importar tokens”) e cole o endereço do contrato; o símbolo e as casas decimais são preenchidos sozinhos.</p></div>
         <div class="side"><span class="m">Próximo</span>Holders podem depositar #SECT no contrato de recompensas e ganhar recompensas a cada segundo, sem bloqueio.<br><a href="https://sectoraorg.com/staking/">Recompensas para holders →</a></div>
       </li>
     </ol>
@@ -538,12 +545,13 @@ footer a:hover{color:var(--ink)}
 <section class="sec paper" id="wallets">
   <div class="wrap">
     <p class="eyebrow m rv"><i></i>04 · Carteiras</p>
-    <h2 class="rv">Funciona com as carteiras <b>que você já usa.</b></h2>
+    <h2 class="rv">MetaMask ou <b>qualquer carteira compatível com a Uniswap.</b></h2>
+    <p class="sub rv">A Uniswap funciona com qualquer carteira de Ethereum que se conecte por extensão do navegador, app ou WalletConnect. Estas são as mais usadas:</p>
     <div class="wl">
       <article class="mm rv">
-        <div class="mm-top"><span class="logo-big"><img data-w="metaMask" alt="MetaMask" width="48" height="48"></span><span class="m">Recomendada</span></div>
+        <div class="mm-top"><span class="logo-big"><img data-w="metaMask" alt="MetaMask" width="48" height="48"></span><span class="m">A mais usada</span></div>
         <h3>MetaMask</h3>
-        <p>A carteira mais usada no Ethereum, e a que este guia segue. A Uniswap se conecta a ela com um toque.</p>
+        <p>A carteira mais usada no Ethereum, e a que este guia usa como exemplo. A Uniswap se conecta a ela com um toque.</p>
         <ul>
           <li>Extensão para Chrome, Brave, Edge e Firefox</li>
           <li>App para iPhone e Android, com navegador integrado</li>
@@ -558,8 +566,16 @@ footer a:hover{color:var(--ink)}
         <div class="w"><div class="w-h"><img data-w="okx" alt="" width="40" height="40"><div><b>OKX Wallet</b><small>App · extensão</small></div></div><p>Carteira multichain; use a rede Ethereum.</p></div>
         <div class="w"><div class="w-h"><img data-w="zerion" alt="" width="40" height="40"><div><b>Zerion</b><small>App · extensão</small></div></div><p>Carteira e acompanhamento de portfólio em um só lugar.</p></div>
         <div class="w"><div class="w-h"><img data-w="safepal" alt="" width="40" height="40"><div><b>SafePal</b><small>App · hardware</small></div></div><p>Carteira de software e hardware, via WalletConnect.</p></div>
-        <div class="w wc"><div class="w-h"><img data-w="walletConnect" alt="" width="40" height="40"><div><b>WalletConnect</b><small>Qualquer carteira compatível</small></div></div><p>Escaneie um QR code para conectar centenas de carteiras, incluindo carteiras físicas como a Ledger pelo Ledger Live. Uniswap Wallet e Rabby também funcionam.</p></div>
+        <div class="w"><div class="w-h"><img data-w="imToken" alt="" width="40" height="40"><div><b>imToken</b><small>App</small></div></div><p>Carteira para celular; conecte com WalletConnect.</p></div>
+        <div class="w"><div class="w-h"><img data-w="tokenPocket" alt="" width="40" height="40"><div><b>TokenPocket</b><small>App · extensão</small></div></div><p>Carteira multichain; use a rede Ethereum.</p></div>
+        <div class="w"><div class="w-h"><img data-w="oneInch" alt="" width="40" height="40"><div><b>1inch Wallet</b><small>App</small></div></div><p>Carteira móvel com WalletConnect.</p></div>
+        <div class="w wc"><div class="w-h"><img data-w="walletConnect" alt="" width="40" height="40"><div><b>WalletConnect</b><small>Qualquer carteira compatível</small></div></div><p>Escaneie um QR code para conectar centenas de carteiras à Uniswap, incluindo carteiras físicas como a Ledger pelo Ledger Live.</p></div>
       </div>
+    </div>
+    <div class="wx rv">
+      <p class="m">Também compatíveis com a Uniswap</p>
+      <ul><li class="chip">Uniswap Wallet</li><li class="chip">Rabby</li><li class="chip">Phantom</li><li class="chip">Brave Wallet</li><li class="chip">Ledger</li><li class="chip">Trezor</li><li class="chip">Safe</li></ul>
+      <p class="wx-n">…e qualquer outra carteira de Ethereum com WalletConnect.</p>
     </div>
   </div>
 </section>
@@ -612,6 +628,8 @@ footer a:hover{color:var(--ink)}
         <p>Abra o app.uniswap.org no computador ou pelo navegador integrado da própria carteira. O pool e a rota são os mesmos.</p></details>
       <details><summary>A troca falhou. O que aconteceu?<i aria-hidden="true"></i></summary>
         <p>Normalmente o preço mudou enquanto você confirmava, ou faltou ETH para a taxa. Seus tokens continuam na sua carteira, embora uma transação que falha também cobre a taxa de rede. Confira seu ETH, aumente um pouco o slippage e tente de novo.</p></details>
+      <details><summary>Preciso usar a MetaMask?<i aria-hidden="true"></i></summary>
+        <p>Não. Qualquer carteira compatível com a Uniswap funciona: Uniswap Wallet, Coinbase Wallet, Trust Wallet, Rainbow, Rabby, OKX Wallet, Zerion, Phantom, Ledger e muitas outras via WalletConnect. Os passos são os mesmos.</p></details>
       <details><summary>Posso comprar com cartão?<i aria-hidden="true"></i></summary>
         <p>O #SECT diretamente, não. Compre ETH com seu cartão dentro da MetaMask ou em uma exchange e depois siga os passos acima.</p></details>
     </div>
