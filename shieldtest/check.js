@@ -14,12 +14,17 @@
     42161: { n: 'Arbitrum', ds: 'arbitrum', ex: 'https://arbiscan.io' },
     137: { n: 'Polygon', ds: 'polygon', ex: 'https://polygonscan.com' },
     10: { n: 'Optimism', ds: 'optimism', ex: 'https://optimistic.etherscan.io' },
-    43114: { n: 'Avalanche', ds: 'avalanche', ex: 'https://snowtrace.io' }
+    43114: { n: 'Avalanche', ds: 'avalanche', ex: 'https://snowtrace.io' },
+    4663: { n: 'Robinhood Chain', ds: 'robinhood', ex: 'https://robinhoodchain.blockscout.com' },
+    sol: { n: 'Solana', ds: 'solana', ex: 'https://solscan.io', sol: true }
   };
+  const exTok = (c, a) => c.ex + '/token/' + a, exAcc = (c, a) => c.ex + (c.sol ? '/account/' : '/address/') + a;
   const DS2ID = Object.fromEntries(Object.entries(CHAINS).map(([id, c]) => [c.ds, id]));
   const ZERO = '0x0000000000000000000000000000000000000000', DEAD = '0x000000000000000000000000000000000000dead';
+  const hAddr = h => h.address || h.account || h.token_account || '';
   const isBurn = a => { a = (a || '').toLowerCase(); return a === ZERO || a === DEAD || /^0x0{30,}/.test(a) || a.endsWith('dead'); };
-  const ADDR = /^0x[a-fA-F0-9]{40}$/;
+  const ADDR = /^0x[a-fA-F0-9]{40}$/, SOL = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+  const st = x => x && typeof x === 'object' && !Array.isArray(x) ? x.status : x;
   /* direcciones conocidas del ecosistema Sectora, con su nombre en la lista de holders */
   const KNOWN = { '0x79cb8b3b3e81a2b25c6d7250c3c5a742aa8320e0': 'APY Contract' };
 
@@ -30,11 +35,11 @@
       h1a: 'Check before', h1b: 'you trust.',
       lead: 'Paste any token, wallet or link. Shield Check reads public on-chain security data and explains every risk in plain language, in seconds.',
       tToken: 'Token', tWallet: 'Wallet', tApprovals: 'Approvals', tLink: 'Link', network: 'Network', auto: 'Auto-detect', scan: 'Scan',
-      hintToken: 'Contract address of any ERC-20 token. Shield Check finds the network for you.',
+      hintToken: 'Token address on Ethereum, Solana, Base, BNB Chain, Robinhood Chain and more. Shield Check finds the network for you.', errSolMode: 'On Solana, Shield Check checks tokens for now. Use the Token tab.',
       hintWallet: 'Any wallet or contract address. See if it is linked to scams before you send funds.',
       hintApprovals: 'Your wallet address. See which contracts can spend your tokens. No connection needed.',
       hintLink: 'A website link you received in a DM, an ad or a comment.',
-      phToken: '0x… token contract address', phWallet: '0x… wallet address', phApprovals: '0x… your wallet address', phLink: 'https://…',
+      phToken: '0x… or Solana token address', phWallet: '0x… wallet address', phApprovals: '0x… your wallet address', phLink: 'https://…',
       try: 'Try', sChecks: 'security checks', sChains: 'networks', sTools: 'tools',
       fEyebrow: 'Four tools, one scanner',
       fToken: 'Honeypots, hidden owners, mint functions, changeable fees, blacklists, liquidity, locks and holder concentration.',
@@ -46,7 +51,7 @@
       h1: 'Paste an address or link', h2: 'We read the contract, trading and holders', h3: 'You get a score and a plain-language report',
       disclaimer: 'Shield Check is an automated tool based on public data. It is not financial advice and a clean result does not guarantee a project is safe. Always do your own research.',
       sources: 'Data',
-      errAddr: 'That doesn’t look like an address. It should start with 0x and have 42 characters.',
+      errAddr: 'That doesn’t look like an address. EVM addresses start with 0x and have 42 characters; Solana addresses have 32 to 44 letters and numbers.',
       errUrl: 'That doesn’t look like a link. Example: https://example.com',
       scanning: 'Scanning', stDetect: 'Detecting the network', stContract: 'Reading contract security', stMarket: 'Checking liquidity and trading',
       stScore: 'Scoring the risk', stWallet: 'Checking address reputation', stApprovals: 'Reading token approvals', stLink: 'Checking phishing databases',
@@ -80,11 +85,11 @@
       h1a: 'Revisa antes', h1b: 'de confiar.',
       lead: 'Pega cualquier token, wallet o enlace. Shield Check lee datos públicos de seguridad en la blockchain y te explica cada riesgo en lenguaje sencillo, en segundos.',
       tToken: 'Token', tWallet: 'Wallet', tApprovals: 'Aprobaciones', tLink: 'Enlace', network: 'Red', auto: 'Detectar red', scan: 'Revisar',
-      hintToken: 'Dirección del contrato de cualquier token ERC-20. Shield Check encuentra la red por ti.',
+      hintToken: 'Dirección del token en Ethereum, Solana, Base, BNB Chain, Robinhood Chain y más. Shield Check encuentra la red por ti.', errSolMode: 'En Solana, por ahora Shield Check revisa tokens. Usa la pestaña Token.',
       hintWallet: 'Cualquier wallet o contrato. Mira si está vinculado a estafas antes de enviar fondos.',
       hintApprovals: 'La dirección de tu wallet. Mira qué contratos pueden gastar tus tokens. No hace falta conectarla.',
       hintLink: 'Un enlace que te llegó por mensaje, anuncio o comentario.',
-      phToken: '0x… contrato del token', phWallet: '0x… dirección de la wallet', phApprovals: '0x… dirección de tu wallet', phLink: 'https://…',
+      phToken: '0x… o token de Solana', phWallet: '0x… dirección de la wallet', phApprovals: '0x… dirección de tu wallet', phLink: 'https://…',
       try: 'Prueba', sChecks: 'revisiones', sChains: 'redes', sTools: 'herramientas',
       fEyebrow: 'Cuatro herramientas, un escáner',
       fToken: 'Honeypots, dueños ocultos, funciones de mint, comisiones modificables, listas negras, liquidez, bloqueos y concentración de holders.',
@@ -96,7 +101,7 @@
       h1: 'Pega una dirección o enlace', h2: 'Leemos el contrato, el trading y los holders', h3: 'Recibes una puntuación y un informe sencillo',
       disclaimer: 'Shield Check es una herramienta automática basada en datos públicos. No es asesoría financiera y un resultado limpio no garantiza que un proyecto sea seguro. Investiga siempre por tu cuenta.',
       sources: 'Datos',
-      errAddr: 'Eso no parece una dirección. Debe empezar con 0x y tener 42 caracteres.',
+      errAddr: 'Eso no parece una dirección. Las de EVM empiezan con 0x y tienen 42 caracteres; las de Solana tienen de 32 a 44 letras y números.',
       errUrl: 'Eso no parece un enlace. Ejemplo: https://ejemplo.com',
       scanning: 'Revisando', stDetect: 'Detectando la red', stContract: 'Leyendo la seguridad del contrato', stMarket: 'Revisando liquidez y trading',
       stScore: 'Calculando el riesgo', stWallet: 'Revisando la reputación de la dirección', stApprovals: 'Leyendo las aprobaciones', stLink: 'Revisando bases de phishing',
@@ -130,11 +135,11 @@
       h1a: 'Verifique antes', h1b: 'de confiar.',
       lead: 'Cole qualquer token, carteira ou link. O Shield Check lê dados públicos de segurança na blockchain e explica cada risco em linguagem simples, em segundos.',
       tToken: 'Token', tWallet: 'Carteira', tApprovals: 'Aprovações', tLink: 'Link', network: 'Rede', auto: 'Detectar rede', scan: 'Verificar',
-      hintToken: 'Endereço do contrato de qualquer token ERC-20. O Shield Check encontra a rede para você.',
+      hintToken: 'Endereço do token na Ethereum, Solana, Base, BNB Chain, Robinhood Chain e mais. O Shield Check encontra a rede para você.', errSolMode: 'Na Solana, por enquanto o Shield Check verifica tokens. Use a aba Token.',
       hintWallet: 'Qualquer carteira ou contrato. Veja se está ligado a golpes antes de enviar fundos.',
       hintApprovals: 'O endereço da sua carteira. Veja quais contratos podem gastar seus tokens. Sem conectar nada.',
       hintLink: 'Um link que você recebeu por mensagem, anúncio ou comentário.',
-      phToken: '0x… contrato do token', phWallet: '0x… endereço da carteira', phApprovals: '0x… endereço da sua carteira', phLink: 'https://…',
+      phToken: '0x… ou token da Solana', phWallet: '0x… endereço da carteira', phApprovals: '0x… endereço da sua carteira', phLink: 'https://…',
       try: 'Teste', sChecks: 'verificações', sChains: 'redes', sTools: 'ferramentas',
       fEyebrow: 'Quatro ferramentas, um scanner',
       fToken: 'Honeypots, donos ocultos, funções de mint, taxas alteráveis, listas negras, liquidez, bloqueios e concentração de holders.',
@@ -146,7 +151,7 @@
       h1: 'Cole um endereço ou link', h2: 'Lemos o contrato, o trading e os holders', h3: 'Você recebe uma nota e um relatório simples',
       disclaimer: 'O Shield Check é uma ferramenta automática baseada em dados públicos. Não é recomendação financeira e um resultado limpo não garante que um projeto seja seguro. Sempre faça sua própria pesquisa.',
       sources: 'Dados',
-      errAddr: 'Isso não parece um endereço. Deve começar com 0x e ter 42 caracteres.',
+      errAddr: 'Isso não parece um endereço. Os da EVM começam com 0x e têm 42 caracteres; os da Solana têm de 32 a 44 letras e números.',
       errUrl: 'Isso não parece um link. Exemplo: https://exemplo.com',
       scanning: 'Verificando', stDetect: 'Detectando a rede', stContract: 'Lendo a segurança do contrato', stMarket: 'Verificando liquidez e trading',
       stScore: 'Calculando o risco', stWallet: 'Verificando a reputação do endereço', stApprovals: 'Lendo as aprovações', stLink: 'Verificando bases de phishing',
@@ -179,6 +184,15 @@
   /* textos de cada revision: [ok, mal, descripcion ok, descripcion mal] */
   const C = {
     en: {
+      solMint: ['Mint authority revoked', 'Mint authority active', 'No one can create more tokens.', 'Someone can still create new tokens, diluting every holder.'],
+      solFreeze: ['No freeze authority', 'Freeze authority active', 'No one can freeze your tokens.', 'Someone can freeze token accounts so you can’t sell. Most Solana honeypots work this way. Normal only for regulated stablecoins.'],
+      solBal: ['Balances can’t be changed', 'Balances can be changed', 'No authority can edit balances.', 'An authority can change token balances, including yours.'],
+      solClose: ['Accounts can’t be closed', 'Accounts can be closed', 'No authority can close token accounts.', 'An authority can close token accounts.'],
+      solMeta: ['Name and logo are fixed', 'Name and logo can change', 'The token’s metadata is locked.', 'The owner can change the token’s name, symbol or logo.'],
+      solNT: ['Tokens can be transferred', 'Tokens can’t be transferred', 'You can move and sell this token.', 'This token can’t be transferred or sold.'],
+      solHook: ['No transfer hook', 'Transfer hook', 'No custom code runs on transfers.', 'Custom code runs on every transfer and could block or charge it.'],
+      solFee: ['No transfer fee', 'Transfer fee', 'Transfers have no built-in fee.', 'Every transfer pays a built-in fee.'],
+      solFeeUp: ['Fee can’t be changed', 'Fee can be changed', 'The transfer fee is fixed.', 'The transfer fee can be raised later.'],
       src: ['Source code verified', 'Source code not verified', 'The code is public on the explorer, so anyone can review it.', 'Nobody can read what this contract really does. Most scam tokens hide their code.'],
       owner: ['No active owner', 'Owner still has control', 'Ownership is renounced or there is no owner, so no one can use admin functions.', 'An owner wallet can still use admin functions. The other checks show what those functions can do.'],
       hidden: ['No hidden owner', 'Hidden owner', 'No secret admin was found.', 'The contract keeps a secret owner that can act even if ownership looks renounced.'],
@@ -212,6 +226,15 @@
       trust: ['On GoPlus trusted list', 'Recognized, widely used token.']
     },
     es: {
+      solMint: ['Autoridad de mint revocada', 'Autoridad de mint activa', 'Nadie puede crear más tokens.', 'Alguien todavía puede crear tokens nuevos, lo que diluye a todos los holders.'],
+      solFreeze: ['Sin autoridad de congelar', 'Autoridad de congelar activa', 'Nadie puede congelar tus tokens.', 'Alguien puede congelar cuentas para que no puedas vender. Así funcionan la mayoría de los honeypots en Solana. Solo es normal en stablecoins reguladas.'],
+      solBal: ['Los saldos no se pueden cambiar', 'Los saldos se pueden cambiar', 'Ninguna autoridad puede editar saldos.', 'Una autoridad puede cambiar saldos, incluido el tuyo.'],
+      solClose: ['Las cuentas no se pueden cerrar', 'Las cuentas se pueden cerrar', 'Ninguna autoridad puede cerrar cuentas del token.', 'Una autoridad puede cerrar cuentas del token.'],
+      solMeta: ['Nombre y logo fijos', 'Nombre y logo se pueden cambiar', 'Los metadatos del token están bloqueados.', 'El dueño puede cambiar el nombre, el símbolo o el logo.'],
+      solNT: ['Se puede transferir', 'No se puede transferir', 'Puedes mover y vender este token.', 'Este token no se puede transferir ni vender.'],
+      solHook: ['Sin transfer hook', 'Transfer hook', 'No se ejecuta código extra al transferir.', 'Se ejecuta código propio en cada transferencia y podría bloquearla o cobrarla.'],
+      solFee: ['Sin comisión por transferencia', 'Comisión por transferencia', 'Las transferencias no tienen comisión integrada.', 'Cada transferencia paga una comisión integrada.'],
+      solFeeUp: ['Comisión fija', 'La comisión se puede cambiar', 'La comisión de transferencia es fija.', 'La comisión de transferencia se puede subir después.'],
       src: ['Código verificado', 'Código no verificado', 'El código es público en el explorador, así que cualquiera puede revisarlo.', 'Nadie puede leer qué hace realmente este contrato. La mayoría de los tokens estafa ocultan su código.'],
       owner: ['Sin dueño activo', 'El dueño mantiene el control', 'La propiedad está renunciada o no hay dueño, así que nadie puede usar funciones de administrador.', 'Una wallet dueña todavía puede usar funciones de administrador. Las otras revisiones muestran qué pueden hacer.'],
       hidden: ['Sin dueño oculto', 'Dueño oculto', 'No se encontró un administrador secreto.', 'El contrato guarda un dueño secreto que puede actuar aunque la propiedad parezca renunciada.'],
@@ -245,6 +268,15 @@
       trust: ['En la lista de confianza de GoPlus', 'Token reconocido y muy usado.']
     },
     pt: {
+      solMint: ['Autoridade de mint revogada', 'Autoridade de mint ativa', 'Ninguém pode criar mais tokens.', 'Alguém ainda pode criar novos tokens, diluindo todos os holders.'],
+      solFreeze: ['Sem autoridade de congelar', 'Autoridade de congelar ativa', 'Ninguém pode congelar seus tokens.', 'Alguém pode congelar contas para você não conseguir vender. A maioria dos honeypots na Solana funciona assim. Normal só em stablecoins reguladas.'],
+      solBal: ['Saldos não podem ser alterados', 'Saldos podem ser alterados', 'Nenhuma autoridade pode editar saldos.', 'Uma autoridade pode alterar saldos, inclusive o seu.'],
+      solClose: ['Contas não podem ser fechadas', 'Contas podem ser fechadas', 'Nenhuma autoridade pode fechar contas do token.', 'Uma autoridade pode fechar contas do token.'],
+      solMeta: ['Nome e logo fixos', 'Nome e logo podem mudar', 'Os metadados do token estão bloqueados.', 'O dono pode mudar o nome, o símbolo ou o logo.'],
+      solNT: ['Pode ser transferido', 'Não pode ser transferido', 'Você pode mover e vender este token.', 'Este token não pode ser transferido nem vendido.'],
+      solHook: ['Sem transfer hook', 'Transfer hook', 'Nenhum código extra roda nas transferências.', 'Um código próprio roda em cada transferência e pode bloqueá-la ou cobrá-la.'],
+      solFee: ['Sem taxa de transferência', 'Taxa de transferência', 'As transferências não têm taxa embutida.', 'Cada transferência paga uma taxa embutida.'],
+      solFeeUp: ['Taxa fixa', 'A taxa pode mudar', 'A taxa de transferência é fixa.', 'A taxa de transferência pode ser aumentada depois.'],
       src: ['Código verificado', 'Código não verificado', 'O código é público no explorador, então qualquer um pode revisar.', 'Ninguém consegue ler o que este contrato realmente faz. A maioria dos tokens golpe esconde o código.'],
       owner: ['Sem dono ativo', 'O dono mantém o controle', 'A propriedade foi renunciada ou não há dono, então ninguém pode usar funções de administrador.', 'Uma carteira dona ainda pode usar funções de administrador. As outras verificações mostram o que elas fazem.'],
       hidden: ['Sem dono oculto', 'Dono oculto', 'Nenhum administrador secreto encontrado.', 'O contrato mantém um dono secreto que pode agir mesmo que a propriedade pareça renunciada.'],
@@ -373,7 +405,7 @@
 
   /* ---------------- formulario ---------------- */
   const EX = {
-    token: [['$SECT', '0x8C9984B06281f1CA9416e493c2E602AaB08513db'], ['USDT', '0xdAC17F958D2ee523a2206206994597C13D831ec7'], ['USDC', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'], ['PEPE', '0x6982508145454Ce325dDbE47a25d4ec3d2311933']],
+    token: [['$SECT', '0x8C9984B06281f1CA9416e493c2E602AaB08513db'], ['USDT', '0xdAC17F958D2ee523a2206206994597C13D831ec7'], ['USDC', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'], ['PEPE', '0x6982508145454Ce325dDbE47a25d4ec3d2311933'], ['USDC · SOL', 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'], ['BONK · SOL', 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263']],
     wallet: [['vitalik.eth', '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045']],
     approvals: [['vitalik.eth', '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045']],
     link: [['app.uniswap.org', 'https://app.uniswap.org'], ['sectoraorg.com', 'https://sectoraorg.com']]
@@ -385,6 +417,7 @@
     mode = m;
     $$('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.mode === m));
     $('#chainWrap').hidden = m === 'link';
+    const so = $('#chain option[value="sol"]'); if (so) { so.disabled = m !== 'token'; if (m !== 'token' && $('#chain').value === 'sol') $('#chain').value = 'auto'; }
     $('#hint').textContent = tr(HINT[m]); $('#q').placeholder = tr(PH[m]);
     $('#formErr').hidden = true;
     $('#examples').innerHTML = `<span class="lbl">${tr('try')}:</span>` + EX[m].map(([l, v]) => `<button type="button" data-v="${esc(v)}">${esc(l)}</button>`).join('');
@@ -428,7 +461,11 @@
     if (m === 'link') {
       if (!/^https?:\/\//i.test(q)) q = 'https://' + q;
       try { const u = new URL(q); if (!u.hostname.includes('.')) throw 0; } catch (e) { err.textContent = tr('errUrl'); err.hidden = false; return; }
+    } else if (SOL.test(q) && !q.startsWith('0x')) {
+      if (m !== 'token') { err.textContent = tr('errSolMode'); err.hidden = false; return; }
+      chainSel = 'sol';
     } else if (!ADDR.test(q)) { err.textContent = tr('errAddr'); err.hidden = false; return; }
+    else if (chainSel === 'sol') chainSel = 'auto';
     busy = true; $('#go').disabled = true;
     try {
       if (m === 'token') await runToken(q, chainSel);
@@ -449,15 +486,15 @@
     const dsP = getJSON(DS + addr).then(j => j && Array.isArray(j.pairs) ? j.pairs : []).catch(() => null);
     if (auto) {
       step(si, 'run'); pairs = await dsP;
-      const best = (pairs || []).filter(p => DS2ID[p.chainId]).sort((a, b) => ((b.liquidity || {}).usd || 0) - ((a.liquidity || {}).usd || 0))[0];
+      const best = (pairs || []).filter(p => DS2ID[p.chainId] && p.chainId !== 'solana').sort((a, b) => ((b.liquidity || {}).usd || 0) - ((a.liquidity || {}).usd || 0))[0];
       chain = best ? DS2ID[best.chainId] : '1';
       await sleep(Math.max(0, 450 - (performance.now() - t))); step(si++, 'done');
     }
     step(si, 'run');
     try {
-      const j = await getJSON(`${GP}/token_security/${chain}?contract_addresses=${addr}`);
-      const r = j && j.result ? j.result : {};
-      const key = Object.keys(r).find(k => k.toLowerCase() === addr.toLowerCase());
+      const j = await getJSON(CHAINS[chain].sol ? `${GP}/solana/token_security?contract_addresses=${addr}` : `${GP}/token_security/${chain}?contract_addresses=${addr}`);
+      const r = j && j.result ? j.result : {}, ks = Object.keys(r);
+      const key = ks.find(k => k === addr) || ks.find(k => k.toLowerCase() === addr.toLowerCase()) || (CHAINS[chain].sol && ks.length === 1 ? ks[0] : null);
       gp = key ? r[key] : null;
     } catch (e) { gpFail = true; }
     await sleep(350); step(si++, gpFail ? 'fail' : 'done');
@@ -493,7 +530,21 @@
       add(g, id, good ? 'ok' : badSev, good ? x[0] : x[1], good ? x[2] : x[3]);
     };
     let ownerActive = false;
-    if (gp) {
+    const SOLC = CHAINS[chain].sol;
+    if (gp && SOLC) {
+      const sflag = (g, id, val, badSev) => { if (val === undefined || val === null || val === '') return; const x = ct(id), bad = on(st(val)); add(g, id, bad ? badSev : 'ok', bad ? x[1] : x[0], bad ? x[3] : x[2]); };
+      const trusted = on(gp.trusted_token);
+      sflag('c', 'solMint', gp.mintable, 'high');
+      sflag('c', 'solFreeze', gp.freezable, trusted ? 'low' : 'high');
+      sflag('c', 'solBal', gp.balance_mutable_authority, 'crit');
+      sflag('c', 'solClose', gp.closable, 'high');
+      sflag('c', 'solMeta', gp.metadata_mutable, 'low');
+      sflag('t', 'solNT', gp.non_transferable, 'crit');
+      if (gp.transfer_hook !== undefined) { const h = gp.transfer_hook, bad = Array.isArray(h) ? h.length > 0 : on(st(h)), x = ct('solHook'); add('t', 'solHook', bad ? 'med' : 'ok', bad ? x[1] : x[0], bad ? x[3] : x[2]); }
+      if (gp.transfer_fee !== undefined) { const f = gp.transfer_fee, bad = f && typeof f === 'object' ? Object.keys(f).length > 0 : on(f), x = ct('solFee'); add('t', 'solFee', bad ? 'med' : 'ok', bad ? x[1] : x[0], bad ? x[3] : x[2]); }
+      sflag('t', 'solFeeUp', gp.transfer_fee_upgradable, 'high');
+    }
+    if (gp && !SOLC) {
       flagInv('c', 'src', 'is_open_source', 'high');
       if (gp.owner_address !== undefined) {
         ownerActive = !!gp.owner_address && !isBurn(gp.owner_address);
@@ -523,6 +574,7 @@
       flag('t', 'whale', 'anti_whale_modifiable', 'low');
       flagInv('l', 'dex', 'is_in_dex', 'med');
     }
+    if (gp && SOLC && Array.isArray(gp.dex)) { const x = ct('dex'), ok = gp.dex.length > 0 || pairs.length > 0; add('l', 'dex', ok ? 'ok' : 'med', ok ? x[0] : x[1], ok ? x[2] : x[3]); }
     /* mercado */
     const top = pairs[0] || null;
     const liqUsd = pairs.reduce((s, p) => s + ((p.liquidity || {}).usd || 0), 0) || null;
@@ -537,20 +589,20 @@
       }
     }
     if (gp) {
-      const lp = Array.isArray(gp.lp_holders) ? gp.lp_holders : [];
+      const lp = !SOLC && Array.isArray(gp.lp_holders) ? gp.lp_holders : [];
       const v3 = (gp.dex || []).some(d => /v3|v4|concentrated/i.test((d.liquidity_type || '') + ' ' + (d.name || '')));
       const x = ct('lplock');
       if (lp.length) {
         const f = frac(lp), locked = lp.reduce((s, h, i) => s + ((on(h.is_locked) || isBurn(h.address)) ? f[i] : 0), 0);
         add('l', 'lplock', locked >= .9 ? 'ok' : locked >= .5 ? 'low' : 'med', fill(locked >= .9 ? x[0] : x[1], { p: pct(Math.min(1, locked), 0) }), locked >= .9 ? x[2] : x[3]);
-      } else if (v3 || pairs.length) add('l', 'lplock', 'info', x[4], x[5]);
+      } else if (!SOLC && (v3 || pairs.length)) add('l', 'lplock', 'info', x[4], x[5]);
       /* holders */
       const hc = num(gp.holder_count);
       if (hc != null) { const x3 = ct('holders'); add('h', 'holders', hc < 100 ? 'low' : 'ok', fill(x3[0], { n: hc.toLocaleString('en-US') }), hc < 100 ? x3[2] : x3[1]); }
       const hs = Array.isArray(gp.holders) ? gp.holders : [];
       if (hs.length) {
         const f = frac(hs);
-        const eoa = hs.reduce((s, h, i) => s + ((on(h.is_contract) || on(h.is_locked) || isBurn(h.address)) ? 0 : f[i]), 0);
+        const eoa = hs.reduce((s, h, i) => s + ((on(h.is_contract) || on(h.is_locked) || isBurn(hAddr(h)) || (SOLC && h.tag)) ? 0 : f[i]), 0);
         const x4 = ct('top10');
         add('h', 'top10', eoa > .5 ? 'high' : eoa > .3 ? 'med' : 'ok', fill(x4[0], { p: pct(eoa, 1) }), (eoa > .3 ? x4[2] : x4[1]) + ' ' + x4[3]);
       }
@@ -559,7 +611,7 @@
       flag('h', 'airdrop', 'is_airdrop_scam', 'crit');
       flag('h', 'samecr', 'honeypot_with_same_creator', 'high');
       if (gp.fake_token && on(gp.fake_token.value)) { const x6 = ct('fake'); add('h', 'fake', 'crit', x6[1], x6[3]); }
-      if (on(gp.trust_list)) { const x7 = ct('trust'); add('h', 'trust', 'info', x7[0], x7[1]); }
+      if (on(gp.trust_list) || on(gp.trusted_token)) { const x7 = ct('trust'); add('h', 'trust', 'info', x7[0], x7[1]); }
     }
     /* puntuacion */
     const W = { crit: 45, high: 18, med: 8, low: 3 };
@@ -567,8 +619,9 @@
     const crit = L.filter(c => c.sev === 'crit');
     let score = Math.max(0, 100 - pts); if (crit.length) score = Math.min(score, 15);
     const v = !gp ? 'na' : crit.length ? 'crit' : score >= 80 ? 'ok' : score >= 55 ? 'med' : 'high';
-    const name = (gp && gp.token_name) || (top && top.baseToken && top.baseToken.address.toLowerCase() === addr.toLowerCase() ? top.baseToken.name : '') || short(addr);
-    const sym = (gp && gp.token_symbol) || (top && top.baseToken && top.baseToken.address.toLowerCase() === addr.toLowerCase() ? top.baseToken.symbol : '') || '';
+    const meta = gp && gp.metadata && typeof gp.metadata === 'object' ? gp.metadata : {};
+    const name = (gp && (gp.token_name || meta.name)) || (top && top.baseToken && top.baseToken.address.toLowerCase() === addr.toLowerCase() ? top.baseToken.name : '') || short(addr);
+    const sym = (gp && (gp.token_symbol || meta.symbol)) || (top && top.baseToken && top.baseToken.address.toLowerCase() === addr.toLowerCase() ? top.baseToken.symbol : '') || '';
     return { addr, chain, gp, pairs, top, liqUsd, vol, list: L, score, v, crit, name, sym, at: at || new Date() };
   }
 
@@ -626,9 +679,9 @@
       const f = frac(hs), mx = Math.max(...f, .0001);
       holdersHtml = `<div class="holders"><h4 class="m" style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);padding:14px 0 8px;font-weight:500">${tr('topHolders')}</h4>` +
         hs.slice(0, 10).map((h, i) => {
-          const ex = on(h.is_contract) || on(h.is_locked) || isBurn(h.address);
-          const tags = (isBurn(h.address) ? `<span class="tg">${tr('tBurn')}</span>` : '') + (on(h.is_locked) ? `<span class="tg lk">${tr('tLocked')}</span>` : '') + (KNOWN[(h.address || '').toLowerCase()] ? `<span class="tg kn">${KNOWN[(h.address || '').toLowerCase()]}</span>` : on(h.is_contract) && !isBurn(h.address) ? `<span class="tg">${tr('tContract')}</span>` : '') + (h.tag ? `<span class="tg">${esc(h.tag)}</span>` : '');
-          return `<div class="hrow"><span class="n">${String(i + 1).padStart(2, '0')}</span><span><a href="${ch.ex}/address/${esc(h.address)}" target="_blank" rel="noopener noreferrer">${short(h.address)}</a>${tags}</span><span class="hbar${ex ? ' ex' : ''}"><i data-w="${(f[i] / mx) * 100}"></i></span><span class="p">${pct(f[i])}</span></div>`;
+          const ha = hAddr(h), ex = on(h.is_contract) || on(h.is_locked) || isBurn(ha) || (ch.sol && !!h.tag);
+          const tags = (isBurn(ha) ? `<span class="tg">${tr('tBurn')}</span>` : '') + (on(h.is_locked) ? `<span class="tg lk">${tr('tLocked')}</span>` : '') + (KNOWN[ha.toLowerCase()] ? `<span class="tg kn">${KNOWN[ha.toLowerCase()]}</span>` : on(h.is_contract) && !isBurn(ha) ? `<span class="tg">${tr('tContract')}</span>` : '') + (h.tag ? `<span class="tg">${esc(h.tag)}</span>` : '');
+          return `<div class="hrow"><span class="n">${String(i + 1).padStart(2, '0')}</span><span><a href="${exAcc(ch, esc(ha))}" target="_blank" rel="noopener noreferrer">${short(ha)}</a>${tags}</span><span class="hbar${ex ? ' ex' : ''}"><i data-w="${(f[i] / mx) * 100}"></i></span><span class="p">${pct(f[i])}</span></div>`;
         }).join('') + `<p class="stamp" style="margin-top:10px">${tr('exNote')}</p></div>`;
     }
     const xt = encodeURIComponent(tr('xText', { s: r.sym ? '$' + r.sym : r.name, v: tr(VK[r.v]), n: r.v === 'na' ? '—' : r.score }));
@@ -642,7 +695,7 @@
           <div class="idrow">
             <span class="chipx">${esc(ch.n)}</span>
             <button type="button" class="chipx" data-copy="${esc(r.addr)}"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h3"/></svg>${short(r.addr)}</button>
-            <a class="chipx" href="${ch.ex}/token/${esc(r.addr)}" target="_blank" rel="noopener noreferrer">${tr('explorer')} ↗</a>
+            <a class="chipx" href="${exTok(ch, esc(r.addr))}" target="_blank" rel="noopener noreferrer">${tr('explorer')} ↗</a>
             ${p && p.url ? `<a class="chipx" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">${tr('chart')} ↗</a>` : ''}
           </div>
         </div>
@@ -757,7 +810,7 @@
         </div>
       </div>
       ${r.chainSel === 'auto' ? `<p class="note">${tr('apAuto', { c: ch.n })}</p>` : ''}
-      ${r.rows.length ? `<div class="apv">${r.rows.map(x => `<div class="ap ${x.risk === 'ok' ? '' : x.risk}"><div><b>${esc(x.sym)}</b><small>${esc(short(x.tokenAddr || ''))}</small></div><div class="who"><b style="font-weight:400">${esc(x.sname || short(x.spender))}</b><small><a href="${ch.ex}/address/${esc(x.spender)}" target="_blank" rel="noopener noreferrer">${esc(x.spender || '')}</a></small></div><span class="amt">${x.unl ? tr('apUnl') : esc(x.amt == null ? '—' : String(x.amt).slice(0, 18))}</span><span class="sev" style="color:${x.risk === 'bad' ? 'var(--crit)' : x.risk === 'warn' ? 'var(--med)' : 'var(--ok)'}">${tr(lab[x.risk])}</span></div>`).join('')}</div>` : `<div class="empty">${tr('apNone', { c: ch.n })}</div>`}
+      ${r.rows.length ? `<div class="apv">${r.rows.map(x => `<div class="ap ${x.risk === 'ok' ? '' : x.risk}"><div><b>${esc(x.sym)}</b><small>${esc(short(x.tokenAddr || ''))}</small></div><div class="who"><b style="font-weight:400">${esc(x.sname || short(x.spender))}</b><small><a href="${exAcc(ch, esc(x.spender))}" target="_blank" rel="noopener noreferrer">${esc(x.spender || '')}</a></small></div><span class="amt">${x.unl ? tr('apUnl') : esc(x.amt == null ? '—' : String(x.amt).slice(0, 18))}</span><span class="sev" style="color:${x.risk === 'bad' ? 'var(--crit)' : x.risk === 'warn' ? 'var(--med)' : 'var(--ok)'}">${tr(lab[x.risk])}</span></div>`).join('')}</div>` : `<div class="empty">${tr('apNone', { c: ch.n })}</div>`}
       <p class="stamp">${tr('stamp', { t: r.at.toLocaleString() })}</p></div>`;
     bindCommon();
   }

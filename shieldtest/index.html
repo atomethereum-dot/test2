@@ -22,7 +22,7 @@
 <meta name="theme-color" content="#030407">
 <link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="check.css?v=20261020b">
+<link rel="stylesheet" href="check.css?v=20261020c">
 </head>
 <body>
 <div class="bg" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="grid"></i></div>
@@ -67,12 +67,14 @@
               <option value="137">Polygon</option>
               <option value="10">Optimism</option>
               <option value="43114">Avalanche</option>
+              <option value="4663">Robinhood Chain</option>
+              <option value="sol">Solana</option>
             </select>
           </label>
-          <input id="q" type="text" spellcheck="false" inputmode="text" aria-label="Address or link" placeholder="0x… token contract address">
+          <input id="q" type="text" spellcheck="false" inputmode="text" aria-label="Address or link" placeholder="0x… or Solana token address">
           <button class="go" type="submit" id="go"><span data-i="scan">Scan</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         </div>
-        <p class="hint" id="hint" data-i="hintToken">Contract address of any ERC-20 token. Shield Check finds the network for you.</p>
+        <p class="hint" id="hint" data-i="hintToken">Token address on Ethereum, Solana, Base, BNB Chain, Robinhood Chain and more. Shield Check finds the network for you.</p>
         <div class="examples" id="examples"></div>
         <p class="err" id="formErr" role="alert" hidden></p>
       </form>
@@ -86,7 +88,7 @@
       </div>
       <div class="stats">
         <div><b class="num">30+</b><span data-i="sChecks">security checks</span></div>
-        <div><b class="num">7</b><span data-i="sChains">networks</span></div>
+        <div><b class="num">9</b><span data-i="sChains">networks</span></div>
         <div><b class="num">4</b><span data-i="sTools">tools</span></div>
       </div>
     </div>
@@ -124,6 +126,6 @@
 </footer>
 
 <div class="toast" id="toast" role="status"></div>
-<script src="check.js?v=20261020b" defer></script>
+<script src="check.js?v=20261020c" defer></script>
 </body>
 </html>
