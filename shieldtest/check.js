@@ -31,21 +31,31 @@
   /* ---------------- textos ---------------- */
   const T = {
     en: {
+      tNft: 'NFT', hintNft: 'Contract address of an NFT collection on an EVM network.', phNft: '0x… NFT collection address', stNft: 'Reading the NFT contract', stDapp: 'Reading dApp security data',
+      nftNf: 'There is no NFT security data for this address on {c}. Check the address or pick another network.', sumCritN: 'Critical risk: {x}. Avoid this collection.',
+      kStd: 'Standard', kItems: 'Items', kOwners: 'Owners', kSales: 'Sales 24h', nftAuto: 'Showing {c}. Pick another network to check the collection there.',
+      dTitle: 'dApp security', dAudit: 'Audit · {f}', dNoAudit: 'No audits on record', dTrusted: 'Trusted dApp', dContracts: 'Contracts',
+      dNone: 'No dApp security data for this site. That’s normal for websites that aren’t dApps.', dOpen: 'open source', dClosed: 'code not verified', dMal: 'malicious', dMalT: 'Malicious dApp contract',
+      dMalSum: 'One of this dApp’s contracts is flagged as malicious. Don’t connect your wallet.',
+      fNft: 'Before you mint or buy: can the owner mint at will, burn your NFTs or move them without your approval?',
+      fSeal: 'Projects can show their live Shield Check result on their own website with one line of code.',
+      sealEyebrow: 'Shield Seal', sealTitle: 'Show this result on your website', sealText: 'Paste this code on your site. The seal checks the token live every time it loads, so it always shows the current result, good or bad.',
+      sealDark: 'Dark', sealLight: 'Light', sealCopy: 'Copy seal code', sealChecking: 'Checking…', sealFail: 'Check unavailable', sealOpen: 'Open the full Shield Check report',
       navShield: 'Sectora Shield', navHome: 'Main site', eyebrow: 'Sectora Shield · free security scanner',
       h1a: 'Check before', h1b: 'you trust.',
       lead: 'Paste any token, wallet or link. Shield Check reads public on-chain security data and explains every risk in plain language, in seconds.',
-      tToken: 'Token', tWallet: 'Wallet', tApprovals: 'Approvals', tLink: 'Link', network: 'Network', auto: 'Auto-detect', scan: 'Scan',
+      tToken: 'Token', tWallet: 'Wallet', tApprovals: 'Approvals', tLink: 'Website', network: 'Network', auto: 'Auto-detect', scan: 'Scan',
       hintToken: 'Token address on Ethereum, Solana, Base, BNB Chain, Robinhood Chain and more. Shield Check finds the network for you.', errSolMode: 'On Solana, Shield Check checks tokens for now. Use the Token tab.',
       hintWallet: 'Any wallet or contract address. See if it is linked to scams before you send funds.',
       hintApprovals: 'Your wallet address. See which contracts can spend your tokens. No connection needed.',
-      hintLink: 'A website link you received in a DM, an ad or a comment.',
+      hintLink: 'A website or dApp link you received in a DM, an ad or a comment. We check phishing lists and the dApp’s audits and contracts.',
       phToken: '0x… or Solana token address', phWallet: '0x… wallet address', phApprovals: '0x… your wallet address', phLink: 'https://…',
       try: 'Try', sChecks: 'security checks', sChains: 'networks', sTools: 'tools',
-      fEyebrow: 'Four tools, one scanner',
+      fEyebrow: 'Five tools and a live seal',
       fToken: 'Honeypots, hidden owners, mint functions, changeable fees, blacklists, liquidity, locks and holder concentration.',
       fWallet: 'Before you send funds: is this address linked to phishing, theft, sanctions, mixers or scam contracts?',
       fApprovals: 'See which contracts can spend your tokens, spot unlimited and risky approvals, and revoke them.',
-      fLink: 'Got a link in a DM or an ad? Check it against phishing databases before you connect your wallet.',
+      fLink: 'Got a link in a DM or an ad? Check phishing lists and the dApp’s audits and contracts before you connect your wallet.',
       hEyebrow: 'How it works', hTitle: 'Public data, read for you.',
       hText: 'Shield Check never asks you to connect a wallet or sign anything. It reads public security data from GoPlus Security and market data from DexScreener, scores every finding and tells you what it means.',
       h1: 'Paste an address or link', h2: 'We read the contract, trading and holders', h3: 'You get a score and a plain-language report',
@@ -74,28 +84,38 @@
       apTitle: 'Token approvals', apNone: 'No active approvals found on {c}.', apSum: '{n} approvals · {r} risky', apUnl: 'Unlimited',
       apRevoke: 'Revoke on revoke.cash', apBad: 'Malicious', apWarn: 'Check', apOk: 'OK', apAuto: 'Showing {c}. Pick another network to check it there.',
       apSumOk: 'No risky approvals found.', apSumBad: '{r} approvals need your attention. Revoke the ones you don’t use.',
-      lOk: 'Not on phishing lists', lBad: 'Known phishing site', lSumOk: 'This site isn’t in the phishing databases we check.',
+      lOk: 'Not on phishing lists', lBad: 'Known phishing site', lSumOk: 'This site isn’t in the phishing databases we check.', lPhFail: 'Phishing check unavailable', lSumPhFail: 'The phishing database didn’t answer right now. Try again in a minute; the dApp data below is still valid.',
       lSumBad: 'This site is reported as phishing. Don’t connect your wallet or enter your seed phrase.',
       lNote: 'New phishing sites appear every day. Always check the address letter by letter and never type your seed phrase on a website.',
-      stamp: 'Data: GoPlus Security · DexScreener · {t}',
+      stamp: 'Data: GoPlus Security · DexScreener · {t}', stampGp: 'Data: GoPlus Security · {t}',
       xText: 'I checked {s} with Shield Check by @sectora__: {v} ({n}/100). Check any token before you trust it.'
     },
     es: {
+      tNft: 'NFT', hintNft: 'Dirección del contrato de una colección NFT en una red EVM.', phNft: '0x… dirección de la colección NFT', stNft: 'Leyendo el contrato NFT', stDapp: 'Leyendo los datos de seguridad del dApp',
+      nftNf: 'No hay datos de seguridad NFT para esta dirección en {c}. Revisa la dirección o elige otra red.', sumCritN: 'Riesgo crítico: {x}. Evita esta colección.',
+      kStd: 'Estándar', kItems: 'NFTs', kOwners: 'Dueños', kSales: 'Ventas 24 h', nftAuto: 'Mostrando {c}. Elige otra red para revisar la colección allí.',
+      dTitle: 'Seguridad del dApp', dAudit: 'Auditoría · {f}', dNoAudit: 'Sin auditorías registradas', dTrusted: 'dApp de confianza', dContracts: 'Contratos',
+      dNone: 'No hay datos de seguridad de dApp para este sitio. Es normal en webs que no son dApps.', dOpen: 'código abierto', dClosed: 'código no verificado', dMal: 'malicioso', dMalT: 'Contrato malicioso en el dApp',
+      dMalSum: 'Uno de los contratos de este dApp está marcado como malicioso. No conectes tu wallet.',
+      fNft: 'Antes de mintear o comprar: ¿el dueño puede mintear cuando quiera, quemar tus NFTs o moverlos sin tu permiso?',
+      fSeal: 'Los proyectos pueden mostrar su resultado de Shield Check en vivo en su propia web con una línea de código.',
+      sealEyebrow: 'Sello Shield', sealTitle: 'Muestra este resultado en tu web', sealText: 'Pega este código en tu web. El sello revisa el token en vivo cada vez que carga, así que siempre muestra el resultado actual, bueno o malo.',
+      sealDark: 'Oscuro', sealLight: 'Claro', sealCopy: 'Copiar código del sello', sealChecking: 'Revisando…', sealFail: 'Revisión no disponible', sealOpen: 'Abrir el informe completo de Shield Check',
       navShield: 'Sectora Shield', navHome: 'Web principal', eyebrow: 'Sectora Shield · escáner de seguridad gratis',
       h1a: 'Revisa antes', h1b: 'de confiar.',
       lead: 'Pega cualquier token, wallet o enlace. Shield Check lee datos públicos de seguridad en la blockchain y te explica cada riesgo en lenguaje sencillo, en segundos.',
-      tToken: 'Token', tWallet: 'Wallet', tApprovals: 'Aprobaciones', tLink: 'Enlace', network: 'Red', auto: 'Detectar red', scan: 'Revisar',
+      tToken: 'Token', tWallet: 'Wallet', tApprovals: 'Aprobaciones', tLink: 'Web', network: 'Red', auto: 'Detectar red', scan: 'Revisar',
       hintToken: 'Dirección del token en Ethereum, Solana, Base, BNB Chain, Robinhood Chain y más. Shield Check encuentra la red por ti.', errSolMode: 'En Solana, por ahora Shield Check revisa tokens. Usa la pestaña Token.',
       hintWallet: 'Cualquier wallet o contrato. Mira si está vinculado a estafas antes de enviar fondos.',
       hintApprovals: 'La dirección de tu wallet. Mira qué contratos pueden gastar tus tokens. No hace falta conectarla.',
-      hintLink: 'Un enlace que te llegó por mensaje, anuncio o comentario.',
+      hintLink: 'Una web o dApp que te llegó por mensaje, anuncio o comentario. Revisamos listas de phishing y las auditorías y contratos del dApp.',
       phToken: '0x… o token de Solana', phWallet: '0x… dirección de la wallet', phApprovals: '0x… dirección de tu wallet', phLink: 'https://…',
       try: 'Prueba', sChecks: 'revisiones', sChains: 'redes', sTools: 'herramientas',
-      fEyebrow: 'Cuatro herramientas, un escáner',
+      fEyebrow: 'Cinco herramientas y un sello en vivo',
       fToken: 'Honeypots, dueños ocultos, funciones de mint, comisiones modificables, listas negras, liquidez, bloqueos y concentración de holders.',
       fWallet: 'Antes de enviar fondos: ¿esta dirección está vinculada a phishing, robos, sanciones, mezcladores o contratos estafa?',
       fApprovals: 'Mira qué contratos pueden gastar tus tokens, detecta aprobaciones ilimitadas o peligrosas y revócalas.',
-      fLink: '¿Te llegó un enlace por mensaje o anuncio? Revísalo en las bases de phishing antes de conectar tu wallet.',
+      fLink: '¿Te llegó un enlace por mensaje o anuncio? Revisa las listas de phishing y las auditorías y contratos del dApp antes de conectar tu wallet.',
       hEyebrow: 'Cómo funciona', hTitle: 'Datos públicos, leídos por ti.',
       hText: 'Shield Check nunca te pide conectar la wallet ni firmar nada. Lee datos públicos de seguridad de GoPlus Security y datos de mercado de DexScreener, puntúa cada hallazgo y te explica qué significa.',
       h1: 'Pega una dirección o enlace', h2: 'Leemos el contrato, el trading y los holders', h3: 'Recibes una puntuación y un informe sencillo',
@@ -124,28 +144,38 @@
       apTitle: 'Aprobaciones de tokens', apNone: 'No se encontraron aprobaciones activas en {c}.', apSum: '{n} aprobaciones · {r} de riesgo', apUnl: 'Ilimitada',
       apRevoke: 'Revocar en revoke.cash', apBad: 'Maliciosa', apWarn: 'Revisar', apOk: 'Bien', apAuto: 'Mostrando {c}. Elige otra red para revisarla allí.',
       apSumOk: 'No se encontraron aprobaciones de riesgo.', apSumBad: '{r} aprobaciones necesitan tu atención. Revoca las que no uses.',
-      lOk: 'No está en listas de phishing', lBad: 'Sitio de phishing conocido', lSumOk: 'Este sitio no está en las bases de phishing que revisamos.',
+      lOk: 'No está en listas de phishing', lBad: 'Sitio de phishing conocido', lSumOk: 'Este sitio no está en las bases de phishing que revisamos.', lPhFail: 'Revisión de phishing no disponible', lSumPhFail: 'La base de phishing no respondió ahora. Inténtalo en un minuto; los datos del dApp de abajo siguen siendo válidos.',
       lSumBad: 'Este sitio está reportado como phishing. No conectes tu wallet ni escribas tu frase semilla.',
       lNote: 'Cada día aparecen sitios de phishing nuevos. Revisa siempre la dirección letra por letra y nunca escribas tu frase semilla en una web.',
-      stamp: 'Datos: GoPlus Security · DexScreener · {t}',
+      stamp: 'Datos: GoPlus Security · DexScreener · {t}', stampGp: 'Datos: GoPlus Security · {t}',
       xText: 'Revisé {s} con Shield Check de @sectora__: {v} ({n}/100). Revisa cualquier token antes de confiar.'
     },
     pt: {
+      tNft: 'NFT', hintNft: 'Endereço do contrato de uma coleção NFT em uma rede EVM.', phNft: '0x… endereço da coleção NFT', stNft: 'Lendo o contrato NFT', stDapp: 'Lendo os dados de segurança do dApp',
+      nftNf: 'Não há dados de segurança NFT para esse endereço em {c}. Confira o endereço ou escolha outra rede.', sumCritN: 'Risco crítico: {x}. Evite esta coleção.',
+      kStd: 'Padrão', kItems: 'NFTs', kOwners: 'Donos', kSales: 'Vendas 24 h', nftAuto: 'Mostrando {c}. Escolha outra rede para verificar a coleção lá.',
+      dTitle: 'Segurança do dApp', dAudit: 'Auditoria · {f}', dNoAudit: 'Sem auditorias registradas', dTrusted: 'dApp confiável', dContracts: 'Contratos',
+      dNone: 'Não há dados de segurança de dApp para este site. É normal em sites que não são dApps.', dOpen: 'código aberto', dClosed: 'código não verificado', dMal: 'malicioso', dMalT: 'Contrato malicioso no dApp',
+      dMalSum: 'Um dos contratos deste dApp está marcado como malicioso. Não conecte sua carteira.',
+      fNft: 'Antes de mintar ou comprar: o dono pode mintar quando quiser, queimar seus NFTs ou movê-los sem sua aprovação?',
+      fSeal: 'Projetos podem mostrar o resultado do Shield Check ao vivo no próprio site com uma linha de código.',
+      sealEyebrow: 'Selo Shield', sealTitle: 'Mostre este resultado no seu site', sealText: 'Cole este código no seu site. O selo verifica o token ao vivo toda vez que carrega, então sempre mostra o resultado atual, bom ou ruim.',
+      sealDark: 'Escuro', sealLight: 'Claro', sealCopy: 'Copiar código do selo', sealChecking: 'Verificando…', sealFail: 'Verificação indisponível', sealOpen: 'Abrir o relatório completo do Shield Check',
       navShield: 'Sectora Shield', navHome: 'Site principal', eyebrow: 'Sectora Shield · scanner de segurança grátis',
       h1a: 'Verifique antes', h1b: 'de confiar.',
       lead: 'Cole qualquer token, carteira ou link. O Shield Check lê dados públicos de segurança na blockchain e explica cada risco em linguagem simples, em segundos.',
-      tToken: 'Token', tWallet: 'Carteira', tApprovals: 'Aprovações', tLink: 'Link', network: 'Rede', auto: 'Detectar rede', scan: 'Verificar',
+      tToken: 'Token', tWallet: 'Carteira', tApprovals: 'Aprovações', tLink: 'Site', network: 'Rede', auto: 'Detectar rede', scan: 'Verificar',
       hintToken: 'Endereço do token na Ethereum, Solana, Base, BNB Chain, Robinhood Chain e mais. O Shield Check encontra a rede para você.', errSolMode: 'Na Solana, por enquanto o Shield Check verifica tokens. Use a aba Token.',
       hintWallet: 'Qualquer carteira ou contrato. Veja se está ligado a golpes antes de enviar fundos.',
       hintApprovals: 'O endereço da sua carteira. Veja quais contratos podem gastar seus tokens. Sem conectar nada.',
-      hintLink: 'Um link que você recebeu por mensagem, anúncio ou comentário.',
+      hintLink: 'Um site ou dApp que você recebeu por mensagem, anúncio ou comentário. Verificamos listas de phishing e as auditorias e contratos do dApp.',
       phToken: '0x… ou token da Solana', phWallet: '0x… endereço da carteira', phApprovals: '0x… endereço da sua carteira', phLink: 'https://…',
       try: 'Teste', sChecks: 'verificações', sChains: 'redes', sTools: 'ferramentas',
-      fEyebrow: 'Quatro ferramentas, um scanner',
+      fEyebrow: 'Cinco ferramentas e um selo ao vivo',
       fToken: 'Honeypots, donos ocultos, funções de mint, taxas alteráveis, listas negras, liquidez, bloqueios e concentração de holders.',
       fWallet: 'Antes de enviar fundos: esse endereço está ligado a phishing, roubos, sanções, mixers ou contratos golpe?',
       fApprovals: 'Veja quais contratos podem gastar seus tokens, encontre aprovações ilimitadas ou perigosas e revogue-as.',
-      fLink: 'Recebeu um link por mensagem ou anúncio? Verifique nas bases de phishing antes de conectar a carteira.',
+      fLink: 'Recebeu um link por mensagem ou anúncio? Verifique as listas de phishing e as auditorias e contratos do dApp antes de conectar a carteira.',
       hEyebrow: 'Como funciona', hTitle: 'Dados públicos, lidos para você.',
       hText: 'O Shield Check nunca pede para conectar a carteira nem assinar nada. Ele lê dados públicos de segurança da GoPlus Security e dados de mercado da DexScreener, pontua cada achado e explica o que significa.',
       h1: 'Cole um endereço ou link', h2: 'Lemos o contrato, o trading e os holders', h3: 'Você recebe uma nota e um relatório simples',
@@ -174,16 +204,23 @@
       apTitle: 'Aprovações de tokens', apNone: 'Nenhuma aprovação ativa encontrada em {c}.', apSum: '{n} aprovações · {r} de risco', apUnl: 'Ilimitada',
       apRevoke: 'Revogar no revoke.cash', apBad: 'Maliciosa', apWarn: 'Conferir', apOk: 'OK', apAuto: 'Mostrando {c}. Escolha outra rede para verificar lá.',
       apSumOk: 'Nenhuma aprovação de risco encontrada.', apSumBad: '{r} aprovações precisam da sua atenção. Revogue as que você não usa.',
-      lOk: 'Não está em listas de phishing', lBad: 'Site de phishing conhecido', lSumOk: 'Este site não está nas bases de phishing que verificamos.',
+      lOk: 'Não está em listas de phishing', lBad: 'Site de phishing conhecido', lSumOk: 'Este site não está nas bases de phishing que verificamos.', lPhFail: 'Verificação de phishing indisponível', lSumPhFail: 'A base de phishing não respondeu agora. Tente de novo em um minuto; os dados do dApp abaixo continuam válidos.',
       lSumBad: 'Este site é reportado como phishing. Não conecte sua carteira nem digite sua frase-semente.',
       lNote: 'Novos sites de phishing surgem todos os dias. Confira sempre o endereço letra por letra e nunca digite sua frase-semente em um site.',
-      stamp: 'Dados: GoPlus Security · DexScreener · {t}',
+      stamp: 'Dados: GoPlus Security · DexScreener · {t}', stampGp: 'Dados: GoPlus Security · {t}',
       xText: 'Verifiquei {s} com o Shield Check da @sectora__: {v} ({n}/100). Verifique qualquer token antes de confiar.'
     }
   };
   /* textos de cada revision: [ok, mal, descripcion ok, descripcion mal] */
   const C = {
     en: {
+      nftMal: ['Not a malicious contract', 'Malicious NFT contract', 'Not flagged as malicious.', 'This contract is flagged as malicious. Don’t interact with it.'],
+      nftMint: ['No privileged minting', 'Owner can mint at will', 'Only the normal mint rules apply.', 'The owner can mint new NFTs whenever they want, diluting the collection.'],
+      nftBurn: ['Owner can’t burn your NFTs', 'Owner can burn your NFTs', 'No one can destroy your NFTs.', 'The owner can destroy NFTs held by other wallets.'],
+      nftMove: ['No transfers without approval', 'Owner can move your NFTs', 'Your NFTs only move with your approval.', 'The owner can move NFTs out of your wallet without your approval.'],
+      nftAppr: ['Approvals work normally', 'Approvals are restricted', 'You can list it on any marketplace.', 'The contract limits which marketplaces can be approved. Selling may be harder.'],
+      nftOver: ['Supply limit enforced', 'Can mint past max supply', 'Minting respects the max supply.', 'More NFTs can be minted than the stated max supply.'],
+      nftVer: ['Verified collection', 'Recognized by major marketplaces.'],
       solMint: ['Mint authority revoked', 'Mint authority active', 'No one can create more tokens.', 'Someone can still create new tokens, diluting every holder.'],
       solFreeze: ['No freeze authority', 'Freeze authority active', 'No one can freeze your tokens.', 'Someone can freeze token accounts so you can’t sell. Most Solana honeypots work this way. Normal only for regulated stablecoins.'],
       solBal: ['Balances can’t be changed', 'Balances can be changed', 'No authority can edit balances.', 'An authority can change token balances, including yours.'],
@@ -226,6 +263,13 @@
       trust: ['On GoPlus trusted list', 'Recognized, widely used token.']
     },
     es: {
+      nftMal: ['No es un contrato malicioso', 'Contrato NFT malicioso', 'No está marcado como malicioso.', 'Este contrato está marcado como malicioso. No interactúes con él.'],
+      nftMint: ['Sin minteo privilegiado', 'El dueño puede mintear cuando quiera', 'Solo aplican las reglas normales de minteo.', 'El dueño puede mintear NFTs nuevos cuando quiera, diluyendo la colección.'],
+      nftBurn: ['El dueño no puede quemar tus NFTs', 'El dueño puede quemar tus NFTs', 'Nadie puede destruir tus NFTs.', 'El dueño puede destruir NFTs de otras wallets.'],
+      nftMove: ['Sin transferencias sin permiso', 'El dueño puede mover tus NFTs', 'Tus NFTs solo se mueven con tu aprobación.', 'El dueño puede sacar NFTs de tu wallet sin tu aprobación.'],
+      nftAppr: ['Las aprobaciones funcionan normal', 'Aprobaciones restringidas', 'Puedes listarlo en cualquier marketplace.', 'El contrato limita qué marketplaces se pueden aprobar. Vender puede ser más difícil.'],
+      nftOver: ['Respeta el suministro máximo', 'Puede mintear más del máximo', 'El minteo respeta el suministro máximo.', 'Se pueden mintear más NFTs que el máximo anunciado.'],
+      nftVer: ['Colección verificada', 'Reconocida por los principales marketplaces.'],
       solMint: ['Autoridad de mint revocada', 'Autoridad de mint activa', 'Nadie puede crear más tokens.', 'Alguien todavía puede crear tokens nuevos, lo que diluye a todos los holders.'],
       solFreeze: ['Sin autoridad de congelar', 'Autoridad de congelar activa', 'Nadie puede congelar tus tokens.', 'Alguien puede congelar cuentas para que no puedas vender. Así funcionan la mayoría de los honeypots en Solana. Solo es normal en stablecoins reguladas.'],
       solBal: ['Los saldos no se pueden cambiar', 'Los saldos se pueden cambiar', 'Ninguna autoridad puede editar saldos.', 'Una autoridad puede cambiar saldos, incluido el tuyo.'],
@@ -268,6 +312,13 @@
       trust: ['En la lista de confianza de GoPlus', 'Token reconocido y muy usado.']
     },
     pt: {
+      nftMal: ['Não é um contrato malicioso', 'Contrato NFT malicioso', 'Não está marcado como malicioso.', 'Este contrato está marcado como malicioso. Não interaja com ele.'],
+      nftMint: ['Sem mint privilegiado', 'O dono pode mintar quando quiser', 'Só valem as regras normais de mint.', 'O dono pode mintar novos NFTs quando quiser, diluindo a coleção.'],
+      nftBurn: ['O dono não pode queimar seus NFTs', 'O dono pode queimar seus NFTs', 'Ninguém pode destruir seus NFTs.', 'O dono pode destruir NFTs de outras carteiras.'],
+      nftMove: ['Sem transferências sem aprovação', 'O dono pode mover seus NFTs', 'Seus NFTs só se movem com sua aprovação.', 'O dono pode tirar NFTs da sua carteira sem sua aprovação.'],
+      nftAppr: ['Aprovações funcionam normalmente', 'Aprovações restritas', 'Você pode listar em qualquer marketplace.', 'O contrato limita quais marketplaces podem ser aprovados. Vender pode ser mais difícil.'],
+      nftOver: ['Respeita a oferta máxima', 'Pode mintar além do máximo', 'O mint respeita a oferta máxima.', 'Podem ser mintados mais NFTs que o máximo anunciado.'],
+      nftVer: ['Coleção verificada', 'Reconhecida pelos principais marketplaces.'],
       solMint: ['Autoridade de mint revogada', 'Autoridade de mint ativa', 'Ninguém pode criar mais tokens.', 'Alguém ainda pode criar novos tokens, diluindo todos os holders.'],
       solFreeze: ['Sem autoridade de congelar', 'Autoridade de congelar ativa', 'Ninguém pode congelar seus tokens.', 'Alguém pode congelar contas para você não conseguir vender. A maioria dos honeypots na Solana funciona assim. Normal só em stablecoins reguladas.'],
       solBal: ['Saldos não podem ser alterados', 'Saldos podem ser alterados', 'Nenhuma autoridade pode editar saldos.', 'Uma autoridade pode alterar saldos, inclusive o seu.'],
@@ -399,6 +450,39 @@
       g.fillRect(ox + x * u + (u - s) / 2, oy + y * u + (u - s) / 2, s - u * .08, s - u * .08);
     });
   }
+  /* ---------------- datos del token: los usan el informe y la pagina del sello ---------------- */
+  async function loadToken(addr, chainSel, step, quick) {
+    const pause = ms => quick ? null : sleep(ms), mark = step || (() => {});
+    const auto = chainSel === 'auto';
+    let si = 0, pairs = null, chain = auto ? null : chainSel, gp = null, gpFail = false;
+    const t = performance.now();
+    const dsP = getJSON(DS + addr).then(j => j && Array.isArray(j.pairs) ? j.pairs : []).catch(() => null);
+    if (auto) {
+      mark(si, 'run'); pairs = await dsP;
+      const best = (pairs || []).filter(p => DS2ID[p.chainId] && p.chainId !== 'solana').sort((a, b) => ((b.liquidity || {}).usd || 0) - ((a.liquidity || {}).usd || 0))[0];
+      chain = best ? DS2ID[best.chainId] : '1';
+      await pause(Math.max(0, 450 - (performance.now() - t))); mark(si++, 'done');
+    }
+    mark(si, 'run');
+    try {
+      const j = await getJSON(CHAINS[chain].sol ? `${GP}/solana/token_security?contract_addresses=${addr}` : `${GP}/token_security/${chain}?contract_addresses=${addr}`);
+      const r = j && j.result ? j.result : {}, ks = Object.keys(r);
+      const key = ks.find(k => k === addr) || ks.find(k => k.toLowerCase() === addr.toLowerCase()) || (CHAINS[chain].sol && ks.length === 1 ? ks[0] : null);
+      gp = key ? r[key] : null;
+    } catch (e) { gpFail = true; }
+    await pause(350); mark(si++, gpFail ? 'fail' : 'done');
+    mark(si, 'run');
+    if (!auto) pairs = await dsP;
+    await pause(350); mark(si++, pairs ? 'done' : 'fail');
+    mark(si, 'run'); await pause(300); mark(si, 'done');
+    const mine = (pairs || []).filter(p => p.chainId === CHAINS[chain].ds).sort((a, b) => ((b.liquidity || {}).usd || 0) - ((a.liquidity || {}).usd || 0));
+    return { chain, gp, gpFail, mine };
+  }
+  /* la pagina del sello carga este archivo sin la interfaz: solo se expone el motor */
+  if (!document.getElementById('form')) {
+    window.ShieldEngine = { CHAINS, ADDR, SOL, tr, setLang: l => { if (T[l]) lang = l; }, loadToken, buildToken, drawMark };
+    return;
+  }
   const heroCv = $('#mark'); let t0 = performance.now();
   function heroLoop(now) { drawMark(heroCv, (now - t0) / 1000, true); requestAnimationFrame(heroLoop); }
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) drawMark(heroCv, 5, false); else requestAnimationFrame(heroLoop);
@@ -408,11 +492,12 @@
     token: [['$SECT', '0x8C9984B06281f1CA9416e493c2E602AaB08513db'], ['USDT', '0xdAC17F958D2ee523a2206206994597C13D831ec7'], ['USDC', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'], ['PEPE', '0x6982508145454Ce325dDbE47a25d4ec3d2311933'], ['USDC · SOL', 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'], ['BONK · SOL', 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263']],
     wallet: [['vitalik.eth', '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045']],
     approvals: [['vitalik.eth', '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045']],
+    nft: [['BAYC', '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'], ['Pudgy Penguins', '0xBd3531dA5CF5857e7CfAA92426877b022e612cf8']],
     link: [['app.uniswap.org', 'https://app.uniswap.org'], ['sectoraorg.com', 'https://sectoraorg.com']]
   };
   let mode = 'token', last = null;
-  const HINT = { token: 'hintToken', wallet: 'hintWallet', approvals: 'hintApprovals', link: 'hintLink' };
-  const PH = { token: 'phToken', wallet: 'phWallet', approvals: 'phApprovals', link: 'phLink' };
+  const HINT = { token: 'hintToken', wallet: 'hintWallet', approvals: 'hintApprovals', nft: 'hintNft', link: 'hintLink' };
+  const PH = { token: 'phToken', wallet: 'phWallet', approvals: 'phApprovals', nft: 'phNft', link: 'phLink' };
   function setMode(m) {
     mode = m;
     $$('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.mode === m));
@@ -471,6 +556,7 @@
       if (m === 'token') await runToken(q, chainSel);
       else if (m === 'wallet') await runWallet(q, chainSel);
       else if (m === 'approvals') await runApprovals(q, chainSel);
+      else if (m === 'nft') await runNft(q, chainSel);
       else await runLink(q);
       try { history.replaceState(null, '', shareUrl(m, q, chainSel === 'auto' ? '' : chainSel)); } catch (e) {}
     } finally { busy = false; $('#go').disabled = false; }
@@ -481,28 +567,7 @@
     const auto = chainSel === 'auto';
     const steps = auto ? ['stDetect', 'stContract', 'stMarket', 'stScore'] : ['stContract', 'stMarket', 'stScore'];
     scanningView({ label: short(addr), sub: addr }, steps);
-    let si = 0, pairs = null, chain = auto ? null : chainSel, gp = null, gpFail = false;
-    const t = performance.now();
-    const dsP = getJSON(DS + addr).then(j => j && Array.isArray(j.pairs) ? j.pairs : []).catch(() => null);
-    if (auto) {
-      step(si, 'run'); pairs = await dsP;
-      const best = (pairs || []).filter(p => DS2ID[p.chainId] && p.chainId !== 'solana').sort((a, b) => ((b.liquidity || {}).usd || 0) - ((a.liquidity || {}).usd || 0))[0];
-      chain = best ? DS2ID[best.chainId] : '1';
-      await sleep(Math.max(0, 450 - (performance.now() - t))); step(si++, 'done');
-    }
-    step(si, 'run');
-    try {
-      const j = await getJSON(CHAINS[chain].sol ? `${GP}/solana/token_security?contract_addresses=${addr}` : `${GP}/token_security/${chain}?contract_addresses=${addr}`);
-      const r = j && j.result ? j.result : {}, ks = Object.keys(r);
-      const key = ks.find(k => k === addr) || ks.find(k => k.toLowerCase() === addr.toLowerCase()) || (CHAINS[chain].sol && ks.length === 1 ? ks[0] : null);
-      gp = key ? r[key] : null;
-    } catch (e) { gpFail = true; }
-    await sleep(350); step(si++, gpFail ? 'fail' : 'done');
-    step(si, 'run');
-    if (!auto) pairs = await dsP;
-    await sleep(350); step(si++, pairs ? 'done' : 'fail');
-    step(si, 'run'); await sleep(300); step(si, 'done');
-    const mine = (pairs || []).filter(p => p.chainId === CHAINS[chain].ds).sort((a, b) => ((b.liquidity || {}).usd || 0) - ((a.liquidity || {}).usd || 0));
+    const { chain, gp, gpFail, mine } = await loadToken(addr, chainSel, step, false);
     if (gpFail && !mine.length) return failView(() => run('token', addr, chainSel));
     if (!gp && !mine.length) return notFound(chain);
     const at = new Date();
@@ -713,9 +778,10 @@
       </div>
       <div class="groups" id="groups">${groups}</div>
       ${holdersHtml}
+      ${sealHtml(r)}
       <p class="stamp">${tr('stamp', { t: r.at.toLocaleString() })}</p>
     </div>`;
-    bindCommon();
+    bindCommon(); bindSeal(r);
     out.querySelectorAll('.filter button').forEach(b => b.addEventListener('click', () => {
       out.querySelectorAll('.filter button').forEach(x => x.classList.toggle('on', x === b));
       $('#groups').classList.toggle('only-issues', b.dataset.f === 'issues');
@@ -729,6 +795,29 @@
     requestAnimationFrame(() => requestAnimationFrame(() => out.querySelectorAll('.hbar i').forEach(i => { i.style.width = i.dataset.w + '%'; })));
   }
   function bindCommon() { out.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => copy(b.dataset.copy))); }
+
+  /* ---------------- sello Shield ---------------- */
+  const SEAL = new URL('seal/', location.href.split(/[?#]/)[0].replace(/[^/]*$/, '')).toString();
+  let sealStyle = 'dark';
+  const sealSrc = (r, s) => `${SEAL}?c=${encodeURIComponent(r.chain)}&t=${encodeURIComponent(r.addr)}&s=${s}&l=${lang}`;
+  const sealCode = (r, s) => `<iframe src="${sealSrc(r, s)}" width="340" height="104" style="border:0;max-width:100%" loading="lazy" title="Sectora Shield Seal"></iframe>`;
+  function sealHtml(r) {
+    return `<div class="seal"><div class="seal-l"><span class="eyebrow"><i></i>${tr('sealEyebrow')}</span><h3>${tr('sealTitle')}</h3><p>${tr('sealText')}</p>
+      <div class="filter" id="sealStyle"><button type="button" data-s="dark" class="${sealStyle === 'dark' ? 'on' : ''}">${tr('sealDark')}</button><button type="button" data-s="light" class="${sealStyle === 'light' ? 'on' : ''}">${tr('sealLight')}</button></div></div>
+      <div class="seal-r"><div class="seal-prev ${sealStyle}" id="sealPrev"><iframe src="${esc(sealSrc(r, sealStyle))}" width="340" height="104" title="Sectora Shield Seal" loading="lazy"></iframe></div>
+      <textarea id="sealCode" readonly rows="3" aria-label="${tr('sealCopy')}">${esc(sealCode(r, sealStyle))}</textarea>
+      <button type="button" class="seal-copy" id="sealCopy"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h3"/></svg>${tr('sealCopy')}</button></div></div>`;
+  }
+  function bindSeal(r) {
+    const box = $('#sealStyle'); if (!box) return;
+    box.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      sealStyle = b.dataset.s;
+      box.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+      $('#sealPrev').className = 'seal-prev ' + sealStyle;
+      $('#sealPrev iframe').src = sealSrc(r, sealStyle); $('#sealCode').value = sealCode(r, sealStyle);
+    }));
+    $('#sealCopy').addEventListener('click', () => copy($('#sealCode').value));
+  }
 
   /* ---------------- wallet ---------------- */
   async function runWallet(addr, chainSel) {
@@ -764,7 +853,7 @@
       </div>
       <div class="flags">${items.map(i => `<div class="flag ${i.bad ? 'bad' : 'ok'}"><span class="ic">${i.bad ? ICO.x : ICO.ok}</span>${esc(i.label)}</div>`).join('')}</div>
       <p class="note">${tr('wNote')}</p>
-      <p class="stamp">${tr('stamp', { t: r.at.toLocaleString() })}</p></div>`;
+      <p class="stamp">${tr('stampGp', { t: r.at.toLocaleString() })}</p></div>`;
     bindCommon();
   }
 
@@ -811,39 +900,132 @@
       </div>
       ${r.chainSel === 'auto' ? `<p class="note">${tr('apAuto', { c: ch.n })}</p>` : ''}
       ${r.rows.length ? `<div class="apv">${r.rows.map(x => `<div class="ap ${x.risk === 'ok' ? '' : x.risk}"><div><b>${esc(x.sym)}</b><small>${esc(short(x.tokenAddr || ''))}</small></div><div class="who"><b style="font-weight:400">${esc(x.sname || short(x.spender))}</b><small><a href="${exAcc(ch, esc(x.spender))}" target="_blank" rel="noopener noreferrer">${esc(x.spender || '')}</a></small></div><span class="amt">${x.unl ? tr('apUnl') : esc(x.amt == null ? '—' : String(x.amt).slice(0, 18))}</span><span class="sev" style="color:${x.risk === 'bad' ? 'var(--crit)' : x.risk === 'warn' ? 'var(--med)' : 'var(--ok)'}">${tr(lab[x.risk])}</span></div>`).join('')}</div>` : `<div class="empty">${tr('apNone', { c: ch.n })}</div>`}
-      <p class="stamp">${tr('stamp', { t: r.at.toLocaleString() })}</p></div>`;
+      <p class="stamp">${tr('stampGp', { t: r.at.toLocaleString() })}</p></div>`;
     bindCommon();
+  }
+
+  /* ---------------- NFT ---------------- */
+  async function runNft(addr, chainSel) {
+    const chain = chainSel === 'auto' ? '1' : chainSel;
+    scanningView({ label: short(addr), sub: addr }, ['stNft', 'stScore']);
+    step(0, 'run');
+    let res;
+    try {
+      const j = await getJSON(`${GP}/nft_security/${chain}?contract_addresses=${addr}`, 20000);
+      const r = j && j.result && typeof j.result === 'object' ? j.result : {};
+      const k = Object.keys(r).find(x => x.toLowerCase() === addr.toLowerCase());
+      res = k && typeof r[k] === 'object' ? r[k] : (r.nft_name !== undefined || r.nft_address !== undefined || r.nft_erc !== undefined ? r : null);
+    } catch (e) { res = undefined; }
+    await sleep(450);
+    if (res === undefined) { step(0, 'fail'); return failView(() => run('nft', addr, chainSel)); }
+    step(0, 'done'); step(1, 'run'); await sleep(300); step(1, 'done');
+    if (!res) { const c = CHAINS[chain].n; last = () => { out.innerHTML = `<div class="panel"><div class="failbox"><span class="ic">?</span><div><h3>${tr('nfTitle', { c })}</h3><p>${tr('nftNf', { c })}</p></div></div></div>`; }; return last(); }
+    const at = new Date();
+    last = () => renderNft(buildNft(addr, chain, chainSel, res, at)); last();
+  }
+  function buildNft(addr, chain, chainSel, d, at) {
+    const L = [], val = x => x && typeof x === 'object' && !Array.isArray(x) ? x.value : x;
+    const add = (g, id, sev, title, desc) => L.push({ g, id, sev, title, desc });
+    const flag = (g, id, v, badSev) => { if (!known(v)) return; const x = ct(id), bad = on(v); add(g, id, bad ? badSev : 'ok', bad ? x[1] : x[0], bad ? x[3] : x[2]); };
+    flag('c', 'nftMal', val(d.malicious_nft_contract), 'crit');
+    if (known(d.nft_open_source)) { const x = ct('src'), g = on(d.nft_open_source); add('c', 'src', g ? 'ok' : 'high', g ? x[0] : x[1], g ? x[2] : x[3]); }
+    flag('c', 'proxy', val(d.nft_proxy), 'med');
+    flag('c', 'selfd', val(d.self_destruct), 'high');
+    flag('t', 'nftMove', val(d.transfer_without_approval), 'crit');
+    flag('t', 'nftBurn', val(d.privileged_burn), 'high');
+    flag('t', 'nftMint', val(d.privileged_minting), 'high');
+    flag('t', 'nftOver', val(d.oversupply_minting), 'high');
+    flag('t', 'nftAppr', val(d.restricted_approval), 'med');
+    if (on(d.nft_verified)) { const x = ct('nftVer'); add('c', 'nftVer', 'info', x[0], x[1]); }
+    if (on(d.trust_list)) { const x = ct('trust'); add('c', 'trust', 'info', x[0], x[1]); }
+    const W = { crit: 45, high: 18, med: 8, low: 3 }, crit = L.filter(c => c.sev === 'crit');
+    let score = Math.max(0, 100 - L.reduce((s, c) => s + (W[c.sev] || 0), 0)); if (crit.length) score = Math.min(score, 15);
+    const v = !L.length ? 'na' : crit.length ? 'crit' : score >= 80 ? 'ok' : score >= 55 ? 'med' : 'high';
+    return { addr, chain, chainSel, d, list: L, score, v, crit, name: d.nft_name || short(addr), sym: d.nft_symbol || '', at };
+  }
+  function renderNft(r) {
+    const ch = CHAINS[r.chain], d = r.d, url = shareUrl('nft', r.addr, r.chainSel === 'auto' ? '' : r.chain);
+    const sum = r.v === 'na' ? tr('sumNa') : r.v === 'crit' ? tr('sumCritN', { x: r.crit[0].title }) : tr(r.v === 'ok' ? 'sumOk' : r.v === 'med' ? 'sumMed' : 'sumHigh');
+    const link = (u, l) => /^https?:\/\//i.test(u || '') ? `<a class="chipx" href="${esc(u)}" target="_blank" rel="noopener noreferrer">${l} ↗</a>` : '';
+    const n = x => { const v = num(x); return v == null ? '—' : v.toLocaleString('en-US'); };
+    const kpis = [[tr('kStd'), d.nft_erc ? String(d.nft_erc).toUpperCase() : '—'], [tr('kItems'), n(d.nft_items)], [tr('kOwners'), n(d.nft_owner_number)], [tr('kSales'), n(d.sales_24h)]];
+    const ord = { crit: 0, high: 1, med: 2, low: 3, info: 4, na: 5, ok: 6 };
+    const groups = [['c', 'gContract'], ['t', 'gTrading']].map(([g, k]) => {
+      const items = r.list.filter(c => c.g === g).sort((a, b) => ord[a.sev] - ord[b.sev]);
+      if (!items.length) return '';
+      const bad = items.filter(c => !['ok', 'info', 'na'].includes(c.sev)).length;
+      return `<div class="group"><h4><span>${tr(k)}</span><span>${items.length - bad}/${items.length}</span></h4>${items.map(chk).join('')}</div>`;
+    }).join('');
+    out.innerHTML = `<div class="panel">
+      <div class="rhead">
+        ${ring(r.score, r.v)}
+        <div>
+          <span class="verdict v-${r.v}"><i></i>${tr(VK[r.v])}</span>
+          <h2 class="tname">${esc(r.name)}${r.sym ? `<small>${esc(r.sym)}</small>` : ''}</h2>
+          <p class="summary">${esc(sum)}</p>
+          <div class="idrow">
+            <span class="chipx">${esc(ch.n)} · NFT</span>
+            <button type="button" class="chipx" data-copy="${esc(r.addr)}">${short(r.addr)}</button>
+            <a class="chipx" href="${exTok(ch, esc(r.addr))}" target="_blank" rel="noopener noreferrer">${tr('explorer')} ↗</a>
+            ${link(d.website_url, 'Web')}${link(d.twitter_url, 'X')}${link(d.discord_url, 'Discord')}
+          </div>
+        </div>
+        <div class="share"><button type="button" data-copy="${esc(url)}">${tr('copyLink')}</button></div>
+      </div>
+      ${r.chainSel === 'auto' ? `<p class="note">${tr('nftAuto', { c: ch.n })}</p>` : ''}
+      <div class="kpis kpis4">${kpis.map(([k, v]) => `<div class="kpi"><span>${k}</span><b class="num">${v}</b></div>`).join('')}</div>
+      <div class="groups" style="margin-top:24px">${groups}</div>
+      <p class="stamp">${tr('stampGp', { t: r.at.toLocaleString() })}</p></div>`;
+    bindCommon(); animateRing();
   }
 
   /* ---------------- enlace ---------------- */
   async function runLink(url) {
     const host = (() => { try { return new URL(url).hostname; } catch (e) { return url; } })();
-    scanningView({ label: host, sub: url }, ['stLink', 'stScore']);
-    step(0, 'run');
-    let res = null;
-    try {
-      const j = await getJSON(`${GP}/phishing_site?url=${encodeURIComponent(url)}`);
-      res = j && j.result ? j.result : null;
-    } catch (e) { res = null; }
+    scanningView({ label: host, sub: url }, ['stLink', 'stDapp', 'stScore']);
+    step(0, 'run'); step(1, 'run');
+    const ph = getJSON(`${GP}/phishing_site?url=${encodeURIComponent(url)}`).then(j => j && j.result ? j.result : undefined).catch(() => undefined);
+    const da = getJSON(`${GP}/dapp_security?url=${encodeURIComponent(url)}`).then(j => j && j.result && typeof j.result === 'object' && Object.keys(j.result).length ? j.result : null).catch(() => null);
+    const [p, d] = await Promise.all([ph, da]);
     await sleep(450);
-    if (!res) { step(0, 'fail'); return failView(() => run('link', url)); }
-    step(0, 'done'); step(1, 'run'); await sleep(300); step(1, 'done');
-    const r = { url, host, bad: on(res.phishing_site), at: new Date() };
+    step(0, p === undefined ? 'fail' : 'done'); step(1, 'done');
+    if (p === undefined && !d) return failView(() => run('link', url));
+    step(2, 'run'); await sleep(300); step(2, 'done');
+    const r = { url, host, bad: p ? on(p.phishing_site) : false, ph: p !== undefined, dapp: d, at: new Date() };
     last = () => renderLink(r); renderLink(r);
   }
+  function dappInfo(d) {
+    if (!d) return null;
+    const audits = (Array.isArray(d.audit_info) ? d.audit_info : []).filter(a => a && (a.audit_firm || a.audit_link));
+    const cons = [];
+    (Array.isArray(d.contracts_security) ? d.contracts_security : []).forEach(g => (g.contracts || []).forEach(c => cons.push({
+      chain: String(g.chain_id || ''), addr: c.contract_address || '', open: known(c.is_open_source) ? on(c.is_open_source) : null,
+      mal: on(c.malicious_contract) || on(c.malicious_creator) || (Array.isArray(c.malicious_behavior) && c.malicious_behavior.length > 0)
+    })));
+    return { name: d.project_name || '', audits, cons, trusted: on(d.trust_list), mal: cons.some(c => c.mal) };
+  }
   function renderLink(r) {
-    const v = r.bad ? 'crit' : 'ok';
+    const di = dappInfo(r.dapp), v = r.bad || (di && di.mal) ? 'crit' : r.ph ? 'ok' : 'na';
+    const title = r.bad ? tr('lBad') : di && di.mal ? tr('dMalT') : r.ph ? tr('lOk') : tr('lPhFail');
+    const sum = r.bad ? tr('lSumBad') : di && di.mal ? tr('dMalSum') : r.ph ? tr('lSumOk') : tr('lSumPhFail');
+    const dapp = !di ? `<div class="empty">${tr('dNone')}</div>` : `<div class="dapp">
+        <div class="dapp-h"><b>${esc(di.name || r.host)}</b>${di.trusted ? `<span class="chipx ok">${tr('dTrusted')}</span>` : ''}
+          ${di.audits.length ? di.audits.map(a => /^https?:\/\//i.test(a.audit_link || '') ? `<a class="chipx" href="${esc(a.audit_link)}" target="_blank" rel="noopener noreferrer">${esc(tr('dAudit', { f: a.audit_firm || '—' }))} ↗</a>` : `<span class="chipx">${esc(tr('dAudit', { f: a.audit_firm || '—' }))}</span>`).join('') : `<span class="chipx">${tr('dNoAudit')}</span>`}</div>
+        ${di.cons.length ? `<h4 class="m">${tr('dContracts')} · ${di.cons.length}</h4><div class="dcons">${di.cons.slice(0, 40).map(c => { const chn = CHAINS[c.chain]; return `<div class="dcon${c.mal ? ' bad' : ''}"><span>${esc(chn ? chn.n : 'Chain ' + c.chain)}</span>${chn ? `<a href="${exAcc(chn, esc(c.addr))}" target="_blank" rel="noopener noreferrer">${short(c.addr)}</a>` : `<span class="m">${short(c.addr)}</span>`}<em class="${c.mal ? 'b' : c.open === false ? 'w' : 'g'}">${c.mal ? tr('dMal') : c.open === false ? tr('dClosed') : c.open ? tr('dOpen') : '—'}</em></div>`; }).join('')}</div>` : ''}
+      </div>`;
     out.innerHTML = `<div class="panel">
       <div class="rhead">
-        <div class="ring sm"><svg viewBox="0 0 176 176"><circle class="tr" cx="88" cy="88" r="78"/><circle class="vl" cx="88" cy="88" r="78" stroke="${VCOL[v]}" stroke-dasharray="490" stroke-dashoffset="0"/></svg><div class="sc">${r.bad ? '<b style="font-size:40px;color:var(--crit)">!</b>' : '<b style="font-size:34px;color:var(--ok)">✓</b>'}</div></div>
-        <div><span class="verdict v-${v}"><i></i>${tr(r.bad ? 'lBad' : 'lOk')}</span>
+        <div class="ring sm"><svg viewBox="0 0 176 176"><circle class="tr" cx="88" cy="88" r="78"/><circle class="vl" cx="88" cy="88" r="78" stroke="${VCOL[v]}" stroke-dasharray="490" stroke-dashoffset="0"/></svg><div class="sc">${v === 'crit' ? '<b style="font-size:40px;color:var(--crit)">!</b>' : v === 'na' ? `<b style="font-size:36px;color:${VCOL.na}">?</b>` : '<b style="font-size:34px;color:var(--ok)">✓</b>'}</div></div>
+        <div><span class="verdict v-${v}"><i></i>${esc(title)}</span>
           <h2 class="tname" style="word-break:break-all">${esc(r.host)}</h2>
-          <p class="summary">${tr(r.bad ? 'lSumBad' : 'lSumOk')}</p>
+          <p class="summary">${esc(sum)}</p>
           <div class="idrow"><span class="chipx">${esc(r.url.slice(0, 60))}</span><button type="button" class="chipx" data-copy="${esc(shareUrl('link', r.url))}">${tr('copyLink')}</button></div>
         </div>
       </div>
+      <h3 class="subh">${tr('dTitle')}</h3>
+      ${dapp}
       <p class="note">${tr('lNote')}</p>
-      <p class="stamp">${tr('stamp', { t: r.at.toLocaleString() })}</p></div>`;
+      <p class="stamp">${tr('stampGp', { t: r.at.toLocaleString() })}</p></div>`;
     bindCommon();
   }
 

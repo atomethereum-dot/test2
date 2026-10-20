@@ -22,7 +22,7 @@
 <meta name="theme-color" content="#030407">
 <link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="check.css?v=20261020c">
+<link rel="stylesheet" href="check.css?v=20261021a">
 </head>
 <body>
 <div class="bg" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="grid"></i></div>
@@ -54,7 +54,8 @@
           <button type="button" role="tab" data-mode="token" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9 12h6M12 9v6"/></svg><span data-i="tToken">Token</span></button>
           <button type="button" role="tab" data-mode="wallet"><svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="13" rx="3"/><path d="M15 12.5h2.5"/><path d="M6 6l9-2.5 1.5 2.5"/></svg><span data-i="tWallet">Wallet</span></button>
           <button type="button" role="tab" data-mode="approvals"><svg viewBox="0 0 24 24"><path d="M12 3.5l7 3v5.5c0 4.2-3 7.4-7 8.6-4-1.2-7-4.4-7-8.6V6.5z"/><path d="M9 12l2 2 4-4"/></svg><span data-i="tApprovals">Approvals</span></button>
-          <button type="button" role="tab" data-mode="link"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></svg><span data-i="tLink">Link</span></button>
+          <button type="button" role="tab" data-mode="nft"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 15l4-4 4 4 3-3 5 5"/><circle cx="15.5" cy="8.5" r="1.4"/></svg><span data-i="tNft">NFT</span></button>
+          <button type="button" role="tab" data-mode="link"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></svg><span data-i="tLink">Website</span></button>
         </div>
         <div class="bar">
           <label class="sel" id="chainWrap"><span class="sr" data-i="network">Network</span>
@@ -89,7 +90,7 @@
       <div class="stats">
         <div><b class="num">30+</b><span data-i="sChecks">security checks</span></div>
         <div><b class="num">9</b><span data-i="sChains">networks</span></div>
-        <div><b class="num">4</b><span data-i="sTools">tools</span></div>
+        <div><b class="num">5</b><span data-i="sTools">tools</span></div>
       </div>
     </div>
   </section>
@@ -97,12 +98,14 @@
   <section class="out" id="out" aria-live="polite"></section>
 
   <section class="feat">
-    <p class="eyebrow"><i></i><span data-i="fEyebrow">Four tools, one scanner</span></p>
+    <p class="eyebrow"><i></i><span data-i="fEyebrow">Five tools and a live seal</span></p>
     <div class="fgrid">
       <article class="fc"><span class="fi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9 12h6M12 9v6"/></svg></span><h3 data-i="tToken">Token</h3><p data-i="fToken">Honeypots, hidden owners, mint functions, changeable fees, blacklists, liquidity, locks and holder concentration.</p></article>
       <article class="fc"><span class="fi"><svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="13" rx="3"/><path d="M15 12.5h2.5"/><path d="M6 6l9-2.5 1.5 2.5"/></svg></span><h3 data-i="tWallet">Wallet</h3><p data-i="fWallet">Before you send funds: is this address linked to phishing, theft, sanctions, mixers or scam contracts?</p></article>
       <article class="fc"><span class="fi"><svg viewBox="0 0 24 24"><path d="M12 3.5l7 3v5.5c0 4.2-3 7.4-7 8.6-4-1.2-7-4.4-7-8.6V6.5z"/><path d="M9 12l2 2 4-4"/></svg></span><h3 data-i="tApprovals">Approvals</h3><p data-i="fApprovals">See which contracts can spend your tokens, spot unlimited and risky approvals, and revoke them.</p></article>
-      <article class="fc"><span class="fi"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></svg></span><h3 data-i="tLink">Link</h3><p data-i="fLink">Got a link in a DM or an ad? Check it against phishing databases before you connect your wallet.</p></article>
+      <article class="fc"><span class="fi"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></svg></span><h3 data-i="tLink">Website</h3><p data-i="fLink">Got a link in a DM or an ad? Check phishing lists and the dApp’s audits and contracts before you connect your wallet.</p></article>
+      <article class="fc"><span class="fi"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 15l4-4 4 4 3-3 5 5"/><circle cx="15.5" cy="8.5" r="1.4"/></svg></span><h3 data-i="tNft">NFT</h3><p data-i="fNft">Before you mint or buy: can the owner mint at will, burn your NFTs or move them without your approval?</p></article>
+      <article class="fc"><span class="fi"><svg viewBox="0 0 24 24"><path d="M12 2.5l7.5 3v6c0 4.8-3.2 8.4-7.5 10-4.3-1.6-7.5-5.2-7.5-10v-6z"/><path d="M8.4 12l2.6 2.6 4.8-5"/></svg></span><h3 data-i="sealEyebrow">Shield Seal</h3><p data-i="fSeal">Projects can show their live Shield Check result on their own website with one line of code.</p></article>
     </div>
   </section>
 
@@ -126,6 +129,6 @@
 </footer>
 
 <div class="toast" id="toast" role="status"></div>
-<script src="check.js?v=20261020c" defer></script>
+<script src="check.js?v=20261021a" defer></script>
 </body>
 </html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sectora Shield Seal</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+@font-face{font-family:'Plex';src:url("/fonts/IBMPlexSans.woff2") format("woff2");font-weight:100 700;font-display:swap}
+@font-face{font-family:'PlexMono';src:url("/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-display:swap}
+:root{--bg:#070a12;--line:rgba(255,255,255,.12);--ink:#eef2fb;--ink2:#a9b3c7;--ink3:#6f7a91;--tile:#0b1120;--ok:#2fd27f;--med:#f0b44c;--high:#ff7a45;--crit:#ff4d5e;--na:#7d879a}
+body.light{--bg:#ffffff;--line:#d9dee8;--ink:#0d1220;--ink2:#465066;--ink3:#7a8396;--tile:#0b1120;--ok:#13a05a;--med:#b97a0c;--high:#d4541c;--crit:#d92637;--na:#7a8396}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:transparent;overflow:hidden}
+body{font-family:'Plex',system-ui,sans-serif;font-weight:400;color:var(--ink);-webkit-font-smoothing:antialiased}
+#seal{display:flex;align-items:center;gap:14px;width:340px;max-width:100%;height:104px;padding:13px 16px 13px 13px;border-radius:16px;background:var(--bg);border:1px solid var(--line);text-decoration:none;color:inherit;transition:border-color .2s}
+#seal:hover{border-color:rgba(79,139,255,.55)}
+.tile{flex:none;width:76px;height:76px;border-radius:13px;background:radial-gradient(circle at 50% 35%,#13275a 0%,var(--tile) 70%);display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(79,139,255,.25)}
+.tile canvas{width:52px;height:60px}
+.mid{flex:1;min-width:0}
+.k,.s{display:block}
+.k{font-family:'PlexMono',ui-monospace,monospace;font-weight:500;font-size:10px;letter-spacing:2.6px;text-transform:uppercase;color:var(--ink3);white-space:nowrap}
+.v{display:flex;align-items:center;gap:7px;margin-top:5px;font-size:16.5px;font-weight:500;line-height:1.2;color:var(--c,var(--na));white-space:nowrap}
+.v i{flex:none;width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+.busy .v i{animation:p 1s ease-in-out infinite}
+@keyframes p{50%{opacity:.25}}
+.s{margin-top:5px;font-family:'PlexMono',ui-monospace,monospace;font-weight:500;font-size:11.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc{flex:none;text-align:right;font-family:'PlexMono',ui-monospace,monospace;font-weight:500;line-height:1}
+.sc b{display:block;font-size:30px;color:var(--c,var(--ink))}
+.sc span{display:block;margin-top:5px;font-size:10.5px;letter-spacing:1px;color:var(--ink3)}
+#vt{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.k{overflow:hidden;text-overflow:ellipsis}
+@media (max-width:330px){#seal{gap:10px;padding:10px 12px 10px 10px}.tile{width:60px;height:60px;border-radius:11px}.tile canvas{width:42px;height:48px}.k{font-size:9px;letter-spacing:2px}.v{font-size:15px}.s{font-size:10.5px}.sc b{font-size:24px}}
+@media (max-width:250px){.tile{display:none}}
+@media (prefers-reduced-motion:reduce){.busy .v i{animation:none}}
+</style>
+</head>
+<body>
+<a id="seal" class="busy" target="_blank" rel="noopener">
+  <span class="tile"><canvas id="mk" width="104" height="120"></canvas></span>
+  <span class="mid"><span class="k">Sectora Shield</span><span class="v" id="v"><i></i><span id="vt">…</span></span><span class="s" id="s">&nbsp;</span></span>
+  <span class="sc"><b id="n">—</b><span>/100</span></span>
+</a>
+<script src="../check.js?v=20261021a"></script>
+<script>
+(function () {
+  'use strict';
+  const E = window.ShieldEngine, q = new URLSearchParams(location.search);
+  const t = (q.get('t') || '').trim(), sol = E && E.SOL.test(t) && !t.startsWith('0x');
+  const chain = sol ? 'sol' : (E && E.CHAINS[q.get('c')] ? q.get('c') : 'auto');
+  const seal = document.getElementById('seal'), $ = id => document.getElementById(id);
+  document.body.className = q.get('s') === 'light' ? 'light' : 'dark';
+  if (!E) return;
+  E.setLang(q.get('l') || 'en'); document.documentElement.lang = q.get('l') || 'en';
+  E.drawMark($('mk'), 5, false);
+  const base = location.href.split(/[?#]/)[0].replace(/seal\/[^/]*$/, '');
+  const show = (key, color, score, sub) => {
+    seal.classList.remove('busy');
+    seal.style.setProperty('--c', color);
+    $('vt').textContent = E.tr(key); $('n').textContent = score; if (sub) $('s').textContent = sub;
+  };
+  $('vt').textContent = E.tr('sealChecking');
+  seal.title = E.tr('sealOpen');
+  if (!(E.ADDR.test(t) || sol)) return show('sealFail', 'var(--na)', '—');
+  seal.href = `${base}?mode=token&q=${encodeURIComponent(t)}${chain !== 'auto' ? '&chain=' + encodeURIComponent(chain) : ''}`;
+  $('s').textContent = t.slice(0, 6) + '…' + t.slice(-4);
+  E.loadToken(t, chain, null, true).then(r => {
+    if (r.gpFail && !r.mine.length) return show('sealFail', 'var(--na)', '—');
+    const x = E.buildToken(t, r.chain, r.gp, r.mine, new Date());
+    seal.href = `${base}?mode=token&q=${encodeURIComponent(t)}&chain=${encodeURIComponent(r.chain)}`;
+    const VK = { ok: 'vOk', med: 'vMed', high: 'vHigh', crit: 'vCrit', na: 'vNa' };
+    show(VK[x.v], `var(--${x.v})`, x.v === 'na' ? '—' : x.score, (x.sym ? '$' + x.sym : x.name) + ' · ' + E.CHAINS[r.chain].n);
+  }).catch(() => show('sealFail', 'var(--na)', '—'));
+})();
+</script>
+</body>
+</html>
