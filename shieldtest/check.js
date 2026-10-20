@@ -20,6 +20,8 @@
   const ZERO = '0x0000000000000000000000000000000000000000', DEAD = '0x000000000000000000000000000000000000dead';
   const isBurn = a => { a = (a || '').toLowerCase(); return a === ZERO || a === DEAD || /^0x0{30,}/.test(a) || a.endsWith('dead'); };
   const ADDR = /^0x[a-fA-F0-9]{40}$/;
+  /* direcciones conocidas del ecosistema Sectora, con su nombre en la lista de holders */
+  const KNOWN = { '0x79cb8b3b3e81a2b25c6d7250c3c5a742aa8320e0': 'APY Contract' };
 
   /* ---------------- textos ---------------- */
   const T = {
@@ -625,7 +627,7 @@
       holdersHtml = `<div class="holders"><h4 class="m" style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);padding:14px 0 8px;font-weight:500">${tr('topHolders')}</h4>` +
         hs.slice(0, 10).map((h, i) => {
           const ex = on(h.is_contract) || on(h.is_locked) || isBurn(h.address);
-          const tags = (isBurn(h.address) ? `<span class="tg">${tr('tBurn')}</span>` : '') + (on(h.is_locked) ? `<span class="tg lk">${tr('tLocked')}</span>` : '') + (on(h.is_contract) && !isBurn(h.address) ? `<span class="tg">${tr('tContract')}</span>` : '') + (h.tag ? `<span class="tg">${esc(h.tag)}</span>` : '');
+          const tags = (isBurn(h.address) ? `<span class="tg">${tr('tBurn')}</span>` : '') + (on(h.is_locked) ? `<span class="tg lk">${tr('tLocked')}</span>` : '') + (KNOWN[(h.address || '').toLowerCase()] ? `<span class="tg kn">${KNOWN[(h.address || '').toLowerCase()]}</span>` : on(h.is_contract) && !isBurn(h.address) ? `<span class="tg">${tr('tContract')}</span>` : '') + (h.tag ? `<span class="tg">${esc(h.tag)}</span>` : '');
           return `<div class="hrow"><span class="n">${String(i + 1).padStart(2, '0')}</span><span><a href="${ch.ex}/address/${esc(h.address)}" target="_blank" rel="noopener noreferrer">${short(h.address)}</a>${tags}</span><span class="hbar${ex ? ' ex' : ''}"><i data-w="${(f[i] / mx) * 100}"></i></span><span class="p">${pct(f[i])}</span></div>`;
         }).join('') + `<p class="stamp" style="margin-top:10px">${tr('exNote')}</p></div>`;
     }
