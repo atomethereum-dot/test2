@@ -479,7 +479,13 @@ h2.t b{font-weight:400;color:var(--b-ink)}
 #final h2.t{margin:0 auto;max-width:none;font-size:clamp(40px,6.4vw,96px);letter-spacing:-.04em}
 #final .sub{margin:24px auto 0;color:var(--ink-2)}
 #final .actions{justify-content:center;grid-template-columns:repeat(2,max-content);margin-top:40px}
-footer{position:relative;background:var(--night);border-top:1px solid var(--hair);padding-top:clamp(40px,6vh,64px);padding-bottom:calc(clamp(40px,6vh,64px) + env(safe-area-inset-bottom,0px))}
+/* sin costura con el pie: el horizonte se apaga antes del borde y la cuadricula
+   se funde con el color del pie, que ya no lleva linea arriba */
+#final .horizon{-webkit-mask-image:linear-gradient(to top,transparent 0,#000 60%);mask-image:linear-gradient(to top,transparent 0,#000 60%)}
+#final .horizon::after{display:none}
+#final::after{content:'';position:absolute;left:0;right:0;bottom:0;height:clamp(150px,24vh,260px);z-index:1;pointer-events:none;
+  background:linear-gradient(0deg,var(--night) 0,rgba(5,7,12,.82) 34%,rgba(5,7,12,.35) 68%,rgba(5,7,12,0) 100%)}
+footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px);padding-bottom:calc(clamp(40px,6vh,64px) + env(safe-area-inset-bottom,0px))}
 .ft{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) auto;gap:clamp(24px,4vw,72px);align-items:start}
 .ft p{font-size:13px;line-height:1.75;color:var(--ink-3);max-width:66ch}
 .ft nav{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:0}
