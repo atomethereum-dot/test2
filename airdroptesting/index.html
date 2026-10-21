@@ -26,6 +26,7 @@
   --p-ink:#07080a;--p-ink-2:#3c414c;--p-ink-3:#6b7280;--p-ink-4:#9aa0ab;
   --p-line:rgba(7,8,10,.12);--p-line-2:rgba(7,8,10,.07);
   --ok:#0f8f52;--warn:#a86400;
+  --night:#05070c;--b-ink:#0d4fd8;
   --pad:clamp(20px,4.4vw,72px);
   --ease:cubic-bezier(.22,.72,.24,1);--ease-out:cubic-bezier(.16,1,.3,1);
 }
@@ -80,10 +81,14 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:20px;paddi
 .docs:hover::before,.docs:focus-visible::before{transform:translateY(0)}
 
 .hero{flex:1;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.8fr);gap:clamp(30px,4vw,76px);align-items:center;padding-top:clamp(40px,7vh,96px);padding-bottom:clamp(56px,9vh,110px)}
-h1{font-size:clamp(46px,7.4vw,112px);font-weight:200;line-height:.98;letter-spacing:-.04em}
-h1 .b{display:block;font-weight:400}
-h1 .b em{font-style:normal;color:var(--blue-l)}
-.rule{width:74px;height:1px;background:var(--hair);margin:36px 0 28px}
+h1{font-size:clamp(34px,5.2vw,66px);font-weight:200;line-height:1.1;letter-spacing:-.024em;max-width:17ch}
+h1 .ln{display:block;overflow:hidden;padding-bottom:.09em;margin-bottom:-.09em}
+h1 .ln > span{display:block}
+h1 .b{font-weight:400}
+.rule{width:74px;height:1px;background:var(--hair);margin:34px 0 28px}
+/* the hero hands over to the iris in pure black, with no edge */
+#top::after{content:'';position:absolute;left:0;right:0;bottom:0;height:140px;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,0),#000)}
+.progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:130;background:var(--blue);transform:scaleX(0);transform-origin:0 50%;will-change:transform}
 .lede{max-width:54ch;font-size:clamp(15px,1.2vw,17px);line-height:1.7;color:var(--ink-2)}
 .lede b{font-weight:400;color:#fff}
 .actions{display:grid;grid-template-columns:minmax(0,max-content);grid-auto-rows:1fr;gap:12px;margin-top:40px}
@@ -124,7 +129,7 @@ h1 .b em{font-style:normal;color:var(--blue-l)}
 .chip.ok::before{content:'';width:4px;height:8px;margin:-3px 1px 0 0;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
 .chip.wait{color:var(--warn);border-color:rgba(168,100,0,.36);background:rgba(168,100,0,.07)}
 .chip.wait::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.6s steps(2) infinite}
-.chip.blue{color:var(--blue-deep);border-color:rgba(13,79,216,.32);background:rgba(13,79,216,.06)}
+.chip.blue{color:var(--b-ink);border-color:rgba(13,79,216,.32);background:rgba(13,79,216,.06)}
 .chip.ink{color:var(--p-ink-2);border-color:var(--p-line)}
 .dk .chip.ok,.stage .chip.ok{color:#3ddc97;border-color:rgba(61,220,151,.38);background:rgba(61,220,151,.08)}
 .dk .chip.wait,.stage .chip.wait{color:#f0b44c;border-color:rgba(240,180,76,.4);background:rgba(240,180,76,.08)}
@@ -132,28 +137,74 @@ h1 .b em{font-style:normal;color:var(--blue-l)}
 .dk .chip.ink,.stage .chip.ink{color:var(--ink-2);border-color:var(--hair)}
 @keyframes blink{50%{opacity:.25}}
 
-/* ---------- prize stage ---------- */
-#prize{padding-top:clamp(84px,14vh,150px);padding-bottom:clamp(110px,18vh,190px);text-align:center;border-top:1px solid var(--hair-soft)}
-#prize .eyebrow{justify-content:center}
-.big{font-size:clamp(60px,15.4vw,236px);font-weight:200;letter-spacing:-.055em;line-height:.9;font-variant-numeric:tabular-nums;color:#fff;white-space:nowrap}
-.big-u{margin-top:22px;color:var(--ink-3)}
-.split{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:980px;margin:clamp(48px,7vh,80px) auto 0;border-top:1px solid var(--hair);text-align:left}
+/* ---------- prize: the iris ----------
+   Same mechanic as the cover of the home page: a black room pinned to the
+   screen while you scroll, a circle of paper with a blue ring opens from
+   the centre until the whole screen is paper, and section 01 continues on
+   that same paper, so there is no edge between them. The figure sits in
+   difference mode: white on the night, ink on the paper. */
+.iris{position:relative;height:260vh;background:#000}
+.iris-pin{--r:150vmax;--cx:50%;--cy:50%;--ro:0;--ho:1;--so:1;--hi:0;position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;isolation:isolate;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:#000}
+.iris-pin canvas.grid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;-webkit-mask-image:radial-gradient(74% 66% at 50% 50%,#000 34%,transparent 92%);mask-image:radial-gradient(74% 66% at 50% 50%,#000 34%,transparent 92%)}
+.iris-paper{position:absolute;inset:0;z-index:2;background:#f6f6f4;clip-path:circle(var(--r) at var(--cx) var(--cy))}
+.iris-paper::before{content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(7,8,10,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(7,8,10,.05) 1px,transparent 1px);background-size:54px 54px;background-position:center;
+  -webkit-mask-image:radial-gradient(62% 56% at 50% 50%,#000,transparent 86%);mask-image:radial-gradient(62% 56% at 50% 50%,#000,transparent 86%)}
+.iris-ring{position:absolute;left:var(--cx);top:var(--cy);z-index:3;width:calc(var(--r) * 2);height:calc(var(--r) * 2);transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;opacity:var(--ro);
+  box-shadow:0 0 0 1px rgba(255,255,255,.85),0 0 70px 14px rgba(255,255,255,.28),0 0 22px 2px rgba(120,170,255,.55)}
+/* the blue band that rides just inside the edge of the opening */
+.iris-ring::after{content:'';position:absolute;inset:calc(var(--r) * .13);border-radius:50%;
+  box-shadow:0 0 0 1.5px rgba(90,150,255,.85),0 0 26px 7px rgba(21,105,255,.55),inset 0 0 26px 7px rgba(21,105,255,.42)}
+.iris .horizon{z-index:4;opacity:var(--ho)}
+.iris-txt{position:relative;z-index:5;color:#fff;mix-blend-mode:difference;padding:0 16px}
+.iris-txt .eyebrow{justify-content:center;opacity:.6;color:#fff}
+.iris-txt .eyebrow i{background:#fff}
+.big{font-size:clamp(52px,9vw,136px);font-weight:200;letter-spacing:-.05em;line-height:.9;font-variant-numeric:tabular-nums;white-space:nowrap}
+.big-u{margin-top:22px;opacity:.55}
+.split{position:relative;z-index:5;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;max-width:980px;margin:clamp(34px,6vh,64px) auto 0;border-top:1px solid rgba(7,8,10,.12);text-align:left;
+  opacity:var(--so);translate:0 calc((1 - var(--so)) * 18px)}
 .split > div{padding:18px 18px 0 0;min-width:0}
-.split > div + div{padding-left:18px;border-left:1px solid var(--hair)}
-.split .pc{color:var(--blue-l)}
-.split b{display:block;margin-top:12px;font-size:clamp(26px,3vw,44px);font-weight:200;letter-spacing:-.03em;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
-.split h3{margin-top:12px;font-size:15px;font-weight:400;color:#fff}
-.split p{margin-top:6px;font-size:9.5px;line-height:1.6;color:var(--ink-4)}
+.split > div + div{padding-left:18px;border-left:1px solid rgba(7,8,10,.12)}
+.split .pc{color:#0d4fd8}
+.split b{display:block;margin-top:12px;font-size:clamp(24px,2.6vw,40px);font-weight:200;letter-spacing:-.03em;line-height:1;color:#07080a;font-variant-numeric:tabular-nums}
+.split h3{margin-top:12px;font-size:15px;font-weight:400;color:#07080a}
+.split p{margin-top:6px;font-size:9.5px;line-height:1.6;color:#6b7280}
+.iris-hint{position:absolute;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));z-index:6;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--ink-3);opacity:var(--hi);font-size:9.5px}
+.iris-hint i{display:block;width:1px;height:26px;background:linear-gradient(var(--blue),transparent);animation:hint 2.4s var(--ease) infinite;transform-origin:top}
+@keyframes hint{0%{transform:scaleY(0)}45%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
 .horizon{position:absolute;left:50%;bottom:-1px;z-index:1;width:min(1500px,150%);height:clamp(220px,34vh,380px);transform:translateX(-50%);pointer-events:none;
   background:radial-gradient(50% 100% at 50% 100%,rgba(21,105,255,.6),rgba(21,105,255,.16) 46%,transparent 74%)}
 .horizon::after{content:'';position:absolute;left:10%;right:10%;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#6ea2ff,transparent)}
 
 /* ---------- sections ---------- */
 .sec{position:relative;isolation:isolate;padding-top:clamp(76px,11vh,128px);padding-bottom:clamp(76px,11vh,128px)}
-.pp{color:var(--p-ink);background:linear-gradient(180deg,#f6f6f4 0,#fff 140px,#fff calc(100% - 140px),#f6f6f4 100%)}
-.pp.flat{background:#f6f6f4}
-.pp .eyebrow{color:var(--blue-deep)}
-.pp .eyebrow i{background:var(--blue-deep)}
+/* Paper that turns to night. While you read a section it is paper; as it
+   leaves through the top it dims, and its text flips from ink to white in a
+   narrow window so it never sits grey on grey. Its foot takes the darkness
+   of the section below (--nf) and, after a dark section, its head starts
+   in the night (.fd), so two neighbours always meet on the same colour. */
+.pp{--noche:0;--tinta:0;--refuerzo:0;--nf:0;--nh:0;
+  --p-ink:color-mix(in srgb,#07080a,#ffffff calc(var(--tinta) * 100%));
+  --p-ink-2:color-mix(in srgb,color-mix(in srgb,#3c414c,#07080a calc(var(--refuerzo) * 100%)),color-mix(in srgb,#e2e7f0,#ffffff calc(var(--refuerzo) * 100%)) calc(var(--tinta) * 100%));
+  --p-ink-3:color-mix(in srgb,color-mix(in srgb,#6b7280,#07080a calc(var(--refuerzo) * 100%)),color-mix(in srgb,#b9c1cf,#ffffff calc(var(--refuerzo) * 100%)) calc(var(--tinta) * 100%));
+  --p-ink-4:color-mix(in srgb,color-mix(in srgb,#9aa0ab,#07080a calc(var(--refuerzo) * 100%)),color-mix(in srgb,#8b93a3,#ffffff calc(var(--refuerzo) * 100%)) calc(var(--tinta) * 100%));
+  --p-line:color-mix(in srgb,rgba(7,8,10,.12),rgba(255,255,255,.14) calc(var(--tinta) * 100%));
+  --p-line-2:color-mix(in srgb,rgba(7,8,10,.07),rgba(255,255,255,.08) calc(var(--tinta) * 100%));
+  --b-ink:color-mix(in srgb,#0d4fd8,#4d8dff calc(var(--tinta) * 100%));
+  --pap:color-mix(in srgb,#f6f6f4,#05070c calc(var(--noche) * 100%));
+  --pap-w:color-mix(in srgb,#ffffff,#05070c calc(var(--noche) * 100%));
+  --pap-h:color-mix(in srgb,#f6f6f4,#05070c calc(max(var(--noche),var(--nh)) * 100%));
+  --pap-f:color-mix(in srgb,#f6f6f4,#05070c calc(max(var(--noche),var(--nf)) * 100%));
+  --card:color-mix(in srgb,#ffffff,#0b0e15 calc(var(--noche) * 100%));
+  --card-a:color-mix(in srgb,rgba(255,255,255,.72),rgba(255,255,255,.04) calc(var(--noche) * 100%));
+  --card-top:color-mix(in srgb,#ffffff,rgba(255,255,255,.12) calc(var(--noche) * 100%));
+  color:var(--p-ink);background:linear-gradient(180deg,var(--pap-h) 0,var(--pap-w) 140px,var(--pap-w) calc(100% - 140px),var(--pap-f) 100%)}
+.pp.flat{background:linear-gradient(180deg,var(--pap-h) 0,var(--pap) 140px,var(--pap) calc(100% - 140px),var(--pap-f) 100%)}
+.pp.fd{--nh:1;padding-top:clamp(150px,18vh,196px)}
+.pp.td{--nf:1;padding-bottom:clamp(150px,18vh,196px)}
+.pp .eyebrow{color:var(--b-ink)}
+.pp .eyebrow i{background:var(--b-ink)}
 .dk{background:#05070c;color:#fff}
 .dk::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54'%3E%3Cpath d='M27 23v8M23 27h8' stroke='rgba(124,138,160,.20)' stroke-width='1'/%3E%3C/svg%3E"),linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
@@ -161,8 +212,8 @@ h1 .b em{font-style:normal;color:var(--blue-l)}
 .dk .eyebrow{color:var(--blue-l)}
 .dk .eyebrow i{background:var(--blue-l)}
 .head{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(24px,4vw,80px);align-items:end;margin-bottom:clamp(40px,6.5vh,76px)}
-h2.t{font-size:clamp(34px,4.9vw,70px);font-weight:200;line-height:1.03;letter-spacing:-.034em;max-width:15ch;text-wrap:balance}
-h2.t b{font-weight:400;color:var(--blue-deep)}
+h2.t{font-size:clamp(30px,4.6vw,64px);font-weight:200;line-height:1.03;letter-spacing:-.034em;max-width:15ch;text-wrap:balance}
+h2.t b{font-weight:400;color:var(--b-ink)}
 .dk h2.t b,.stage h2.t b{color:var(--blue-l)}
 .sub{font-size:clamp(15px,1.2vw,17px);line-height:1.7;color:var(--p-ink-2);max-width:46ch}
 .dk .sub{color:var(--ink-2)}
@@ -172,12 +223,14 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 /* left rail, as on the main site */
 .spine{position:absolute;top:0;bottom:0;left:calc(var(--pad) * .34);z-index:4;width:1px;background:rgba(0,0,0,.10);pointer-events:none;display:none;
   font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:#9aa0ab}
+.pp .spine{background:var(--p-line);color:var(--p-ink-4)}
 .dk .spine{background:rgba(255,255,255,.12);color:#6f7889}
 .spine em{position:sticky;top:120px;display:block;height:0;font-style:normal}
 .spine b{position:absolute;top:0;left:50%;transform:translateX(-50%);width:19px;height:25px;display:grid;place-items:center;background:#f4f4f1;font-weight:500;color:#3c414c;letter-spacing:0}
+.pp .spine b{background:var(--pap);color:var(--p-ink-2)}
 .dk .spine b{background:#05070c;color:#c6ccd8}
 .spine span{position:absolute;top:38px;left:7px;writing-mode:vertical-rl;white-space:nowrap}
-.spine i{position:absolute;bottom:30px;left:50%;width:5px;height:5px;transform:translateX(-50%);background:var(--blue-deep)}
+.spine i{position:absolute;bottom:30px;left:50%;width:5px;height:5px;transform:translateX(-50%);background:var(--b-ink)}
 @media (min-width:1180px){.spine{display:block}}
 
 /* square buttons for light sections */
@@ -195,7 +248,7 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 /* ---------- 01 levels ---------- */
 .lvls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.4vw,20px);align-items:stretch}
 .lv{position:relative;display:flex;flex-direction:column;padding:clamp(24px,2.4vw,34px) clamp(22px,2.4vw,34px) clamp(24px,2.4vw,30px);
-  background:rgba(255,255,255,.72);border:1px solid var(--p-line);border-radius:3px;box-shadow:inset 0 1px 0 #fff;transition:transform .5s var(--ease),border-color .5s var(--ease)}
+  background:var(--card-a,rgba(255,255,255,.72));border:1px solid var(--p-line);border-radius:3px;box-shadow:inset 0 1px 0 var(--card-top,#fff);transition:transform .5s var(--ease),border-color .5s var(--ease)}
 .lv:hover{transform:translateY(-3px);border-color:rgba(21,105,255,.45)}
 .lv::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;border-radius:3px 3px 0 0;background:var(--p-ink-4)}
 .lv.s::before,.lv.g::before{background:var(--blue)}
@@ -203,10 +256,10 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .lv.g:hover{border-color:rgba(77,141,255,.8)}
 .lv-top{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--p-ink-3)}
 .lv.g .lv-top{color:var(--ink-3)}
-.lv h3{margin-top:26px;font-size:clamp(28px,2.5vw,36px);font-weight:300;letter-spacing:-.022em;line-height:1}
+.lv h3{margin-top:26px;font-size:clamp(24px,2.2vw,32px);font-weight:300;letter-spacing:-.022em;line-height:1}
 .req{margin-top:22px;padding-top:20px;border-top:1px solid var(--p-line)}
 .lv.g .req{border-color:var(--hair)}
-.req b{display:block;font-size:clamp(38px,3.7vw,56px);font-weight:200;letter-spacing:-.035em;line-height:1;white-space:nowrap}
+.req b{display:block;font-size:clamp(34px,3.2vw,48px);font-weight:200;letter-spacing:-.035em;line-height:1;white-space:nowrap}
 .req b small{font-size:.42em;font-weight:300;letter-spacing:0;color:var(--p-ink-3);margin-left:6px}
 .lv.g .req b small{color:var(--ink-3)}
 .req > span{display:block;margin-top:12px;font-size:9.5px;line-height:1.6;color:var(--p-ink-3)}
@@ -215,7 +268,7 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .lv.g ul{border-color:var(--hair)}
 .lv li{position:relative;padding:12px 0 12px 24px;border-bottom:1px solid var(--p-line-2);font-size:14.5px;line-height:1.5;color:var(--p-ink-2)}
 .lv.g li{border-color:var(--hair-soft);color:var(--ink-2)}
-.lv li::before{content:'';position:absolute;left:4px;top:17px;width:4px;height:8px;border:solid var(--blue-deep);border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.lv li::before{content:'';position:absolute;left:4px;top:17px;width:4px;height:8px;border:solid var(--b-ink);border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
 .lv.g li::before{border-color:var(--blue-l)}
 .lv li b{font-weight:400;color:var(--p-ink)}
 .lv.g li b{color:#fff}
@@ -232,7 +285,7 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .pt + .pt{border-left:1px solid var(--p-line)}
 .pt::before{content:'';position:absolute;left:0;top:-1px;height:1.5px;width:100%;background:var(--blue);transform:scaleX(.16);transform-origin:0 50%;transition:transform .55s var(--ease)}
 .pt:hover::before{transform:scaleX(1)}
-.pt .n{color:var(--blue-deep);margin-bottom:16px}
+.pt .n{color:var(--b-ink);margin-bottom:16px}
 .pt h3{font-size:clamp(21px,1.8vw,26px);font-weight:400;letter-spacing:-.016em;line-height:1.2}
 .pt p{margin:10px 0 18px;color:var(--p-ink-3);font-size:14.5px;line-height:1.65;max-width:46ch}
 .fact{margin-top:auto;padding:6px 10px;border:1px solid var(--p-line);color:var(--p-ink);font-size:10px}
@@ -242,7 +295,7 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .pt.claim p{color:var(--ink-2)}
 .pt.claim .fact{border-color:var(--hair);color:#fff}
 
-.doc{position:relative;border:1px solid var(--p-line);background:#fff}
+.doc{position:relative;border:1px solid var(--p-line);background:var(--card,#fff)}
 .doc > .fc{position:absolute;width:11px;height:11px;pointer-events:none;z-index:2}
 .doc > .fc::before,.doc > .fc::after{content:'';position:absolute;background:var(--blue)}
 .doc > .fc::before{width:11px;height:1.5px}
@@ -263,7 +316,7 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .mis-w{margin-top:clamp(40px,6vh,64px)}
 .mis{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(24px,4vw,72px);padding:6px clamp(18px,2.6vw,36px) 10px}
 .mis li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:14px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--p-line-2)}
-.mis li .n{color:var(--blue-deep);font-size:10px}
+.mis li .n{color:var(--b-ink);font-size:10px}
 .mis li h4{font-size:16px;font-weight:400;color:var(--p-ink)}
 .mis li p{margin-top:4px;font-size:13.5px;line-height:1.5;color:var(--p-ink-3)}
 .mis li b{font-size:24px;font-weight:200;letter-spacing:-.02em;color:var(--p-ink);white-space:nowrap;font-variant-numeric:tabular-nums}
@@ -276,7 +329,7 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .lrow .n{color:var(--blue-l)}
 .lrow h3{font-size:clamp(22px,2.1vw,31px);font-weight:300;letter-spacing:-.02em;line-height:1.1}
 .lrow p{color:var(--ink-2);font-size:15px;line-height:1.7;max-width:52ch}
-.lrow .v{text-align:right;font-size:clamp(40px,4vw,62px);font-weight:200;letter-spacing:-.04em;line-height:.9;color:#fff;white-space:nowrap}
+.lrow .v{text-align:right;font-size:clamp(36px,3.4vw,54px);font-weight:200;letter-spacing:-.04em;line-height:.9;color:#fff;white-space:nowrap}
 .lrow .v small{display:block;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
 .xnote{margin-top:clamp(30px,4.6vh,46px);padding-left:clamp(18px,2vw,28px);border-left:1px solid var(--blue);font-size:clamp(15px,1.25vw,18px);line-height:1.65;color:var(--ink-2);max-width:72ch}
 .xnote b{font-weight:400;color:#fff}
@@ -289,7 +342,7 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .d-lv{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .d-lv b{font-size:32px;font-weight:300;letter-spacing:-.02em;line-height:1}
 .d-pts{margin-top:30px;padding-top:22px;border-top:1px solid var(--p-line)}
-.d-pts b{display:block;font-size:clamp(52px,5vw,76px);font-weight:200;letter-spacing:-.045em;line-height:.9;font-variant-numeric:tabular-nums}
+.d-pts b{display:block;font-size:clamp(46px,4.4vw,66px);font-weight:200;letter-spacing:-.045em;line-height:.9;font-variant-numeric:tabular-nums}
 .d-pts span{display:block;margin-top:12px;color:var(--p-ink-3);font-size:10px}
 .d-st{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:24px;border-top:1px solid var(--p-line)}
 .d-st > div{padding:14px 10px 0 0;min-width:0}
@@ -298,14 +351,14 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .d-st span{display:block;margin-top:8px;font-size:9px;color:var(--p-ink-4)}
 .meter{margin-top:30px;padding-top:22px;border-top:1px solid var(--p-line)}
 .cells{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
-.cells i{height:14px;background:rgba(7,8,10,.07)}
+.cells i{height:14px;background:var(--p-line-2)}
 .cells i.on{background:var(--blue)}
-.cells i.half{background:linear-gradient(90deg,var(--blue) var(--p,50%),rgba(7,8,10,.07) var(--p,50%))}
+.cells i.half{background:linear-gradient(90deg,var(--blue) var(--p,50%),var(--p-line-2) var(--p,50%))}
 .meter .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:12px;font-size:10px;color:var(--p-ink-3)}
-.meter .row b{font-family:'IBM Plex Sans',sans-serif;font-size:26px;font-weight:300;letter-spacing:-.02em;color:var(--blue-deep);text-transform:none}
+.meter .row b{font-family:'IBM Plex Sans',sans-serif;font-size:26px;font-weight:300;letter-spacing:-.02em;color:var(--b-ink);text-transform:none}
 .invite{display:flex;border:1px solid var(--p-line)}
 .invite code{flex:1;min-width:0;padding:14px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--p-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.invite button{flex:none;padding:0 16px;border-left:1px solid var(--p-line);color:var(--blue-deep);font-size:10px;transition:background .3s var(--ease)}
+.invite button{flex:none;padding:0 16px;border-left:1px solid var(--p-line);color:var(--b-ink);font-size:10px;transition:background .3s var(--ease)}
 .invite button:hover{background:rgba(13,79,216,.06)}
 .squad{margin-top:22px}
 .squad .cells{grid-template-columns:repeat(5,minmax(0,1fr))}
@@ -317,9 +370,9 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .chk li.done::before{background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.2l2 2 4-4.4' fill='none' stroke='%23fff' stroke-width='1.5'/%3E%3C/svg%3E") center/12px no-repeat;border-color:var(--blue)}
 .chk li.done{color:var(--p-ink-3)}
 .chk li span:last-child{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:var(--p-ink-3)}
-.chk li.done span:last-child{color:var(--blue-deep)}
+.chk li.done span:last-child{color:var(--b-ink)}
 .d-ci{margin-top:20px;width:100%}
-.d-ci[disabled]{cursor:default;background:#fff;color:var(--p-ink-3);border-color:var(--p-line)}
+.d-ci[disabled]{cursor:default;background:var(--card,#fff);color:var(--p-ink-3);border-color:var(--p-line)}
 .cardw{position:relative;border:1px solid var(--p-line);background:#000;line-height:0}
 .cardw canvas{display:block;width:100%;height:auto;aspect-ratio:1200/675}
 .d-sh{margin-top:16px}
@@ -329,7 +382,7 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .pool{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}
 .pool > div{padding:clamp(24px,3vw,44px) clamp(18px,2.6vw,36px);min-width:0}
 .pool > div + div{border-left:1px solid var(--p-line)}
-.pool .num{font-size:clamp(48px,5.8vw,92px);font-weight:200;letter-spacing:-.05em;line-height:.9;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pool .num{font-size:clamp(44px,5vw,80px);font-weight:200;letter-spacing:-.05em;line-height:.9;white-space:nowrap;font-variant-numeric:tabular-nums}
 .pool .num small{display:block;margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;color:var(--p-ink-3)}
 .alloc{display:flex;gap:3px;height:14px;margin-top:34px}
 .alloc i{display:block;height:100%}
@@ -355,15 +408,15 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .podium > div{position:relative;padding:clamp(22px,3vw,40px) clamp(18px,2.6vw,36px);min-width:0}
 .podium > div + div{border-left:1px solid var(--p-line)}
 .podium .rk{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--p-ink-3)}
-.podium .rk b{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:400;letter-spacing:0;color:var(--blue-deep)}
-.podium strong{display:block;margin-top:22px;font-size:clamp(40px,5vw,78px);font-weight:200;letter-spacing:-.05em;line-height:.9;white-space:nowrap;font-variant-numeric:tabular-nums}
+.podium .rk b{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:400;letter-spacing:0;color:var(--b-ink)}
+.podium strong{display:block;margin-top:22px;font-size:clamp(36px,4.2vw,64px);font-weight:200;letter-spacing:-.05em;line-height:.9;white-space:nowrap;font-variant-numeric:tabular-nums}
 .podium span.u{display:block;margin-top:12px;font-size:10px;color:var(--p-ink-3)}
 .podium > div:first-child{background:linear-gradient(180deg,rgba(21,105,255,.07),transparent 80%)}
 .podium > div:first-child::before{content:'';position:absolute;left:0;right:0;top:-1px;height:2px;background:var(--blue)}
 .tb-w{padding:clamp(22px,3vw,40px) clamp(18px,2.6vw,36px) clamp(10px,1.4vw,18px)}
 
 /* ---------- 07 calendar ---------- */
-.dl{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr) auto;gap:clamp(16px,2.4vw,36px);align-items:center;margin-top:clamp(24px,3.4vh,34px);padding:clamp(20px,2.4vw,28px) clamp(18px,2.6vw,36px);border:1px solid var(--p-line);background:#fff}
+.dl{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr) auto;gap:clamp(16px,2.4vw,36px);align-items:center;margin-top:clamp(24px,3.4vh,34px);padding:clamp(20px,2.4vw,28px) clamp(18px,2.6vw,36px);border:1px solid var(--p-line);background:var(--card,#fff)}
 .dl h3{font-size:clamp(19px,1.6vw,23px);font-weight:400;letter-spacing:-.012em;white-space:nowrap}
 .dl p{font-size:14.5px;line-height:1.65;color:var(--p-ink-2)}
 
@@ -405,8 +458,8 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .faq details{border-bottom:1px solid var(--p-line)}
 .faq summary{list-style:none;display:grid;grid-template-columns:44px minmax(0,1fr) 18px;gap:14px;align-items:baseline;padding:24px 0;cursor:pointer;font-size:clamp(18px,1.6vw,22px);font-weight:300;letter-spacing:-.01em;line-height:1.35;color:var(--p-ink);transition:color .3s var(--ease)}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary:hover{color:var(--blue-deep)}
-.faq summary .n{color:var(--blue-deep);font-size:10.5px}
+.faq summary:hover{color:var(--b-ink)}
+.faq summary .n{color:var(--b-ink);font-size:10.5px}
 .pm{position:relative;width:12px;height:12px;align-self:center}
 .pm::before,.pm::after{content:'';position:absolute;left:0;top:50%;width:12px;height:1px;background:currentColor;transition:transform .35s var(--ease)}
 .pm::after{transform:rotate(90deg)}
@@ -415,12 +468,13 @@ h2.t b{font-weight:400;color:var(--blue-deep)}
 .faq .a b{font-weight:400;color:var(--p-ink)}
 
 /* ---------- final + footer ---------- */
-#final{padding-top:clamp(100px,16vh,170px);padding-bottom:clamp(120px,20vh,210px);text-align:center}
+#final{background:var(--night);padding-top:clamp(100px,16vh,170px);padding-bottom:clamp(120px,20vh,210px);text-align:center}
+#final .vig{background:radial-gradient(118% 88% at 50% 56%,transparent 46%,rgba(5,7,12,.72) 100%)}
 #final .eyebrow{justify-content:center}
-#final h2.t{margin:0 auto;max-width:none;font-size:clamp(48px,8vw,124px);letter-spacing:-.045em}
+#final h2.t{margin:0 auto;max-width:none;font-size:clamp(40px,6.4vw,96px);letter-spacing:-.04em}
 #final .sub{margin:24px auto 0;color:var(--ink-2)}
 #final .actions{justify-content:center;grid-template-columns:repeat(2,max-content);margin-top:40px}
-footer{position:relative;background:#000;border-top:1px solid var(--hair);padding-top:clamp(40px,6vh,64px);padding-bottom:calc(clamp(40px,6vh,64px) + env(safe-area-inset-bottom,0px))}
+footer{position:relative;background:var(--night);border-top:1px solid var(--hair);padding-top:clamp(40px,6vh,64px);padding-bottom:calc(clamp(40px,6vh,64px) + env(safe-area-inset-bottom,0px))}
 .ft{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) auto;gap:clamp(24px,4vw,72px);align-items:start}
 .ft p{font-size:13px;line-height:1.75;color:var(--ink-3);max-width:66ch}
 .ft p + p{margin-top:12px}
@@ -453,6 +507,7 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
   .ft > div:nth-child(2){grid-column:1 / -1;grid-row:2}
 }
 @media (max-width:760px){
+  h2.t{font-size:clamp(28px,7.6vw,40px)}
   .pts,.pts.c4{grid-template-columns:1fr}
   .pt + .pt,.pts.c4 .pt:nth-child(n){border-left:0;border-top:1px solid var(--p-line)}
   .pts.c4 .pt:first-child{border-top:0}
@@ -475,8 +530,8 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
   .band .ref{display:none}
   .cap span + span{display:none}
   .split{grid-template-columns:1fr;max-width:420px}
-  .split > div{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto auto;column-gap:16px;padding:16px 0}
-  .split > div + div{padding-left:0;border-left:0;border-top:1px solid var(--hair)}
+  .split > div{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto auto;column-gap:16px;padding:14px 0}
+  .split > div + div{padding-left:0;border-left:0;border-top:1px solid rgba(7,8,10,.12)}
   .split .pc{grid-row:1 / 4;font-size:13px;padding-top:4px}
   .split b,.split h3{margin-top:0}
   .split h3{margin-top:8px}
@@ -496,13 +551,33 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
   .lrow{grid-template-columns:minmax(0,1fr) auto}
   .lrow .n{grid-column:1 / -1}
   .lrow h3{grid-column:1;grid-row:2;align-self:center}
-  .lrow .v{grid-column:2;grid-row:2;font-size:40px}
+  .lrow .v{grid-column:2;grid-row:2;font-size:36px}
   .lrow p{grid-column:1 / -1;grid-row:3}
   .d-st b{font-size:17px}
   .tbl td{font-size:14px}
   .tbl td.big{font-size:19px}
   .tbl th{font-size:9px;letter-spacing:.1em}
 }
+/* motion: only with JS and when the visitor allows it */
+.hw{overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
+.anim #top h1 .ln > span{transform:translateY(112%)}
+.anim #top.played h1 .ln > span{transform:none;transition:transform 1.05s var(--ease-out) calc(var(--i,0) * .09s + .2s)}
+.anim #top .rule{width:0}
+.anim #top.played .rule{width:74px;transition:width 1s var(--ease-out) .6s}
+.anim #top .eyebrow i{width:0}
+.anim #top.played .eyebrow i{width:30px;transition:width .9s var(--ease-out) .1s}
+.anim #top .fx{opacity:0;translate:0 12px}
+.anim #top.played .fx{opacity:1;translate:none;transition:opacity .9s var(--ease-out) var(--d,0s),translate .9s var(--ease-out) var(--d,0s)}
+.anim .sec .eyebrow i{width:0;transition:width .9s var(--ease-out) .1s}
+.anim .sec .eyebrow.in i{width:30px}
+.anim .hw h2{transform:translateY(104%)}
+.anim .hw.in h2{transform:none;transition:transform 1.1s var(--ease-out)}
+.anim .rv{opacity:0;translate:0 16px}
+.anim .rv.in{opacity:1;translate:none;transition:opacity .9s var(--ease-out) var(--d,0s),translate .9s var(--ease-out) var(--d,0s),transform .5s var(--ease),border-color .5s var(--ease),background .4s var(--ease)}
+.anim .pt::before{transform:scaleX(0)}
+.anim .pt.in::before{transform:scaleX(.16);transition:transform .9s var(--ease-out) calc(var(--d,0s) + .3s)}
+.anim .pt.in:hover::before,.anim .pt.claim.in::before{transform:scaleX(1)}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
@@ -511,6 +586,8 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
 </head>
 <body>
 
+<script>document.documentElement.className+=" js"+(matchMedia("(prefers-reduced-motion: reduce)").matches?"":" anim")</script>
+<div class="progress" aria-hidden="true"></div>
 <div class="pv mono" data-i="pv">Test preview · not public · dashboard shows sample data · rules under legal review</div>
 
 <!-- ============ hero ============ -->
@@ -544,17 +621,17 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
     <div class="hero gut">
       <div>
         <p class="eyebrow mono"><i></i><span data-i="h.e">Official campaign · Sectora Foundation, Illinois US</span></p>
-        <h1>Sectora Airdrop <span class="b"><em>Genesis</em></span></h1>
+        <h1><span class="ln" style="--i:0"><span>Sectora Airdrop</span></span><span class="ln b" style="--i:1"><span>Genesis</span></span></h1>
         <div class="rule"></div>
-        <p class="lede" data-i="h.l"><b>2,000,000 SECT</b> for the first community of SectoraEVM. Join free, hold SECT in your own wallet to earn points every day, and claim when the blockchain launches. No deposits, no gas, no promised returns.</p>
+        <p class="lede fx" style="--d:.55s" data-i="h.l"><b>2,000,000 SECT</b> for the first community of SectoraEVM. Join free, hold SECT in your own wallet to earn points every day, and claim when the blockchain launches. No deposits, no gas, no promised returns.</p>
         <div class="actions">
-          <a class="btn btn-primary mono js-connect" href="#dash"><span data-i="b.join">Join free</span><span class="arrow">→</span></a>
-          <a class="btn btn-ghost mono" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener"><span data-i="b.buy">Buy SECT on Uniswap</span><span class="arrow">↗</span></a>
-          <a class="btn btn-guide mono" href="#how"><span class="gs" aria-hidden="true"><b></b><b></b><b></b><b></b></span><span data-i="b.how">How it works in one minute</span><span class="arrow">→</span></a>
+          <a class="btn btn-primary mono js-connect fx" style="--d:.7s" href="#dash"><span data-i="b.join">Join free</span><span class="arrow">→</span></a>
+          <a class="btn btn-ghost mono fx" style="--d:.78s" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener"><span data-i="b.buy">Buy SECT on Uniswap</span><span class="arrow">↗</span></a>
+          <a class="btn btn-guide mono fx" style="--d:.86s" href="#how"><span class="gs" aria-hidden="true"><b></b><b></b><b></b><b></b></span><span data-i="b.how">How it works in one minute</span><span class="arrow">→</span></a>
         </div>
       </div>
 
-      <aside class="sheet" aria-label="Campaign sheet">
+      <aside class="sheet fx" style="--d:.45s" aria-label="Campaign sheet">
         <h2><span data-i="sh.t">Campaign sheet</span><span>GN·01</span></h2>
         <dl>
           <dt data-i="sh.1">Prize pool</dt><dd><b><span data-n="2000000"></span> SECT</b></dd>
@@ -572,20 +649,26 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
   </div>
 </header>
 
-<!-- ============ prize ============ -->
-<section class="stage gut" id="prize" aria-label="Prize pool">
-  <canvas class="grid" aria-hidden="true"></canvas>
-  <div class="vig" aria-hidden="true"></div>
-  <div class="horizon" aria-hidden="true"></div>
-  <div class="lay">
-    <p class="eyebrow mono"><i></i><span data-i="pz.e">Total prize pool</span><i></i></p>
-    <div class="big" data-n="2000000"></div>
-    <p class="big-u mono" data-i="pz.u">SECT · three seasons · one claim</p>
-    <div class="split">
-      <div><span class="pc mono">70%</span><b data-n="1400000"></b><h3 data-i="pz.1">Holders</h3><p class="mono" data-i="pz.1s">Sentinel &amp; Guardian · split by points</p></div>
-      <div><span class="pc mono">20%</span><b data-n="400000"></b><h3 data-i="pz.2">Top 100 referrers</h3><p class="mono" data-i="pz.2s">Fixed prizes by rank</p></div>
-      <div><span class="pc mono">10%</span><b data-n="200000"></b><h3 data-i="pz.3">Scouts</h3><p class="mono" data-i="pz.3s">Free participants · split by missions</p></div>
+<!-- ============ prize: iris ============ -->
+<section class="iris" id="prize" aria-label="Prize pool">
+  <div class="iris-pin">
+    <canvas class="grid" aria-hidden="true"></canvas>
+    <div class="iris-paper" aria-hidden="true"></div>
+    <div class="iris-ring" aria-hidden="true"></div>
+    <div class="horizon" aria-hidden="true"></div>
+    <div class="iris-txt">
+      <p class="eyebrow mono"><i></i><span data-i="pz.e">Total prize pool</span><i></i></p>
+      <div class="big" data-n="2000000"></div>
+      <p class="big-u mono" data-i="pz.u">SECT · three seasons · one claim</p>
     </div>
+    <div class="gut" style="width:100%;position:relative;z-index:5">
+      <div class="split">
+        <div><span class="pc mono">70%</span><b data-n="1400000"></b><h3 data-i="pz.1">Holders</h3><p class="mono" data-i="pz.1s">Sentinel &amp; Guardian · split by points</p></div>
+        <div><span class="pc mono">20%</span><b data-n="400000"></b><h3 data-i="pz.2">Top 100 referrers</h3><p class="mono" data-i="pz.2s">Fixed prizes by rank</p></div>
+        <div><span class="pc mono">10%</span><b data-n="200000"></b><h3 data-i="pz.3">Scouts</h3><p class="mono" data-i="pz.3s">Free participants · split by missions</p></div>
+      </div>
+    </div>
+    <p class="iris-hint mono" aria-hidden="true"><span data-i="pz.h">Scroll</span><i></i></p>
   </div>
 </section>
 
@@ -597,7 +680,7 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
     <div class="head">
       <div>
         <p class="eyebrow mono"><i></i><span data-i="lv.e">01 · Levels</span></p>
-        <h2 class="t" data-i="lv.h">Three levels. <b>Pick yours.</b></h2>
+        <div class="hw"><h2 class="t" data-i="lv.h">Three levels. <b>Pick yours.</b></h2></div>
       </div>
       <p class="sub" data-i="lv.p">Everyone starts free. Holding SECT in <b>your own wallet</b> unlocks daily points. You never send your tokens to anyone.</p>
     </div>
@@ -656,7 +739,7 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
     <div class="head">
       <div>
         <p class="eyebrow mono"><i></i><span data-i="hw.e">02 · How it works</span></p>
-        <h2 class="t" data-i="hw.h">Three steps. <b>No deposits.</b></h2>
+        <div class="hw"><h2 class="t" data-i="hw.h">Three steps. <b>No deposits.</b></h2></div>
       </div>
       <p class="sub" data-i="hw.p">Points are counted from what is public on Ethereum: your balance and your activity. Nothing leaves your wallet.</p>
     </div>
@@ -690,7 +773,7 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
     <div class="head">
       <div>
         <p class="eyebrow mono"><i></i><span data-i="pu.e">03 · Power-ups</span></p>
-        <h2 class="t" data-i="pu.h">Multiply your points. <b>Four ways.</b></h2>
+        <div class="hw"><h2 class="t" data-i="pu.h">Multiply your points. <b>Four ways.</b></h2></div>
       </div>
       <p class="sub" data-i="pu.p">Multipliers reward people who stay. They apply to holding points, not to missions.</p>
     </div>
@@ -711,7 +794,7 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
     <div class="head">
       <div>
         <p class="eyebrow mono"><i></i><span data-i="db.e">04 · Your dashboard</span></p>
-        <h2 class="t" data-i="db.h">Everything in <b>one record.</b></h2>
+        <div class="hw"><h2 class="t" data-i="db.h">Everything in <b>one record.</b></h2></div>
       </div>
       <p class="sub" data-i="db.p">Your level, points, streak and invite link in one place. This preview uses sample data until the wallet connection goes live.</p>
     </div>
@@ -764,7 +847,7 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
     <div class="head">
       <div>
         <p class="eyebrow mono"><i></i><span data-i="pp.e">05 · Prize pool</span></p>
-        <h2 class="t" data-i="pp.h">Two million SECT. <b>Split three ways.</b></h2>
+        <div class="hw"><h2 class="t" data-i="pp.h">Two million SECT. <b>Split three ways.</b></h2></div>
       </div>
       <p class="sub" data-i="pp.p">The pool is fixed before the campaign starts and comes from SECT that already exists. It does not grow with deposits, because there are none.</p>
     </div>
@@ -805,7 +888,7 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
     <div class="head">
       <div>
         <p class="eyebrow mono"><i></i><span data-i="tp.e">06 · Top 100</span></p>
-        <h2 class="t" data-i="tp.h">The best referrers. <b>Fixed prizes.</b></h2>
+        <div class="hw"><h2 class="t" data-i="tp.h">The best referrers. <b>Fixed prizes.</b></h2></div>
       </div>
       <p class="sub" data-i="tp.p">Ranked by valid referrals: friends who join with your link, reach Sentinel and pass the anti-bot check. Referrals earn points and a place in the ranking, <b>never money from the people you invite.</b></p>
     </div>
@@ -836,7 +919,7 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
     <div class="head">
       <div>
         <p class="eyebrow mono"><i></i><span data-i="cl.e">07 · Calendar</span></p>
-        <h2 class="t" data-i="cl.h">Three seasons. <b>One claim.</b></h2>
+        <div class="hw"><h2 class="t" data-i="cl.h">Three seasons. <b>One claim.</b></h2></div>
       </div>
       <p class="sub" data-i="cl.p">Ninety days of campaign in three seasons of 30 days. Dates will be announced on X and Telegram before Season 1 opens.</p>
     </div>
@@ -860,7 +943,7 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
   <div class="in ver">
     <div class="ver-l">
       <p class="eyebrow mono"><i></i><span data-i="vf.e">08 · Verification</span></p>
-      <h2 class="t" data-i="vf.h">Sounds too good? <b>Check it yourself.</b></h2>
+      <div class="hw"><h2 class="t" data-i="vf.h">Sounds too good? <b>Check it yourself.</b></h2></div>
       <p class="sub" data-i="vf.p">A real airdrop gives away tokens that already exist and never asks you to send money. Here is what you can check today, and what is still pending.</p>
       <div class="stats">
         <div><b>06</b><span class="mono" data-i="vf.s1">public checks</span></div>
@@ -925,7 +1008,7 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
   <div class="in faqw">
     <div class="head">
       <p class="eyebrow mono"><i></i><span data-i="fq.e">09 · FAQ</span></p>
-      <h2 class="t" data-i="fq.h">Simple <b>answers.</b></h2>
+      <div class="hw"><h2 class="t" data-i="fq.h">Simple <b>answers.</b></h2></div>
       <p class="sub" data-i="fq.p">Still unsure? Ask in the Telegram. The team answers there.</p>
     </div>
     <div class="faq">
@@ -948,7 +1031,7 @@ footer{position:relative;background:#000;border-top:1px solid var(--hair);paddin
   <div class="horizon" aria-hidden="true"></div>
   <div class="lay">
     <p class="eyebrow mono"><i></i><span data-i="fn.e">Season 1 · date to be announced</span><i></i></p>
-    <h2 class="t" data-i="fn.h">Get in <b>early.</b></h2>
+    <div class="hw"><h2 class="t" data-i="fn.h">Get in <b>early.</b></h2></div>
     <p class="sub" data-i="fn.p">The first 1,000 wallets keep 2× for the whole campaign. Joining is free.</p>
     <div class="actions">
       <a class="btn btn-primary mono js-connect" href="#dash"><span data-i="b.join">Join free</span><span class="arrow">→</span></a>
@@ -998,7 +1081,7 @@ n1:"Niveles",n2:"Cómo funciona",n3:"Premios",n4:"Top 100",n5:"Verificación",n6
 "sh.t":"Ficha de la campaña","sh.1":"Bolsa de premios","sh.2":"Niveles","sh.3":"Temporadas","sh.3v":"3 × 30 días","sh.4":"Top 100","sh.4v":"hasta <b>50.000 SECT</b>","sh.5":"Pioneros","sh.5v":"primeras 1.000 wallets · <b>2×</b>","sh.6":"Entrada","sh.6v":"Gratis · sin gas","sh.7":"Reclamo","sh.7v":"En el lanzamiento de SectoraEVM","sh.8":"Bloqueo bolsa",
 "st.pend":"Pendiente","st.ok":"Verificable","st.rule":"Regla","st.src":"Fuente",
 "sh.n":"Los puntos no son tokens. Tu parte depende de los puntos de todos al final de la campaña. Reglas en revisión legal.",
-"pz.e":"Bolsa total de premios","pz.u":"SECT · tres temporadas · un reclamo","pz.1":"Holders","pz.1s":"Sentinel y Guardian · según puntos","pz.2":"Top 100 referidores","pz.2s":"Premios fijos por puesto","pz.3":"Scouts","pz.3s":"Participantes gratis · según misiones",
+"pz.e":"Bolsa total de premios","pz.h":"Desliza","pz.u":"SECT · tres temporadas · un reclamo","pz.1":"Holders","pz.1s":"Sentinel y Guardian · según puntos","pz.2":"Top 100 referidores","pz.2s":"Premios fijos por puesto","pz.3":"Scouts","pz.3s":"Participantes gratis · según misiones",
 "lv.e":"01 · Niveles","lv.h":"Tres niveles. <b>Elige el tuyo.</b>","lv.p":"Todos empiezan gratis. Guardar SECT en <b>tu propia wallet</b> desbloquea puntos diarios. Nunca envías tus tokens a nadie.",
 "lv.k1":"Nivel 1","lv.c1":"Gratis","lv.r1":"Gratis","lv.r1s":"Sin compra · sin gas · solo firmar",
 "lv.1a":"Misiones de hasta <b>300 puntos</b>","lv.1b":"Check-in diario: <b>+10 puntos</b>","lv.1c":"Parte de la bolsa Scout de <b>200.000 SECT</b>","lv.1d":"Invita amigos y sube en el Top 100",
@@ -1064,7 +1147,7 @@ n1:"Níveis",n2:"Como funciona",n3:"Prêmios",n4:"Top 100",n5:"Verificação",n6
 "sh.t":"Ficha da campanha","sh.1":"Prêmios","sh.2":"Níveis","sh.3":"Temporadas","sh.3v":"3 × 30 dias","sh.4":"Top 100","sh.4v":"até <b>50.000 SECT</b>","sh.5":"Pioneiros","sh.5v":"primeiras 1.000 carteiras · <b>2×</b>","sh.6":"Entrada","sh.6v":"Grátis · sem gas","sh.7":"Resgate","sh.7v":"No lançamento da SectoraEVM","sh.8":"Bloqueio",
 "st.pend":"Pendente","st.ok":"Verificável","st.rule":"Regra","st.src":"Fonte",
 "sh.n":"Pontos não são tokens. Sua parte depende dos pontos de todos no fim da campanha. Regras em revisão jurídica.",
-"pz.e":"Total de prêmios","pz.u":"SECT · três temporadas · um resgate","pz.1":"Holders","pz.1s":"Sentinel e Guardian · por pontos","pz.2":"Top 100 indicadores","pz.2s":"Prêmios fixos por posição","pz.3":"Scouts","pz.3s":"Participantes grátis · por missões",
+"pz.e":"Total de prêmios","pz.h":"Role","pz.u":"SECT · três temporadas · um resgate","pz.1":"Holders","pz.1s":"Sentinel e Guardian · por pontos","pz.2":"Top 100 indicadores","pz.2s":"Prêmios fixos por posição","pz.3":"Scouts","pz.3s":"Participantes grátis · por missões",
 "lv.e":"01 · Níveis","lv.h":"Três níveis. <b>Escolha o seu.</b>","lv.p":"Todos começam grátis. Guardar SECT na <b>sua própria carteira</b> libera pontos diários. Você nunca envia seus tokens para ninguém.",
 "lv.k1":"Nível 1","lv.c1":"Grátis","lv.r1":"Grátis","lv.r1s":"Sem compra · sem gas · só assinar",
 "lv.1a":"Missões de até <b>300 pontos</b>","lv.1b":"Check-in diário: <b>+10 pontos</b>","lv.1c":"Parte do pool Scout de <b>200.000 SECT</b>","lv.1d":"Convide amigos e suba no Top 100",
@@ -1299,7 +1382,7 @@ function gridFx(cv){
     raf = 0;
     if(!seen || !alive) return;
     raf = requestAnimationFrame(tick);
-    if(t - last < 33) return;
+    if(t - last < 33 || host.classList.contains("lit")) return;
     var dt = Math.min(120, t - last || 33); last = t;
     var k = Math.pow(.955, dt/33);
     for(var i=0;i<heat.length;i++) if(heat[i] > 0) heat[i] *= k;
@@ -1323,6 +1406,108 @@ function gridFx(cv){
   if("IntersectionObserver" in window) new IntersectionObserver(function(es){ seen = es[0].isIntersecting; wake(); }).observe(host); else seen = true;
   document.addEventListener("visibilitychange", function(){ alive = !document.hidden; wake(); });
   size(); wake();
+}
+
+/* ---------- scroll: iris, night chain and progress, one pass per frame ---------- */
+function clamp(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
+function smooth(t){ return t * t * (3 - 2 * t); }
+var iris = $("#prize"), pin = iris.querySelector(".iris-pin"), bar = $(".progress");
+var S = $$(".sec").map(function(el){ return {el:el, pp:el.classList.contains("pp"), n:0, v:-1, f:-1, near:false}; });
+S.forEach(function(s,i){
+  if(!s.pp) return;
+  var prev = S[i-1], next = S[i+1];
+  if(prev && !prev.pp) s.el.classList.add("fd");
+  if(!next || !next.pp) s.el.classList.add("td");
+});
+var irisLast = "", cx = 0, cy = 0;
+function irisCentre(){
+  var b = pin.querySelector(".big").getBoundingClientRect(), q = pin.getBoundingClientRect();
+  cx = b.left + b.width / 2 - q.left; cy = b.top + b.height * .52 - q.top;
+  pin.style.setProperty("--cx", cx.toFixed(1) + "px");
+  pin.style.setProperty("--cy", cy.toFixed(1) + "px");
+  irisLast = "";
+}
+function frame(){
+  pending = false;
+  var vh = innerHeight;
+
+  /* iris: closed while the figure settles, opens across the middle of the
+     pinned scroll, and holds on paper at the end so the split can be read */
+  var r = iris.getBoundingClientRect(), span = Math.max(1, r.height - vh);
+  var p = clamp(-r.top / span);
+  var a = clamp((p - .1) / .58), e = a * a * a;
+  /* the opening is centred on the figure, and must reach the farthest corner */
+  var pw = pin.clientWidth, ph = pin.clientHeight;
+  var R = Math.hypot(Math.max(cx, pw - cx), Math.max(cy, ph - cy)) + 80;
+  var ro = a <= 0 ? 0 : a < .1 ? a / .1 : a > .9 ? (1 - a) / .1 : 1;
+  var key = [ (e * R).toFixed(1), ro.toFixed(2), (1 - clamp((p - .5) / .22)).toFixed(2), clamp((p - .64) / .16).toFixed(2), (1 - clamp(p / .08)).toFixed(2) ].join("|");
+  if(key !== irisLast && r.bottom > -40 && r.top < vh + 40){
+    irisLast = key;
+    var k = key.split("|");
+    pin.style.setProperty("--r", k[0] + "px");
+    pin.style.setProperty("--ro", k[1]);
+    pin.style.setProperty("--ho", k[2]);
+    pin.style.setProperty("--so", k[3]);
+    pin.style.setProperty("--hi", k[4]);
+    pin.classList.toggle("lit", a >= 1);
+  }
+
+  /* each paper section dims as its foot climbs the screen, in steps of
+     1/40, and only writes when it is near enough to be seen */
+  S.forEach(function(s){
+    if(!s.pp) return;
+    var c = s.el.getBoundingClientRect();
+    s.near = c.bottom > -vh * .5 && c.top < vh * 1.5;
+    var t = clamp(1 - c.bottom / vh);
+    var v = Math.round(smooth(t) * 40) / 40;
+    s.n = v;
+    if(s.near && v !== s.v){
+      s.v = v;
+      s.el.style.setProperty("--noche", v);
+      s.el.style.setProperty("--tinta", Math.round(smooth(clamp((t - .40) / .08)) * 40) / 40);
+      s.el.style.setProperty("--refuerzo", Math.round(smooth(clamp(1 - Math.abs(t - .44) / .30)) * 40) / 40);
+    }
+  });
+  /* the seam: a foot takes the darkness of the paper below it */
+  S.forEach(function(s,i){
+    if(!s.pp || !s.near) return;
+    var nx = S[i+1];
+    var f = nx && nx.pp ? nx.n : 1;
+    if(f !== s.f){ s.f = f; s.el.style.setProperty("--nf", f); }
+  });
+
+  var max = document.documentElement.scrollHeight - vh;
+  bar.style.transform = "scaleX(" + (max > 0 ? Math.min(1, scrollY / max) : 0).toFixed(4) + ")";
+}
+var pending = false;
+function ask(){ if(!pending){ pending = true; requestAnimationFrame(frame); } }
+addEventListener("scroll", ask, {passive:true});
+addEventListener("resize", function(){ irisCentre(); ask(); }, {passive:true});
+
+/* ---------- reveals, as on the home page ---------- */
+function reveals(){
+  var anim = document.documentElement.classList.contains("anim");
+  var top = $("#top");
+  if(!anim){ top.classList.add("played"); return; }
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ top.classList.add("played"); }); });
+  var RV = ".sub,.lnote,.xnote,.lv,.pts > .pt,.lrow,.doc,.dl,.vc,.faq details,.stats > div,.cards,.ledger";
+  var els = [];
+  $$(".sec").forEach(function(sec){
+    sec.querySelectorAll(RV).forEach(function(el){
+      if(el.matches(".cards,.ledger")) return;
+      el.classList.add("rv");
+      var sib = Array.prototype.indexOf.call(el.parentElement.children, el);
+      el.style.setProperty("--d", (Math.min(sib, 6) * .08) + "s");
+      els.push(el);
+    });
+    sec.querySelectorAll(".eyebrow").forEach(function(el){ els.push(el); });
+  });
+  $$(".hw").forEach(function(el){ els.push(el); });
+  if(!("IntersectionObserver" in window)){ els.forEach(function(el){ el.classList.add("in"); }); return; }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } });
+  }, {threshold:.12, rootMargin:"0px 0px -6% 0px"});
+  els.forEach(function(el){ io.observe(el); });
 }
 
 /* ---------- interactions ---------- */
@@ -1355,6 +1540,10 @@ $("#dShare").addEventListener("click", function(e){
 try{ var saved = localStorage.getItem("sa_lang"); if(saved && D[saved]) lang = saved; }catch(e){}
 if(lang === "en"){ var nl = (navigator.language || "").slice(0,2); if(nl === "es" || nl === "pt"){ try{ if(!localStorage.getItem("sa_lang")) lang = nl; }catch(e){ lang = nl; } } }
 render();
+reveals();
+irisCentre();
+frame();
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ irisCentre(); ask(); });
 $$("canvas.grid").forEach(gridFx);
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(drawCard);
 })();
