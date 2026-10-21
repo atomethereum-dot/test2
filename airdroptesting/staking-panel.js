@@ -13,21 +13,21 @@
   var TG_URL = "https://t.me/sectoraorg";
 
   var T = {
-    en: { loc: "en-US", bar: "Sectora Airdrop · Genesis", k: "For stakers",
+    en: { loc: "en-US", bar: "airdrop genesis", band: "Airdrop for stakers", k: "For stakers",
       h: "Complete your <b>staking airdrop</b>",
       p: "Your staking already counts for the airdrop. Don't withdraw anything: keep earning and collect stars.",
       st: "Your SECT in staking", none: "Connect your wallet", chip: "Counts 2.5×",
       stars: "{n} of 6 stars", hint: "Connect your wallet in the console to check your staking.",
       t: { stake: "Stake SECT", sentinel: "500 SECT staked", guardian: "1,000 SECT staked", x: "Follow Sectora on X", tg: "Join the Telegram", reg: "Sign up for the airdrop" },
       s1: "Season 1", cta: "See the airdrop", note: "Preview · points start in Season 1", min: "Minimise", max: "Open" },
-    es: { loc: "es-ES", bar: "Sectora Airdrop · Genesis", k: "Para quien hace staking",
+    es: { loc: "es-ES", bar: "airdrop genesis", band: "Airdrop para staking", k: "Para quien hace staking",
       h: "Completa tu <b>airdrop de staking</b>",
       p: "Tu staking ya cuenta para el airdrop. No retires nada: sigue ganando y junta estrellas.",
       st: "Tus SECT en staking", none: "Conecta tu wallet", chip: "Cuenta 2,5×",
       stars: "{n} de 6 estrellas", hint: "Conecta tu wallet en la consola para ver tu staking.",
       t: { stake: "Haz staking", sentinel: "500 SECT en staking", guardian: "1.000 SECT en staking", x: "Sigue a Sectora en X", tg: "Únete al Telegram", reg: "Inscríbete en el airdrop" },
       s1: "Temporada 1", cta: "Ver el airdrop", note: "Vista previa · los puntos empiezan en la temporada 1", min: "Minimizar", max: "Abrir" },
-    pt: { loc: "pt-BR", bar: "Sectora Airdrop · Genesis", k: "Para quem faz staking",
+    pt: { loc: "pt-BR", bar: "airdrop genesis", band: "Airdrop para staking", k: "Para quem faz staking",
       h: "Complete seu <b>airdrop de staking</b>",
       p: "Seu staking já conta para o airdrop. Não saque nada: continue ganhando e junte estrelas.",
       st: "Seus SECT em staking", none: "Conecte sua carteira", chip: "Conta 2,5×",
@@ -53,59 +53,68 @@
     { id: "reg", tag: L.s1, lock: true }
   ];
 
+  /* same look as the staking console beside it: a frame with blue registration
+     crosses, a band, and a white card with the blue top line; stars in yellow */
   var css = "" +
-    ".sad{--b:#1569ff;--bl:#4d8dff;position:relative;isolation:isolate;margin-bottom:clamp(18px,2.4vw,28px);background:#05070c;color:#fff;" +
-    "border:1px solid rgba(21,105,255,.45);border-radius:3px;overflow:hidden;font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:300;" +
-    "box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 40px 90px -50px rgba(21,105,255,.85)}" +
-    ".sad::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;" +
-    "background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:27px 27px;" +
-    "-webkit-mask-image:radial-gradient(90% 70% at 85% 0%,#000,transparent 80%);mask-image:radial-gradient(90% 70% at 85% 0%,#000,transparent 80%)}" +
-    ".sad::after{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:var(--b)}" +
+    ".sad{--b:#1569ff;--bd:#0d4fd8;--ink:#07080a;--ink2:#3c414c;--ink3:#6b7280;--ink4:#9aa0ab;--line:rgba(0,0,0,.11);--star:#f5b400;--star-d:#d99a00;" +
+    "position:relative;margin:0 0 clamp(18px,2.4vw,28px);padding:clamp(14px,1.4vw,20px);border:1px solid var(--line);background:rgba(255,255,255,.35);" +
+    "font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:300;color:var(--ink)}" +
+    ".sad-plus{position:absolute;inset:-7px;pointer-events:none}" +
+    ".sad-plus i{position:absolute;width:13px;height:13px}" +
+    ".sad-plus i::before,.sad-plus i::after{content:'';position:absolute;background:var(--b)}" +
+    ".sad-plus i::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-.5px)}" +
+    ".sad-plus i::after{top:50%;left:0;right:0;height:1px;transform:translateY(-.5px)}" +
+    ".sad-plus i:nth-child(1){left:0;top:0}.sad-plus i:nth-child(2){right:0;top:0}.sad-plus i:nth-child(3){left:0;bottom:0}.sad-plus i:nth-child(4){right:0;bottom:0}" +
     ".sad .m{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:400}" +
-    ".sad-bar{display:flex;align-items:center;gap:10px;padding:12px 14px 11px;border-bottom:1px solid rgba(255,255,255,.1);color:#c6ccd8}" +
-    ".sad-bar svg{width:18px;height:18px;flex:none;border-radius:2px}" +
-    ".sad-bar .sp{flex:1}" +
-    ".sad-cnt{display:none;color:var(--bl)}" +
+    ".sad-band{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;font-size:10.5px}" +
+    ".sad-band span{color:var(--ink3)}" +
+    ".sad-band b{color:var(--b);font-weight:500}" +
+    ".sad-card{position:relative;background:#fff;color:var(--ink);padding:clamp(18px,2vw,26px);border:1px solid rgba(0,0,0,.08);" +
+    "box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 24px 60px -36px rgba(7,8,10,.28)}" +
+    ".sad-card::after{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:var(--b)}" +
+    ".sad-head{display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line);font-size:9.5px;color:var(--ink4)}" +
+    ".sad-head .sp{flex:1}" +
+    ".sad-cnt{display:none;color:var(--star-d)}" +
     ".sad.min .sad-cnt{display:inline}" +
-    ".sad-min{display:grid;place-items:center;width:28px;height:24px;padding:0;border:1px solid rgba(255,255,255,.16);background:none;color:#c6ccd8;cursor:pointer;font:inherit;transition:border-color .3s,color .3s}" +
-    ".sad-min:hover{border-color:var(--bl);color:#fff}" +
+    ".sad-min{display:grid;place-items:center;width:28px;height:24px;padding:0;border:1px solid var(--line);background:none;color:var(--ink3);cursor:pointer;font:inherit;transition:border-color .3s,color .3s}" +
+    ".sad-min:hover{border-color:var(--ink3);color:var(--ink)}" +
     ".sad-min i{display:block;width:10px;height:1px;background:currentColor;position:relative}" +
     ".sad.min .sad-min i::after{content:'';position:absolute;left:0;top:0;width:10px;height:1px;background:currentColor;transform:rotate(90deg)}" +
-    ".sad-body{padding:20px 20px 18px}" +
+    ".sad-body{padding-top:18px}" +
     ".sad.min .sad-body{display:none}" +
-    ".sad-k{color:var(--bl)}" +
-    ".sad h3{margin:10px 0 0;font-size:clamp(22px,1.9vw,27px);font-weight:300;letter-spacing:-.02em;line-height:1.15;color:#fff}" +
-    ".sad h3 b{font-weight:400;color:var(--bl)}" +
-    ".sad-p{margin:10px 0 0;font-size:14.5px;line-height:1.6;color:#c6ccd8}" +
-    ".sad-st{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-top:18px;padding:14px 0;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1)}" +
-    ".sad-st .m{display:block;color:#7c8496}" +
-    ".sad-st b{display:block;margin-top:8px;font-size:26px;font-weight:200;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}" +
-    ".sad-st b.off{font-size:16px;font-weight:300;color:#7c8496;letter-spacing:0}" +
-    ".sad-chip{padding:5px 9px;border:1px solid rgba(77,141,255,.45);background:rgba(77,141,255,.1);color:#8fb4ff;white-space:nowrap}" +
-    ".sad-stars{display:flex;align-items:center;gap:6px;margin-top:16px}" +
-    ".sad-stars svg{width:22px;height:22px;flex:none}" +
-    ".sad-stars span{margin-left:auto;color:#c6ccd8}" +
-    ".sad-star path{fill:none;stroke:rgba(255,255,255,.28);stroke-width:1.3;transition:fill .4s,stroke .4s}" +
-    ".sad-star.on path{fill:var(--bl);stroke:var(--bl)}" +
-    ".sad-star.on{filter:drop-shadow(0 0 6px rgba(77,141,255,.75))}" +
+    ".sad-k{color:var(--b)}" +
+    ".sad h3{margin:10px 0 0;font-size:clamp(22px,1.9vw,27px);font-weight:300;letter-spacing:-.02em;line-height:1.15;color:var(--ink)}" +
+    ".sad h3 b{font-weight:400;color:var(--b)}" +
+    ".sad-p{margin:10px 0 0;font-size:14.5px;line-height:1.6;color:var(--ink2)}" +
+    ".sad-lbl{display:block;margin:20px 0 10px;color:var(--ink3)}" +
+    ".sad-st{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 12px;border:1px solid rgba(0,0,0,.14);background:#f7f7f5;padding:14px 16px}" +
+    ".sad-st b{font-size:clamp(24px,2.4vw,30px);font-weight:200;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}" +
+    ".sad-st b.off{font-size:16px;font-weight:300;color:var(--ink3);letter-spacing:0}" +
+    ".sad-chip{flex:none;padding:7px 11px;border:1px solid var(--b);background:rgba(21,105,255,.08);color:var(--bd);font-size:9.5px;letter-spacing:.12em;white-space:nowrap}" +
+    ".sad-stars{display:flex;align-items:center;gap:6px;margin-top:20px}" +
+    ".sad-stars svg{width:26px;height:26px;flex:none}" +
+    ".sad-stars span{margin-left:auto;color:var(--ink3)}" +
+    ".sad-star path{fill:none;stroke:#c3c7cf;stroke-width:1.3;stroke-linejoin:round;transition:fill .4s,stroke .4s}" +
+    ".sad-star.on path{fill:var(--star);stroke:var(--star-d)}" +
+    ".sad-star.on{filter:drop-shadow(0 1px 4px rgba(245,180,0,.45))}" +
     ".sad-star.pop{animation:sadPop .6s cubic-bezier(.22,.72,.24,1)}" +
     "@keyframes sadPop{0%{transform:scale(.4)}60%{transform:scale(1.25)}100%{transform:scale(1)}}" +
-    ".sad-hint{margin:12px 0 0;font-size:13px;line-height:1.5;color:#7c8496}" +
-    ".sad-tasks{list-style:none;margin:10px 0 0;padding:0}" +
-    ".sad-tasks li{display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:14.5px;line-height:1.4;color:#c6ccd8}" +
-    ".sad-tasks li svg{width:16px;height:16px}" +
-    ".sad-tasks li.done{color:#fff}" +
-    ".sad-tasks li .tg{color:#7c8496}" +
-    ".sad-tasks li.done .tg{color:var(--bl)}" +
-    ".sad-tasks li.lock{opacity:.5}" +
-    ".sad-tasks a{color:inherit;text-decoration:underline;text-decoration-color:rgba(255,255,255,.28);text-underline-offset:3px;transition:text-decoration-color .3s}" +
-    ".sad-tasks a:hover{text-decoration-color:var(--bl)}" +
-    ".sad-cta{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;margin-top:16px;height:50px;padding:0 16px;background:var(--b);color:#fff;text-decoration:none}" +
-    ".sad-cta::before{content:'';position:absolute;inset:0;background:#0d4fd8;transform:translateY(101%);transition:transform .42s cubic-bezier(.22,.72,.24,1)}" +
+    ".sad-hint{margin:12px 0 0;font-size:13px;line-height:1.5;color:var(--ink3)}" +
+    ".sad-tasks{list-style:none;margin:10px 0 0;padding:0;border-top:1px solid var(--line)}" +
+    ".sad-tasks li{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.4;color:var(--ink3)}" +
+    ".sad-tasks li svg{width:18px;height:18px}" +
+    ".sad-tasks li.done{color:var(--ink)}" +
+    ".sad-tasks li .tg{color:var(--ink4)}" +
+    ".sad-tasks li.done .tg{color:var(--bd)}" +
+    ".sad-tasks li.lock{opacity:.55}" +
+    ".sad-tasks a{color:inherit;text-decoration:underline;text-decoration-color:rgba(0,0,0,.22);text-underline-offset:3px;transition:text-decoration-color .3s,color .3s}" +
+    ".sad-tasks a:hover{color:var(--ink);text-decoration-color:var(--b)}" +
+    ".sad-cta{position:relative;overflow:hidden;display:flex;justify-content:center;align-items:center;gap:11px;margin-top:18px;padding:17px 22px;background:var(--b);color:#fff;text-decoration:none}" +
+    ".sad-cta::before{content:'';position:absolute;inset:0;background:var(--bd);transform:translateY(101%);transition:transform .42s cubic-bezier(.22,.72,.24,1)}" +
     ".sad-cta:hover::before{transform:none}" +
     ".sad-cta span,.sad-cta i{position:relative;font-style:normal}" +
-    ".sad-note{margin:12px 0 0;color:#4a5164;line-height:1.6}" +
-    ".sad-min:focus-visible,.sad-cta:focus-visible,.sad-tasks a:focus-visible{outline:2px solid var(--bl);outline-offset:3px}" +
+    ".sad-note{margin:12px 0 0;color:var(--ink4);line-height:1.6;text-align:center}" +
+    ".sad-min:focus-visible,.sad-cta:focus-visible,.sad-tasks a:focus-visible{outline:2px solid var(--b);outline-offset:3px}" +
     /* beside the console: the window takes the top of the right column, the steps go below it */
     ".pp-body.sad-on{grid-template-rows:auto 1fr}" +
     ".pp-body.sad-on > .frame{grid-row:1 / span 2}" +
@@ -137,21 +146,24 @@
       return '<li data-t="' + t.id + '"' + (t.lock ? ' class="lock"' : "") + ">" + star() + "<span>" + label + '</span><span class="tg m">' + esc(t.tag) + "</span></li>";
     }).join("");
     el.innerHTML =
-      '<div class="sad-bar m">' +
-        '<svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="7"/></svg>' +
-        "<span>" + esc(L.bar) + '</span><span class="sp"></span><span class="sad-cnt"></span>' +
-        '<button type="button" class="sad-min" aria-expanded="true" aria-label="' + esc(L.min) + '"><i></i></button>' +
-      "</div>" +
-      '<div class="sad-body">' +
-        '<p class="sad-k m">' + esc(L.k) + "</p>" +
-        "<h3>" + L.h + "</h3>" +
-        '<p class="sad-p">' + esc(L.p) + "</p>" +
-        '<div class="sad-st"><div><span class="m">' + esc(L.st) + '</span><b class="sad-dep off">' + esc(L.none) + '</b></div><span class="sad-chip m">' + esc(L.chip) + "</span></div>" +
-        '<div class="sad-stars" role="img">' + stars + '<span class="m"></span></div>' +
-        '<p class="sad-hint"></p>' +
-        '<ul class="sad-tasks">' + rows + "</ul>" +
-        '<a class="sad-cta m" href="' + AIRDROP_URL + '"><span>' + esc(L.cta) + "</span><i>→</i></a>" +
-        '<p class="sad-note m">' + esc(L.note) + "</p>" +
+      '<span class="sad-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>' +
+      '<div class="sad-band m"><span>' + esc(L.band) + '</span><b>SA&middot;ST&middot;01&middot;26</b></div>' +
+      '<div class="sad-card">' +
+        '<div class="sad-head m"><span>Sectora &nbsp;//&nbsp; ' + esc(L.bar) + '</span><span class="sp"></span><span class="sad-cnt"></span>' +
+          '<button type="button" class="sad-min" aria-expanded="true" aria-label="' + esc(L.min) + '"><i></i></button>' +
+        "</div>" +
+        '<div class="sad-body">' +
+          '<p class="sad-k m">' + esc(L.k) + "</p>" +
+          "<h3>" + L.h + "</h3>" +
+          '<p class="sad-p">' + esc(L.p) + "</p>" +
+          '<span class="sad-lbl m">' + esc(L.st) + "</span>" +
+          '<div class="sad-st"><b class="sad-dep off">' + esc(L.none) + '</b><span class="sad-chip m">' + esc(L.chip) + "</span></div>" +
+          '<div class="sad-stars" role="img">' + stars + '<span class="m"></span></div>' +
+          '<p class="sad-hint"></p>' +
+          '<ul class="sad-tasks">' + rows + "</ul>" +
+          '<a class="sad-cta m" href="' + AIRDROP_URL + '"><span>' + esc(L.cta) + "</span><i>→</i></a>" +
+          '<p class="sad-note m">' + esc(L.note) + "</p>" +
+        "</div>" +
       "</div>";
     body.insertBefore(el, steps);
     body.classList.add("sad-on");
