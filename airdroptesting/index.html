@@ -344,6 +344,15 @@ h2.t b{font-weight:400;color:var(--b-ink)}
 .boost b{display:block;font-size:clamp(46px,4.6vw,72px);font-weight:200;letter-spacing:-.045em;line-height:.9;color:#fff}
 .boost h3{margin-top:22px;font-size:clamp(18px,1.5vw,21px);font-weight:400;letter-spacing:-.01em}
 .boost p{margin-top:8px;font-size:15px;line-height:1.6;color:var(--ink-2)}
+/* staking: the strongest boost, so it carries the blue and a way in */
+.boost.star{background:linear-gradient(180deg,rgba(21,105,255,.16),rgba(21,105,255,.02) 85%)}
+.boost.star::before{background:var(--blue);transform:scaleX(1)}
+.boost.star b{color:var(--blue-l)}
+.boost .tag{position:absolute;top:clamp(20px,2.6vw,34px);right:clamp(14px,1.6vw,24px)}
+.boost .bl{display:inline-flex;align-items:center;gap:8px;margin-top:18px;color:var(--blue-l);text-decoration:none;font-weight:500;transition:color .3s var(--ease)}
+.boost .bl i{font-style:normal;transition:transform .38s var(--ease)}
+.boost .bl:hover{color:#fff}
+.boost .bl:hover i{transform:translate(3px,-3px)}
 
 /* ---------- document frame ---------- */
 .doc{position:relative;border:1px solid var(--p-line);background:var(--card,#fff)}
@@ -502,7 +511,9 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
   .boost + .boost,.boost:nth-child(n){border-left:0;border-top:1px solid var(--hair)}
   .boost:first-child{border-top:0}
   .boost b{grid-row:1 / 3;font-size:44px;min-width:2.3ch}
-  .boost h3{margin-top:2px}
+  .boost h3{margin-top:2px;padding-right:110px}
+  .boost .tag{top:24px;right:0}
+  .boost .bl{grid-column:2;justify-self:start}
   .prz,.podium{grid-template-columns:1fr}
   .prz > div + div,.podium > div + div{border-left:0;border-top:1px solid var(--p-line)}
   .podium > div{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:6px 16px}
@@ -563,7 +574,7 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
 .anim .step.is-in .num{opacity:1;translate:none;transition:opacity .9s var(--ease-out) calc(var(--d,0s) + .15s),translate .9s var(--ease-out) calc(var(--d,0s) + .15s)}
 .anim .step::before,.anim .pt::before,.anim .boost::before{transform:scaleX(0)}
 .anim .step.is-in::before,.anim .pt.is-in::before,.anim .boost.is-in::before{transform:scaleX(.16);transition:transform .9s var(--ease-out) calc(var(--d,0s) + .3s)}
-.anim .step.is-in:hover::before,.anim .pt.is-in:hover::before,.anim .pt.claim.is-in::before,.anim .boost.is-in:hover::before{transform:scaleX(1)}
+.anim .step.is-in:hover::before,.anim .pt.is-in:hover::before,.anim .pt.claim.is-in::before,.anim .boost.is-in:hover::before,.anim .boost.star.is-in::before{transform:scaleX(1)}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
@@ -735,7 +746,7 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
       </div>
       <ul class="hold-l">
         <li><b data-i="hd.1">Not locked</b><span data-i="hd.1p">Nobody freezes your SECT.</span></li>
-        <li><b data-i="hd.2">Nothing to send</b><span data-i="hd.2p">You never send SECT to any address.</span></li>
+        <li><b data-i="hd.2">Nothing to send</b><span data-i="hd.2p">The airdrop never asks you to send SECT anywhere.</span></li>
         <li><b data-i="hd.3">Sell any time</b><span data-i="hd.3p">You keep the points you already earned.</span></li>
       </ul>
     </div>
@@ -757,8 +768,8 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
     <div class="boosts">
       <div class="boost"><b>2×</b><h3 data-i="bo.1h">Come every day</h3><p data-i="bo.1p">Your points grow every 6 days, up to double on day 60.</p></div>
       <div class="boost"><b>2×</b><h3 data-i="bo.2h">Be early</h3><p data-i="bo.2p">The first 1,000 people get double points for the whole campaign.</p></div>
-      <div class="boost"><b>2×</b><h3 data-i="bo.3h">Stake your SECT</h3><p data-i="bo.3p">SECT in Sectora staking counts double.</p></div>
-      <div class="boost"><b>1.2×</b><h3 data-i="bo.4h">Bring 5 friends</h3><p data-i="bo.4p">When 5 friends reach Sentinel, you earn 20% more.</p></div>
+      <div class="boost star"><span class="chip blue mono tag" data-i="bo.3t">Most points</span><b data-i="bo.3v">2.5×</b><h3 data-i="bo.3h">Stake your SECT</h3><p data-i="bo.3p">Staked SECT counts 2.5× and still counts for your level. Your first stake gives +100 points. Withdraw any time.</p><a class="bl mono" href="/staking/"><span data-i="bo.3l">Go to staking</span><i>↗</i></a></div>
+      <div class="boost"><b data-i="bo.4v">1.2×</b><h3 data-i="bo.4h">Bring 5 friends</h3><p data-i="bo.4p">When 5 friends reach Sentinel, you earn 20% more.</p></div>
     </div>
   </div>
 </section>
@@ -888,7 +899,8 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
       <details><summary><span class="n mono">03</span><span data-i="q6">Are my SECT locked? Can I sell?</span><span class="pm"></span></summary><p class="a" data-i="a6">They are never locked and you never send them anywhere. You can sell whenever you want. You keep the points you already earned; from then on you just stop earning daily points for holding.</p></details>
       <details><summary><span class="n mono">04</span><span data-i="q3">How much will I get?</span><span class="pm"></span></summary><p class="a" data-i="a3">It depends on your points compared with everyone else's. The Top 100 prizes are fixed. We don't promise amounts in dollars.</p></details>
       <details><summary><span class="n mono">05</span><span data-i="q4">When do I get it?</span><span class="pm"></span></summary><p class="a" data-i="a4">When SectoraEVM launches: half that day and the other half 90 days later.</p></details>
-      <details><summary><span class="n mono">06</span><span data-i="q5">Who can join?</span><span class="pm"></span></summary><p class="a" data-i="a5">Anyone where it's legal. The final rules will be published before Season 1.</p></details>
+      <details><summary><span class="n mono">06</span><span data-i="q7">Do stakers earn more?</span><span class="pm"></span></summary><p class="a" data-i="a7">Yes. SECT in Sectora staking counts 2.5× for points and still counts for your level. Your first stake also gives +100 points. Staking has no lock-up: you can withdraw whenever you want.</p></details>
+      <details><summary><span class="n mono">07</span><span data-i="q5">Who can join?</span><span class="pm"></span></summary><p class="a" data-i="a5">Anyone where it's legal. The final rules will be published before Season 1.</p></details>
     </div>
   </div>
 </section>
@@ -964,13 +976,13 @@ s4h:"Recibe tus SECT",s4p:"Cuando se lance SectoraEVM, recibes SECT según tus p
 "lv.k2":"Nivel 2","lv.r2s":"En tu wallet · sin bloqueo","lv.2a":"Todo lo de Scout","lv.2b":"Parte de <b>1.400.000 SECT</b>","lv.b2":"Ser Sentinel",
 "lv.k3":"Nivel 3","lv.3a":"Todo lo de Sentinel","lv.3b":"<b>+50%</b> puntos: el mejor nivel","lv.b3":"Ser Guardian",
 "hd.h":"Solo lo guardas. <b>Nada más.</b>","hd.p":"Tus SECT se quedan en tu propia wallet todo el tiempo. Si quieres retirarte, vende cuando quieras.",
-"hd.1":"No se bloquea","hd.1p":"Nadie congela tus SECT.","hd.2":"No envías nada","hd.2p":"Nunca envías SECT a ninguna dirección.","hd.3":"Vende cuando quieras","hd.3p":"Conservas los puntos que ya ganaste.",
+"hd.1":"No se bloquea","hd.1p":"Nadie congela tus SECT.","hd.2":"No envías nada","hd.2p":"El airdrop nunca te pide enviar SECT a ninguna dirección.","hd.3":"Vende cuando quieras","hd.3p":"Conservas los puntos que ya ganaste.",
 "lv.n":"Revisamos tu wallet una vez al día. Las cifras en dólares son aproximadas: el precio de SECT cambia.",
 "bo.e":"03 · Puntos extra","bo.h":"Cuatro formas de <b>ganar más.</b>","bo.p":"Multiplican los puntos que ganas por guardar SECT.",
 "bo.1h":"Ven cada día","bo.1p":"Tus puntos suben cada 6 días, hasta el doble el día 60.",
 "bo.2h":"Llega primero","bo.2p":"Las primeras 1.000 personas tienen puntos dobles toda la campaña.",
-"bo.3h":"Haz staking","bo.3p":"Los SECT en el staking de Sectora cuentan doble.",
-"bo.4h":"Trae 5 amigos","bo.4p":"Cuando 5 amigos llegan a Sentinel, ganas un 20% más.",
+"bo.3t":"Más puntos","bo.3v":"2,5×","bo.3h":"Haz staking","bo.3p":"Los SECT en staking cuentan 2,5× y siguen contando para tu nivel. Tu primer staking da +100 puntos. Retiras cuando quieras.","bo.3l":"Ir al staking",
+"bo.4v":"1,2×","bo.4h":"Trae 5 amigos","bo.4p":"Cuando 5 amigos llegan a Sentinel, ganas un 20% más.",
 "pr.e":"04 · Premios","pr.h":"Quién gana <b>qué.</b>","pr.p":"Todo sale de una bolsa fija de 2.000.000 SECT.","pr.t":"Bolsa de premios",
 "pr.1h":"Holders","pr.1p":"Se reparte por puntos entre Sentinels y Guardians.",
 "pr.2h":"Top 100 que más invitan","pr.2p":"Premios fijos por puesto. Mira abajo.",
@@ -993,6 +1005,7 @@ q2:"¿Tengo que enviar mis SECT?",a2:"No. Tus SECT se quedan en tu wallet. Solo 
 q6:"¿Se bloquean mis SECT? ¿Puedo vender?",a6:"Nunca se bloquean y nunca los envías a ningún lado. Puedes venderlos cuando quieras. Conservas los puntos que ya ganaste; desde ese momento solo dejas de sumar puntos diarios por guardar.",
 q3:"¿Cuánto voy a recibir?",a3:"Depende de tus puntos comparados con los de todos. Los premios del Top 100 son fijos. No prometemos cantidades en dólares.",
 q4:"¿Cuándo lo recibo?",a4:"Cuando se lance SectoraEVM: la mitad ese día y la otra mitad 90 días después.",
+q7:"¿Los que hacen staking ganan más?",a7:"Sí. Los SECT en el staking de Sectora cuentan 2,5× para los puntos y siguen contando para tu nivel. Además, tu primer staking da +100 puntos. El staking no tiene bloqueo: puedes retirar cuando quieras.",
 q5:"¿Quién puede participar?",a5:"Cualquier persona donde sea legal. Las reglas finales se publicarán antes de la temporada 1.",
 "fn.e":"Temporada 1 · fecha muy pronto","fn.h":"Entra <b>temprano.</b>","fn.p":"Las primeras 1.000 personas tienen puntos dobles. Entrar es gratis.",
 "ft.1":"Sectora Foundation · Illinois, EE. UU. · Expediente 18523639",
@@ -1021,13 +1034,13 @@ s4h:"Receba seus SECT",s4p:"Quando a SectoraEVM for lançada, você recebe SECT 
 "lv.k2":"Nível 2","lv.r2s":"Na sua carteira · sem bloqueio","lv.2a":"Tudo do Scout","lv.2b":"Parte de <b>1.400.000 SECT</b>","lv.b2":"Ser Sentinel",
 "lv.k3":"Nível 3","lv.3a":"Tudo do Sentinel","lv.3b":"<b>+50%</b> pontos: o melhor nível","lv.b3":"Ser Guardian",
 "hd.h":"Você só guarda. <b>Só isso.</b>","hd.p":"Seus SECT ficam na sua própria carteira o tempo todo. Se quiser sair, venda quando quiser.",
-"hd.1":"Não fica bloqueado","hd.1p":"Ninguém congela seus SECT.","hd.2":"Você não envia nada","hd.2p":"Você nunca envia SECT para nenhum endereço.","hd.3":"Venda quando quiser","hd.3p":"Você mantém os pontos que já ganhou.",
+"hd.1":"Não fica bloqueado","hd.1p":"Ninguém congela seus SECT.","hd.2":"Você não envia nada","hd.2p":"O airdrop nunca pede para você enviar SECT a nenhum endereço.","hd.3":"Venda quando quiser","hd.3p":"Você mantém os pontos que já ganhou.",
 "lv.n":"Verificamos sua carteira uma vez por dia. Os valores em dólar são aproximados: o preço do SECT muda.",
 "bo.e":"03 · Pontos extras","bo.h":"Quatro jeitos de <b>ganhar mais.</b>","bo.p":"Multiplicam os pontos que você ganha por guardar SECT.",
 "bo.1h":"Venha todo dia","bo.1p":"Seus pontos sobem a cada 6 dias, até o dobro no dia 60.",
 "bo.2h":"Chegue cedo","bo.2p":"As primeiras 1.000 pessoas têm pontos em dobro a campanha toda.",
-"bo.3h":"Faça staking","bo.3p":"SECT no staking da Sectora conta em dobro.",
-"bo.4h":"Traga 5 amigos","bo.4p":"Quando 5 amigos chegam a Sentinel, você ganha 20% a mais.",
+"bo.3t":"Mais pontos","bo.3v":"2,5×","bo.3h":"Faça staking","bo.3p":"SECT em staking conta 2,5× e continua valendo para o seu nível. Seu primeiro staking dá +100 pontos. Saque quando quiser.","bo.3l":"Ir para o staking",
+"bo.4v":"1,2×","bo.4h":"Traga 5 amigos","bo.4p":"Quando 5 amigos chegam a Sentinel, você ganha 20% a mais.",
 "pr.e":"04 · Prêmios","pr.h":"Quem ganha <b>o quê.</b>","pr.p":"Tudo sai de um pote fixo de 2.000.000 SECT.","pr.t":"Pote de prêmios",
 "pr.1h":"Holders","pr.1p":"Dividido por pontos entre Sentinels e Guardians.",
 "pr.2h":"Top 100 que mais convidam","pr.2p":"Prêmios fixos por posição. Veja abaixo.",
@@ -1050,6 +1063,7 @@ q2:"Preciso enviar meus SECT?",a2:"Não. Seus SECT ficam na sua carteira. Só ol
 q6:"Meus SECT ficam bloqueados? Posso vender?",a6:"Nunca ficam bloqueados e você nunca os envia para lugar nenhum. Você pode vender quando quiser. Mantém os pontos que já ganhou; a partir daí só deixa de somar pontos diários por guardar.",
 q3:"Quanto vou receber?",a3:"Depende dos seus pontos comparados com os de todos. Os prêmios do Top 100 são fixos. Não prometemos valores em dólar.",
 q4:"Quando eu recebo?",a4:"No lançamento da SectoraEVM: metade nesse dia e a outra metade 90 dias depois.",
+q7:"Quem faz staking ganha mais?",a7:"Sim. SECT no staking da Sectora conta 2,5× para os pontos e continua valendo para o seu nível. Além disso, seu primeiro staking dá +100 pontos. O staking não tem bloqueio: você pode sacar quando quiser.",
 q5:"Quem pode participar?",a5:"Qualquer pessoa onde for legal. As regras finais serão publicadas antes da temporada 1.",
 "fn.e":"Temporada 1 · data em breve","fn.h":"Entre <b>cedo.</b>","fn.p":"As primeiras 1.000 pessoas têm pontos em dobro. Entrar é grátis.",
 "ft.1":"Sectora Foundation · Illinois, EUA · Arquivo 18523639",
