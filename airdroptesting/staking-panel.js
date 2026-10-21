@@ -18,21 +18,21 @@
       p: "Your staking already counts for the airdrop. Don't withdraw anything: keep earning and collect stars.",
       st: "Your SECT in staking", none: "Connect your wallet", chip: "10 → 25 points",
       stars: "{n} of 6 stars", hint: "Connect your wallet in the console to check your staking.",
-      t: { stake: "Stake SECT", sentinel: "500 SECT staked", guardian: "1,000 SECT staked", x: "Follow Sectora on X", tg: "Join the Telegram", reg: "Sign up for the airdrop" },
+      t: { stake: "Stake SECT", sentinel: "500 SECT staked", guardian: "1,000 SECT staked", x: "Follow Sectora on X", tg: "Join the Telegram", node: "Turn on a node" },
       s1: "Season 1", cta: "See the airdrop", note: "Preview · points start in Season 1", min: "Minimise", max: "Open" },
     es: { loc: "es-ES", bar: "airdrop genesis", band: "Airdrop para staking", k: "Para quien hace staking",
       h: "Completa tu <b>airdrop de staking</b>",
       p: "Tu staking ya cuenta para el airdrop. No retires nada: sigue ganando y junta estrellas.",
       st: "Tus SECT en staking", none: "Conecta tu wallet", chip: "10 → 25 puntos",
       stars: "{n} de 6 estrellas", hint: "Conecta tu wallet en la consola para ver tu staking.",
-      t: { stake: "Haz staking", sentinel: "500 SECT en staking", guardian: "1.000 SECT en staking", x: "Sigue a Sectora en X", tg: "Únete al Telegram", reg: "Inscríbete en el airdrop" },
+      t: { stake: "Haz staking", sentinel: "500 SECT en staking", guardian: "1.000 SECT en staking", x: "Sigue a Sectora en X", tg: "Únete al Telegram", node: "Enciende un nodo" },
       s1: "Temporada 1", cta: "Ver el airdrop", note: "Vista previa · los puntos empiezan en la temporada 1", min: "Minimizar", max: "Abrir" },
     pt: { loc: "pt-BR", bar: "airdrop genesis", band: "Airdrop para staking", k: "Para quem faz staking",
       h: "Complete seu <b>airdrop de staking</b>",
       p: "Seu staking já conta para o airdrop. Não saque nada: continue ganhando e junte estrelas.",
       st: "Seus SECT em staking", none: "Conecte sua carteira", chip: "10 → 25 pontos",
       stars: "{n} de 6 estrelas", hint: "Conecte sua carteira no console para ver seu staking.",
-      t: { stake: "Faça staking", sentinel: "500 SECT em staking", guardian: "1.000 SECT em staking", x: "Siga a Sectora no X", tg: "Entre no Telegram", reg: "Inscreva-se no airdrop" },
+      t: { stake: "Faça staking", sentinel: "500 SECT em staking", guardian: "1.000 SECT em staking", x: "Siga a Sectora no X", tg: "Entre no Telegram", node: "Ligue um nó" },
       s1: "Temporada 1", cta: "Ver o airdrop", note: "Prévia · os pontos começam na temporada 1", min: "Minimizar", max: "Abrir" }
   };
   function pick() {
@@ -43,14 +43,14 @@
   }
   var L = T[pick()];
 
-  /* six stars: three read from the staked amount, two social, one for Season 1 */
+  /* six stars: three read from the staked amount, two social, and a node on the testnet */
   var TASKS = [
     { id: "stake", tag: "+100", auto: function (d) { return d > 0; } },
     { id: "sentinel", tag: "Sentinel", auto: function (d) { return d >= 500; } },
     { id: "guardian", tag: "Guardian", auto: function (d) { return d >= 1000; } },
     { id: "x", tag: "+25", href: X_URL },
     { id: "tg", tag: "+25", href: TG_URL },
-    { id: "reg", tag: L.s1, lock: true }
+    { id: "node", tag: "+300", href: "/dash/" }
   ];
 
   /* same look as the staking console beside it: a frame with blue registration

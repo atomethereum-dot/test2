@@ -337,6 +337,10 @@ h2.t b{font-weight:400;color:var(--b-ink)}
 .hold.stk .hold-l li::before{border-color:rgba(21,105,255,.4);
   background:rgba(21,105,255,.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.2l2 2 4-4.4' fill='none' stroke='%231569ff' stroke-width='1.5'/%3E%3C/svg%3E") center/13px no-repeat}
 .hold .sb{margin-top:20px;max-width:300px}
+.hold.node{margin-top:clamp(28px,4vh,40px)}
+.hold.node .hold-l{counter-reset:n}
+.hold.node .hold-l li::before{counter-increment:n;content:counter(n);display:grid;place-items:center;background:rgba(21,105,255,.08);border-color:rgba(21,105,255,.4);
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:var(--b-ink)}
 .lnote{margin-top:22px;color:var(--p-ink-3);font-size:14px;line-height:1.6;max-width:72ch}
 
 /* ---------- 03 extra points ---------- */
@@ -687,11 +691,23 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
       <p class="sub" data-i="sp.p">You don't need money to start.</p>
     </div>
     <ol class="steps">
-      <li class="step"><span class="num">1</span><div><h3 data-i="s1h">Connect your wallet</h3><p data-i="s1p">Press the button and sign. It's free and costs no gas.</p></div><span class="fact mono" data-i="s1f">+50 points</span></li>
-      <li class="step"><span class="num">2</span><div><h3 data-i="s2h">Do easy tasks</h3><p data-i="s2p">Follow us on X, join Telegram and come back every day.</p></div><span class="fact mono" data-i="s2f">+10 points a day</span></li>
+      <li class="step"><span class="num">1</span><div><h3 data-i="s1h">Connect and say hi</h3><p data-i="s1p">Connect your wallet, follow us on X and join Telegram. It's free and costs no gas.</p></div><span class="fact mono" data-i="s1f">+100 points</span></li>
+      <li class="step"><span class="num">2</span><div><h3 data-i="s2h">Turn on a node</h3><p data-i="s2p">In the Sectora dashboard, take free test SECT, buy hash power and register your node. It costs nothing.</p></div><span class="fact mono" data-i="s2f">+300 points · +5 a day</span></li>
       <li class="step"><span class="num">3</span><div><h3 data-i="s3h">Hold SECT <span class='chip ink mono'>Optional</span></h3><p data-i="s3p">Keep SECT in your wallet and earn points every day. Nothing is locked or sent: you can sell whenever you want.</p></div><span class="fact mono" data-i="s3f">Up to 15 points a day</span></li>
       <li class="step last"><span class="num">4</span><div><h3 data-i="s4h">Receive your SECT</h3><p data-i="s4p">When SectoraEVM launches, you get SECT based on your points.</p></div><span class="fact mono" data-i="s4f">Half at launch, half 90 days later</span></li>
     </ol>
+    <div class="hold stk node">
+      <div class="hold-h">
+        <h3 data-i="nd.h">Your node in <b>3 clicks.</b></h3>
+        <p data-i="nd.p">It runs on the Sectora testnet: you use free test tokens and you don't need a computer switched on.</p>
+        <a class="sb go mono" href="/dash/"><span data-i="nd.b">Open the node dashboard</span><i>↗</i></a>
+      </div>
+      <ul class="hold-l">
+        <li><b data-i="nd.1">Take free test SECT</b><span data-i="nd.1p">5,000 tSECT every 24 h from the faucet.</span></li>
+        <li><b data-i="nd.2">Buy hash power</b><span data-i="nd.2p">Pick any package. +100 points.</span></li>
+        <li><b data-i="nd.3">Register your node</b><span data-i="nd.3p">+200 points, and +5 a day while it's on.</span></li>
+      </ul>
+    </div>
     <div class="hold stk">
       <div class="hold-h">
         <h3 data-i="sk.h">Already staking? <b>You're already in.</b></h3>
@@ -728,7 +744,7 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
         <h3>Scout</h3>
         <div class="req"><b data-i="lv.r1">Free</b><span class="mono" data-i="lv.r1s">No purchase</span></div>
         <ul>
-          <li data-i="lv.1a">Tasks and daily check-in</li>
+          <li data-i="lv.1a">Tasks and your node</li>
           <li data-i="lv.1b">Share of <b>200,000 SECT</b></li>
         </ul>
         <div class="rate mono"><span data-i="lv.rt">Points a day for holding</span><b>0</b></div>
@@ -913,12 +929,13 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
     </div>
     <div class="faq">
       <details open><summary><span class="n mono">01</span><span data-i="q1">Is it free?</span><span class="pm"></span></summary><p class="a" data-i="a1">Yes. You only connect your wallet and sign. Holding SECT is optional and gives more points.</p></details>
-      <details><summary><span class="n mono">02</span><span data-i="q2">Do I have to send my SECT?</span><span class="pm"></span></summary><p class="a" data-i="a2">No. Your SECT stay in your wallet. We only look at your balance once a day.</p></details>
-      <details><summary><span class="n mono">03</span><span data-i="q6">Are my SECT locked? Can I sell?</span><span class="pm"></span></summary><p class="a" data-i="a6">They are never locked and you never send them anywhere. You can sell whenever you want. You keep the points you already earned; from then on you just stop earning daily points for holding.</p></details>
-      <details><summary><span class="n mono">04</span><span data-i="q3">How much will I get?</span><span class="pm"></span></summary><p class="a" data-i="a3">It depends on your points compared with everyone else's. The Top 100 prizes are fixed. We don't promise amounts in dollars.</p></details>
-      <details><summary><span class="n mono">05</span><span data-i="q4">When do I get it?</span><span class="pm"></span></summary><p class="a" data-i="a4">When SectoraEVM launches: half that day and the other half 90 days later.</p></details>
-      <details><summary><span class="n mono">06</span><span data-i="q7">Do stakers earn more?</span><span class="pm"></span></summary><p class="a" data-i="a7">Yes. If you already stake, you're in automatically: you don't need to withdraw anything. With staking, every 10 points become 25, and it still counts for your level. Your first stake also gives +100 points. Staking has no lock-up.</p></details>
-      <details><summary><span class="n mono">07</span><span data-i="q5">Who can join?</span><span class="pm"></span></summary><p class="a" data-i="a5">Anyone where it's legal. The final rules will be published before Season 1.</p></details>
+      <details><summary><span class="n mono">02</span><span data-i="q8">What is a node? Does it cost anything?</span><span class="pm"></span></summary><p class="a" data-i="a8">A node is your place in the Sectora network. For now it runs on the testnet: the test SECT are free and have no value, and you only need a little free test ETH for gas (the dashboard links to it). You don't need a computer switched on. Use the same wallet as in the airdrop so your points count.</p></details>
+      <details><summary><span class="n mono">03</span><span data-i="q2">Do I have to send my SECT?</span><span class="pm"></span></summary><p class="a" data-i="a2">No. Your SECT stay in your wallet. We only look at your balance once a day.</p></details>
+      <details><summary><span class="n mono">04</span><span data-i="q6">Are my SECT locked? Can I sell?</span><span class="pm"></span></summary><p class="a" data-i="a6">They are never locked and you never send them anywhere. You can sell whenever you want. You keep the points you already earned; from then on you just stop earning daily points for holding.</p></details>
+      <details><summary><span class="n mono">05</span><span data-i="q3">How much will I get?</span><span class="pm"></span></summary><p class="a" data-i="a3">It depends on your points compared with everyone else's. The Top 100 prizes are fixed. We don't promise amounts in dollars.</p></details>
+      <details><summary><span class="n mono">06</span><span data-i="q4">When do I get it?</span><span class="pm"></span></summary><p class="a" data-i="a4">When SectoraEVM launches: half that day and the other half 90 days later.</p></details>
+      <details><summary><span class="n mono">07</span><span data-i="q7">Do stakers earn more?</span><span class="pm"></span></summary><p class="a" data-i="a7">Yes. If you already stake, you're in automatically: you don't need to withdraw anything. With staking, every 10 points become 25, and it still counts for your level. Your first stake also gives +100 points. Staking has no lock-up.</p></details>
+      <details><summary><span class="n mono">08</span><span data-i="q5">Who can join?</span><span class="pm"></span></summary><p class="a" data-i="a5">Anyone where it's legal. The final rules will be published before Season 1.</p></details>
     </div>
   </div>
 </section>
@@ -983,15 +1000,17 @@ n1:"Cómo entrar",n2:"Niveles",n3:"Premios",n4:"¿Es seguro?",n5:"Preguntas",nc:
 "pz.e":"Premio total","pz.u":"SECT para repartir","pz.h":"Desliza",
 "pz.1":"Para quien guarda SECT","pz.2":"Para los 100 que más invitan","pz.3":"Para todos los que entran gratis",
 "sp.e":"01 · Cómo entrar","sp.h":"Cuatro pasos. <b>Nada más.</b>","sp.p":"No necesitas dinero para empezar.",
-s1h:"Conecta tu wallet",s1p:"Pulsa el botón y firma. Es gratis y no cuesta gas.",s1f:"+50 puntos",
-s2h:"Haz tareas fáciles",s2p:"Síguenos en X, únete al Telegram y vuelve cada día.",s2f:"+10 puntos al día",
+s1h:"Conecta y saluda",s1p:"Conecta tu wallet, síguenos en X y únete al Telegram. Es gratis y no cuesta gas.",s1f:"+100 puntos",
+s2h:"Enciende un nodo",s2p:"En el panel de Sectora, toma SECT de prueba gratis, compra poder de hash y registra tu nodo. No cuesta nada.",s2f:"+300 puntos · +5 al día",
+"nd.h":"Tu nodo en <b>3 clics.</b>","nd.p":"Funciona en la testnet de Sectora: usas tokens de prueba gratis y no necesitas una computadora encendida.","nd.b":"Abrir el panel de nodos",
+"nd.1":"Toma SECT de prueba gratis","nd.1p":"5.000 tSECT cada 24 h en el grifo.","nd.2":"Compra poder de hash","nd.2p":"Elige cualquier paquete. +100 puntos.","nd.3":"Registra tu nodo","nd.3p":"+200 puntos y +5 al día mientras esté encendido.",
 s3h:"Guarda SECT <span class='chip ink mono'>Opcional</span>",s3p:"Deja SECT en tu wallet y gana puntos cada día. No se bloquea ni se envía: puedes venderlo cuando quieras.",s3f:"Hasta 15 puntos al día",
 s4h:"Recibe tus SECT",s4p:"Cuando se lance SectoraEVM, recibes SECT según tus puntos.",s4f:"Mitad al lanzamiento, mitad 90 días después",
 "sp.c":"Te toma menos de un minuto.",
 "sk.h":"¿Ya haces staking? <b>Ya estás dentro.</b>","sk.p":"Tus SECT en el staking de Sectora cuentan solos para el airdrop. No los retires: sigues con las recompensas del staking y sumas puntos del airdrop a la vez.","sk.b":"Abrir mi staking",
 "sk.1":"Sin inscribirte","sk.1p":"Tu wallet de staking entra desde el primer día.","sk.2":"Más del doble","sk.2p":"Con staking, 10 puntos se convierten en 25.","sk.3":"Estrellas en el staking","sk.3p":"Tu página de staking te muestra tus tareas del airdrop.",
 "lv.e":"02 · Niveles","lv.h":"Elige tu <b>nivel.</b>","lv.p":"Regla simple: cada 100 SECT en tu wallet = 1 punto al día.",
-"lv.k1":"Nivel 1","lv.c1":"Gratis","lv.r1":"Gratis","lv.r1s":"Sin comprar","lv.1a":"Tareas y check-in diario","lv.1b":"Parte de <b>200.000 SECT</b>",
+"lv.k1":"Nivel 1","lv.c1":"Gratis","lv.r1":"Gratis","lv.r1s":"Sin comprar","lv.1a":"Tareas y tu nodo","lv.1b":"Parte de <b>200.000 SECT</b>",
 "lv.rt":"Puntos al día por guardar","lv.b1":"Empezar gratis",
 "lv.k2":"Nivel 2","lv.r2s":"En tu wallet · sin bloqueo","lv.2a":"Todo lo de Scout","lv.2b":"Parte de <b>1.400.000 SECT</b>","lv.b2":"Ser Sentinel",
 "lv.k3":"Nivel 3","lv.3a":"Todo lo de Sentinel","lv.3b":"Bonus: <b>15 puntos al día</b> en vez de 10","lv.b3":"Ser Guardian",
@@ -1021,6 +1040,7 @@ s4h:"Recibe tus SECT",s4p:"Cuando se lance SectoraEVM, recibes SECT según tus p
 "vf.4h":"Registrada y auditada","vf.4p":"Sectora Foundation está registrada en Illinois, EE. UU. El contrato de SECT fue auditado por Cyberscope y la liquidez está bloqueada.","vf.4a":"Auditoría de Cyberscope","vf.4b":"Liquidez bloqueada","vf.4c":"Información legal",
 "fq.e":"07 · Preguntas","fq.h":"Respuestas <b>simples.</b>","fq.p":"¿Dudas? Pregunta en nuestro Telegram.",
 q1:"¿Es gratis?",a1:"Sí. Solo conectas tu wallet y firmas. Guardar SECT es opcional y da más puntos.",
+q8:"¿Qué es un nodo? ¿Cuesta algo?",a8:"Un nodo es tu lugar en la red de Sectora. Por ahora funciona en la testnet: los SECT de prueba son gratis y no tienen valor, y solo necesitas un poco de ETH de prueba gratis para el gas (el panel te lleva a él). No necesitas una computadora encendida. Usa la misma wallet que en el airdrop para que tus puntos cuenten.",
 q2:"¿Tengo que enviar mis SECT?",a2:"No. Tus SECT se quedan en tu wallet. Solo miramos tu saldo una vez al día.",
 q6:"¿Se bloquean mis SECT? ¿Puedo vender?",a6:"Nunca se bloquean y nunca los envías a ningún lado. Puedes venderlos cuando quieras. Conservas los puntos que ya ganaste; desde ese momento solo dejas de sumar puntos diarios por guardar.",
 q3:"¿Cuánto voy a recibir?",a3:"Depende de tus puntos comparados con los de todos. Los premios del Top 100 son fijos. No prometemos cantidades en dólares.",
@@ -1043,15 +1063,17 @@ n1:"Como entrar",n2:"Níveis",n3:"Prêmios",n4:"É seguro?",n5:"Perguntas",nc:"C
 "pz.e":"Prêmio total","pz.u":"SECT para dividir","pz.h":"Role",
 "pz.1":"Para quem guarda SECT","pz.2":"Para os 100 que mais convidam","pz.3":"Para todos que entram grátis",
 "sp.e":"01 · Como entrar","sp.h":"Quatro passos. <b>Só isso.</b>","sp.p":"Você não precisa de dinheiro para começar.",
-s1h:"Conecte sua carteira",s1p:"Toque no botão e assine. É grátis e não custa gas.",s1f:"+50 pontos",
-s2h:"Faça tarefas fáceis",s2p:"Siga a gente no X, entre no Telegram e volte todo dia.",s2f:"+10 pontos por dia",
+s1h:"Conecte e diga oi",s1p:"Conecte sua carteira, siga a gente no X e entre no Telegram. É grátis e não custa gas.",s1f:"+100 pontos",
+s2h:"Ligue um nó",s2p:"No painel da Sectora, pegue SECT de teste grátis, compre poder de hash e registre seu nó. Não custa nada.",s2f:"+300 pontos · +5 por dia",
+"nd.h":"Seu nó em <b>3 cliques.</b>","nd.p":"Funciona na testnet da Sectora: você usa tokens de teste grátis e não precisa de um computador ligado.","nd.b":"Abrir o painel de nós",
+"nd.1":"Pegue SECT de teste grátis","nd.1p":"5.000 tSECT a cada 24 h na torneira.","nd.2":"Compre poder de hash","nd.2p":"Escolha qualquer pacote. +100 pontos.","nd.3":"Registre seu nó","nd.3p":"+200 pontos e +5 por dia enquanto estiver ligado.",
 s3h:"Guarde SECT <span class='chip ink mono'>Opcional</span>",s3p:"Deixe SECT na sua carteira e ganhe pontos todo dia. Nada fica bloqueado nem é enviado: você pode vender quando quiser.",s3f:"Até 15 pontos por dia",
 s4h:"Receba seus SECT",s4p:"Quando a SectoraEVM for lançada, você recebe SECT de acordo com seus pontos.",s4f:"Metade no lançamento, metade 90 dias depois",
 "sp.c":"Leva menos de um minuto.",
 "sk.h":"Já faz staking? <b>Você já está dentro.</b>","sk.p":"Seus SECT no staking da Sectora contam sozinhos para o airdrop. Não saque: você continua com as recompensas do staking e soma pontos do airdrop ao mesmo tempo.","sk.b":"Abrir meu staking",
 "sk.1":"Sem inscrição","sk.1p":"Sua carteira de staking entra desde o primeiro dia.","sk.2":"Mais que o dobro","sk.2p":"Com staking, 10 pontos viram 25.","sk.3":"Estrelas no staking","sk.3p":"Sua página de staking mostra suas tarefas do airdrop.",
 "lv.e":"02 · Níveis","lv.h":"Escolha seu <b>nível.</b>","lv.p":"Regra simples: cada 100 SECT na sua carteira = 1 ponto por dia.",
-"lv.k1":"Nível 1","lv.c1":"Grátis","lv.r1":"Grátis","lv.r1s":"Sem comprar","lv.1a":"Tarefas e check-in diário","lv.1b":"Parte de <b>200.000 SECT</b>",
+"lv.k1":"Nível 1","lv.c1":"Grátis","lv.r1":"Grátis","lv.r1s":"Sem comprar","lv.1a":"Tarefas e seu nó","lv.1b":"Parte de <b>200.000 SECT</b>",
 "lv.rt":"Pontos por dia por guardar","lv.b1":"Começar grátis",
 "lv.k2":"Nível 2","lv.r2s":"Na sua carteira · sem bloqueio","lv.2a":"Tudo do Scout","lv.2b":"Parte de <b>1.400.000 SECT</b>","lv.b2":"Ser Sentinel",
 "lv.k3":"Nível 3","lv.3a":"Tudo do Sentinel","lv.3b":"Bônus: <b>15 pontos por dia</b> em vez de 10","lv.b3":"Ser Guardian",
@@ -1081,6 +1103,7 @@ s4h:"Receba seus SECT",s4p:"Quando a SectoraEVM for lançada, você recebe SECT 
 "vf.4h":"Registrada e auditada","vf.4p":"A Sectora Foundation é registrada em Illinois, EUA. O contrato do SECT foi auditado pela Cyberscope e a liquidez está bloqueada.","vf.4a":"Auditoria da Cyberscope","vf.4b":"Liquidez bloqueada","vf.4c":"Informações legais",
 "fq.e":"07 · Perguntas","fq.h":"Respostas <b>simples.</b>","fq.p":"Dúvidas? Pergunte no nosso Telegram.",
 q1:"É grátis?",a1:"Sim. Você só conecta sua carteira e assina. Guardar SECT é opcional e dá mais pontos.",
+q8:"O que é um nó? Custa alguma coisa?",a8:"Um nó é o seu lugar na rede da Sectora. Por enquanto funciona na testnet: os SECT de teste são grátis e não têm valor, e você só precisa de um pouco de ETH de teste grátis para o gas (o painel leva até ele). Você não precisa de um computador ligado. Use a mesma carteira do airdrop para seus pontos contarem.",
 q2:"Preciso enviar meus SECT?",a2:"Não. Seus SECT ficam na sua carteira. Só olhamos seu saldo uma vez por dia.",
 q6:"Meus SECT ficam bloqueados? Posso vender?",a6:"Nunca ficam bloqueados e você nunca os envia para lugar nenhum. Você pode vender quando quiser. Mantém os pontos que já ganhou; a partir daí só deixa de somar pontos diários por guardar.",
 q3:"Quanto vou receber?",a3:"Depende dos seus pontos comparados com os de todos. Os prêmios do Top 100 são fixos. Não prometemos valores em dólar.",
