@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Sectora Foundation — #SECT Holder Rewards</title>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sectoraorg.com/staking/">
+<meta property="og:title" content="Sectora Foundation — #SECT Holder Rewards">
+<meta property="og:description" content="#SECT holders earn 14.9% APY, paid by the Sectora Foundation treasury. No lock-up, claim any time, no deposit cap.">
+<meta property="og:image" content="https://sectoraorg.com/staking/og-holder-rewards.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Stake #SECT. Earn every second. 14.9% APY, no lock-up, claim any time, reward pool funded in advance. sectoraorg.com/staking">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sectora Foundation — #SECT Holder Rewards">
+<meta name="twitter:description" content="#SECT holders earn 14.9% APY, paid by the Sectora Foundation treasury. No lock-up, claim any time, no deposit cap.">
+<meta name="twitter:image" content="https://sectoraorg.com/staking/og-holder-rewards.jpg">
+<meta name="twitter:image:alt" content="Stake #SECT. Earn every second. 14.9% APY, no lock-up, claim any time, reward pool funded in advance. sectoraorg.com/staking">
+<meta name="description" content="#SECT holders earn 14.9% APY, paid by the Sectora Foundation treasury. No lock-up, claim any time, no deposit cap.">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/v2/icon-192.png">
+<link rel="icon" type="image/png" sizes="144x144" href="/icons/v2/favicon-144x144.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/icons/v2/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/icons/v2/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/v2/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/v2/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/icons/v2/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="canonical" href="https://sectoraorg.com/staking/">
+<meta name="theme-color" content="#000000">
+<link rel="preload" href="../fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
+<!-- la intro solo existe con JavaScript: sin el, la pagina se ve directa -->
+<script>document.documentElement.classList.add("js");</script>
+<link rel="stylesheet" href="/staking/staking.css?v=20261035">
+</head>
+<body>
+
+<!-- ============ intro: la misma de la portada. La rejilla se enciende sobre
+     azul, el aro se ensambla y se engancha con las escuadras; al salir, la
+     camara entra por el aro y la pagina aparece por su centro ============ -->
+<div class="intro" id="intro" aria-hidden="true">
+  <canvas id="intro-grid"></canvas>
+  <div class="intro-frame"><i></i><i></i><i></i><i></i></div>
+  <div class="intro-hud">
+    <span class="tl">Sectora Foundation IL</span>
+    <span class="tr">Holder rewards &middot; Ethereum mainnet</span>
+    <div class="intro-log" id="intro-log">
+      <span>Grid 54px &middot; raster ok</span>
+      <span>Dial 60 ticks &middot; 1 s each</span>
+      <span class="hi">Contract 0x79Cb&hellip;20E0</span>
+      <span class="hi">Accrual &middot; every second</span>
+    </div>
+    <span class="bl" id="intro-state"><i class="led"></i>Initializing</span>
+    <span class="br"><b id="intro-pct">00</b>%</span>
+    <span class="intro-bar"><i id="intro-fill"></i></span>
+  </div>
+  <div class="intro-stack">
+    <p class="intro-apy" id="intro-apy"><b id="intro-num">0.0</b><span>%</span><small>APY</small></p>
+    <p class="intro-word" id="intro-word">Holder rewards</p>
+  </div>
+</div>
+
+<a class="skip" href="#stake">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" id="progress"></div>
+<div class="reticle" id="reticle" aria-hidden="true"><span class="rx"></span><span class="ry"></span></div>
+<div class="readout" id="readout" aria-hidden="true">00 &middot; 00</div>
+
+<header class="top">
+  <nav>
+    <div class="brand">
+      <a href="https://sectoraorg.com" aria-label="Sectora Foundation, main site">
+        <svg viewBox="0 0 100 100" role="img" aria-hidden="true">
+          <rect width="100" height="100" rx="9" ry="9" fill="#1569ff"/>
+          <circle class="ring" cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/>
+        </svg>
+      </a>
+    </div>
+    <div class="topnav">
+      <a class="tn-a" href="#guide">Guide</a>
+      <a class="tn-a" href="#stake">Stake</a>
+      <a class="tn-a" href="#terms">Terms</a>
+      <a class="tn-a" href="#verify">Security</a>
+      <a class="tn-a" href="#faq">FAQ</a>
+      <a class="tn-a" href="https://sectoraorg.com/docs">Whitepaper</a>
+    </div>
+    <div class="nav-end">
+      <a class="docs mono" href="https://sectoraorg.com"><span>Main site</span></a>
+    </div>
+  </nav>
+</header>
+
+<!-- ============ portada: la de la web principal, con la ficha del programa ============ -->
+<div class="stage" id="stage">
+  <canvas id="grid" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="layer">
+    <main class="hero">
+      <div class="hero-l">
+        <a class="hero-new mono lift" style="--d:0s" href="#stake"><span class="led" aria-hidden="true"></span><b>Live</b><span>Staking on Ethereum mainnet</span><i aria-hidden="true">↓</i></a>
+        <p class="eyebrow mono lift" style="--d:.05s"><i></i>#SECT holder rewards &middot; Sectora Foundation</p>
+        <h1 id="title"><span class="ln" style="--i:0"><span>Holder rewards</span></span><span class="ln" style="--i:1"><span class="b"><span class="apy-n">14.9</span>% APY</span></span></h1>
+        <div class="rule"></div>
+        <p class="lede lift" style="--d:.6s">
+          Deposit #SECT and earn <span class="apy-n">14.9</span>% a year, accrued every second and
+          paid by the Sectora Foundation treasury from a reward pool funded in advance. No lock-up
+          and no deposit cap: claim your rewards and withdraw your deposit whenever you want.
+        </p>
+        <div class="actions mono lift" style="--d:.72s">
+          <a class="btn btn-primary" href="#stake"><span>Start staking</span><span class="arrow">↓</span></a>
+          <a class="btn btn-ghost" href="https://etherscan.io/address/0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0" target="_blank" rel="noopener noreferrer"><span>Verify the contract</span><span class="arrow">↗</span></a>
+        </div>
+      </div>
+
+      <aside class="sheet lift" style="--d:.86s">
+        <h2>Program <em>SECT</em></h2>
+        <dl>
+          <dt>Network</dt><dd>Ethereum &middot; <b>Mainnet</b></dd>
+          <dt>Reward rate</dt><dd><b><span class="apy-n">14.9</span>% APY</b></dd>
+          <dt>Accrual</dt><dd>Every second</dd>
+          <dt>Lock-up</dt><dd><b>None</b></dd>
+          <dt>Deposit cap</dt><dd>None</dd>
+          <dt>Total deposited</dt><dd class="num" id="lvStaked">&mdash;</dd>
+          <dt>Holders in</dt><dd class="num" id="lvStakers">&mdash;</dd>
+          <dt>Contract</dt><dd class="ok">Verified</dd>
+          <dt>Address</dt><dd><a class="sheet-addr" href="https://etherscan.io/address/0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0" target="_blank" rel="noopener noreferrer">0x79Cb&hellip;20E0 <i>↗</i></a></dd>
+        </dl>
+        <p class="note">Paid by the Sectora Foundation &middot; Exact-amount approvals</p>
+      </aside>
+    </main>
+  </div>
+</div>
+
+<!-- ============ curva: la transicion de la portada a la guia. Al bajar se
+     dibuja la recompensa acumulada de un ejemplo de 1.000 #SECT durante 12
+     meses. Es una recta porque el contrato no capitaliza: cada segundo
+     paga lo mismo. Al final la guia sube por encima como una hoja mientras
+     la grafica se oscurece debajo. Lo mueve staking-curva.js ============ -->
+<section class="curva" id="curva" aria-labelledby="curva-t">
+  <div class="curva-pin">
+    <canvas class="curva-ejes" id="curva-ejes" aria-hidden="true"></canvas>
+    <canvas class="curva-cv" id="curva-cv" aria-hidden="true"></canvas>
+
+    <div class="curva-top">
+      <div class="curva-head">
+        <p class="eyebrow mono"><i></i>Holder rewards &middot; Guide</p>
+        <h2 id="curva-t"><span class="ln"><span>Step by step to</span></span><span class="ln"><span><b><span class="apy-n" translate="no">14.9</span>% APY</b></span></span></h2>
+        <p class="curva-sub">Example: <b>1,000 #SECT</b> deposited for 12 months. Rewards accrue every second, with no lock-up and no compounding.</p>
+      </div>
+
+      <dl class="curva-stats" aria-label="Example with 1,000 #SECT">
+        <div class="key"><dt class="mono">Earned</dt><dd><span id="curva-ganado" translate="no">+0.00</span> <small class="mono">#SECT</small></dd></div>
+        <div><dt class="mono">Per day</dt><dd id="curva-dia" translate="no">0.41</dd></div>
+        <div><dt class="mono">Per month</dt><dd id="curva-mes" translate="no">12.42</dd></div>
+        <div><dt class="mono">Per year</dt><dd id="curva-ano" translate="no">149.00</dd></div>
+      </dl>
+    </div>
+
+    <div class="curva-tip mono" id="curva-tip" aria-hidden="true"><span id="curva-tip-m">Month 01</span><b id="curva-tip-v">+12.42 #SECT</b></div>
+
+    <div class="curva-hud mono" aria-hidden="true">
+      <span class="curva-st"><i></i><b id="curva-st">Accruing</b></span>
+      <span class="curva-rail"><i id="curva-fill"></i></span>
+      <span class="curva-pc" id="curva-pc">0%</span>
+      <span class="curva-paso" id="curva-paso">01 / 08 &middot; Get #SECT and a little ETH</span>
+    </div>
+    <div class="curva-sombra" id="curva-sombra" aria-hidden="true"></div>
+    <div class="curva-cue" id="curva-cue" aria-hidden="true"><span>Keep scrolling</span><small id="curva-cue-sub">Scroll to draw 12 months</small><svg viewBox="0 0 24 24"><path d="M12 4.5v14M6 13l6 6 6-6"/></svg></div>
+  </div>
+</section>
+
+<!-- ============ 01 · guide: el paso a paso, en hoja clara como el Hash
+     Market y el Why hold de la portada. Sube como una hoja por encima de la
+     grafica fijada (su margen negativo tapa la ultima pantalla de esta).
+     El titular se queda fijo arriba con el paso en curso, y los ocho pasos
+     suben por debajo como tarjetas que se apilan (position:sticky); las que
+     quedan debajo se hunden un poco. Lo mide y lo anima staking-guia.js ============ -->
+<section class="paper guia" id="guide" aria-labelledby="guia-t">
+  <div class="spine" aria-hidden="true"><em><b>01</b><span>Guide</span></em><i></i></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
+  <div class="lux" aria-hidden="true"></div>
+  <div class="pp-in">
+    <div class="pp-top">
+      <span class="live-tag mono"><span class="led" aria-hidden="true"></span>8 steps &middot; about 5 minutes</span>
+      <span class="pp-ser mono">Holder rewards &middot; Step by step</span>
+    </div>
+
+    <div class="gd-stack">
+      <div class="gd-head" id="gd-head">
+        <div class="hw"><h2 id="guia-t">How to stake, <b>step by step.</b></h2></div>
+        <!-- el paso en curso: repite el de las tarjetas para quien mira, por eso va oculto a los lectores de pantalla -->
+        <div class="gd-trk" aria-hidden="true">
+          <p class="gd-trk-n mono">Step <b id="gd-n">01</b> / 08</p>
+          <p class="gd-trk-w mono" id="gd-w"></p>
+          <div class="gd-segs" id="gd-segs"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <p class="gd-tt" id="gd-tt">Get #SECT and a little ETH</p>
+        </div>
+      </div>
+      <p class="gd-lede">From buying #SECT to claiming your first rewards. Depositing takes two confirmations in your wallet; claiming and withdrawing take one.</p>
+
+      <ol class="gd-deck">
+        <li class="gd-card" style="--i:0">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span>Before you start</span><b>SF&middot;GD&middot;01</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">01<small>/ 08</small></span>
+                <h3>Get #SECT and a little ETH</h3>
+                <p>Buy #SECT on Uniswap, on Ethereum mainnet, and keep a little ETH in the same wallet: every confirmation pays a small network fee in ETH.</p>
+                <a class="gd-link mono" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener noreferrer">Buy #SECT on Uniswap <i aria-hidden="true">↗</i></a>
+              </div>
+              <div class="gd-side">
+                <p class="gd-k mono">What you will see</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Where</dt><dd class="mono">Uniswap &middot; Ethereum</dd></div>
+                  <div><dt class="mono">Swap</dt><dd class="mono">USDT &rarr; #SECT</dd></div>
+                  <div><dt class="mono">Keep</dt><dd class="mono">A little ETH for fees</dd></div>
+                  <div><dt class="mono">Token</dt><dd class="mono">0x8C9984B06281f1CA9416e493c2E602AaB08513db</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
+        </li>
+        <li class="gd-card" style="--i:1">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span>Any browser</span><b>SF&middot;GD&middot;02</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">02<small>/ 08</small></span>
+                <h3>Open sectoraorg.com/staking</h3>
+                <p>In Chrome, Safari or your wallet&rsquo;s own browser, on a phone or a computer. Check the address bar: the only real page is <b>sectoraorg.com/staking</b>.</p>
+                <span class="fact mono">Check the address bar</span>
+              </div>
+              <div class="gd-side">
+                <p class="gd-k mono">What you will see</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Address</dt><dd class="mono">sectoraorg.com/staking</dd></div>
+                  <div><dt class="mono">Browser</dt><dd class="mono">Chrome, Safari or your wallet&rsquo;s</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
+        </li>
+        <li class="gd-card" style="--i:2">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span>Connect</span><b>SF&middot;GD&middot;03</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">03<small>/ 08</small></span>
+                <h3>Connect your wallet</h3>
+                <p>Tap <b>Connect wallet</b> in the console below and pick yours. On a phone the wallet app opens: approve the connection there and come back to this tab. On a computer, use your browser extension or scan the QR code with your phone.</p>
+                <span class="fact mono">MetaMask &middot; Trust &middot; Binance &middot; Coinbase &middot; OKX &middot; WalletConnect</span>
+              </div>
+              <div class="gd-side">
+                <p class="gd-k mono">What you will see</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Button</dt><dd class="mono">Connect wallet</dd></div>
+                  <div><dt class="mono">Phone</dt><dd class="mono">Approve in the app, come back</dd></div>
+                  <div><dt class="mono">Computer</dt><dd class="mono">Extension or QR code</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
+        </li>
+        <li class="gd-card" style="--i:3">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span>Network</span><b>SF&middot;GD&middot;04</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">04<small>/ 08</small></span>
+                <h3>Check you are on Ethereum</h3>
+                <p>The blue button now shows your address and the console reads <b>Mainnet</b>. If a red message asks you to switch to the Ethereum network, change the network in your wallet.</p>
+              </div>
+              <div class="gd-side">
+                <p class="gd-k mono">What you will see</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Button</dt><dd class="mono">Your address, 0x&hellip;</dd></div>
+                  <div><dt class="mono">Console</dt><dd class="mono">Mainnet</dd></div>
+                  <div><dt class="mono">If not</dt><dd class="mono">Switch to Ethereum</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
+        </li>
+        <li class="gd-card" style="--i:4">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span>Estimate</span><b>SF&middot;GD&middot;05</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">05<small>/ 08</small></span>
+                <h3>Type the amount</h3>
+                <p>Enter how many #SECT you want to deposit. The console shows what it earns per second, day, month and year before you sign anything.</p>
+                <span class="fact mono">Estimate first, sign after</span>
+              </div>
+              <div class="gd-side">
+                <p class="gd-k mono">What you will see</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Field</dt><dd class="mono">You deposit</dd></div>
+                  <div><dt class="mono">Preview</dt><dd class="mono">Second &middot; day &middot; month &middot; year</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
+        </li>
+        <li class="gd-card key" style="--i:5">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span class="gd-wal">Wallet &middot; confirmation 1 of 2</span><b>SF&middot;GD&middot;06</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">06<small>/ 08</small></span>
+                <h3>Approve the exact amount</h3>
+                <p>Tap <b>Deposit #SECT</b>. Your wallet asks you to let the staking contract take exactly that amount, never more. Nothing moves yet.</p>
+              </div>
+              <div class="gd-side key">
+                <p class="gd-k mono">Check before you confirm</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Request</dt><dd class="mono">Approve &middot; spending cap</dd></div>
+                  <div><dt class="mono">Amount</dt><dd class="mono">The exact #SECT you typed</dd></div>
+                  <div><dt class="mono">Spender</dt><dd class="mono">0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
+        </li>
+        <li class="gd-card key" style="--i:6">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span class="gd-wal">Wallet &middot; confirmation 2 of 2</span><b>SF&middot;GD&middot;07</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">07<small>/ 08</small></span>
+                <h3>Confirm the deposit</h3>
+                <p>Once the approval is confirmed on-chain, your wallet asks for the deposit itself. Confirm it and your #SECT start earning that same second.</p>
+              </div>
+              <div class="gd-side key">
+                <p class="gd-k mono">Check before you confirm</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Request</dt><dd class="mono">Deposit</dd></div>
+                  <div><dt class="mono">Contract</dt><dd class="mono">0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0</dd></div>
+                  <div><dt class="mono">Starts</dt><dd class="mono">Earning that same second</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
+        </li>
+        <li class="gd-card" style="--i:7">
+          <article class="gd-c">
+            <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <p class="gd-band mono"><span>Any time</span><b>SF&middot;GD&middot;08</b></p>
+            <div class="gd-cin">
+              <div class="gd-main">
+                <span class="gd-num mono" aria-hidden="true">08<small>/ 08</small></span>
+                <h3>Claim or withdraw whenever you want</h3>
+                <p>Your rewards grow live in the console. <b>Claim rewards</b>, <b>Withdraw</b> and <b>Withdraw all</b> take a single confirmation each, with no lock-up and no penalty. Every new deposit repeats steps 05 to 07.</p>
+                <span class="fact mono">No lock-up &middot; one confirmation</span>
+              </div>
+              <div class="gd-side">
+                <p class="gd-k mono">What you will see</p>
+                <dl class="gd-see">
+                  <div><dt class="mono">Buttons</dt><dd class="mono">Claim &middot; Withdraw &middot; Withdraw all</dd></div>
+                  <div><dt class="mono">Wallet</dt><dd class="mono">One confirmation each</dd></div>
+                  <div><dt class="mono">Lock-up</dt><dd class="mono">None</dd></div>
+                </dl>
+              </div>
+            </div>
+            <i class="gd-velo" aria-hidden="true"></i>
+          </article>
+        </li>
+        <li class="gd-sp" aria-hidden="true"></li>
+      </ol>
+    </div>
+
+    <div class="gd-end">
+      <a class="btn btn-primary mono" href="#stake"><span>Go to the console</span><span class="arrow">↓</span></a>
+      <p class="gd-note">Network fees are paid in ETH to Ethereum, not to Sectora. Nobody from Sectora will ever ask for your seed phrase or private key, or message you first to help you stake. If someone does, it is a scam.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 · stake: hoja clara, como el Hash Market de la portada ============ -->
+<section class="paper" id="stake">
+  <div class="spine" aria-hidden="true"><em><b>02</b><span>Stake</span></em><i></i></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
+  <div class="lux" aria-hidden="true"></div>
+  <div class="pp-in">
+    <div class="pp-top">
+      <span class="live-tag mono"><span class="led" aria-hidden="true"></span>Mainnet live</span>
+      <span class="pp-ser mono">Holder rewards &middot; Ethereum mainnet</span>
+    </div>
+    <div class="pp-head">
+      <div class="hw"><h2>Estimate it, then stake it.</h2></div>
+      <p><span class="apy-n">14.9</span>% a year on what you deposit, accrued every second, straight
+        from your own wallet. Type an amount to see what it earns, then connect and deposit.
+        <a class="pp-guide" href="#guide">First time? Read the step-by-step guide&nbsp;<i aria-hidden="true">↑</i></a></p>
+    </div>
+
+    <div class="pp-body">
+      <figure class="frame">
+        <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <figcaption class="band mono"><span>Staking console</span><b>SF&middot;HR&middot;01&middot;26</b></figcaption>
+        <div class="console">
+          <div class="con-head mono">
+            <span>Sectora<span class="cx"> &nbsp;//&nbsp; holder rewards</span></span>
+            <span class="con-net"><span class="led" aria-hidden="true"></span>Mainnet</span>
+          </div>
+
+          <label class="con-lbl mono" for="sectIn">You deposit</label>
+          <div class="input-wrap">
+            <input type="number" id="sectIn" inputmode="decimal" min="0" step="1" placeholder="0.00" autocomplete="off">
+            <span class="input-suffix mono">#SECT</span>
+          </div>
+          <div class="chips mono" role="group" aria-label="Quick amounts for the estimate">
+            <button type="button" data-v="1000">1,000</button>
+            <button type="button" data-v="10000">10,000</button>
+            <button type="button" data-v="100000">100,000</button>
+            <button type="button" data-v="1000000">1,000,000</button>
+          </div>
+
+          <dl class="out">
+            <div class="out-key"><dt class="mono">Every second</dt><dd id="outSec">0.00000000 #SECT</dd></div>
+            <div><dt class="mono">Per day</dt><dd id="outDay">0.00 #SECT</dd></div>
+            <div><dt class="mono">Per month</dt><dd id="outMonth">0.00 #SECT</dd></div>
+            <div><dt class="mono">Per year</dt><dd id="outYearSm">0.00 #SECT</dd></div>
+          </dl>
+
+          <div class="chart-wrap">
+            <div class="chart-head mono">
+              <span>12 months &middot; cumulative rewards</span>
+              <b id="outYear">0.00 #SECT</b>
+            </div>
+            <canvas id="growthChart" width="600" height="150" aria-hidden="true"></canvas>
+          </div>
+
+          <!-- staking-chain.js cuelga aqui el contador en vivo, las acciones,
+               los avisos y la direccion oficial del contrato -->
+          <div class="con-actions">
+            <button type="button" class="btn btn-primary wide mono" id="connectBtn" disabled>Connect wallet</button>
+          </div>
+        </div>
+      </figure>
+
+      <ol class="steps">
+        <li class="step">
+          <span class="step-n mono">01</span>
+          <h3>Connect and approve</h3>
+          <p>Connect your wallet and approve the exact amount you want to deposit, never more. Then confirm the deposit.</p>
+          <span class="fact mono">Exact amount only</span>
+        </li>
+        <li class="step">
+          <span class="step-n mono">02</span>
+          <h3>Earn every second</h3>
+          <p>Rewards start accruing the second your deposit lands and grow continuously while it stays in.</p>
+          <span class="fact mono"><span class="apy-n">14.9</span>% APY &middot; every second</span>
+        </li>
+        <li class="step">
+          <span class="step-n mono">03</span>
+          <h3>Claim and withdraw</h3>
+          <p>Claim your rewards whenever you like and withdraw part or all of your deposit at any time, with no penalty.</p>
+          <span class="fact mono">No lock-up &middot; no fees</span>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 · terms: noche con rejilla, como el roadmap ============ -->
+<section class="night nf-top nf-bot" id="terms">
+  <div class="night-glow" aria-hidden="true"></div>
+  <div class="nt-in">
+    <div class="nt-sticky">
+      <p class="eyebrow mono"><i></i>Terms</p>
+      <h2>The program, in one table.</h2>
+      <p class="nt-lede">Every term below is enforced by the contract, not by a promise on this page.</p>
+      <p class="nt-count mono">08 terms &middot; on-chain</p>
+    </div>
+    <dl class="ledger">
+      <div class="lg-row key"><dt>Reward rate</dt><dd><span class="apy-n">14.9</span>% APY<small>Read from the contract</small></dd></div>
+      <div class="lg-row"><dt>Accrual</dt><dd>Every second<small>No compounding</small></dd></div>
+      <div class="lg-row"><dt>Claim</dt><dd>Any time<small>Also after withdrawing</small></dd></div>
+      <div class="lg-row"><dt>Lock-up</dt><dd>None<small>Withdraw any time, no penalty</small></dd></div>
+      <div class="lg-row"><dt>Deposit cap</dt><dd>None</dd></div>
+      <div class="lg-row"><dt>Approval</dt><dd>Exact amount<small>Never unlimited</small></dd></div>
+      <div class="lg-row"><dt>Funded by</dt><dd>Sectora Foundation<small>Treasury, deposited in advance</small></dd></div>
+      <div class="lg-row"><dt>Network</dt><dd>Ethereum<small>Mainnet</small></dd></div>
+    </dl>
+    <p class="nt-fine mono">Rewards are paid from #SECT the treasury deposits into the contract in advance;
+      nothing is minted. The foundation can top up the reward pool, take back the part not yet
+      earned and adjust the rate, which only counts from that second on. Deposits and rewards
+      already earned stay yours. If the pool ran dry, rewards would stop accruing until it is
+      refilled. The contract has been tested but not externally audited.</p>
+  </div>
+</section>
+
+<!-- ============ 04 · security: hoja clara con tarjetas, como Verification ============ -->
+<section class="paper paper-cards" id="verify">
+  <div class="spine" aria-hidden="true"><em><b>04</b><span>Security</span></em><i></i></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
+  <div class="lux" aria-hidden="true"></div>
+  <div class="mc-in">
+    <div class="mc-sticky">
+      <p class="eyebrow mono"><i></i>Security</p>
+      <div class="hw"><h2>Why this isn't just a promised number.</h2></div>
+      <p class="mc-lede">Four rules written into the contract. Each one can be checked on Etherscan without asking the foundation for anything.</p>
+      <p class="mc-count mono">04 rules</p>
+    </div>
+    <div class="mc-list">
+      <article class="m-card">
+        <span class="mono">01</span>
+        <h3>Every reward is deposited first</h3>
+        <p>#SECT has no mint function and its ownership is renounced. The treasury transfers the reward budget into the contract before it is paid out, and the size of that pool is public on-chain.</p>
+        <a class="m-link mono" href="https://etherscan.io/address/0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0" target="_blank" rel="noopener noreferrer">View the pool on Etherscan <i>↗</i></a>
+      </article>
+      <article class="m-card">
+        <span class="mono">02</span>
+        <h3>What you earn stays earned</h3>
+        <p>The APY starts at 14.9% and the foundation can adjust it on-chain; a change only counts from that second on, so nothing already earned is ever recalculated.</p>
+        <a class="m-link mono" href="https://etherscan.io/address/0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0" target="_blank" rel="noopener noreferrer">View the contract on Etherscan <i>↗</i></a>
+      </article>
+      <article class="m-card">
+        <span class="mono">03</span>
+        <h3>Deposits never pay anyone else</h3>
+        <p>Deposits and rewards are accounted separately. No function lets the owner touch a deposit or a reward already earned, and withdrawing always works.</p>
+        <a class="m-link mono" href="https://etherscan.io/address/0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0" target="_blank" rel="noopener noreferrer">View the contract on Etherscan <i>↗</i></a>
+      </article>
+      <article class="m-card">
+        <span class="mono">04</span>
+        <h3>You approve only what you deposit</h3>
+        <p>This page asks your wallet to approve the exact amount you are depositing, never an unlimited allowance. The deposit uses all of it, so nothing stays approved afterwards.</p>
+        <a class="m-link mono" href="#stake">Go to the console <i>↑</i></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 · faq: noche, filas numeradas como Developments ============ -->
+<section class="night nf-top nf-pie" id="faq">
+  <div class="nf-luz" aria-hidden="true"></div>
+  <div class="nt-in">
+    <div class="nt-sticky">
+      <p class="eyebrow mono"><i></i>FAQ</p>
+      <h2>Frequently asked.</h2>
+      <p class="nt-lede">What to know before depositing #SECT.</p>
+      <p class="nt-count mono">06 questions</p>
+    </div>
+    <div class="faq">
+      <details class="q" open>
+        <summary><span class="q-n mono">01</span><span class="q-t">Can I deposit right now?</span></summary>
+        <div class="q-a"><p>Yes. Connect your wallet in the console above, enter an amount and deposit. Rewards start accruing from that moment.</p></div>
+      </details>
+      <details class="q">
+        <summary><span class="q-n mono">02</span><span class="q-t">When can I collect my rewards?</span></summary>
+        <div class="q-a"><p>Whenever you want. Rewards accrue every second and you can claim them at any time, including after you have withdrawn your deposit.</p></div>
+      </details>
+      <details class="q">
+        <summary><span class="q-n mono">03</span><span class="q-t">Can I withdraw whenever I want?</span></summary>
+        <div class="q-a"><p>Yes. There is no lock-up and no penalty. You can take out part or all of your deposit at any moment, and everything you earned until then stays claimable.</p></div>
+      </details>
+      <details class="q">
+        <summary><span class="q-n mono">04</span><span class="q-t">Where does the reward money come from?</span></summary>
+        <div class="q-a"><p>From the Sectora Foundation treasury, deposited into the contract in advance. No new tokens are created. If the reward pool ever ran out, rewards would pause until it is refilled.</p></div>
+      </details>
+      <details class="q">
+        <summary><span class="q-n mono">05</span><span class="q-t">Is there a limit on how much can be deposited?</span></summary>
+        <div class="q-a"><p>No. There is no cap on deposits. The foundation can close the program to new deposits; anyone already in can still withdraw and claim at any time.</p></div>
+      </details>
+      <details class="q">
+        <summary><span class="q-n mono">06</span><span class="q-t">How do I know I'm on the real contract?</span></summary>
+        <div class="q-a"><p>When you approve, your wallet shows the address that receives the approval. It must be 0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0, the same one shown in the console and on Etherscan. If it is different, stop.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer class="ft" id="footer">
+  <div class="ft-dots" aria-hidden="true"></div>
+  <div class="ft-glow" aria-hidden="true"></div>
+  <div class="ft-rail" aria-hidden="true"><i></i></div>
+  <div class="ft-marks" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="ft-inner">
+    <div class="ft-top">
+      <a class="ft-mark" href="https://sectoraorg.com" aria-label="Sectora Foundation">
+        <svg viewBox="0 0 100 100" role="img" aria-hidden="true">
+          <rect width="100" height="100" rx="9" ry="9" fill="#1569ff"/>
+          <circle class="ring" cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/>
+        </svg>
+      </a>
+      <div>
+        <p class="ft-name">Sectora Foundation</p>
+        <p class="ft-sub">Holder rewards for #SECT on Ethereum mainnet, paid by the Sectora Foundation treasury from a reward pool funded in advance.</p>
+        <p class="ft-status"><i class="led"></i>Illinois, United States &middot; <b id="ft-time">--:--:--</b> CT</p>
+      </div>
+    </div>
+    <nav class="ft-cols" aria-label="Footer">
+      <div class="ft-col">
+        <h4>Staking</h4>
+        <a href="#guide">Guide</a>
+        <a href="#stake">Stake</a>
+        <a href="#terms">Terms</a>
+        <a href="#verify">Security</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="ft-col">
+        <h4>Sectora</h4>
+        <a href="https://sectoraorg.com">Main site</a>
+        <a href="https://sectoraorg.com/docs">Whitepaper</a>
+        <a href="https://sectoraorg.com/legal">Legal documents</a>
+      </div>
+      <div class="ft-col">
+        <h4>On-chain</h4>
+        <a href="https://etherscan.io/address/0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0" target="_blank" rel="noopener noreferrer">Staking contract <em>↗</em></a>
+        <a href="https://etherscan.io/token/0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener noreferrer">#SECT token <em>↗</em></a>
+        <a href="https://www.coingecko.com/en/coins/sectora" target="_blank" rel="noopener noreferrer">CoinGecko <em>↗</em></a>
+      </div>
+    </nav>
+    <div class="ft-mails">
+      <div class="ft-mail">
+        <div><small>Support</small><a href="mailto:support@sectoraorg.com">support@sectoraorg.com</a></div>
+        <button type="button" class="ft-copy" data-copy="support@sectoraorg.com">Copy</button>
+      </div>
+      <!-- la app de Sectora, aun sin publicar: insignias sin enlace -->
+      <div class="ft-apps">
+        <small>Sectora app <b>Coming soon</b></small>
+        <div class="ft-stores">
+          <p class="ft-store"><svg class="ft-store-i" viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span><i>Coming soon on the</i> <b>App Store</b></span></p>
+          <p class="ft-store"><svg class="ft-store-i" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285f4" d="M1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924z"/><path fill="#34a853" d="M13.544 10.989l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973z"/><path fill="#fbbc04" d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594z"/><path fill="#ea4335" d="M13.544 13.056l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg><span><i>Coming soon on</i> <b>Google Play</b></span></p>
+        </div>
+      </div>
+    </div>
+    <div class="ft-end">
+      <p class="ft-legal">&copy; 2026 Sectora Foundation &middot; Illinois file no. 18523639</p>
+      <button type="button" class="ft-up" id="ft-up">Back to top <em>&#8593;</em></button>
+    </div>
+    <p class="ft-disc">Rewards are paid in #SECT from a pool funded in advance; the rate can change. Nothing on this page is a promise about the price of #SECT.</p>
+  </div>
+  <div class="ft-word" aria-hidden="true">SECTORA</div>
+</footer>
+
+<script src="/staking/staking-fx.js?v=20261033"></script>
+<script src="/staking/staking.js?v=20261018"></script>
+<script src="/staking/staking-curva.js?v=20261030"></script>
+<script src="/staking/staking-guia.js?v=20261030"></script>
+<!-- cableado on-chain: wallet, deposito, cobro y retiro -->
+<script src="../ethers.min.js"></script>
+<script src="/staking/staking-wallet.js?v=20261021"></script>
+<script src="/staking/staking-chain.js?v=20261020"></script>
+<script src="/airdroptesting/staking-panel.js?v=1"></script>
+</body>
+</html>

@@ -332,6 +332,11 @@ h2.t b{font-weight:400;color:var(--b-ink)}
   background:rgba(15,143,82,.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.2l2 2 4-4.4' fill='none' stroke='%230f8f52' stroke-width='1.5'/%3E%3C/svg%3E") center/13px no-repeat}
 .hold-l b{display:block;margin-top:14px;font-size:17px;font-weight:400;letter-spacing:-.01em;color:var(--p-ink)}
 .hold-l span{display:block;margin-top:6px;font-size:14.5px;line-height:1.5;color:var(--p-ink-3)}
+.hold.stk::before{background:var(--blue)}
+.hold.stk h3 b{color:var(--b-ink)}
+.hold.stk .hold-l li::before{border-color:rgba(21,105,255,.4);
+  background:rgba(21,105,255,.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.2l2 2 4-4.4' fill='none' stroke='%231569ff' stroke-width='1.5'/%3E%3C/svg%3E") center/13px no-repeat}
+.hold .sb{margin-top:20px;max-width:300px}
 .lnote{margin-top:22px;color:var(--p-ink-3);font-size:14px;line-height:1.6;max-width:72ch}
 
 /* ---------- 03 extra points ---------- */
@@ -686,6 +691,18 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
       <li class="step"><span class="num">3</span><div><h3 data-i="s3h">Hold SECT <span class='chip ink mono'>Optional</span></h3><p data-i="s3p">Keep SECT in your wallet and earn points every day. Nothing is locked or sent: you can sell whenever you want.</p></div><span class="fact mono" data-i="s3f">Up to 15 points a day</span></li>
       <li class="step last"><span class="num">4</span><div><h3 data-i="s4h">Receive your SECT</h3><p data-i="s4p">When SectoraEVM launches, you get SECT based on your points.</p></div><span class="fact mono" data-i="s4f">Half at launch, half 90 days later</span></li>
     </ol>
+    <div class="hold stk">
+      <div class="hold-h">
+        <h3 data-i="sk.h">Already staking? <b>You're already in.</b></h3>
+        <p data-i="sk.p">Your SECT in Sectora staking count for the airdrop on their own. Don't withdraw them: you keep your staking rewards and add airdrop points at the same time.</p>
+        <a class="sb mono" href="/staking/"><span data-i="sk.b">Open my staking</span><i>↗</i></a>
+      </div>
+      <ul class="hold-l">
+        <li><b data-i="sk.1">No sign-up needed</b><span data-i="sk.1p">Your staking wallet is in from day one.</span></li>
+        <li><b data-i="sk.2">Counts 2.5×</b><span data-i="sk.2p">Staked SECT earn the most points.</span></li>
+        <li><b data-i="sk.3">Stars in staking</b><span data-i="sk.3p">Your staking page shows your airdrop tasks.</span></li>
+      </ul>
+    </div>
     <div class="cta">
       <a class="sb go mono js-connect" href="#steps"><span data-i="b.join">Join free</span><i>→</i></a>
       <p data-i="sp.c">Takes less than a minute.</p>
@@ -768,7 +785,7 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
     <div class="boosts">
       <div class="boost"><b>2×</b><h3 data-i="bo.1h">Come every day</h3><p data-i="bo.1p">Your points grow every 6 days, up to double on day 60.</p></div>
       <div class="boost"><b>2×</b><h3 data-i="bo.2h">Be early</h3><p data-i="bo.2p">The first 1,000 people get double points for the whole campaign.</p></div>
-      <div class="boost star"><span class="chip blue mono tag" data-i="bo.3t">Most points</span><b data-i="bo.3v">2.5×</b><h3 data-i="bo.3h">Stake your SECT</h3><p data-i="bo.3p">Staked SECT counts 2.5× and still counts for your level. Your first stake gives +100 points. Withdraw any time.</p><a class="bl mono" href="/staking/"><span data-i="bo.3l">Go to staking</span><i>↗</i></a></div>
+      <div class="boost star"><span class="chip blue mono tag" data-i="bo.3t">Most points</span><b data-i="bo.3v">2.5×</b><h3 data-i="bo.3h">Stake your SECT</h3><p data-i="bo.3p">Staked SECT counts 2.5× and for your level. First stake: +100 points. Already staking? You're in.</p><a class="bl mono" href="/staking/"><span data-i="bo.3l">Go to staking</span><i>↗</i></a></div>
       <div class="boost"><b data-i="bo.4v">1.2×</b><h3 data-i="bo.4h">Bring 5 friends</h3><p data-i="bo.4p">When 5 friends reach Sentinel, you earn 20% more.</p></div>
     </div>
   </div>
@@ -899,7 +916,7 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
       <details><summary><span class="n mono">03</span><span data-i="q6">Are my SECT locked? Can I sell?</span><span class="pm"></span></summary><p class="a" data-i="a6">They are never locked and you never send them anywhere. You can sell whenever you want. You keep the points you already earned; from then on you just stop earning daily points for holding.</p></details>
       <details><summary><span class="n mono">04</span><span data-i="q3">How much will I get?</span><span class="pm"></span></summary><p class="a" data-i="a3">It depends on your points compared with everyone else's. The Top 100 prizes are fixed. We don't promise amounts in dollars.</p></details>
       <details><summary><span class="n mono">05</span><span data-i="q4">When do I get it?</span><span class="pm"></span></summary><p class="a" data-i="a4">When SectoraEVM launches: half that day and the other half 90 days later.</p></details>
-      <details><summary><span class="n mono">06</span><span data-i="q7">Do stakers earn more?</span><span class="pm"></span></summary><p class="a" data-i="a7">Yes. SECT in Sectora staking counts 2.5× for points and still counts for your level. Your first stake also gives +100 points. Staking has no lock-up: you can withdraw whenever you want.</p></details>
+      <details><summary><span class="n mono">06</span><span data-i="q7">Do stakers earn more?</span><span class="pm"></span></summary><p class="a" data-i="a7">Yes. If you already stake, you're in automatically: you don't need to withdraw anything. Staked SECT counts 2.5× for points and for your level, and your first stake gives +100 points. Staking has no lock-up.</p></details>
       <details><summary><span class="n mono">07</span><span data-i="q5">Who can join?</span><span class="pm"></span></summary><p class="a" data-i="a5">Anyone where it's legal. The final rules will be published before Season 1.</p></details>
     </div>
   </div>
@@ -970,6 +987,8 @@ s2h:"Haz tareas fáciles",s2p:"Síguenos en X, únete al Telegram y vuelve cada 
 s3h:"Guarda SECT <span class='chip ink mono'>Opcional</span>",s3p:"Deja SECT en tu wallet y gana puntos cada día. No se bloquea ni se envía: puedes venderlo cuando quieras.",s3f:"Hasta 15 puntos al día",
 s4h:"Recibe tus SECT",s4p:"Cuando se lance SectoraEVM, recibes SECT según tus puntos.",s4f:"Mitad al lanzamiento, mitad 90 días después",
 "sp.c":"Te toma menos de un minuto.",
+"sk.h":"¿Ya haces staking? <b>Ya estás dentro.</b>","sk.p":"Tus SECT en el staking de Sectora cuentan solos para el airdrop. No los retires: sigues con las recompensas del staking y sumas puntos del airdrop a la vez.","sk.b":"Abrir mi staking",
+"sk.1":"Sin inscribirte","sk.1p":"Tu wallet de staking entra desde el primer día.","sk.2":"Cuenta 2,5×","sk.2p":"Los SECT en staking son los que más puntos ganan.","sk.3":"Estrellas en el staking","sk.3p":"Tu página de staking te muestra tus tareas del airdrop.",
 "lv.e":"02 · Niveles","lv.h":"Elige tu <b>nivel.</b>","lv.p":"Cuantos más SECT guardes en tu wallet, más puntos ganas cada día.",
 "lv.k1":"Nivel 1","lv.c1":"Gratis","lv.r1":"Gratis","lv.r1s":"Sin comprar","lv.1a":"Tareas y check-in diario","lv.1b":"Parte de <b>200.000 SECT</b>",
 "lv.rt":"Puntos al día por guardar","lv.b1":"Empezar gratis",
@@ -981,7 +1000,7 @@ s4h:"Recibe tus SECT",s4p:"Cuando se lance SectoraEVM, recibes SECT según tus p
 "bo.e":"03 · Puntos extra","bo.h":"Cuatro formas de <b>ganar más.</b>","bo.p":"Multiplican los puntos que ganas por guardar SECT.",
 "bo.1h":"Ven cada día","bo.1p":"Tus puntos suben cada 6 días, hasta el doble el día 60.",
 "bo.2h":"Llega primero","bo.2p":"Las primeras 1.000 personas tienen puntos dobles toda la campaña.",
-"bo.3t":"Más puntos","bo.3v":"2,5×","bo.3h":"Haz staking","bo.3p":"Los SECT en staking cuentan 2,5× y siguen contando para tu nivel. Tu primer staking da +100 puntos. Retiras cuando quieras.","bo.3l":"Ir al staking",
+"bo.3t":"Más puntos","bo.3v":"2,5×","bo.3h":"Haz staking","bo.3p":"Los SECT en staking cuentan 2,5× y para tu nivel. Primer staking: +100 puntos. ¿Ya haces staking? Ya estás dentro.","bo.3l":"Ir al staking",
 "bo.4v":"1,2×","bo.4h":"Trae 5 amigos","bo.4p":"Cuando 5 amigos llegan a Sentinel, ganas un 20% más.",
 "pr.e":"04 · Premios","pr.h":"Quién gana <b>qué.</b>","pr.p":"Todo sale de una bolsa fija de 2.000.000 SECT.","pr.t":"Bolsa de premios",
 "pr.1h":"Holders","pr.1p":"Se reparte por puntos entre Sentinels y Guardians.",
@@ -1005,7 +1024,7 @@ q2:"¿Tengo que enviar mis SECT?",a2:"No. Tus SECT se quedan en tu wallet. Solo 
 q6:"¿Se bloquean mis SECT? ¿Puedo vender?",a6:"Nunca se bloquean y nunca los envías a ningún lado. Puedes venderlos cuando quieras. Conservas los puntos que ya ganaste; desde ese momento solo dejas de sumar puntos diarios por guardar.",
 q3:"¿Cuánto voy a recibir?",a3:"Depende de tus puntos comparados con los de todos. Los premios del Top 100 son fijos. No prometemos cantidades en dólares.",
 q4:"¿Cuándo lo recibo?",a4:"Cuando se lance SectoraEVM: la mitad ese día y la otra mitad 90 días después.",
-q7:"¿Los que hacen staking ganan más?",a7:"Sí. Los SECT en el staking de Sectora cuentan 2,5× para los puntos y siguen contando para tu nivel. Además, tu primer staking da +100 puntos. El staking no tiene bloqueo: puedes retirar cuando quieras.",
+q7:"¿Los que hacen staking ganan más?",a7:"Sí. Si ya haces staking, estás dentro automáticamente: no tienes que retirar nada. Los SECT en staking cuentan 2,5× para los puntos y para tu nivel, y tu primer staking da +100 puntos. El staking no tiene bloqueo.",
 q5:"¿Quién puede participar?",a5:"Cualquier persona donde sea legal. Las reglas finales se publicarán antes de la temporada 1.",
 "fn.e":"Temporada 1 · fecha muy pronto","fn.h":"Entra <b>temprano.</b>","fn.p":"Las primeras 1.000 personas tienen puntos dobles. Entrar es gratis.",
 "ft.1":"Sectora Foundation · Illinois, EE. UU. · Expediente 18523639",
@@ -1028,6 +1047,8 @@ s2h:"Faça tarefas fáceis",s2p:"Siga a gente no X, entre no Telegram e volte to
 s3h:"Guarde SECT <span class='chip ink mono'>Opcional</span>",s3p:"Deixe SECT na sua carteira e ganhe pontos todo dia. Nada fica bloqueado nem é enviado: você pode vender quando quiser.",s3f:"Até 15 pontos por dia",
 s4h:"Receba seus SECT",s4p:"Quando a SectoraEVM for lançada, você recebe SECT de acordo com seus pontos.",s4f:"Metade no lançamento, metade 90 dias depois",
 "sp.c":"Leva menos de um minuto.",
+"sk.h":"Já faz staking? <b>Você já está dentro.</b>","sk.p":"Seus SECT no staking da Sectora contam sozinhos para o airdrop. Não saque: você continua com as recompensas do staking e soma pontos do airdrop ao mesmo tempo.","sk.b":"Abrir meu staking",
+"sk.1":"Sem inscrição","sk.1p":"Sua carteira de staking entra desde o primeiro dia.","sk.2":"Conta 2,5×","sk.2p":"SECT em staking são os que mais ganham pontos.","sk.3":"Estrelas no staking","sk.3p":"Sua página de staking mostra suas tarefas do airdrop.",
 "lv.e":"02 · Níveis","lv.h":"Escolha seu <b>nível.</b>","lv.p":"Quanto mais SECT na sua carteira, mais pontos você ganha todo dia.",
 "lv.k1":"Nível 1","lv.c1":"Grátis","lv.r1":"Grátis","lv.r1s":"Sem comprar","lv.1a":"Tarefas e check-in diário","lv.1b":"Parte de <b>200.000 SECT</b>",
 "lv.rt":"Pontos por dia por guardar","lv.b1":"Começar grátis",
@@ -1039,7 +1060,7 @@ s4h:"Receba seus SECT",s4p:"Quando a SectoraEVM for lançada, você recebe SECT 
 "bo.e":"03 · Pontos extras","bo.h":"Quatro jeitos de <b>ganhar mais.</b>","bo.p":"Multiplicam os pontos que você ganha por guardar SECT.",
 "bo.1h":"Venha todo dia","bo.1p":"Seus pontos sobem a cada 6 dias, até o dobro no dia 60.",
 "bo.2h":"Chegue cedo","bo.2p":"As primeiras 1.000 pessoas têm pontos em dobro a campanha toda.",
-"bo.3t":"Mais pontos","bo.3v":"2,5×","bo.3h":"Faça staking","bo.3p":"SECT em staking conta 2,5× e continua valendo para o seu nível. Seu primeiro staking dá +100 pontos. Saque quando quiser.","bo.3l":"Ir para o staking",
+"bo.3t":"Mais pontos","bo.3v":"2,5×","bo.3h":"Faça staking","bo.3p":"SECT em staking conta 2,5× e vale para o seu nível. Primeiro staking: +100 pontos. Já faz staking? Você já está dentro.","bo.3l":"Ir para o staking",
 "bo.4v":"1,2×","bo.4h":"Traga 5 amigos","bo.4p":"Quando 5 amigos chegam a Sentinel, você ganha 20% a mais.",
 "pr.e":"04 · Prêmios","pr.h":"Quem ganha <b>o quê.</b>","pr.p":"Tudo sai de um pote fixo de 2.000.000 SECT.","pr.t":"Pote de prêmios",
 "pr.1h":"Holders","pr.1p":"Dividido por pontos entre Sentinels e Guardians.",
@@ -1063,7 +1084,7 @@ q2:"Preciso enviar meus SECT?",a2:"Não. Seus SECT ficam na sua carteira. Só ol
 q6:"Meus SECT ficam bloqueados? Posso vender?",a6:"Nunca ficam bloqueados e você nunca os envia para lugar nenhum. Você pode vender quando quiser. Mantém os pontos que já ganhou; a partir daí só deixa de somar pontos diários por guardar.",
 q3:"Quanto vou receber?",a3:"Depende dos seus pontos comparados com os de todos. Os prêmios do Top 100 são fixos. Não prometemos valores em dólar.",
 q4:"Quando eu recebo?",a4:"No lançamento da SectoraEVM: metade nesse dia e a outra metade 90 dias depois.",
-q7:"Quem faz staking ganha mais?",a7:"Sim. SECT no staking da Sectora conta 2,5× para os pontos e continua valendo para o seu nível. Além disso, seu primeiro staking dá +100 pontos. O staking não tem bloqueio: você pode sacar quando quiser.",
+q7:"Quem faz staking ganha mais?",a7:"Sim. Se você já faz staking, está dentro automaticamente: não precisa sacar nada. SECT em staking conta 2,5× para os pontos e para o seu nível, e seu primeiro staking dá +100 pontos. O staking não tem bloqueio.",
 q5:"Quem pode participar?",a5:"Qualquer pessoa onde for legal. As regras finais serão publicadas antes da temporada 1.",
 "fn.e":"Temporada 1 · data em breve","fn.h":"Entre <b>cedo.</b>","fn.p":"As primeiras 1.000 pessoas têm pontos em dobro. Entrar é grátis.",
 "ft.1":"Sectora Foundation · Illinois, EUA · Arquivo 18523639",
