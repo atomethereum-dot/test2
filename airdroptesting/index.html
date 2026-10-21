@@ -319,6 +319,19 @@ h2.t b{font-weight:400;color:var(--b-ink)}
 .lv.g .rate{color:var(--ink-3)}
 .rate b{font-size:30px;font-weight:300;letter-spacing:-.02em;color:var(--p-ink);font-family:'IBM Plex Sans',sans-serif;text-transform:none}
 .lv.g .rate b{color:#fff}
+/* you only hold: nothing locked, nothing sent, sell any time */
+.hold{position:relative;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.6fr);gap:clamp(20px,3vw,48px);align-items:center;margin-top:clamp(20px,3vh,32px);
+  padding:clamp(24px,2.8vw,38px) clamp(22px,2.8vw,38px);border:1px solid var(--p-line);border-radius:3px;background:var(--card,#fff)}
+.hold::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;border-radius:3px 3px 0 0;background:#0f8f52}
+.hold h3{font-size:clamp(23px,2.1vw,30px);font-weight:300;letter-spacing:-.02em;line-height:1.15}
+.hold h3 b{font-weight:400;color:#0f8f52}
+.hold-h p{margin-top:12px;font-size:16px;line-height:1.6;color:var(--p-ink-2);max-width:40ch}
+.hold-l{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.hold-l li{padding:2px clamp(14px,1.6vw,24px);border-left:1px solid var(--p-line)}
+.hold-l li::before{content:'';display:block;width:26px;height:26px;border-radius:50%;border:1px solid rgba(15,143,82,.38);
+  background:rgba(15,143,82,.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.2l2 2 4-4.4' fill='none' stroke='%230f8f52' stroke-width='1.5'/%3E%3C/svg%3E") center/13px no-repeat}
+.hold-l b{display:block;margin-top:14px;font-size:17px;font-weight:400;letter-spacing:-.01em;color:var(--p-ink)}
+.hold-l span{display:block;margin-top:6px;font-size:14.5px;line-height:1.5;color:var(--p-ink-3)}
 .lnote{margin-top:22px;color:var(--p-ink-3);font-size:14px;line-height:1.6;max-width:72ch}
 
 /* ---------- 03 extra points ---------- */
@@ -497,6 +510,11 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
   .podium strong{margin-top:10px}
   .podium span.u{margin-top:0;text-align:right}
   .dl{grid-template-columns:1fr;gap:12px}
+  .hold{grid-template-columns:1fr}
+  .hold-l{grid-template-columns:1fr}
+  .hold-l li{display:grid;grid-template-columns:26px minmax(0,1fr);column-gap:14px;padding:14px 0;border-left:0;border-top:1px solid var(--p-line)}
+  .hold-l li::before{grid-row:1 / 3}
+  .hold-l b{margin-top:2px}
   .dl h3{white-space:normal}
   .dl .chip{justify-self:start}
   .cards{grid-template-columns:1fr}
@@ -606,7 +624,7 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
           <dt data-i="sh.4">You get it</dt><dd data-i="sh.4v">When SectoraEVM launches</dd>
           <dt data-i="sh.5">Prize lock</dt><dd><span class="chip wait mono" data-i="st.pend">Pending</span></dd>
         </dl>
-        <p class="note" data-i="sh.n">You never send money or tokens to anyone.</p>
+        <p class="note" data-i="sh.n">You never send or lock your SECT. Sell whenever you want.</p>
       </aside>
     </div>
   </div>
@@ -654,7 +672,7 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
     <ol class="steps">
       <li class="step"><span class="num">1</span><div><h3 data-i="s1h">Connect your wallet</h3><p data-i="s1p">Press the button and sign. It's free and costs no gas.</p></div><span class="fact mono" data-i="s1f">+50 points</span></li>
       <li class="step"><span class="num">2</span><div><h3 data-i="s2h">Do easy tasks</h3><p data-i="s2p">Follow us on X, join Telegram and come back every day.</p></div><span class="fact mono" data-i="s2f">+10 points a day</span></li>
-      <li class="step"><span class="num">3</span><div><h3 data-i="s3h">Hold SECT <span class='chip ink mono'>Optional</span></h3><p data-i="s3p">Keep SECT in your wallet and earn points every day. More SECT, more points.</p></div><span class="fact mono" data-i="s3f">Up to 15 points a day</span></li>
+      <li class="step"><span class="num">3</span><div><h3 data-i="s3h">Hold SECT <span class='chip ink mono'>Optional</span></h3><p data-i="s3p">Keep SECT in your wallet and earn points every day. Nothing is locked or sent: you can sell whenever you want.</p></div><span class="fact mono" data-i="s3f">Up to 15 points a day</span></li>
       <li class="step last"><span class="num">4</span><div><h3 data-i="s4h">Receive your SECT</h3><p data-i="s4p">When SectoraEVM launches, you get SECT based on your points.</p></div><span class="fact mono" data-i="s4f">Half at launch, half 90 days later</span></li>
     </ol>
     <div class="cta">
@@ -690,7 +708,7 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
       <article class="lv s">
         <div class="lv-top mono"><span data-i="lv.k2">Level 2</span><span class="chip blue mono">≈ $50</span></div>
         <h3>Sentinel</h3>
-        <div class="req"><b><span data-n="500"></span><small>SECT</small></b><span class="mono" data-i="lv.r2s">In your wallet</span></div>
+        <div class="req"><b><span data-n="500"></span><small>SECT</small></b><span class="mono" data-i="lv.r2s">In your wallet · not locked</span></div>
         <ul>
           <li data-i="lv.2a">Everything in Scout</li>
           <li data-i="lv.2b">Share of <b>1,400,000 SECT</b></li>
@@ -701,7 +719,7 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
       <article class="lv g">
         <div class="lv-top mono"><span data-i="lv.k3">Level 3</span><span class="chip blue mono">≈ $100</span></div>
         <h3>Guardian</h3>
-        <div class="req"><b><span data-n="1000"></span><small>SECT</small></b><span class="mono" data-i="lv.r2s">In your wallet</span></div>
+        <div class="req"><b><span data-n="1000"></span><small>SECT</small></b><span class="mono" data-i="lv.r2s">In your wallet · not locked</span></div>
         <ul>
           <li data-i="lv.3a">Everything in Sentinel</li>
           <li data-i="lv.3b"><b>+50%</b> points: the best level</li>
@@ -709,6 +727,17 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
         <div class="rate mono"><span data-i="lv.rt">Points a day for holding</span><b>15</b></div>
         <a class="sb go mono js-connect" href="#steps"><span data-i="lv.b3">Become Guardian</span><i>→</i></a>
       </article>
+    </div>
+    <div class="hold">
+      <div class="hold-h">
+        <h3 data-i="hd.h">You only hold. <b>That's it.</b></h3>
+        <p data-i="hd.p">Your SECT stay in your own wallet the whole time. If you want to leave, sell whenever you want.</p>
+      </div>
+      <ul class="hold-l">
+        <li><b data-i="hd.1">Not locked</b><span data-i="hd.1p">Nobody freezes your SECT.</span></li>
+        <li><b data-i="hd.2">Nothing to send</b><span data-i="hd.2p">You never send SECT to any address.</span></li>
+        <li><b data-i="hd.3">Sell any time</b><span data-i="hd.3p">You keep the points you already earned.</span></li>
+      </ul>
     </div>
     <p class="lnote" data-i="lv.n">We check your wallet once a day. Dollar amounts are approximate: the price of SECT changes.</p>
   </div>
@@ -815,7 +844,7 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
       <article class="vc">
         <div class="top"><span class="mono">01</span><span class="chip ok mono" data-i="st.ok">Verifiable</span></div>
         <h3 data-i="vf.1h">You never send money</h3>
-        <p data-i="vf.1p">We only read your balance. If someone asks you to send tokens for this airdrop, it's a scam.</p>
+        <p data-i="vf.1p">We only read your balance. Your SECT are never locked. If someone asks you to send tokens for this airdrop, it's a scam.</p>
         <div class="lk mono"><a href="https://etherscan.io/token/0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener"><span data-i="vf.1l">SECT on Etherscan</span><i>↗</i></a></div>
       </article>
       <article class="vc pend">
@@ -856,9 +885,10 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
     <div class="faq">
       <details open><summary><span class="n mono">01</span><span data-i="q1">Is it free?</span><span class="pm"></span></summary><p class="a" data-i="a1">Yes. You only connect your wallet and sign. Holding SECT is optional and gives more points.</p></details>
       <details><summary><span class="n mono">02</span><span data-i="q2">Do I have to send my SECT?</span><span class="pm"></span></summary><p class="a" data-i="a2">No. Your SECT stay in your wallet. We only look at your balance once a day.</p></details>
-      <details><summary><span class="n mono">03</span><span data-i="q3">How much will I get?</span><span class="pm"></span></summary><p class="a" data-i="a3">It depends on your points compared with everyone else's. The Top 100 prizes are fixed. We don't promise amounts in dollars.</p></details>
-      <details><summary><span class="n mono">04</span><span data-i="q4">When do I get it?</span><span class="pm"></span></summary><p class="a" data-i="a4">When SectoraEVM launches: half that day and the other half 90 days later.</p></details>
-      <details><summary><span class="n mono">05</span><span data-i="q5">Who can join?</span><span class="pm"></span></summary><p class="a" data-i="a5">Anyone where it's legal. The final rules will be published before Season 1.</p></details>
+      <details><summary><span class="n mono">03</span><span data-i="q6">Are my SECT locked? Can I sell?</span><span class="pm"></span></summary><p class="a" data-i="a6">They are never locked and you never send them anywhere. You can sell whenever you want. You keep the points you already earned; from then on you just stop earning daily points for holding.</p></details>
+      <details><summary><span class="n mono">04</span><span data-i="q3">How much will I get?</span><span class="pm"></span></summary><p class="a" data-i="a3">It depends on your points compared with everyone else's. The Top 100 prizes are fixed. We don't promise amounts in dollars.</p></details>
+      <details><summary><span class="n mono">05</span><span data-i="q4">When do I get it?</span><span class="pm"></span></summary><p class="a" data-i="a4">When SectoraEVM launches: half that day and the other half 90 days later.</p></details>
+      <details><summary><span class="n mono">06</span><span data-i="q5">Who can join?</span><span class="pm"></span></summary><p class="a" data-i="a5">Anyone where it's legal. The final rules will be published before Season 1.</p></details>
     </div>
   </div>
 </section>
@@ -918,21 +948,23 @@ n1:"Cómo entrar",n2:"Niveles",n3:"Premios",n4:"¿Es seguro?",n5:"Preguntas",nc:
 "h.l":"Regalamos <b>2.000.000 SECT</b>. Entra gratis, junta puntos y recibe tus SECT cuando se lance SectoraEVM.",
 "b.join":"Entrar gratis","b.how":"Ver los 4 pasos","b.buy":"Comprar SECT en Uniswap",
 "sh.t":"En resumen","sh.1":"Premio","sh.2":"Precio","sh.2v":"Gratis","sh.3":"Duración","sh.3v":"90 días","sh.4":"Lo recibes","sh.4v":"Cuando se lance SectoraEVM","sh.5":"Bloqueo del premio",
-"sh.n":"Nunca envías dinero ni tokens a nadie.",
+"sh.n":"Nunca envías ni bloqueas tus SECT. Vende cuando quieras.",
 "st.pend":"Pendiente","st.ok":"Verificable","st.rule":"Regla",
 "pz.e":"Premio total","pz.u":"SECT para repartir","pz.h":"Desliza",
 "pz.1":"Para quien guarda SECT","pz.2":"Para los 100 que más invitan","pz.3":"Para todos los que entran gratis",
 "sp.e":"01 · Cómo entrar","sp.h":"Cuatro pasos. <b>Nada más.</b>","sp.p":"No necesitas dinero para empezar.",
 s1h:"Conecta tu wallet",s1p:"Pulsa el botón y firma. Es gratis y no cuesta gas.",s1f:"+50 puntos",
 s2h:"Haz tareas fáciles",s2p:"Síguenos en X, únete al Telegram y vuelve cada día.",s2f:"+10 puntos al día",
-s3h:"Guarda SECT <span class='chip ink mono'>Opcional</span>",s3p:"Deja SECT en tu wallet y gana puntos cada día. Más SECT, más puntos.",s3f:"Hasta 15 puntos al día",
+s3h:"Guarda SECT <span class='chip ink mono'>Opcional</span>",s3p:"Deja SECT en tu wallet y gana puntos cada día. No se bloquea ni se envía: puedes venderlo cuando quieras.",s3f:"Hasta 15 puntos al día",
 s4h:"Recibe tus SECT",s4p:"Cuando se lance SectoraEVM, recibes SECT según tus puntos.",s4f:"Mitad al lanzamiento, mitad 90 días después",
 "sp.c":"Te toma menos de un minuto.",
 "lv.e":"02 · Niveles","lv.h":"Elige tu <b>nivel.</b>","lv.p":"Cuantos más SECT guardes en tu wallet, más puntos ganas cada día.",
 "lv.k1":"Nivel 1","lv.c1":"Gratis","lv.r1":"Gratis","lv.r1s":"Sin comprar","lv.1a":"Tareas y check-in diario","lv.1b":"Parte de <b>200.000 SECT</b>",
 "lv.rt":"Puntos al día por guardar","lv.b1":"Empezar gratis",
-"lv.k2":"Nivel 2","lv.r2s":"En tu wallet","lv.2a":"Todo lo de Scout","lv.2b":"Parte de <b>1.400.000 SECT</b>","lv.b2":"Ser Sentinel",
+"lv.k2":"Nivel 2","lv.r2s":"En tu wallet · sin bloqueo","lv.2a":"Todo lo de Scout","lv.2b":"Parte de <b>1.400.000 SECT</b>","lv.b2":"Ser Sentinel",
 "lv.k3":"Nivel 3","lv.3a":"Todo lo de Sentinel","lv.3b":"<b>+50%</b> puntos: el mejor nivel","lv.b3":"Ser Guardian",
+"hd.h":"Solo lo guardas. <b>Nada más.</b>","hd.p":"Tus SECT se quedan en tu propia wallet todo el tiempo. Si quieres retirarte, vende cuando quieras.",
+"hd.1":"No se bloquea","hd.1p":"Nadie congela tus SECT.","hd.2":"No envías nada","hd.2p":"Nunca envías SECT a ninguna dirección.","hd.3":"Vende cuando quieras","hd.3p":"Conservas los puntos que ya ganaste.",
 "lv.n":"Revisamos tu wallet una vez al día. Las cifras en dólares son aproximadas: el precio de SECT cambia.",
 "bo.e":"03 · Puntos extra","bo.h":"Cuatro formas de <b>ganar más.</b>","bo.p":"Multiplican los puntos que ganas por guardar SECT.",
 "bo.1h":"Ven cada día","bo.1p":"Tus puntos suben cada 6 días, hasta el doble el día 60.",
@@ -951,13 +983,14 @@ s4h:"Recibe tus SECT",s4p:"Cuando se lance SectoraEVM, recibes SECT según tus p
 "wh.4n":"Recibes","wh.4h":"Lanzamiento de SectoraEVM","wh.4p":"La mitad el primer día. La otra mitad 90 días después.",
 "wh.dh":"Fecha garantizada","wh.dp":"Si SectoraEVM se retrasa, recibirás tus SECT en Ethereum después de una fecha fija.",
 "sf.e":"06 · ¿Es seguro?","sf.h":"Compruébalo <b>tú mismo.</b>","sf.p":"Un airdrop real nunca te pide enviar dinero.",
-"vf.1h":"Nunca envías dinero","vf.1p":"Solo leemos tu saldo. Si alguien te pide enviar tokens para este airdrop, es una estafa.","vf.1l":"SECT en Etherscan",
+"vf.1h":"Nunca envías dinero","vf.1p":"Solo leemos tu saldo. Tus SECT nunca se bloquean. Si alguien te pide enviar tokens para este airdrop, es una estafa.","vf.1l":"SECT en Etherscan",
 "vf.2h":"El premio ya existe","vf.2p":"Los 2.000.000 SECT se bloquearán en Team Finance antes de la temporada 1. El enlace aparecerá aquí.","vf.2l":"Enlace antes de la temporada 1",
 "vf.3h":"Sin ganancias prometidas","vf.3p":"No prometemos dinero. El precio de SECT puede subir o bajar.","vf.3l":"Leer las preguntas",
 "vf.4h":"Registrada y auditada","vf.4p":"Sectora Foundation está registrada en Illinois, EE. UU. El contrato de SECT fue auditado por Cyberscope y la liquidez está bloqueada.","vf.4a":"Auditoría de Cyberscope","vf.4b":"Liquidez bloqueada","vf.4c":"Información legal",
 "fq.e":"07 · Preguntas","fq.h":"Respuestas <b>simples.</b>","fq.p":"¿Dudas? Pregunta en nuestro Telegram.",
 q1:"¿Es gratis?",a1:"Sí. Solo conectas tu wallet y firmas. Guardar SECT es opcional y da más puntos.",
 q2:"¿Tengo que enviar mis SECT?",a2:"No. Tus SECT se quedan en tu wallet. Solo miramos tu saldo una vez al día.",
+q6:"¿Se bloquean mis SECT? ¿Puedo vender?",a6:"Nunca se bloquean y nunca los envías a ningún lado. Puedes venderlos cuando quieras. Conservas los puntos que ya ganaste; desde ese momento solo dejas de sumar puntos diarios por guardar.",
 q3:"¿Cuánto voy a recibir?",a3:"Depende de tus puntos comparados con los de todos. Los premios del Top 100 son fijos. No prometemos cantidades en dólares.",
 q4:"¿Cuándo lo recibo?",a4:"Cuando se lance SectoraEVM: la mitad ese día y la otra mitad 90 días después.",
 q5:"¿Quién puede participar?",a5:"Cualquier persona donde sea legal. Las reglas finales se publicarán antes de la temporada 1.",
@@ -972,21 +1005,23 @@ n1:"Como entrar",n2:"Níveis",n3:"Prêmios",n4:"É seguro?",n5:"Perguntas",nc:"C
 "h.l":"Vamos distribuir <b>2.000.000 SECT</b>. Entre grátis, junte pontos e receba seus SECT quando a SectoraEVM for lançada.",
 "b.join":"Entrar grátis","b.how":"Ver os 4 passos","b.buy":"Comprar SECT na Uniswap",
 "sh.t":"Resumo","sh.1":"Prêmio","sh.2":"Custo","sh.2v":"Grátis","sh.3":"Duração","sh.3v":"90 dias","sh.4":"Você recebe","sh.4v":"No lançamento da SectoraEVM","sh.5":"Bloqueio do prêmio",
-"sh.n":"Você nunca envia dinheiro nem tokens para ninguém.",
+"sh.n":"Você nunca envia nem bloqueia seus SECT. Venda quando quiser.",
 "st.pend":"Pendente","st.ok":"Verificável","st.rule":"Regra",
 "pz.e":"Prêmio total","pz.u":"SECT para dividir","pz.h":"Role",
 "pz.1":"Para quem guarda SECT","pz.2":"Para os 100 que mais convidam","pz.3":"Para todos que entram grátis",
 "sp.e":"01 · Como entrar","sp.h":"Quatro passos. <b>Só isso.</b>","sp.p":"Você não precisa de dinheiro para começar.",
 s1h:"Conecte sua carteira",s1p:"Toque no botão e assine. É grátis e não custa gas.",s1f:"+50 pontos",
 s2h:"Faça tarefas fáceis",s2p:"Siga a gente no X, entre no Telegram e volte todo dia.",s2f:"+10 pontos por dia",
-s3h:"Guarde SECT <span class='chip ink mono'>Opcional</span>",s3p:"Deixe SECT na sua carteira e ganhe pontos todo dia. Mais SECT, mais pontos.",s3f:"Até 15 pontos por dia",
+s3h:"Guarde SECT <span class='chip ink mono'>Opcional</span>",s3p:"Deixe SECT na sua carteira e ganhe pontos todo dia. Nada fica bloqueado nem é enviado: você pode vender quando quiser.",s3f:"Até 15 pontos por dia",
 s4h:"Receba seus SECT",s4p:"Quando a SectoraEVM for lançada, você recebe SECT de acordo com seus pontos.",s4f:"Metade no lançamento, metade 90 dias depois",
 "sp.c":"Leva menos de um minuto.",
 "lv.e":"02 · Níveis","lv.h":"Escolha seu <b>nível.</b>","lv.p":"Quanto mais SECT na sua carteira, mais pontos você ganha todo dia.",
 "lv.k1":"Nível 1","lv.c1":"Grátis","lv.r1":"Grátis","lv.r1s":"Sem comprar","lv.1a":"Tarefas e check-in diário","lv.1b":"Parte de <b>200.000 SECT</b>",
 "lv.rt":"Pontos por dia por guardar","lv.b1":"Começar grátis",
-"lv.k2":"Nível 2","lv.r2s":"Na sua carteira","lv.2a":"Tudo do Scout","lv.2b":"Parte de <b>1.400.000 SECT</b>","lv.b2":"Ser Sentinel",
+"lv.k2":"Nível 2","lv.r2s":"Na sua carteira · sem bloqueio","lv.2a":"Tudo do Scout","lv.2b":"Parte de <b>1.400.000 SECT</b>","lv.b2":"Ser Sentinel",
 "lv.k3":"Nível 3","lv.3a":"Tudo do Sentinel","lv.3b":"<b>+50%</b> pontos: o melhor nível","lv.b3":"Ser Guardian",
+"hd.h":"Você só guarda. <b>Só isso.</b>","hd.p":"Seus SECT ficam na sua própria carteira o tempo todo. Se quiser sair, venda quando quiser.",
+"hd.1":"Não fica bloqueado","hd.1p":"Ninguém congela seus SECT.","hd.2":"Você não envia nada","hd.2p":"Você nunca envia SECT para nenhum endereço.","hd.3":"Venda quando quiser","hd.3p":"Você mantém os pontos que já ganhou.",
 "lv.n":"Verificamos sua carteira uma vez por dia. Os valores em dólar são aproximados: o preço do SECT muda.",
 "bo.e":"03 · Pontos extras","bo.h":"Quatro jeitos de <b>ganhar mais.</b>","bo.p":"Multiplicam os pontos que você ganha por guardar SECT.",
 "bo.1h":"Venha todo dia","bo.1p":"Seus pontos sobem a cada 6 dias, até o dobro no dia 60.",
@@ -1005,13 +1040,14 @@ s4h:"Receba seus SECT",s4p:"Quando a SectoraEVM for lançada, você recebe SECT 
 "wh.4n":"Você recebe","wh.4h":"Lançamento da SectoraEVM","wh.4p":"Metade no primeiro dia. A outra metade 90 dias depois.",
 "wh.dh":"Data garantida","wh.dp":"Se a SectoraEVM atrasar, você recebe seus SECT na Ethereum depois de uma data fixa.",
 "sf.e":"06 · É seguro?","sf.h":"Confira <b>você mesmo.</b>","sf.p":"Um airdrop de verdade nunca pede para você enviar dinheiro.",
-"vf.1h":"Você nunca envia dinheiro","vf.1p":"Só lemos seu saldo. Se alguém pedir para você enviar tokens para este airdrop, é golpe.","vf.1l":"SECT no Etherscan",
+"vf.1h":"Você nunca envia dinheiro","vf.1p":"Só lemos seu saldo. Seus SECT nunca ficam bloqueados. Se alguém pedir para você enviar tokens para este airdrop, é golpe.","vf.1l":"SECT no Etherscan",
 "vf.2h":"O prêmio já existe","vf.2p":"Os 2.000.000 SECT serão bloqueados na Team Finance antes da temporada 1. O link vai aparecer aqui.","vf.2l":"Link antes da temporada 1",
 "vf.3h":"Sem lucros prometidos","vf.3p":"Não prometemos dinheiro. O preço do SECT pode subir ou cair.","vf.3l":"Ler as perguntas",
 "vf.4h":"Registrada e auditada","vf.4p":"A Sectora Foundation é registrada em Illinois, EUA. O contrato do SECT foi auditado pela Cyberscope e a liquidez está bloqueada.","vf.4a":"Auditoria da Cyberscope","vf.4b":"Liquidez bloqueada","vf.4c":"Informações legais",
 "fq.e":"07 · Perguntas","fq.h":"Respostas <b>simples.</b>","fq.p":"Dúvidas? Pergunte no nosso Telegram.",
 q1:"É grátis?",a1:"Sim. Você só conecta sua carteira e assina. Guardar SECT é opcional e dá mais pontos.",
 q2:"Preciso enviar meus SECT?",a2:"Não. Seus SECT ficam na sua carteira. Só olhamos seu saldo uma vez por dia.",
+q6:"Meus SECT ficam bloqueados? Posso vender?",a6:"Nunca ficam bloqueados e você nunca os envia para lugar nenhum. Você pode vender quando quiser. Mantém os pontos que já ganhou; a partir daí só deixa de somar pontos diários por guardar.",
 q3:"Quanto vou receber?",a3:"Depende dos seus pontos comparados com os de todos. Os prêmios do Top 100 são fixos. Não prometemos valores em dólar.",
 q4:"Quando eu recebo?",a4:"No lançamento da SectoraEVM: metade nesse dia e a outra metade 90 dias depois.",
 q5:"Quem pode participar?",a5:"Qualquer pessoa onde for legal. As regras finais serão publicadas antes da temporada 1.",
@@ -1214,7 +1250,7 @@ function reveals(){
   var top = $("#top");
   if(!anim){ top.classList.add("played"); return; }
   requestAnimationFrame(function(){ requestAnimationFrame(function(){ top.classList.add("played"); }); });
-  var RV = ".sub,.lnote,.lv,.step,.cta,.boost,.pts > .pt,.doc,.dl,.vc,.faq details";
+  var RV = ".sub,.lnote,.lv,.hold,.step,.cta,.boost,.pts > .pt,.doc,.dl,.vc,.faq details";
   var els = [];
   $$(".sec").forEach(function(sec){
     sec.querySelectorAll(RV).forEach(function(el){
