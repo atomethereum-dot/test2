@@ -1,0 +1,1363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#000000">
+<title>Sectora Airdrop · Genesis (test)</title>
+<meta name="description" content="Sectora Airdrop Genesis: 2,000,000 SECT for the first community of SectoraEVM. Test preview.">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/v2/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/v2/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/icons/v2/apple-touch-icon.png">
+<link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Same system as sectoraorg.com: black stage with the live pixel grid, paper sections,
+   document frames with blue corners, mono labels and square buttons. */
+@font-face{font-family:'IBM Plex Sans';src:url("/fonts/IBMPlexSans.woff2") format("woff2");font-weight:200 500;font-style:normal;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url("/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url("/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+:root{
+  color-scheme:dark;
+  --bg:#000;--ink:#fff;--ink-2:#c6ccd8;--ink-3:#7c8496;--ink-4:#4a5164;
+  --blue:#1569ff;--blue-deep:#0d4fd8;--blue-l:#4d8dff;
+  --hair:rgba(255,255,255,.10);--hair-soft:rgba(255,255,255,.05);
+  --p-ink:#07080a;--p-ink-2:#3c414c;--p-ink-3:#6b7280;--p-ink-4:#9aa0ab;
+  --p-line:rgba(7,8,10,.12);--p-line-2:rgba(7,8,10,.07);
+  --ok:#0f8f52;--warn:#a86400;
+  --pad:clamp(20px,4.4vw,72px);
+  --ease:cubic-bezier(.22,.72,.24,1);--ease-out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;background:#000;overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:clip}
+@supports not (overflow-x:clip){body{overflow-x:hidden}}
+section[id]{scroll-margin-top:18px}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.gut{padding-left:max(var(--pad),env(safe-area-inset-left,0px));padding-right:max(var(--pad),env(safe-area-inset-right,0px))}
+.in{position:relative;z-index:1;max-width:1280px;margin:0 auto}
+.eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:28px;color:var(--ink-3)}
+.eyebrow i{display:block;width:30px;height:1px;background:var(--blue);flex:none}
+
+/* ---------- preview strip ---------- */
+.pv{position:relative;z-index:3;display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:9px 16px;padding-top:calc(9px + env(safe-area-inset-top,0px));background:#07090f;border-bottom:1px solid var(--hair);
+  color:#d9a24a;font-size:9.5px;text-align:center}
+.pv::before{content:'';width:5px;height:5px;border-radius:50%;background:#f0b44c;flex:none;box-shadow:0 0 8px #f0b44c}
+
+/* ---------- stage (black, live grid) ---------- */
+.stage{position:relative;background:#000;overflow:hidden;isolation:isolate}
+.stage canvas.grid{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.vig{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(118% 88% at 38% 46%,transparent 46%,rgba(0,0,0,.72) 100%)}
+.stage > .lay{position:relative;z-index:2}
+#top{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+#top > .lay{flex:1;display:flex;flex-direction:column}
+
+nav{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:18px;padding-bottom:18px}
+.brand{display:inline-flex;align-items:center;gap:14px;text-decoration:none;line-height:0}
+.brand svg{display:block;width:38px;height:38px;border-radius:3.4px;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.brand:hover svg{transform:translateY(-1px);box-shadow:0 0 0 1px rgba(21,105,255,.5),0 6px 22px -8px rgba(21,105,255,.9)}
+.brand .ring{transform-origin:50% 50%;transition:transform .5s var(--ease)}
+.brand:hover .ring{transform:rotate(90deg) scale(1.04)}
+.brand .mono{line-height:1.2;color:var(--ink-2)}
+.brand .mono b{display:block;font-weight:500;color:#fff}
+.links{display:flex;gap:26px}
+.links a{color:var(--ink-3);text-decoration:none;transition:color .3s var(--ease)}
+.links a:hover{color:#fff}
+.nr{display:flex;align-items:center;gap:14px}
+.lang{display:flex;border:1px solid var(--hair)}
+.lang button{padding:9px 9px;color:var(--ink-4);font-size:10px}
+.lang button[aria-pressed=true]{color:#fff;background:rgba(255,255,255,.07)}
+.docs{position:relative;overflow:hidden;color:#fff;text-decoration:none;border:1px solid var(--hair);padding:10px 17px;white-space:nowrap;transition:border-color .3s var(--ease)}
+.docs span{position:relative;z-index:1}
+.docs::before{content:'';position:absolute;inset:0;background:var(--blue);transform:translateY(101%);transition:transform .42s var(--ease)}
+.docs:hover,.docs:focus-visible{border-color:var(--blue)}
+.docs:hover::before,.docs:focus-visible::before{transform:translateY(0)}
+
+.hero{flex:1;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.8fr);gap:clamp(30px,4vw,76px);align-items:center;padding-top:clamp(40px,7vh,96px);padding-bottom:clamp(56px,9vh,110px)}
+h1{font-size:clamp(46px,7.4vw,112px);font-weight:200;line-height:.98;letter-spacing:-.04em}
+h1 .b{display:block;font-weight:400}
+h1 .b em{font-style:normal;color:var(--blue-l)}
+.rule{width:74px;height:1px;background:var(--hair);margin:36px 0 28px}
+.lede{max-width:54ch;font-size:clamp(15px,1.2vw,17px);line-height:1.7;color:var(--ink-2)}
+.lede b{font-weight:400;color:#fff}
+.actions{display:grid;grid-template-columns:minmax(0,max-content);grid-auto-rows:1fr;gap:12px;margin-top:40px}
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:11px;text-decoration:none;padding:15px 26px;border:1px solid transparent;transition:border-color .3s var(--ease),color .3s var(--ease)}
+.btn span,.btn .arrow,.btn .gs{position:relative;z-index:1}
+.btn .arrow{margin-left:auto;transition:transform .38s var(--ease)}
+.btn:hover .arrow{transform:translateX(5px)}
+.btn-ghost:hover .arrow{transform:translate(4px,-4px)}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary::before{content:'';position:absolute;inset:0;background:var(--blue-deep);transform:translateY(101%);transition:transform .42s var(--ease)}
+.btn-primary:hover::before,.btn-primary:focus-visible::before{transform:translateY(0)}
+.btn-ghost{color:#fff;border-color:var(--hair)}
+.btn-ghost::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.07);transform:translateY(101%);transition:transform .42s var(--ease)}
+.btn-ghost:hover,.btn-ghost:focus-visible{border-color:var(--ink-3)}
+.btn-ghost:hover::before,.btn-ghost:focus-visible::before{transform:translateY(0)}
+.btn-guide{color:#fff;border-color:rgba(21,105,255,.5);background:linear-gradient(90deg,rgba(21,105,255,.18),rgba(21,105,255,.03) 72%)}
+.btn-guide::before{content:'';position:absolute;inset:0;background:rgba(21,105,255,.24);transform:translateY(101%);transition:transform .42s var(--ease)}
+.btn-guide:hover,.btn-guide:focus-visible{border-color:var(--blue)}
+.btn-guide:hover::before,.btn-guide:focus-visible::before{transform:translateY(0)}
+.gs{display:inline-flex;gap:3px;flex:none}
+.gs b{width:5px;height:5px;background:rgba(255,255,255,.2);animation:paso 3.6s infinite}
+.gs b:nth-child(2){animation-delay:.3s}.gs b:nth-child(3){animation-delay:.6s}.gs b:nth-child(4){animation-delay:.9s}
+@keyframes paso{0%,100%{background:rgba(255,255,255,.2)}4%,62%{background:var(--blue)}72%{background:rgba(255,255,255,.2)}}
+
+.sheet{color:var(--ink-3);border-left:1px solid var(--hair);padding-left:clamp(18px,2vw,30px);min-width:0}
+.sheet h2{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-4);display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:14px;margin-bottom:4px;border-bottom:1px solid var(--hair)}
+.sheet dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 18px;align-items:baseline}
+.sheet dt,.sheet dd{padding:12px 0;border-bottom:1px solid var(--hair-soft)}
+.sheet dt{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-4);white-space:nowrap}
+.sheet dd{color:var(--ink-2);font-size:13.5px;font-weight:400;text-align:right;font-variant-numeric:tabular-nums}
+.sheet dd b{color:#fff;font-weight:400}
+.sheet dl > *:nth-last-child(-n+2){border-bottom:0}
+.sheet .note{padding-top:14px;margin-top:2px;border-top:1px solid var(--hair);font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);line-height:1.7}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:8px;padding:5px 10px;border:1px solid;font-size:9.5px;font-style:normal;white-space:nowrap;line-height:1.2}
+.chip.ok{color:var(--ok);border-color:rgba(15,143,82,.38);background:rgba(15,143,82,.07)}
+.chip.ok::before{content:'';width:4px;height:8px;margin:-3px 1px 0 0;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.chip.wait{color:var(--warn);border-color:rgba(168,100,0,.36);background:rgba(168,100,0,.07)}
+.chip.wait::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.6s steps(2) infinite}
+.chip.blue{color:var(--blue-deep);border-color:rgba(13,79,216,.32);background:rgba(13,79,216,.06)}
+.chip.ink{color:var(--p-ink-2);border-color:var(--p-line)}
+.dk .chip.ok,.stage .chip.ok{color:#3ddc97;border-color:rgba(61,220,151,.38);background:rgba(61,220,151,.08)}
+.dk .chip.wait,.stage .chip.wait{color:#f0b44c;border-color:rgba(240,180,76,.4);background:rgba(240,180,76,.08)}
+.dk .chip.blue,.stage .chip.blue{color:#8fb4ff;border-color:rgba(77,141,255,.4);background:rgba(77,141,255,.08)}
+.dk .chip.ink,.stage .chip.ink{color:var(--ink-2);border-color:var(--hair)}
+@keyframes blink{50%{opacity:.25}}
+
+/* ---------- prize stage ---------- */
+#prize{padding-top:clamp(84px,14vh,150px);padding-bottom:clamp(110px,18vh,190px);text-align:center;border-top:1px solid var(--hair-soft)}
+#prize .eyebrow{justify-content:center}
+.big{font-size:clamp(60px,15.4vw,236px);font-weight:200;letter-spacing:-.055em;line-height:.9;font-variant-numeric:tabular-nums;color:#fff;white-space:nowrap}
+.big-u{margin-top:22px;color:var(--ink-3)}
+.split{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:980px;margin:clamp(48px,7vh,80px) auto 0;border-top:1px solid var(--hair);text-align:left}
+.split > div{padding:18px 18px 0 0;min-width:0}
+.split > div + div{padding-left:18px;border-left:1px solid var(--hair)}
+.split .pc{color:var(--blue-l)}
+.split b{display:block;margin-top:12px;font-size:clamp(26px,3vw,44px);font-weight:200;letter-spacing:-.03em;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
+.split h3{margin-top:12px;font-size:15px;font-weight:400;color:#fff}
+.split p{margin-top:6px;font-size:9.5px;line-height:1.6;color:var(--ink-4)}
+.horizon{position:absolute;left:50%;bottom:-1px;z-index:1;width:min(1500px,150%);height:clamp(220px,34vh,380px);transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(50% 100% at 50% 100%,rgba(21,105,255,.6),rgba(21,105,255,.16) 46%,transparent 74%)}
+.horizon::after{content:'';position:absolute;left:10%;right:10%;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#6ea2ff,transparent)}
+
+/* ---------- sections ---------- */
+.sec{position:relative;isolation:isolate;padding-top:clamp(76px,11vh,128px);padding-bottom:clamp(76px,11vh,128px)}
+.pp{color:var(--p-ink);background:linear-gradient(180deg,#f6f6f4 0,#fff 140px,#fff calc(100% - 140px),#f6f6f4 100%)}
+.pp.flat{background:#f6f6f4}
+.pp .eyebrow{color:var(--blue-deep)}
+.pp .eyebrow i{background:var(--blue-deep)}
+.dk{background:#05070c;color:#fff}
+.dk::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54'%3E%3Cpath d='M27 23v8M23 27h8' stroke='rgba(124,138,160,.20)' stroke-width='1'/%3E%3C/svg%3E"),linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:54px 54px;-webkit-mask-image:radial-gradient(90% 80% at 50% 40%,#000,transparent 88%);mask-image:radial-gradient(90% 80% at 50% 40%,#000,transparent 88%)}
+.dk .eyebrow{color:var(--blue-l)}
+.dk .eyebrow i{background:var(--blue-l)}
+.head{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(24px,4vw,80px);align-items:end;margin-bottom:clamp(40px,6.5vh,76px)}
+h2.t{font-size:clamp(34px,4.9vw,70px);font-weight:200;line-height:1.03;letter-spacing:-.034em;max-width:15ch;text-wrap:balance}
+h2.t b{font-weight:400;color:var(--blue-deep)}
+.dk h2.t b,.stage h2.t b{color:var(--blue-l)}
+.sub{font-size:clamp(15px,1.2vw,17px);line-height:1.7;color:var(--p-ink-2);max-width:46ch}
+.dk .sub{color:var(--ink-2)}
+.sub b{font-weight:400;color:var(--p-ink)}
+.dk .sub b{color:#fff}
+
+/* left rail, as on the main site */
+.spine{position:absolute;top:0;bottom:0;left:calc(var(--pad) * .34);z-index:4;width:1px;background:rgba(0,0,0,.10);pointer-events:none;display:none;
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:#9aa0ab}
+.dk .spine{background:rgba(255,255,255,.12);color:#6f7889}
+.spine em{position:sticky;top:120px;display:block;height:0;font-style:normal}
+.spine b{position:absolute;top:0;left:50%;transform:translateX(-50%);width:19px;height:25px;display:grid;place-items:center;background:#f4f4f1;font-weight:500;color:#3c414c;letter-spacing:0}
+.dk .spine b{background:#05070c;color:#c6ccd8}
+.spine span{position:absolute;top:38px;left:7px;writing-mode:vertical-rl;white-space:nowrap}
+.spine i{position:absolute;bottom:30px;left:50%;width:5px;height:5px;transform:translateX(-50%);background:var(--blue-deep)}
+@media (min-width:1180px){.spine{display:block}}
+
+/* square buttons for light sections */
+.sb{display:flex;align-items:center;justify-content:space-between;gap:12px;height:56px;padding:0 22px;border:1px solid var(--p-ink);color:var(--p-ink);text-decoration:none;white-space:nowrap;
+  transition:background .3s var(--ease),border-color .3s var(--ease),color .3s var(--ease)}
+.sb i{font-style:normal;transition:transform .38s var(--ease)}
+.sb:hover{border-color:var(--blue);color:var(--blue)}
+.sb:hover i{transform:translateX(4px)}
+.sb.go{background:var(--blue);border-color:var(--blue);color:#fff}
+.sb.go:hover{background:var(--blue-deep);border-color:var(--blue-deep);color:#fff}
+.dk .sb,.lv.g .sb{border-color:rgba(255,255,255,.5);color:#fff}
+.dk .sb:hover{border-color:var(--blue-l);color:#fff}
+.lv.g .sb.go,.dk .sb.go{border-color:var(--blue)}
+
+/* ---------- 01 levels ---------- */
+.lvls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.4vw,20px);align-items:stretch}
+.lv{position:relative;display:flex;flex-direction:column;padding:clamp(24px,2.4vw,34px) clamp(22px,2.4vw,34px) clamp(24px,2.4vw,30px);
+  background:rgba(255,255,255,.72);border:1px solid var(--p-line);border-radius:3px;box-shadow:inset 0 1px 0 #fff;transition:transform .5s var(--ease),border-color .5s var(--ease)}
+.lv:hover{transform:translateY(-3px);border-color:rgba(21,105,255,.45)}
+.lv::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;border-radius:3px 3px 0 0;background:var(--p-ink-4)}
+.lv.s::before,.lv.g::before{background:var(--blue)}
+.lv.g{background:#05070c;color:#fff;border-color:rgba(21,105,255,.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 40px 90px -50px rgba(21,105,255,.8)}
+.lv.g:hover{border-color:rgba(77,141,255,.8)}
+.lv-top{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--p-ink-3)}
+.lv.g .lv-top{color:var(--ink-3)}
+.lv h3{margin-top:26px;font-size:clamp(28px,2.5vw,36px);font-weight:300;letter-spacing:-.022em;line-height:1}
+.req{margin-top:22px;padding-top:20px;border-top:1px solid var(--p-line)}
+.lv.g .req{border-color:var(--hair)}
+.req b{display:block;font-size:clamp(38px,3.7vw,56px);font-weight:200;letter-spacing:-.035em;line-height:1;white-space:nowrap}
+.req b small{font-size:.42em;font-weight:300;letter-spacing:0;color:var(--p-ink-3);margin-left:6px}
+.lv.g .req b small{color:var(--ink-3)}
+.req > span{display:block;margin-top:12px;font-size:9.5px;line-height:1.6;color:var(--p-ink-3)}
+.lv.g .req > span{color:var(--ink-3)}
+.lv ul{list-style:none;margin:22px 0 26px;border-top:1px solid var(--p-line)}
+.lv.g ul{border-color:var(--hair)}
+.lv li{position:relative;padding:12px 0 12px 24px;border-bottom:1px solid var(--p-line-2);font-size:14.5px;line-height:1.5;color:var(--p-ink-2)}
+.lv.g li{border-color:var(--hair-soft);color:var(--ink-2)}
+.lv li::before{content:'';position:absolute;left:4px;top:17px;width:4px;height:8px;border:solid var(--blue-deep);border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.lv.g li::before{border-color:var(--blue-l)}
+.lv li b{font-weight:400;color:var(--p-ink)}
+.lv.g li b{color:#fff}
+.rate{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:auto 0 20px;color:var(--p-ink-3)}
+.lv.g .rate{color:var(--ink-3)}
+.rate b{font-size:30px;font-weight:300;letter-spacing:-.02em;color:var(--p-ink);font-family:'IBM Plex Sans',sans-serif;text-transform:none}
+.lv.g .rate b{color:#fff}
+.lnote{margin-top:22px;color:var(--p-ink-3);font-size:13px;line-height:1.6;max-width:72ch}
+
+/* ---------- 02 steps + missions ---------- */
+.pts{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--p-line);border-bottom:1px solid var(--p-line)}
+.pts.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.pt{position:relative;display:flex;flex-direction:column;align-items:flex-start;padding:clamp(22px,2.4vw,32px) clamp(18px,2vw,30px) clamp(22px,2.4vw,28px)}
+.pt + .pt{border-left:1px solid var(--p-line)}
+.pt::before{content:'';position:absolute;left:0;top:-1px;height:1.5px;width:100%;background:var(--blue);transform:scaleX(.16);transform-origin:0 50%;transition:transform .55s var(--ease)}
+.pt:hover::before{transform:scaleX(1)}
+.pt .n{color:var(--blue-deep);margin-bottom:16px}
+.pt h3{font-size:clamp(21px,1.8vw,26px);font-weight:400;letter-spacing:-.016em;line-height:1.2}
+.pt p{margin:10px 0 18px;color:var(--p-ink-3);font-size:14.5px;line-height:1.65;max-width:46ch}
+.fact{margin-top:auto;padding:6px 10px;border:1px solid var(--p-line);color:var(--p-ink);font-size:10px}
+.pt.claim{background:#05070c;color:#fff;border-left-color:#05070c}
+.pt.claim::before{transform:scaleX(1)}
+.pt.claim .n{color:var(--blue-l)}
+.pt.claim p{color:var(--ink-2)}
+.pt.claim .fact{border-color:var(--hair);color:#fff}
+
+.doc{position:relative;border:1px solid var(--p-line);background:#fff}
+.doc > .fc{position:absolute;width:11px;height:11px;pointer-events:none;z-index:2}
+.doc > .fc::before,.doc > .fc::after{content:'';position:absolute;background:var(--blue)}
+.doc > .fc::before{width:11px;height:1.5px}
+.doc > .fc::after{width:1.5px;height:11px}
+.doc > .fc.a{top:-1px;left:-1px}
+.doc > .fc.b{top:-1px;right:-1px}
+.doc > .fc.b::before,.doc > .fc.b::after{right:0}
+.doc > .fc.c{bottom:-1px;left:-1px}
+.doc > .fc.c::before,.doc > .fc.c::after{bottom:0}
+.doc > .fc.d{bottom:-1px;right:-1px}
+.doc > .fc.d::before,.doc > .fc.d::after{right:0;bottom:0}
+.band{display:flex;align-items:center;gap:18px;padding:15px clamp(18px,2.6vw,36px);border-bottom:1px solid var(--p-line);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--p-ink-3)}
+.band .eyebrow{margin:0;color:var(--p-ink);font-size:inherit;letter-spacing:inherit}
+.band .eyebrow i{background:var(--blue)}
+.band .sp{flex:1;height:1px;background:var(--p-line-2);min-width:12px}
+.band .ref{color:var(--p-ink-2);white-space:nowrap}
+.cap{display:flex;justify-content:space-between;gap:18px;padding:12px clamp(18px,2.6vw,36px);border-top:1px solid var(--p-line);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--p-ink-3)}
+.mis-w{margin-top:clamp(40px,6vh,64px)}
+.mis{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(24px,4vw,72px);padding:6px clamp(18px,2.6vw,36px) 10px}
+.mis li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:14px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--p-line-2)}
+.mis li .n{color:var(--blue-deep);font-size:10px}
+.mis li h4{font-size:16px;font-weight:400;color:var(--p-ink)}
+.mis li p{margin-top:4px;font-size:13.5px;line-height:1.5;color:var(--p-ink-3)}
+.mis li b{font-size:24px;font-weight:200;letter-spacing:-.02em;color:var(--p-ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.mis li b small{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;color:var(--p-ink-3);margin-left:4px}
+
+/* ---------- 03 power-ups ---------- */
+.ledger{border-top:1px solid var(--hair)}
+.lrow{display:grid;grid-template-columns:64px minmax(0,.9fr) minmax(0,1.3fr) minmax(130px,.5fr);gap:clamp(16px,2.4vw,36px);align-items:baseline;padding:clamp(24px,3.4vh,36px) 0;border-bottom:1px solid var(--hair);transition:background .4s var(--ease)}
+.lrow:hover{background:linear-gradient(90deg,rgba(21,105,255,.07),transparent 70%)}
+.lrow .n{color:var(--blue-l)}
+.lrow h3{font-size:clamp(22px,2.1vw,31px);font-weight:300;letter-spacing:-.02em;line-height:1.1}
+.lrow p{color:var(--ink-2);font-size:15px;line-height:1.7;max-width:52ch}
+.lrow .v{text-align:right;font-size:clamp(40px,4vw,62px);font-weight:200;letter-spacing:-.04em;line-height:.9;color:#fff;white-space:nowrap}
+.lrow .v small{display:block;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.xnote{margin-top:clamp(30px,4.6vh,46px);padding-left:clamp(18px,2vw,28px);border-left:1px solid var(--blue);font-size:clamp(15px,1.25vw,18px);line-height:1.65;color:var(--ink-2);max-width:72ch}
+.xnote b{font-weight:400;color:#fff}
+
+/* ---------- 04 dashboard ---------- */
+.dash{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr) minmax(0,1fr)}
+.dash > div{padding:clamp(22px,2.6vw,36px);min-width:0}
+.dash > div + div{border-left:1px solid var(--p-line)}
+.lbl{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--p-ink-3);margin-bottom:14px;font-size:10px}
+.d-lv{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.d-lv b{font-size:32px;font-weight:300;letter-spacing:-.02em;line-height:1}
+.d-pts{margin-top:30px;padding-top:22px;border-top:1px solid var(--p-line)}
+.d-pts b{display:block;font-size:clamp(52px,5vw,76px);font-weight:200;letter-spacing:-.045em;line-height:.9;font-variant-numeric:tabular-nums}
+.d-pts span{display:block;margin-top:12px;color:var(--p-ink-3);font-size:10px}
+.d-st{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:24px;border-top:1px solid var(--p-line)}
+.d-st > div{padding:14px 10px 0 0;min-width:0}
+.d-st > div + div{padding-left:12px;border-left:1px solid var(--p-line)}
+.d-st b{display:block;font-size:20px;font-weight:300;letter-spacing:-.01em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.d-st span{display:block;margin-top:8px;font-size:9px;color:var(--p-ink-4)}
+.meter{margin-top:30px;padding-top:22px;border-top:1px solid var(--p-line)}
+.cells{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+.cells i{height:14px;background:rgba(7,8,10,.07)}
+.cells i.on{background:var(--blue)}
+.cells i.half{background:linear-gradient(90deg,var(--blue) var(--p,50%),rgba(7,8,10,.07) var(--p,50%))}
+.meter .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:12px;font-size:10px;color:var(--p-ink-3)}
+.meter .row b{font-family:'IBM Plex Sans',sans-serif;font-size:26px;font-weight:300;letter-spacing:-.02em;color:var(--blue-deep);text-transform:none}
+.invite{display:flex;border:1px solid var(--p-line)}
+.invite code{flex:1;min-width:0;padding:14px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--p-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.invite button{flex:none;padding:0 16px;border-left:1px solid var(--p-line);color:var(--blue-deep);font-size:10px;transition:background .3s var(--ease)}
+.invite button:hover{background:rgba(13,79,216,.06)}
+.squad{margin-top:22px}
+.squad .cells{grid-template-columns:repeat(5,minmax(0,1fr))}
+.squad .cells i{height:30px;display:grid;place-items:center;font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--p-ink-4)}
+.squad .cells i.on{color:#fff}
+.chk{list-style:none;margin-top:24px;border-top:1px solid var(--p-line)}
+.chk li{display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--p-line-2);font-size:14px;color:var(--p-ink-2)}
+.chk li::before{content:'';width:12px;height:12px;border:1px solid var(--p-ink-4)}
+.chk li.done::before{background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.2l2 2 4-4.4' fill='none' stroke='%23fff' stroke-width='1.5'/%3E%3C/svg%3E") center/12px no-repeat;border-color:var(--blue)}
+.chk li.done{color:var(--p-ink-3)}
+.chk li span:last-child{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:var(--p-ink-3)}
+.chk li.done span:last-child{color:var(--blue-deep)}
+.d-ci{margin-top:20px;width:100%}
+.d-ci[disabled]{cursor:default;background:#fff;color:var(--p-ink-3);border-color:var(--p-line)}
+.cardw{position:relative;border:1px solid var(--p-line);background:#000;line-height:0}
+.cardw canvas{display:block;width:100%;height:auto;aspect-ratio:1200/675}
+.d-sh{margin-top:16px}
+.d-n{margin-top:14px;font-size:13px;line-height:1.6;color:var(--p-ink-3)}
+
+/* ---------- 05 pool / 06 top 100 tables ---------- */
+.pool{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}
+.pool > div{padding:clamp(24px,3vw,44px) clamp(18px,2.6vw,36px);min-width:0}
+.pool > div + div{border-left:1px solid var(--p-line)}
+.pool .num{font-size:clamp(48px,5.8vw,92px);font-weight:200;letter-spacing:-.05em;line-height:.9;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pool .num small{display:block;margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;color:var(--p-ink-3)}
+.alloc{display:flex;gap:3px;height:14px;margin-top:34px}
+.alloc i{display:block;height:100%}
+.alloc i:nth-child(1){flex:70;background:var(--blue)}
+.alloc i:nth-child(2){flex:20;background:#7aa6ff}
+.alloc i:nth-child(3){flex:10;background:#c9d3e6}
+.leg{list-style:none;margin-top:16px}
+.leg li{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:10px;color:var(--p-ink-2)}
+.leg li::before{content:'';width:9px;height:9px;flex:none;background:var(--blue)}
+.leg li:nth-child(2)::before{background:#7aa6ff}
+.leg li:nth-child(3)::before{background:#c9d3e6}
+.leg li span:last-child{margin-left:auto;color:var(--p-ink-3)}
+.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.tbl th{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:400;color:var(--p-ink-3);text-align:left;padding:0 10px 12px 0;border-bottom:1px solid var(--p-line)}
+.tbl td{padding:16px 10px 16px 0;border-bottom:1px solid var(--p-line-2);font-size:15px;color:var(--p-ink-2);vertical-align:baseline}
+.tbl th:last-child,.tbl td:last-child{padding-right:0}
+.tbl .r{text-align:right}
+.tbl td b{font-weight:400;color:var(--p-ink)}
+.tbl td small{display:block;margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--p-ink-4);line-height:1.5}
+.tbl tfoot td{border-top:1px solid var(--p-ink);border-bottom:0;color:var(--p-ink);font-weight:400}
+.tbl td.big{font-size:22px;font-weight:300;color:var(--p-ink);letter-spacing:-.01em}
+.podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid var(--p-line)}
+.podium > div{position:relative;padding:clamp(22px,3vw,40px) clamp(18px,2.6vw,36px);min-width:0}
+.podium > div + div{border-left:1px solid var(--p-line)}
+.podium .rk{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--p-ink-3)}
+.podium .rk b{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:400;letter-spacing:0;color:var(--blue-deep)}
+.podium strong{display:block;margin-top:22px;font-size:clamp(40px,5vw,78px);font-weight:200;letter-spacing:-.05em;line-height:.9;white-space:nowrap;font-variant-numeric:tabular-nums}
+.podium span.u{display:block;margin-top:12px;font-size:10px;color:var(--p-ink-3)}
+.podium > div:first-child{background:linear-gradient(180deg,rgba(21,105,255,.07),transparent 80%)}
+.podium > div:first-child::before{content:'';position:absolute;left:0;right:0;top:-1px;height:2px;background:var(--blue)}
+.tb-w{padding:clamp(22px,3vw,40px) clamp(18px,2.6vw,36px) clamp(10px,1.4vw,18px)}
+
+/* ---------- 07 calendar ---------- */
+.dl{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr) auto;gap:clamp(16px,2.4vw,36px);align-items:center;margin-top:clamp(24px,3.4vh,34px);padding:clamp(20px,2.4vw,28px) clamp(18px,2.6vw,36px);border:1px solid var(--p-line);background:#fff}
+.dl h3{font-size:clamp(19px,1.6vw,23px);font-weight:400;letter-spacing:-.012em;white-space:nowrap}
+.dl p{font-size:14.5px;line-height:1.65;color:var(--p-ink-2)}
+
+/* ---------- 08 verification ---------- */
+.ver{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.6fr);gap:clamp(30px,4.4vw,80px);align-items:start}
+.ver-l{position:sticky;top:48px}
+.ver-l h2.t{max-width:11ch}
+.ver-l .sub{margin-top:22px;max-width:38ch;font-size:15px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:34px;border-top:1px solid rgba(255,255,255,.13)}
+.stats > div{padding:16px 12px 0 0;min-width:0}
+.stats > div + div{padding-left:14px;border-left:1px solid rgba(255,255,255,.13)}
+.stats b{display:block;font-size:clamp(34px,3.2vw,50px);font-weight:200;letter-spacing:-.03em;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
+.stats > div:first-child b{color:var(--blue-l)}
+.stats span{display:block;margin-top:10px;font-size:9.5px;line-height:1.5;color:#6f7889}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.vc{position:relative;display:flex;flex-direction:column;padding:clamp(24px,2.5vw,32px) clamp(22px,2.6vw,34px);background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.13);border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12);transition:transform .5s var(--ease),border-color .5s var(--ease)}
+.vc:hover{transform:translateY(-3px);border-color:rgba(21,105,255,.55)}
+.vc::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;border-radius:3px 3px 0 0;background:var(--blue)}
+.vc.pend::before{background:#f0b44c}
+.vc .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}
+.vc .top > span{color:var(--blue-l);font-weight:500}
+.vc h3{font-size:clamp(20px,1.8vw,25px);font-weight:400;letter-spacing:-.014em;line-height:1.2;margin-bottom:12px}
+.vc p{font-size:14.5px;line-height:1.72;color:var(--ink-2)}
+.vc .src{margin-top:16px;font-size:9.5px;line-height:1.6;color:#6f7889}
+.vc .src b{font-weight:500;color:var(--ink-3)}
+.vc .lk{margin-top:auto;padding-top:20px}
+.vc .lk a{display:flex;align-items:center;gap:8px;padding-top:14px;border-top:1px solid rgba(255,255,255,.13);color:var(--blue-l);text-decoration:none;font-weight:500;transition:color .3s var(--ease)}
+.vc .lk a + a{padding-top:12px;margin-top:12px}
+.vc .lk a i{font-style:normal;margin-left:auto;transition:transform .38s var(--ease)}
+.vc .lk a:hover{color:#fff}
+.vc .lk a:hover i{transform:translate(3px,-3px)}
+.vc .lk .soon{display:block;padding-top:14px;border-top:1px solid rgba(255,255,255,.13);color:#6f7889}
+
+/* ---------- 09 faq ---------- */
+.faqw{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:clamp(30px,4.4vw,80px);align-items:start}
+.faqw .head{display:block;margin:0;position:sticky;top:48px}
+.faqw .sub{margin-top:22px}
+.faq{border-top:1px solid var(--p-line)}
+.faq details{border-bottom:1px solid var(--p-line)}
+.faq summary{list-style:none;display:grid;grid-template-columns:44px minmax(0,1fr) 18px;gap:14px;align-items:baseline;padding:24px 0;cursor:pointer;font-size:clamp(18px,1.6vw,22px);font-weight:300;letter-spacing:-.01em;line-height:1.35;color:var(--p-ink);transition:color .3s var(--ease)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--blue-deep)}
+.faq summary .n{color:var(--blue-deep);font-size:10.5px}
+.pm{position:relative;width:12px;height:12px;align-self:center}
+.pm::before,.pm::after{content:'';position:absolute;left:0;top:50%;width:12px;height:1px;background:currentColor;transition:transform .35s var(--ease)}
+.pm::after{transform:rotate(90deg)}
+.faq details[open] .pm::after{transform:rotate(0)}
+.faq .a{padding:0 32px 26px 58px;font-size:15.5px;line-height:1.75;color:var(--p-ink-2);max-width:78ch}
+.faq .a b{font-weight:400;color:var(--p-ink)}
+
+/* ---------- final + footer ---------- */
+#final{padding-top:clamp(100px,16vh,170px);padding-bottom:clamp(120px,20vh,210px);text-align:center}
+#final .eyebrow{justify-content:center}
+#final h2.t{margin:0 auto;max-width:none;font-size:clamp(48px,8vw,124px);letter-spacing:-.045em}
+#final .sub{margin:24px auto 0;color:var(--ink-2)}
+#final .actions{justify-content:center;grid-template-columns:repeat(2,max-content);margin-top:40px}
+footer{position:relative;background:#000;border-top:1px solid var(--hair);padding-top:clamp(40px,6vh,64px);padding-bottom:calc(clamp(40px,6vh,64px) + env(safe-area-inset-bottom,0px))}
+.ft{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) auto;gap:clamp(24px,4vw,72px);align-items:start}
+.ft p{font-size:13px;line-height:1.75;color:var(--ink-3);max-width:66ch}
+.ft p + p{margin-top:12px}
+.ft nav{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:0}
+.ft nav a{color:var(--ink-2);text-decoration:none}
+.ft nav a:hover{color:#fff}
+.ft .mono.c{color:var(--ink-4);margin-top:16px}
+
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:90;max-width:min(560px,calc(100vw - 32px));transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  padding:14px 18px;background:#05070c;border:1px solid rgba(21,105,255,.6);color:#fff;font-size:10.5px;line-height:1.6;text-align:center;box-shadow:0 20px 60px -20px rgba(21,105,255,.6);transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1060px){
+  .links{display:none}
+  .hero{grid-template-columns:1fr;gap:48px;align-items:start}
+  .sheet{border-left:0;border-top:1px solid var(--hair);padding:24px 0 0}
+  .head{grid-template-columns:1fr;align-items:start;gap:20px}
+  .lvls{grid-template-columns:1fr;max-width:620px}
+  .pts.c4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pts.c4 .pt:nth-child(3){border-left:0}
+  .pts.c4 .pt:nth-child(n+3){border-top:1px solid var(--p-line)}
+  .lrow{grid-template-columns:52px minmax(0,1fr) auto;row-gap:10px}
+  .lrow p{grid-column:2 / 4;grid-row:2}
+  .dash{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dash > div:nth-child(3){grid-column:1 / -1;border-left:0;border-top:1px solid var(--p-line)}
+  .ver,.faqw{grid-template-columns:1fr}
+  .ver-l,.faqw .head{position:static}
+  .ft{grid-template-columns:1fr 1fr}
+  .ft > div:nth-child(2){grid-column:1 / -1;grid-row:2}
+}
+@media (max-width:760px){
+  .pts,.pts.c4{grid-template-columns:1fr}
+  .pt + .pt,.pts.c4 .pt:nth-child(n){border-left:0;border-top:1px solid var(--p-line)}
+  .pts.c4 .pt:first-child{border-top:0}
+  .pt{padding-left:0;padding-right:0}
+  .pt.claim{padding-left:18px;padding-right:18px}
+  .mis{grid-template-columns:1fr}
+  .dash{grid-template-columns:1fr}
+  .dash > div + div{border-left:0;border-top:1px solid var(--p-line)}
+  .pool{grid-template-columns:1fr}
+  .pool > div + div{border-left:0;border-top:1px solid var(--p-line)}
+  .podium{grid-template-columns:1fr}
+  .podium > div + div{border-left:0;border-top:1px solid var(--p-line)}
+  .podium > div{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:6px 16px}
+  .podium .rk{grid-column:1 / -1}
+  .podium strong{margin-top:10px}
+  .podium span.u{margin-top:0;text-align:right}
+  .dl{grid-template-columns:1fr;gap:12px}
+  .dl h3{white-space:normal}
+  .cards{grid-template-columns:1fr}
+  .band .ref{display:none}
+  .cap span + span{display:none}
+  .split{grid-template-columns:1fr;max-width:420px}
+  .split > div{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto auto;column-gap:16px;padding:16px 0}
+  .split > div + div{padding-left:0;border-left:0;border-top:1px solid var(--hair)}
+  .split .pc{grid-row:1 / 4;font-size:13px;padding-top:4px}
+  .split b,.split h3{margin-top:0}
+  .split h3{margin-top:8px}
+  #final .actions{grid-template-columns:minmax(0,1fr);max-width:360px;margin-left:auto;margin-right:auto}
+  .ft{grid-template-columns:1fr}
+  .ft > div:nth-child(2){grid-row:auto}
+  .faq summary{grid-template-columns:32px minmax(0,1fr) 14px;gap:10px;font-size:17px;padding:20px 0}
+  .faq .a{padding:0 0 22px 42px;font-size:15px}
+}
+@media (max-width:640px){
+  .brand .mono{display:none}
+  .nr{gap:8px}
+  .lang button{padding:8px 7px}
+  .docs{padding:9px 12px}
+  .actions{grid-template-columns:minmax(0,1fr)}
+  .btn{padding:15px 20px}
+  .lrow{grid-template-columns:minmax(0,1fr) auto}
+  .lrow .n{grid-column:1 / -1}
+  .lrow h3{grid-column:1;grid-row:2;align-self:center}
+  .lrow .v{grid-column:2;grid-row:2;font-size:40px}
+  .lrow p{grid-column:1 / -1;grid-row:3}
+  .d-st b{font-size:17px}
+  .tbl td{font-size:14px}
+  .tbl td.big{font-size:19px}
+  .tbl th{font-size:9px;letter-spacing:.1em}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="pv mono" data-i="pv">Test preview · not public · dashboard shows sample data · rules under legal review</div>
+
+<!-- ============ hero ============ -->
+<header class="stage" id="top">
+  <canvas class="grid" aria-hidden="true"></canvas>
+  <div class="vig" aria-hidden="true"></div>
+  <div class="lay">
+    <nav class="gut" aria-label="Main">
+      <a class="brand" href="https://sectoraorg.com" aria-label="Sectora Foundation">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" ry="9" fill="#1569ff"/><circle class="ring" cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+        <span class="mono"><b>Sectora</b>Airdrop · Genesis</span>
+      </a>
+      <div class="links mono">
+        <a href="#levels" data-i="n1">Levels</a>
+        <a href="#how" data-i="n2">How it works</a>
+        <a href="#pool" data-i="n3">Prize pool</a>
+        <a href="#top100" data-i="n4">Top 100</a>
+        <a href="#verify" data-i="n5">Verification</a>
+        <a href="#faq" data-i="n6">FAQ</a>
+      </div>
+      <div class="nr">
+        <div class="lang mono" role="group" aria-label="Language">
+          <button type="button" data-l="en" aria-pressed="true">EN</button>
+          <button type="button" data-l="es" aria-pressed="false">ES</button>
+          <button type="button" data-l="pt" aria-pressed="false">PT</button>
+        </div>
+        <a class="docs mono js-connect" href="#dash"><span data-i="nc">Connect wallet</span></a>
+      </div>
+    </nav>
+
+    <div class="hero gut">
+      <div>
+        <p class="eyebrow mono"><i></i><span data-i="h.e">Official campaign · Sectora Foundation, Illinois US</span></p>
+        <h1>Sectora Airdrop <span class="b"><em>Genesis</em></span></h1>
+        <div class="rule"></div>
+        <p class="lede" data-i="h.l"><b>2,000,000 SECT</b> for the first community of SectoraEVM. Join free, hold SECT in your own wallet to earn points every day, and claim when the blockchain launches. No deposits, no gas, no promised returns.</p>
+        <div class="actions">
+          <a class="btn btn-primary mono js-connect" href="#dash"><span data-i="b.join">Join free</span><span class="arrow">→</span></a>
+          <a class="btn btn-ghost mono" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener"><span data-i="b.buy">Buy SECT on Uniswap</span><span class="arrow">↗</span></a>
+          <a class="btn btn-guide mono" href="#how"><span class="gs" aria-hidden="true"><b></b><b></b><b></b><b></b></span><span data-i="b.how">How it works in one minute</span><span class="arrow">→</span></a>
+        </div>
+      </div>
+
+      <aside class="sheet" aria-label="Campaign sheet">
+        <h2><span data-i="sh.t">Campaign sheet</span><span>GN·01</span></h2>
+        <dl>
+          <dt data-i="sh.1">Prize pool</dt><dd><b><span data-n="2000000"></span> SECT</b></dd>
+          <dt data-i="sh.2">Levels</dt><dd>Scout · Sentinel · Guardian</dd>
+          <dt data-i="sh.3">Seasons</dt><dd data-i="sh.3v">3 × 30 days</dd>
+          <dt data-i="sh.4">Top 100</dt><dd data-i="sh.4v">up to <b>50,000 SECT</b></dd>
+          <dt data-i="sh.5">Pioneers</dt><dd data-i="sh.5v">first 1,000 wallets · <b>2×</b></dd>
+          <dt data-i="sh.6">Entry</dt><dd data-i="sh.6v">Free · no gas</dd>
+          <dt data-i="sh.7">Claim</dt><dd data-i="sh.7v">At SectoraEVM launch</dd>
+          <dt data-i="sh.8">Pool lock</dt><dd><span class="chip wait mono" data-i="st.pend">Pending</span></dd>
+        </dl>
+        <p class="note" data-i="sh.n">Points are not tokens. Your share depends on everyone's points at the end of the campaign. Rules under legal review.</p>
+      </aside>
+    </div>
+  </div>
+</header>
+
+<!-- ============ prize ============ -->
+<section class="stage gut" id="prize" aria-label="Prize pool">
+  <canvas class="grid" aria-hidden="true"></canvas>
+  <div class="vig" aria-hidden="true"></div>
+  <div class="horizon" aria-hidden="true"></div>
+  <div class="lay">
+    <p class="eyebrow mono"><i></i><span data-i="pz.e">Total prize pool</span><i></i></p>
+    <div class="big" data-n="2000000"></div>
+    <p class="big-u mono" data-i="pz.u">SECT · three seasons · one claim</p>
+    <div class="split">
+      <div><span class="pc mono">70%</span><b data-n="1400000"></b><h3 data-i="pz.1">Holders</h3><p class="mono" data-i="pz.1s">Sentinel &amp; Guardian · split by points</p></div>
+      <div><span class="pc mono">20%</span><b data-n="400000"></b><h3 data-i="pz.2">Top 100 referrers</h3><p class="mono" data-i="pz.2s">Fixed prizes by rank</p></div>
+      <div><span class="pc mono">10%</span><b data-n="200000"></b><h3 data-i="pz.3">Scouts</h3><p class="mono" data-i="pz.3s">Free participants · split by missions</p></div>
+    </div>
+  </div>
+</section>
+
+<main>
+<!-- ============ 01 levels ============ -->
+<section class="sec pp gut" id="levels">
+  <div class="spine" aria-hidden="true"><em><b>01</b><span></span></em><i></i></div>
+  <div class="in">
+    <div class="head">
+      <div>
+        <p class="eyebrow mono"><i></i><span data-i="lv.e">01 · Levels</span></p>
+        <h2 class="t" data-i="lv.h">Three levels. <b>Pick yours.</b></h2>
+      </div>
+      <p class="sub" data-i="lv.p">Everyone starts free. Holding SECT in <b>your own wallet</b> unlocks daily points. You never send your tokens to anyone.</p>
+    </div>
+
+    <div class="lvls">
+      <article class="lv">
+        <div class="lv-top mono"><span data-i="lv.k1">Level 1</span><span class="chip ink mono" data-i="lv.c1">Free</span></div>
+        <h3>Scout</h3>
+        <div class="req"><b data-i="lv.r1">Free</b><span class="mono" data-i="lv.r1s">No purchase · no gas · just sign</span></div>
+        <ul>
+          <li data-i="lv.1a">Missions worth up to <b>300 points</b></li>
+          <li data-i="lv.1b">Daily check-in: <b>+10 points</b></li>
+          <li data-i="lv.1c">Share of the <b>200,000 SECT</b> Scout pool</li>
+          <li data-i="lv.1d">Invite friends and climb the Top 100</li>
+        </ul>
+        <div class="rate mono"><span data-i="lv.rt">Holding points / day</span><b>0</b></div>
+        <a class="sb mono js-connect" href="#dash"><span data-i="lv.b1">Start free</span><i>→</i></a>
+      </article>
+
+      <article class="lv s">
+        <div class="lv-top mono"><span data-i="lv.k2">Level 2</span><span class="chip blue mono">≈ $50</span></div>
+        <h3>Sentinel</h3>
+        <div class="req"><b><span data-n="500"></span><small>SECT</small></b><span class="mono" data-i="lv.r2s">Held in your wallet · ~$0.10 per SECT, price varies</span></div>
+        <ul>
+          <li data-i="lv.2a">Everything in Scout</li>
+          <li data-i="lv.2b"><b>1 point a day</b> for every 100 SECT you hold</li>
+          <li data-i="lv.2c">Share of the <b>1,400,000 SECT</b> holders pool</li>
+          <li data-i="lv.2d">Streak power-up up to <b>2×</b></li>
+        </ul>
+        <div class="rate mono"><span data-i="lv.rt">Holding points / day</span><b>5</b></div>
+        <a class="sb mono js-connect" href="#dash"><span data-i="lv.b2">Become Sentinel</span><i>→</i></a>
+      </article>
+
+      <article class="lv g">
+        <div class="lv-top mono"><span data-i="lv.k3">Level 3</span><span class="chip blue mono" data-i="lv.c3">+50% points</span></div>
+        <h3>Guardian</h3>
+        <div class="req"><b><span data-n="1000"></span><small>SECT</small></b><span class="mono" data-i="lv.r3s">Held in your wallet · ≈ $100 at today's price</span></div>
+        <ul>
+          <li data-i="lv.3a">Everything in Sentinel</li>
+          <li data-i="lv.3b"><b>+50%</b> on every holding point</li>
+          <li data-i="lv.3c">Guardian badge on your share card</li>
+          <li data-i="lv.3d">The most points per SECT in the campaign</li>
+        </ul>
+        <div class="rate mono"><span data-i="lv.rt">Holding points / day</span><b>15</b></div>
+        <a class="sb go mono js-connect" href="#dash"><span data-i="lv.b3">Become Guardian</span><i>→</i></a>
+      </article>
+    </div>
+    <p class="lnote" data-i="lv.n">Minimums are counted in SECT, not dollars, in one snapshot a day. Dollar figures are approximate and change with the price. You can move up or down a level on any day.</p>
+  </div>
+</section>
+
+<!-- ============ 02 how it works ============ -->
+<section class="sec pp flat gut" id="how">
+  <div class="spine" aria-hidden="true"><em><b>02</b><span></span></em><i></i></div>
+  <div class="in">
+    <div class="head">
+      <div>
+        <p class="eyebrow mono"><i></i><span data-i="hw.e">02 · How it works</span></p>
+        <h2 class="t" data-i="hw.h">Three steps. <b>No deposits.</b></h2>
+      </div>
+      <p class="sub" data-i="hw.p">Points are counted from what is public on Ethereum: your balance and your activity. Nothing leaves your wallet.</p>
+    </div>
+    <ol class="pts">
+      <li class="pt"><span class="n mono">01</span><h3 data-i="hw.1h">Connect</h3><p data-i="hw.1p">Connect your wallet and sign a free message. It is not a transaction and costs no gas.</p><span class="fact mono" data-i="hw.1f">Signature only</span></li>
+      <li class="pt"><span class="n mono">02</span><h3 data-i="hw.2h">Hold and play</h3><p data-i="hw.2p">Keep SECT in your wallet and complete missions. A snapshot reads your balance once a day.</p><span class="fact mono" data-i="hw.2f">Daily snapshot</span></li>
+      <li class="pt"><span class="n mono">03</span><h3 data-i="hw.3h">Claim</h3><p data-i="hw.3p">When SectoraEVM launches you claim 50%. The other 50% unlocks 90 days later.</p><span class="fact mono">50% + 50%</span></li>
+    </ol>
+
+    <div class="doc mis-w">
+      <span class="fc a"></span><span class="fc b"></span><span class="fc c"></span><span class="fc d"></span>
+      <div class="band"><p class="eyebrow"><i></i><span data-i="ms.t">Missions</span></p><span class="sp"></span><span class="ref">Ref. SA·MS·01·26</span></div>
+      <ol class="mis">
+        <li><span class="n mono">01</span><div><h4 data-i="m1">Connect your wallet</h4><p data-i="m1p">Sign once to create your record.</p></div><b>50<small>PTS</small></b></li>
+        <li><span class="n mono">02</span><div><h4 data-i="m2">Follow Sectora on X</h4><p>@sectora__</p></div><b>25<small>PTS</small></b></li>
+        <li><span class="n mono">03</span><div><h4 data-i="m3">Join the Telegram</h4><p>t.me/sectoraorg</p></div><b>25<small>PTS</small></b></li>
+        <li><span class="n mono">04</span><div><h4 data-i="m4">Pass the Sectora quiz</h4><p data-i="m4p">Five questions about the project.</p></div><b>100<small>PTS</small></b></li>
+        <li><span class="n mono">05</span><div><h4 data-i="m5">Run a Shield Check</h4><p data-i="m5p">Scan any token or wallet with Sectora Shield.</p></div><b>50<small>PTS</small></b></li>
+        <li><span class="n mono">06</span><div><h4 data-i="m6">Try the SectoraEVM testnet</h4><p data-i="m6p">Send one test transaction.</p></div><b>50<small>PTS</small></b></li>
+        <li><span class="n mono">07</span><div><h4 data-i="m7">Daily check-in</h4><p data-i="m7p">Come back every day. One click.</p></div><b>+10<small data-i="m7u">/ DAY</small></b></li>
+      </ol>
+      <div class="cap"><span data-i="ms.c1">Missions count at every level</span><span data-i="ms.c2">300 points + 10 a day</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 power-ups ============ -->
+<section class="sec dk gut" id="power">
+  <div class="spine" aria-hidden="true"><em><b>03</b><span></span></em><i></i></div>
+  <div class="in">
+    <div class="head">
+      <div>
+        <p class="eyebrow mono"><i></i><span data-i="pu.e">03 · Power-ups</span></p>
+        <h2 class="t" data-i="pu.h">Multiply your points. <b>Four ways.</b></h2>
+      </div>
+      <p class="sub" data-i="pu.p">Multipliers reward people who stay. They apply to holding points, not to missions.</p>
+    </div>
+    <div class="ledger">
+      <div class="lrow"><span class="n mono">01</span><h3 data-i="pu.1h">Streak</h3><p data-i="pu.1p">+0.1× every 6 days you keep the minimum, up to 2× on day 60. If you drop below the minimum, it starts again.</p><div class="v">2×<small data-i="pu.max">maximum</small></div></div>
+      <div class="lrow"><span class="n mono">02</span><h3 data-i="pu.2h">Staking</h3><p data-i="pu.2p">SECT staked in the official Sectora staking contract counts double for points.</p><div class="v">2×<small data-i="pu.2v">staked SECT</small></div></div>
+      <div class="lrow"><span class="n mono">03</span><h3 data-i="pu.3h">Pioneers</h3><p data-i="pu.3p">The first 1,000 wallets to join keep 2× for the whole campaign.</p><div class="v">2×<small data-i="pu.3v">first 1,000</small></div></div>
+      <div class="lrow"><span class="n mono">04</span><h3 data-i="pu.4h">Squad</h3><p data-i="pu.4p">Bring 5 friends who reach Sentinel and your points go up 20%.</p><div class="v">1.2×<small data-i="pu.4v">5 friends</small></div></div>
+    </div>
+    <p class="xnote" data-i="pu.x"><b>Example.</b> A Guardian with 1,000 SECT earns 15 points a day. On day 60 of the streak that becomes <b>30 points a day</b>. The exact way multipliers combine will be in the final rules.</p>
+  </div>
+</section>
+
+<!-- ============ 04 dashboard ============ -->
+<section class="sec pp gut" id="dash">
+  <div class="spine" aria-hidden="true"><em><b>04</b><span></span></em><i></i></div>
+  <div class="in">
+    <div class="head">
+      <div>
+        <p class="eyebrow mono"><i></i><span data-i="db.e">04 · Your dashboard</span></p>
+        <h2 class="t" data-i="db.h">Everything in <b>one record.</b></h2>
+      </div>
+      <p class="sub" data-i="db.p">Your level, points, streak and invite link in one place. This preview uses sample data until the wallet connection goes live.</p>
+    </div>
+
+    <div class="doc">
+      <span class="fc a"></span><span class="fc b"></span><span class="fc c"></span><span class="fc d"></span>
+      <div class="band"><p class="eyebrow"><i></i><span data-i="db.t">Participant record</span></p><span class="sp"></span><span class="chip wait mono" data-i="db.smp">Sample data</span><span class="ref">Ref. SA·GN·0427</span></div>
+      <div class="dash">
+        <div>
+          <div class="lbl mono"><span data-i="db.lvl">Level</span><span>0x7a3f…c41e</span></div>
+          <div class="d-lv"><b id="dLvl">Sentinel</b><span class="chip blue mono" id="dSeat"></span></div>
+          <div class="d-pts"><b id="dPts"></b><span class="mono" data-i="db.pts">points · season 1</span></div>
+          <div class="d-st">
+            <div><b id="dRank"></b><span class="mono" data-i="db.rank">rank</span></div>
+            <div><b id="dBal"></b><span class="mono" data-i="db.bal">SECT held</span></div>
+            <div><b id="dRate"></b><span class="mono" data-i="db.rate">points / day</span></div>
+          </div>
+          <div class="meter">
+            <div class="lbl mono"><span data-i="db.stk">Streak</span><span id="dDay"></span></div>
+            <div class="cells" id="dCells"></div>
+            <div class="row mono"><span id="dNext"></span><b id="dMul"></b></div>
+          </div>
+        </div>
+        <div>
+          <div class="lbl mono"><span data-i="db.inv">Your invite link</span></div>
+          <div class="invite"><code id="dRef">sectoraorg.com/airdrop?r=0x7a3f…c41e</code><button type="button" class="mono" id="dCopy" data-i="db.copy">Copy</button></div>
+          <div class="squad">
+            <div class="lbl mono"><span data-i="db.sq">Squad · 1.2×</span><span id="dSq"></span></div>
+            <div class="cells" id="dSqCells"></div>
+          </div>
+          <ul class="chk" id="dMis"></ul>
+          <button type="button" class="sb go mono d-ci" id="dCi"><span data-i="db.ci">Daily check-in · +10</span><i>→</i></button>
+        </div>
+        <div>
+          <div class="lbl mono"><span data-i="db.card">Share card</span><span>1200 × 675</span></div>
+          <div class="cardw"><canvas id="card" width="1200" height="675" aria-label="Share card preview"></canvas></div>
+          <a class="sb mono d-sh" href="#" id="dShare"><span data-i="db.share">Share on X</span><i>↗</i></a>
+          <p class="d-n" data-i="db.cn">Your card changes with your level and streak. Every friend who joins from your link counts toward the Top 100.</p>
+        </div>
+      </div>
+      <div class="cap"><span data-i="db.c1">Snapshot every day · 00:00 UTC</span><span data-i="db.c2">Sample data · not a real wallet</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 prize pool ============ -->
+<section class="sec pp flat gut" id="pool">
+  <div class="spine" aria-hidden="true"><em><b>05</b><span></span></em><i></i></div>
+  <div class="in">
+    <div class="head">
+      <div>
+        <p class="eyebrow mono"><i></i><span data-i="pp.e">05 · Prize pool</span></p>
+        <h2 class="t" data-i="pp.h">Two million SECT. <b>Split three ways.</b></h2>
+      </div>
+      <p class="sub" data-i="pp.p">The pool is fixed before the campaign starts and comes from SECT that already exists. It does not grow with deposits, because there are none.</p>
+    </div>
+    <div class="doc">
+      <span class="fc a"></span><span class="fc b"></span><span class="fc c"></span><span class="fc d"></span>
+      <div class="band"><p class="eyebrow"><i></i><span data-i="pp.t">Allocation</span></p><span class="sp"></span><span class="ref">Ref. SA·PP·01·26</span></div>
+      <div class="pool">
+        <div>
+          <div class="num"><span data-n="2000000"></span><small data-i="pp.u">SECT · total prize pool</small></div>
+          <div class="alloc" aria-hidden="true"><i></i><i></i><i></i></div>
+          <ul class="leg mono">
+            <li><span data-i="pp.r1">Holders pool</span><span>70%</span></li>
+            <li><span data-i="pp.r2">Referral pool</span><span>20%</span></li>
+            <li><span data-i="pp.r3">Scout pool</span><span>10%</span></li>
+          </ul>
+        </div>
+        <div>
+          <table class="tbl">
+            <thead><tr><th data-i="pp.th1">Pool</th><th class="r" data-i="pp.th2">Share</th><th class="r">SECT</th></tr></thead>
+            <tbody>
+              <tr><td><b data-i="pp.r1">Holders pool</b><small data-i="pp.r1s">Sentinels and Guardians · split by points</small></td><td class="r">70%</td><td class="r big" data-n="1400000"></td></tr>
+              <tr><td><b data-i="pp.r2">Referral pool</b><small data-i="pp.r2s">Top 100 referrers · fixed prizes</small></td><td class="r">20%</td><td class="r big" data-n="400000"></td></tr>
+              <tr><td><b data-i="pp.r3">Scout pool</b><small data-i="pp.r3s">Free participants · split by mission points</small></td><td class="r">10%</td><td class="r big" data-n="200000"></td></tr>
+            </tbody>
+            <tfoot><tr><td data-i="pp.tot">Total</td><td class="r">100%</td><td class="r big" data-n="2000000"></td></tr></tfoot>
+          </table>
+        </div>
+      </div>
+      <div class="cap"><span data-i="pp.c1">Pool lock on Team Finance · pending</span><span data-i="pp.c2">The lock link will be published here before Season 1</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 top 100 ============ -->
+<section class="sec pp gut" id="top100">
+  <div class="spine" aria-hidden="true"><em><b>06</b><span></span></em><i></i></div>
+  <div class="in">
+    <div class="head">
+      <div>
+        <p class="eyebrow mono"><i></i><span data-i="tp.e">06 · Top 100</span></p>
+        <h2 class="t" data-i="tp.h">The best referrers. <b>Fixed prizes.</b></h2>
+      </div>
+      <p class="sub" data-i="tp.p">Ranked by valid referrals: friends who join with your link, reach Sentinel and pass the anti-bot check. Referrals earn points and a place in the ranking, <b>never money from the people you invite.</b></p>
+    </div>
+    <div class="doc">
+      <span class="fc a"></span><span class="fc b"></span><span class="fc c"></span><span class="fc d"></span>
+      <div class="band"><p class="eyebrow"><i></i><span data-i="tp.t">Top 100 referrers</span></p><span class="sp"></span><span class="ref">Ref. SA·LB·01·26</span></div>
+      <div class="podium">
+        <div><div class="rk mono"><span data-i="tp.p1">First place</span><b>#1</b></div><strong data-n="50000"></strong><span class="u mono">SECT</span></div>
+        <div><div class="rk mono"><span data-i="tp.p2">Second place</span><b>#2</b></div><strong data-n="30000"></strong><span class="u mono">SECT</span></div>
+        <div><div class="rk mono"><span data-i="tp.p3">Third place</span><b>#3</b></div><strong data-n="20000"></strong><span class="u mono">SECT</span></div>
+      </div>
+      <div class="tb-w">
+        <table class="tbl">
+          <thead><tr><th data-i="tp.th1">Rank</th><th class="r" data-i="tp.th2">Per wallet</th><th class="r" data-i="tp.th3">Wallets</th><th class="r" data-i="tp.th4">Subtotal</th></tr></thead>
+          <tbody id="ladder"></tbody>
+          <tfoot><tr><td>Top 100</td><td class="r"></td><td class="r">100</td><td class="r big" data-n="400000"></td></tr></tfoot>
+        </table>
+      </div>
+      <div class="cap"><span data-i="tp.c1">Valid referral = new wallet + Sentinel minimum + anti-bot check</span><span data-i="tp.c2">Points, not money</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 calendar ============ -->
+<section class="sec pp flat gut" id="calendar">
+  <div class="spine" aria-hidden="true"><em><b>07</b><span></span></em><i></i></div>
+  <div class="in">
+    <div class="head">
+      <div>
+        <p class="eyebrow mono"><i></i><span data-i="cl.e">07 · Calendar</span></p>
+        <h2 class="t" data-i="cl.h">Three seasons. <b>One claim.</b></h2>
+      </div>
+      <p class="sub" data-i="cl.p">Ninety days of campaign in three seasons of 30 days. Dates will be announced on X and Telegram before Season 1 opens.</p>
+    </div>
+    <ol class="pts c4">
+      <li class="pt"><span class="n mono" data-i="cl.s">Season</span><h3 data-i="cl.1h">Season 1</h3><p data-i="cl.1p">30 days. Pioneer seats open: the first 1,000 wallets lock in 2×.</p><span class="fact mono" data-i="cl.tbc">Date TBC</span></li>
+      <li class="pt"><span class="n mono" data-i="cl.s">Season</span><h3 data-i="cl.2h">Season 2</h3><p data-i="cl.2p">30 days. New missions. Your streak keeps running.</p><span class="fact mono" data-i="cl.tbc">Date TBC</span></li>
+      <li class="pt"><span class="n mono" data-i="cl.s">Season</span><h3 data-i="cl.3h">Season 3</h3><p data-i="cl.3p">30 days. The Top 100 ranking closes at the end.</p><span class="fact mono" data-i="cl.tbc">Date TBC</span></li>
+      <li class="pt claim"><span class="n mono" data-i="cl.4n">Claim</span><h3 data-i="cl.4h">SectoraEVM launch</h3><p data-i="cl.4p">50% of your SECT at launch, the other 50% 90 days later.</p><span class="fact mono">50% + 50%</span></li>
+    </ol>
+    <div class="dl">
+      <h3 data-i="cl.dh">Guaranteed deadline</h3>
+      <p data-i="cl.dp">If SectoraEVM is not live by the deadline, the claim opens on Ethereum instead. The date is fixed in the rules before Season 1.</p>
+      <span class="chip wait mono" data-i="cl.tbc">Date TBC</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 verification ============ -->
+<section class="sec dk gut" id="verify">
+  <div class="spine" aria-hidden="true"><em><b>08</b><span></span></em><i></i></div>
+  <div class="in ver">
+    <div class="ver-l">
+      <p class="eyebrow mono"><i></i><span data-i="vf.e">08 · Verification</span></p>
+      <h2 class="t" data-i="vf.h">Sounds too good? <b>Check it yourself.</b></h2>
+      <p class="sub" data-i="vf.p">A real airdrop gives away tokens that already exist and never asks you to send money. Here is what you can check today, and what is still pending.</p>
+      <div class="stats">
+        <div><b>06</b><span class="mono" data-i="vf.s1">public checks</span></div>
+        <div><b>00</b><span class="mono" data-i="vf.s2">deposits required</span></div>
+        <div><b>0%</b><span class="mono" data-i="vf.s3">promised return</span></div>
+      </div>
+    </div>
+    <div class="cards">
+      <article class="vc">
+        <div class="top"><span class="mono" data-i="vf.1k">Deposits</span><span class="chip ok mono" data-i="st.ok">Verifiable</span></div>
+        <h3 data-i="vf.1h">No deposits</h3>
+        <p data-i="vf.1p">You never send SECT or money to anyone. Your level is read from your public balance, in your own wallet.</p>
+        <p class="src mono"><b data-i="st.src">Source</b> · <span data-i="vf.1s">Ethereum · public balance</span></p>
+        <div class="lk mono"><a href="https://etherscan.io/token/0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener"><span data-i="vf.1l">SECT on Etherscan</span><i>↗</i></a></div>
+      </article>
+      <article class="vc pend">
+        <div class="top"><span class="mono" data-i="vf.2k">Prize pool</span><span class="chip wait mono" data-i="st.pend">Pending</span></div>
+        <h3 data-i="vf.2h">Rewards that already exist</h3>
+        <p data-i="vf.2p">The 2,000,000 SECT come from the existing supply. They will be locked on Team Finance before Season 1 and the link will appear here.</p>
+        <p class="src mono"><b data-i="st.src">Source</b> · Team Finance</p>
+        <div class="lk mono"><span class="soon" data-i="vf.2l">Lock link · coming before Season 1</span></div>
+      </article>
+      <article class="vc">
+        <div class="top"><span class="mono" data-i="vf.3k">Funding</span><span class="chip blue mono" data-i="st.rule">Rule</span></div>
+        <h3 data-i="vf.3h">Not paid with newcomers' money</h3>
+        <p data-i="vf.3p">Prizes come from a fixed pool set before the start. New participants never pay older ones. Nobody earns from anyone else's purchase.</p>
+        <p class="src mono"><b data-i="st.src">Source</b> · <span data-i="vf.3s">Campaign rules · fixed pool</span></p>
+        <div class="lk mono"><a href="#pool"><span data-i="vf.3l">See the allocation</span><i>→</i></a></div>
+      </article>
+      <article class="vc">
+        <div class="top"><span class="mono" data-i="vf.4k">Returns</span><span class="chip blue mono" data-i="st.rule">Rule</span></div>
+        <h3 data-i="vf.4h">No promised returns</h3>
+        <p data-i="vf.4p">We don't publish dollar values or percentages. Your share depends on total points, and the price of SECT can go down as well as up.</p>
+        <p class="src mono"><b data-i="st.src">Source</b> · <span data-i="vf.rs">Campaign rules</span></p>
+        <div class="lk mono"><a href="#faq"><span data-i="vf.4l">Read the FAQ</span><i>→</i></a></div>
+      </article>
+      <article class="vc">
+        <div class="top"><span class="mono" data-i="vf.5k">Referrals</span><span class="chip blue mono" data-i="st.rule">Rule</span></div>
+        <h3 data-i="vf.5h">Referrals earn points, not money</h3>
+        <p data-i="vf.5p">Inviting friends moves you up the ranking. You never receive a cut of what anyone buys, and there are no levels under you.</p>
+        <p class="src mono"><b data-i="st.src">Source</b> · <span data-i="vf.rs">Campaign rules</span></p>
+        <div class="lk mono"><a href="#top100"><span data-i="vf.5l">See the Top 100 prizes</span><i>→</i></a></div>
+      </article>
+      <article class="vc">
+        <div class="top"><span class="mono" data-i="vf.6k">Foundation</span><span class="chip ok mono" data-i="st.ok">Verifiable</span></div>
+        <h3 data-i="vf.6h">Registered, audited, liquidity locked</h3>
+        <p data-i="vf.6p">Sectora Foundation is registered in Illinois (file 18523639). The SECT contract was audited by Cyberscope, and the Uniswap liquidity is locked on Team Finance.</p>
+        <p class="src mono"><b data-i="st.src">Source</b> · Illinois · Cyberscope · Team Finance</p>
+        <div class="lk mono">
+          <a href="https://www.cyberscope.io/audits/sect" target="_blank" rel="noopener"><span data-i="vf.6a">Cyberscope audit</span><i>↗</i></a>
+          <a href="https://etherscan.io/nft/0xc36442b4a4522e871399cd717abdd847ab11fe88/1360231" target="_blank" rel="noopener"><span data-i="vf.6b">Locked liquidity position</span><i>↗</i></a>
+          <a href="/legal/"><span data-i="vf.6c">Legal information</span><i>→</i></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09 faq ============ -->
+<section class="sec pp gut" id="faq">
+  <div class="spine" aria-hidden="true"><em><b>09</b><span></span></em><i></i></div>
+  <div class="in faqw">
+    <div class="head">
+      <p class="eyebrow mono"><i></i><span data-i="fq.e">09 · FAQ</span></p>
+      <h2 class="t" data-i="fq.h">Simple <b>answers.</b></h2>
+      <p class="sub" data-i="fq.p">Still unsure? Ask in the Telegram. The team answers there.</p>
+    </div>
+    <div class="faq">
+      <details open><summary><span class="n mono">01</span><span data-i="q1">Is it really free?</span><span class="pm"></span></summary><p class="a" data-i="a1">Yes. The Scout level costs nothing and needs no gas: you only sign a message. Holding SECT is optional and unlocks more points.</p></details>
+      <details><summary><span class="n mono">02</span><span data-i="q2">Do I have to send my SECT anywhere?</span><span class="pm"></span></summary><p class="a" data-i="a2">No. Your SECT stays in your wallet. Once a day we read your public balance. If anyone asks you to send tokens for this airdrop, it is a scam.</p></details>
+      <details><summary><span class="n mono">03</span><span data-i="q3">How much will I get?</span><span class="pm"></span></summary><p class="a" data-i="a3">It depends on your points compared with everyone else's at the end of the campaign. Top 100 prizes are fixed by rank. We don't promise amounts in dollars.</p></details>
+      <details><summary><span class="n mono">04</span><span data-i="q4">When can I claim?</span><span class="pm"></span></summary><p class="a" data-i="a4">When SectoraEVM launches: 50% then, and 50% 90 days later. If the launch passes the guaranteed deadline, the claim opens on Ethereum.</p></details>
+      <details><summary><span class="n mono">05</span><span data-i="q5">What is a valid referral?</span><span class="pm"></span></summary><p class="a" data-i="a5">A friend who joins from your link with a new wallet, reaches the Sentinel minimum and passes the anti-bot check. Fake wallets are removed.</p></details>
+      <details><summary><span class="n mono">06</span><span data-i="q6">What if I sell below the minimum?</span><span class="pm"></span></summary><p class="a" data-i="a6">You keep the points you already earned. Your streak starts again and holding points stop until you are back above the minimum.</p></details>
+      <details><summary><span class="n mono">07</span><span data-i="q7">Who can take part?</span><span class="pm"></span></summary><p class="a" data-i="a7">Anyone where it is legal. The final rules, including any excluded countries, will be published after legal review and before Season 1.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ final ============ -->
+<section class="stage gut" id="final">
+  <canvas class="grid" aria-hidden="true"></canvas>
+  <div class="vig" aria-hidden="true"></div>
+  <div class="horizon" aria-hidden="true"></div>
+  <div class="lay">
+    <p class="eyebrow mono"><i></i><span data-i="fn.e">Season 1 · date to be announced</span><i></i></p>
+    <h2 class="t" data-i="fn.h">Get in <b>early.</b></h2>
+    <p class="sub" data-i="fn.p">The first 1,000 wallets keep 2× for the whole campaign. Joining is free.</p>
+    <div class="actions">
+      <a class="btn btn-primary mono js-connect" href="#dash"><span data-i="b.join">Join free</span><span class="arrow">→</span></a>
+      <a class="btn btn-ghost mono" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener"><span data-i="b.buy">Buy SECT on Uniswap</span><span class="arrow">↗</span></a>
+    </div>
+  </div>
+</section>
+
+<footer class="gut">
+  <div class="in ft">
+    <div>
+      <a class="brand" href="https://sectoraorg.com" aria-label="Sectora Foundation">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" ry="9" fill="#1569ff"/><circle class="ring" cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+      </a>
+      <p class="mono c" data-i="ft.1">Sectora Foundation · Illinois, US · File 18523639</p>
+    </div>
+    <div>
+      <p data-i="ft.2">Points have no cash value and are not an investment. The rules are under legal review and may change before Season 1. Not available where prohibited by law.</p>
+      <p data-i="ft.3">SECT is a utility token. Its price can go down as well as up. Never buy more than you can afford to lose.</p>
+    </div>
+    <nav class="mono" aria-label="Sectora">
+      <a href="https://x.com/sectora__" target="_blank" rel="noopener">X ↗</a>
+      <a href="https://t.me/sectoraorg" target="_blank" rel="noopener">Telegram ↗</a>
+      <a href="https://sectoraorg.com">sectoraorg.com</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="toast mono" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+var PREVIEW = true;
+var $ = function(s){ return document.querySelector(s); };
+var $$ = function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
+var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- copy ---------- */
+var T = {
+es:{
+pv:"Vista de prueba · no pública · el panel muestra datos de ejemplo · reglas en revisión legal",
+n1:"Niveles",n2:"Cómo funciona",n3:"Premios",n4:"Top 100",n5:"Verificación",n6:"Preguntas",nc:"Conectar wallet",
+"h.e":"Campaña oficial · Sectora Foundation, Illinois EE. UU.",
+"h.l":"<b>2.000.000 SECT</b> para la primera comunidad de SectoraEVM. Entra gratis, guarda SECT en tu propia wallet para sumar puntos cada día y reclama cuando se lance la blockchain. Sin depósitos, sin gas, sin rendimientos prometidos.",
+"b.join":"Entrar gratis","b.buy":"Comprar SECT en Uniswap","b.how":"Cómo funciona en un minuto",
+"sh.t":"Ficha de la campaña","sh.1":"Bolsa de premios","sh.2":"Niveles","sh.3":"Temporadas","sh.3v":"3 × 30 días","sh.4":"Top 100","sh.4v":"hasta <b>50.000 SECT</b>","sh.5":"Pioneros","sh.5v":"primeras 1.000 wallets · <b>2×</b>","sh.6":"Entrada","sh.6v":"Gratis · sin gas","sh.7":"Reclamo","sh.7v":"En el lanzamiento de SectoraEVM","sh.8":"Bloqueo bolsa",
+"st.pend":"Pendiente","st.ok":"Verificable","st.rule":"Regla","st.src":"Fuente",
+"sh.n":"Los puntos no son tokens. Tu parte depende de los puntos de todos al final de la campaña. Reglas en revisión legal.",
+"pz.e":"Bolsa total de premios","pz.u":"SECT · tres temporadas · un reclamo","pz.1":"Holders","pz.1s":"Sentinel y Guardian · según puntos","pz.2":"Top 100 referidores","pz.2s":"Premios fijos por puesto","pz.3":"Scouts","pz.3s":"Participantes gratis · según misiones",
+"lv.e":"01 · Niveles","lv.h":"Tres niveles. <b>Elige el tuyo.</b>","lv.p":"Todos empiezan gratis. Guardar SECT en <b>tu propia wallet</b> desbloquea puntos diarios. Nunca envías tus tokens a nadie.",
+"lv.k1":"Nivel 1","lv.c1":"Gratis","lv.r1":"Gratis","lv.r1s":"Sin compra · sin gas · solo firmar",
+"lv.1a":"Misiones de hasta <b>300 puntos</b>","lv.1b":"Check-in diario: <b>+10 puntos</b>","lv.1c":"Parte de la bolsa Scout de <b>200.000 SECT</b>","lv.1d":"Invita amigos y sube en el Top 100",
+"lv.rt":"Puntos por holding / día","lv.b1":"Empezar gratis",
+"lv.k2":"Nivel 2","lv.r2s":"En tu wallet · ~0,10 $ por SECT, el precio varía",
+"lv.2a":"Todo lo de Scout","lv.2b":"<b>1 punto al día</b> por cada 100 SECT","lv.2c":"Parte de la bolsa de holders de <b>1.400.000 SECT</b>","lv.2d":"Power-up de racha hasta <b>2×</b>","lv.b2":"Ser Sentinel",
+"lv.k3":"Nivel 3","lv.c3":"+50% puntos","lv.r3s":"En tu wallet · ≈ 100 $ al precio de hoy",
+"lv.3a":"Todo lo de Sentinel","lv.3b":"<b>+50%</b> en cada punto por holding","lv.3c":"Insignia Guardian en tu tarjeta","lv.3d":"Los puntos más altos por SECT de la campaña","lv.b3":"Ser Guardian",
+"lv.n":"Los mínimos se cuentan en SECT, no en dólares, con una foto al día. Las cifras en dólares son aproximadas y cambian con el precio. Puedes subir o bajar de nivel cualquier día.",
+"hw.e":"02 · Cómo funciona","hw.h":"Tres pasos. <b>Sin depósitos.</b>","hw.p":"Los puntos se cuentan con lo que es público en Ethereum: tu saldo y tu actividad. Nada sale de tu wallet.",
+"hw.1h":"Conecta","hw.1p":"Conecta tu wallet y firma un mensaje gratis. No es una transacción y no cuesta gas.","hw.1f":"Solo firma",
+"hw.2h":"Guarda y juega","hw.2p":"Mantén SECT en tu wallet y completa misiones. Una foto lee tu saldo una vez al día.","hw.2f":"Foto diaria",
+"hw.3h":"Reclama","hw.3p":"Cuando se lance SectoraEVM reclamas el 50%. El otro 50% se libera 90 días después.",
+"ms.t":"Misiones",m1:"Conecta tu wallet",m1p:"Firma una vez para crear tu registro.",m2:"Sigue a Sectora en X",m3:"Únete al Telegram",m4:"Pasa el quiz de Sectora",m4p:"Cinco preguntas sobre el proyecto.",m5:"Haz un Shield Check",m5p:"Escanea cualquier token o wallet con Sectora Shield.",m6:"Prueba la testnet de SectoraEVM",m6p:"Envía una transacción de prueba.",m7:"Check-in diario",m7p:"Vuelve cada día. Un clic.",m7u:"/ DÍA",
+"ms.c1":"Las misiones cuentan en todos los niveles","ms.c2":"300 puntos + 10 al día",
+"pu.e":"03 · Power-ups","pu.h":"Multiplica tus puntos. <b>Cuatro formas.</b>","pu.p":"Los multiplicadores premian a quien se queda. Se aplican a los puntos por holding, no a las misiones.",
+"pu.1h":"Racha","pu.1p":"+0,1× cada 6 días que mantienes el mínimo, hasta 2× el día 60. Si bajas del mínimo, empieza de nuevo.","pu.max":"máximo",
+"pu.2h":"Staking","pu.2p":"Los SECT en el contrato oficial de staking de Sectora cuentan doble para puntos.","pu.2v":"SECT en staking",
+"pu.3h":"Pioneros","pu.3p":"Las primeras 1.000 wallets en entrar mantienen 2× toda la campaña.","pu.3v":"primeras 1.000",
+"pu.4h":"Escuadrón","pu.4p":"Trae 5 amigos que lleguen a Sentinel y tus puntos suben un 20%.","pu.4v":"5 amigos",
+"pu.x":"<b>Ejemplo.</b> Un Guardian con 1.000 SECT gana 15 puntos al día. El día 60 de racha pasan a <b>30 puntos al día</b>. Cómo se combinan los multiplicadores estará en las reglas finales.",
+"db.e":"04 · Tu panel","db.h":"Todo en <b>un registro.</b>","db.p":"Tu nivel, puntos, racha y enlace de invitación en un solo lugar. Esta vista usa datos de ejemplo hasta que se active la conexión de wallet.",
+"db.t":"Registro del participante","db.smp":"Datos de ejemplo","db.lvl":"Nivel","db.pts":"puntos · temporada 1","db.rank":"puesto","db.bal":"SECT guardados","db.rate":"puntos / día","db.stk":"Racha",
+"db.inv":"Tu enlace de invitación","db.copy":"Copiar","db.sq":"Escuadrón · 1,2×","db.ci":"Check-in diario · +10","db.card":"Tarjeta para compartir","db.share":"Compartir en X",
+"db.cn":"Tu tarjeta cambia con tu nivel y tu racha. Cada amigo que entra con tu enlace cuenta para el Top 100.","db.c1":"Foto cada día · 00:00 UTC","db.c2":"Datos de ejemplo · no es una wallet real",
+"pp.e":"05 · Premios","pp.h":"Dos millones de SECT. <b>En tres partes.</b>","pp.p":"La bolsa se fija antes de empezar y sale de SECT que ya existen. No crece con depósitos, porque no hay depósitos.",
+"pp.t":"Reparto","pp.u":"SECT · bolsa total de premios","pp.r1":"Bolsa de holders","pp.r2":"Bolsa de referidos","pp.r3":"Bolsa Scout","pp.th1":"Bolsa","pp.th2":"Parte",
+"pp.r1s":"Sentinels y Guardians · según puntos","pp.r2s":"Top 100 referidores · premios fijos","pp.r3s":"Participantes gratis · según puntos de misiones","pp.tot":"Total",
+"pp.c1":"Bloqueo de la bolsa en Team Finance · pendiente","pp.c2":"El enlace del bloqueo se publicará aquí antes de la temporada 1",
+"tp.e":"06 · Top 100","tp.h":"Los mejores referidores. <b>Premios fijos.</b>","tp.p":"Ranking por referidos válidos: amigos que entran con tu enlace, llegan a Sentinel y pasan el control anti-bots. Los referidos dan puntos y puesto en el ranking, <b>nunca dinero de las personas que invitas.</b>",
+"tp.t":"Top 100 referidores","tp.p1":"Primer puesto","tp.p2":"Segundo puesto","tp.p3":"Tercer puesto","tp.th1":"Puesto","tp.th2":"Por wallet","tp.th3":"Wallets","tp.th4":"Subtotal",
+"tp.c1":"Referido válido = wallet nueva + mínimo Sentinel + control anti-bots","tp.c2":"Puntos, no dinero",
+"cl.e":"07 · Calendario","cl.h":"Tres temporadas. <b>Un reclamo.</b>","cl.p":"Noventa días de campaña en tres temporadas de 30 días. Las fechas se anunciarán en X y Telegram antes de abrir la temporada 1.",
+"cl.s":"Temporada","cl.1h":"Temporada 1","cl.1p":"30 días. Se abren los puestos de pionero: las primeras 1.000 wallets aseguran 2×.","cl.tbc":"Fecha por confirmar",
+"cl.2h":"Temporada 2","cl.2p":"30 días. Misiones nuevas. Tu racha sigue contando.","cl.3h":"Temporada 3","cl.3p":"30 días. El ranking del Top 100 se cierra al final.",
+"cl.4n":"Reclamo","cl.4h":"Lanzamiento de SectoraEVM","cl.4p":"El 50% de tus SECT en el lanzamiento y el otro 50% 90 días después.",
+"cl.dh":"Fecha límite garantizada","cl.dp":"Si SectoraEVM no está activa en la fecha límite, el reclamo se abre en Ethereum. La fecha se fija en las reglas antes de la temporada 1.",
+"vf.e":"08 · Verificación","vf.h":"¿Suena demasiado bien? <b>Compruébalo tú.</b>","vf.p":"Un airdrop de verdad regala tokens que ya existen y nunca te pide enviar dinero. Esto es lo que puedes comprobar hoy y lo que aún está pendiente.",
+"vf.s1":"comprobaciones públicas","vf.s2":"depósitos exigidos","vf.s3":"rendimiento prometido",
+"vf.1k":"Depósitos","vf.1h":"Sin depósitos","vf.1p":"Nunca envías SECT ni dinero a nadie. Tu nivel se lee de tu saldo público, en tu propia wallet.","vf.1s":"Ethereum · saldo público","vf.1l":"SECT en Etherscan",
+"vf.2k":"Bolsa de premios","vf.2h":"Premios que ya existen","vf.2p":"Los 2.000.000 SECT salen del suministro que ya existe. Se bloquearán en Team Finance antes de la temporada 1 y el enlace aparecerá aquí.","vf.2l":"Enlace del bloqueo · antes de la temporada 1",
+"vf.3k":"Financiación","vf.3h":"No se paga con el dinero de los nuevos","vf.3p":"Los premios salen de una bolsa fija definida antes de empezar. Los nuevos nunca pagan a los anteriores. Nadie gana con la compra de otro.","vf.3s":"Reglas de la campaña · bolsa fija","vf.3l":"Ver el reparto","vf.rs":"Reglas de la campaña",
+"vf.4k":"Rendimientos","vf.4h":"Sin rendimientos prometidos","vf.4p":"No publicamos cifras en dólares ni porcentajes. Tu parte depende del total de puntos, y el precio de SECT puede bajar o subir.","vf.4l":"Leer las preguntas",
+"vf.5k":"Referidos","vf.5h":"Los referidos dan puntos, no dinero","vf.5p":"Invitar amigos te sube en el ranking. Nunca recibes una parte de lo que otro compra y no hay niveles por debajo de ti.","vf.5l":"Ver los premios del Top 100",
+"vf.6k":"Fundación","vf.6h":"Registrada, auditada y con liquidez bloqueada","vf.6p":"Sectora Foundation está registrada en Illinois (expediente 18523639). El contrato de SECT fue auditado por Cyberscope y la liquidez de Uniswap está bloqueada en Team Finance.","vf.6a":"Auditoría de Cyberscope","vf.6b":"Posición de liquidez bloqueada","vf.6c":"Información legal",
+"fq.e":"09 · Preguntas","fq.h":"Respuestas <b>simples.</b>","fq.p":"¿Aún con dudas? Pregunta en el Telegram. El equipo responde allí.",
+q1:"¿De verdad es gratis?",a1:"Sí. El nivel Scout no cuesta nada ni necesita gas: solo firmas un mensaje. Guardar SECT es opcional y desbloquea más puntos.",
+q2:"¿Tengo que enviar mis SECT a algún sitio?",a2:"No. Tus SECT se quedan en tu wallet. Una vez al día leemos tu saldo público. Si alguien te pide enviar tokens para este airdrop, es una estafa.",
+q3:"¿Cuánto voy a recibir?",a3:"Depende de tus puntos comparados con los de todos al final de la campaña. Los premios del Top 100 son fijos por puesto. No prometemos cantidades en dólares.",
+q4:"¿Cuándo puedo reclamar?",a4:"Cuando se lance SectoraEVM: el 50% en ese momento y el otro 50% 90 días después. Si el lanzamiento pasa la fecha límite garantizada, el reclamo se abre en Ethereum.",
+q5:"¿Qué es un referido válido?",a5:"Un amigo que entra con tu enlace con una wallet nueva, llega al mínimo de Sentinel y pasa el control anti-bots. Las wallets falsas se eliminan.",
+q6:"¿Y si vendo por debajo del mínimo?",a6:"Conservas los puntos que ya ganaste. Tu racha empieza de nuevo y los puntos por holding se detienen hasta que vuelvas a superar el mínimo.",
+q7:"¿Quién puede participar?",a7:"Cualquier persona donde sea legal. Las reglas finales, incluidos los países excluidos, se publicarán tras la revisión legal y antes de la temporada 1.",
+"fn.e":"Temporada 1 · fecha por anunciar","fn.h":"Entra <b>temprano.</b>","fn.p":"Las primeras 1.000 wallets mantienen 2× toda la campaña. Entrar es gratis.",
+"ft.1":"Sectora Foundation · Illinois, EE. UU. · Expediente 18523639","ft.2":"Los puntos no tienen valor monetario y no son una inversión. Las reglas están en revisión legal y pueden cambiar antes de la temporada 1. No disponible donde la ley lo prohíba.","ft.3":"SECT es un token de utilidad. Su precio puede bajar o subir. Nunca compres más de lo que puedas permitirte perder."
+},
+pt:{
+pv:"Prévia de teste · não pública · o painel mostra dados de exemplo · regras em revisão jurídica",
+n1:"Níveis",n2:"Como funciona",n3:"Prêmios",n4:"Top 100",n5:"Verificação",n6:"Perguntas",nc:"Conectar carteira",
+"h.e":"Campanha oficial · Sectora Foundation, Illinois EUA",
+"h.l":"<b>2.000.000 SECT</b> para a primeira comunidade da SectoraEVM. Entre grátis, guarde SECT na sua própria carteira para somar pontos todo dia e resgate quando a blockchain for lançada. Sem depósitos, sem gas, sem retornos prometidos.",
+"b.join":"Entrar grátis","b.buy":"Comprar SECT na Uniswap","b.how":"Como funciona em um minuto",
+"sh.t":"Ficha da campanha","sh.1":"Prêmios","sh.2":"Níveis","sh.3":"Temporadas","sh.3v":"3 × 30 dias","sh.4":"Top 100","sh.4v":"até <b>50.000 SECT</b>","sh.5":"Pioneiros","sh.5v":"primeiras 1.000 carteiras · <b>2×</b>","sh.6":"Entrada","sh.6v":"Grátis · sem gas","sh.7":"Resgate","sh.7v":"No lançamento da SectoraEVM","sh.8":"Bloqueio",
+"st.pend":"Pendente","st.ok":"Verificável","st.rule":"Regra","st.src":"Fonte",
+"sh.n":"Pontos não são tokens. Sua parte depende dos pontos de todos no fim da campanha. Regras em revisão jurídica.",
+"pz.e":"Total de prêmios","pz.u":"SECT · três temporadas · um resgate","pz.1":"Holders","pz.1s":"Sentinel e Guardian · por pontos","pz.2":"Top 100 indicadores","pz.2s":"Prêmios fixos por posição","pz.3":"Scouts","pz.3s":"Participantes grátis · por missões",
+"lv.e":"01 · Níveis","lv.h":"Três níveis. <b>Escolha o seu.</b>","lv.p":"Todos começam grátis. Guardar SECT na <b>sua própria carteira</b> libera pontos diários. Você nunca envia seus tokens para ninguém.",
+"lv.k1":"Nível 1","lv.c1":"Grátis","lv.r1":"Grátis","lv.r1s":"Sem compra · sem gas · só assinar",
+"lv.1a":"Missões de até <b>300 pontos</b>","lv.1b":"Check-in diário: <b>+10 pontos</b>","lv.1c":"Parte do pool Scout de <b>200.000 SECT</b>","lv.1d":"Convide amigos e suba no Top 100",
+"lv.rt":"Pontos por holding / dia","lv.b1":"Começar grátis",
+"lv.k2":"Nível 2","lv.r2s":"Na sua carteira · ~US$ 0,10 por SECT, o preço varia",
+"lv.2a":"Tudo do Scout","lv.2b":"<b>1 ponto por dia</b> a cada 100 SECT","lv.2c":"Parte do pool de holders de <b>1.400.000 SECT</b>","lv.2d":"Power-up de sequência até <b>2×</b>","lv.b2":"Ser Sentinel",
+"lv.k3":"Nível 3","lv.c3":"+50% pontos","lv.r3s":"Na sua carteira · ≈ US$ 100 no preço de hoje",
+"lv.3a":"Tudo do Sentinel","lv.3b":"<b>+50%</b> em cada ponto por holding","lv.3c":"Selo Guardian no seu cartão","lv.3d":"Os maiores pontos por SECT da campanha","lv.b3":"Ser Guardian",
+"lv.n":"Os mínimos contam em SECT, não em dólares, com uma foto por dia. Valores em dólar são aproximados e mudam com o preço. Você pode subir ou descer de nível qualquer dia.",
+"hw.e":"02 · Como funciona","hw.h":"Três passos. <b>Sem depósitos.</b>","hw.p":"Os pontos são contados com o que é público na Ethereum: seu saldo e sua atividade. Nada sai da sua carteira.",
+"hw.1h":"Conecte","hw.1p":"Conecte sua carteira e assine uma mensagem grátis. Não é uma transação e não custa gas.","hw.1f":"Só assinatura",
+"hw.2h":"Guarde e jogue","hw.2p":"Mantenha SECT na carteira e complete missões. Uma foto lê seu saldo uma vez por dia.","hw.2f":"Foto diária",
+"hw.3h":"Resgate","hw.3p":"Quando a SectoraEVM for lançada você resgata 50%. Os outros 50% liberam 90 dias depois.",
+"ms.t":"Missões",m1:"Conecte sua carteira",m1p:"Assine uma vez para criar seu registro.",m2:"Siga a Sectora no X",m3:"Entre no Telegram",m4:"Passe no quiz da Sectora",m4p:"Cinco perguntas sobre o projeto.",m5:"Faça um Shield Check",m5p:"Escaneie qualquer token ou carteira com o Sectora Shield.",m6:"Teste a testnet da SectoraEVM",m6p:"Envie uma transação de teste.",m7:"Check-in diário",m7p:"Volte todo dia. Um clique.",m7u:"/ DIA",
+"ms.c1":"Missões contam em todos os níveis","ms.c2":"300 pontos + 10 por dia",
+"pu.e":"03 · Power-ups","pu.h":"Multiplique seus pontos. <b>Quatro formas.</b>","pu.p":"Os multiplicadores premiam quem fica. Valem para pontos por holding, não para missões.",
+"pu.1h":"Sequência","pu.1p":"+0,1× a cada 6 dias mantendo o mínimo, até 2× no dia 60. Se cair abaixo do mínimo, recomeça.","pu.max":"máximo",
+"pu.2h":"Staking","pu.2p":"SECT no contrato oficial de staking da Sectora conta em dobro para pontos.","pu.2v":"SECT em staking",
+"pu.3h":"Pioneiros","pu.3p":"As primeiras 1.000 carteiras a entrar mantêm 2× a campanha inteira.","pu.3v":"primeiras 1.000",
+"pu.4h":"Esquadrão","pu.4p":"Traga 5 amigos que cheguem a Sentinel e seus pontos sobem 20%.","pu.4v":"5 amigos",
+"pu.x":"<b>Exemplo.</b> Um Guardian com 1.000 SECT ganha 15 pontos por dia. No dia 60 de sequência vira <b>30 pontos por dia</b>. Como os multiplicadores se combinam estará nas regras finais.",
+"db.e":"04 · Seu painel","db.h":"Tudo em <b>um registro.</b>","db.p":"Seu nível, pontos, sequência e link de convite num só lugar. Esta prévia usa dados de exemplo até a conexão de carteira entrar no ar.",
+"db.t":"Registro do participante","db.smp":"Dados de exemplo","db.lvl":"Nível","db.pts":"pontos · temporada 1","db.rank":"posição","db.bal":"SECT guardados","db.rate":"pontos / dia","db.stk":"Sequência",
+"db.inv":"Seu link de convite","db.copy":"Copiar","db.sq":"Esquadrão · 1,2×","db.ci":"Check-in diário · +10","db.card":"Cartão para compartilhar","db.share":"Compartilhar no X",
+"db.cn":"Seu cartão muda com seu nível e sua sequência. Cada amigo que entra pelo seu link conta para o Top 100.","db.c1":"Foto todo dia · 00:00 UTC","db.c2":"Dados de exemplo · não é uma carteira real",
+"pp.e":"05 · Prêmios","pp.h":"Dois milhões de SECT. <b>Em três partes.</b>","pp.p":"O pool é fixado antes do início e vem de SECT que já existem. Ele não cresce com depósitos, porque não há depósitos.",
+"pp.t":"Distribuição","pp.u":"SECT · total de prêmios","pp.r1":"Pool de holders","pp.r2":"Pool de indicações","pp.r3":"Pool Scout","pp.th1":"Pool","pp.th2":"Parte",
+"pp.r1s":"Sentinels e Guardians · por pontos","pp.r2s":"Top 100 indicadores · prêmios fixos","pp.r3s":"Participantes grátis · por pontos de missões","pp.tot":"Total",
+"pp.c1":"Bloqueio do pool na Team Finance · pendente","pp.c2":"O link do bloqueio será publicado aqui antes da temporada 1",
+"tp.e":"06 · Top 100","tp.h":"Os melhores indicadores. <b>Prêmios fixos.</b>","tp.p":"Ranking por indicações válidas: amigos que entram pelo seu link, chegam a Sentinel e passam no controle anti-bots. Indicações dão pontos e posição no ranking, <b>nunca dinheiro das pessoas que você convida.</b>",
+"tp.t":"Top 100 indicadores","tp.p1":"Primeiro lugar","tp.p2":"Segundo lugar","tp.p3":"Terceiro lugar","tp.th1":"Posição","tp.th2":"Por carteira","tp.th3":"Carteiras","tp.th4":"Subtotal",
+"tp.c1":"Indicação válida = carteira nova + mínimo Sentinel + controle anti-bots","tp.c2":"Pontos, não dinheiro",
+"cl.e":"07 · Calendário","cl.h":"Três temporadas. <b>Um resgate.</b>","cl.p":"Noventa dias de campanha em três temporadas de 30 dias. As datas serão anunciadas no X e no Telegram antes da temporada 1.",
+"cl.s":"Temporada","cl.1h":"Temporada 1","cl.1p":"30 dias. Abrem as vagas de pioneiro: as primeiras 1.000 carteiras garantem 2×.","cl.tbc":"Data a confirmar",
+"cl.2h":"Temporada 2","cl.2p":"30 dias. Missões novas. Sua sequência continua.","cl.3h":"Temporada 3","cl.3p":"30 dias. O ranking do Top 100 fecha no final.",
+"cl.4n":"Resgate","cl.4h":"Lançamento da SectoraEVM","cl.4p":"50% dos seus SECT no lançamento e os outros 50% 90 dias depois.",
+"cl.dh":"Prazo garantido","cl.dp":"Se a SectoraEVM não estiver no ar até o prazo, o resgate abre na Ethereum. A data é fixada nas regras antes da temporada 1.",
+"vf.e":"08 · Verificação","vf.h":"Bom demais para ser verdade? <b>Confira você mesmo.</b>","vf.p":"Um airdrop de verdade distribui tokens que já existem e nunca pede para você enviar dinheiro. Veja o que dá para conferir hoje e o que ainda está pendente.",
+"vf.s1":"verificações públicas","vf.s2":"depósitos exigidos","vf.s3":"retorno prometido",
+"vf.1k":"Depósitos","vf.1h":"Sem depósitos","vf.1p":"Você nunca envia SECT nem dinheiro para ninguém. Seu nível é lido do seu saldo público, na sua própria carteira.","vf.1s":"Ethereum · saldo público","vf.1l":"SECT no Etherscan",
+"vf.2k":"Prêmios","vf.2h":"Prêmios que já existem","vf.2p":"Os 2.000.000 SECT vêm do supply que já existe. Serão bloqueados na Team Finance antes da temporada 1 e o link aparecerá aqui.","vf.2l":"Link do bloqueio · antes da temporada 1",
+"vf.3k":"Financiamento","vf.3h":"Não é pago com dinheiro dos novatos","vf.3p":"Os prêmios vêm de um pool fixo definido antes do início. Novos participantes nunca pagam os antigos. Ninguém ganha com a compra de outra pessoa.","vf.3s":"Regras da campanha · pool fixo","vf.3l":"Ver a distribuição","vf.rs":"Regras da campanha",
+"vf.4k":"Retornos","vf.4h":"Sem retornos prometidos","vf.4p":"Não publicamos valores em dólar nem porcentagens. Sua parte depende do total de pontos, e o preço do SECT pode cair ou subir.","vf.4l":"Ler as perguntas",
+"vf.5k":"Indicações","vf.5h":"Indicações dão pontos, não dinheiro","vf.5p":"Convidar amigos faz você subir no ranking. Você nunca recebe parte do que outra pessoa compra e não há níveis abaixo de você.","vf.5l":"Ver os prêmios do Top 100",
+"vf.6k":"Fundação","vf.6h":"Registrada, auditada e com liquidez bloqueada","vf.6p":"A Sectora Foundation é registrada em Illinois (arquivo 18523639). O contrato do SECT foi auditado pela Cyberscope e a liquidez da Uniswap está bloqueada na Team Finance.","vf.6a":"Auditoria da Cyberscope","vf.6b":"Posição de liquidez bloqueada","vf.6c":"Informações legais",
+"fq.e":"09 · Perguntas","fq.h":"Respostas <b>simples.</b>","fq.p":"Ainda com dúvidas? Pergunte no Telegram. A equipe responde lá.",
+q1:"É grátis mesmo?",a1:"Sim. O nível Scout não custa nada e não precisa de gas: você só assina uma mensagem. Guardar SECT é opcional e libera mais pontos.",
+q2:"Preciso enviar meus SECT para algum lugar?",a2:"Não. Seus SECT ficam na sua carteira. Uma vez por dia lemos seu saldo público. Se alguém pedir para você enviar tokens para este airdrop, é golpe.",
+q3:"Quanto vou receber?",a3:"Depende dos seus pontos comparados com os de todos no fim da campanha. Os prêmios do Top 100 são fixos por posição. Não prometemos valores em dólar.",
+q4:"Quando posso resgatar?",a4:"No lançamento da SectoraEVM: 50% nesse momento e 50% 90 dias depois. Se o lançamento passar do prazo garantido, o resgate abre na Ethereum.",
+q5:"O que é uma indicação válida?",a5:"Um amigo que entra pelo seu link com uma carteira nova, chega ao mínimo de Sentinel e passa no controle anti-bots. Carteiras falsas são removidas.",
+q6:"E se eu vender abaixo do mínimo?",a6:"Você mantém os pontos que já ganhou. Sua sequência recomeça e os pontos por holding param até você voltar acima do mínimo.",
+q7:"Quem pode participar?",a7:"Qualquer pessoa onde for legal. As regras finais, incluindo países excluídos, serão publicadas após a revisão jurídica e antes da temporada 1.",
+"fn.e":"Temporada 1 · data a anunciar","fn.h":"Entre <b>cedo.</b>","fn.p":"As primeiras 1.000 carteiras mantêm 2× a campanha inteira. Entrar é grátis.",
+"ft.1":"Sectora Foundation · Illinois, EUA · Arquivo 18523639","ft.2":"Pontos não têm valor monetário e não são um investimento. As regras estão em revisão jurídica e podem mudar antes da temporada 1. Indisponível onde a lei proibir.","ft.3":"SECT é um token de utilidade. O preço pode cair ou subir. Nunca compre mais do que pode perder."
+}
+};
+
+/* strings built in script */
+var D = {
+en:{loc:"en-US",seat:"Pioneer #{n}",day:"Day {d} of 60",next:"+0.1× in {n} days",next1:"+0.1× tomorrow",max:"Maximum reached",sq:"{n} of 5",
+  mis:["Connect your wallet","Follow Sectora on X","Join the Telegram","Pass the Sectora quiz","Run a Shield Check","Try the testnet"],
+  ci:"Checked in today",copied:"Invite link copied",ciT:"+10 points · see you tomorrow",
+  pvConnect:"Preview: wallet connection is not live yet. Showing sample data.",pvShare:"Preview: sharing is off until the campaign is public.",
+  lv:["Scout","Sentinel","Guardian"],c:{lvl:"Level",k:"Sectora Airdrop · Genesis",pts:"points",stk:"day streak",rk:"rank",cta:"Join free"}},
+es:{loc:"es-ES",seat:"Pionero #{n}",day:"Día {d} de 60",next:"+0,1× en {n} días",next1:"+0,1× mañana",max:"Máximo alcanzado",sq:"{n} de 5",
+  mis:["Conecta tu wallet","Sigue a Sectora en X","Únete al Telegram","Pasa el quiz de Sectora","Haz un Shield Check","Prueba la testnet"],
+  ci:"Check-in hecho hoy",copied:"Enlace de invitación copiado",ciT:"+10 puntos · hasta mañana",
+  pvConnect:"Vista previa: la conexión de wallet aún no está activa. Se muestran datos de ejemplo.",pvShare:"Vista previa: compartir está desactivado hasta que la campaña sea pública.",
+  lv:["Scout","Sentinel","Guardian"],c:{lvl:"Nivel",k:"Sectora Airdrop · Genesis",pts:"puntos",stk:"días de racha",rk:"puesto",cta:"Entra gratis"}},
+pt:{loc:"pt-BR",seat:"Pioneiro #{n}",day:"Dia {d} de 60",next:"+0,1× em {n} dias",next1:"+0,1× amanhã",max:"Máximo atingido",sq:"{n} de 5",
+  mis:["Conecte sua carteira","Siga a Sectora no X","Entre no Telegram","Passe no quiz da Sectora","Faça um Shield Check","Teste a testnet"],
+  ci:"Check-in feito hoje",copied:"Link de convite copiado",ciT:"+10 pontos · até amanhã",
+  pvConnect:"Prévia: a conexão de carteira ainda não está no ar. Mostrando dados de exemplo.",pvShare:"Prévia: compartilhar fica desligado até a campanha ser pública.",
+  lv:["Scout","Sentinel","Guardian"],c:{lvl:"Nível",k:"Sectora Airdrop · Genesis",pts:"pontos",stk:"dias de sequência",rk:"posição",cta:"Entre grátis"}}
+};
+var MPTS = [50,25,25,100,50,50];
+var TOP = [["#1",50000,1],["#2",30000,1],["#3",20000,1],["#4–10",10000,7],["#11–50",3000,40],["#51–100",2200,50]];
+var DEMO = {lvl:1,pts:1284,day:23,rank:412,bal:540,friends:3,done:[0,1,2,3],seat:427,ci:false};
+
+var lang = "en";
+var EN = {};
+$$("[data-i]").forEach(function(el){ var k = el.getAttribute("data-i"); if(!(k in EN)) EN[k] = el.innerHTML; });
+
+function nf(n){ try{ return new Intl.NumberFormat(D[lang].loc,{useGrouping:"always",maximumFractionDigits:1}).format(n); }catch(e){ return new Intl.NumberFormat(D[lang].loc,{maximumFractionDigits:1}).format(n); } }
+function fmt(s,o){ return s.replace(/\{(\w+)\}/g,function(_,k){ return o[k]; }); }
+
+function render(){
+  var dict = lang === "en" ? EN : T[lang];
+  $$("[data-i]").forEach(function(el){ var k = el.getAttribute("data-i"); var v = dict[k]; if(v == null) v = EN[k]; if(el.innerHTML !== v) el.innerHTML = v; });
+  $$("[data-n]").forEach(function(el){ el.textContent = nf(+el.getAttribute("data-n")); });
+  document.documentElement.lang = lang;
+  $$(".lang button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-l") === lang)); });
+  $$(".sec").forEach(function(s){
+    var e = s.querySelector(".eyebrow span"), sp = s.querySelector(".spine span");
+    if(e && sp) sp.textContent = e.textContent.split("·").pop().trim();
+  });
+  var lad = $("#ladder"); lad.innerHTML = "";
+  TOP.forEach(function(r){
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td><b>"+r[0]+"</b></td><td class='r'>"+nf(r[1])+"</td><td class='r'>"+r[2]+"</td><td class='r big'>"+nf(r[1]*r[2])+"</td>";
+    lad.appendChild(tr);
+  });
+  renderDash();
+}
+
+function mult(day){ return Math.min(2, 1 + Math.floor(day/6)*0.1); }
+function renderDash(){
+  var d = D[lang], m = mult(DEMO.day);
+  var base = DEMO.lvl === 0 ? 0 : Math.floor(DEMO.bal/100) * (DEMO.lvl === 2 ? 1.5 : 1);
+  $("#dLvl").textContent = d.lv[DEMO.lvl];
+  $("#dSeat").textContent = fmt(d.seat,{n:DEMO.seat});
+  $("#dPts").textContent = nf(DEMO.pts);
+  $("#dRank").textContent = "#" + nf(DEMO.rank);
+  $("#dBal").textContent = nf(DEMO.bal);
+  $("#dRate").textContent = nf(Math.round(base*m*10)/10);
+  $("#dDay").textContent = fmt(d.day,{d:DEMO.day});
+  var steps = Math.floor(DEMO.day/6), frac = (DEMO.day % 6)/6, cells = "";
+  for(var i=0;i<10;i++){
+    if(i < steps) cells += "<i class='on'></i>";
+    else if(i === steps && frac > 0) cells += "<i class='half' style='--p:"+Math.round(frac*100)+"%'></i>";
+    else cells += "<i></i>";
+  }
+  $("#dCells").innerHTML = cells;
+  var left = 6 - (DEMO.day % 6);
+  $("#dNext").textContent = m >= 2 ? d.max : (left === 1 ? d.next1 : fmt(d.next,{n:left}));
+  $("#dMul").textContent = nf(m) + "×";
+  $("#dSq").textContent = fmt(d.sq,{n:DEMO.friends});
+  var sq = "";
+  for(var j=0;j<5;j++) sq += "<i class='"+(j < DEMO.friends ? "on" : "")+"'>"+(j+1)+"</i>";
+  $("#dSqCells").innerHTML = sq;
+  var ul = $("#dMis"); ul.innerHTML = "";
+  d.mis.forEach(function(name,k){
+    var li = document.createElement("li");
+    var done = DEMO.done.indexOf(k) > -1;
+    if(done) li.className = "done";
+    li.innerHTML = "<span></span><span>"+(done ? "+" : "")+MPTS[k]+" PTS</span>";
+    li.firstChild.textContent = name;
+    ul.appendChild(li);
+  });
+  var ci = $("#dCi");
+  ci.disabled = DEMO.ci;
+  ci.firstElementChild.innerHTML = DEMO.ci ? d.ci : (lang === "en" ? EN["db.ci"] : T[lang]["db.ci"]);
+  drawCard();
+}
+
+/* ---------- share card, drawn in the site's own look ---------- */
+function drawCard(){
+  var cv = $("#card"); if(!cv) return;
+  var x = cv.getContext("2d"), W = 1200, H = 675, d = D[lang], C = 54;
+  x.setTransform(1,0,0,1,0,0);
+  x.fillStyle = "#000"; x.fillRect(0,0,W,H);
+  for(var r=0;r<Math.ceil(H/C);r++) for(var c=0;c<Math.ceil(W/C);c++){
+    var g = Math.abs(Math.sin(c*127.1 + r*311.7) * 43758.5453) % 1;
+    if(g > .9){ x.fillStyle = "rgba("+((12+62*g)|0)+","+((74+96*g)|0)+","+((198+57*g)|0)+","+(.12 + (g-.9)*3).toFixed(2)+")"; x.fillRect(c*C+1,r*C+1,C-1,C-1); }
+  }
+  x.strokeStyle = "rgba(255,255,255,.05)"; x.lineWidth = 1; x.beginPath();
+  for(var cc=0;cc<=W;cc+=C){ x.moveTo(cc+.5,0); x.lineTo(cc+.5,H); }
+  for(var rr=0;rr<=H;rr+=C){ x.moveTo(0,rr+.5); x.lineTo(W,rr+.5); }
+  x.stroke();
+  var gr = x.createRadialGradient(W/2,H+60,10,W/2,H+60,700);
+  gr.addColorStop(0,"rgba(21,105,255,.75)"); gr.addColorStop(.42,"rgba(21,105,255,.16)"); gr.addColorStop(1,"rgba(21,105,255,0)");
+  x.fillStyle = gr; x.fillRect(0,0,W,H);
+  var vg = x.createLinearGradient(0,0,0,H); vg.addColorStop(0,"rgba(0,0,0,.55)"); vg.addColorStop(.6,"rgba(0,0,0,0)");
+  x.fillStyle = vg; x.fillRect(0,0,W,H);
+  /* logo */
+  x.fillStyle = "#1569ff"; roundRect(x,72,64,58,58,5); x.fill();
+  x.strokeStyle = "#fff"; x.lineWidth = 3.6; x.beginPath(); x.arc(101,93,15.8,0,Math.PI*2); x.stroke();
+  x.fillStyle = "#c6ccd8"; x.font = "500 19px 'IBM Plex Mono', monospace"; x.textBaseline = "middle";
+  spaced(x, d.c.k.toUpperCase(), 156, 94, 3.2);
+  x.fillStyle = "#7c8496"; x.textAlign = "right";
+  spacedR(x, fmt(d.seat,{n:DEMO.seat}).toUpperCase(), W-72, 94, 3.2);
+  x.textAlign = "left";
+  /* eyebrow line + level */
+  x.fillStyle = "#4d8dff"; x.fillRect(72,232,40,2);
+  x.font = "500 19px 'IBM Plex Mono', monospace"; spaced(x, (d.c.lvl + " " + (DEMO.lvl+1)).toUpperCase(), 128, 233, 3.2);
+  x.fillStyle = "#fff"; x.font = "200 168px 'IBM Plex Sans', sans-serif"; x.textBaseline = "alphabetic";
+  x.fillText(d.lv[DEMO.lvl], 62, 400);
+  /* stats */
+  var st = [[nf(DEMO.pts), d.c.pts],[String(DEMO.day), d.c.stk],["#"+nf(DEMO.rank), d.c.rk]];
+  for(var s=0;s<3;s++){
+    var sx = 72 + s*240;
+    x.fillStyle = "rgba(255,255,255,.16)"; x.fillRect(sx,452,210,1);
+    x.fillStyle = s === 0 ? "#4d8dff" : "#fff"; x.font = "200 54px 'IBM Plex Sans', sans-serif"; x.fillText(st[s][0], sx, 518);
+    x.fillStyle = "#7c8496"; x.font = "500 15px 'IBM Plex Mono', monospace"; x.textBaseline = "middle"; spaced(x, st[s][1].toUpperCase(), sx, 552, 2.6); x.textBaseline = "alphabetic";
+  }
+  x.fillStyle = "#fff"; x.font = "400 22px 'IBM Plex Mono', monospace"; x.textAlign = "right"; x.textBaseline = "middle";
+  x.fillText("sectoraorg.com/airdrop", W-72, 600);
+  x.fillStyle = "#c6ccd8"; x.font = "500 16px 'IBM Plex Mono', monospace";
+  spacedR(x, d.c.cta.toUpperCase() + " →", W-72, 560, 2.6);
+  x.textAlign = "left";
+}
+function roundRect(x,a,b,w,h,r){ x.beginPath(); x.moveTo(a+r,b); x.arcTo(a+w,b,a+w,b+h,r); x.arcTo(a+w,b+h,a,b+h,r); x.arcTo(a,b+h,a,b,r); x.arcTo(a,b,a+w,b,r); x.closePath(); }
+function spaced(x,t,px,py,ls){ for(var i=0;i<t.length;i++){ x.fillText(t[i],px,py); px += x.measureText(t[i]).width + ls; } }
+function spacedR(x,t,px,py,ls){ var w = 0, i; for(i=0;i<t.length;i++) w += x.measureText(t[i]).width + ls; x.textAlign = "left"; spaced(x,t,px-w+ls,py,ls); x.textAlign = "right"; }
+
+/* ---------- live pixel grid, same recipe as the home page ---------- */
+function gridFx(cv){
+  var host = cv.parentElement, ctx = cv.getContext("2d"), CELL = 54;
+  var W = 0, H = 0, dpr = 1, cols = 0, rows = 0, heat = null, tint = null, lines = document.createElement("canvas");
+  var raf = 0, last = 0, nextPop = 0, walkers = [], seen = false, alive = true;
+  function rnd(c,r){ var v = Math.sin(c*127.1 + r*311.7) * 43758.5453; return v - Math.floor(v); }
+  function size(){
+    var w = host.clientWidth, h = host.clientHeight;
+    if(w < 1 || h < 1 || (w === W && h === H)) return;
+    W = w; H = h; dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+    cols = Math.ceil(W/CELL); rows = Math.ceil(H/CELL);
+    heat = new Float32Array(cols*rows); tint = [];
+    for(var i=0;i<cols*rows;i++){ var g = rnd(i % cols, (i/cols)|0); tint[i] = "rgba("+((12+62*g)|0)+","+((74+96*g)|0)+","+((198+57*g)|0)+","; }
+    lines.width = cv.width; lines.height = cv.height;
+    var l = lines.getContext("2d"); l.setTransform(dpr,0,0,dpr,0,0); l.strokeStyle = "rgba(255,255,255,.034)"; l.lineWidth = 1; l.beginPath();
+    for(var c=0;c<=cols;c++){ l.moveTo(c*CELL+.5,0); l.lineTo(c*CELL+.5,H); }
+    for(var r=0;r<=rows;r++){ l.moveTo(0,r*CELL+.5); l.lineTo(W,r*CELL+.5); }
+    l.stroke();
+    walkers = [];
+    for(var k=0;k<(W < 700 ? 3 : 6);k++) walkers.push({c:(Math.random()*cols)|0, r:(Math.random()*rows)|0, dc:Math.random() < .5 ? 1 : -1, dr:0, next:0});
+    if(reduce){ for(var s=0;s<heat.length;s++){ var q = rnd(s*3.1, s*.7); if(q > .93) heat[s] = .3 + (q-.93)*6; } }
+    draw();
+  }
+  function draw(){
+    ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    for(var i=0;i<heat.length;i++){
+      var v = heat[i]; if(v < .012) continue;
+      ctx.fillStyle = tint[i] + (v*.62).toFixed(3) + ")";
+      ctx.fillRect((i % cols)*CELL + 1, ((i/cols)|0)*CELL + 1, CELL - 1, CELL - 1);
+    }
+    ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(lines,0,0);
+  }
+  function tick(t){
+    raf = 0;
+    if(!seen || !alive) return;
+    raf = requestAnimationFrame(tick);
+    if(t - last < 33) return;
+    var dt = Math.min(120, t - last || 33); last = t;
+    var k = Math.pow(.955, dt/33);
+    for(var i=0;i<heat.length;i++) if(heat[i] > 0) heat[i] *= k;
+    if(t > nextPop){
+      nextPop = t + 90 + Math.random()*110;
+      for(var n=0;n<2+((Math.random()*3)|0);n++){ var j = (Math.random()*heat.length)|0, v = .5 + Math.random()*.42; if(heat[j] < v) heat[j] = v; }
+    }
+    walkers.forEach(function(w){
+      if(t < w.next) return;
+      w.next = t + 110 + Math.random()*130;
+      if(Math.random() < .3){ if(w.dc !== 0){ w.dr = Math.random() < .5 ? 1 : -1; w.dc = 0; } else { w.dc = Math.random() < .5 ? 1 : -1; w.dr = 0; } }
+      w.c = Math.max(0, Math.min(cols-1, w.c + w.dc)); w.r = Math.max(0, Math.min(rows-1, w.r + w.dr));
+      if(w.c === 0 || w.c === cols-1) w.dc = -w.dc || 0;
+      if(w.r === 0 || w.r === rows-1) w.dr = -w.dr || 0;
+      heat[w.r*cols + w.c] = .52;
+    });
+    draw();
+  }
+  function wake(){ if(!reduce && seen && alive && !raf){ last = 0; raf = requestAnimationFrame(tick); } }
+  if("ResizeObserver" in window) new ResizeObserver(function(){ size(); }).observe(host); else window.addEventListener("resize", size);
+  if("IntersectionObserver" in window) new IntersectionObserver(function(es){ seen = es[0].isIntersecting; wake(); }).observe(host); else seen = true;
+  document.addEventListener("visibilitychange", function(){ alive = !document.hidden; wake(); });
+  size(); wake();
+}
+
+/* ---------- interactions ---------- */
+var tt = 0;
+function toast(msg){ var t = $("#toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove("on"); }, 3200); }
+
+$$(".lang button").forEach(function(b){
+  b.addEventListener("click", function(){
+    lang = b.getAttribute("data-l");
+    try{ localStorage.setItem("sa_lang", lang); }catch(e){}
+    render();
+  });
+});
+$$(".js-connect").forEach(function(a){
+  a.addEventListener("click", function(){ if(PREVIEW) setTimeout(function(){ toast(D[lang].pvConnect); }, 450); });
+});
+$("#dCopy").addEventListener("click", function(){
+  var link = "https://sectoraorg.com/airdrop?r=0x7a3f…c41e";
+  var done = function(){ toast(D[lang].copied); };
+  try{ navigator.clipboard.writeText(link).then(done, done); }catch(e){ done(); }
+});
+$("#dCi").addEventListener("click", function(){
+  if(DEMO.ci) return;
+  DEMO.ci = true; DEMO.pts += 10; renderDash(); toast(D[lang].ciT);
+});
+$("#dShare").addEventListener("click", function(e){
+  if(PREVIEW){ e.preventDefault(); toast(D[lang].pvShare); }
+});
+
+try{ var saved = localStorage.getItem("sa_lang"); if(saved && D[saved]) lang = saved; }catch(e){}
+if(lang === "en"){ var nl = (navigator.language || "").slice(0,2); if(nl === "es" || nl === "pt"){ try{ if(!localStorage.getItem("sa_lang")) lang = nl; }catch(e){ lang = nl; } } }
+render();
+$$("canvas.grid").forEach(gridFx);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(drawCard);
+})();
+</script>
+</body>
+</html>
