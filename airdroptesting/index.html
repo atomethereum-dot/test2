@@ -337,6 +337,8 @@ h2.t b{font-weight:400;color:var(--b-ink)}
 .hold.stk .hold-l li::before{border-color:rgba(21,105,255,.4);
   background:rgba(21,105,255,.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.2l2 2 4-4.4' fill='none' stroke='%231569ff' stroke-width='1.5'/%3E%3C/svg%3E") center/13px no-repeat}
 .hold .sb{margin-top:20px;max-width:300px}
+.stk-rem{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;padding-top:18px;border-top:1px solid var(--p-line);font-size:15.5px;line-height:1.55;color:var(--p-ink-2)}
+.stk-rem .mono{flex:none;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--b-ink)}
 .hold.node{margin-top:clamp(28px,4vh,40px)}
 .hold.node .hold-l{counter-reset:n}
 .hold.node .hold-l li::before{counter-increment:n;content:counter(n);display:grid;place-items:center;background:rgba(21,105,255,.08);border-color:rgba(21,105,255,.4);
@@ -719,6 +721,7 @@ footer{position:relative;background:var(--night);border-top:1px solid var(--hair
         <li><b data-i="sk.2">More than double</b><span data-i="sk.2p">With staking, 10 points become 25.</span></li>
         <li><b data-i="sk.3">Stars in staking</b><span data-i="sk.3p">Your staking page shows your airdrop tasks.</span></li>
       </ul>
+      <p class="stk-rem"><span class="mono" data-i="sk.rk">Reminder</span><span data-i="sk.r">Staking is open to everyone with no lock-up: you withdraw whenever you want. The rewards are deposited in the contract in advance.</span></p>
     </div>
     <div class="cta">
       <a class="sb go mono js-connect" href="#steps"><span data-i="b.join">Join free</span><i>→</i></a>
@@ -1009,6 +1012,7 @@ s4h:"Recibe tus SECT",s4p:"Cuando se lance SectoraEVM, recibes SECT según tus p
 "sp.c":"Te toma menos de un minuto.",
 "sk.h":"¿Ya haces staking? <b>Ya estás dentro.</b>","sk.p":"Tus SECT en el staking de Sectora cuentan solos para el airdrop. No los retires: sigues con las recompensas del staking y sumas puntos del airdrop a la vez.","sk.b":"Abrir mi staking",
 "sk.1":"Sin inscribirte","sk.1p":"Tu wallet de staking entra desde el primer día.","sk.2":"Más del doble","sk.2p":"Con staking, 10 puntos se convierten en 25.","sk.3":"Estrellas en el staking","sk.3p":"Tu página de staking te muestra tus tareas del airdrop.",
+"sk.rk":"Recordatorio","sk.r":"El staking es para todos y sin bloqueo: retiras cuando quieras. Las recompensas ya están depositadas en el contrato por adelantado.",
 "lv.e":"02 · Niveles","lv.h":"Elige tu <b>nivel.</b>","lv.p":"Regla simple: cada 100 SECT en tu wallet = 1 punto al día.",
 "lv.k1":"Nivel 1","lv.c1":"Gratis","lv.r1":"Gratis","lv.r1s":"Sin comprar","lv.1a":"Tareas y tu nodo","lv.1b":"Parte de <b>200.000 SECT</b>",
 "lv.rt":"Puntos al día por guardar","lv.b1":"Empezar gratis",
@@ -1072,6 +1076,7 @@ s4h:"Receba seus SECT",s4p:"Quando a SectoraEVM for lançada, você recebe SECT 
 "sp.c":"Leva menos de um minuto.",
 "sk.h":"Já faz staking? <b>Você já está dentro.</b>","sk.p":"Seus SECT no staking da Sectora contam sozinhos para o airdrop. Não saque: você continua com as recompensas do staking e soma pontos do airdrop ao mesmo tempo.","sk.b":"Abrir meu staking",
 "sk.1":"Sem inscrição","sk.1p":"Sua carteira de staking entra desde o primeiro dia.","sk.2":"Mais que o dobro","sk.2p":"Com staking, 10 pontos viram 25.","sk.3":"Estrelas no staking","sk.3p":"Sua página de staking mostra suas tarefas do airdrop.",
+"sk.rk":"Lembrete","sk.r":"O staking é para todos e sem bloqueio: você saca quando quiser. As recompensas já estão depositadas no contrato com antecedência.",
 "lv.e":"02 · Níveis","lv.h":"Escolha seu <b>nível.</b>","lv.p":"Regra simples: cada 100 SECT na sua carteira = 1 ponto por dia.",
 "lv.k1":"Nível 1","lv.c1":"Grátis","lv.r1":"Grátis","lv.r1s":"Sem comprar","lv.1a":"Tarefas e seu nó","lv.1b":"Parte de <b>200.000 SECT</b>",
 "lv.rt":"Pontos por dia por guardar","lv.b1":"Começar grátis",
