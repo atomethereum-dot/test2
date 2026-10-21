@@ -1351,7 +1351,11 @@ $$(".lang button").forEach(function(b){
   });
 });
 $$(".js-connect").forEach(function(a){
-  a.addEventListener("click", function(){ if(PREVIEW) setTimeout(function(){ toast(D[lang].pvConnect); }, 450); });
+  a.addEventListener("click", function(e){
+    // la ventana "Tu airdrop" lee las plazas (wallet + staking) y el nodo de la testnet
+    if(window.SAElig){ e.preventDefault(); window.SAElig.open(); return; }
+    if(PREVIEW) setTimeout(function(){ toast(D[lang].pvConnect); }, 450);
+  });
 });
 
 try{ var saved = localStorage.getItem("sa_lang"); if(saved && D[saved]) lang = saved; }catch(e){}
@@ -1365,5 +1369,6 @@ if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){
 $$("canvas.grid").forEach(gridFx);
 })();
 </script>
+<script src="/airdroptesting/eligibility.js?v=1" defer></script>
 </body>
 </html>

@@ -1,0 +1,213 @@
+/* Ventana "Tu airdrop": al conectar la wallet lee, sin firmas ni
+   transacciones, los SECT de la wallet y los del staking (una sola llamada
+   a accountView del contrato de staking en Ethereum) y el nodo de la testnet
+   (ValidatorRegistry en Sepolia). Con eso muestra las plazas activadas y lo
+   que falta: activar el Hash Node con la misma wallet.
+   Regla de plazas: menos de 500 SECT = nivel 1 gratis; desde 500 = 1 plaza
+   (Sentinel); desde 1.000 = 1 plaza por cada 1.000 (Guardian). */
+(function () {
+  "use strict";
+  var STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
+  var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
+  var MAINNET = ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org", "https://1rpc.io/eth"];
+  var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.drpc.org"];
+  var SEL = { accountView: "0xf85b90e2", indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44" };
+  var DASH = "/dash/";
+  var MM = "https://metamask.app.link/dapp/sectoraorg.com/airdroptesting/";
+
+  var L = {
+    en: { loc: "en-US", k: "Sectora // Airdrop Genesis", pv: "Season 1 preview", h: "Your airdrop",
+      intro: "Connect your wallet to see the places you already have in the airdrop.",
+      connect: "Connect wallet", nowallet: "No wallet in this browser?", openmm: "Open in MetaMask",
+      or: "Or check an address", check: "Check", reading: "Reading the network…",
+      r1: "Wallet connected", r2: "{n} SECT counted", r2s: "Wallet {w} + staking {s}",
+      one: "1 place activated", many: "{n} places activated", lv2: "Level 2 · Sentinel", lv3: "Level 3 · Guardian",
+      free: "You're in for free", frees: "Level 1 · Free. With 500 SECT (wallet + staking) you activate your first place.",
+      todo: "Only one step left", todos: "Activate your Hash Node on the testnet with this same wallet to start receiving the airdrop.",
+      node: "Activate my Hash Node", done: "Hash Node active", dones: "You're receiving the airdrop with this wallet.",
+      paused: "Hash Node paused", pauseds: "Your node is registered but paused. Turn it back on in the dashboard.", reopen: "Open the dashboard",
+      rule: "500 SECT = 1 place · from 1,000 SECT, 1 place per 1,000 · wallet + staking count",
+      foot: "We only read public data: no signature, no transaction, nothing leaves your wallet. Places are checked once a day.",
+      err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
+      rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet" },
+    es: { loc: "es-ES", k: "Sectora // Airdrop Genesis", pv: "Vista previa · temporada 1", h: "Tu airdrop",
+      intro: "Conecta tu wallet para ver las plazas que ya tienes en el airdrop.",
+      connect: "Conectar wallet", nowallet: "¿No tienes wallet en este navegador?", openmm: "Abrir en MetaMask",
+      or: "O revisa una dirección", check: "Revisar", reading: "Leyendo la red…",
+      r1: "Wallet conectada", r2: "{n} SECT contados", r2s: "Wallet {w} + staking {s}",
+      one: "1 plaza activada", many: "{n} plazas activadas", lv2: "Nivel 2 · Sentinel", lv3: "Nivel 3 · Guardian",
+      free: "Participas gratis", frees: "Nivel 1 · Gratis. Con 500 SECT (wallet + staking) activas tu primera plaza.",
+      todo: "Solo te falta un paso", todos: "Activa tu Hash Node en la testnet, con esta misma wallet, para empezar a recibir el airdrop.",
+      node: "Activar mi Hash Node", done: "Hash Node activo", dones: "Ya estás recibiendo el airdrop con esta wallet.",
+      paused: "Hash Node pausado", pauseds: "Tu nodo está registrado pero pausado. Vuelve a encenderlo en el panel.", reopen: "Abrir el panel",
+      rule: "500 SECT = 1 plaza · desde 1.000 SECT, 1 plaza por cada 1.000 · cuentan wallet + staking",
+      foot: "Solo leemos datos públicos: no hay firmas ni transacciones y nada sale de tu wallet. Las plazas se revisan una vez al día.",
+      err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
+      rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet" },
+    pt: { loc: "pt-BR", k: "Sectora // Airdrop Genesis", pv: "Prévia · temporada 1", h: "Seu airdrop",
+      intro: "Conecte sua carteira para ver as vagas que você já tem no airdrop.",
+      connect: "Conectar carteira", nowallet: "Sem carteira neste navegador?", openmm: "Abrir no MetaMask",
+      or: "Ou verifique um endereço", check: "Verificar", reading: "Lendo a rede…",
+      r1: "Carteira conectada", r2: "{n} SECT contados", r2s: "Carteira {w} + staking {s}",
+      one: "1 vaga ativada", many: "{n} vagas ativadas", lv2: "Nível 2 · Sentinel", lv3: "Nível 3 · Guardian",
+      free: "Você participa grátis", frees: "Nível 1 · Grátis. Com 500 SECT (carteira + staking) você ativa sua primeira vaga.",
+      todo: "Só falta um passo", todos: "Ative seu Hash Node na testnet, com esta mesma carteira, para começar a receber o airdrop.",
+      node: "Ativar meu Hash Node", done: "Hash Node ativo", dones: "Você já está recebendo o airdrop com esta carteira.",
+      paused: "Hash Node pausado", pauseds: "Seu nó está registrado, mas pausado. Ligue de novo no painel.", reopen: "Abrir o painel",
+      rule: "500 SECT = 1 vaga · a partir de 1.000 SECT, 1 vaga a cada 1.000 · contam carteira + staking",
+      foot: "Só lemos dados públicos: sem assinatura, sem transação, nada sai da sua carteira. As vagas são verificadas uma vez por dia.",
+      err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
+      rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira" }
+  };
+  function lang() { var l = (document.documentElement.lang || "en").slice(0, 2); return L[l] ? l : "en"; }
+  function t(k, v) { var s = L[lang()][k]; if (v) for (var x in v) s = s.replace("{" + x + "}", v[x]); return s; }
+
+  /* ---------- estilos ---------- */
+  var css = [
+    ".el-ov{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,7,12,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}",
+    ".el-ov.on{display:flex}",
+    ".el{position:relative;width:min(560px,100%);max-height:calc(100dvh - 32px);overflow:auto;background:#fff;color:#07080a;border:1px solid rgba(7,8,10,.12);border-radius:3px;box-shadow:0 30px 80px rgba(0,0,0,.45);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:300}",
+    ".el::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:3px;background:#1569ff}",
+    ".el-hd{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid rgba(7,8,10,.08)}",
+    ".el .mono{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}",
+    ".el-k{color:#0d4fd8}.el-pv{color:#6b7280;margin-left:10px}",
+    ".el-x{appearance:none;border:1px solid rgba(7,8,10,.15);background:#fff;width:32px;height:32px;border-radius:2px;cursor:pointer;font-size:18px;line-height:1;color:#07080a}",
+    ".el-bd{padding:22px 20px 20px}",
+    ".el h3{font-size:30px;font-weight:300;letter-spacing:-.02em;line-height:1.1}",
+    ".el-in{margin-top:10px;font-size:16px;line-height:1.55;color:#3c414c}",
+    ".el-b{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;margin-top:18px;padding:16px 18px;border:1px solid #07080a;background:#07080a;color:#fff;border-radius:2px;cursor:pointer;text-decoration:none}",
+    ".el-b.go{background:#1569ff;border-color:#1569ff}",
+    ".el-b.gh{background:#fff;color:#07080a}",
+    ".el-alt{margin-top:18px;padding-top:16px;border-top:1px solid rgba(7,8,10,.08);font-size:14px;color:#6b7280}",
+    ".el-alt a{color:#0d4fd8}",
+    ".el-f{display:flex;gap:8px;margin-top:10px}",
+    ".el-f input{flex:1;min-width:0;padding:12px;border:1px solid rgba(7,8,10,.2);border-radius:2px;background:#fff;color:#07080a;font-family:'IBM Plex Mono',monospace;font-size:14px}",
+    ".el-f button{padding:0 16px;border:1px solid #07080a;background:#fff;color:#07080a;border-radius:2px;cursor:pointer}",
+    ".el-rows{list-style:none;margin-top:18px;border-top:1px solid rgba(7,8,10,.08)}",
+    ".el-rows li{display:grid;grid-template-columns:30px minmax(0,1fr);column-gap:14px;padding:14px 0;border-bottom:1px solid rgba(7,8,10,.08)}",
+    ".el-ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#1569ff}",
+    ".el-ic svg{width:15px;height:15px;display:block}",
+    ".el-ic.p{background:#fff8ec;border:1.5px dashed #e0a030}",
+    ".el-rows b{display:block;font-size:18px;font-weight:400;letter-spacing:-.01em}",
+    ".el-rows span{display:block;margin-top:3px;font-size:14.5px;line-height:1.5;color:#6b7280}",
+    ".el-rows .chip{display:inline-block;margin-top:8px;padding:5px 8px;border:1px solid rgba(21,105,255,.4);background:rgba(21,105,255,.07);color:#0d4fd8;border-radius:2px}",
+    ".el-rows b .el-big{display:block;margin:0;font-size:40px;font-weight:300;letter-spacing:-.03em;line-height:1.05;color:#07080a}",
+    ".el-rows b .el-big em{font-style:normal;font-weight:400;color:#1569ff}",
+    "@media (max-width:520px){.el-rows b .el-big{font-size:32px}.el h3{font-size:26px}}",
+    ".el-rule{margin-top:16px;color:#3c414c;line-height:1.7}",
+    ".el-ft{margin-top:12px;font-size:13px;line-height:1.55;color:#6b7280}",
+    ".el-msg{margin-top:12px;font-size:14px;color:#b42318}",
+    ".el-sp{display:inline-block;width:14px;height:14px;border:2px solid rgba(7,8,10,.15);border-top-color:#1569ff;border-radius:50%;animation:elsp .8s linear infinite;vertical-align:-2px;margin-right:8px}",
+    "@keyframes elsp{to{transform:rotate(360deg)}}",
+    ".el-lnk{margin-top:14px;background:none;border:0;padding:0;color:#0d4fd8;cursor:pointer;font-size:14px;text-decoration:underline}"
+  ].join("\n");
+  var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
+
+  var ov = document.createElement("div"); ov.className = "el-ov"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
+  ov.innerHTML = '<div class="el"><div class="el-hd"><div><span class="mono el-k"></span><span class="mono el-pv"></span></div>' +
+    '<button class="el-x" type="button">×</button></div><div class="el-bd"></div></div>';
+  document.body.appendChild(ov);
+  var bd = ov.querySelector(".el-bd");
+  ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
+  ov.querySelector(".el-x").addEventListener("click", close);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+
+  var cur = null, curConn = false; // direccion revisada y si vino de la wallet
+
+  /* ---------- lectura publica ---------- */
+  function pad(a) { return a.toLowerCase().replace(/^0x/, "").padStart(64, "0"); }
+  function call(rpcs, to, data) {
+    var i = 0;
+    function next() {
+      if (i >= rpcs.length) return Promise.reject(new Error("rpc"));
+      var url = rpcs[i++];
+      var ctl = new AbortController(); var tm = setTimeout(function () { ctl.abort(); }, 7000);
+      return fetch(url, { method: "POST", headers: { "content-type": "application/json" }, signal: ctl.signal,
+        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: to, data: data }, "latest"] }) })
+        .then(function (r) { return r.json(); })
+        .then(function (j) { clearTimeout(tm); if (!j || !j.result || j.error) throw new Error("rpc"); return j.result; })
+        .catch(function () { clearTimeout(tm); return next(); });
+    }
+    return next();
+  }
+  function word(hex, n) { return BigInt("0x" + (hex.slice(2 + 64 * n, 2 + 64 * (n + 1)) || "0")); }
+  var WEI = 10n ** 18n;
+  function read(addr) {
+    var a = call(MAINNET, STAKING, SEL.accountView + pad(addr)).then(function (h) {
+      return { staked: word(h, 0) / WEI, wallet: word(h, 2) / WEI };
+    });
+    var b = call(SEPOLIA, REGISTRY, SEL.indexPlusOne + pad(addr)).then(function (h) {
+      var n = word(h, 0);
+      if (n === 0n) return "none";
+      return call(SEPOLIA, REGISTRY, SEL.validators + pad((n - 1n).toString(16))).then(function (v) {
+        return word(v, 6) === 1n ? "active" : "paused";
+      });
+    }).catch(function () { return "unknown"; });
+    return Promise.all([a, b]).then(function (r) { return { staked: r[0].staked, wallet: r[0].wallet, node: r[1] }; });
+  }
+  function places(total) { if (total < 500n) return 0; if (total < 1000n) return 1; return Number(total / 1000n); }
+  function fmt(n) { return new Intl.NumberFormat(L[lang()].loc, { maximumFractionDigits: 0, useGrouping: "always" }).format(Number(n)); }
+  function short(a) { return a.slice(0, 6) + "…" + a.slice(-4); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  /* ---------- pantallas ---------- */
+  function head() { ov.querySelector(".el-k").textContent = t("k"); ov.querySelector(".el-pv").textContent = t("pv"); ov.querySelector(".el-x").setAttribute("aria-label", t("close")); }
+  function start(msg) {
+    head(); cur = null;
+    var hasW = !!window.ethereum;
+    bd.innerHTML = '<h3>' + t("h") + '</h3><p class="el-in">' + t("intro") + '</p>' +
+      (hasW ? '<button class="el-b go mono" type="button" data-a="connect"><span>' + t("connect") + '</span><span>→</span></button>' : "") +
+      (msg ? '<p class="el-msg">' + esc(msg) + '</p>' : "") +
+      '<div class="el-alt">' + (hasW ? "" : t("nowallet") + ' <a href="' + MM + '">' + t("openmm") + ' ↗</a><br><br>') +
+      t("or") + '<form class="el-f"><input name="a" placeholder="0x…" autocomplete="off" spellcheck="false" aria-label="' + t("or") + '"><button class="mono" type="submit">' + t("check") + '</button></form></div>' +
+      '<p class="mono el-rule">' + t("rule") + '</p>';
+    var b = bd.querySelector('[data-a="connect"]'); if (b) b.addEventListener("click", connect);
+    bd.querySelector("form").addEventListener("submit", function (e) {
+      e.preventDefault(); var v = this.a.value.trim();
+      if (!/^0x[0-9a-fA-F]{40}$/.test(v)) { start(t("bad")); return; }
+      show(v, false);
+    });
+  }
+  function connect() {
+    window.ethereum.request({ method: "eth_requestAccounts" }).then(function (acc) {
+      if (acc && acc[0]) show(acc[0], true); else start(t("rej"));
+    }).catch(function () { start(t("rej")); });
+  }
+  function show(addr, connected) {
+    head(); cur = addr; curConn = connected;
+    bd.innerHTML = '<h3>' + t("h") + '</h3><p class="el-in"><span class="el-sp"></span>' + t("reading") + '</p>';
+    read(addr).then(function (r) {
+      if (cur !== addr) return;
+      var total = r.wallet + r.staked, p = places(total);
+      var rows = [];
+      rows.push(li("ok", "", connected ? t("r1") : short(addr), connected ? short(addr) : ""));
+      rows.push(li("ok", "", t("r2", { n: fmt(total) }), t("r2s", { w: fmt(r.wallet), s: fmt(r.staked) })));
+      if (p > 0) rows.push(li("ok", "", '<span class="el-big">' + (p === 1 ? t("one").replace("1", "<em>1</em>") : t("many", { n: "<em>" + fmt(p) + "</em>" })) + "</span>", "", p === 1 && total < 1000n ? t("lv2") : t("lv3")));
+      else rows.push(li("ok", "", t("free"), t("frees")));
+      if (r.node === "active") rows.push(li("ok", "", t("done"), t("dones")));
+      else if (r.node === "paused") rows.push(li("warn", "p", t("paused"), t("pauseds")));
+      else rows.push(li("wait", "p", t("todo"), t("todos")));
+      var btn = r.node === "active" ? "" :
+        '<a class="el-b go mono" href="' + DASH + '"><span>' + (r.node === "paused" ? t("reopen") : t("node")) + '</span><span>↗</span></a>';
+      bd.innerHTML = '<h3>' + t("h") + '</h3><ul class="el-rows">' + rows.join("") + "</ul>" + btn +
+        '<p class="mono el-rule">' + t("rule") + '</p><p class="el-ft">' + t("foot") + '</p>' +
+        '<button class="el-lnk" type="button" data-a="other">' + t("other") + "</button>";
+      bd.querySelector('[data-a="other"]').addEventListener("click", function () { start(); });
+    }).catch(function () { if (cur === addr) start(t("err")); });
+  }
+  var ICON = {
+    ok: '<svg viewBox="0 0 16 16"><path d="M3.2 8.4l3 3 6.6-7" fill="none" stroke="#fff" stroke-width="2.2"/></svg>',
+    wait: '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.6" fill="#e0a030"/></svg>',
+    warn: '<svg viewBox="0 0 16 16"><path d="M8 3.5v6" stroke="#b26b00" stroke-width="2.2"/><circle cx="8" cy="12.4" r="1.3" fill="#b26b00"/></svg>'
+  };
+  function li(ic, cls, title, sub, chip) {
+    return '<li><span class="el-ic ' + cls + '">' + ICON[ic] + "</span><div><b>" + title + "</b>" + (sub ? "<span>" + sub + "</span>" : "") +
+      (chip ? '<span class="chip mono">' + chip + "</span>" : "") + "</div></li>";
+  }
+
+  function open() { ov.classList.add("on"); document.documentElement.style.overflow = "hidden"; if (cur) show(cur, curConn); else start(); }
+  function close() { ov.classList.remove("on"); document.documentElement.style.overflow = ""; }
+  if (window.ethereum && window.ethereum.on) window.ethereum.on("accountsChanged", function (a) { if (ov.classList.contains("on") && a && a[0]) show(a[0], true); });
+
+  window.SAElig = { open: open, close: close };
+})();
