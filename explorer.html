@@ -48,9 +48,9 @@
 <script src="/analytics.js" defer></script>
 </head>
 <body>
-<!-- intro de Sectorascan: pruebas finales 07/15 (06 y 07 completadas). El logo
+<!-- intro de Sectorascan: pruebas finales 08/15 (la 08 completada). El logo
      como pieza de metal pulido trazada por rayos en WebGL; luces de estudio la
-     barren en cada prueba y al completarse la 07 la cara se enciende en azul. ~5 s, en cada
+     barren en cada prueba y al completarse la 08 la cara se enciende en azul. ~5 s, en cada
      visita; no aparece con "reducir movimiento". Sin WebGL queda el logo
      plano. La pieza se coloca en el hueco que deja el texto, medido en cada
      cambio de tamaño: nunca se monta sobre las letras. -->
@@ -130,9 +130,9 @@
     <div class="k m" id="siK">Latest final tests · Security</div>
     <div class="nm" id="siNm"><span class="a" id="siNum">00</span><span class="b">/15</span></div>
     <div class="st">
-      <h2 id="siH2"><span class="g">06 &amp; 07 completed.</span><span class="v" id="siH2v"></span></h2>
+      <h2 id="siH2"><span class="g">Test 08 completed.</span><span class="v" id="siH2v"></span></h2>
       <p id="siP">Final testing of the Sectora L3 network is underway.</p>
-      <div class="chip" id="siChip"><svg viewBox="0 0 16 16"><path d="M2.5 8.5 6.2 12 13.5 4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Final tests · 07 / 15</div>
+      <div class="chip" id="siChip"><svg viewBox="0 0 16 16"><path d="M2.5 8.5 6.2 12 13.5 4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Final tests · 08 / 15</div>
     </div>
   </div>
   <div class="bt" id="siBt">
@@ -148,9 +148,9 @@
   var root=document.documentElement,ov=root.style.overflow;root.style.overflow='hidden';
   var $=function(i){return document.getElementById(i);};
 
-  /* guion: pruebas 01-05 a golpe; la 06 se verifica y se completa en 2.55 s
-     y la 07 en 3.3 s, cuando la pieza se enciende en azul */
-  var PASS=[.85,1.05,1.25,1.45,1.65],V0=1.8,V6=2.55,V1=3.3,HEAD=3.35,EXIT=4.75,END=5.35;
+  /* guion: pruebas 01-07 a golpe; la 08 se verifica de 1.8 s a 3.3 s, cuando
+     la pieza se enciende en azul */
+  var PASS=[.75,.9,1.05,1.2,1.35,1.5,1.65],V0=1.8,V1=3.3,HEAD=3.35,EXIT=4.75,END=5.35;
   var cl=function(v){return v<0?0:v>1?1:v;},seg=function(t,a,b){return cl((t-a)/(b-a));};
   var eo=function(k){return 1-Math.pow(1-k,3);},eio=function(k){return k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;};
   var lerp=function(a,b,k){return a+(b-a)*k;},pk=function(t,t0,d){var k=(t-t0)/d;return k<0||k>1?0:Math.pow(1-k,2.2);};
@@ -228,8 +228,8 @@
     fb.style.width=fb.style.height=(half*1.6)+'px';fb.style.left=(cx-half*.8)+'px';fb.style.top=(cy-half*.8)+'px';
   }
 
-  /* barridos de luz: entrada, cada prueba, la 06, la 07 y un destello final */
-  var ev=[.45].concat(PASS,[V6,V1,V1+.95]);
+  /* barridos de luz: entrada, una de cada dos pruebas, la 08 y un destello final */
+  var ev=[.45].concat(PASS.filter(function(x,i){return i%2===0;}),[V1,V1+.95]);
   var fl=$('siFl'),a=$('siNum'),k=$('siK'),nm=$('siNm'),h2=$('siH2v'),p=$('siP'),chip=$('siChip'),fill=$('siFill'),pc=$('siPct');
   var KT='Latest final tests · Security';
   function fade(e,v,dy){e.style.opacity=v;e.style.transform=v<1?'translateY('+((1-eo(v))*dy)+'px)':'';}
@@ -250,12 +250,12 @@
       gl.uniform1f(U.uFloor,lay.floor);gl.uniform1f(U.uCut,lay.cut);
       gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
     } else {fb.style.display='block';fb.style.opacity=eo(seg(t,.1,.7));}
-    fl.style.opacity=pk(t,V1,.32)*.7+pk(t,V6,.22)*.35;
+    fl.style.opacity=pk(t,V1,.32)*.7;
     /* texto */
     fade(tp,seg(t,.1,.6),-8);fade(k,seg(t,.35,.85),10);k.textContent=scr(KT,seg(t,.35,1.1),t,3);
     nm.style.opacity=seg(t,.5,.9);
-    var n=PASS.filter(function(x){return t>=x;}).length+(t>=V6?1:0)+(t>=V1?1:0);a.textContent=(n<10?'0':'')+n;a.classList.toggle('blue',t>=V6);
-    var kh=seg(t,HEAD,HEAD+.5);fade(h2,kh,14);h2.textContent=kh>0?scr('06 & 07 completed.',seg(t,HEAD,HEAD+.55),t,9):'';
+    var n=PASS.filter(function(x){return t>=x;}).length+(t>=V1?1:0);a.textContent=(n<10?'0':'')+n;a.classList.toggle('blue',t>=V1);
+    var kh=seg(t,HEAD,HEAD+.5);fade(h2,kh,14);h2.textContent=kh>0?scr('Test 08 completed.',seg(t,HEAD,HEAD+.55),t,9):'';
     fade(p,seg(t,HEAD+.18,HEAD+.65),12);fade(chip,seg(t,HEAD+.32,HEAD+.8),12);
     bt.style.opacity=seg(t,.2,.6);
     var bb=1-Math.pow(1-seg(t,.25,EXIT-.15),2.2);fill.style.transform='scaleX('+bb+')';pc.textContent=Math.round(bb*100)+'%';
