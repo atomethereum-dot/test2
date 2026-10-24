@@ -4,7 +4,7 @@
    (ValidatorRegistry en Sepolia). Con eso muestra el premio fijo de su nivel,
    que solo se gana con el Hash Node encendido. Para el nivel solo cuentan los
    SECT en staking; los de la wallet se muestran para invitar a stakearlos:
-   - Scout, menos de 500 SECT = 50 SECT;
+   - Scout, menos de 500 SECT = 150 SECT;
    - Sentinel, desde 500 SECT = 250 SECT;
    - Guardian, desde 1.000 SECT = 600 SECT;
    - Titan, una plaza de 2.800 SECT por cada 4.000 SECT, sin maximo.
@@ -35,7 +35,7 @@
       todo: "Activate your Hash Node", todos: "Turn on your node on the testnet with this same wallet. No node, no prize.",
       node: "Activate my Hash Node", done: "Hash Node active", dones: "This wallet's node is on.",
       paused: "Hash Node paused", pauseds: "Your node is registered but paused. Turn it back on to win your prize.", stake: "Stake my SECT", reopen: "Open the dashboard",
-      rule: "Scout 50 SECT · Sentinel (500 in staking) 250 SECT · Guardian (1,000) 600 SECT · Titan 2,800 SECT per 4,000 in staking, no maximum · only staking counts",
+      rule: "Scout 150 SECT · Sentinel (500 in staking) 250 SECT · Guardian (1,000) 600 SECT · Titan 2,800 SECT per 4,000 in staking, no maximum · only staking counts",
       foot: "We only read public data: no signature, no transaction, nothing leaves your wallet. Your level is checked once a day.",
       err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
       rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet" },
@@ -51,7 +51,7 @@
       todo: "Activa tu Hash Node", todos: "Enciende tu nodo en la testnet con esta misma wallet. Sin nodo no hay premio.",
       node: "Activar mi Hash Node", done: "Hash Node activo", dones: "El nodo de esta wallet está encendido.",
       paused: "Hash Node pausado", pauseds: "Tu nodo está registrado pero pausado. Vuelve a encenderlo para ganar tu premio.", stake: "Hacer staking de mis SECT", reopen: "Abrir el panel",
-      rule: "Scout 50 SECT · Sentinel (500 en staking) 250 SECT · Guardian (1.000) 600 SECT · Titan 2.800 SECT por cada 4.000 en staking, sin máximo · solo cuenta el staking",
+      rule: "Scout 150 SECT · Sentinel (500 en staking) 250 SECT · Guardian (1.000) 600 SECT · Titan 2.800 SECT por cada 4.000 en staking, sin máximo · solo cuenta el staking",
       foot: "Solo leemos datos públicos: no hay firmas ni transacciones y nada sale de tu wallet. Tu nivel se revisa una vez al día.",
       err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
       rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet" },
@@ -67,7 +67,7 @@
       todo: "Ative seu Hash Node", todos: "Ligue seu nó na testnet com esta mesma carteira. Sem nó não há prêmio.",
       node: "Ativar meu Hash Node", done: "Hash Node ativo", dones: "O nó desta carteira está ligado.",
       paused: "Hash Node pausado", pauseds: "Seu nó está registrado, mas pausado. Ligue de novo para ganhar seu prêmio.", stake: "Fazer staking dos meus SECT", reopen: "Abrir o painel",
-      rule: "Scout 50 SECT · Sentinel (500 em staking) 250 SECT · Guardian (1.000) 600 SECT · Titan 2.800 SECT a cada 4.000 em staking, sem máximo · só conta o staking",
+      rule: "Scout 150 SECT · Sentinel (500 em staking) 250 SECT · Guardian (1.000) 600 SECT · Titan 2.800 SECT a cada 4.000 em staking, sem máximo · só conta o staking",
       foot: "Só lemos dados públicos: sem assinatura, sem transação, nada sai da sua carteira. Seu nível é verificado uma vez por dia.",
       err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
       rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira" }
@@ -176,7 +176,7 @@
     return Promise.all([a, b]).then(function (r) { return { staked: r[0].staked, wallet: r[0].wallet, node: r[1] }; });
   }
   function level(total) { return total < 500n ? 1 : total < 1000n ? 2 : total < 4000n ? 3 : 4; }
-  var PRIZE = { 1: 50, 2: 250, 3: 600, 4: 2800 };
+  var PRIZE = { 1: 150, 2: 250, 3: 600, 4: 2800 };
   function fmt(n) { return new Intl.NumberFormat(L[lang()].loc, { maximumFractionDigits: 0, useGrouping: "always" }).format(Number(n)); }
   function short(a) { return a.slice(0, 6) + "…" + a.slice(-4); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
