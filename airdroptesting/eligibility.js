@@ -5,9 +5,9 @@
    que solo se gana con el Hash Node encendido. Para el nivel solo cuentan los
    SECT en staking; los de la wallet se muestran para invitar a stakearlos:
    - Scout, menos de 500 SECT = 50 SECT;
-   - Sentinel, desde 500 SECT = 350 SECT;
-   - Guardian, desde 1.000 SECT = 700 SECT;
-   - Titan, desde 4.000 SECT = 2.800 SECT.
+   - Sentinel, desde 500 SECT = 250 SECT;
+   - Guardian, desde 1.000 SECT = 600 SECT;
+   - Titan, una plaza de 2.800 SECT por cada 4.000 SECT, sin maximo.
    Los SECT se entregan en SectoraEVM al lanzarse la mainnet.
    Si la wallet tiene staking y aun no tiene el nodo activo, sale el aviso
    "solo te falta conectar el nodo". */
@@ -30,12 +30,12 @@
       r1: "Wallet connected", r2: "{n} SECT in staking", r2s: "Only staked SECT count · in your wallet: {w}",
       win: "You win {n} SECT", wOn: "Delivered on SectoraEVM at mainnet. Keep your node and your SECT until then.", wOff: "Once your Hash Node is on with this wallet.",
       lv1: "Level 1 · Scout", lv2: "Level 2 · Sentinel", lv3: "Level 3 · Guardian", lv4: "Level 4 · Titan",
-      up1: "With 500 SECT in staking you become Sentinel and win 350 SECT.", up2: "With 1,000 SECT in staking you become Guardian and win 700 SECT.", up3: "With 4,000 SECT in staking you become Titan and win 2,800 SECT.",
+      up1: "With 500 SECT in staking you become Sentinel and win 250 SECT.", up2: "With 1,000 SECT in staking you become Guardian and win 600 SECT.", up3: "With 4,000 SECT in staking you become Titan and win 2,800 SECT.", up4: "Every 4,000 SECT more in staking is another Titan spot: +2,800 SECT.", lv4s: "Level 4 · Titan · {s} spots",
       stk: "Staker detected", stks: "You're already in. You only need to connect your node and you're done.",
       todo: "Activate your Hash Node", todos: "Turn on your node on the testnet with this same wallet. No node, no prize.",
       node: "Activate my Hash Node", done: "Hash Node active", dones: "This wallet's node is on.",
       paused: "Hash Node paused", pauseds: "Your node is registered but paused. Turn it back on to win your prize.", stake: "Stake my SECT", reopen: "Open the dashboard",
-      rule: "Scout 50 SECT · Sentinel (500 in staking) 350 SECT · Guardian (1,000) 700 SECT · Titan (4,000) 2,800 SECT · only staking counts",
+      rule: "Scout 50 SECT · Sentinel (500 in staking) 250 SECT · Guardian (1,000) 600 SECT · Titan 2,800 SECT per 4,000 in staking, no maximum · only staking counts",
       foot: "We only read public data: no signature, no transaction, nothing leaves your wallet. Your level is checked once a day.",
       err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
       rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet" },
@@ -46,12 +46,12 @@
       r1: "Wallet conectada", r2: "{n} SECT en staking", r2s: "Solo cuentan los SECT en staking · en tu wallet: {w}",
       win: "Ganas {n} SECT", wOn: "Se entrega en SectoraEVM al lanzar la mainnet. Mantén tu nodo y tus SECT hasta entonces.", wOff: "Cuando tu Hash Node esté encendido con esta wallet.",
       lv1: "Nivel 1 · Scout", lv2: "Nivel 2 · Sentinel", lv3: "Nivel 3 · Guardian", lv4: "Nivel 4 · Titan",
-      up1: "Con 500 SECT en staking pasas a Sentinel y ganas 350 SECT.", up2: "Con 1.000 SECT en staking pasas a Guardian y ganas 700 SECT.", up3: "Con 4.000 SECT en staking pasas a Titan y ganas 2.800 SECT.",
+      up1: "Con 500 SECT en staking pasas a Sentinel y ganas 250 SECT.", up2: "Con 1.000 SECT en staking pasas a Guardian y ganas 600 SECT.", up3: "Con 4.000 SECT en staking pasas a Titan y ganas 2.800 SECT.", up4: "Cada 4.000 SECT más en staking es otra plaza Titan: +2.800 SECT.", lv4s: "Nivel 4 · Titan · {s} plazas",
       stk: "Staker detectado", stks: "Ya estás dentro. Solo te falta conectar el nodo y listo.",
       todo: "Activa tu Hash Node", todos: "Enciende tu nodo en la testnet con esta misma wallet. Sin nodo no hay premio.",
       node: "Activar mi Hash Node", done: "Hash Node activo", dones: "El nodo de esta wallet está encendido.",
       paused: "Hash Node pausado", pauseds: "Tu nodo está registrado pero pausado. Vuelve a encenderlo para ganar tu premio.", stake: "Hacer staking de mis SECT", reopen: "Abrir el panel",
-      rule: "Scout 50 SECT · Sentinel (500 en staking) 350 SECT · Guardian (1.000) 700 SECT · Titan (4.000) 2.800 SECT · solo cuenta el staking",
+      rule: "Scout 50 SECT · Sentinel (500 en staking) 250 SECT · Guardian (1.000) 600 SECT · Titan 2.800 SECT por cada 4.000 en staking, sin máximo · solo cuenta el staking",
       foot: "Solo leemos datos públicos: no hay firmas ni transacciones y nada sale de tu wallet. Tu nivel se revisa una vez al día.",
       err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
       rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet" },
@@ -62,12 +62,12 @@
       r1: "Carteira conectada", r2: "{n} SECT em staking", r2s: "Só contam os SECT em staking · na sua carteira: {w}",
       win: "Você ganha {n} SECT", wOn: "Entregue na SectoraEVM no lançamento da mainnet. Mantenha seu nó e seus SECT até lá.", wOff: "Quando o seu Hash Node estiver ligado com esta carteira.",
       lv1: "Nível 1 · Scout", lv2: "Nível 2 · Sentinel", lv3: "Nível 3 · Guardian", lv4: "Nível 4 · Titan",
-      up1: "Com 500 SECT em staking você vira Sentinel e ganha 350 SECT.", up2: "Com 1.000 SECT em staking você vira Guardian e ganha 700 SECT.", up3: "Com 4.000 SECT em staking você vira Titan e ganha 2.800 SECT.",
+      up1: "Com 500 SECT em staking você vira Sentinel e ganha 250 SECT.", up2: "Com 1.000 SECT em staking você vira Guardian e ganha 600 SECT.", up3: "Com 4.000 SECT em staking você vira Titan e ganha 2.800 SECT.", up4: "Cada 4.000 SECT a mais em staking é outra vaga Titan: +2.800 SECT.", lv4s: "Nível 4 · Titan · {s} vagas",
       stk: "Staker detectado", stks: "Você já está dentro. Só falta conectar o nó e pronto.",
       todo: "Ative seu Hash Node", todos: "Ligue seu nó na testnet com esta mesma carteira. Sem nó não há prêmio.",
       node: "Ativar meu Hash Node", done: "Hash Node ativo", dones: "O nó desta carteira está ligado.",
       paused: "Hash Node pausado", pauseds: "Seu nó está registrado, mas pausado. Ligue de novo para ganhar seu prêmio.", stake: "Fazer staking dos meus SECT", reopen: "Abrir o painel",
-      rule: "Scout 50 SECT · Sentinel (500 em staking) 350 SECT · Guardian (1.000) 700 SECT · Titan (4.000) 2.800 SECT · só conta o staking",
+      rule: "Scout 50 SECT · Sentinel (500 em staking) 250 SECT · Guardian (1.000) 600 SECT · Titan 2.800 SECT a cada 4.000 em staking, sem máximo · só conta o staking",
       foot: "Só lemos dados públicos: sem assinatura, sem transação, nada sai da sua carteira. Seu nível é verificado uma vez por dia.",
       err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
       rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira" }
@@ -176,7 +176,7 @@
     return Promise.all([a, b]).then(function (r) { return { staked: r[0].staked, wallet: r[0].wallet, node: r[1] }; });
   }
   function level(total) { return total < 500n ? 1 : total < 1000n ? 2 : total < 4000n ? 3 : 4; }
-  var PRIZE = { 1: 50, 2: 350, 3: 700, 4: 2800 };
+  var PRIZE = { 1: 50, 2: 250, 3: 600, 4: 2800 };
   function fmt(n) { return new Intl.NumberFormat(L[lang()].loc, { maximumFractionDigits: 0, useGrouping: "always" }).format(Number(n)); }
   function short(a) { return a.slice(0, 6) + "…" + a.slice(-4); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
@@ -211,20 +211,22 @@
       if (cur !== addr) return;
       // para el nivel solo cuentan los SECT en staking
       var total = r.staked, lv = level(total), on = r.node === "active";
+      // Titan: una plaza por cada 4.000 SECT en staking, sin maximo
+      var spots = lv === 4 ? Number(total / 4000n) : 1, prize = PRIZE[lv] * spots;
       var rows = [];
       rows.push(li("ok", "", connected ? t("r1") : short(addr), connected ? short(addr) : ""));
-      // el premio fijo de su nivel; solo cuenta con el nodo encendido
-      rows.push(li(on ? "ok" : "wait", on ? "" : "p", '<span class="el-big">' + t("win", { n: "<em>" + fmt(PRIZE[lv]) + "</em>" }) + "</span>",
-        on ? t("wOn") : t("wOff"), t("lv" + lv)));
+      // el premio de su nivel (en Titan, por plaza); solo cuenta con el nodo encendido
+      rows.push(li(on ? "ok" : "wait", on ? "" : "p", '<span class="el-big">' + t("win", { n: "<em>" + fmt(prize) + "</em>" }) + "</span>",
+        on ? t("wOn") : t("wOff"), spots > 1 ? t("lv4s", { s: fmt(spots) }) : t("lv" + lv)));
       if (on) rows.push(li("ok", "", t("done"), t("dones")));
       else if (r.node === "paused") rows.push(li("warn", "p", t("paused"), t("pauseds")));
       else rows.push(li("wait", "p", t("todo"), t("todos")));
-      rows.push(li("ok", "", t("r2", { n: fmt(total) }), t("r2s", { w: fmt(r.wallet) }) + (lv < 4 ? "<br>" + t("up" + lv) : "")));
+      rows.push(li("ok", "", t("r2", { n: fmt(total) }), t("r2s", { w: fmt(r.wallet) }) + "<br>" + t("up" + lv)));
       // con staking y sin nodo encendido: el aviso de que solo falta el nodo
       var stk = r.staked > 0n && !on ? '<p class="el-st"><i>' + ICON.bolt + "</i><b>" + t("stk") + "</b><span>" + t("stks") + "</span></p>" : "";
       var btn = (on ? "" :
         '<a class="el-b go mono" href="' + DASH + '"><span>' + (r.node === "paused" ? t("reopen") : t("node")) + '</span><span>↗</span></a>') +
-        (lv < 4 ? '<a class="el-b mono" href="' + STAKE + '"><span>' + t("stake") + '</span><span>↗</span></a>' : "");
+        '<a class="el-b mono" href="' + STAKE + '"><span>' + t("stake") + '</span><span>↗</span></a>';
       bd.innerHTML = '<h3>' + t("h") + '</h3>' + stk + '<ul class="el-rows">' + rows.join("") + "</ul>" + btn +
         '<p class="mono el-rule">' + t("rule") + '</p><p class="el-ft">' + t("foot") + '</p>' +
         '<button class="el-lnk" type="button" data-a="other">' + t("other") + "</button>";
