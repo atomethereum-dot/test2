@@ -2,7 +2,8 @@
    transacciones, los SECT de la wallet y los del staking (una sola llamada
    a accountView del contrato de staking en Ethereum) y el nodo de la testnet
    (ValidatorRegistry en Sepolia). Con eso muestra el premio fijo de su nivel,
-   que solo se gana con el Hash Node encendido:
+   que solo se gana con el Hash Node encendido. Para el nivel solo cuentan los
+   SECT en staking; los de la wallet se muestran para invitar a stakearlos:
    - Scout, menos de 500 SECT = 50 SECT;
    - Sentinel, desde 500 SECT = 350 SECT;
    - Guardian, desde 1.000 SECT = 700 SECT;
@@ -18,6 +19,7 @@
   var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.drpc.org"];
   var SEL = { accountView: "0xf85b90e2", indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44" };
   var DASH = "/dash/";
+  var STAKE = "/staking/";
   var MM = "https://metamask.app.link/dapp/sectoraorg.com/airdroptesting/";
 
   var L = {
@@ -25,15 +27,15 @@
       intro: "Connect your wallet to see how much you win in the airdrop.",
       connect: "Connect wallet", nowallet: "No wallet in this browser?", openmm: "Open in MetaMask",
       or: "Or check an address", check: "Check", reading: "Reading the network…",
-      r1: "Wallet connected", r2: "{n} SECT counted", r2s: "Wallet {w} + staking {s}",
+      r1: "Wallet connected", r2: "{n} SECT in staking", r2s: "Only staked SECT count · in your wallet: {w}",
       win: "You win {n} SECT", wOn: "Delivered on SectoraEVM at mainnet. Keep your node and your SECT until then.", wOff: "Once your Hash Node is on with this wallet.",
       lv1: "Level 1 · Scout", lv2: "Level 2 · Sentinel", lv3: "Level 3 · Guardian", lv4: "Level 4 · Titan",
-      up1: "With 500 SECT (wallet + staking) you become Sentinel and win 350 SECT.", up2: "With 1,000 SECT you become Guardian and win 700 SECT.", up3: "With 4,000 SECT you become Titan and win 2,800 SECT.",
+      up1: "With 500 SECT in staking you become Sentinel and win 350 SECT.", up2: "With 1,000 SECT in staking you become Guardian and win 700 SECT.", up3: "With 4,000 SECT in staking you become Titan and win 2,800 SECT.",
       stk: "Staker detected", stks: "You're already in. You only need to connect your node and you're done.",
       todo: "Activate your Hash Node", todos: "Turn on your node on the testnet with this same wallet. No node, no prize.",
       node: "Activate my Hash Node", done: "Hash Node active", dones: "This wallet's node is on.",
-      paused: "Hash Node paused", pauseds: "Your node is registered but paused. Turn it back on to win your prize.", reopen: "Open the dashboard",
-      rule: "Scout 50 SECT · Sentinel (500) 350 SECT · Guardian (1,000) 700 SECT · Titan (4,000) 2,800 SECT · wallet + staking count",
+      paused: "Hash Node paused", pauseds: "Your node is registered but paused. Turn it back on to win your prize.", stake: "Stake my SECT", reopen: "Open the dashboard",
+      rule: "Scout 50 SECT · Sentinel (500 in staking) 350 SECT · Guardian (1,000) 700 SECT · Titan (4,000) 2,800 SECT · only staking counts",
       foot: "We only read public data: no signature, no transaction, nothing leaves your wallet. Your level is checked once a day.",
       err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
       rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet" },
@@ -41,15 +43,15 @@
       intro: "Conecta tu wallet para ver cuánto ganas en el airdrop.",
       connect: "Conectar wallet", nowallet: "¿No tienes wallet en este navegador?", openmm: "Abrir en MetaMask",
       or: "O revisa una dirección", check: "Revisar", reading: "Leyendo la red…",
-      r1: "Wallet conectada", r2: "{n} SECT contados", r2s: "Wallet {w} + staking {s}",
+      r1: "Wallet conectada", r2: "{n} SECT en staking", r2s: "Solo cuentan los SECT en staking · en tu wallet: {w}",
       win: "Ganas {n} SECT", wOn: "Se entrega en SectoraEVM al lanzar la mainnet. Mantén tu nodo y tus SECT hasta entonces.", wOff: "Cuando tu Hash Node esté encendido con esta wallet.",
       lv1: "Nivel 1 · Scout", lv2: "Nivel 2 · Sentinel", lv3: "Nivel 3 · Guardian", lv4: "Nivel 4 · Titan",
-      up1: "Con 500 SECT (wallet + staking) pasas a Sentinel y ganas 350 SECT.", up2: "Con 1.000 SECT pasas a Guardian y ganas 700 SECT.", up3: "Con 4.000 SECT pasas a Titan y ganas 2.800 SECT.",
+      up1: "Con 500 SECT en staking pasas a Sentinel y ganas 350 SECT.", up2: "Con 1.000 SECT en staking pasas a Guardian y ganas 700 SECT.", up3: "Con 4.000 SECT en staking pasas a Titan y ganas 2.800 SECT.",
       stk: "Staker detectado", stks: "Ya estás dentro. Solo te falta conectar el nodo y listo.",
       todo: "Activa tu Hash Node", todos: "Enciende tu nodo en la testnet con esta misma wallet. Sin nodo no hay premio.",
       node: "Activar mi Hash Node", done: "Hash Node activo", dones: "El nodo de esta wallet está encendido.",
-      paused: "Hash Node pausado", pauseds: "Tu nodo está registrado pero pausado. Vuelve a encenderlo para ganar tu premio.", reopen: "Abrir el panel",
-      rule: "Scout 50 SECT · Sentinel (500) 350 SECT · Guardian (1.000) 700 SECT · Titan (4.000) 2.800 SECT · cuentan wallet + staking",
+      paused: "Hash Node pausado", pauseds: "Tu nodo está registrado pero pausado. Vuelve a encenderlo para ganar tu premio.", stake: "Hacer staking de mis SECT", reopen: "Abrir el panel",
+      rule: "Scout 50 SECT · Sentinel (500 en staking) 350 SECT · Guardian (1.000) 700 SECT · Titan (4.000) 2.800 SECT · solo cuenta el staking",
       foot: "Solo leemos datos públicos: no hay firmas ni transacciones y nada sale de tu wallet. Tu nivel se revisa una vez al día.",
       err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
       rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet" },
@@ -57,15 +59,15 @@
       intro: "Conecte sua carteira para ver quanto você ganha no airdrop.",
       connect: "Conectar carteira", nowallet: "Sem carteira neste navegador?", openmm: "Abrir no MetaMask",
       or: "Ou verifique um endereço", check: "Verificar", reading: "Lendo a rede…",
-      r1: "Carteira conectada", r2: "{n} SECT contados", r2s: "Carteira {w} + staking {s}",
+      r1: "Carteira conectada", r2: "{n} SECT em staking", r2s: "Só contam os SECT em staking · na sua carteira: {w}",
       win: "Você ganha {n} SECT", wOn: "Entregue na SectoraEVM no lançamento da mainnet. Mantenha seu nó e seus SECT até lá.", wOff: "Quando o seu Hash Node estiver ligado com esta carteira.",
       lv1: "Nível 1 · Scout", lv2: "Nível 2 · Sentinel", lv3: "Nível 3 · Guardian", lv4: "Nível 4 · Titan",
-      up1: "Com 500 SECT (carteira + staking) você vira Sentinel e ganha 350 SECT.", up2: "Com 1.000 SECT você vira Guardian e ganha 700 SECT.", up3: "Com 4.000 SECT você vira Titan e ganha 2.800 SECT.",
+      up1: "Com 500 SECT em staking você vira Sentinel e ganha 350 SECT.", up2: "Com 1.000 SECT em staking você vira Guardian e ganha 700 SECT.", up3: "Com 4.000 SECT em staking você vira Titan e ganha 2.800 SECT.",
       stk: "Staker detectado", stks: "Você já está dentro. Só falta conectar o nó e pronto.",
       todo: "Ative seu Hash Node", todos: "Ligue seu nó na testnet com esta mesma carteira. Sem nó não há prêmio.",
       node: "Ativar meu Hash Node", done: "Hash Node ativo", dones: "O nó desta carteira está ligado.",
-      paused: "Hash Node pausado", pauseds: "Seu nó está registrado, mas pausado. Ligue de novo para ganhar seu prêmio.", reopen: "Abrir o painel",
-      rule: "Scout 50 SECT · Sentinel (500) 350 SECT · Guardian (1.000) 700 SECT · Titan (4.000) 2.800 SECT · contam carteira + staking",
+      paused: "Hash Node pausado", pauseds: "Seu nó está registrado, mas pausado. Ligue de novo para ganhar seu prêmio.", stake: "Fazer staking dos meus SECT", reopen: "Abrir o painel",
+      rule: "Scout 50 SECT · Sentinel (500 em staking) 350 SECT · Guardian (1.000) 700 SECT · Titan (4.000) 2.800 SECT · só conta o staking",
       foot: "Só lemos dados públicos: sem assinatura, sem transação, nada sai da sua carteira. Seu nível é verificado uma vez por dia.",
       err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
       rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira" }
@@ -94,6 +96,7 @@
     ".el-b{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;margin-top:16px;padding:15px 18px;border:0;background:#07080a;color:#fff;border-radius:12px;cursor:pointer;text-decoration:none;transition:filter .2s,transform .2s}",
     ".el-b:hover{filter:brightness(1.08)}.el-b:active{transform:scale(.99)}",
     ".el-b.go{background:#1569ff}",
+    ".el-b + .el-b{margin-top:10px}",
     ".el-alt{margin-top:16px;padding-top:14px;border-top:1px solid rgba(7,8,10,.07);font-size:14px;color:#6b7280}",
     ".el-alt a{color:#0d4fd8}",
     ".el-f{display:flex;gap:8px;margin-top:10px}",
@@ -206,7 +209,8 @@
     bd.innerHTML = '<h3>' + t("h") + '</h3><p class="el-in"><span class="el-sp"></span>' + t("reading") + '</p>';
     read(addr).then(function (r) {
       if (cur !== addr) return;
-      var total = r.wallet + r.staked, lv = level(total), on = r.node === "active";
+      // para el nivel solo cuentan los SECT en staking
+      var total = r.staked, lv = level(total), on = r.node === "active";
       var rows = [];
       rows.push(li("ok", "", connected ? t("r1") : short(addr), connected ? short(addr) : ""));
       // el premio fijo de su nivel; solo cuenta con el nodo encendido
@@ -215,11 +219,12 @@
       if (on) rows.push(li("ok", "", t("done"), t("dones")));
       else if (r.node === "paused") rows.push(li("warn", "p", t("paused"), t("pauseds")));
       else rows.push(li("wait", "p", t("todo"), t("todos")));
-      rows.push(li("ok", "", t("r2", { n: fmt(total) }), t("r2s", { w: fmt(r.wallet), s: fmt(r.staked) }) + (lv < 4 ? "<br>" + t("up" + lv) : "")));
+      rows.push(li("ok", "", t("r2", { n: fmt(total) }), t("r2s", { w: fmt(r.wallet) }) + (lv < 4 ? "<br>" + t("up" + lv) : "")));
       // con staking y sin nodo encendido: el aviso de que solo falta el nodo
       var stk = r.staked > 0n && !on ? '<p class="el-st"><i>' + ICON.bolt + "</i><b>" + t("stk") + "</b><span>" + t("stks") + "</span></p>" : "";
-      var btn = on ? "" :
-        '<a class="el-b go mono" href="' + DASH + '"><span>' + (r.node === "paused" ? t("reopen") : t("node")) + '</span><span>↗</span></a>';
+      var btn = (on ? "" :
+        '<a class="el-b go mono" href="' + DASH + '"><span>' + (r.node === "paused" ? t("reopen") : t("node")) + '</span><span>↗</span></a>') +
+        (lv < 4 ? '<a class="el-b mono" href="' + STAKE + '"><span>' + t("stake") + '</span><span>↗</span></a>' : "");
       bd.innerHTML = '<h3>' + t("h") + '</h3>' + stk + '<ul class="el-rows">' + rows.join("") + "</ul>" + btn +
         '<p class="mono el-rule">' + t("rule") + '</p><p class="el-ft">' + t("foot") + '</p>' +
         '<button class="el-lnk" type="button" data-a="other">' + t("other") + "</button>";
