@@ -4,7 +4,7 @@
    (ValidatorRegistry en Sepolia). Con eso muestra el premio fijo de su nivel,
    que solo se gana con el Hash Node encendido. Para el nivel solo cuentan los
    SECT en staking; los de la wallet se muestran para invitar a stakearlos:
-   - Scout, menos de 500 SECT = 150 SECT;
+   - Scout, menos de 500 SECT = 150 SECT (wallets con historial en Ethereum, tope de 1.000.000 SECT);
    - Sentinel, desde 500 SECT = 250 SECT;
    - Guardian, desde 1.000 SECT = 600 SECT;
    - Titan, una plaza de 2.800 SECT por cada 4.000 SECT, sin maximo.
@@ -30,7 +30,7 @@
       r1: "Wallet connected", r2: "{n} SECT in staking", r2s: "Only staked SECT count · in your wallet: {w}",
       win: "You win {n} SECT", wOn: "Delivered on SectoraEVM at mainnet. Keep your node and your SECT until then.", wOff: "Once your Hash Node is on with this wallet.",
       lv1: "Level 1 · Scout", lv2: "Level 2 · Sentinel", lv3: "Level 3 · Guardian", lv4: "Level 4 · Titan",
-      up1: "With 500 SECT in staking you become Sentinel and win 250 SECT.", up2: "With 1,000 SECT in staking you become Guardian and win 600 SECT.", up3: "With 4,000 SECT in staking you become Titan and win 2,800 SECT.", up4: "Every 4,000 SECT more in staking is another Titan spot: +2,800 SECT.", lv4s: "Level 4 · Titan · {s} spots",
+      up1: "With 500 SECT in staking you become Sentinel and win 250 SECT.", up2: "With 1,000 SECT in staking you become Guardian and win 600 SECT.", up3: "With 4,000 SECT in staking you become Titan and win 2,800 SECT.", up4: "Every 4,000 SECT more in staking is another Titan spot: +2,800 SECT.", sreq: "Scout only counts wallets that already used Ethereum before the announcement (30 days and 5 transactions). Up to 1,000,000 SECT for all Scouts.", lv4s: "Level 4 · Titan · {s} spots",
       stk: "Staker detected", stks: "You're already in. You only need to connect your node and you're done.",
       todo: "Activate your Hash Node", todos: "Turn on your node on the testnet with this same wallet. No node, no prize.",
       node: "Activate my Hash Node", done: "Hash Node active", dones: "This wallet's node is on.",
@@ -46,7 +46,7 @@
       r1: "Wallet conectada", r2: "{n} SECT en staking", r2s: "Solo cuentan los SECT en staking · en tu wallet: {w}",
       win: "Ganas {n} SECT", wOn: "Se entrega en SectoraEVM al lanzar la mainnet. Mantén tu nodo y tus SECT hasta entonces.", wOff: "Cuando tu Hash Node esté encendido con esta wallet.",
       lv1: "Nivel 1 · Scout", lv2: "Nivel 2 · Sentinel", lv3: "Nivel 3 · Guardian", lv4: "Nivel 4 · Titan",
-      up1: "Con 500 SECT en staking pasas a Sentinel y ganas 250 SECT.", up2: "Con 1.000 SECT en staking pasas a Guardian y ganas 600 SECT.", up3: "Con 4.000 SECT en staking pasas a Titan y ganas 2.800 SECT.", up4: "Cada 4.000 SECT más en staking es otra plaza Titan: +2.800 SECT.", lv4s: "Nivel 4 · Titan · {s} plazas",
+      up1: "Con 500 SECT en staking pasas a Sentinel y ganas 250 SECT.", up2: "Con 1.000 SECT en staking pasas a Guardian y ganas 600 SECT.", up3: "Con 4.000 SECT en staking pasas a Titan y ganas 2.800 SECT.", up4: "Cada 4.000 SECT más en staking es otra plaza Titan: +2.800 SECT.", sreq: "Scout solo cuenta wallets que ya usaban Ethereum antes del anuncio (30 días y 5 transacciones). Hasta 1.000.000 SECT para todos los Scouts.", lv4s: "Nivel 4 · Titan · {s} plazas",
       stk: "Staker detectado", stks: "Ya estás dentro. Solo te falta conectar el nodo y listo.",
       todo: "Activa tu Hash Node", todos: "Enciende tu nodo en la testnet con esta misma wallet. Sin nodo no hay premio.",
       node: "Activar mi Hash Node", done: "Hash Node activo", dones: "El nodo de esta wallet está encendido.",
@@ -62,7 +62,7 @@
       r1: "Carteira conectada", r2: "{n} SECT em staking", r2s: "Só contam os SECT em staking · na sua carteira: {w}",
       win: "Você ganha {n} SECT", wOn: "Entregue na SectoraEVM no lançamento da mainnet. Mantenha seu nó e seus SECT até lá.", wOff: "Quando o seu Hash Node estiver ligado com esta carteira.",
       lv1: "Nível 1 · Scout", lv2: "Nível 2 · Sentinel", lv3: "Nível 3 · Guardian", lv4: "Nível 4 · Titan",
-      up1: "Com 500 SECT em staking você vira Sentinel e ganha 250 SECT.", up2: "Com 1.000 SECT em staking você vira Guardian e ganha 600 SECT.", up3: "Com 4.000 SECT em staking você vira Titan e ganha 2.800 SECT.", up4: "Cada 4.000 SECT a mais em staking é outra vaga Titan: +2.800 SECT.", lv4s: "Nível 4 · Titan · {s} vagas",
+      up1: "Com 500 SECT em staking você vira Sentinel e ganha 250 SECT.", up2: "Com 1.000 SECT em staking você vira Guardian e ganha 600 SECT.", up3: "Com 4.000 SECT em staking você vira Titan e ganha 2.800 SECT.", up4: "Cada 4.000 SECT a mais em staking é outra vaga Titan: +2.800 SECT.", sreq: "Scout só conta carteiras que já usavam a Ethereum antes do anúncio (30 dias e 5 transações). Até 1.000.000 SECT para todos os Scouts.", lv4s: "Nível 4 · Titan · {s} vagas",
       stk: "Staker detectado", stks: "Você já está dentro. Só falta conectar o nó e pronto.",
       todo: "Ative seu Hash Node", todos: "Ligue seu nó na testnet com esta mesma carteira. Sem nó não há prêmio.",
       node: "Ativar meu Hash Node", done: "Hash Node ativo", dones: "O nó desta carteira está ligado.",
@@ -217,7 +217,7 @@
       rows.push(li("ok", "", connected ? t("r1") : short(addr), connected ? short(addr) : ""));
       // el premio de su nivel (en Titan, por plaza); solo cuenta con el nodo encendido
       rows.push(li(on ? "ok" : "wait", on ? "" : "p", '<span class="el-big">' + t("win", { n: "<em>" + fmt(prize) + "</em>" }) + "</span>",
-        on ? t("wOn") : t("wOff"), spots > 1 ? t("lv4s", { s: fmt(spots) }) : t("lv" + lv)));
+        (on ? t("wOn") : t("wOff")) + (lv === 1 ? "<br>" + t("sreq") : ""), spots > 1 ? t("lv4s", { s: fmt(spots) }) : t("lv" + lv)));
       if (on) rows.push(li("ok", "", t("done"), t("dones")));
       else if (r.node === "paused") rows.push(li("warn", "p", t("paused"), t("pauseds")));
       else rows.push(li("wait", "p", t("todo"), t("todos")));
