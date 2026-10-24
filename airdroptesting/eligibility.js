@@ -3,9 +3,9 @@
    a accountView del contrato de staking en Ethereum) y el nodo de la testnet
    (ValidatorRegistry en Sepolia). Con eso muestra el premio fijo de su nivel,
    que solo se gana con el Hash Node encendido:
-   - Scout, menos de 500 SECT = 250 SECT;
-   - Sentinel, desde 500 SECT = 400 SECT;
-   - Guardian, desde 1.000 SECT = 800 SECT.
+   - Scout, menos de 500 SECT = 150 SECT;
+   - Sentinel, desde 500 SECT = 300 SECT;
+   - Guardian, desde 1.000 SECT = 500 SECT.
    Los SECT se entregan en SectoraEVM al lanzarse la mainnet.
    Si la wallet tiene staking y aun no tiene el nodo activo, sale el aviso
    "solo te falta conectar el nodo". */
@@ -27,12 +27,12 @@
       r1: "Wallet connected", r2: "{n} SECT counted", r2s: "Wallet {w} + staking {s}",
       win: "You win {n} SECT", wOn: "Delivered on SectoraEVM at mainnet. Keep your node and your SECT until then.", wOff: "Once your Hash Node is on with this wallet.",
       lv1: "Level 1 · Scout", lv2: "Level 2 · Sentinel", lv3: "Level 3 · Guardian",
-      up1: "With 500 SECT (wallet + staking) you become Sentinel and win 400 SECT.", up2: "With 1,000 SECT you become Guardian and win 800 SECT.",
+      up1: "With 500 SECT (wallet + staking) you become Sentinel and win 300 SECT.", up2: "With 1,000 SECT you become Guardian and win 500 SECT.",
       stk: "Staker detected", stks: "You're already in. You only need to connect your node and you're done.",
       todo: "Activate your Hash Node", todos: "Turn on your node on the testnet with this same wallet. No node, no prize.",
       node: "Activate my Hash Node", done: "Hash Node active", dones: "This wallet's node is on.",
       paused: "Hash Node paused", pauseds: "Your node is registered but paused. Turn it back on to win your prize.", reopen: "Open the dashboard",
-      rule: "Scout 250 SECT · Sentinel (500 SECT) 400 SECT · Guardian (1,000 SECT) 800 SECT · wallet + staking count",
+      rule: "Scout 150 SECT · Sentinel (500 SECT) 300 SECT · Guardian (1,000 SECT) 500 SECT · wallet + staking count",
       foot: "We only read public data: no signature, no transaction, nothing leaves your wallet. Your level is checked once a day.",
       err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
       rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet" },
@@ -43,12 +43,12 @@
       r1: "Wallet conectada", r2: "{n} SECT contados", r2s: "Wallet {w} + staking {s}",
       win: "Ganas {n} SECT", wOn: "Se entrega en SectoraEVM al lanzar la mainnet. Mantén tu nodo y tus SECT hasta entonces.", wOff: "Cuando tu Hash Node esté encendido con esta wallet.",
       lv1: "Nivel 1 · Scout", lv2: "Nivel 2 · Sentinel", lv3: "Nivel 3 · Guardian",
-      up1: "Con 500 SECT (wallet + staking) pasas a Sentinel y ganas 400 SECT.", up2: "Con 1.000 SECT pasas a Guardian y ganas 800 SECT.",
+      up1: "Con 500 SECT (wallet + staking) pasas a Sentinel y ganas 300 SECT.", up2: "Con 1.000 SECT pasas a Guardian y ganas 500 SECT.",
       stk: "Staker detectado", stks: "Ya estás dentro. Solo te falta conectar el nodo y listo.",
       todo: "Activa tu Hash Node", todos: "Enciende tu nodo en la testnet con esta misma wallet. Sin nodo no hay premio.",
       node: "Activar mi Hash Node", done: "Hash Node activo", dones: "El nodo de esta wallet está encendido.",
       paused: "Hash Node pausado", pauseds: "Tu nodo está registrado pero pausado. Vuelve a encenderlo para ganar tu premio.", reopen: "Abrir el panel",
-      rule: "Scout 250 SECT · Sentinel (500 SECT) 400 SECT · Guardian (1.000 SECT) 800 SECT · cuentan wallet + staking",
+      rule: "Scout 150 SECT · Sentinel (500 SECT) 300 SECT · Guardian (1.000 SECT) 500 SECT · cuentan wallet + staking",
       foot: "Solo leemos datos públicos: no hay firmas ni transacciones y nada sale de tu wallet. Tu nivel se revisa una vez al día.",
       err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
       rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet" },
@@ -59,12 +59,12 @@
       r1: "Carteira conectada", r2: "{n} SECT contados", r2s: "Carteira {w} + staking {s}",
       win: "Você ganha {n} SECT", wOn: "Entregue na SectoraEVM no lançamento da mainnet. Mantenha seu nó e seus SECT até lá.", wOff: "Quando o seu Hash Node estiver ligado com esta carteira.",
       lv1: "Nível 1 · Scout", lv2: "Nível 2 · Sentinel", lv3: "Nível 3 · Guardian",
-      up1: "Com 500 SECT (carteira + staking) você vira Sentinel e ganha 400 SECT.", up2: "Com 1.000 SECT você vira Guardian e ganha 800 SECT.",
+      up1: "Com 500 SECT (carteira + staking) você vira Sentinel e ganha 300 SECT.", up2: "Com 1.000 SECT você vira Guardian e ganha 500 SECT.",
       stk: "Staker detectado", stks: "Você já está dentro. Só falta conectar o nó e pronto.",
       todo: "Ative seu Hash Node", todos: "Ligue seu nó na testnet com esta mesma carteira. Sem nó não há prêmio.",
       node: "Ativar meu Hash Node", done: "Hash Node ativo", dones: "O nó desta carteira está ligado.",
       paused: "Hash Node pausado", pauseds: "Seu nó está registrado, mas pausado. Ligue de novo para ganhar seu prêmio.", reopen: "Abrir o painel",
-      rule: "Scout 250 SECT · Sentinel (500 SECT) 400 SECT · Guardian (1.000 SECT) 800 SECT · contam carteira + staking",
+      rule: "Scout 150 SECT · Sentinel (500 SECT) 300 SECT · Guardian (1.000 SECT) 500 SECT · contam carteira + staking",
       foot: "Só lemos dados públicos: sem assinatura, sem transação, nada sai da sua carteira. Seu nível é verificado uma vez por dia.",
       err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
       rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira" }
@@ -172,7 +172,7 @@
     return Promise.all([a, b]).then(function (r) { return { staked: r[0].staked, wallet: r[0].wallet, node: r[1] }; });
   }
   function level(total) { return total < 500n ? 1 : total < 1000n ? 2 : 3; }
-  var PRIZE = { 1: 250, 2: 400, 3: 800 };
+  var PRIZE = { 1: 150, 2: 300, 3: 500 };
   function fmt(n) { return new Intl.NumberFormat(L[lang()].loc, { maximumFractionDigits: 0, useGrouping: "always" }).format(Number(n)); }
   function short(a) { return a.slice(0, 6) + "…" + a.slice(-4); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
