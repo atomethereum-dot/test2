@@ -395,6 +395,19 @@ h2.t b{font-weight:400;color:var(--b-ink)}
 .cmp .px{margin-top:14px}
 .cmp .px span{display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--p-ink-3)}
 .cmp .px b{display:block;margin-top:5px;font-size:clamp(19px,1.6vw,23px);font-weight:500;letter-spacing:-.015em;color:#0f8f52;white-space:nowrap;font-variant-numeric:tabular-nums}
+.shr{margin-top:clamp(18px,2.4vw,28px)}
+.shr-l{list-style:none;padding:clamp(8px,1.2vw,14px) clamp(18px,2.6vw,36px)}
+.shr-l li{display:grid;grid-template-columns:minmax(96px,.45fr) minmax(0,2fr) 64px minmax(118px,.55fr);grid-template-areas:"n bar b d";gap:clamp(12px,1.6vw,24px);align-items:center;padding:13px 0;border-bottom:1px solid var(--p-line-2)}
+.shr-l li:last-child{border-bottom:0}
+.shr-l .n{grid-area:n;font-size:16px;font-weight:400;color:var(--p-ink)}
+.shr-l .bar{grid-area:bar;display:block;height:10px;background:var(--p-line-2)}
+.shr-l .bar i{display:block;height:100%;width:var(--w);background:var(--p-ink-3);transform-origin:0 50%}
+.shr-l b{grid-area:b;font-size:clamp(18px,1.5vw,22px);font-weight:500;letter-spacing:-.01em;text-align:right;color:var(--p-ink);font-variant-numeric:tabular-nums}
+.shr-l .d{grid-area:d;font-size:10px;letter-spacing:.12em;color:var(--p-ink-3);text-align:right;white-space:nowrap}
+.shr-l li.me .n,.shr-l li.me b,.shr-l li.me .d{color:var(--b-ink)}
+.shr-l li.me .bar i{background:var(--blue)}
+.anim .shr .bar i{transform:scaleX(0)}
+.anim .shr.is-in .bar i{transform:none;transition:transform 1.2s var(--ease-out) calc(.25s + var(--k,0) * .09s)}
 
 /* ---------- 05 when ---------- */
 .pts{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--p-line);border-bottom:1px solid var(--p-line)}
@@ -526,6 +539,8 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
   .pt{padding-left:0;padding-right:0}
   .pt.claim{padding-left:18px;padding-right:18px}
   .prz{grid-template-columns:1fr}
+  .shr-l li{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n b" "bar bar" "d d";row-gap:8px}
+  .shr-l .d{text-align:left}
   .prz > div + div{border-left:0;border-top:1px solid var(--p-line)}
   .dl{grid-template-columns:1fr;gap:12px}
   .hold{grid-template-columns:1fr}
@@ -903,6 +918,19 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
         <li><div class="who"><b>Celestia</b><span>2023</span><div class="px"><span data-i="cp.5x">Launch → 2024 high</span><b>$2.10 → $20+</b></div></div><p data-i="cp.5d">Went to the people who build: developers and active users of the ecosystem.</p><span class="ar" aria-hidden="true">→</span><p class="us"><span class="lb mono" data-i="cp.th3">In Sectora</span><span data-i="cp.5s">Rewards those who help test the network, with an anti-bot check so real people win.</span></p></li>
       </ul>
     </div>
+    <div class="doc shr">
+      <span class="fc a"></span><span class="fc b"></span><span class="fc c"></span><span class="fc d"></span>
+      <div class="band"><p class="eyebrow"><i></i><span data-i="cp.st">How much they gave</span></p><span class="sp"></span><span class="ref" data-i="cp.sr">% of total supply</span></div>
+      <ul class="shr-l">
+        <li style="--k:0"><span class="n">Hyperliquid</span><span class="bar"><i style="--w:100.0%"></i></span><b>31%</b><span class="d mono">310M / 1000M HYPE</span></li>
+        <li style="--k:1"><span class="n">Uniswap</span><span class="bar"><i style="--w:48.4%"></i></span><b>15%</b><span class="d mono">150M / 1000M UNI</span></li>
+        <li class="me" style="--k:2"><span class="n">Sectora</span><span class="bar"><i style="--w:45.2%"></i></span><b>14%</b><span class="d mono">7M / 50M SECT</span></li>
+        <li style="--k:3"><span class="n">Jupiter</span><span class="bar"><i style="--w:32.3%"></i></span><b>10%</b><span class="d mono">1000M / 10000M JUP</span></li>
+        <li style="--k:4"><span class="n">Jito</span><span class="bar"><i style="--w:29.0%"></i></span><b>9%</b><span class="d mono">90M / 1000M JTO</span></li>
+        <li style="--k:5"><span class="n">Celestia</span><span class="bar"><i style="--w:19.4%"></i></span><b>6%</b><span class="d mono">60M / 1000M TIA</span></li>
+      </ul>
+      <div class="cap"><span data-i="cp.sc">Share of the total supply given in each airdrop · Jupiter: first round of several</span><span data-i="cp.sc2">Sectora: 7,000,000 of 50,000,000 SECT</span></div>
+    </div>
     <div class="hold">
       <div class="hold-h">
         <h3 data-i="av.h">What we <b>avoid.</b></h3>
@@ -1091,7 +1119,7 @@ q5:"¿Quién puede participar?","a5":"Cualquier persona donde sea legal. Las reg
 "wh.dc":"Mainnet","a2.e":"05 · Airdrop 2","a2.h":"Usa tus SECT. <b>Adelántate.</b>","a2.p":"Tus SECT llegan a SectoraEVM listos para usar. Quien los use en la red se adelanta para el Airdrop 2.","a2.1k":"Mainnet de SectoraEVM","a2.1h":"Llegan tus SECT","a2.1p":"Los recibes directamente en SectoraEVM, la blockchain de Sectora, listos para usar desde el primer día.","a2.2k":"En la red","a2.2h":"Los usas","a2.2p":"Envíalos, recíbelos y muévelos en SectoraEVM. Cada transacción le da volumen a la red.","a2.3k":"Airdrop 2","a2.3h":"Te adelantas","a2.3p":"Quienes usen sus SECT de Genesis en SectoraEVM tendrán ventajas en el Airdrop 2.","a2.nh":"Las reglas del Airdrop 2","a2.np":"Las publicaremos antes de que empiece el Airdrop 2. No prometemos cantidades: lo que cuenta es el uso real de la red.","a2.nc":"Muy pronto","q9":"¿Qué es el Airdrop 2?","a9":"Un próximo airdrop para quienes usen sus SECT de Genesis en SectoraEVM. Sus reglas se publicarán antes de que empiece.",
 "pz.4":"Titan · por cada 4.000 SECT en staking","lv.k4":"Nivel 4","lv.4b":"<b>1</b> plaza por cada 4.000 SECT · sin máximo","lv.b4":"Ser Titan","pr.4p":"2.800 SECT por plaza Titan. Cada 4.000 SECT en staking es una plaza: 40.000 SECT = 10 plazas = 28.000 SECT.",
 "q10":"¿Por qué hay que hacer staking de SECT para ganar más?","a10":"Porque SECT ya cotiza. Los airdrops famosos regalaron su token el día que nació, cuando todavía no había un mercado que proteger. Con un token que ya está en el mercado, regalarlo a quien no tiene nada invertido suele terminar en ventas el mismo día, y eso perjudica a los holders que ya confían en Sectora.<br><br>Pedirte que hagas staking de SECT protege a la comunidad de cuatro formas:<br><b>1.</b> Premia a quien de verdad apoya el proyecto.<br><b>2.</b> Frena a quienes mueven los mismos SECT entre muchas wallets para cobrar varias veces.<br><b>3.</b> Los SECT se quedan en staking, fuera del mercado, y tú sigues ganando las recompensas del staking.<br><b>4.</b> Los premios llegan en SectoraEVM en dos mitades, sin golpear al mercado de una vez.<br><br>La entrada gratis sigue abierta: solo por probar el Hash Node ganas 50 SECT.",
-"ft.1":"Sectora Foundation · Illinois, EE. UU. · Expediente 18523639",
+"cp.st":"Cuánto repartieron","cp.sr":"% del suministro total","cp.sc":"Parte del suministro total que dio cada airdrop · Jupiter: primera ronda de varias","cp.sc2":"Sectora: 7.000.000 de 50.000.000 SECT","ft.1":"Sectora Foundation · Illinois, EE. UU. · Expediente 18523639",
 "ft.2":"Este airdrop no es una inversión. Las reglas están en revisión legal y pueden cambiar antes de que se abra el airdrop. No disponible donde la ley no lo permita. El precio de SECT puede bajar o subir."
 },
 pt:{
@@ -1153,7 +1181,7 @@ q5:"Quem pode participar?","a5":"Qualquer pessoa onde for legal. As regras finai
 "wh.dc":"Mainnet","a2.e":"05 · Airdrop 2","a2.h":"Use seus SECT. <b>Saia na frente.</b>","a2.p":"Seus SECT chegam na SectoraEVM prontos para usar. Quem usar na rede sai na frente no Airdrop 2.","a2.1k":"Mainnet da SectoraEVM","a2.1h":"Seus SECT chegam","a2.1p":"Você recebe direto na SectoraEVM, a blockchain da Sectora, prontos para usar desde o primeiro dia.","a2.2k":"Na rede","a2.2h":"Você usa","a2.2p":"Envie, receba e movimente seus SECT na SectoraEVM. Cada transação dá volume à rede.","a2.3k":"Airdrop 2","a2.3h":"Você sai na frente","a2.3p":"Quem usar seus SECT do Genesis na SectoraEVM terá vantagens no Airdrop 2.","a2.nh":"As regras do Airdrop 2","a2.np":"Vamos publicá-las antes de o Airdrop 2 começar. Não prometemos valores: o que conta é o uso real da rede.","a2.nc":"Em breve","q9":"O que é o Airdrop 2?","a9":"Um próximo airdrop para quem usar seus SECT do Genesis na SectoraEVM. As regras serão publicadas antes de ele começar.",
 "pz.4":"Titan · a cada 4.000 SECT em staking","lv.k4":"Nível 4","lv.4b":"<b>1</b> vaga a cada 4.000 SECT · sem máximo","lv.b4":"Ser Titan","pr.4p":"2.800 SECT por vaga Titan. Cada 4.000 SECT em staking é uma vaga: 40.000 SECT = 10 vagas = 28.000 SECT.",
 "q10":"Por que preciso fazer staking de SECT para ganhar mais?","a10":"Porque o SECT já é negociado. Os airdrops famosos distribuíram o token no dia em que ele nasceu, quando ainda não havia um mercado para proteger. Com um token que já está no mercado, dar tokens a quem não tem nada investido costuma terminar em vendas no mesmo dia, e isso prejudica os holders que já confiam na Sectora.<br><br>Pedir que você faça staking de SECT protege a comunidade de quatro formas:<br><b>1.</b> Premia quem realmente apoia o projeto.<br><b>2.</b> Freia quem move os mesmos SECT entre muitas carteiras para ganhar várias vezes.<br><b>3.</b> Os SECT ficam em staking, fora do mercado, e você continua ganhando as recompensas do staking.<br><b>4.</b> Os prêmios chegam na SectoraEVM em duas metades, sem atingir o mercado de uma vez.<br><br>A entrada grátis continua aberta: só por testar o Hash Node você ganha 50 SECT.",
-"ft.1":"Sectora Foundation · Illinois, EUA · Arquivo 18523639",
+"cp.st":"Quanto distribuíram","cp.sr":"% do suprimento total","cp.sc":"Parte do suprimento total que cada airdrop deu · Jupiter: primeira rodada de várias","cp.sc2":"Sectora: 7.000.000 de 50.000.000 SECT","ft.1":"Sectora Foundation · Illinois, EUA · Arquivo 18523639",
 "ft.2":"Este airdrop não é um investimento. As regras estão em revisão jurídica e podem mudar antes de o airdrop abrir. Indisponível onde a lei não permitir. O preço do SECT pode cair ou subir."
 }
 };
