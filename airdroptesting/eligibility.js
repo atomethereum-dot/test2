@@ -1,10 +1,12 @@
 /* Ventana "Tu airdrop": al conectar la wallet lee, sin firmas ni
    transacciones, los SECT de la wallet y los del staking (una sola llamada
    a accountView del contrato de staking en Ethereum) y el nodo de la testnet
-   (ValidatorRegistry en Sepolia). Con eso muestra las plazas activadas y lo
-   que falta: activar el Hash Node con la misma wallet.
-   Regla de plazas: menos de 500 SECT = nivel 1 gratis; desde 500 = 1 plaza
-   (Sentinel); desde 1.000 = 1 plaza por cada 1.000 (Guardian). */
+   (ValidatorRegistry en Sepolia). Con eso muestra lo que gana esa wallet:
+   - probar el Hash Node = 250 SECT (primeros 2.000 nodos);
+   - nodo + SECT = plazas en el premio de holders: menos de 500 SECT, ninguna;
+     desde 500 = 1 plaza (Sentinel); desde 1.000 = 1 plaza por cada 1.000 (Guardian).
+   Si la wallet tiene staking y aun no tiene el nodo activo, sale el aviso
+   "solo te falta conectar el nodo". */
 (function () {
   "use strict";
   var STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
@@ -16,45 +18,51 @@
   var MM = "https://metamask.app.link/dapp/sectoraorg.com/airdroptesting/";
 
   var L = {
-    en: { loc: "en-US", k: "Sectora // Airdrop Genesis", pv: "Season 1 preview", h: "Your airdrop",
-      intro: "Connect your wallet to see the places you already have in the airdrop.",
+    en: { loc: "en-US", k: "Sectora // Airdrop Genesis", pv: "Preview", h: "Your airdrop",
+      intro: "Connect your wallet to see what you win in the airdrop.",
       connect: "Connect wallet", nowallet: "No wallet in this browser?", openmm: "Open in MetaMask",
       or: "Or check an address", check: "Check", reading: "Reading the network…",
       r1: "Wallet connected", r2: "{n} SECT counted", r2s: "Wallet {w} + staking {s}",
-      one: "1 place activated", many: "{n} places activated", lv2: "Level 2 · Sentinel", lv3: "Level 3 · Guardian",
-      free: "You're in for free", frees: "Level 1 · Free. With 500 SECT (wallet + staking) you activate your first place.",
-      todo: "Only one step left", todos: "Activate your Hash Node on the testnet with this same wallet to start receiving the airdrop.",
-      node: "Activate my Hash Node", done: "Hash Node active", dones: "You're receiving the airdrop with this wallet.",
-      paused: "Hash Node paused", pauseds: "Your node is registered but paused. Turn it back on in the dashboard.", reopen: "Open the dashboard",
-      rule: "500 SECT = 1 place · from 1,000 SECT, 1 place per 1,000 · wallet + staking count",
+      one: "1 place", many: "{n} places", lv2: "Level 2 · Sentinel", lv3: "Level 3 · Guardian",
+      ps: "In the 1,500,000 SECT holder prize.", pn: "In the 1,500,000 SECT holder prize. They count once your node is on.",
+      free: "No places yet", frees: "With 500 SECT (wallet + staking) you also get a place in the 1,500,000 SECT prize.",
+      stk: "Staker detected", stks: "You're already in. You only need to connect your node and you're done.",
+      todo: "Test your Hash Node", todos: "Turn on your node on the testnet with this same wallet and win 250 SECT (first 2,000 nodes).",
+      node: "Activate my Hash Node", done: "Hash Node active · 250 SECT", dones: "Keep it on until the campaign ends (first 2,000 nodes).",
+      paused: "Hash Node paused", pauseds: "Your node is registered but paused. Turn it back on to win the 250 SECT.", reopen: "Open the dashboard",
+      rule: "Node on = 250 SECT · 500 SECT = 1 place · from 1,000 SECT, 1 place per 1,000 · wallet + staking count",
       foot: "We only read public data: no signature, no transaction, nothing leaves your wallet. Places are checked once a day.",
       err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
       rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet" },
-    es: { loc: "es-ES", k: "Sectora // Airdrop Genesis", pv: "Vista previa · temporada 1", h: "Tu airdrop",
-      intro: "Conecta tu wallet para ver las plazas que ya tienes en el airdrop.",
+    es: { loc: "es-ES", k: "Sectora // Airdrop Genesis", pv: "Vista previa", h: "Tu airdrop",
+      intro: "Conecta tu wallet para ver lo que ganas en el airdrop.",
       connect: "Conectar wallet", nowallet: "¿No tienes wallet en este navegador?", openmm: "Abrir en MetaMask",
       or: "O revisa una dirección", check: "Revisar", reading: "Leyendo la red…",
       r1: "Wallet conectada", r2: "{n} SECT contados", r2s: "Wallet {w} + staking {s}",
-      one: "1 plaza activada", many: "{n} plazas activadas", lv2: "Nivel 2 · Sentinel", lv3: "Nivel 3 · Guardian",
-      free: "Participas gratis", frees: "Nivel 1 · Gratis. Con 500 SECT (wallet + staking) activas tu primera plaza.",
-      todo: "Solo te falta un paso", todos: "Activa tu Hash Node en la testnet, con esta misma wallet, para empezar a recibir el airdrop.",
-      node: "Activar mi Hash Node", done: "Hash Node activo", dones: "Ya estás recibiendo el airdrop con esta wallet.",
-      paused: "Hash Node pausado", pauseds: "Tu nodo está registrado pero pausado. Vuelve a encenderlo en el panel.", reopen: "Abrir el panel",
-      rule: "500 SECT = 1 plaza · desde 1.000 SECT, 1 plaza por cada 1.000 · cuentan wallet + staking",
+      one: "1 plaza", many: "{n} plazas", lv2: "Nivel 2 · Sentinel", lv3: "Nivel 3 · Guardian",
+      ps: "En el premio de holders de 1.500.000 SECT.", pn: "En el premio de holders de 1.500.000 SECT. Cuentan cuando tu nodo esté encendido.",
+      free: "Aún sin plazas", frees: "Con 500 SECT (wallet + staking) también tienes una plaza en el premio de 1.500.000 SECT.",
+      stk: "Staker detectado", stks: "Ya estás dentro. Solo te falta conectar el nodo y listo.",
+      todo: "Prueba tu Hash Node", todos: "Enciende tu nodo en la testnet con esta misma wallet y gana 250 SECT (primeros 2.000 nodos).",
+      node: "Activar mi Hash Node", done: "Hash Node activo · 250 SECT", dones: "Déjalo encendido hasta el final de la campaña (primeros 2.000 nodos).",
+      paused: "Hash Node pausado", pauseds: "Tu nodo está registrado pero pausado. Vuelve a encenderlo para ganar los 250 SECT.", reopen: "Abrir el panel",
+      rule: "Nodo encendido = 250 SECT · 500 SECT = 1 plaza · desde 1.000 SECT, 1 plaza por cada 1.000 · cuentan wallet + staking",
       foot: "Solo leemos datos públicos: no hay firmas ni transacciones y nada sale de tu wallet. Las plazas se revisan una vez al día.",
       err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
       rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet" },
-    pt: { loc: "pt-BR", k: "Sectora // Airdrop Genesis", pv: "Prévia · temporada 1", h: "Seu airdrop",
-      intro: "Conecte sua carteira para ver as vagas que você já tem no airdrop.",
+    pt: { loc: "pt-BR", k: "Sectora // Airdrop Genesis", pv: "Prévia", h: "Seu airdrop",
+      intro: "Conecte sua carteira para ver o que você ganha no airdrop.",
       connect: "Conectar carteira", nowallet: "Sem carteira neste navegador?", openmm: "Abrir no MetaMask",
       or: "Ou verifique um endereço", check: "Verificar", reading: "Lendo a rede…",
       r1: "Carteira conectada", r2: "{n} SECT contados", r2s: "Carteira {w} + staking {s}",
-      one: "1 vaga ativada", many: "{n} vagas ativadas", lv2: "Nível 2 · Sentinel", lv3: "Nível 3 · Guardian",
-      free: "Você participa grátis", frees: "Nível 1 · Grátis. Com 500 SECT (carteira + staking) você ativa sua primeira vaga.",
-      todo: "Só falta um passo", todos: "Ative seu Hash Node na testnet, com esta mesma carteira, para começar a receber o airdrop.",
-      node: "Ativar meu Hash Node", done: "Hash Node ativo", dones: "Você já está recebendo o airdrop com esta carteira.",
-      paused: "Hash Node pausado", pauseds: "Seu nó está registrado, mas pausado. Ligue de novo no painel.", reopen: "Abrir o painel",
-      rule: "500 SECT = 1 vaga · a partir de 1.000 SECT, 1 vaga a cada 1.000 · contam carteira + staking",
+      one: "1 vaga", many: "{n} vagas", lv2: "Nível 2 · Sentinel", lv3: "Nível 3 · Guardian",
+      ps: "No prêmio de holders de 1.500.000 SECT.", pn: "No prêmio de holders de 1.500.000 SECT. Contam quando o seu nó estiver ligado.",
+      free: "Ainda sem vagas", frees: "Com 500 SECT (carteira + staking) você também tem uma vaga no prêmio de 1.500.000 SECT.",
+      stk: "Staker detectado", stks: "Você já está dentro. Só falta conectar o nó e pronto.",
+      todo: "Teste seu Hash Node", todos: "Ligue seu nó na testnet com esta mesma carteira e ganhe 250 SECT (primeiros 2.000 nós).",
+      node: "Ativar meu Hash Node", done: "Hash Node ativo · 250 SECT", dones: "Deixe ligado até o fim da campanha (primeiros 2.000 nós).",
+      paused: "Hash Node pausado", pauseds: "Seu nó está registrado, mas pausado. Ligue de novo para ganhar os 250 SECT.", reopen: "Abrir o painel",
+      rule: "Nó ligado = 250 SECT · 500 SECT = 1 vaga · a partir de 1.000 SECT, 1 vaga a cada 1.000 · contam carteira + staking",
       foot: "Só lemos dados públicos: sem assinatura, sem transação, nada sai da sua carteira. As vagas são verificadas uma vez por dia.",
       err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
       rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira" }
@@ -102,8 +110,14 @@
     ".el-rows b .el-big em{font-style:normal;font-weight:400;color:#1569ff}",
     "@media (max-width:520px){.el{border-radius:18px}.el-rows b .el-big{font-size:30px}.el h3{font-size:25px}.el-bd{padding:18px 18px 20px}.el-hd{padding-left:18px}}",
     ".el-rule{margin-top:14px;color:#3c414c;line-height:1.7}",
+    ".el-st{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 14px;align-items:center;margin-top:14px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,#1569ff,#0b46c4);color:#fff;overflow:hidden}",
+    ".el-st::after{content:'';position:absolute;right:-30px;top:-40px;width:120px;height:120px;border-radius:50%;border:14px solid rgba(255,255,255,.08)}",
+    ".el-st i{grid-row:1 / 3;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.16);font-style:normal}",
+    ".el-st i svg{width:16px;height:16px;display:block}",
+    ".el-st b{font-size:16px;font-weight:500;letter-spacing:-.01em}",
+    ".el-st span{font-size:14.5px;line-height:1.45;color:rgba(255,255,255,.88)}",
     /* pantallas bajas (iPhone SE): todo mas junto para que quepa sin desplazar */
-    "@media (max-height:720px){.el-hd{padding-top:12px;padding-bottom:10px}.el-bd{padding-top:14px;padding-bottom:16px}.el h3{font-size:23px}.el-rows{margin-top:8px}.el-rows li{padding:8px 0}.el-rows span{font-size:13px}.el-rows b .el-big{font-size:27px}.el-rows .chip{margin-top:6px}.el-b{margin-top:12px;padding:13px 16px}.el-rule{margin-top:10px;line-height:1.55}.el-ft{font-size:12px}.el-lnk{margin-top:8px}}",
+    "@media (max-height:720px){.el-hd{padding-top:12px;padding-bottom:10px}.el-bd{padding-top:14px;padding-bottom:16px}.el h3{font-size:23px}.el-rows{margin-top:8px}.el-rows li{padding:8px 0}.el-rows span{font-size:13px}.el-rows b .el-big{font-size:27px}.el-rows .chip{margin-top:6px}.el-b{margin-top:12px;padding:13px 16px}.el-rule{margin-top:10px;line-height:1.55}.el-st{margin-top:10px;padding:11px 14px}.el-ft{font-size:12px}.el-lnk{margin-top:8px}}",
     ".el-ft{margin-top:8px;font-size:12.5px;line-height:1.5;color:#6b7280}",
     ".el-msg{margin-top:12px;font-size:14px;color:#b42318}",
     ".el-sp{display:inline-block;width:14px;height:14px;border:2px solid rgba(7,8,10,.15);border-top-color:#1569ff;border-radius:50%;animation:elsp .8s linear infinite;vertical-align:-2px;margin-right:8px}",
@@ -188,18 +202,23 @@
     bd.innerHTML = '<h3>' + t("h") + '</h3><p class="el-in"><span class="el-sp"></span>' + t("reading") + '</p>';
     read(addr).then(function (r) {
       if (cur !== addr) return;
-      var total = r.wallet + r.staked, p = places(total);
+      var total = r.wallet + r.staked, p = places(total), on = r.node === "active";
       var rows = [];
       rows.push(li("ok", "", connected ? t("r1") : short(addr), connected ? short(addr) : ""));
-      rows.push(li("ok", "", t("r2", { n: fmt(total) }), t("r2s", { w: fmt(r.wallet), s: fmt(r.staked) })));
-      if (p > 0) rows.push(li("ok", "", '<span class="el-big">' + (p === 1 ? t("one").replace("1", "<em>1</em>") : t("many", { n: "<em>" + fmt(p) + "</em>" })) + "</span>", "", p === 1 && total < 1000n ? t("lv2") : t("lv3")));
-      else rows.push(li("ok", "", t("free"), t("frees")));
-      if (r.node === "active") rows.push(li("ok", "", t("done"), t("dones")));
+      // premio del nodo: lo primero que gana cualquiera
+      if (on) rows.push(li("ok", "", t("done"), t("dones")));
       else if (r.node === "paused") rows.push(li("warn", "p", t("paused"), t("pauseds")));
       else rows.push(li("wait", "p", t("todo"), t("todos")));
-      var btn = r.node === "active" ? "" :
+      rows.push(li("ok", "", t("r2", { n: fmt(total) }), t("r2s", { w: fmt(r.wallet), s: fmt(r.staked) })));
+      // nodo + SECT: plazas en el premio de holders
+      if (p > 0) rows.push(li(on ? "ok" : "wait", on ? "" : "p", '<span class="el-big">' + (p === 1 ? t("one").replace("1", "<em>1</em>") : t("many", { n: "<em>" + fmt(p) + "</em>" })) + "</span>",
+        on ? t("ps") : t("pn"), p === 1 && total < 1000n ? t("lv2") : t("lv3")));
+      else rows.push(li("wait", "p", t("free"), t("frees")));
+      // con staking y sin nodo encendido: el aviso de que solo falta el nodo
+      var stk = r.staked > 0n && !on ? '<p class="el-st"><i>' + ICON.bolt + "</i><b>" + t("stk") + "</b><span>" + t("stks") + "</span></p>" : "";
+      var btn = on ? "" :
         '<a class="el-b go mono" href="' + DASH + '"><span>' + (r.node === "paused" ? t("reopen") : t("node")) + '</span><span>↗</span></a>';
-      bd.innerHTML = '<h3>' + t("h") + '</h3><ul class="el-rows">' + rows.join("") + "</ul>" + btn +
+      bd.innerHTML = '<h3>' + t("h") + '</h3>' + stk + '<ul class="el-rows">' + rows.join("") + "</ul>" + btn +
         '<p class="mono el-rule">' + t("rule") + '</p><p class="el-ft">' + t("foot") + '</p>' +
         '<button class="el-lnk" type="button" data-a="other">' + t("other") + "</button>";
       bd.querySelector('[data-a="other"]').addEventListener("click", function () { start(); });
@@ -208,7 +227,8 @@
   var ICON = {
     ok: '<svg viewBox="0 0 16 16"><path d="M3.2 8.4l3 3 6.6-7" fill="none" stroke="#fff" stroke-width="2.2"/></svg>',
     wait: '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.6" fill="#e0a030"/></svg>',
-    warn: '<svg viewBox="0 0 16 16"><path d="M8 3.5v6" stroke="#b26b00" stroke-width="2.2"/><circle cx="8" cy="12.4" r="1.3" fill="#b26b00"/></svg>'
+    warn: '<svg viewBox="0 0 16 16"><path d="M8 3.5v6" stroke="#b26b00" stroke-width="2.2"/><circle cx="8" cy="12.4" r="1.3" fill="#b26b00"/></svg>',
+    bolt: '<svg viewBox="0 0 16 16"><path d="M9.2 1.5L3.6 9h3.9l-.9 5.5L12.4 7H8.4z" fill="#fff"/></svg>'
   };
   function li(ic, cls, title, sub, chip) {
     return '<li><span class="el-ic ' + cls + '">' + ICON[ic] + "</span><div><b>" + title + "</b>" + (sub ? "<span>" + sub + "</span>" : "") +

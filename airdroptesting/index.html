@@ -192,7 +192,7 @@ h1 .b{font-weight:400}
 .big{font-size:clamp(52px,9vw,136px);font-weight:200;letter-spacing:-.05em;line-height:.9;font-variant-numeric:tabular-nums;white-space:nowrap}
 .big-u{margin-top:22px;opacity:.55}
 .iris-sp{grid-row:3;align-self:start;width:100%;position:relative;z-index:5;transform:translateY(calc(var(--lift) * var(--so) * -1))}
-.split{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;max-width:980px;margin:clamp(34px,6vh,64px) auto 0;border-top:1px solid rgba(7,8,10,.12);text-align:left;
+.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;max-width:760px;margin:clamp(34px,6vh,64px) auto 0;border-top:1px solid rgba(7,8,10,.12);text-align:left;
   opacity:var(--so);translate:0 calc((1 - var(--so)) * 18px)}
 .split > div{padding:18px 18px 0 0;min-width:0}
 .split > div + div{padding-left:18px;border-left:1px solid rgba(7,8,10,.12)}
@@ -317,7 +317,9 @@ h2.t b{font-weight:400;color:var(--b-ink)}
 .lv.g li b{color:#fff}
 .rate{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:auto 0 20px;color:var(--p-ink-3)}
 .lv.g .rate{color:var(--ink-3)}
-.rate b{font-size:30px;font-weight:300;letter-spacing:-.02em;color:var(--p-ink);font-family:'IBM Plex Sans',sans-serif;text-transform:none}
+.rate b{font-size:30px;font-weight:300;letter-spacing:-.02em;color:var(--p-ink);font-family:'IBM Plex Sans',sans-serif;text-transform:none;white-space:nowrap}
+.rate b small{font-size:13px;letter-spacing:0;color:var(--p-ink-3);margin-left:3px}
+.lv.g .rate b small{color:var(--ink-3)}
 .lv.g .rate b{color:#fff}
 /* you only hold: nothing locked, nothing sent, sell any time */
 .hold{position:relative;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.6fr);gap:clamp(20px,3vw,48px);align-items:center;margin-top:clamp(20px,3vh,32px);
@@ -337,6 +339,7 @@ h2.t b{font-weight:400;color:var(--b-ink)}
 .hold.stk .hold-l li::before{border-color:rgba(21,105,255,.4);
   background:rgba(21,105,255,.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.2l2 2 4-4.4' fill='none' stroke='%231569ff' stroke-width='1.5'/%3E%3C/svg%3E") center/13px no-repeat}
 .hold .sb{margin-top:20px;max-width:300px}
+.hold .sb + .sb{margin-top:10px}
 .stk-rem{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;padding-top:18px;border-top:1px solid var(--p-line);font-size:15.5px;line-height:1.55;color:var(--p-ink-2)}
 .stk-rem .mono{flex:none;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--b-ink)}
 .hold.node{margin-top:clamp(28px,4vh,40px)}
@@ -345,27 +348,6 @@ h2.t b{font-weight:400;color:var(--b-ink)}
   font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:var(--b-ink)}
 .lnote{margin-top:22px;color:var(--p-ink-3);font-size:14px;line-height:1.6;max-width:72ch}
 
-/* ---------- 03 extra points ---------- */
-.boosts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
-.boost{position:relative;padding:clamp(24px,3vw,40px) clamp(18px,2vw,30px) clamp(24px,3vw,36px);transition:background .4s var(--ease)}
-.boost + .boost{border-left:1px solid var(--hair)}
-.boost::before{content:'';position:absolute;left:0;top:-1px;height:1.5px;width:100%;background:var(--blue-l);transform:scaleX(.16);transform-origin:0 50%;transition:transform .55s var(--ease)}
-.boost:hover{background:linear-gradient(180deg,rgba(21,105,255,.08),transparent 80%)}
-.boost:hover::before{transform:scaleX(1)}
-.boost b{display:block;font-size:clamp(34px,3.2vw,50px);font-weight:200;letter-spacing:-.04em;line-height:.95;color:#fff;white-space:nowrap}
-.boost b i{font-style:normal;color:var(--ink-3);margin:0 .12em}
-.boost .u{display:block;margin-top:10px;color:var(--ink-3);font-size:10px}
-.boost h3{margin-top:22px;font-size:clamp(18px,1.5vw,21px);font-weight:400;letter-spacing:-.01em}
-.boost p{margin-top:8px;font-size:15px;line-height:1.6;color:var(--ink-2)}
-/* staking: the strongest boost, so it carries the blue and a way in */
-.boost.star{background:linear-gradient(180deg,rgba(21,105,255,.16),rgba(21,105,255,.02) 85%)}
-.boost.star::before{background:var(--blue);transform:scaleX(1)}
-.boost.star b{color:var(--blue-l)}
-.boost .tag{position:absolute;top:clamp(20px,2.6vw,34px);right:clamp(14px,1.6vw,24px)}
-.boost .bl{display:inline-flex;align-items:center;gap:8px;margin-top:18px;color:var(--blue-l);text-decoration:none;font-weight:500;transition:color .3s var(--ease)}
-.boost .bl i{font-style:normal;transition:transform .38s var(--ease)}
-.boost .bl:hover{color:#fff}
-.boost .bl:hover i{transform:translate(3px,-3px)}
 
 /* ---------- document frame ---------- */
 .doc{position:relative;border:1px solid var(--p-line);background:var(--card,#fff)}
@@ -389,7 +371,7 @@ h2.t b{font-weight:400;color:var(--b-ink)}
 .cap{display:flex;justify-content:space-between;gap:18px;padding:12px clamp(18px,2.6vw,36px);border-top:1px solid var(--p-line);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;line-height:1.6;color:var(--p-ink-3)}
 
 /* ---------- 04 prizes ---------- */
-.prz{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.prz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
 .prz > div{position:relative;padding:clamp(24px,3vw,44px) clamp(18px,2.6vw,36px);min-width:0}
 .prz > div + div{border-left:1px solid var(--p-line)}
 .prz .pc{color:var(--b-ink)}
@@ -397,16 +379,6 @@ h2.t b{font-weight:400;color:var(--b-ink)}
 .prz b small{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--p-ink-3);margin-left:8px}
 .prz h3{margin-top:18px;font-size:clamp(18px,1.5vw,21px);font-weight:400;letter-spacing:-.01em}
 .prz p{margin-top:8px;font-size:15px;line-height:1.6;color:var(--p-ink-2)}
-.podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid var(--p-line)}
-.podium > div{position:relative;padding:clamp(22px,3vw,40px) clamp(18px,2.6vw,36px);min-width:0}
-.podium > div + div{border-left:1px solid var(--p-line)}
-.podium .rk{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--p-ink-3)}
-.podium .rk b{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:400;letter-spacing:0;color:var(--b-ink)}
-.podium strong{display:block;margin-top:20px;font-size:clamp(36px,4.2vw,64px);font-weight:200;letter-spacing:-.05em;line-height:.9;white-space:nowrap;font-variant-numeric:tabular-nums}
-.podium span.u{display:block;margin-top:12px;font-size:10px;color:var(--p-ink-3)}
-.podium > div:first-child{background:linear-gradient(180deg,rgba(21,105,255,.07),transparent 80%)}
-.podium > div:first-child::before{content:'';position:absolute;left:0;right:0;top:-1px;height:2px;background:var(--blue)}
-.tb-w{padding:clamp(18px,2.6vw,32px) clamp(18px,2.6vw,36px) clamp(8px,1.2vw,14px)}
 /* 06 · comparativa con airdrops conocidos: que hizo cada uno y como lo hace Sectora */
 .cmp{list-style:none}
 .cmp-h,.cmp li{display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1.1fr) 34px minmax(0,1.1fr);gap:clamp(14px,2vw,28px);align-items:center;padding-left:clamp(18px,2.6vw,36px);padding-right:clamp(18px,2.6vw,36px)}
@@ -423,14 +395,6 @@ h2.t b{font-weight:400;color:var(--b-ink)}
 .cmp .px{margin-top:14px}
 .cmp .px span{display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--p-ink-3)}
 .cmp .px b{display:block;margin-top:5px;font-size:clamp(19px,1.6vw,23px);font-weight:500;letter-spacing:-.015em;color:#0f8f52;white-space:nowrap;font-variant-numeric:tabular-nums}
-.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
-.tbl th{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:400;color:var(--p-ink-3);text-align:left;padding:0 10px 12px 0;border-bottom:1px solid var(--p-line)}
-.tbl td{padding:15px 10px 15px 0;border-bottom:1px solid var(--p-line-2);font-size:15.5px;color:var(--p-ink-2)}
-.tbl th:last-child,.tbl td:last-child{padding-right:0}
-.tbl .r{text-align:right}
-.tbl td b{font-weight:400;color:var(--p-ink)}
-.tbl td.big2{font-size:22px;font-weight:300;color:var(--p-ink);letter-spacing:-.01em}
-.tbl tr:last-child td{border-bottom:0}
 
 /* ---------- 05 when ---------- */
 .pts{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--p-line);border-bottom:1px solid var(--p-line)}
@@ -520,9 +484,9 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
   .sheet{border-left:0;border-top:1px solid var(--hair);padding:24px 0 0}
   .head{grid-template-columns:1fr;align-items:start;gap:20px}
   .lvls{grid-template-columns:1fr;max-width:620px}
-  .boosts,.pts{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .boost:nth-child(3),.pts .pt:nth-child(3){border-left:0}
-  .boost:nth-child(n+3),.pts .pt:nth-child(n+3){border-top:1px solid var(--hair)}
+  .pts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pts .pt:nth-child(3){border-left:0}
+  .pts .pt:nth-child(n+3){border-top:1px solid var(--hair)}
   .pts .pt:nth-child(n+3){border-top-color:var(--p-line)}
   .ver,.faqw{grid-template-columns:1fr}
   .ver-l,.faqw .head{position:static}
@@ -537,23 +501,13 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
   .step .num{font-size:44px;min-width:1.2em}
   .step .fact{grid-column:2;justify-self:start;white-space:normal}
   .step h3 .chip{margin:8px 0 0;display:inline-flex}
-  .pts,.boosts{grid-template-columns:1fr}
+  .pts{grid-template-columns:1fr}
   .pt + .pt,.pts .pt:nth-child(n){border-left:0;border-top:1px solid var(--p-line)}
   .pts .pt:first-child{border-top:0}
   .pt{padding-left:0;padding-right:0}
   .pt.claim{padding-left:18px;padding-right:18px}
-  .boost{display:block;padding-left:0;padding-right:0}
-  .boost + .boost,.boost:nth-child(n){border-left:0;border-top:1px solid var(--hair)}
-  .boost:first-child{border-top:0}
-  .boost b{font-size:40px}
-  .boost h3{margin-top:14px}
-  .boost .tag{top:28px;right:0}
-  .prz,.podium{grid-template-columns:1fr}
-  .prz > div + div,.podium > div + div{border-left:0;border-top:1px solid var(--p-line)}
-  .podium > div{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:6px 16px}
-  .podium .rk{grid-column:1 / -1}
-  .podium strong{margin-top:10px}
-  .podium span.u{margin-top:0;text-align:right}
+  .prz{grid-template-columns:1fr}
+  .prz > div + div{border-left:0;border-top:1px solid var(--p-line)}
   .dl{grid-template-columns:1fr;gap:12px}
   .hold{grid-template-columns:1fr}
   .hold-l{grid-template-columns:1fr}
@@ -589,9 +543,6 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
   .docs{padding:9px 12px}
   .actions{grid-template-columns:minmax(0,1fr)}
   .btn{padding:15px 20px}
-  .tbl td{font-size:14.5px}
-  .tbl td.big2{font-size:19px}
-  .tbl th{font-size:9px;letter-spacing:.1em}
 }
 
 /* motion: only with JS and when the visitor allows it */
@@ -611,9 +562,9 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
 .anim .rv.is-in{opacity:1;translate:none;transition:opacity .9s var(--ease-out) var(--d,0s),translate .9s var(--ease-out) var(--d,0s),transform .5s var(--ease),border-color .5s var(--ease),background .4s var(--ease)}
 .anim .step .num{opacity:0;translate:-14px 0}
 .anim .step.is-in .num{opacity:1;translate:none;transition:opacity .9s var(--ease-out) calc(var(--d,0s) + .15s),translate .9s var(--ease-out) calc(var(--d,0s) + .15s)}
-.anim .step::before,.anim .pt::before,.anim .boost::before{transform:scaleX(0)}
-.anim .step.is-in::before,.anim .pt.is-in::before,.anim .boost.is-in::before{transform:scaleX(.16);transition:transform .9s var(--ease-out) calc(var(--d,0s) + .3s)}
-.anim .step.is-in:hover::before,.anim .pt.is-in:hover::before,.anim .pt.claim.is-in::before,.anim .boost.is-in:hover::before,.anim .boost.star.is-in::before{transform:scaleX(1)}
+.anim .step::before,.anim .pt::before{transform:scaleX(0)}
+.anim .step.is-in::before,.anim .pt.is-in::before{transform:scaleX(.16);transition:transform .9s var(--ease-out) calc(var(--d,0s) + .3s)}
+.anim .step.is-in:hover::before,.anim .pt.is-in:hover::before,.anim .pt.claim.is-in::before{transform:scaleX(1)}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
@@ -657,7 +608,7 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
         <p class="eyebrow mono"><i></i><span data-i="h.e">Official campaign · Sectora Foundation</span></p>
         <h1><span class="ln" style="--i:0"><span>Sectora Foundation</span></span><span class="ln b" style="--i:1"><span>Airdrop Genesis</span></span></h1>
         <div class="rule"></div>
-        <p class="lede fx" style="--d:.55s" data-i="h.l">We're giving away <b>2,000,000 SECT</b>. Join free, collect points and get your SECT when SectoraEVM launches.</p>
+        <p class="lede fx" style="--d:.55s" data-i="h.l">We're giving away <b>2,000,000 SECT</b>. Test the Hash Node for free and win SECT. Test it and hold SECT, and win even more.</p>
         <div class="actions">
           <a class="btn btn-primary mono js-connect fx" style="--d:.7s" href="#steps"><span data-i="b.join">Join free</span><span class="arrow">→</span></a>
           <a class="btn btn-guide mono fx" style="--d:.78s" href="#steps"><span class="gs" aria-hidden="true"><b></b><b></b><b></b><b></b></span><span data-i="b.how">See the 4 steps</span><span class="arrow">→</span></a>
@@ -698,9 +649,8 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
     </div>
     <div class="gut iris-sp">
       <div class="split">
-        <div><span class="pc mono">70%</span><b data-n="1400000"></b><h3 data-i="pz.1">For people who hold SECT</h3></div>
-        <div><span class="pc mono">20%</span><b data-n="400000"></b><h3 data-i="pz.2">For the 100 who invite the most</h3></div>
-        <div><span class="pc mono">10%</span><b data-n="200000"></b><h3 data-i="pz.3">For everyone who joins free</h3></div>
+        <div><span class="pc mono">25%</span><b data-n="500000"></b><h3 data-i="pz.1">For everyone who tests the node, free</h3></div>
+        <div><span class="pc mono">75%</span><b data-n="1500000"></b><h3 data-i="pz.2">For those who test the node and hold SECT</h3></div>
       </div>
     </div>
     <p class="iris-hint mono" aria-hidden="true"><span data-i="pz.h">Scroll</span><i></i></p>
@@ -715,15 +665,15 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
     <div class="head">
       <div>
         <p class="eyebrow mono"><i></i><span data-i="sp.e">01 · How to join</span></p>
-        <div class="hw"><h2 class="t" data-i="sp.h">Four steps. <b>That's it.</b></h2></div>
+        <div class="hw"><h2 class="t" data-i="sp.h">Test the node. <b>Win SECT.</b></h2></div>
       </div>
       <p class="sub" data-i="sp.p">You don't need money to start.</p>
     </div>
     <ol class="steps">
-      <li class="step"><span class="num">1</span><div><h3 data-i="s1h">Connect and say hi</h3><p data-i="s1p">Connect your wallet, follow us on X and join Telegram. It's free and costs no gas.</p></div><span class="fact mono" data-i="s1f">+100 points</span></li>
-      <li class="step"><span class="num">2</span><div><h3 data-i="s2h">Turn on a node</h3><p data-i="s2p">In the Sectora dashboard, take free test SECT, buy hash power and register your node. It costs nothing.</p></div><span class="fact mono" data-i="s2f">+300 points · +5 a day</span></li>
-      <li class="step"><span class="num">3</span><div><h3 data-i="s3h">Hold SECT <span class='chip ink mono'>Optional</span></h3><p data-i="s3p">Keep SECT in your wallet and earn points every day. Nothing is locked or sent: you can sell whenever you want.</p></div><span class="fact mono" data-i="s3f">Up to 15 points a day</span></li>
-      <li class="step last"><span class="num">4</span><div><h3 data-i="s4h">Receive your SECT</h3><p data-i="s4p">When SectoraEVM launches, you get SECT based on your points.</p></div><span class="fact mono" data-i="s4f">Half at launch, half 90 days later</span></li>
+      <li class="step"><span class="num">1</span><div><h3 data-i="s1h">Connect your wallet</h3><p data-i="s1p">Use the same wallet you'll use for your node. It's free and costs no gas.</p></div><span class="fact mono" data-i="s1f">Free</span></li>
+      <li class="step"><span class="num">2</span><div><h3 data-i="s2h">Test the Hash Node</h3><p data-i="s2p">In the Sectora dashboard, take free test SECT, buy hash power and register your node. It all runs on the testnet and costs nothing. The first 2,000 nodes win.</p></div><span class="fact mono" data-i="s2f">You win 250 SECT</span></li>
+      <li class="step"><span class="num">3</span><div><h3 data-i="s3h">Hold SECT <span class='chip ink mono'>Optional</span></h3><p data-i="s3p">If you also keep SECT in your wallet or in staking, you win more: a share of 1,500,000 SECT. Nothing is locked or sent.</p></div><span class="fact mono" data-i="s3f">+ share of 1,500,000 SECT</span></li>
+      <li class="step last"><span class="num">4</span><div><h3 data-i="s4h">Receive your SECT</h3><p data-i="s4p">When SectoraEVM launches, you get your node prize and, if you hold SECT, your share.</p></div><span class="fact mono" data-i="s4f">Half at launch, half 90 days later</span></li>
     </ol>
     <div class="hold stk node">
       <div class="hold-h">
@@ -733,20 +683,21 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
       </div>
       <ul class="hold-l">
         <li><b data-i="nd.1">Take free test SECT</b><span data-i="nd.1p">5,000 tSECT every 24 h from the faucet.</span></li>
-        <li><b data-i="nd.2">Buy hash power</b><span data-i="nd.2p">Pick any package. +100 points.</span></li>
-        <li><b data-i="nd.3">Register your node</b><span data-i="nd.3p">+200 points, and +5 a day while it's on.</span></li>
+        <li><b data-i="nd.2">Buy hash power</b><span data-i="nd.2p">Pick any package.</span></li>
+        <li><b data-i="nd.3">Register your node</b><span data-i="nd.3p">Keep it on until the campaign ends. That's it.</span></li>
       </ul>
     </div>
     <div class="hold stk">
       <div class="hold-h">
         <h3 data-i="sk.h">Already staking? <b>You're already in.</b></h3>
-        <p data-i="sk.p">Your SECT in Sectora staking count for the airdrop on their own. Don't withdraw them: you keep your staking rewards and add airdrop points at the same time.</p>
+        <p data-i="sk.p">Your SECT in Sectora staking count on their own, as if they were in your wallet. Don't withdraw them: you keep your staking rewards and you're in the airdrop at the same time.</p>
+        <a class="sb go mono" href="/dash/"><span data-i="sk.n">Connect my node</span><i>↗</i></a>
         <a class="sb mono" href="/staking/"><span data-i="sk.b">Open my staking</span><i>↗</i></a>
       </div>
       <ul class="hold-l">
         <li><b data-i="sk.1">No sign-up needed</b><span data-i="sk.1p">Your staking wallet is in from day one.</span></li>
-        <li><b data-i="sk.2">More than double</b><span data-i="sk.2p">With staking, 10 points become 25.</span></li>
-        <li><b data-i="sk.3">Stars in staking</b><span data-i="sk.3p">Your staking page shows your airdrop tasks.</span></li>
+        <li><b data-i="sk.2">Counts as holding</b><span data-i="sk.2p">Your staked SECT give you places in the 1,500,000 SECT prize.</span></li>
+        <li><b data-i="sk.3">Only the node is missing</b><span data-i="sk.3p">Connect your Hash Node with the same wallet and you're done.</span></li>
       </ul>
       <p class="stk-rem"><span class="mono" data-i="sk.rk">Reminder</span><span data-i="sk.r">Staking is open to everyone with no lock-up: you withdraw whenever you want. The rewards are deposited in the contract in advance.</span></p>
     </div>
@@ -766,7 +717,7 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
         <p class="eyebrow mono"><i></i><span data-i="lv.e">02 · Levels</span></p>
         <div class="hw"><h2 class="t" data-i="lv.h">Pick your <b>level.</b></h2></div>
       </div>
-      <p class="sub" data-i="lv.p">Simple rule: every 100 SECT in your wallet = 1 point a day.</p>
+      <p class="sub" data-i="lv.p">Simple rule: test the node and you win. Hold SECT too and you win more.</p>
     </div>
     <div class="lvls">
       <article class="lv">
@@ -774,10 +725,10 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
         <h3>Scout</h3>
         <div class="req"><b data-i="lv.r1">Free</b><span class="mono" data-i="lv.r1s">No purchase</span></div>
         <ul>
-          <li data-i="lv.1a">Tasks and your node</li>
-          <li data-i="lv.1b">Share of <b>200,000 SECT</b></li>
+          <li data-i="lv.1a">Test the Hash Node</li>
+          <li data-i="lv.1b">Win <b>250 SECT</b></li>
         </ul>
-        <div class="rate mono"><span data-i="lv.rt">Points a day for holding</span><b>0</b></div>
+        <div class="rate mono"><span data-i="lv.rt">Places in the holder prize</span><b>0</b></div>
         <a class="sb mono js-connect" href="#steps"><span data-i="lv.b1">Start free</span><i>→</i></a>
       </article>
       <article class="lv s">
@@ -786,9 +737,9 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
         <div class="req"><b><span data-n="500"></span><small>SECT</small></b><span class="mono" data-i="lv.r2s">In your wallet · not locked</span></div>
         <ul>
           <li data-i="lv.2a">Everything in Scout</li>
-          <li data-i="lv.2b">Share of <b>1,400,000 SECT</b></li>
+          <li data-i="lv.2b">+ 1 place in <b>1,500,000 SECT</b></li>
         </ul>
-        <div class="rate mono"><span data-i="lv.rt">Points a day for holding</span><b>5</b></div>
+        <div class="rate mono"><span data-i="lv.rt">Places in the holder prize</span><b>1</b></div>
         <a class="sb mono js-connect" href="#steps"><span data-i="lv.b2">Become Sentinel</span><i>→</i></a>
       </article>
       <article class="lv g">
@@ -796,10 +747,10 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
         <h3>Guardian</h3>
         <div class="req"><b><span data-n="1000"></span><small>SECT</small></b><span class="mono" data-i="lv.r2s">In your wallet · not locked</span></div>
         <ul>
-          <li data-i="lv.3a">Everything in Sentinel</li>
-          <li data-i="lv.3b">Bonus: <b>15 points a day</b> instead of 10</li>
+          <li data-i="lv.2a">Everything in Scout</li>
+          <li data-i="lv.3b">+ 1 place for every <b>1,000 SECT</b></li>
         </ul>
-        <div class="rate mono"><span data-i="lv.rt">Points a day for holding</span><b>15</b></div>
+        <div class="rate mono"><span data-i="lv.rt">Places in the holder prize</span><b>1<small>/ <span data-n="1000"></span></small></b></div>
         <a class="sb go mono js-connect" href="#steps"><span data-i="lv.b3">Become Guardian</span><i>→</i></a>
       </article>
     </div>
@@ -811,91 +762,51 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
       <ul class="hold-l">
         <li><b data-i="hd.1">Not locked</b><span data-i="hd.1p">Nobody freezes your SECT.</span></li>
         <li><b data-i="hd.2">Nothing to send</b><span data-i="hd.2p">The airdrop never asks you to send SECT anywhere.</span></li>
-        <li><b data-i="hd.3">Sell any time</b><span data-i="hd.3p">You keep the points you already earned.</span></li>
+        <li><b data-i="hd.3">Sell any time</b><span data-i="hd.3p">You keep your node prize.</span></li>
       </ul>
     </div>
-    <p class="lnote" data-i="lv.n">We check your wallet once a day. Dollar amounts are approximate: the price of SECT changes.</p>
+    <p class="lnote" data-i="lv.n">We check your wallet and your staking once a day. Dollar amounts are approximate: the price of SECT changes.</p>
   </div>
 </section>
 
-<!-- ============ 03 extra points ============ -->
-<section class="sec dk gut" id="boost">
+<!-- ============ 03 prizes ============ -->
+<section class="sec pp gut" id="prizes">
   <div class="spine" aria-hidden="true"><em><b>03</b><span></span></em><i></i></div>
   <div class="in">
     <div class="head">
       <div>
-        <p class="eyebrow mono"><i></i><span data-i="bo.e">03 · Extra points</span></p>
-        <div class="hw"><h2 class="t" data-i="bo.h">Four ways to <b>earn more.</b></h2></div>
-      </div>
-      <p class="sub" data-i="bo.p">Example: if you normally earn 10 points a day for holding SECT, this is what each extra turns them into.</p>
-    </div>
-    <div class="boosts">
-      <div class="boost"><b>10<i>→</i>20</b><span class="u mono" data-i="bo.u">points a day</span><h3 data-i="bo.1h">Come every day</h3><p data-i="bo.1p">Your points grow a little every 6 days. By day 60 they are double.</p></div>
-      <div class="boost"><b>10<i>→</i>20</b><span class="u mono" data-i="bo.u">points a day</span><h3 data-i="bo.2h">Be one of the first 1,000</h3><p data-i="bo.2p">Double points for the whole campaign.</p></div>
-      <div class="boost star"><span class="chip blue mono tag" data-i="bo.3t">Most points</span><b>10<i>→</i>25</b><span class="u mono" data-i="bo.u">points a day</span><h3 data-i="bo.3h">Stake your SECT</h3><p data-i="bo.3p">You earn more than double, and it still counts for your level. First stake: +100 points. Already staking? You're in.</p><a class="bl mono" href="/staking/"><span data-i="bo.3l">Go to staking</span><i>↗</i></a></div>
-      <div class="boost"><b>10<i>→</i>12</b><span class="u mono" data-i="bo.u">points a day</span><h3 data-i="bo.4h">Bring 5 friends</h3><p data-i="bo.4p">When 5 friends reach Sentinel, you get 2 extra points for every 10.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 04 prizes ============ -->
-<section class="sec pp gut" id="prizes">
-  <div class="spine" aria-hidden="true"><em><b>04</b><span></span></em><i></i></div>
-  <div class="in">
-    <div class="head">
-      <div>
-        <p class="eyebrow mono"><i></i><span data-i="pr.e">04 · Prizes</span></p>
+        <p class="eyebrow mono"><i></i><span data-i="pr.e">03 · Prizes</span></p>
         <div class="hw"><h2 class="t" data-i="pr.h">Who wins <b>what.</b></h2></div>
       </div>
       <p class="sub" data-i="pr.p">Everything comes from one fixed bag of 2,000,000 SECT.</p>
     </div>
     <div class="doc">
       <span class="fc a"></span><span class="fc b"></span><span class="fc c"></span><span class="fc d"></span>
-      <div class="band"><p class="eyebrow"><i></i><span data-i="pr.t">Prize bag</span></p><span class="sp"></span><span class="ref">Ref. SA·PP·01·26</span></div>
+      <div class="band"><p class="eyebrow"><i></i><span data-i="pr.t">Prize bag</span></p><span class="sp"></span><span class="ref">Ref. SA·PP·02·26</span></div>
       <div class="prz">
-        <div><span class="pc mono">70%</span><b><span data-n="1400000"></span><small>SECT</small></b><h3 data-i="pr.1h">Holders</h3><p data-i="pr.1p">Split by points among Sentinels and Guardians.</p></div>
-        <div><span class="pc mono">20%</span><b><span data-n="400000"></span><small>SECT</small></b><h3 data-i="pr.2h">Top 100 inviters</h3><p data-i="pr.2p">Fixed prizes by place. See below.</p></div>
-        <div><span class="pc mono">10%</span><b><span data-n="200000"></span><small>SECT</small></b><h3 data-i="pr.3h">Free players</h3><p data-i="pr.3p">Split by task points.</p></div>
+        <div><span class="pc mono">25%</span><b><span data-n="500000"></span><small>SECT</small></b><h3 data-i="pr.1h">Node testers</h3><p data-i="pr.1p">250 SECT for each of the first 2,000 nodes that are still on at the end. One per person.</p></div>
+        <div><span class="pc mono">75%</span><b><span data-n="1500000"></span><small>SECT</small></b><h3 data-i="pr.2h">Node + holders</h3><p data-i="pr.2p">Split by places among those who test the node and hold 500 SECT or more, in their wallet or in staking.</p></div>
       </div>
-    </div>
-    <div class="doc">
-      <span class="fc a"></span><span class="fc b"></span><span class="fc c"></span><span class="fc d"></span>
-      <div class="band"><p class="eyebrow"><i></i><span data-i="tp.t">Top 100 inviters</span></p><span class="sp"></span><span class="ref">Ref. SA·LB·01·26</span></div>
-      <div class="podium">
-        <div><div class="rk mono"><span data-i="tp.p1">1st place</span><b>#1</b></div><strong data-n="50000"></strong><span class="u mono">SECT</span></div>
-        <div><div class="rk mono"><span data-i="tp.p2">2nd place</span><b>#2</b></div><strong data-n="30000"></strong><span class="u mono">SECT</span></div>
-        <div><div class="rk mono"><span data-i="tp.p3">3rd place</span><b>#3</b></div><strong data-n="20000"></strong><span class="u mono">SECT</span></div>
-      </div>
-      <div class="tb-w">
-        <table class="tbl">
-          <thead><tr><th data-i="tp.th1">Place</th><th class="r" data-i="tp.th3">People</th><th class="r" data-i="tp.th2">SECT each</th></tr></thead>
-          <tbody>
-            <tr><td><b>#4 – 10</b></td><td class="r">7</td><td class="r big2" data-n="10000"></td></tr>
-            <tr><td><b>#11 – 50</b></td><td class="r">40</td><td class="r big2" data-n="3000"></td></tr>
-            <tr><td><b>#51 – 100</b></td><td class="r">50</td><td class="r big2" data-n="2200"></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="cap"><span data-i="tp.c1">A friend counts when they join with your link, reach Sentinel and pass the anti-bot check</span><span data-i="tp.c2">Points, not money</span></div>
+      <div class="cap"><span data-i="pr.c1">One node per person · anti-bot check</span><span data-i="pr.c2">Same wallet for the node and the SECT</span></div>
     </div>
   </div>
 </section>
 
-<!-- ============ 05 when ============ -->
+<!-- ============ 04 when ============ -->
 <section class="sec pp flat gut" id="when">
-  <div class="spine" aria-hidden="true"><em><b>05</b><span></span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>04</b><span></span></em><i></i></div>
   <div class="in">
     <div class="head">
       <div>
-        <p class="eyebrow mono"><i></i><span data-i="wh.e">05 · When</span></p>
+        <p class="eyebrow mono"><i></i><span data-i="wh.e">04 · When</span></p>
         <div class="hw"><h2 class="t" data-i="wh.h">When do I <b>get it?</b></h2></div>
       </div>
-      <p class="sub" data-i="wh.p">Three seasons of 30 days. Dates will be announced on X and Telegram.</p>
+      <p class="sub" data-i="wh.p">One campaign of 90 days. The start date will be announced on X and Telegram.</p>
     </div>
     <ol class="pts">
-      <li class="pt"><span class="n mono" data-i="wh.s">Season</span><h3 data-i="wh.1h">Season 1</h3><p data-i="wh.1p">30 days. The first 1,000 get double points.</p><span class="fact mono" data-i="wh.tbc">Date TBC</span></li>
-      <li class="pt"><span class="n mono" data-i="wh.s">Season</span><h3 data-i="wh.2h">Season 2</h3><p data-i="wh.2p">30 days. New tasks.</p><span class="fact mono" data-i="wh.tbc">Date TBC</span></li>
-      <li class="pt"><span class="n mono" data-i="wh.s">Season</span><h3 data-i="wh.3h">Season 3</h3><p data-i="wh.3p">30 days. The Top 100 closes.</p><span class="fact mono" data-i="wh.tbc">Date TBC</span></li>
+      <li class="pt"><span class="n mono" data-i="wh.1n">Start</span><h3 data-i="wh.1h">Campaign starts</h3><p data-i="wh.1p">Connect your wallet and turn on your node.</p><span class="fact mono" data-i="wh.tbc">Date TBC</span></li>
+      <li class="pt"><span class="n mono" data-i="wh.2n">90 days</span><h3 data-i="wh.2h">Test and hold</h3><p data-i="wh.2p">Keep your node on. If you hold SECT, your places are counted every day.</p><span class="fact mono" data-i="wh.2f">90 days</span></li>
+      <li class="pt"><span class="n mono" data-i="wh.3n">Close</span><h3 data-i="wh.3h">Campaign ends</h3><p data-i="wh.3p">We check the nodes and the anti-bot control.</p><span class="fact mono" data-i="wh.tbc">Date TBC</span></li>
       <li class="pt claim"><span class="n mono" data-i="wh.4n">You receive</span><h3 data-i="wh.4h">SectoraEVM launch</h3><p data-i="wh.4p">Half on day one. The other half 90 days later.</p><span class="fact mono">50% + 50%</span></li>
     </ol>
     <div class="dl">
@@ -906,13 +817,13 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
   </div>
 </section>
 
-<!-- ============ 06 proven ideas ============ -->
+<!-- ============ 05 proven ideas ============ -->
 <section class="sec pp gut" id="proven">
-  <div class="spine" aria-hidden="true"><em><b>06</b><span></span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>05</b><span></span></em><i></i></div>
   <div class="in">
     <div class="head">
       <div>
-        <p class="eyebrow mono"><i></i><span data-i="cp.e">06 · Proven ideas</span></p>
+        <p class="eyebrow mono"><i></i><span data-i="cp.e">05 · Proven ideas</span></p>
         <div class="hw"><h2 class="t" data-i="cp.h">Airdrops that <b>worked.</b></h2></div>
       </div>
       <p class="sub" data-i="cp.p">We studied the airdrops the market remembers. This is what each one did well, and how the Sectora airdrop does the same.</p>
@@ -923,8 +834,8 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
       <div class="cmp-h" aria-hidden="true"><span data-i="cp.th1">Airdrop</span><span data-i="cp.th2">What they did</span><span></span><span data-i="cp.th3">In Sectora</span></div>
       <ul class="cmp">
         <li><div class="who"><b>Hyperliquid</b><span>2024</span><div class="px"><span data-i="cp.1x">Launch → 2026 high</span><b>$3.90 → $89+</b></div></div><p data-i="cp.1d">Gave 31% of its tokens to the people who actually used the platform.</p><span class="ar" aria-hidden="true">→</span><p class="us"><span class="lb mono" data-i="cp.th3">In Sectora</span><span data-i="cp.1s">The free way in is real use: turn on a node in the Sectora testnet.</span></p></li>
-        <li><div class="who"><b>Uniswap</b><span>2020</span><div class="px"><span data-i="cp.2x">Launch → 2021 high</span><b>$3 → $44.97</b></div></div><p data-i="cp.2d">One simple rule, the same for everyone: 400 UNI to every wallet that had used it.</p><span class="ar" aria-hidden="true">→</span><p class="us"><span class="lb mono" data-i="cp.th3">In Sectora</span><span data-i="cp.2s">Clear rules from day one: one fixed prize bag and fixed prizes for the Top 100.</span></p></li>
-        <li><div class="who"><b>Jupiter</b><span>2024</span><div class="px"><span data-i="cp.3x">Wallets rewarded</span><b>≈ 955,000</b></div></div><p data-i="cp.3d">Turned its airdrop into a yearly event, so people kept using it.</p><span class="ar" aria-hidden="true">→</span><p class="us"><span class="lb mono" data-i="cp.th3">In Sectora</span><span data-i="cp.3s">Three 30-day seasons, each with new tasks.</span></p></li>
+        <li><div class="who"><b>Uniswap</b><span>2020</span><div class="px"><span data-i="cp.2x">Launch → 2021 high</span><b>$3 → $44.97</b></div></div><p data-i="cp.2d">One simple rule, the same for everyone: 400 UNI to every wallet that had used it.</p><span class="ar" aria-hidden="true">→</span><p class="us"><span class="lb mono" data-i="cp.th3">In Sectora</span><span data-i="cp.2s">Clear rules from day one: a fixed prize for each node and one fixed prize bag.</span></p></li>
+        <li><div class="who"><b>Jupiter</b><span>2024</span><div class="px"><span data-i="cp.3x">Wallets rewarded</span><b>≈ 955,000</b></div></div><p data-i="cp.3d">Turned its airdrop into a yearly event, so people kept using it.</p><span class="ar" aria-hidden="true">→</span><p class="us"><span class="lb mono" data-i="cp.th3">In Sectora</span><span data-i="cp.3s">90 days with your node on: the prize goes to people who keep using the network.</span></p></li>
         <li><div class="who"><b>Jito</b><span>2023</span><div class="px"><span data-i="cp.4x">Given to users</span><b>$225M</b></div></div><p data-i="cp.4d">Rewarded the people who were already staking.</p><span class="ar" aria-hidden="true">→</span><p class="us"><span class="lb mono" data-i="cp.th3">In Sectora</span><span data-i="cp.4s">Your SECT in Sectora staking count on their own, with no lock-up.</span></p></li>
         <li><div class="who"><b>Celestia</b><span>2023</span><div class="px"><span data-i="cp.5x">Launch → 2024 high</span><b>$2.10 → $20+</b></div></div><p data-i="cp.5d">Went to the people who build: developers and active users of the ecosystem.</p><span class="ar" aria-hidden="true">→</span><p class="us"><span class="lb mono" data-i="cp.th3">In Sectora</span><span data-i="cp.5s">Rewards those who help test the network, with an anti-bot check so real people win.</span></p></li>
       </ul>
@@ -936,7 +847,7 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
       </div>
       <ul class="hold-l">
         <li><b data-i="av.1">Paying to claim</b><span data-i="av.1p">Claiming costs nothing. You never send money.</span></li>
-        <li><b data-i="av.2">Rules changed at the end</b><span data-i="av.2p">The final rules are published before Season 1.</span></li>
+        <li><b data-i="av.2">Rules changed at the end</b><span data-i="av.2p">The final rules are published before the campaign starts.</span></li>
         <li><b data-i="av.3">Surprise locks</b><span data-i="av.3p">The payment plan is known from day one: half at launch, half 90 days later.</span></li>
       </ul>
     </div>
@@ -946,10 +857,10 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
 
 <!-- ============ 06 safety ============ -->
 <section class="sec dk gut" id="safe">
-  <div class="spine" aria-hidden="true"><em><b>07</b><span></span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>06</b><span></span></em><i></i></div>
   <div class="in ver">
     <div class="ver-l">
-      <p class="eyebrow mono"><i></i><span data-i="sf.e">07 · Is it safe?</span></p>
+      <p class="eyebrow mono"><i></i><span data-i="sf.e">06 · Is it safe?</span></p>
       <div class="hw"><h2 class="t" data-i="sf.h">Check it <b>yourself.</b></h2></div>
       <p class="sub" data-i="sf.p">A real airdrop never asks you to send money.</p>
     </div>
@@ -963,8 +874,8 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
       <article class="vc pend">
         <div class="top"><span class="mono">02</span><span class="chip wait mono" data-i="st.pend">Pending</span></div>
         <h3 data-i="vf.2h">The prize already exists</h3>
-        <p data-i="vf.2p">The 2,000,000 SECT will be locked on Team Finance before Season 1. The link will appear here.</p>
-        <div class="lk mono"><span class="soon" data-i="vf.2l">Link coming before Season 1</span></div>
+        <p data-i="vf.2p">The 2,000,000 SECT will be locked on Team Finance before the campaign starts. The link will appear here.</p>
+        <div class="lk mono"><span class="soon" data-i="vf.2l">Link coming before the start</span></div>
       </article>
       <article class="vc">
         <div class="top"><span class="mono">03</span><span class="chip blue mono" data-i="st.rule">Rule</span></div>
@@ -988,22 +899,22 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
 
 <!-- ============ 07 faq ============ -->
 <section class="sec pp gut" id="faq">
-  <div class="spine" aria-hidden="true"><em><b>08</b><span></span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>07</b><span></span></em><i></i></div>
   <div class="in faqw">
     <div class="head">
-      <p class="eyebrow mono"><i></i><span data-i="fq.e">08 · Questions</span></p>
+      <p class="eyebrow mono"><i></i><span data-i="fq.e">07 · Questions</span></p>
       <div class="hw"><h2 class="t" data-i="fq.h">Simple <b>answers.</b></h2></div>
       <p class="sub" data-i="fq.p">Still unsure? Ask in our Telegram.</p>
     </div>
     <div class="faq">
-      <details open><summary><span class="n mono">01</span><span data-i="q1">Is it free?</span><span class="pm"></span></summary><p class="a" data-i="a1">Yes. You only connect your wallet and sign. Holding SECT is optional and gives more points.</p></details>
-      <details><summary><span class="n mono">02</span><span data-i="q8">What is a node? Does it cost anything?</span><span class="pm"></span></summary><p class="a" data-i="a8">A node is your place in the Sectora network. For now it runs on the testnet: the test SECT are free and have no value, and you only need a little free test ETH for gas (the dashboard links to it). You don't need a computer switched on. Use the same wallet as in the airdrop so your points count.</p></details>
+      <details open><summary><span class="n mono">01</span><span data-i="q1">Is it free?</span><span class="pm"></span></summary><p class="a" data-i="a1">Yes. You connect your wallet and test the node on the testnet, which is free. Holding SECT is optional and makes you win more.</p></details>
+      <details><summary><span class="n mono">02</span><span data-i="q8">What is a node? Does it cost anything?</span><span class="pm"></span></summary><p class="a" data-i="a8">A node is your place in the Sectora network. For now it runs on the testnet: the test SECT are free and have no value, and you only need a little free test ETH for gas (the dashboard links to it). You don't need a computer switched on. Use the same wallet as in the airdrop so your node counts.</p></details>
       <details><summary><span class="n mono">03</span><span data-i="q2">Do I have to send my SECT?</span><span class="pm"></span></summary><p class="a" data-i="a2">No. Your SECT stay in your wallet. We only look at your balance once a day.</p></details>
-      <details><summary><span class="n mono">04</span><span data-i="q6">Are my SECT locked? Can I sell?</span><span class="pm"></span></summary><p class="a" data-i="a6">They are never locked and you never send them anywhere. You can sell whenever you want. You keep the points you already earned; from then on you just stop earning daily points for holding.</p></details>
-      <details><summary><span class="n mono">05</span><span data-i="q3">How much will I get?</span><span class="pm"></span></summary><p class="a" data-i="a3">It depends on your points compared with everyone else's. The Top 100 prizes are fixed. We don't promise amounts in dollars.</p></details>
+      <details><summary><span class="n mono">04</span><span data-i="q6">Are my SECT locked? Can I sell?</span><span class="pm"></span></summary><p class="a" data-i="a6">They are never locked and you never send them anywhere. You can sell whenever you want. You keep your node prize; from then on your SECT just stop counting for places.</p></details>
+      <details><summary><span class="n mono">05</span><span data-i="q3">How much will I get?</span><span class="pm"></span></summary><p class="a" data-i="a3">Each node that is still on at the end wins 250 SECT (first 2,000 nodes). If you also hold SECT, you get a share of 1,500,000 SECT according to your places. We don't promise amounts in dollars.</p></details>
       <details><summary><span class="n mono">06</span><span data-i="q4">When do I get it?</span><span class="pm"></span></summary><p class="a" data-i="a4">When SectoraEVM launches: half that day and the other half 90 days later.</p></details>
-      <details><summary><span class="n mono">07</span><span data-i="q7">Do stakers earn more?</span><span class="pm"></span></summary><p class="a" data-i="a7">Yes. If you already stake, you're in automatically: you don't need to withdraw anything. With staking, every 10 points become 25, and it still counts for your level. Your first stake also gives +100 points. Staking has no lock-up.</p></details>
-      <details><summary><span class="n mono">08</span><span data-i="q5">Who can join?</span><span class="pm"></span></summary><p class="a" data-i="a5">Anyone where it's legal. The final rules will be published before Season 1.</p></details>
+      <details><summary><span class="n mono">07</span><span data-i="q7">I already stake. Do I have to do anything?</span><span class="pm"></span></summary><p class="a" data-i="a7">Almost nothing: you're already in. Your staked SECT count on their own and you don't need to withdraw anything. You only need to connect your node with the same wallet and you're done. Staking has no lock-up.</p></details>
+      <details><summary><span class="n mono">08</span><span data-i="q5">Who can join?</span><span class="pm"></span></summary><p class="a" data-i="a5">Anyone where it's legal. The final rules will be published before the campaign starts.</p></details>
     </div>
   </div>
 </section>
@@ -1015,9 +926,9 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
   <div class="vig" aria-hidden="true"></div>
   <div class="horizon" aria-hidden="true"></div>
   <div class="lay">
-    <p class="eyebrow mono"><i></i><span data-i="fn.e">Season 1 · date coming soon</span><i></i></p>
+    <p class="eyebrow mono"><i></i><span data-i="fn.e">Campaign · date coming soon</span><i></i></p>
     <div class="hw"><h2 class="t" data-i="fn.h">Get in <b>early.</b></h2></div>
-    <p class="sub" data-i="fn.p">The first 1,000 people get double points. Joining is free.</p>
+    <p class="sub" data-i="fn.p">Only the first 2,000 nodes win 250 SECT. Joining is free.</p>
     <div class="actions">
       <a class="btn btn-primary mono js-connect" href="#steps"><span data-i="b.join">Join free</span><span class="arrow">→</span></a>
       <a class="btn btn-ghost mono" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener"><span data-i="b.buy">Buy SECT on Uniswap</span><span class="arrow">↗</span></a>
@@ -1034,7 +945,7 @@ footer{position:relative;background:var(--night);padding-top:clamp(40px,6vh,64px
       <p class="mono c" data-i="ft.1">Sectora Foundation · Illinois, US · File 18523639</p>
     </div>
     <div>
-      <p data-i="ft.2">Points are not money and not an investment. The rules are under legal review and may change before Season 1. Not available where the law does not allow it. The price of SECT can go down as well as up.</p>
+      <p data-i="ft.2">This airdrop is not an investment. The rules are under legal review and may change before the campaign starts. Not available where the law does not allow it. The price of SECT can go down as well as up.</p>
     </div>
     <nav class="mono" aria-label="Sectora">
       <a href="https://x.com/sectora__" target="_blank" rel="noopener">X ↗</a>
@@ -1060,137 +971,123 @@ es:{
 pv:"Vista de prueba · no pública · reglas en revisión legal",
 n1:"Cómo entrar",n2:"Niveles",n3:"Premios",n4:"¿Es seguro?",n5:"Preguntas",nc:"Conectar wallet",
 "h.e":"Campaña oficial · Sectora Foundation",
-"h.l":"Regalamos <b>2.000.000 SECT</b>. Entra gratis, junta puntos y recibe tus SECT cuando se lance SectoraEVM.",
+"h.l":"Regalamos <b>2.000.000 SECT</b>. Prueba el Hash Node gratis y gana SECT. Pruébalo y guarda SECT, y ganas todavía más.",
 "b.join":"Entrar gratis","b.how":"Ver los 4 pasos","b.buy":"Comprar SECT en Uniswap",
 "sh.t":"En resumen","sh.1":"Premio","sh.2":"Precio","sh.2v":"Gratis","sh.3":"Duración","sh.3v":"90 días","sh.4":"Lo recibes","sh.4v":"Cuando se lance SectoraEVM","sh.5":"Bloqueo del premio",
 "sh.n":"Nunca envías ni bloqueas tus SECT. Vende cuando quieras.",
 "st.pend":"Pendiente","st.ok":"Verificable","st.rule":"Regla",
 "pz.e":"Premio total","pz.u":"SECT para repartir","pz.h":"Desliza",
-"pz.1":"Para quien guarda SECT","pz.2":"Para los 100 que más invitan","pz.3":"Para todos los que entran gratis",
-"sp.e":"01 · Cómo entrar","sp.h":"Cuatro pasos. <b>Nada más.</b>","sp.p":"No necesitas dinero para empezar.",
-s1h:"Conecta y saluda",s1p:"Conecta tu wallet, síguenos en X y únete al Telegram. Es gratis y no cuesta gas.",s1f:"+100 puntos",
-s2h:"Enciende un nodo",s2p:"En el panel de Sectora, toma SECT de prueba gratis, compra poder de hash y registra tu nodo. No cuesta nada.",s2f:"+300 puntos · +5 al día",
+"pz.1":"Para todos los que prueban el nodo, gratis","pz.2":"Para quienes prueban el nodo y guardan SECT",
+"sp.e":"01 · Cómo entrar","sp.h":"Prueba el nodo. <b>Gana SECT.</b>","sp.p":"No necesitas dinero para empezar.",
+"s1h":"Conecta tu wallet","s1p":"Usa la misma wallet que usarás para tu nodo. Es gratis y no cuesta gas.","s1f":"Gratis",
+"s2h":"Prueba el Hash Node","s2p":"En el panel de Sectora, toma SECT de prueba gratis, compra poder de hash y registra tu nodo. Todo es en la testnet y no cuesta nada. Ganan los primeros 2.000 nodos.","s2f":"Ganas 250 SECT",
 "nd.h":"Tu nodo en <b>3 clics.</b>","nd.p":"Funciona en la testnet de Sectora: usas tokens de prueba gratis y no necesitas una computadora encendida.","nd.b":"Abrir el panel de nodos",
-"nd.1":"Toma SECT de prueba gratis","nd.1p":"5.000 tSECT cada 24 h en el grifo.","nd.2":"Compra poder de hash","nd.2p":"Elige cualquier paquete. +100 puntos.","nd.3":"Registra tu nodo","nd.3p":"+200 puntos y +5 al día mientras esté encendido.",
-s3h:"Guarda SECT <span class='chip ink mono'>Opcional</span>",s3p:"Deja SECT en tu wallet y gana puntos cada día. No se bloquea ni se envía: puedes venderlo cuando quieras.",s3f:"Hasta 15 puntos al día",
-s4h:"Recibe tus SECT",s4p:"Cuando se lance SectoraEVM, recibes SECT según tus puntos.",s4f:"Mitad al lanzamiento, mitad 90 días después",
+"nd.1":"Toma SECT de prueba gratis","nd.1p":"5.000 tSECT cada 24 h en el grifo.","nd.2":"Compra poder de hash","nd.2p":"Elige cualquier paquete.","nd.3":"Registra tu nodo","nd.3p":"Déjalo encendido hasta el final de la campaña. Listo.",
+"s3h":"Guarda SECT <span class='chip ink mono'>Opcional</span>","s3p":"Si además guardas SECT en tu wallet o en staking, ganas más: una parte de 1.500.000 SECT. No se bloquea ni se envía nada.","s3f":"+ parte de 1.500.000 SECT",
+s4h:"Recibe tus SECT","s4p":"Cuando se lance SectoraEVM, recibes tu premio del nodo y, si guardas SECT, tu parte.",s4f:"Mitad al lanzamiento, mitad 90 días después",
 "sp.c":"Te toma menos de un minuto.",
-"sk.h":"¿Ya haces staking? <b>Ya estás dentro.</b>","sk.p":"Tus SECT en el staking de Sectora cuentan solos para el airdrop. No los retires: sigues con las recompensas del staking y sumas puntos del airdrop a la vez.","sk.b":"Abrir mi staking",
-"sk.1":"Sin inscribirte","sk.1p":"Tu wallet de staking entra desde el primer día.","sk.2":"Más del doble","sk.2p":"Con staking, 10 puntos se convierten en 25.","sk.3":"Estrellas en el staking","sk.3p":"Tu página de staking te muestra tus tareas del airdrop.",
+"sk.h":"¿Ya haces staking? <b>Ya estás dentro.</b>","sk.p":"Tus SECT en el staking de Sectora cuentan solos, como si estuvieran en tu wallet. No los retires: sigues con las recompensas del staking y estás en el airdrop a la vez.","sk.b":"Abrir mi staking",
+"sk.1":"Sin inscribirte","sk.1p":"Tu wallet de staking entra desde el primer día.","sk.2":"Cuenta como guardar","sk.2p":"Tus SECT en staking te dan plazas en el premio de 1.500.000 SECT.","sk.3":"Solo te falta el nodo","sk.3p":"Conecta tu Hash Node con la misma wallet y listo.",
 "sk.rk":"Recordatorio","sk.r":"El staking es para todos y sin bloqueo: retiras cuando quieras. Las recompensas ya están depositadas en el contrato por adelantado.",
-"lv.e":"02 · Niveles","lv.h":"Elige tu <b>nivel.</b>","lv.p":"Regla simple: cada 100 SECT en tu wallet = 1 punto al día.",
-"lv.k1":"Nivel 1","lv.c1":"Gratis","lv.r1":"Gratis","lv.r1s":"Sin comprar","lv.1a":"Tareas y tu nodo","lv.1b":"Parte de <b>200.000 SECT</b>",
-"lv.rt":"Puntos al día por guardar","lv.b1":"Empezar gratis",
-"lv.k2":"Nivel 2","lv.r2s":"En tu wallet · sin bloqueo","lv.2a":"Todo lo de Scout","lv.2b":"Parte de <b>1.400.000 SECT</b>","lv.b2":"Ser Sentinel",
-"lv.k3":"Nivel 3","lv.3a":"Todo lo de Sentinel","lv.3b":"Bonus: <b>15 puntos al día</b> en vez de 10","lv.b3":"Ser Guardian",
+"lv.e":"02 · Niveles","lv.h":"Elige tu <b>nivel.</b>","lv.p":"Regla simple: prueba el nodo y ganas. Si además guardas SECT, ganas más.",
+"lv.k1":"Nivel 1","lv.c1":"Gratis","lv.r1":"Gratis","lv.r1s":"Sin comprar","lv.1a":"Prueba el Hash Node","lv.1b":"Gana <b>250 SECT</b>",
+"lv.rt":"Plazas en el premio de holders","lv.b1":"Empezar gratis",
+"lv.k2":"Nivel 2","lv.r2s":"En tu wallet · sin bloqueo","lv.2a":"Todo lo de Scout","lv.2b":"+ 1 plaza en <b>1.500.000 SECT</b>","lv.b2":"Ser Sentinel",
+"lv.k3":"Nivel 3","lv.3b":"+ 1 plaza por cada <b>1.000 SECT</b>","lv.b3":"Ser Guardian",
 "hd.h":"Solo lo guardas. <b>Nada más.</b>","hd.p":"Tus SECT se quedan en tu propia wallet todo el tiempo. Si quieres retirarte, vende cuando quieras.",
-"hd.1":"No se bloquea","hd.1p":"Nadie congela tus SECT.","hd.2":"No envías nada","hd.2p":"El airdrop nunca te pide enviar SECT a ninguna dirección.","hd.3":"Vende cuando quieras","hd.3p":"Conservas los puntos que ya ganaste.",
-"lv.n":"Revisamos tu wallet una vez al día. Las cifras en dólares son aproximadas: el precio de SECT cambia.",
-"bo.e":"03 · Puntos extra","bo.h":"Cuatro formas de <b>ganar más.</b>","bo.p":"Ejemplo: si normalmente ganas 10 puntos al día por guardar SECT, así quedan con cada extra.","bo.u":"puntos al día",
-"bo.1h":"Ven cada día","bo.1p":"Tus puntos suben un poco cada 6 días. El día 60 ya son el doble.",
-"bo.2h":"Sé de los primeros 1.000","bo.2p":"Puntos dobles durante toda la campaña.",
-"bo.3t":"Más puntos","bo.3h":"Haz staking","bo.3p":"Ganas más del doble y sigue contando para tu nivel. Primer staking: +100 puntos. ¿Ya haces staking? Ya estás dentro.","bo.3l":"Ir al staking",
-"bo.4h":"Trae 5 amigos","bo.4p":"Cuando 5 amigos llegan a Sentinel, ganas 2 puntos extra por cada 10.",
-"pr.e":"04 · Premios","pr.h":"Quién gana <b>qué.</b>","pr.p":"Todo sale de una bolsa fija de 2.000.000 SECT.","pr.t":"Bolsa de premios",
-"pr.1h":"Holders","pr.1p":"Se reparte por puntos entre Sentinels y Guardians.",
-"pr.2h":"Top 100 que más invitan","pr.2p":"Premios fijos por puesto. Mira abajo.",
-"pr.3h":"Jugadores gratis","pr.3p":"Se reparte por puntos de tareas.",
-"tp.t":"Top 100 que más invitan","tp.p1":"1.er puesto","tp.p2":"2.º puesto","tp.p3":"3.er puesto","tp.th1":"Puesto","tp.th2":"SECT cada uno","tp.th3":"Personas",
-"tp.c1":"Un amigo cuenta si entra con tu enlace, llega a Sentinel y pasa el control anti-bots","tp.c2":"Puntos, no dinero",
-"wh.e":"05 · Cuándo","wh.h":"¿Cuándo lo <b>recibo?</b>","wh.p":"Tres temporadas de 30 días. Las fechas se anunciarán en X y Telegram.",
-"wh.s":"Temporada","wh.1h":"Temporada 1","wh.1p":"30 días. Las primeras 1.000 personas tienen puntos dobles.","wh.tbc":"Fecha por confirmar",
-"wh.2h":"Temporada 2","wh.2p":"30 días. Tareas nuevas.","wh.3h":"Temporada 3","wh.3p":"30 días. Se cierra el Top 100.",
+"hd.1":"No se bloquea","hd.1p":"Nadie congela tus SECT.","hd.2":"No envías nada","hd.2p":"El airdrop nunca te pide enviar SECT a ninguna dirección.","hd.3":"Vende cuando quieras","hd.3p":"Conservas tu premio del nodo.",
+"lv.n":"Revisamos tu wallet y tu staking una vez al día. Las cifras en dólares son aproximadas: el precio de SECT cambia.",
+"pr.e":"03 · Premios","pr.h":"Quién gana <b>qué.</b>","pr.p":"Todo sale de una bolsa fija de 2.000.000 SECT.","pr.t":"Bolsa de premios",
+"pr.1h":"Prueban el nodo","pr.1p":"250 SECT para cada uno de los primeros 2.000 nodos que sigan encendidos al final. Uno por persona.",
+"pr.2h":"Nodo + holders","pr.2p":"Se reparte por plazas entre quienes prueban el nodo y guardan 500 SECT o más, en su wallet o en staking.",
+"wh.e":"04 · Cuándo","wh.h":"¿Cuándo lo <b>recibo?</b>","wh.p":"Una sola campaña de 90 días. La fecha de inicio se anunciará en X y Telegram.",
+"wh.1h":"Empieza la campaña","wh.1p":"Conecta tu wallet y enciende tu nodo.","wh.tbc":"Fecha por confirmar",
+"wh.2h":"Prueba y guarda","wh.2p":"Mantén tu nodo encendido. Si guardas SECT, tus plazas se cuentan cada día.","wh.3h":"Termina la campaña","wh.3p":"Revisamos los nodos y el control antibots.",
 "wh.4n":"Recibes","wh.4h":"Lanzamiento de SectoraEVM","wh.4p":"La mitad el primer día. La otra mitad 90 días después.",
 "wh.dh":"Fecha garantizada","wh.dp":"Si SectoraEVM se retrasa, recibirás tus SECT en Ethereum después de una fecha fija.",
-"sf.e":"07 · ¿Es seguro?","sf.h":"Compruébalo <b>tú mismo.</b>","sf.p":"Un airdrop real nunca te pide enviar dinero.",
+"sf.e":"06 · ¿Es seguro?","sf.h":"Compruébalo <b>tú mismo.</b>","sf.p":"Un airdrop real nunca te pide enviar dinero.",
 "vf.1h":"Nunca envías dinero","vf.1p":"Solo leemos tu saldo. Tus SECT nunca se bloquean. Si alguien te pide enviar tokens para este airdrop, es una estafa.","vf.1l":"SECT en Etherscan",
-"vf.2h":"El premio ya existe","vf.2p":"Los 2.000.000 SECT se bloquearán en Team Finance antes de la temporada 1. El enlace aparecerá aquí.","vf.2l":"Enlace antes de la temporada 1",
+"vf.2h":"El premio ya existe","vf.2p":"Los 2.000.000 SECT se bloquearán en Team Finance antes de que empiece la campaña. El enlace aparecerá aquí.","vf.2l":"Enlace antes del inicio",
 "vf.3h":"Sin ganancias prometidas","vf.3p":"No prometemos dinero. El precio de SECT puede subir o bajar.","vf.3l":"Leer las preguntas",
 "vf.4h":"Registrada y auditada","vf.4p":"Sectora Foundation está registrada en Illinois, EE. UU. El contrato de SECT fue auditado por Cyberscope y la liquidez está bloqueada.","vf.4a":"Auditoría de Cyberscope","vf.4b":"Liquidez bloqueada","vf.4c":"Información legal",
-"fq.e":"08 · Preguntas","fq.h":"Respuestas <b>simples.</b>","fq.p":"¿Dudas? Pregunta en nuestro Telegram.",
-q1:"¿Es gratis?",a1:"Sí. Solo conectas tu wallet y firmas. Guardar SECT es opcional y da más puntos.",
-q8:"¿Qué es un nodo? ¿Cuesta algo?",a8:"Un nodo es tu lugar en la red de Sectora. Por ahora funciona en la testnet: los SECT de prueba son gratis y no tienen valor, y solo necesitas un poco de ETH de prueba gratis para el gas (el panel te lleva a él). No necesitas una computadora encendida. Usa la misma wallet que en el airdrop para que tus puntos cuenten.",
+"fq.e":"07 · Preguntas","fq.h":"Respuestas <b>simples.</b>","fq.p":"¿Dudas? Pregunta en nuestro Telegram.",
+q1:"¿Es gratis?","a1":"Sí. Conectas tu wallet y pruebas el nodo en la testnet, que es gratis. Guardar SECT es opcional y te hace ganar más.",
+q8:"¿Qué es un nodo? ¿Cuesta algo?",a8:"Un nodo es tu lugar en la red de Sectora. Por ahora funciona en la testnet: los SECT de prueba son gratis y no tienen valor, y solo necesitas un poco de ETH de prueba gratis para el gas (el panel te lleva a él). No necesitas una computadora encendida. Usa la misma wallet que en el airdrop para que tu nodo cuente.",
 q2:"¿Tengo que enviar mis SECT?",a2:"No. Tus SECT se quedan en tu wallet. Solo miramos tu saldo una vez al día.",
-q6:"¿Se bloquean mis SECT? ¿Puedo vender?",a6:"Nunca se bloquean y nunca los envías a ningún lado. Puedes venderlos cuando quieras. Conservas los puntos que ya ganaste; desde ese momento solo dejas de sumar puntos diarios por guardar.",
-q3:"¿Cuánto voy a recibir?",a3:"Depende de tus puntos comparados con los de todos. Los premios del Top 100 son fijos. No prometemos cantidades en dólares.",
+q6:"¿Se bloquean mis SECT? ¿Puedo vender?","a6":"Nunca se bloquean y nunca los envías a ningún lado. Puedes venderlos cuando quieras. Conservas tu premio del nodo; desde ese momento tus SECT solo dejan de contar para plazas.",
+q3:"¿Cuánto voy a recibir?","a3":"Cada nodo que siga encendido al final gana 250 SECT (primeros 2.000 nodos). Si además guardas SECT, recibes una parte de 1.500.000 SECT según tus plazas. No prometemos cantidades en dólares.",
 q4:"¿Cuándo lo recibo?",a4:"Cuando se lance SectoraEVM: la mitad ese día y la otra mitad 90 días después.",
-q7:"¿Los que hacen staking ganan más?",a7:"Sí. Si ya haces staking, estás dentro automáticamente: no tienes que retirar nada. Con staking, cada 10 puntos se convierten en 25 y sigue contando para tu nivel. Además, tu primer staking da +100 puntos. El staking no tiene bloqueo.",
-q5:"¿Quién puede participar?",a5:"Cualquier persona donde sea legal. Las reglas finales se publicarán antes de la temporada 1.",
-"fn.e":"Temporada 1 · fecha muy pronto","fn.h":"Entra <b>temprano.</b>","fn.p":"Las primeras 1.000 personas tienen puntos dobles. Entrar es gratis.",
-"cp.e":"06 · Ideas probadas","cp.h":"Airdrops que <b>funcionaron.</b>","cp.p":"Estudiamos los airdrops que el mercado recuerda. Esto es lo que cada uno hizo bien y cómo el airdrop de Sectora hace lo mismo.","cp.t":"Comparativa","cp.th1":"Airdrop","cp.th2":"Qué hicieron","cp.th3":"En Sectora","cp.1d":"Entregó el 31 % de sus tokens a quienes de verdad usaban la plataforma.","cp.1s":"La entrada gratis es uso real: activar un nodo en la testnet de Sectora.","cp.2d":"Una regla simple e igual para todos: 400 UNI para cada wallet que lo había usado.","cp.2s":"Reglas claras desde el primer día: una bolsa de premios fija y premios fijos para el Top 100.","cp.3d":"Convirtió su airdrop en un evento de cada año, así la gente siguió usándolo.","cp.3s":"Tres temporadas de 30 días, cada una con tareas nuevas.","cp.4d":"Premió a quienes ya hacían staking.","cp.4s":"Tus SECT en el staking de Sectora cuentan solos, sin bloqueo.","cp.5d":"Fue para quienes construyen: desarrolladores y usuarios activos del ecosistema.","cp.5s":"Premia a quien ayuda a probar la red, con un control anti-bots para que ganen personas reales.","av.h":"Lo que <b>evitamos.</b>","av.p":"Los airdrops que la gente recuerda mal cometieron los mismos errores. Las reglas de Sectora los evitan desde el primer día.","av.1":"Pagar por reclamar","av.1p":"Reclamar no cuesta nada. Nunca envías dinero.","av.2":"Reglas que cambian al final","av.2p":"Las reglas finales se publican antes de la temporada 1.","av.3":"Bloqueos sorpresa","av.3p":"El plan de pago se conoce desde el primer día: la mitad al lanzamiento y la otra mitad 90 días después.","cp.1x":"Lanzamiento → máximo 2026","cp.2x":"Lanzamiento → máximo 2021","cp.3x":"Wallets premiadas","cp.4x":"Repartido a usuarios","cp.5x":"Lanzamiento → máximo 2024","cp.n":"Precios aproximados en dólares, según datos públicos de mercado (CoinGecko y prensa). Los precios cambian: varios de estos tokens cotizan hoy muy por debajo de su máximo. Los airdrops anteriores no predicen resultados para SECT.",
+"q7":"Ya hago staking. ¿Tengo que hacer algo?","a7":"Casi nada: ya estás dentro. Tus SECT en staking cuentan solos y no tienes que retirar nada. Solo te falta conectar tu nodo con la misma wallet y listo. El staking no tiene bloqueo.",
+q5:"¿Quién puede participar?","a5":"Cualquier persona donde sea legal. Las reglas finales se publicarán antes de que empiece la campaña.",
+"fn.e":"Campaña · fecha muy pronto","fn.h":"Entra <b>temprano.</b>","fn.p":"Solo los primeros 2.000 nodos ganan 250 SECT. Entrar es gratis.",
+"cp.e":"05 · Ideas probadas","cp.h":"Airdrops que <b>funcionaron.</b>","cp.p":"Estudiamos los airdrops que el mercado recuerda. Esto es lo que cada uno hizo bien y cómo el airdrop de Sectora hace lo mismo.","cp.t":"Comparativa","cp.th1":"Airdrop","cp.th2":"Qué hicieron","cp.th3":"En Sectora","cp.1d":"Entregó el 31 % de sus tokens a quienes de verdad usaban la plataforma.","cp.1s":"La entrada gratis es uso real: activar un nodo en la testnet de Sectora.","cp.2d":"Una regla simple e igual para todos: 400 UNI para cada wallet que lo había usado.","cp.2s":"Reglas claras desde el primer día: un premio fijo por nodo y una bolsa de premios fija.","cp.3d":"Convirtió su airdrop en un evento de cada año, así la gente siguió usándolo.","cp.3s":"90 días con tu nodo encendido: el premio es para quien sigue usando la red.","cp.4d":"Premió a quienes ya hacían staking.","cp.4s":"Tus SECT en el staking de Sectora cuentan solos, sin bloqueo.","cp.5d":"Fue para quienes construyen: desarrolladores y usuarios activos del ecosistema.","cp.5s":"Premia a quien ayuda a probar la red, con un control antibots para que ganen personas reales.","av.h":"Lo que <b>evitamos.</b>","av.p":"Los airdrops que la gente recuerda mal cometieron los mismos errores. Las reglas de Sectora los evitan desde el primer día.","av.1":"Pagar por reclamar","av.1p":"Reclamar no cuesta nada. Nunca envías dinero.","av.2":"Reglas que cambian al final","av.2p":"Las reglas finales se publican antes de que empiece la campaña.","av.3":"Bloqueos sorpresa","av.3p":"El plan de pago se conoce desde el primer día: la mitad al lanzamiento y la otra mitad 90 días después.","cp.1x":"Lanzamiento → máximo 2026","cp.2x":"Lanzamiento → máximo 2021","cp.3x":"Wallets premiadas","cp.4x":"Repartido a usuarios","cp.5x":"Lanzamiento → máximo 2024","cp.n":"Precios aproximados en dólares, según datos públicos de mercado (CoinGecko y prensa). Los precios cambian: varios de estos tokens cotizan hoy muy por debajo de su máximo. Los airdrops anteriores no predicen resultados para SECT.",
+"sk.n":"Conectar mi nodo","pr.c1":"Un nodo por persona · control antibots","pr.c2":"La misma wallet para el nodo y los SECT","wh.1n":"Inicio","wh.2n":"90 días","wh.2f":"90 días","wh.3n":"Cierre",
 "ft.1":"Sectora Foundation · Illinois, EE. UU. · Expediente 18523639",
-"ft.2":"Los puntos no son dinero ni una inversión. Las reglas están en revisión legal y pueden cambiar antes de la temporada 1. No disponible donde la ley no lo permita. El precio de SECT puede bajar o subir."
+"ft.2":"Este airdrop no es una inversión. Las reglas están en revisión legal y pueden cambiar antes de que empiece la campaña. No disponible donde la ley no lo permita. El precio de SECT puede bajar o subir."
 },
 pt:{
 pv:"Prévia de teste · não pública · regras em revisão jurídica",
 n1:"Como entrar",n2:"Níveis",n3:"Prêmios",n4:"É seguro?",n5:"Perguntas",nc:"Conectar carteira",
 "h.e":"Campanha oficial · Sectora Foundation",
-"h.l":"Vamos distribuir <b>2.000.000 SECT</b>. Entre grátis, junte pontos e receba seus SECT quando a SectoraEVM for lançada.",
+"h.l":"Vamos distribuir <b>2.000.000 SECT</b>. Teste o Hash Node grátis e ganhe SECT. Teste e guarde SECT, e ganhe ainda mais.",
 "b.join":"Entrar grátis","b.how":"Ver os 4 passos","b.buy":"Comprar SECT na Uniswap",
 "sh.t":"Resumo","sh.1":"Prêmio","sh.2":"Custo","sh.2v":"Grátis","sh.3":"Duração","sh.3v":"90 dias","sh.4":"Você recebe","sh.4v":"No lançamento da SectoraEVM","sh.5":"Bloqueio do prêmio",
 "sh.n":"Você nunca envia nem bloqueia seus SECT. Venda quando quiser.",
 "st.pend":"Pendente","st.ok":"Verificável","st.rule":"Regra",
 "pz.e":"Prêmio total","pz.u":"SECT para dividir","pz.h":"Role",
-"pz.1":"Para quem guarda SECT","pz.2":"Para os 100 que mais convidam","pz.3":"Para todos que entram grátis",
-"sp.e":"01 · Como entrar","sp.h":"Quatro passos. <b>Só isso.</b>","sp.p":"Você não precisa de dinheiro para começar.",
-s1h:"Conecte e diga oi",s1p:"Conecte sua carteira, siga a gente no X e entre no Telegram. É grátis e não custa gas.",s1f:"+100 pontos",
-s2h:"Ligue um nó",s2p:"No painel da Sectora, pegue SECT de teste grátis, compre poder de hash e registre seu nó. Não custa nada.",s2f:"+300 pontos · +5 por dia",
+"pz.1":"Para todos que testam o nó, grátis","pz.2":"Para quem testa o nó e guarda SECT",
+"sp.e":"01 · Como entrar","sp.h":"Teste o nó. <b>Ganhe SECT.</b>","sp.p":"Você não precisa de dinheiro para começar.",
+"s1h":"Conecte sua carteira","s1p":"Use a mesma carteira que você vai usar no seu nó. É grátis e não custa gas.","s1f":"Grátis",
+"s2h":"Teste o Hash Node","s2p":"No painel da Sectora, pegue SECT de teste grátis, compre poder de hash e registre seu nó. Tudo é na testnet e não custa nada. Ganham os primeiros 2.000 nós.","s2f":"Você ganha 250 SECT",
 "nd.h":"Seu nó em <b>3 cliques.</b>","nd.p":"Funciona na testnet da Sectora: você usa tokens de teste grátis e não precisa de um computador ligado.","nd.b":"Abrir o painel de nós",
-"nd.1":"Pegue SECT de teste grátis","nd.1p":"5.000 tSECT a cada 24 h na torneira.","nd.2":"Compre poder de hash","nd.2p":"Escolha qualquer pacote. +100 pontos.","nd.3":"Registre seu nó","nd.3p":"+200 pontos e +5 por dia enquanto estiver ligado.",
-s3h:"Guarde SECT <span class='chip ink mono'>Opcional</span>",s3p:"Deixe SECT na sua carteira e ganhe pontos todo dia. Nada fica bloqueado nem é enviado: você pode vender quando quiser.",s3f:"Até 15 pontos por dia",
-s4h:"Receba seus SECT",s4p:"Quando a SectoraEVM for lançada, você recebe SECT de acordo com seus pontos.",s4f:"Metade no lançamento, metade 90 dias depois",
+"nd.1":"Pegue SECT de teste grátis","nd.1p":"5.000 tSECT a cada 24 h na torneira.","nd.2":"Compre poder de hash","nd.2p":"Escolha qualquer pacote.","nd.3":"Registre seu nó","nd.3p":"Deixe ligado até o fim da campanha. Pronto.",
+"s3h":"Guarde SECT <span class='chip ink mono'>Opcional</span>","s3p":"Se você também guardar SECT na carteira ou no staking, ganha mais: uma parte de 1.500.000 SECT. Nada fica bloqueado nem é enviado.","s3f":"+ parte de 1.500.000 SECT",
+s4h:"Receba seus SECT","s4p":"Quando a SectoraEVM for lançada, você recebe o prêmio do nó e, se guardar SECT, a sua parte.",s4f:"Metade no lançamento, metade 90 dias depois",
 "sp.c":"Leva menos de um minuto.",
-"sk.h":"Já faz staking? <b>Você já está dentro.</b>","sk.p":"Seus SECT no staking da Sectora contam sozinhos para o airdrop. Não saque: você continua com as recompensas do staking e soma pontos do airdrop ao mesmo tempo.","sk.b":"Abrir meu staking",
-"sk.1":"Sem inscrição","sk.1p":"Sua carteira de staking entra desde o primeiro dia.","sk.2":"Mais que o dobro","sk.2p":"Com staking, 10 pontos viram 25.","sk.3":"Estrelas no staking","sk.3p":"Sua página de staking mostra suas tarefas do airdrop.",
+"sk.h":"Já faz staking? <b>Você já está dentro.</b>","sk.p":"Seus SECT no staking da Sectora contam sozinhos, como se estivessem na sua carteira. Não saque: você continua com as recompensas do staking e está no airdrop ao mesmo tempo.","sk.b":"Abrir meu staking",
+"sk.1":"Sem inscrição","sk.1p":"Sua carteira de staking entra desde o primeiro dia.","sk.2":"Conta como guardar","sk.2p":"Seus SECT em staking dão vagas no prêmio de 1.500.000 SECT.","sk.3":"Só falta o nó","sk.3p":"Conecte seu Hash Node com a mesma carteira e pronto.",
 "sk.rk":"Lembrete","sk.r":"O staking é para todos e sem bloqueio: você saca quando quiser. As recompensas já estão depositadas no contrato com antecedência.",
-"lv.e":"02 · Níveis","lv.h":"Escolha seu <b>nível.</b>","lv.p":"Regra simples: cada 100 SECT na sua carteira = 1 ponto por dia.",
-"lv.k1":"Nível 1","lv.c1":"Grátis","lv.r1":"Grátis","lv.r1s":"Sem comprar","lv.1a":"Tarefas e seu nó","lv.1b":"Parte de <b>200.000 SECT</b>",
-"lv.rt":"Pontos por dia por guardar","lv.b1":"Começar grátis",
-"lv.k2":"Nível 2","lv.r2s":"Na sua carteira · sem bloqueio","lv.2a":"Tudo do Scout","lv.2b":"Parte de <b>1.400.000 SECT</b>","lv.b2":"Ser Sentinel",
-"lv.k3":"Nível 3","lv.3a":"Tudo do Sentinel","lv.3b":"Bônus: <b>15 pontos por dia</b> em vez de 10","lv.b3":"Ser Guardian",
+"lv.e":"02 · Níveis","lv.h":"Escolha seu <b>nível.</b>","lv.p":"Regra simples: teste o nó e você ganha. Se também guardar SECT, ganha mais.",
+"lv.k1":"Nível 1","lv.c1":"Grátis","lv.r1":"Grátis","lv.r1s":"Sem comprar","lv.1a":"Teste o Hash Node","lv.1b":"Ganhe <b>250 SECT</b>",
+"lv.rt":"Vagas no prêmio de holders","lv.b1":"Começar grátis",
+"lv.k2":"Nível 2","lv.r2s":"Na sua carteira · sem bloqueio","lv.2a":"Tudo do Scout","lv.2b":"+ 1 vaga em <b>1.500.000 SECT</b>","lv.b2":"Ser Sentinel",
+"lv.k3":"Nível 3","lv.3b":"+ 1 vaga a cada <b>1.000 SECT</b>","lv.b3":"Ser Guardian",
 "hd.h":"Você só guarda. <b>Só isso.</b>","hd.p":"Seus SECT ficam na sua própria carteira o tempo todo. Se quiser sair, venda quando quiser.",
-"hd.1":"Não fica bloqueado","hd.1p":"Ninguém congela seus SECT.","hd.2":"Você não envia nada","hd.2p":"O airdrop nunca pede para você enviar SECT a nenhum endereço.","hd.3":"Venda quando quiser","hd.3p":"Você mantém os pontos que já ganhou.",
-"lv.n":"Verificamos sua carteira uma vez por dia. Os valores em dólar são aproximados: o preço do SECT muda.",
-"bo.e":"03 · Pontos extras","bo.h":"Quatro jeitos de <b>ganhar mais.</b>","bo.p":"Exemplo: se você normalmente ganha 10 pontos por dia por guardar SECT, assim ficam com cada extra.","bo.u":"pontos por dia",
-"bo.1h":"Venha todo dia","bo.1p":"Seus pontos sobem um pouco a cada 6 dias. No dia 60 já são o dobro.",
-"bo.2h":"Seja dos primeiros 1.000","bo.2p":"Pontos em dobro durante toda a campanha.",
-"bo.3t":"Mais pontos","bo.3h":"Faça staking","bo.3p":"Você ganha mais que o dobro e continua valendo para o seu nível. Primeiro staking: +100 pontos. Já faz staking? Você já está dentro.","bo.3l":"Ir para o staking",
-"bo.4h":"Traga 5 amigos","bo.4p":"Quando 5 amigos chegam a Sentinel, você ganha 2 pontos extras a cada 10.",
-"pr.e":"04 · Prêmios","pr.h":"Quem ganha <b>o quê.</b>","pr.p":"Tudo sai de um pote fixo de 2.000.000 SECT.","pr.t":"Pote de prêmios",
-"pr.1h":"Holders","pr.1p":"Dividido por pontos entre Sentinels e Guardians.",
-"pr.2h":"Top 100 que mais convidam","pr.2p":"Prêmios fixos por posição. Veja abaixo.",
-"pr.3h":"Jogadores grátis","pr.3p":"Dividido por pontos de tarefas.",
-"tp.t":"Top 100 que mais convidam","tp.p1":"1º lugar","tp.p2":"2º lugar","tp.p3":"3º lugar","tp.th1":"Posição","tp.th2":"SECT cada um","tp.th3":"Pessoas",
-"tp.c1":"Um amigo conta se entrar pelo seu link, chegar a Sentinel e passar no controle anti-bots","tp.c2":"Pontos, não dinheiro",
-"wh.e":"05 · Quando","wh.h":"Quando eu <b>recebo?</b>","wh.p":"Três temporadas de 30 dias. As datas serão anunciadas no X e no Telegram.",
-"wh.s":"Temporada","wh.1h":"Temporada 1","wh.1p":"30 dias. As primeiras 1.000 pessoas têm pontos em dobro.","wh.tbc":"Data a confirmar",
-"wh.2h":"Temporada 2","wh.2p":"30 dias. Tarefas novas.","wh.3h":"Temporada 3","wh.3p":"30 dias. O Top 100 fecha.",
+"hd.1":"Não fica bloqueado","hd.1p":"Ninguém congela seus SECT.","hd.2":"Você não envia nada","hd.2p":"O airdrop nunca pede para você enviar SECT a nenhum endereço.","hd.3":"Venda quando quiser","hd.3p":"Você mantém o prêmio do nó.",
+"lv.n":"Verificamos sua carteira e seu staking uma vez por dia. Os valores em dólar são aproximados: o preço do SECT muda.",
+"pr.e":"03 · Prêmios","pr.h":"Quem ganha <b>o quê.</b>","pr.p":"Tudo sai de um pote fixo de 2.000.000 SECT.","pr.t":"Pote de prêmios",
+"pr.1h":"Testam o nó","pr.1p":"250 SECT para cada um dos primeiros 2.000 nós que continuarem ligados no final. Um por pessoa.",
+"pr.2h":"Nó + holders","pr.2p":"Dividido por vagas entre quem testa o nó e guarda 500 SECT ou mais, na carteira ou no staking.",
+"wh.e":"04 · Quando","wh.h":"Quando eu <b>recebo?</b>","wh.p":"Uma única campanha de 90 dias. A data de início será anunciada no X e no Telegram.",
+"wh.1h":"A campanha começa","wh.1p":"Conecte sua carteira e ligue seu nó.","wh.tbc":"Data a confirmar",
+"wh.2h":"Teste e guarde","wh.2p":"Mantenha seu nó ligado. Se você guarda SECT, suas vagas são contadas todo dia.","wh.3h":"A campanha termina","wh.3p":"Verificamos os nós e o controle antibots.",
 "wh.4n":"Você recebe","wh.4h":"Lançamento da SectoraEVM","wh.4p":"Metade no primeiro dia. A outra metade 90 dias depois.",
 "wh.dh":"Data garantida","wh.dp":"Se a SectoraEVM atrasar, você recebe seus SECT na Ethereum depois de uma data fixa.",
-"sf.e":"07 · É seguro?","sf.h":"Confira <b>você mesmo.</b>","sf.p":"Um airdrop de verdade nunca pede para você enviar dinheiro.",
+"sf.e":"06 · É seguro?","sf.h":"Confira <b>você mesmo.</b>","sf.p":"Um airdrop de verdade nunca pede para você enviar dinheiro.",
 "vf.1h":"Você nunca envia dinheiro","vf.1p":"Só lemos seu saldo. Seus SECT nunca ficam bloqueados. Se alguém pedir para você enviar tokens para este airdrop, é golpe.","vf.1l":"SECT no Etherscan",
-"vf.2h":"O prêmio já existe","vf.2p":"Os 2.000.000 SECT serão bloqueados na Team Finance antes da temporada 1. O link vai aparecer aqui.","vf.2l":"Link antes da temporada 1",
+"vf.2h":"O prêmio já existe","vf.2p":"Os 2.000.000 SECT serão bloqueados na Team Finance antes de a campanha começar. O link vai aparecer aqui.","vf.2l":"Link antes do início",
 "vf.3h":"Sem lucros prometidos","vf.3p":"Não prometemos dinheiro. O preço do SECT pode subir ou cair.","vf.3l":"Ler as perguntas",
 "vf.4h":"Registrada e auditada","vf.4p":"A Sectora Foundation é registrada em Illinois, EUA. O contrato do SECT foi auditado pela Cyberscope e a liquidez está bloqueada.","vf.4a":"Auditoria da Cyberscope","vf.4b":"Liquidez bloqueada","vf.4c":"Informações legais",
-"fq.e":"08 · Perguntas","fq.h":"Respostas <b>simples.</b>","fq.p":"Dúvidas? Pergunte no nosso Telegram.",
-q1:"É grátis?",a1:"Sim. Você só conecta sua carteira e assina. Guardar SECT é opcional e dá mais pontos.",
-q8:"O que é um nó? Custa alguma coisa?",a8:"Um nó é o seu lugar na rede da Sectora. Por enquanto funciona na testnet: os SECT de teste são grátis e não têm valor, e você só precisa de um pouco de ETH de teste grátis para o gas (o painel leva até ele). Você não precisa de um computador ligado. Use a mesma carteira do airdrop para seus pontos contarem.",
+"fq.e":"07 · Perguntas","fq.h":"Respostas <b>simples.</b>","fq.p":"Dúvidas? Pergunte no nosso Telegram.",
+q1:"É grátis?","a1":"Sim. Você conecta sua carteira e testa o nó na testnet, que é grátis. Guardar SECT é opcional e faz você ganhar mais.",
+q8:"O que é um nó? Custa alguma coisa?",a8:"Um nó é o seu lugar na rede da Sectora. Por enquanto funciona na testnet: os SECT de teste são grátis e não têm valor, e você só precisa de um pouco de ETH de teste grátis para o gas (o painel leva até ele). Você não precisa de um computador ligado. Use a mesma carteira do airdrop para o seu nó contar.",
 q2:"Preciso enviar meus SECT?",a2:"Não. Seus SECT ficam na sua carteira. Só olhamos seu saldo uma vez por dia.",
-q6:"Meus SECT ficam bloqueados? Posso vender?",a6:"Nunca ficam bloqueados e você nunca os envia para lugar nenhum. Você pode vender quando quiser. Mantém os pontos que já ganhou; a partir daí só deixa de somar pontos diários por guardar.",
-q3:"Quanto vou receber?",a3:"Depende dos seus pontos comparados com os de todos. Os prêmios do Top 100 são fixos. Não prometemos valores em dólar.",
+q6:"Meus SECT ficam bloqueados? Posso vender?","a6":"Nunca ficam bloqueados e você nunca os envia para lugar nenhum. Você pode vender quando quiser. Mantém o prêmio do nó; a partir daí seus SECT só deixam de contar para vagas.",
+q3:"Quanto vou receber?","a3":"Cada nó que continuar ligado no final ganha 250 SECT (primeiros 2.000 nós). Se você também guarda SECT, recebe uma parte de 1.500.000 SECT de acordo com suas vagas. Não prometemos valores em dólar.",
 q4:"Quando eu recebo?",a4:"No lançamento da SectoraEVM: metade nesse dia e a outra metade 90 dias depois.",
-q7:"Quem faz staking ganha mais?",a7:"Sim. Se você já faz staking, está dentro automaticamente: não precisa sacar nada. Com staking, cada 10 pontos viram 25 e continua valendo para o seu nível. Além disso, seu primeiro staking dá +100 pontos. O staking não tem bloqueio.",
-q5:"Quem pode participar?",a5:"Qualquer pessoa onde for legal. As regras finais serão publicadas antes da temporada 1.",
-"fn.e":"Temporada 1 · data em breve","fn.h":"Entre <b>cedo.</b>","fn.p":"As primeiras 1.000 pessoas têm pontos em dobro. Entrar é grátis.",
-"cp.e":"06 · Ideias comprovadas","cp.h":"Airdrops que <b>deram certo.</b>","cp.p":"Estudamos os airdrops que o mercado lembra. Isto é o que cada um fez bem e como o airdrop da Sectora faz o mesmo.","cp.t":"Comparativo","cp.th1":"Airdrop","cp.th2":"O que fizeram","cp.th3":"Na Sectora","cp.1d":"Entregou 31% dos seus tokens a quem realmente usava a plataforma.","cp.1s":"A entrada grátis é uso real: ativar um nó na testnet da Sectora.","cp.2d":"Uma regra simples e igual para todos: 400 UNI para cada carteira que já o tinha usado.","cp.2s":"Regras claras desde o primeiro dia: um prêmio total fixo e prêmios fixos para o Top 100.","cp.3d":"Transformou o airdrop num evento anual, e as pessoas continuaram usando.","cp.3s":"Três temporadas de 30 dias, cada uma com tarefas novas.","cp.4d":"Premiou quem já fazia staking.","cp.4s":"Seus SECT no staking da Sectora contam sozinhos, sem bloqueio.","cp.5d":"Foi para quem constrói: desenvolvedores e usuários ativos do ecossistema.","cp.5s":"Premia quem ajuda a testar a rede, com um controle anti-bots para que ganhem pessoas reais.","av.h":"O que <b>evitamos.</b>","av.p":"Os airdrops de que as pessoas se lembram mal cometeram os mesmos erros. As regras da Sectora os evitam desde o primeiro dia.","av.1":"Pagar para resgatar","av.1p":"Resgatar não custa nada. Você nunca envia dinheiro.","av.2":"Regras que mudam no final","av.2p":"As regras finais são publicadas antes da temporada 1.","av.3":"Bloqueios surpresa","av.3p":"O plano de pagamento é conhecido desde o primeiro dia: metade no lançamento e a outra metade 90 dias depois.","cp.1x":"Lançamento → máxima 2026","cp.2x":"Lançamento → máxima 2021","cp.3x":"Carteiras premiadas","cp.4x":"Distribuído aos usuários","cp.5x":"Lançamento → máxima 2024","cp.n":"Preços aproximados em dólares, segundo dados públicos de mercado (CoinGecko e imprensa). Os preços mudam: vários desses tokens são negociados hoje bem abaixo da máxima. Airdrops anteriores não preveem resultados para o SECT.",
+"q7":"Já faço staking. Preciso fazer alguma coisa?","a7":"Quase nada: você já está dentro. Seus SECT em staking contam sozinhos e você não precisa sacar nada. Só falta conectar seu nó com a mesma carteira e pronto. O staking não tem bloqueio.",
+q5:"Quem pode participar?","a5":"Qualquer pessoa onde for legal. As regras finais serão publicadas antes de a campanha começar.",
+"fn.e":"Campanha · data em breve","fn.h":"Entre <b>cedo.</b>","fn.p":"Só os primeiros 2.000 nós ganham 250 SECT. Entrar é grátis.",
+"cp.e":"05 · Ideias comprovadas","cp.h":"Airdrops que <b>deram certo.</b>","cp.p":"Estudamos os airdrops que o mercado lembra. Isto é o que cada um fez bem e como o airdrop da Sectora faz o mesmo.","cp.t":"Comparativo","cp.th1":"Airdrop","cp.th2":"O que fizeram","cp.th3":"Na Sectora","cp.1d":"Entregou 31% dos seus tokens a quem realmente usava a plataforma.","cp.1s":"A entrada grátis é uso real: ativar um nó na testnet da Sectora.","cp.2d":"Uma regra simples e igual para todos: 400 UNI para cada carteira que já o tinha usado.","cp.2s":"Regras claras desde o primeiro dia: um prêmio fixo por nó e um prêmio total fixo.","cp.3d":"Transformou o airdrop num evento anual, e as pessoas continuaram usando.","cp.3s":"90 dias com o seu nó ligado: o prêmio é para quem continua usando a rede.","cp.4d":"Premiou quem já fazia staking.","cp.4s":"Seus SECT no staking da Sectora contam sozinhos, sem bloqueio.","cp.5d":"Foi para quem constrói: desenvolvedores e usuários ativos do ecossistema.","cp.5s":"Premia quem ajuda a testar a rede, com um controle antibots para que ganhem pessoas reais.","av.h":"O que <b>evitamos.</b>","av.p":"Os airdrops de que as pessoas se lembram mal cometeram os mesmos erros. As regras da Sectora os evitam desde o primeiro dia.","av.1":"Pagar para resgatar","av.1p":"Resgatar não custa nada. Você nunca envia dinheiro.","av.2":"Regras que mudam no final","av.2p":"As regras finais são publicadas antes de a campanha começar.","av.3":"Bloqueios surpresa","av.3p":"O plano de pagamento é conhecido desde o primeiro dia: metade no lançamento e a outra metade 90 dias depois.","cp.1x":"Lançamento → máxima 2026","cp.2x":"Lançamento → máxima 2021","cp.3x":"Carteiras premiadas","cp.4x":"Distribuído aos usuários","cp.5x":"Lançamento → máxima 2024","cp.n":"Preços aproximados em dólares, segundo dados públicos de mercado (CoinGecko e imprensa). Os preços mudam: vários desses tokens são negociados hoje bem abaixo da máxima. Airdrops anteriores não preveem resultados para o SECT.",
+"sk.n":"Conectar meu nó","pr.c1":"Um nó por pessoa · controle antibots","pr.c2":"A mesma carteira para o nó e os SECT","wh.1n":"Início","wh.2n":"90 dias","wh.2f":"90 dias","wh.3n":"Encerramento",
 "ft.1":"Sectora Foundation · Illinois, EUA · Arquivo 18523639",
-"ft.2":"Pontos não são dinheiro nem investimento. As regras estão em revisão jurídica e podem mudar antes da temporada 1. Indisponível onde a lei não permitir. O preço do SECT pode cair ou subir."
+"ft.2":"Este airdrop não é um investimento. As regras estão em revisão jurídica e podem mudar antes de a campanha começar. Indisponível onde a lei não permitir. O preço do SECT pode cair ou subir."
 }
 };
 var D = {
-en:{loc:"en-US",pvConnect:"Preview: connecting wallets is not live yet. It will open on Season 1."},
-es:{loc:"es-ES",pvConnect:"Vista previa: conectar la wallet aún no está activo. Se abrirá en la temporada 1."},
-pt:{loc:"pt-BR",pvConnect:"Prévia: conectar a carteira ainda não está no ar. Abre na temporada 1."}
+en:{loc:"en-US",pvConnect:"Preview: connecting wallets is not live yet. It will open when the campaign starts."},
+es:{loc:"es-ES",pvConnect:"Vista previa: conectar la wallet aún no está activo. Se abrirá cuando empiece la campaña."},
+pt:{loc:"pt-BR",pvConnect:"Prévia: conectar a carteira ainda não está no ar. Abre quando a campanha começar."}
 };
 
 var lang = "en";
@@ -1381,7 +1278,7 @@ function reveals(){
   var top = $("#top");
   if(!anim){ top.classList.add("played"); return; }
   requestAnimationFrame(function(){ requestAnimationFrame(function(){ top.classList.add("played"); }); });
-  var RV = ".sub,.lnote,.lv,.hold,.step,.cta,.boost,.pts > .pt,.doc,.dl,.vc,.faq details";
+  var RV = ".sub,.lnote,.lv,.hold,.step,.cta,.pts > .pt,.doc,.dl,.vc,.faq details";
   var els = [];
   $$(".sec").forEach(function(sec){
     sec.querySelectorAll(RV).forEach(function(el){
@@ -1430,6 +1327,6 @@ if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){
 $$("canvas.grid").forEach(gridFx);
 })();
 </script>
-<script src="/airdroptesting/eligibility.js?v=2" defer></script>
+<script src="/airdroptesting/eligibility.js?v=3" defer></script>
 </body>
 </html>
