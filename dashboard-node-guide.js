@@ -147,7 +147,7 @@
           : '<button class="ng-go" type="button" data-go="' + st.go + '">' + s[2] + " →</button>";
         return '<section class="ng-s" data-i="' + i + '"><span class="ng-n">' + (i + 1) + "</span>" +
           "<h3>" + s[0] + '<span class="ng-ok">' + L.done + "</span></h3><p>" + fill(s[1]) + "</p>" +
-          "<figure>" + st.img.map(function (f) { return '<img src="' + IMG + pre + f + '.jpg" alt="" loading="lazy" decoding="async">'; }).join("") + "</figure>" +
+          "<figure>" + st.img.map(function (f) { return '<img src="' + IMG + pre + f + '.jpg?v=2" alt="" loading="lazy" decoding="async">'; }).join("") + "</figure>" +
           act + "</section>";
       }).join("") + '<p class="ng-help">' + L.help + "</p>";
     marks();
