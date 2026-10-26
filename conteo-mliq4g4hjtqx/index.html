@@ -179,7 +179,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     </div>
     <div class="tabs" id="tabs" role="group" aria-label="Filtrar"></div>
     <div class="tbl"><table>
-      <thead><tr><th>Wallet</th><th>Nivel</th><th class="r">En staking</th><th>Nodo</th><th>Día</th><th class="r">Ganado</th><th class="r">A la entrega</th><th>Estado</th></tr></thead>
+      <thead><tr><th>Wallet</th><th>Nivel</th><th class="r">En staking</th><th>Nodo</th><th>Día</th><th class="r">Ganado</th><th class="r">Al completar</th><th>Cobra</th><th>Estado</th></tr></thead>
       <tbody id="rows"></tbody>
     </table></div>
     <p class="foot">Toca una wallet para ver su detalle. Se calcula en tu navegador con los datos públicos de la blockchain (staking en Ethereum y registro de nodos en la testnet). No se guarda ni se publica nada. Es una estimación: si una wallet apagó el nodo, cuenta como "falta el nodo" hasta que lo encienda.</p>
@@ -193,7 +193,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   </div>
 </div>
 
-<script src="/airdroptesting/count.js?v=4"></script>
+<script src="/airdroptesting/count.js?v=5"></script>
 <script>
 (function () {
   "use strict";
@@ -286,7 +286,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     tabsDraw(); draw();
     clearInterval(tick); tick = setInterval(live, 250); live();
   }
-  // avance hacia lo que tendra a la entrega
+  // avance hacia lo que tendra al completar su tiempo
   function pct(r) { return r.proj ? Math.min(100, earnedNow(r) / r.proj * 100) : 0; }
   function earnedNow(r) { return C.liveEarned(r.items, r.closed, Date.now()); }
   function live() {
@@ -321,9 +321,10 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       html += '<tr data-r="' + i + '"><td><button class="w" type="button" data-r="' + i + '">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + "</button></td>" +
         "<td>" + lvl + "</td><td class=\"r\">" + nf0.format(r.bal) + "</td><td>" + node + "</td><td>" + day + "</td>" +
         '<td class="r" data-e="' + i + '">' + nf2.format(earnedNow(r)) + '</td><td class="r">' + (r.proj ? nf0.format(r.proj) : r.prize ? nf0.format(r.prize) : "—") + "</td>" +
+        "<td>" + (r.deliver ? d(r.deliver) : "—") + "</td>" +
         '<td><span class="chip ' + st[1] + '">' + st[0] + "</span></td></tr>";
     });
-    $("rows").innerHTML = html || '<tr><td colspan="8" class="empty">No hay wallets en este filtro.</td></tr>';
+    $("rows").innerHTML = html || '<tr><td colspan="9" class="empty">No hay wallets en este filtro.</td></tr>';
     $("rows").querySelectorAll("tr[data-r]").forEach(function (tr) { tr.addEventListener("click", function () { show(+tr.dataset.r); }); });
   }
 
@@ -351,12 +352,13 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       kv("Nivel", r.level ? LV[r.level] : "Sin nivel") +
       kv("Plazas", r.level === 4 ? r.spots + " plaza" + (r.spots > 1 ? "s" : "") + " Titan" : r.level ? "1" : "—") +
       kv("Premio de su nivel", r.prize ? nf0.format(r.prize) + " SECT" : "—") +
-      kv("Tendrá a la entrega si se queda", r.proj ? nf0.format(r.proj) + " SECT" : "—") +
+      kv("Tendrá al completar su tiempo", r.proj ? nf0.format(r.proj) + " SECT" : "—") +
       kv("Asegurado (día 30 o más)", nf2.format(r.secured) + " SECT") +
       kv("Días dentro", r.day ? r.day : "—") +
       kv("Empezó a contar", d(r.start)) +
       kv("Asegura lo ganado el", r.start ? d(r.start + 30 * C.DAY) : "—") +
-      kv("Entrega", d(C.END) + " · 10 días tras la quema") +
+      kv("Completa su tiempo", r.end ? d(r.end) : "—") +
+      kv("Cobra", r.deliver ? d(r.deliver) + (r.deliver === C.END ? " · primeras entregas, 10 días tras la quema" : "") : "—") +
       '<p class="hint">' + nextLv(r.bal) + "</p></div>";
     h += '<div class="box"><h4>Staking</h4>' +
       kv("SECT en staking", nf0.format(a ? a.staked : r.bal)) +
@@ -390,13 +392,13 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   $("dr").addEventListener("click", function (e) { if (e.target === $("dr")) hide(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("dr").hidden) hide(); });
   function csv() {
-    var lines = [["wallet", "nivel", "plazas", "en_staking", "en_wallet", "recompensas_staking", "nodo", "nodo_registrado", "dia", "empezo", "asegura_el", "completo_el",
+    var lines = [["wallet", "nivel", "plazas", "en_staking", "en_wallet", "recompensas_staking", "nodo", "nodo_registrado", "dia", "empezo", "asegura_el", "completo_el", "cobra",
       "ganado", "asegurado", "premio_nivel", "a_la_entrega", "total_depositado", "total_retirado", "primer_deposito", "estado"].join(",")];
     rows.forEach(function (x) {
       var r = x.r, a = x.acc, dep = 0, wd = 0, first = 0; if (r.status === "out") return;
       x.ev.forEach(function (e) { if (e.dep) { dep += e.amt; if (!first) first = e.t; } else wd += e.amt; });
       var day = function (t) { return t ? iso(t) : ""; };
-      lines.push([x.who, LV[r.level], r.spots, r.bal, a ? a.wallet : "", a ? a.claimable.toFixed(4) : "", r.node, day(r.nodeAt), r.day, day(r.start), r.start ? day(r.start + 30 * C.DAY) : "", day(r.end),
+      lines.push([x.who, LV[r.level], r.spots, r.bal, a ? a.wallet : "", a ? a.claimable.toFixed(4) : "", r.node, day(r.nodeAt), r.day, day(r.start), r.start ? day(r.start + 30 * C.DAY) : "", day(r.end), day(r.deliver),
         earnedNow(r).toFixed(4), r.secured.toFixed(4), r.prize, Math.round(r.proj), dep, wd, day(first), (ST[r.status] || [""])[0]].join(","));
     });
     var a = document.createElement("a");

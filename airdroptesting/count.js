@@ -3,9 +3,10 @@
    registro de nodos (Sepolia), y con eso se rehace la historia de cada wallet.
 
    Reglas que aplica:
-   - El premio sube cada dia desde que se entra hasta la entrega (25 mar 2027, 10 dias despues de la
-     quema): quien esta desde la apertura gana el premio completo; quien entra despues, la parte del
-     tiempo que esta. Cada umbral es una capa con su parte del premio: Scout 100 SECT = 40,
+   - Todos tienen el mismo tiempo para completar su premio (DUR, 150 dias; en la web no se dice el
+     numero), contado desde que entran. Las entregas empiezan el 25 mar 2027, 10 dias despues de la
+     quema: quien ya completo su tiempo cobra ese dia; quien entro despues, al completarlo. Asi las
+     entregas se reparten en el tiempo. Cada umbral es una capa con su parte del premio: Scout 100 SECT = 40,
      Sentinel 500 = +210 (250), Guardian 1.000 = +350 (600), Titan 4.000 = +2.800 (3.400) y cada
      4.000 mas es otra plaza de 3.400. Asi, subir de nivel tarde solo suma desde ese dia.
    - Una capa empieza cuando el saldo cruza su umbral (no antes de la apertura ni del registro
@@ -28,7 +29,7 @@
   var OPEN = null;
   // entrega: 25 de marzo de 2027, 10 dias despues de la quema del 15 de marzo
   var END = Date.UTC(2027, 2, 25);
-  var DAY = 864e5, MIN = 30, BAG = 7e6;
+  var DAY = 864e5, MIN = 30, BAG = 7e6, DUR = 150 * DAY;
   var LAYERS = [[100, 40, 1], [500, 210, 2], [1000, 350, 3], [4000, 2800, 4]];
   var SPOT = 4000, SPOT_PRIZE = 3400;
   var PRIZE = { 0: 0, 1: 40, 2: 250, 3: 600, 4: 3400 };
@@ -142,33 +143,32 @@
   function evaluate(ev, nd, open, now) {
     var h = layers(ev), lv = level(h.bal), spots = lv === 4 ? Math.floor(h.bal / SPOT) : (lv ? 1 : 0);
     var r = { bal: h.bal, level: lv, spots: spots, prize: lv ? PRIZE[lv] * Math.max(1, spots) : 0, node: nd ? (nd.active ? "on" : "off") : "none",
-      earned: 0, secured: 0, closed: 0, proj: 0, items: [], lay: [], day: 0, left: 0, status: "", start: 0, end: 0, nodeAt: nd ? nd.at : 0 };
+      earned: 0, secured: 0, closed: 0, proj: 0, items: [], lay: [], day: 0, left: 0, status: "", start: 0, end: 0, deliver: 0, nodeAt: nd ? nd.at : 0 };
     if (!open || now < open) { r.status = lv ? (nd && nd.active ? "pre" : "nonode") : (nd ? "p2" : "out"); return r; }
     if (!lv) { r.status = nd ? "p2" : "out"; return r; }
     if (!nd || !nd.active) { r.status = "nonode"; return r; }
-    var base = null, sp = span(open), t = Math.min(now, END);
+    var base = null, last = 0;
     h.layers.forEach(function (L) {
-      var s = Math.max(L.start, open, nd.at), e = Math.min(L.end == null ? t : L.end, END);
+      var s = Math.max(L.start, open, nd.at), e = L.end == null ? now : L.end;
       var d = (e - s) / DAY;
-      var row = { at: L.at, p: L.p, s: s, end: L.end, d: Math.max(0, d), got: 0, state: L.end == null ? (now >= END ? "full" : d >= MIN ? "run" : "early") : (d < MIN ? "lost" : "closed") };
+      var row = { at: L.at, p: L.p, s: s, end: L.end, d: Math.max(0, d), got: 0, state: L.end == null ? (e - s >= DUR ? "full" : d >= MIN ? "run" : "early") : (d < MIN ? "lost" : "closed") };
       r.lay.push(row);
       if (d <= 0) { row.state = L.end == null ? "early" : "lost"; return; }
       if (L.end != null && d < MIN) return;           // salio antes del dia 30: nada
-      var got = L.p * Math.min(1, (e - s) / sp); row.got = got;
+      var got = L.p * Math.min(1, (e - s) / DUR); row.got = got;
       r.earned += got; if (d >= MIN) r.secured += got; if (L.end != null) r.closed += got;
-      if (L.end == null) { r.items.push({ s: s, p: L.p, sp: sp }); r.proj += L.p * Math.min(1, (END - s) / sp); if (!base || L.at < base.at) base = { at: L.at, s: s }; }
+      if (L.end == null) { r.items.push({ s: s, p: L.p, sp: DUR }); r.proj += L.p; if (!base || L.at < base.at) base = { at: L.at, s: s }; last = Math.max(last, s); }
       else r.proj += got;
     });
-    if (base) { r.day = Math.floor((t - base.s) / DAY) + 1; r.left = Math.max(0, Math.ceil((END - now) / DAY)); r.start = base.s; r.end = END; }
-    r.status = !base ? "out" : now >= END ? "full" : r.day < MIN ? "early" : "run";
+    // completa su tiempo con la ultima plaza; cobra ese dia o el 25 de marzo, lo que llegue despues
+    if (base) { r.day = Math.floor((now - base.s) / DAY) + 1; r.end = last + DUR; r.deliver = Math.max(END, r.end); r.left = Math.max(0, Math.ceil((r.end - now) / DAY)); r.start = base.s; }
+    else if (r.closed) r.deliver = END;            // salio despues del dia 30: cobra lo ganado en las primeras entregas
+    r.status = !base ? "out" : now >= r.end ? "full" : r.day < MIN ? "early" : "run";
     return r;
   }
-  // tiempo entre la apertura y la entrega: quien esta todo ese tiempo gana el premio completo
-  function span(open) { return Math.max(DAY, END - open); }
   // lo ganado en un instante, solo con las capas abiertas (para el contador en vivo)
   function liveEarned(items, closed, now) {
-    var t = Math.min(now, END), s = closed;
-    items.forEach(function (it) { s += it.p * Math.min(1, Math.max(0, (t - it.s) / it.sp)); }); return s;
+    var s = closed; items.forEach(function (it) { s += it.p * Math.min(1, Math.max(0, (now - it.s) / it.sp)); }); return s;
   }
 
   /* ---------- una wallet (verificador) o todas (panel) ---------- */
@@ -192,6 +192,6 @@
     });
   }
 
-  root.SACount = { OPEN: root.SA_OPEN !== undefined ? root.SA_OPEN : OPEN, END: END, DAY: DAY, MIN: MIN, BAG: BAG, PRIZE: PRIZE,
-    level: level, layers: layers, evaluate: evaluate, span: span, liveEarned: liveEarned, wallet: wallet, everyone: everyone };
+  root.SACount = { OPEN: root.SA_OPEN !== undefined ? root.SA_OPEN : OPEN, END: END, DAY: DAY, DUR: DUR, MIN: MIN, BAG: BAG, PRIZE: PRIZE,
+    level: level, layers: layers, evaluate: evaluate, liveEarned: liveEarned, wallet: wallet, everyone: everyone };
 })(window);
