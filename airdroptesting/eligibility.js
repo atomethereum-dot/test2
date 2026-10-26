@@ -11,7 +11,7 @@
    Cada persona tiene sus propios 90 dias desde que entra; los SECT se entregan en SectoraEVM
    (al lanzarse la mainnet, o el dia 90 si llega despues).
    Ya abierto el airdrop, lo ganado sube en vivo como en el staking: premio x dias / 90, por
-   plaza, desde el inicio de cada plaza. Los inicios salen de progress.json, que escribe el
+   plaza, desde el inicio de cada plaza. Minimo 30 dias: si sale antes del dia 30 no gana nada. Los inicios salen de progress.json, que escribe el
    programa diario: { "open": ms, "wallets": { "0x…": [inicio plaza 1, inicio plaza 2, …] } }.
    Sin ese archivo (antes de la apertura) se muestra el premio y "empieza a sumar el dia de la apertura".
    Si la wallet tiene staking y aun no tiene el nodo activo, sale el aviso
@@ -27,7 +27,7 @@
   var STAKE = "/staking/";
   var MM = "https://metamask.app.link/dapp/sectoraorg.com/airdroptesting/";
   var PROG = "/airdroptesting/progress.json";
-  var DAYS = 90, DAY = 864e5;
+  var DAYS = 90, MIN = 30, DAY = 864e5;
 
   var L = {
     en: { loc: "en-US", k: "Sectora // Airdrop Genesis", pv: "Preview", h: "Your airdrop",
@@ -46,7 +46,7 @@
       foot: "We only read public data: no signature, no transaction, nothing leaves your wallet. Your level is checked once a day.",
       err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
       rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet",
-      acc: "You've earned {n} SECT", of: "of {n} SECT · full prize at day 90", day: "Day {d} of 90 · {r} days to the full prize", full: "Full prize complete · delivered on SectoraEVM",
+      acc: "You've earned {n} SECT", of: "of {n} SECT · full prize at day 90", day: "Day {d} of 90 · {r} days to the full prize", lock: "Day {d} of 90 · what you earn is secured on day 30", full: "Full prize complete · delivered on SectoraEVM",
       pre: "Starts adding up on opening day. 90 days with your node on and your SECT in staking = full prize.", wait: "Your count starts at the next daily check." },
     es: { loc: "es-ES", k: "Sectora // Airdrop Genesis", pv: "Vista previa", h: "Tu airdrop",
       intro: "Conecta tu wallet para ver cuánto ganas en el airdrop.",
@@ -64,7 +64,7 @@
       foot: "Solo leemos datos públicos: no hay firmas ni transacciones y nada sale de tu wallet. Tu nivel se revisa una vez al día.",
       err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
       rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet",
-      acc: "Llevas {n} SECT", of: "de {n} SECT · premio completo el día 90", day: "Día {d} de 90 · faltan {r} días para el premio completo", full: "Premio completo · se entrega en SectoraEVM",
+      acc: "Llevas {n} SECT", of: "de {n} SECT · premio completo el día 90", day: "Día {d} de 90 · faltan {r} días para el premio completo", lock: "Día {d} de 90 · lo ganado queda asegurado el día 30", full: "Premio completo · se entrega en SectoraEVM",
       pre: "Empieza a sumar el día de la apertura. 90 días con tu nodo encendido y tus SECT en staking = premio completo.", wait: "Tu conteo empieza en la próxima revisión diaria." },
     pt: { loc: "pt-BR", k: "Sectora // Airdrop Genesis", pv: "Prévia", h: "Seu airdrop",
       intro: "Conecte sua carteira para ver quanto você ganha no airdrop.",
@@ -82,7 +82,7 @@
       foot: "Só lemos dados públicos: sem assinatura, sem transação, nada sai da sua carteira. Seu nível é verificado uma vez por dia.",
       err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
       rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira",
-      acc: "Você já tem {n} SECT", of: "de {n} SECT · prêmio completo no dia 90", day: "Dia {d} de 90 · faltam {r} dias para o prêmio completo", full: "Prêmio completo · entregue na SectoraEVM",
+      acc: "Você já tem {n} SECT", of: "de {n} SECT · prêmio completo no dia 90", day: "Dia {d} de 90 · faltam {r} dias para o prêmio completo", lock: "Dia {d} de 90 · o que você ganha fica garantido no dia 30", full: "Prêmio completo · entregue na SectoraEVM",
       pre: "Começa a somar no dia da abertura. 90 dias com seu nó ligado e seus SECT em staking = prêmio completo.", wait: "Sua contagem começa na próxima verificação diária." }
   };
   function lang() { var l = (document.documentElement.lang || "en").slice(0, 2); return L[l] ? l : "en"; }
@@ -283,7 +283,9 @@
       acc.textContent = nf.format(earned);
       bar.style.width = Math.min(100, earned / prize * 100) + "%";
       var left = Math.ceil((last + DAYS * DAY - now) / DAY);
-      days.textContent = left <= 0 ? t("full") : t("day", { d: Math.min(DAYS, Math.max(1, Math.floor((now - first) / DAY) + 1)), r: left });
+      var d = Math.min(DAYS, Math.max(1, Math.floor((now - first) / DAY) + 1));
+      // minimo de 30 dias: antes de eso, lo ganado aun no esta asegurado
+      days.textContent = left <= 0 ? t("full") : d < MIN ? t("lock", { d: d }) : t("day", { d: d, r: left });
     }
     stop(); tick(); timer = setInterval(tick, 100);
   }
