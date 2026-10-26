@@ -35,7 +35,7 @@
   var DEPLOYED = Date.UTC(2026, 9, 8);
   // fecha de apertura del airdrop (ms). null = aun no abre. Ej.: Date.UTC(2026, 10, 1)
   var OPEN = null;
-  // entrega: 25 de marzo de 2027, 10 dias despues de la quema del 15 de marzo
+  // fecha prevista (interna) del lanzamiento de SectoraEVM, cuando empiezan las entregas; la web no la muestra
   var END = Date.UTC(2027, 2, 25);
   var DAY = 864e5, MIN = 30, BAG = 7e6, DUR = 150 * DAY;
   var LEVELS = [100, 500, 1000, 4000];

@@ -10,7 +10,7 @@
    - Guardian, desde 1.000 SECT = 60 %;
    - Titan, desde 4.000 SECT = 85 %, sin maximo. Ej.: 1.500 SECT en staking = 900 SECT.
    Todos tienen el mismo tiempo para completar su premio, contado desde que entran. Las entregas en
-   SectoraEVM empiezan el 25 de marzo de 2027 (10 dias despues de la quema): quien ya completo su
+   SectoraEVM empiezan en su lanzamiento: quien ya completo su
    tiempo cobra ese dia; quien entro despues, al completarlo.
    Ya abierto el airdrop, lo ganado sube en vivo como en el staking: premio x tiempo dentro / tiempo completo, por
    plaza, desde el inicio de cada plaza. Si sale, se pausa y sigue al volver. Minimo 30 dias dentro. Los inicios salen de progress.json, que escribe el
@@ -29,7 +29,7 @@
   var STAKE = "/staking/";
   var MM = "https://metamask.app.link/dapp/sectoraorg.com/airdroptesting/";
   var PROG = "/airdroptesting/progress.json";
-  // entregas desde el 25 mar 2027 (10 dias despues de la quema); DUR: el mismo tiempo para todos
+  // END: fecha prevista (interna) del lanzamiento de SectoraEVM, no se muestra; DUR: el mismo tiempo para todos
   var MIN = 30, DAY = 864e5, END = Date.UTC(2027, 2, 25), DUR = 150 * DAY;
 
   var L = {
@@ -49,8 +49,8 @@
       foot: "We only read public data: no signature, no transaction, nothing leaves your wallet. Your level is checked once a day.",
       err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
       rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet",
-      acc: "You've earned {n} SECT", of: "{n} SECT when you complete your time", day: "Delivered on SectoraEVM · Mar 25, 2027, 10 days after the burn", day2: "You complete your time on {d} · delivered that day on SectoraEVM", day3: "Each part is delivered on SectoraEVM when it completes its time · next: {d}", lock: "What you earn is secured on {d}", full: "Full prize complete · delivered on SectoraEVM",
-      pre: "Starts adding up on opening day. Everyone has the same time to complete the prize, counted from the day they join. Deliveries start 10 days after the burn.", wait: "Your count will show as soon as the network confirms your staking." },
+      acc: "You've earned {n} SECT", of: "{n} SECT when you complete your time", day: "Delivered at the launch of SectoraEVM", day2: "You complete your time on {d} · delivered on SectoraEVM", day3: "Each part is delivered on SectoraEVM when it completes its time · the next one completes on {d}", lock: "What you earn is secured on {d}", full: "Full prize complete · delivered on SectoraEVM",
+      pre: "Starts adding up on opening day. Everyone has the same time to complete the prize, counted from the day they join. Deliveries start at the launch of SectoraEVM.", wait: "Your count will show as soon as the network confirms your staking." },
     es: { loc: "es-ES", k: "Sectora // Airdrop Genesis", pv: "Vista previa", h: "Tu airdrop",
       intro: "Conecta tu wallet para ver cuánto ganas en el airdrop.",
       connect: "Conectar wallet", nowallet: "¿No tienes wallet en este navegador?", openmm: "Abrir en MetaMask",
@@ -67,8 +67,8 @@
       foot: "Solo leemos datos públicos: no hay firmas ni transacciones y nada sale de tu wallet. Tu nivel se revisa una vez al día.",
       err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
       rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet",
-      acc: "Llevas {n} SECT", of: "{n} SECT al completar tu tiempo", day: "Se entrega en SectoraEVM · 25 mar 2027, 10 días después de la quema", day2: "Completas tu tiempo el {d} · se entrega ese día en SectoraEVM", day3: "Cada parte se entrega en SectoraEVM al completar su tiempo · la próxima, el {d}", lock: "Lo ganado queda asegurado el {d}", full: "Premio completo · se entrega en SectoraEVM",
-      pre: "Empieza a sumar el día de la apertura. Todos tienen el mismo tiempo para completar el premio, contado desde que entran. Las entregas empiezan 10 días después de la quema.", wait: "Tu conteo aparecerá en cuanto la red confirme tu staking." },
+      acc: "Llevas {n} SECT", of: "{n} SECT al completar tu tiempo", day: "Se entrega en el lanzamiento de SectoraEVM", day2: "Completas tu tiempo el {d} · se entrega en SectoraEVM", day3: "Cada parte se entrega en SectoraEVM al completar su tiempo · la próxima se completa el {d}", lock: "Lo ganado queda asegurado el {d}", full: "Premio completo · se entrega en SectoraEVM",
+      pre: "Empieza a sumar el día de la apertura. Todos tienen el mismo tiempo para completar el premio, contado desde que entran. Las entregas empiezan en el lanzamiento de SectoraEVM.", wait: "Tu conteo aparecerá en cuanto la red confirme tu staking." },
     pt: { loc: "pt-BR", k: "Sectora // Airdrop Genesis", pv: "Prévia", h: "Seu airdrop",
       intro: "Conecte sua carteira para ver quanto você ganha no airdrop.",
       connect: "Conectar carteira", nowallet: "Sem carteira neste navegador?", openmm: "Abrir no MetaMask",
@@ -85,8 +85,8 @@
       foot: "Só lemos dados públicos: sem assinatura, sem transação, nada sai da sua carteira. Seu nível é verificado uma vez por dia.",
       err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
       rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira",
-      acc: "Você já tem {n} SECT", of: "{n} SECT ao completar seu tempo", day: "Entregue na SectoraEVM · 25 mar 2027, 10 dias depois da queima", day2: "Você completa seu tempo em {d} · entregue nesse dia na SectoraEVM", day3: "Cada parte é entregue na SectoraEVM ao completar seu tempo · a próxima, em {d}", lock: "O que você ganha fica garantido em {d}", full: "Prêmio completo · entregue na SectoraEVM",
-      pre: "Começa a somar no dia da abertura. Todos têm o mesmo tempo para completar o prêmio, contado desde que entram. As entregas começam 10 dias depois da queima.", wait: "Sua contagem vai aparecer assim que a rede confirmar seu staking." }
+      acc: "Você já tem {n} SECT", of: "{n} SECT ao completar seu tempo", day: "Entregue no lançamento da SectoraEVM", day2: "Você completa seu tempo em {d} · entregue na SectoraEVM", day3: "Cada parte é entregue na SectoraEVM ao completar seu tempo · a próxima se completa em {d}", lock: "O que você ganha fica garantido em {d}", full: "Prêmio completo · entregue na SectoraEVM",
+      pre: "Começa a somar no dia da abertura. Todos têm o mesmo tempo para completar o prêmio, contado desde que entram. As entregas começam no lançamento da SectoraEVM.", wait: "Sua contagem vai aparecer assim que a rede confirmar seu staking." }
   };
   function lang() { var l = (document.documentElement.lang || "en").slice(0, 2); return L[l] ? l : "en"; }
   function t(k, v) { var s = L[lang()][k]; if (v) for (var x in v) s = s.replace("{" + x + "}", v[x]); return s; }
@@ -291,10 +291,12 @@
   function live(items, closed, proj) {
     var acc = bd.querySelector("[data-acc]"), bar = bd.querySelector("[data-bar]"), days = bd.querySelector("[data-days]");
     var nf = new Intl.NumberFormat(L[lang()].loc, { minimumFractionDigits: 4, maximumFractionDigits: 4, useGrouping: "always" });
-    // cada parte se paga por separado: al completar su tiempo, nunca antes del 25 de marzo
+    // cada parte se paga por separado al completar su tiempo, desde el lanzamiento de SectoraEVM.
+    // END es la fecha prevista (interna) del lanzamiento: nunca se muestra; solo se muestran fechas posteriores
     var first = Math.min.apply(null, items.map(function (it) { return it.s; }));
-    var due = items.map(function (it) { return Math.max(END, it.s + it.sp); }), done = Math.max.apply(null, due);
-    var many = due.some(function (x) { return x !== due[0]; });
+    var fin = items.map(function (it) { return it.s + it.sp; }), done = Math.max.apply(null, fin);
+    var late = fin.filter(function (x) { return x > END; });
+    var many = late.length && (late.length < fin.length || late.some(function (x) { return x !== late[0]; }));
     var df = new Intl.DateTimeFormat(L[lang()].loc, { day: "numeric", month: "short", year: "numeric" });
     function tick() {
       var now = Date.now(), earned = closed;
@@ -302,9 +304,9 @@
       acc.textContent = nf.format(earned);
       bar.style.width = (proj ? Math.min(100, earned / proj * 100) : 0) + "%";
       // minimo de 30 dias: antes de eso, lo ganado aun no esta asegurado
-      var next = Math.min.apply(null, due.filter(function (x) { return x > now; }));
+      var next = Math.min.apply(null, late.filter(function (x) { return x > now; }).concat(done));
       days.textContent = now >= done ? t("full") : now - first < MIN * DAY ? t("lock", { d: df.format(first + MIN * DAY) }) :
-        many ? t("day3", { d: df.format(next) }) : done <= END ? t("day") : t("day2", { d: df.format(done) });
+        done <= END ? t("day") : many ? t("day3", { d: df.format(next) }) : t("day2", { d: df.format(done) });
     }
     stop(); tick(); timer = setInterval(tick, 100);
   }
