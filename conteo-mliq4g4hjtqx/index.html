@@ -179,7 +179,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     </div>
     <div class="tabs" id="tabs" role="group" aria-label="Filtrar"></div>
     <div class="tbl"><table>
-      <thead><tr><th>Wallet</th><th>Nivel</th><th class="r">En staking</th><th>Nodo</th><th>Día</th><th class="r">Ganado</th><th class="r">Premio</th><th>Estado</th></tr></thead>
+      <thead><tr><th>Wallet</th><th>Nivel</th><th class="r">En staking</th><th>Nodo</th><th>Día</th><th class="r">Ganado</th><th class="r">A la entrega</th><th>Estado</th></tr></thead>
       <tbody id="rows"></tbody>
     </table></div>
     <p class="foot">Toca una wallet para ver su detalle. Se calcula en tu navegador con los datos públicos de la blockchain (staking en Ethereum y registro de nodos en la testnet). No se guarda ni se publica nada. Es una estimación: si una wallet apagó el nodo, cuenta como "falta el nodo" hasta que lo encienda.</p>
@@ -193,7 +193,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   </div>
 </div>
 
-<script src="/airdroptesting/count.js?v=3"></script>
+<script src="/airdroptesting/count.js?v=4"></script>
 <script>
 (function () {
   "use strict";
@@ -271,8 +271,9 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       var r = x.r;
       if (r.status === "p2") p2++;
       if (r.status === "nonode") nonode++;
-      if (r.level && r.node === "on") { part++; lv[r.level]++; reserved += r.prize; if (r.level === 4) titan += r.spots; }
-      reserved += r.closed; secured += r.secured;
+      if (r.level && r.node === "on") { part++; lv[r.level]++; reserved += r.proj || r.prize; if (r.level === 4) titan += r.spots; }
+      else reserved += r.closed;  // salio despues del dia 30: conserva lo ganado
+      secured += r.secured;
     });
     $("t-part").textContent = nf0.format(part); $("t-parts").textContent = "Con 100+ SECT en staking y el nodo activo";
     $("t-titan").textContent = nf0.format(titan); $("t-titans").textContent = nf0.format(titan * 4000) + " SECT en staking como Titan";
@@ -285,6 +286,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     tabsDraw(); draw();
     clearInterval(tick); tick = setInterval(live, 250); live();
   }
+  // avance hacia lo que tendra a la entrega
+  function pct(r) { return r.proj ? Math.min(100, earnedNow(r) / r.proj * 100) : 0; }
   function earnedNow(r) { return C.liveEarned(r.items, r.closed, Date.now()); }
   function live() {
     var tot = 0; rows.forEach(function (x) { tot += earnedNow(x.r); });
@@ -314,10 +317,10 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       var r = x.r, st = ST[r.status] || ["—", "mute"];
       var lvl = r.level ? LV[r.level] + (r.level === 4 && r.spots > 1 ? " · " + r.spots + " plazas" : "") : "—";
       var node = r.node === "on" ? '<span class="chip ok">Activo</span>' : r.node === "off" ? '<span class="chip warn">Pausado</span>' : '<span class="chip mute">Sin nodo</span>';
-      var day = r.day ? r.day + " / " + C.DAYS + "<span class=\"prog\"><i style=\"width:" + (r.day / C.DAYS * 100) + '%"></i></span>' : "—";
+      var day = r.day ? r.day + " días<span class=\"prog\"><i style=\"width:" + pct(r) + '%"></i></span>' : "—";
       html += '<tr data-r="' + i + '"><td><button class="w" type="button" data-r="' + i + '">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + "</button></td>" +
         "<td>" + lvl + "</td><td class=\"r\">" + nf0.format(r.bal) + "</td><td>" + node + "</td><td>" + day + "</td>" +
-        '<td class="r" data-e="' + i + '">' + nf2.format(earnedNow(r)) + '</td><td class="r">' + (r.prize ? nf0.format(r.prize) : "—") + "</td>" +
+        '<td class="r" data-e="' + i + '">' + nf2.format(earnedNow(r)) + '</td><td class="r">' + (r.proj ? nf0.format(r.proj) : r.prize ? nf0.format(r.prize) : "—") + "</td>" +
         '<td><span class="chip ' + st[1] + '">' + st[0] + "</span></td></tr>";
     });
     $("rows").innerHTML = html || '<tr><td colspan="8" class="empty">No hay wallets en este filtro.</td></tr>';
@@ -344,15 +347,16 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       '<a href="https://sepolia.etherscan.io/address/' + x.who + '" target="_blank" rel="noopener">Nodo en Sepolia ↗</a>' +
       '<button type="button" id="dr-copy">Copiar dirección</button><span class="chip ' + st[1] + '">' + st[0] + "</span></div>";
     h += '<div class="box"><h4>Airdrop</h4><div class="big"><b data-e="' + i + '">' + nf2.format(earnedNow(r)) + "</b><span>SECT ganados de " + (r.prize ? nf0.format(r.prize) : "0") + "</span></div>" +
-      (r.day ? '<span class="prog" style="width:100%;height:7px"><i style="width:' + (r.day / C.DAYS * 100) + '%"></i></span>' : "") +
+      (r.day ? '<span class="prog" style="width:100%;height:7px"><i style="width:' + pct(r) + '%"></i></span>' : "") +
       kv("Nivel", r.level ? LV[r.level] : "Sin nivel") +
       kv("Plazas", r.level === 4 ? r.spots + " plaza" + (r.spots > 1 ? "s" : "") + " Titan" : r.level ? "1" : "—") +
-      kv("Premio completo", r.prize ? nf0.format(r.prize) + " SECT" : "—") +
+      kv("Premio de su nivel", r.prize ? nf0.format(r.prize) + " SECT" : "—") +
+      kv("Tendrá a la entrega si se queda", r.proj ? nf0.format(r.proj) + " SECT" : "—") +
       kv("Asegurado (día 30 o más)", nf2.format(r.secured) + " SECT") +
-      kv("Día", r.day ? r.day + " de " + C.DAYS : "—") +
+      kv("Días dentro", r.day ? r.day : "—") +
       kv("Empezó a contar", d(r.start)) +
       kv("Asegura lo ganado el", r.start ? d(r.start + 30 * C.DAY) : "—") +
-      kv("Premio completo el", d(r.end)) +
+      kv("Entrega", d(C.END) + " · 10 días tras la quema") +
       '<p class="hint">' + nextLv(r.bal) + "</p></div>";
     h += '<div class="box"><h4>Staking</h4>' +
       kv("SECT en staking", nf0.format(a ? a.staked : r.bal)) +
@@ -367,7 +371,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       h += '<div class="box"><h4>Partes del premio</h4><table class="mini"><thead><tr><th>Parte</th><th class="r">SECT</th><th>Desde</th><th class="r">Ganado</th><th>Estado</th></tr></thead><tbody>' +
         r.lay.map(function (L) { var s2 = LAY[L.state] || ["—", "mute"];
           return "<tr><td>" + layName(L.at) + '<span class="sub">desde ' + nf0.format(L.at) + " en staking</span></td><td class=\"r\">" + nf0.format(L.p) + "</td><td>" + d(L.s) +
-            '<span class="sub">día ' + Math.min(C.DAYS, Math.floor(L.d) + 1) + '</span></td><td class="r">' + nf2.format(L.got) + '</td><td><span class="chip ' + s2[1] + '">' + s2[0] + "</span></td></tr>"; }).join("") +
+            '<span class="sub">día ' + (Math.floor(L.d) + 1) + '</span></td><td class="r">' + nf2.format(L.got) + '</td><td><span class="chip ' + s2[1] + '">' + s2[0] + "</span></td></tr>"; }).join("") +
         "</tbody></table></div>";
     }
     if (x.ev.length) {
@@ -387,13 +391,13 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("dr").hidden) hide(); });
   function csv() {
     var lines = [["wallet", "nivel", "plazas", "en_staking", "en_wallet", "recompensas_staking", "nodo", "nodo_registrado", "dia", "empezo", "asegura_el", "completo_el",
-      "ganado", "asegurado", "premio", "total_depositado", "total_retirado", "primer_deposito", "estado"].join(",")];
+      "ganado", "asegurado", "premio_nivel", "a_la_entrega", "total_depositado", "total_retirado", "primer_deposito", "estado"].join(",")];
     rows.forEach(function (x) {
       var r = x.r, a = x.acc, dep = 0, wd = 0, first = 0; if (r.status === "out") return;
       x.ev.forEach(function (e) { if (e.dep) { dep += e.amt; if (!first) first = e.t; } else wd += e.amt; });
       var day = function (t) { return t ? iso(t) : ""; };
       lines.push([x.who, LV[r.level], r.spots, r.bal, a ? a.wallet : "", a ? a.claimable.toFixed(4) : "", r.node, day(r.nodeAt), r.day, day(r.start), r.start ? day(r.start + 30 * C.DAY) : "", day(r.end),
-        earnedNow(r).toFixed(4), r.secured.toFixed(4), r.prize, dep, wd, day(first), (ST[r.status] || [""])[0]].join(","));
+        earnedNow(r).toFixed(4), r.secured.toFixed(4), r.prize, Math.round(r.proj), dep, wd, day(first), (ST[r.status] || [""])[0]].join(","));
     });
     var a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv" }));

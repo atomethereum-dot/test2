@@ -9,9 +9,9 @@
    - Sentinel, desde 500 SECT = 250 SECT;
    - Guardian, desde 1.000 SECT = 600 SECT;
    - Titan, una plaza de 3.400 SECT por cada 4.000 SECT, sin maximo.
-   Cada persona tiene sus propios 150 dias desde que entra; los SECT se entregan en SectoraEVM
-   desde el 25 de marzo de 2027 (10 dias despues de la quema), o el dia 150 si llega despues.
-   Ya abierto el airdrop, lo ganado sube en vivo como en el staking: premio x dias / 150, por
+   El premio sube cada dia desde que se entra hasta la entrega en SectoraEVM, el 25 de marzo de 2027
+   (10 dias despues de la quema): quien esta desde la apertura gana el premio completo.
+   Ya abierto el airdrop, lo ganado sube en vivo como en el staking: premio x tiempo dentro / tiempo de la apertura a la entrega, por
    plaza, desde el inicio de cada plaza. Minimo 30 dias: si sale antes del dia 30 no gana nada. Los inicios salen de progress.json, que escribe el
    programa diario: { "open": ms, "wallets": { "0x…": [inicio plaza 1, inicio plaza 2, …] } }.
    Sin ese archivo (antes de la apertura) se muestra el premio y "empieza a sumar el dia de la apertura".
@@ -28,7 +28,7 @@
   var STAKE = "/staking/";
   var MM = "https://metamask.app.link/dapp/sectoraorg.com/airdroptesting/";
   var PROG = "/airdroptesting/progress.json";
-  var DAYS = 150, MIN = 30, DAY = 864e5;
+  var MIN = 30, DAY = 864e5, END = Date.UTC(2027, 2, 25); // entrega: 10 dias despues de la quema
 
   var L = {
     en: { loc: "en-US", k: "Sectora // Airdrop Genesis", pv: "Preview", h: "Your airdrop",
@@ -36,7 +36,7 @@
       connect: "Connect wallet", nowallet: "No wallet in this browser?", openmm: "Open in MetaMask",
       or: "Or check an address", check: "Check", reading: "Reading the network…",
       r1: "Wallet connected", r2: "{n} SECT in staking", r2s: "Only staked SECT count · in your wallet: {w}",
-      win: "You win {n} SECT", wOn: "Keep your node on and your SECT in staking for 150 days from the day you join (from the opening day if you were already staking). Delivered on SectoraEVM.", wOff: "Once your Hash Node is on with this wallet.",
+      win: "You win {n} SECT", wOn: "Keep your node on and your SECT in staking until delivery, 10 days after the burn. Delivered on SectoraEVM.", wOff: "Once your Hash Node is on with this wallet.",
       lv0: "Phase 2 · registered", lv1: "Level 1 · Scout", lv2: "Level 2 · Sentinel", lv3: "Level 3 · Guardian", lv4: "Level 4 · Titan",
       up0: "With 100 SECT in staking you become Scout and win 40 SECT.", up1: "With 500 SECT in staking you become Sentinel and win 250 SECT.", up2: "With 1,000 SECT in staking you become Guardian and win 600 SECT.", up3: "With 4,000 SECT in staking you become Titan and win 3,400 SECT.", up4: "Every 4,000 SECT more in staking is another Titan spot: +3,400 SECT.", p2: "Phase 2 benefits", p2s: "Testing the node for free registers you for phase 2. To win SECT now, stake 100 SECT and you become Scout.", lv4s: "Level 4 · Titan · {s} spots",
       stk: "Staker detected", stks: "You're already in. You only need to connect your node and you're done.",
@@ -47,14 +47,14 @@
       foot: "We only read public data: no signature, no transaction, nothing leaves your wallet. Your level is checked once a day.",
       err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
       rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet",
-      acc: "You've earned {n} SECT", of: "of {n} SECT · full prize at day 150", day: "Day {d} of 150 · {r} days to the full prize", lock: "Day {d} of 150 · what you earn is secured on day 30", full: "Full prize complete · delivered on SectoraEVM",
-      pre: "Starts adding up on opening day. 150 days with your node on and your SECT in staking = full prize.", wait: "Your count will show as soon as the network confirms your staking." },
+      acc: "You've earned {n} SECT", of: "{n} SECT at delivery if you stay", day: "Delivery on SectoraEVM · Mar 25, 2027, 10 days after the burn", lock: "What you earn is secured on {d}", full: "Full prize complete · delivered on SectoraEVM",
+      pre: "Starts adding up on opening day. With your node on and your SECT in staking from the opening to delivery, 10 days after the burn, you win the full prize.", wait: "Your count will show as soon as the network confirms your staking." },
     es: { loc: "es-ES", k: "Sectora // Airdrop Genesis", pv: "Vista previa", h: "Tu airdrop",
       intro: "Conecta tu wallet para ver cuánto ganas en el airdrop.",
       connect: "Conectar wallet", nowallet: "¿No tienes wallet en este navegador?", openmm: "Abrir en MetaMask",
       or: "O revisa una dirección", check: "Revisar", reading: "Leyendo la red…",
       r1: "Wallet conectada", r2: "{n} SECT en staking", r2s: "Solo cuentan los SECT en staking · en tu wallet: {w}",
-      win: "Ganas {n} SECT", wOn: "Mantén tu nodo encendido y tus SECT en staking durante 150 días desde que entras (desde la apertura si ya hacías staking). Se entrega en SectoraEVM.", wOff: "Cuando tu Hash Node esté encendido con esta wallet.",
+      win: "Ganas {n} SECT", wOn: "Mantén tu nodo encendido y tus SECT en staking hasta la entrega, 10 días después de la quema. Se entrega en SectoraEVM.", wOff: "Cuando tu Hash Node esté encendido con esta wallet.",
       lv0: "Fase 2 · registrado", lv1: "Nivel 1 · Scout", lv2: "Nivel 2 · Sentinel", lv3: "Nivel 3 · Guardian", lv4: "Nivel 4 · Titan",
       up0: "Con 100 SECT en staking pasas a Scout y ganas 40 SECT.", up1: "Con 500 SECT en staking pasas a Sentinel y ganas 250 SECT.", up2: "Con 1.000 SECT en staking pasas a Guardian y ganas 600 SECT.", up3: "Con 4.000 SECT en staking pasas a Titan y ganas 3.400 SECT.", up4: "Cada 4.000 SECT más en staking es otra plaza Titan: +3.400 SECT.", p2: "Beneficios de la fase 2", p2s: "Probar el nodo gratis te registra para la fase 2. Para ganar SECT ahora, pon 100 SECT en staking y pasas a Scout.", lv4s: "Nivel 4 · Titan · {s} plazas",
       stk: "Staker detectado", stks: "Ya estás dentro. Solo te falta conectar el nodo y listo.",
@@ -65,14 +65,14 @@
       foot: "Solo leemos datos públicos: no hay firmas ni transacciones y nada sale de tu wallet. Tu nivel se revisa una vez al día.",
       err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
       rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet",
-      acc: "Llevas {n} SECT", of: "de {n} SECT · premio completo el día 150", day: "Día {d} de 150 · faltan {r} días para el premio completo", lock: "Día {d} de 150 · lo ganado queda asegurado el día 30", full: "Premio completo · se entrega en SectoraEVM",
-      pre: "Empieza a sumar el día de la apertura. 150 días con tu nodo encendido y tus SECT en staking = premio completo.", wait: "Tu conteo aparecerá en cuanto la red confirme tu staking." },
+      acc: "Llevas {n} SECT", of: "{n} SECT a la entrega si te quedas", day: "Entrega en SectoraEVM · 25 mar 2027, 10 días después de la quema", lock: "Lo ganado queda asegurado el {d}", full: "Premio completo · se entrega en SectoraEVM",
+      pre: "Empieza a sumar el día de la apertura. Con tu nodo encendido y tus SECT en staking desde la apertura hasta la entrega, 10 días después de la quema, ganas el premio completo.", wait: "Tu conteo aparecerá en cuanto la red confirme tu staking." },
     pt: { loc: "pt-BR", k: "Sectora // Airdrop Genesis", pv: "Prévia", h: "Seu airdrop",
       intro: "Conecte sua carteira para ver quanto você ganha no airdrop.",
       connect: "Conectar carteira", nowallet: "Sem carteira neste navegador?", openmm: "Abrir no MetaMask",
       or: "Ou verifique um endereço", check: "Verificar", reading: "Lendo a rede…",
       r1: "Carteira conectada", r2: "{n} SECT em staking", r2s: "Só contam os SECT em staking · na sua carteira: {w}",
-      win: "Você ganha {n} SECT", wOn: "Mantenha seu nó ligado e seus SECT em staking por 150 dias desde que você entra (desde a abertura se já fazia staking). Entregue na SectoraEVM.", wOff: "Quando o seu Hash Node estiver ligado com esta carteira.",
+      win: "Você ganha {n} SECT", wOn: "Mantenha seu nó ligado e seus SECT em staking até a entrega, 10 dias depois da queima. Entregue na SectoraEVM.", wOff: "Quando o seu Hash Node estiver ligado com esta carteira.",
       lv0: "Fase 2 · registrado", lv1: "Nível 1 · Scout", lv2: "Nível 2 · Sentinel", lv3: "Nível 3 · Guardian", lv4: "Nível 4 · Titan",
       up0: "Com 100 SECT em staking você vira Scout e ganha 40 SECT.", up1: "Com 500 SECT em staking você vira Sentinel e ganha 250 SECT.", up2: "Com 1.000 SECT em staking você vira Guardian e ganha 600 SECT.", up3: "Com 4.000 SECT em staking você vira Titan e ganha 3.400 SECT.", up4: "Cada 4.000 SECT a mais em staking é outra vaga Titan: +3.400 SECT.", p2: "Benefícios da fase 2", p2s: "Testar o nó de graça registra você para a fase 2. Para ganhar SECT agora, coloque 100 SECT em staking e você vira Scout.", lv4s: "Nível 4 · Titan · {s} vagas",
       stk: "Staker detectado", stks: "Você já está dentro. Só falta conectar o nó e pronto.",
@@ -83,8 +83,8 @@
       foot: "Só lemos dados públicos: sem assinatura, sem transação, nada sai da sua carteira. Seu nível é verificado uma vez por dia.",
       err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
       rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira",
-      acc: "Você já tem {n} SECT", of: "de {n} SECT · prêmio completo no dia 150", day: "Dia {d} de 150 · faltam {r} dias para o prêmio completo", lock: "Dia {d} de 150 · o que você ganha fica garantido no dia 30", full: "Prêmio completo · entregue na SectoraEVM",
-      pre: "Começa a somar no dia da abertura. 150 dias com seu nó ligado e seus SECT em staking = prêmio completo.", wait: "Sua contagem vai aparecer assim que a rede confirmar seu staking." }
+      acc: "Você já tem {n} SECT", of: "{n} SECT na entrega se você ficar", day: "Entrega na SectoraEVM · 25 mar 2027, 10 dias depois da queima", lock: "O que você ganha fica garantido em {d}", full: "Prêmio completo · entregue na SectoraEVM",
+      pre: "Começa a somar no dia da abertura. Com seu nó ligado e seus SECT em staking da abertura até a entrega, 10 dias depois da queima, você ganha o prêmio completo.", wait: "Sua contagem vai aparecer assim que a rede confirmar seu staking." }
   };
   function lang() { var l = (document.documentElement.lang || "en").slice(0, 2); return L[l] ? l : "en"; }
   function t(k, v) { var s = L[lang()][k]; if (v) for (var x in v) s = s.replace("{" + x + "}", v[x]); return s; }
@@ -143,7 +143,7 @@
     ".el-sp{display:inline-block;width:14px;height:14px;border:2px solid rgba(7,8,10,.15);border-top-color:#1569ff;border-radius:50%;animation:elsp .8s linear infinite;vertical-align:-2px;margin-right:8px}",
     "@keyframes elsp{to{transform:rotate(360deg)}}",
     ".el-lnk{margin-top:12px;background:none;border:0;padding:0;color:#0d4fd8;cursor:pointer;font-size:14px;text-decoration:underline;text-underline-offset:3px}",
-    /* lo ganado en vivo: numero que sube, barra hasta el dia 150 y dias que faltan */
+    /* lo ganado en vivo: numero que sube, barra hasta la entrega y fecha */
     ".el-rows b .el-big em[data-acc]{font-variant-numeric:tabular-nums}",
     ".el-rows .el-bar{display:block;height:8px;margin-top:10px;border-radius:99px;background:rgba(21,105,255,.12);overflow:hidden}",
     ".el-rows .el-bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#1569ff,#4d8dff)}",
@@ -245,7 +245,7 @@
       else if (!on) state = "off";
       else if (listed && listed.length) {
         // lista publicada: un inicio por plaza
-        state = "run"; items = listed.slice(0, spots).map(function (s) { return { s: s, p: PRIZE[lv] }; });
+        state = "run"; items = listed.slice(0, spots).map(function (s) { return { s: s, p: PRIZE[lv], sp: Math.max(DAY, END - P.open) }; });
       } else if (r.hist && C) {
         // sin lista: se rehace la historia de esta wallet con la blockchain
         var ev = C.evaluate(r.hist.ev, r.hist.node, C.OPEN, now);
@@ -257,7 +257,8 @@
       var winT, winS;
       if (state === "run") {
         winT = '<span class="el-big">' + t("acc", { n: "<em data-acc>0</em>" }) + "</span>";
-        winS = t("of", { n: fmt(prize) }) + '<span class="el-bar"><i data-bar></i></span><span class="el-days" data-days></span>';
+        var proj = closed; items.forEach(function (it) { proj += it.p * Math.min(1, (END - it.s) / it.sp); });
+        winS = t("of", { n: fmt(Math.round(proj)) }) + '<span class="el-bar"><i data-bar></i></span><span class="el-days" data-days></span>';
       } else if (state === "p2") {
         winT = '<span class="el-big">' + t("p2") + "</span>";
         winS = on ? t("p2s") : t("wOff");
@@ -280,25 +281,24 @@
         '<p class="mono el-rule">' + t("rule") + '</p><p class="el-ft">' + t("foot") + '</p>' +
         '<button class="el-lnk" type="button" data-a="other">' + t("other") + "</button>";
       bd.querySelector('[data-a="other"]').addEventListener("click", function () { start(); });
-      if (state === "run") live(items, closed, prize);
+      if (state === "run") live(items, closed, proj);
     }).catch(function () { if (cur === addr) start(t("err")); });
   }
-  /* lo ganado sube como en el staking: premio de la plaza x dias / 150, desde el inicio de cada plaza */
+  /* lo ganado sube como en el staking: premio de la plaza x tiempo dentro / tiempo hasta la entrega, desde el inicio de cada plaza */
   var timer = 0;
   function stop() { if (timer) { clearInterval(timer); timer = 0; } }
-  function live(items, closed, prize) {
+  function live(items, closed, proj) {
     var acc = bd.querySelector("[data-acc]"), bar = bd.querySelector("[data-bar]"), days = bd.querySelector("[data-days]");
     var nf = new Intl.NumberFormat(L[lang()].loc, { minimumFractionDigits: 4, maximumFractionDigits: 4, useGrouping: "always" });
-    var st = items.map(function (it) { return it.s; }), first = Math.min.apply(null, st), last = Math.max.apply(null, st);
+    var first = Math.min.apply(null, items.map(function (it) { return it.s; }));
+    var df = new Intl.DateTimeFormat(L[lang()].loc, { day: "numeric", month: "short", year: "numeric" });
     function tick() {
-      var now = Date.now(), earned = 0;
-      earned = closed; items.forEach(function (it) { earned += it.p * Math.min(1, Math.max(0, (now - it.s) / (DAYS * DAY))); });
+      var now = Date.now(), t2 = Math.min(now, END), earned = closed;
+      items.forEach(function (it) { earned += it.p * Math.min(1, Math.max(0, (t2 - it.s) / it.sp)); });
       acc.textContent = nf.format(earned);
-      bar.style.width = Math.min(100, earned / prize * 100) + "%";
-      var left = Math.ceil((last + DAYS * DAY - now) / DAY);
-      var d = Math.min(DAYS, Math.max(1, Math.floor((now - first) / DAY) + 1));
+      bar.style.width = (proj ? Math.min(100, earned / proj * 100) : 0) + "%";
       // minimo de 30 dias: antes de eso, lo ganado aun no esta asegurado
-      days.textContent = left <= 0 ? t("full") : d < MIN ? t("lock", { d: d }) : t("day", { d: d, r: left });
+      days.textContent = now >= END ? t("full") : now - first < MIN * DAY ? t("lock", { d: df.format(first + MIN * DAY) }) : t("day");
     }
     stop(); tick(); timer = setInterval(tick, 100);
   }
