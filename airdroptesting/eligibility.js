@@ -48,7 +48,7 @@
       err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
       rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet",
       acc: "You've earned {n} SECT", of: "of {n} SECT · full prize at day 90", day: "Day {d} of 90 · {r} days to the full prize", lock: "Day {d} of 90 · what you earn is secured on day 30", full: "Full prize complete · delivered on SectoraEVM",
-      pre: "Starts adding up on opening day. 90 days with your node on and your SECT in staking = full prize.", wait: "Your count starts at the next daily check." },
+      pre: "Starts adding up on opening day. 90 days with your node on and your SECT in staking = full prize.", wait: "Your count will show as soon as the network confirms your staking." },
     es: { loc: "es-ES", k: "Sectora // Airdrop Genesis", pv: "Vista previa", h: "Tu airdrop",
       intro: "Conecta tu wallet para ver cuánto ganas en el airdrop.",
       connect: "Conectar wallet", nowallet: "¿No tienes wallet en este navegador?", openmm: "Abrir en MetaMask",
@@ -66,7 +66,7 @@
       err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
       rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet",
       acc: "Llevas {n} SECT", of: "de {n} SECT · premio completo el día 90", day: "Día {d} de 90 · faltan {r} días para el premio completo", lock: "Día {d} de 90 · lo ganado queda asegurado el día 30", full: "Premio completo · se entrega en SectoraEVM",
-      pre: "Empieza a sumar el día de la apertura. 90 días con tu nodo encendido y tus SECT en staking = premio completo.", wait: "Tu conteo empieza en la próxima revisión diaria." },
+      pre: "Empieza a sumar el día de la apertura. 90 días con tu nodo encendido y tus SECT en staking = premio completo.", wait: "Tu conteo aparecerá en cuanto la red confirme tu staking." },
     pt: { loc: "pt-BR", k: "Sectora // Airdrop Genesis", pv: "Prévia", h: "Seu airdrop",
       intro: "Conecte sua carteira para ver quanto você ganha no airdrop.",
       connect: "Conectar carteira", nowallet: "Sem carteira neste navegador?", openmm: "Abrir no MetaMask",
@@ -84,7 +84,7 @@
       err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
       rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira",
       acc: "Você já tem {n} SECT", of: "de {n} SECT · prêmio completo no dia 90", day: "Dia {d} de 90 · faltam {r} dias para o prêmio completo", lock: "Dia {d} de 90 · o que você ganha fica garantido no dia 30", full: "Prêmio completo · entregue na SectoraEVM",
-      pre: "Começa a somar no dia da abertura. 90 dias com seu nó ligado e seus SECT em staking = prêmio completo.", wait: "Sua contagem começa na próxima verificação diária." }
+      pre: "Começa a somar no dia da abertura. 90 dias com seu nó ligado e seus SECT em staking = prêmio completo.", wait: "Sua contagem vai aparecer assim que a rede confirmar seu staking." }
   };
   function lang() { var l = (document.documentElement.lang || "en").slice(0, 2); return L[l] ? l : "en"; }
   function t(k, v) { var s = L[lang()][k]; if (v) for (var x in v) s = s.replace("{" + x + "}", v[x]); return s; }
@@ -192,7 +192,8 @@
         return word(v, 6) === 1n ? "active" : "paused";
       });
     }).catch(function () { return "unknown"; });
-    return Promise.all([a, b, prog()]).then(function (r) { return { staked: r[0].staked, wallet: r[0].wallet, node: r[1], prog: r[2] }; });
+    var C = window.SACount, hist = C && C.OPEN && Date.now() >= C.OPEN ? C.wallet(addr).catch(function () { return null; }) : null;
+    return Promise.all([a, b, prog(), hist]).then(function (r) { return { staked: r[0].staked, wallet: r[0].wallet, node: r[1], prog: r[2], hist: r[3] }; });
   }
   // inicios de cada plaza; el archivo cambia una vez al dia, se pide como mucho una vez por hora
   function prog() {
@@ -238,11 +239,18 @@
       // Titan: una plaza por cada 4.000 SECT en staking, sin maximo
       var spots = lv === 4 ? Number(total / 4000n) : 1, prize = PRIZE[lv] * spots;
       // antes de la apertura se muestra el premio; despues, lo ganado sube en vivo
-      var P = r.prog, now = Date.now(), starts = null, state;
+      var P = r.prog, C = window.SACount, now = Date.now(), items = null, closed = 0, state;
+      var listed = P && P.open && now >= P.open && P.wallets && P.wallets[addr.toLowerCase()];
       if (lv === 0) state = "p2";
       else if (!on) state = "off";
-      else if (!P || !P.open || now < P.open) state = "pre";
-      else { starts = P.wallets && P.wallets[addr.toLowerCase()]; state = starts && starts.length ? "run" : "wait"; }
+      else if (listed && listed.length) {
+        // lista publicada: un inicio por plaza
+        state = "run"; items = listed.slice(0, spots).map(function (s) { return { s: s, p: PRIZE[lv] }; });
+      } else if (r.hist && C) {
+        // sin lista: se rehace la historia de esta wallet con la blockchain
+        var ev = C.evaluate(r.hist.ev, r.hist.node, C.OPEN, now);
+        if (ev.items.length) { state = "run"; items = ev.items; closed = ev.closed; } else state = "wait";
+      } else state = (C && C.OPEN && now >= C.OPEN) || (P && P.open && now >= P.open) ? "wait" : "pre";
       var rows = [];
       rows.push(li("ok", "", connected ? t("r1") : short(addr), connected ? short(addr) : ""));
       // el premio de su nivel (en Titan, por plaza); solo cuenta con el nodo encendido
@@ -272,19 +280,19 @@
         '<p class="mono el-rule">' + t("rule") + '</p><p class="el-ft">' + t("foot") + '</p>' +
         '<button class="el-lnk" type="button" data-a="other">' + t("other") + "</button>";
       bd.querySelector('[data-a="other"]').addEventListener("click", function () { start(); });
-      if (state === "run") live(starts.slice(0, spots), PRIZE[lv], prize);
+      if (state === "run") live(items, closed, prize);
     }).catch(function () { if (cur === addr) start(t("err")); });
   }
   /* lo ganado sube como en el staking: premio de la plaza x dias / 90, desde el inicio de cada plaza */
   var timer = 0;
   function stop() { if (timer) { clearInterval(timer); timer = 0; } }
-  function live(starts, per, prize) {
+  function live(items, closed, prize) {
     var acc = bd.querySelector("[data-acc]"), bar = bd.querySelector("[data-bar]"), days = bd.querySelector("[data-days]");
     var nf = new Intl.NumberFormat(L[lang()].loc, { minimumFractionDigits: 4, maximumFractionDigits: 4, useGrouping: "always" });
-    var first = Math.min.apply(null, starts), last = Math.max.apply(null, starts);
+    var st = items.map(function (it) { return it.s; }), first = Math.min.apply(null, st), last = Math.max.apply(null, st);
     function tick() {
       var now = Date.now(), earned = 0;
-      starts.forEach(function (s) { earned += per * Math.min(1, Math.max(0, (now - s) / (DAYS * DAY))); });
+      earned = closed; items.forEach(function (it) { earned += it.p * Math.min(1, Math.max(0, (now - it.s) / (DAYS * DAY))); });
       acc.textContent = nf.format(earned);
       bar.style.width = Math.min(100, earned / prize * 100) + "%";
       var left = Math.ceil((last + DAYS * DAY - now) / DAY);

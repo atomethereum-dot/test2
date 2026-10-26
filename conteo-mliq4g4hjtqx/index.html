@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Conteo Airdrop Genesis</title>
+<style>
+/* panel privado: una columna de lectura, resumen arriba y la lista de wallets abajo */
+@font-face{font-family:'IBM Plex Sans';src:url("/fonts/IBMPlexSans.woff2") format("woff2");font-weight:200 500;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url("/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url("/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-display:swap}
+:root{
+  --bg:#07090d;--panel:#0d1118;--panel-2:#121823;--line:rgba(233,239,248,.09);--line-2:rgba(233,239,248,.16);
+  --ink:#eef2f7;--ink-2:#aab3c0;--ink-3:#6f7987;--blue:#1569ff;--blue-l:#5a95ff;
+  --ok:#3ecf8e;--warn:#f0b44c;--bad:#ff7a7a;
+  --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{background:var(--bg);color:var(--ink)}
+body{font:300 15px/1.55 var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh}
+.mono{font-family:var(--mono)}
+.k{font:500 10.5px/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue-l);outline-offset:2px}
+
+/* PIN */
+.gate{min-height:100vh;display:grid;place-items:center;padding-inline:16px}
+.gate form{width:min(380px,100%);display:grid;gap:14px;padding:28px;border:1px solid var(--line-2);border-radius:18px;background:var(--panel)}
+.gate h1{font-size:24px;font-weight:300;letter-spacing:-.01em}
+.gate p{color:var(--ink-2);font-size:14px}
+.gate input{width:100%;padding:13px 14px;border:1px solid var(--line-2);border-radius:10px;background:var(--bg);font:500 20px/1 var(--mono);letter-spacing:.3em;text-align:center}
+.gate input:focus{border-color:var(--blue)}
+.gate .err{color:var(--bad);font-size:13px;min-height:1.2em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border:0;border-radius:10px;background:var(--blue);color:#fff;font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid var(--line-2);color:var(--ink)}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* cabecera */
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand i{width:30px;height:30px;border-radius:7px;background:var(--blue);display:grid;place-items:center}
+.brand i::after{content:'';width:14px;height:14px;border:2.4px solid #fff;border-radius:50%}
+.brand h1{font-size:19px;font-weight:400;letter-spacing:-.01em}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border:1px solid var(--line-2);border-radius:99px;font:500 10px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+.chip::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.chip.ok{color:var(--ok);border-color:rgba(62,207,142,.35)}
+.chip.warn{color:var(--warn);border-color:rgba(240,180,76,.35)}
+.chip.bad{color:var(--bad);border-color:rgba(255,122,122,.35)}
+.chip.blue{color:var(--blue-l);border-color:rgba(90,149,255,.4)}
+.chip.mute{color:var(--ink-3)}
+.ctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.ctl label{display:flex;align-items:center;gap:8px}
+.ctl input[type=date]{padding:9px 10px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel);font:400 13px var(--mono)}
+.upd{color:var(--ink-3);font-size:12.5px}
+
+.note{margin-top:18px;padding:12px 16px;border:1px solid rgba(240,180,76,.3);border-radius:12px;background:rgba(240,180,76,.06);color:var(--ink-2);font-size:14px}
+.note b{color:var(--warn);font-weight:500}
+
+/* resumen */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:22px}
+.tile{display:grid;gap:8px;align-content:start;padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--panel);min-width:0}
+.tile .v{font:300 30px/1.05 var(--sans);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tile .v small{font:400 12px var(--mono);color:var(--ink-3);letter-spacing:.06em;margin-left:4px}
+.tile .s{font-size:13px;color:var(--ink-2)}
+.tile.hi{border-color:rgba(21,105,255,.45);background:linear-gradient(160deg,rgba(21,105,255,.16),var(--panel) 60%)}
+.bar{height:7px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--blue);border-radius:inherit;transition:width .4s}
+.lvls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:12px}
+.lv{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.lv b{font:300 22px/1 var(--sans);font-variant-numeric:tabular-nums}
+.lv span{font-size:13px;color:var(--ink-2)}
+
+/* lista */
+.bar2{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:30px}
+.bar2 h2{font-size:18px;font-weight:400}
+.bar2 .ctl{flex:1 1 320px;justify-content:flex-end}
+.find{padding:10px 12px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel);font:400 13px var(--mono);width:min(280px,100%)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tabs button{padding:7px 11px;border:1px solid var(--line-2);border-radius:99px;background:transparent;font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs button em{font-style:normal;opacity:.6;margin-left:4px}
+.tbl{margin-top:14px;border:1px solid var(--line);border-radius:14px;overflow-x:auto;background:var(--panel)}
+table{width:100%;min-width:880px;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font:500 10px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);background:var(--panel-2)}
+td.r,th.r{text-align:right}
+tr:last-child td{border-bottom:0}
+td a{color:var(--ink);text-decoration:none;font-family:var(--mono);font-size:13px}
+td a:hover{color:var(--blue-l)}
+td .sub{display:block;font-size:12px;color:var(--ink-3)}
+.prog{display:block;width:84px;height:5px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:6px}
+.prog i{display:block;height:100%;background:var(--blue)}
+.empty{padding:40px 20px;text-align:center;color:var(--ink-2)}
+.foot{margin-top:18px;color:var(--ink-3);font-size:12.5px;max-width:78ch}
+.load{display:flex;align-items:center;gap:10px;color:var(--ink-2);margin-top:26px}
+.spin{width:16px;height:16px;border:2px solid var(--line-2);border-top-color:var(--blue);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (max-width:760px){.lvls{grid-template-columns:repeat(2,minmax(0,1fr))}.tile .v{font-size:26px}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}.bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="gate" id="gate">
+  <form id="pinf" autocomplete="off">
+    <span class="k">Sectora · Privado</span>
+    <h1>Conteo del airdrop</h1>
+    <p>Escribe tu PIN para ver el conteo.</p>
+    <input id="pin" inputmode="numeric" maxlength="12" aria-label="PIN" autofocus>
+    <p class="err" id="pinerr"></p>
+    <button class="btn" type="submit">Entrar</button>
+  </form>
+</div>
+
+<main class="wrap" id="app" hidden>
+  <header class="top">
+    <div class="brand"><i aria-hidden="true"></i><div><h1>Conteo · Airdrop Genesis</h1><span class="k">Solo para ti · no se publica</span></div></div>
+    <div class="ctl">
+      <label><span class="k">Apertura</span><input type="date" id="open"></label>
+      <button class="btn ghost" id="refresh" type="button">Actualizar</button>
+      <span class="upd" id="upd"></span>
+    </div>
+  </header>
+
+  <p class="note" id="pre" hidden></p>
+  <div class="load" id="load"><span class="spin"></span><span id="step">Leyendo la blockchain…</span></div>
+
+  <section id="sum" hidden>
+    <div class="tiles">
+      <div class="tile hi"><span class="k">Ganado hasta ahora</span><span class="v" id="t-earned">0</span><span class="s" id="t-secured"></span></div>
+      <div class="tile"><span class="k">Bolsa reservada</span><span class="v" id="t-res">0</span><div class="bar"><i id="t-resbar"></i></div><span class="s" id="t-resp"></span></div>
+      <div class="tile"><span class="k">Wallets participando</span><span class="v" id="t-part">0</span><span class="s" id="t-parts"></span></div>
+      <div class="tile"><span class="k">Plazas Titan</span><span class="v" id="t-titan">0</span><span class="s" id="t-titans"></span></div>
+      <div class="tile"><span class="k">Falta encender el nodo</span><span class="v" id="t-nonode">0</span><span class="s">Tienen staking pero el nodo no está activo</span></div>
+      <div class="tile"><span class="k">Registrados fase 2</span><span class="v" id="t-p2">0</span><span class="s">Nodo sin 100 SECT en staking</span></div>
+    </div>
+    <div class="lvls">
+      <div class="lv"><span>Scout</span><b id="l1">0</b></div>
+      <div class="lv"><span>Sentinel</span><b id="l2">0</b></div>
+      <div class="lv"><span>Guardian</span><b id="l3">0</b></div>
+      <div class="lv"><span>Titan</span><b id="l4">0</b></div>
+    </div>
+
+    <div class="bar2">
+      <h2>Wallets</h2>
+      <div class="ctl"><input class="find" id="find" placeholder="Buscar 0x…" aria-label="Buscar wallet"><button class="btn ghost" id="csv" type="button">Descargar CSV</button></div>
+    </div>
+    <div class="tabs" id="tabs" role="group" aria-label="Filtrar"></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Wallet</th><th>Nivel</th><th class="r">En staking</th><th>Nodo</th><th>Día</th><th class="r">Ganado</th><th class="r">Premio</th><th>Estado</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+    <p class="foot">Se calcula en tu navegador con los datos públicos de la blockchain (staking en Ethereum y registro de nodos en la testnet). No se guarda ni se publica nada. Es una estimación: si una wallet apagó el nodo, cuenta como "falta el nodo" hasta que lo encienda.</p>
+  </section>
+</main>
+
+<script src="/airdroptesting/count.js?v=1"></script>
+<script>
+(function () {
+  "use strict";
+  var HASH = "1846fe7f30c63a29052f2a79717affb4eeadebd140a16b4882b88395032fb027";
+  var C = window.SACount, $ = function (id) { return document.getElementById(id); };
+  var LV = { 0: "—", 1: "Scout", 2: "Sentinel", 3: "Guardian", 4: "Titan" };
+  var ST = { pre: ["Listo para la apertura", "blue"], early: ["Antes del día 30", "warn"], run: ["Asegurado", "ok"], full: ["Premio completo", "ok"],
+    nonode: ["Falta el nodo", "bad"], p2: ["Fase 2", "mute"], out: ["Fuera", "mute"] };
+  var TABS = [["all", "Todas"], ["count", "Participando"], ["early", "Antes del día 30"], ["nonode", "Falta el nodo"], ["p2", "Fase 2"], ["full", "Completas"]];
+  var nf0 = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 0, useGrouping: "always" });
+  var nf2 = new Intl.NumberFormat("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: "always" });
+  var df = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
+  var data = null, rows = [], tab = "all", q = "", tick = 0;
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  /* ---------- PIN ---------- */
+  function sha(s) {
+    return crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)).then(function (b) {
+      return Array.from(new Uint8Array(b)).map(function (x) { return x.toString(16).padStart(2, "0"); }).join("");
+    });
+  }
+  function enter() { $("gate").hidden = true; $("app").hidden = false; init(); }
+  if (store("sa-panel") === HASH) enter();
+  $("pinf").addEventListener("submit", function (e) {
+    e.preventDefault();
+    sha("sectora-conteo:" + $("pin").value.trim()).then(function (h) {
+      if (h === HASH) { store("sa-panel", HASH); enter(); } else { $("pinerr").textContent = "PIN incorrecto."; $("pin").select(); }
+    });
+  });
+
+  /* ---------- apertura: la real si ya esta fijada; si no, una simulacion ---------- */
+  function openAt() {
+    if (C.OPEN) return C.OPEN;
+    var v = $("open").value; if (!v) return null;
+    var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]).getTime();
+  }
+  function iso(t) { var d = new Date(t); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+  function init() {
+    var saved = store("sa-panel-open"), today = new Date(); today.setHours(0, 0, 0, 0);
+    $("open").value = C.OPEN ? iso(C.OPEN) : (saved || iso(today.getTime()));
+    if (C.OPEN) $("open").disabled = true;
+    $("open").addEventListener("change", function () { store("sa-panel-open", $("open").value); compute(); });
+    $("refresh").addEventListener("click", load);
+    $("find").addEventListener("input", function () { q = this.value.trim().toLowerCase(); draw(); });
+    $("csv").addEventListener("click", csv);
+    load();
+  }
+
+  /* ---------- lectura ---------- */
+  function load() {
+    $("refresh").disabled = true; $("load").hidden = false; $("step").textContent = "Leyendo la blockchain…";
+    var steps = { staking: "Leyendo los depósitos del staking…", horas: "Ordenando por fecha…", nodos: "Leyendo los nodos de la testnet…" };
+    C.everyone(function (s) { $("step").textContent = steps[s] || s; }).then(function (d) {
+      data = d; $("load").hidden = true; $("sum").hidden = false; $("refresh").disabled = false;
+      $("upd").textContent = "Actualizado " + new Date().toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+      compute();
+    }).catch(function () {
+      $("refresh").disabled = false;
+      $("step").textContent = "No se pudo leer la red. Revisa tu conexión y toca Actualizar.";
+      $("load").querySelector(".spin").hidden = true;
+    });
+  }
+
+  /* ---------- calculo y resumen ---------- */
+  function compute() {
+    if (!data) return;
+    var open = openAt(), now = Date.now();
+    var pre = !C.OPEN;
+    $("pre").hidden = !pre;
+    if (pre) $("pre").innerHTML = "<b>El airdrop aún no abre.</b> Esto es una simulación con apertura el " + (open ? df.format(open) : "—") + ". Cambia la fecha arriba para ver cómo iría.";
+    rows = data.map(function (d) { return { who: d.who, r: C.evaluate(d.ev, d.node, open, now) }; });
+    rows.sort(function (a, b) { return b.r.prize - a.r.prize || b.r.bal - a.r.bal; });
+    var part = 0, titan = 0, reserved = 0, nonode = 0, p2 = 0, secured = 0, lv = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    rows.forEach(function (x) {
+      var r = x.r;
+      if (r.status === "p2") p2++;
+      if (r.status === "nonode") nonode++;
+      if (r.level && r.node === "on") { part++; lv[r.level]++; reserved += r.prize; if (r.level === 4) titan += r.spots; }
+      reserved += r.closed; secured += r.secured;
+    });
+    $("t-part").textContent = nf0.format(part); $("t-parts").textContent = "Con 100+ SECT en staking y el nodo activo";
+    $("t-titan").textContent = nf0.format(titan); $("t-titans").textContent = nf0.format(titan * 4000) + " SECT en staking como Titan";
+    $("t-nonode").textContent = nf0.format(nonode); $("t-p2").textContent = nf0.format(p2);
+    $("t-res").innerHTML = nf0.format(reserved) + "<small>SECT</small>";
+    var pct = Math.min(100, reserved / C.BAG * 100);
+    $("t-resbar").style.width = pct + "%"; $("t-resp").textContent = nf2.format(pct) + " % de 7.000.000" + (reserved >= C.BAG ? " · bolsa completa" : "");
+    $("t-secured").textContent = nf0.format(secured) + " SECT ya asegurados (día 30 o más)";
+    [1, 2, 3, 4].forEach(function (k) { $("l" + k).textContent = nf0.format(lv[k]); });
+    tabsDraw(); draw();
+    clearInterval(tick); tick = setInterval(live, 250); live();
+  }
+  function earnedNow(r) { return C.liveEarned(r.items, r.closed, Date.now()); }
+  function live() {
+    var tot = 0; rows.forEach(function (x) { tot += earnedNow(x.r); });
+    $("t-earned").innerHTML = nf2.format(tot) + "<small>SECT</small>";
+    document.querySelectorAll("[data-e]").forEach(function (el) { var x = rows[+el.dataset.e]; if (x) el.textContent = nf2.format(earnedNow(x.r)); });
+  }
+
+  /* ---------- lista ---------- */
+  function pass(x) {
+    var s = x.r.status;
+    if (q && x.who.indexOf(q) < 0) return false;
+    if (tab === "all") return s !== "out";
+    if (tab === "count") return x.r.level && x.r.node === "on";
+    return s === tab;
+  }
+  function tabsDraw() {
+    $("tabs").innerHTML = TABS.map(function (t) {
+      var n = rows.filter(function (x) { var keep = tab; tab = t[0]; var ok = pass(x); tab = keep; return ok; }).length;
+      return '<button type="button" data-t="' + t[0] + '" aria-pressed="' + (tab === t[0]) + '">' + t[1] + "<em>" + n + "</em></button>";
+    }).join("");
+    $("tabs").querySelectorAll("button").forEach(function (b) { b.addEventListener("click", function () { tab = b.dataset.t; tabsDraw(); draw(); }); });
+  }
+  function draw() {
+    var html = "";
+    rows.forEach(function (x, i) {
+      if (!pass(x)) return;
+      var r = x.r, st = ST[r.status] || ["—", "mute"];
+      var lvl = r.level ? LV[r.level] + (r.level === 4 && r.spots > 1 ? " · " + r.spots + " plazas" : "") : "—";
+      var node = r.node === "on" ? '<span class="chip ok">Activo</span>' : r.node === "off" ? '<span class="chip warn">Pausado</span>' : '<span class="chip mute">Sin nodo</span>';
+      var day = r.day ? r.day + " / 90<span class=\"prog\"><i style=\"width:" + (r.day / 90 * 100) + '%"></i></span>' : "—";
+      html += "<tr><td><a href=\"https://etherscan.io/address/" + x.who + '" target="_blank" rel="noopener">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + "</a></td>" +
+        "<td>" + lvl + "</td><td class=\"r\">" + nf0.format(r.bal) + "</td><td>" + node + "</td><td>" + day + "</td>" +
+        '<td class="r" data-e="' + i + '">' + nf2.format(earnedNow(r)) + '</td><td class="r">' + (r.prize ? nf0.format(r.prize) : "—") + "</td>" +
+        '<td><span class="chip ' + st[1] + '">' + st[0] + "</span></td></tr>";
+    });
+    $("rows").innerHTML = html || '<tr><td colspan="8" class="empty">No hay wallets en este filtro.</td></tr>';
+  }
+  function csv() {
+    var lines = [["wallet", "nivel", "plazas", "en_staking", "nodo", "dia", "ganado", "asegurado", "premio", "estado"].join(",")];
+    rows.forEach(function (x) {
+      var r = x.r; if (r.status === "out") return;
+      lines.push([x.who, LV[r.level], r.spots, r.bal, r.node, r.day, earnedNow(r).toFixed(4), r.secured.toFixed(4), r.prize, (ST[r.status] || [""])[0]].join(","));
+    });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv" }));
+    a.download = "conteo-airdrop-" + iso(Date.now()) + ".csv"; document.body.appendChild(a); a.click(); a.remove();
+  }
+})();
+</script>
+</body>
+</html>
