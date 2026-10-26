@@ -3,7 +3,7 @@
    registro de nodos (Sepolia), y con eso se rehace la historia de cada wallet.
 
    Reglas que aplica:
-   - Cada umbral es una capa con su parte del premio y sus propios 90 dias: Scout 100 SECT = 40,
+   - Cada umbral es una capa con su parte del premio y sus propios 150 dias: Scout 100 SECT = 40,
      Sentinel 500 = +210 (250), Guardian 1.000 = +350 (600), Titan 4.000 = +2.800 (3.400) y cada
      4.000 mas es otra plaza de 3.400. Asi, subir de nivel tarde solo cuenta desde ese dia.
    - Una capa empieza cuando el saldo cruza su umbral (no antes de la apertura ni del registro
@@ -24,7 +24,7 @@
   var DEPLOYED = Date.UTC(2026, 9, 8);
   // fecha de apertura del airdrop (ms). null = aun no abre. Ej.: Date.UTC(2026, 10, 1)
   var OPEN = null;
-  var DAY = 864e5, DAYS = 90, MIN = 30, BAG = 7e6;
+  var DAY = 864e5, DAYS = 150, MIN = 30, BAG = 7e6;
   var LAYERS = [[100, 40, 1], [500, 210, 2], [1000, 350, 3], [4000, 2800, 4]];
   var SPOT = 4000, SPOT_PRIZE = 3400;
   var PRIZE = { 0: 0, 1: 40, 2: 250, 3: 600, 4: 3400 };
