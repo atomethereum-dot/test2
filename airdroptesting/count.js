@@ -92,7 +92,7 @@
       return list.map(function (l) {
         var ts = parseInt(l.blockTimestamp || t[l.blockNumber], 16) * 1000;
         return { who: "0x" + l.topics[1].slice(26).toLowerCase(), dep: l.topics[0] === T_DEP, amt: sect(BigInt(l.data)), t: ts,
-          bn: parseInt(l.blockNumber, 16), li: parseInt(l.logIndex, 16) };
+          bn: parseInt(l.blockNumber, 16), li: parseInt(l.logIndex, 16), tx: l.transactionHash || "" };
       }).sort(function (x, y) { return x.bn - y.bn || x.li - y.li; });
     });
   }
@@ -101,6 +101,10 @@
       var n = word(h, 0); if (n === 0n) return null;
       return rpc(SEPOLIA, "eth_call", [{ to: REGISTRY, data: SEL.validators + pad((n - 1n).toString(16)).slice(2) }, "latest"]).then(parseNode);
     });
+  }
+  function accounts(list) {
+    return batch(MAINNET, list.map(function (w) { return ["eth_call", [{ to: STAKING, data: "0xf85b90e2" + pad(w).slice(2) }, "latest"]]; }))
+      .then(function (res) { var m = {}; list.forEach(function (w, i) { var h = res[i]; if (h && h.length >= 2 + 64 * 3) m[w] = { staked: sect(word(h, 0)), claimable: sect(word(h, 1)), wallet: sect(word(h, 2)) }; }); return m; });
   }
   function parseNode(v) { return { who: "0x" + v.slice(26, 66).toLowerCase(), at: Number(word(v, 5)) * 1000, active: word(v, 6) === 1n }; }
   function nodes() {
@@ -134,20 +138,23 @@
   function evaluate(ev, nd, open, now) {
     var h = layers(ev), lv = level(h.bal), spots = lv === 4 ? Math.floor(h.bal / SPOT) : (lv ? 1 : 0);
     var r = { bal: h.bal, level: lv, spots: spots, prize: lv ? PRIZE[lv] * Math.max(1, spots) : 0, node: nd ? (nd.active ? "on" : "off") : "none",
-      earned: 0, secured: 0, closed: 0, items: [], day: 0, left: 0, status: "" };
+      earned: 0, secured: 0, closed: 0, items: [], lay: [], day: 0, left: 0, status: "", start: 0, end: 0, nodeAt: nd ? nd.at : 0 };
     if (!open || now < open) { r.status = lv ? (nd && nd.active ? "pre" : "nonode") : (nd ? "p2" : "out"); return r; }
     if (!lv) { r.status = nd ? "p2" : "out"; return r; }
     if (!nd || !nd.active) { r.status = "nonode"; return r; }
     var base = null, last = 0;
     h.layers.forEach(function (L) {
       var s = Math.max(L.start, open, nd.at), e = L.end == null ? now : L.end;
-      var d = (e - s) / DAY; if (d <= 0) return;
+      var d = (e - s) / DAY;
+      var row = { at: L.at, p: L.p, s: s, end: L.end, d: Math.max(0, d), got: 0, state: L.end == null ? (d >= DAYS ? "full" : d >= MIN ? "run" : "early") : (d < MIN ? "lost" : "closed") };
+      r.lay.push(row);
+      if (d <= 0) { row.state = L.end == null ? "early" : "lost"; return; }
       if (L.end != null && d < MIN) return;           // salio antes del dia 30: nada
-      var got = L.p * Math.min(1, d / DAYS);
+      var got = L.p * Math.min(1, d / DAYS); row.got = got;
       r.earned += got; if (d >= MIN) r.secured += got; if (L.end != null) r.closed += got;
       if (L.end == null) { r.items.push({ s: s, p: L.p }); if (!base || L.at < base.at) base = { at: L.at, s: s }; last = Math.max(last, s); }
     });
-    if (base) { r.day = Math.min(DAYS, Math.floor((now - base.s) / DAY) + 1); r.left = Math.max(0, Math.ceil((last + DAYS * DAY - now) / DAY)); }
+    if (base) { r.day = Math.min(DAYS, Math.floor((now - base.s) / DAY) + 1); r.left = Math.max(0, Math.ceil((last + DAYS * DAY - now) / DAY)); r.start = base.s; r.end = last + DAYS * DAY; }
     r.status = !base ? "out" : r.left <= 0 ? "full" : r.day < MIN ? "early" : "run";
     return r;
   }
@@ -168,7 +175,11 @@
       return nodes().catch(function () { return {}; }).then(function (nd) {
         var by = {}; ev.forEach(function (e) { (by[e.who] = by[e.who] || []).push(e); });
         Object.keys(nd).forEach(function (w) { by[w] = by[w] || []; });
-        return Object.keys(by).map(function (w) { return { who: w, ev: by[w], node: nd[w] || null }; });
+        var list = Object.keys(by);
+        onStep && onStep("saldos");
+        return accounts(list).catch(function () { return {}; }).then(function (acc) {
+          return list.map(function (w) { return { who: w, ev: by[w], node: nd[w] || null, acc: acc[w] || null }; });
+        });
       });
     });
   }
