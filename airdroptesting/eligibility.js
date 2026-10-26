@@ -13,7 +13,7 @@
    SectoraEVM empiezan el 25 de marzo de 2027 (10 dias despues de la quema): quien ya completo su
    tiempo cobra ese dia; quien entro despues, al completarlo.
    Ya abierto el airdrop, lo ganado sube en vivo como en el staking: premio x tiempo dentro / tiempo completo, por
-   plaza, desde el inicio de cada plaza. Minimo 30 dias: si sale antes del dia 30 no gana nada. Los inicios salen de progress.json, que escribe el
+   plaza, desde el inicio de cada plaza. Si sale, se pausa y sigue al volver. Minimo 30 dias dentro. Los inicios salen de progress.json, que escribe el
    programa diario: { "open": ms, "wallets": { "0x…": [inicio plaza 1, inicio plaza 2, …] } }.
    Sin ese archivo (antes de la apertura) se muestra el premio y "empieza a sumar el dia de la apertura".
    Si la wallet tiene staking y aun no tiene el nodo activo, sale el aviso

@@ -193,7 +193,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   </div>
 </div>
 
-<script src="/airdroptesting/count.js?v=7"></script>
+<script src="/airdroptesting/count.js?v=8"></script>
 <script>
 (function () {
   "use strict";
@@ -201,7 +201,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   var C = window.SACount, $ = function (id) { return document.getElementById(id); };
   var LV = { 0: "—", 1: "Scout", 2: "Sentinel", 3: "Guardian", 4: "Titan" };
   var ST = { pre: ["Listo para la apertura", "blue"], early: ["Antes del día 30", "warn"], run: ["Asegurado", "ok"], full: ["Premio completo", "ok"],
-    nonode: ["Falta el nodo", "bad"], p2: ["Fase 2", "mute"], left: ["Salió · conserva lo ganado", "mute"], out: ["Fuera", "mute"] };
+    nonode: ["Falta el nodo", "bad"], p2: ["Fase 2", "mute"], left: ["Fuera · conserva lo ganado", "mute"], out: ["Fuera", "mute"] };
   var TABS = [["all", "Todas"], ["count", "Participando"], ["early", "Antes del día 30"], ["nonode", "Falta el nodo"], ["p2", "Fase 2"], ["full", "Completas"]];
   var nf0 = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 0, useGrouping: "always" });
   var nf2 = new Intl.NumberFormat("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: "always" });
@@ -329,7 +329,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   }
 
   /* ---------- detalle de una wallet ---------- */
-  var LAY = { early: ["Antes del día 30", "warn"], run: ["Asegurada", "ok"], full: ["Completa", "ok"], closed: ["Cerrada · conserva lo ganado", "mute"], lost: ["Perdida · salió antes del día 30", "bad"] };
+  var LAY = { early: ["Antes del día 30", "warn"], run: ["Asegurada", "ok"], full: ["Completa", "ok"], closed: ["En pausa · conserva lo ganado", "mute"], lost: ["En pausa · menos de 30 días", "warn"] };
   var cur = -1;
   function d(t) { return t ? df.format(t) : "—"; }
   function layName(at) { return at === 100 ? "Scout" : at === 500 ? "Sentinel" : at === 1000 ? "Guardian" : "Titan · plaza " + (at / 4000); }
@@ -373,7 +373,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       h += '<div class="box"><h4>Partes del premio</h4><table class="mini"><thead><tr><th>Parte</th><th class="r">SECT</th><th>Desde</th><th class="r">Ganado</th><th>Cobra</th><th>Estado</th></tr></thead><tbody>' +
         r.lay.map(function (L) { var s2 = LAY[L.state] || ["—", "mute"];
           return "<tr><td>" + layName(L.at) + '<span class="sub">desde ' + nf0.format(L.at) + " en staking</span></td><td class=\"r\">" + nf0.format(L.p) + "</td><td>" + d(L.s) +
-            '<span class="sub">día ' + (Math.floor(L.d) + 1) + (L.gap ? " · " + Math.max(1, Math.round(L.gap / 36e5)) + " h fuera" : "") + '</span></td><td class="r">' + nf2.format(L.got) + "</td><td>" + d(L.due) + '</td><td><span class="chip ' + s2[1] + '">' + s2[0] + "</span></td></tr>"; }).join("") +
+            '<span class="sub">día ' + (Math.floor(L.d) + 1) + (L.gap ? " · " + (L.gap >= 2 * C.DAY ? Math.floor(L.gap / C.DAY) + " días" : Math.max(1, Math.round(L.gap / 36e5)) + " h") + " fuera" : "") + '</span></td><td class="r">' + nf2.format(L.got) + "</td><td>" + d(L.due) + '</td><td><span class="chip ' + s2[1] + '">' + s2[0] + "</span></td></tr>"; }).join("") +
         "</tbody></table></div>";
     }
     if (x.ev.length) {

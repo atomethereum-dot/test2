@@ -9,11 +9,10 @@
      entregas se reparten en el tiempo. Cada umbral es una capa con su parte del premio: Scout 100 SECT = 40,
      Sentinel 500 = +210 (250), Guardian 1.000 = +350 (600), Titan 4.000 = +2.800 (3.400) y cada
      4.000 mas es otra plaza de 3.400. Asi, subir de nivel tarde solo suma desde ese dia.
-   - Una capa empieza cuando el saldo cruza su umbral (no antes de la apertura ni del registro
-     del nodo) y termina si el saldo baja de el. Si termina antes del dia 30 no gana nada;
-     desde el dia 30 se queda con lo ganado. Si vuelve antes de 24 h, la capa sigue como estaba:
-     las horas fuera no suman y su fecha de cobro se corre lo mismo. Si tarda mas, lo ganado queda
-     y al volver sigue sumando solo lo que le falta: una capa nunca paga mas que su parte del premio.
+   - Una capa suma mientras el saldo esta en su umbral o mas (no antes de la apertura ni del registro
+     del nodo). Si el saldo baja, la capa se pausa con los dias que lleva; si vuelve a subir, sigue
+     donde quedo: las horas fuera no suman y su fecha de cobro se corre lo mismo. Con menos de 30
+     dias dentro no gana nada; desde el dia 30 lo ganado es suyo. Nunca paga mas que su parte del premio.
    - Sin nodo activo no cuenta (estimacion conservadora: no se conoce cuando se apago).
    Usado por el verificador publico (una wallet) y por el panel privado (todas). */
 (function (root) {
@@ -31,7 +30,7 @@
   var OPEN = null;
   // entrega: 25 de marzo de 2027, 10 dias despues de la quema del 15 de marzo
   var END = Date.UTC(2027, 2, 25);
-  var DAY = 864e5, MIN = 30, BAG = 7e6, DUR = 150 * DAY, GRACE = DAY; // 24 h para volver sin cortar la capa
+  var DAY = 864e5, MIN = 30, BAG = 7e6, DUR = 150 * DAY;
   var LAYERS = [[100, 40, 1], [500, 210, 2], [1000, 350, 3], [4000, 2800, 4]];
   var SPOT = 4000, SPOT_PRIZE = 3400;
   var PRIZE = { 0: 0, 1: 40, 2: 250, 3: 600, 4: 3400 };
@@ -152,37 +151,40 @@
     var base = null, last = 0, pays = {}, by = {};
     h.layers.forEach(function (L) { (by[L.at] = by[L.at] || []).push(L); });
     Object.keys(by).map(Number).sort(function (a, b) { return a - b; }).forEach(function (at) {
-      var P = by[at][0].p, rem = P, runs = [];
-      // tramos separados por menos de 24 h son uno solo; las horas fuera no suman
+      var P = by[at][0].p, acc = 0, paid = 0, prevE = 0, segs = [];
       by[at].forEach(function (L) {
-        var s = Math.max(L.start, open, nd.at), e = L.end == null ? now : L.end, g = runs[runs.length - 1];
-        if (e <= s) return;
-        if (g && s - g.e < GRACE) { g.gap += s - g.e; g.e = e; g.end = L.end; }
-        else runs.push({ s: s, e: e, end: L.end, gap: 0 });
+        var s = Math.max(L.start, open, nd.at), e = L.end == null ? now : L.end;
+        if (e > s) segs.push({ s: s, e: e, end: L.end });
       });
-      runs.forEach(function (g) {
-        var inn = g.e - g.s - g.gap, d = inn / DAY, need = rem / P * DUR;  // tiempo para completar lo que le falta
-        if (rem <= 0) return;                         // esta parte ya se completo antes
-        var row = { at: at, p: rem, s: g.s, end: g.end, d: d, gap: g.gap, got: 0, state: "" };
-        r.lay.push(row);
-        if (g.end != null && d < MIN) { row.state = "lost"; return; }   // salio antes del dia 30: nada
-        var got = Math.min(rem, P * inn / DUR); row.got = got;
-        r.earned += got; if (d >= MIN) r.secured += got;
-        // cada parte se paga por separado: al completar su tiempo, nunca antes del 25 de marzo
-        if (g.end == null) {
-          var s2 = g.s + g.gap;                       // inicio corrido por las horas fuera
-          r.items.push({ s: s2, p: rem, sp: need }); r.proj += rem;
-          if (!base || at < base.at) base = { at: at, s: s2 };
-          last = Math.max(last, s2 + need); row.due = Math.max(END, s2 + need);
-          row.state = inn >= need ? "full" : d >= MIN ? "run" : "early";
-          pays[row.due] = (pays[row.due] || 0) + rem;
-        } else {
-          row.state = got >= rem - 1e-9 ? "full" : "closed";
-          row.due = Math.max(END, Math.min(g.e, g.s + g.gap + need));
-          r.closed += got; r.proj += got; rem -= got;
-          pays[row.due] = (pays[row.due] || 0) + got;
+      if (!segs.length) return;
+      // los dias dentro se acumulan: si sale, la parte se pausa; si vuelve, sigue donde quedo
+      var row = { at: at, p: P, s: segs[0].s, end: null, d: 0, gap: 0, got: 0, state: "" };
+      segs.forEach(function (g, i) {
+        if (i) {
+          row.gap += g.s - prevE;
+          // si le toco cobrar mientras estaba fuera, eso ya se pago y no se vuelve a pagar
+          var due = Math.max(END, prevE), amt = Math.min(P, P * acc / DUR) - paid;
+          if (acc >= MIN * DAY && due < g.s && amt > 0) { pays[due] = (pays[due] || 0) + amt; paid += amt; }
         }
+        acc += g.e - g.s; prevE = g.e;
       });
+      var z = segs[segs.length - 1], inNow = z.end == null, got = Math.min(P, P * acc / DUR), d = acc / DAY;
+      row.end = z.end; row.d = d; r.lay.push(row);
+      if (!inNow && d < MIN) { row.state = "lost"; return; }   // fuera con menos de 30 dias: nada, salvo que vuelva
+      row.got = got; r.earned += got; if (d >= MIN) r.secured += got;
+      // cada parte se paga por separado: al completar su tiempo, nunca antes del 25 de marzo
+      if (inNow) {
+        var s2 = now - acc;                           // inicio corrido: las horas fuera no suman
+        r.items.push({ s: s2, p: P, sp: DUR }); r.proj += P;
+        if (!base || at < base.at) base = { at: at, s: s2 };
+        last = Math.max(last, s2 + DUR); row.due = Math.max(END, s2 + DUR);
+        row.state = acc >= DUR ? "full" : d >= MIN ? "run" : "early";
+        if (P - paid > 0) pays[row.due] = (pays[row.due] || 0) + P - paid;
+      } else {
+        row.state = got >= P - 1e-9 ? "full" : "closed"; row.due = Math.max(END, z.e - Math.max(0, acc - DUR));
+        r.closed += got; r.proj += got;
+        if (got - paid > 0) pays[row.due] = (pays[row.due] || 0) + got - paid;
+      }
     });
     // pagos por fecha; r.deliver es el primero y r.end el dia que completa la ultima parte
     r.pays = Object.keys(pays).map(Number).sort(function (a, b) { return a - b; }).map(function (t) { return { t: t, p: pays[t] }; });
