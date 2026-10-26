@@ -818,6 +818,9 @@ svg{display:block}
   letter-spacing:.16em;text-transform:uppercase;color:var(--ink4)}
 .wsel-none{padding:18px 14px;color:var(--ink3);font-size:13px;line-height:1.7}
 .wsel-none a{color:var(--blue2);text-decoration:underline;text-underline-offset:3px}
+.wsel-sub{padding:14px 12px 6px;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ink4);border-top:1px solid var(--hair);margin-top:6px}
+.wsel-note{padding:12px 12px 6px;color:var(--ink4);font-size:12px;line-height:1.55}
 .wsel-f{padding:12px 18px;border-top:1px solid var(--hair);
   font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--ink4);line-height:1.7}
@@ -1306,7 +1309,7 @@ html.booting,body.booting{overflow:hidden}
 </div>
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="translations.js"></script>
-<script src="dashboard-i18n-extra.js?v=20261026"></script>
+<script src="dashboard-i18n-extra.js?v=20261026b"></script>
 <script src="i18n.js"></script>
 <script src="dashboard-reticle.js?v=20260820b"></script>
 <script>
@@ -3235,13 +3238,27 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 
   /* ---- listado ---- */
   const movil = matchMedia('(max-width:900px)').matches;
-  /* logos oficiales de cada wallet (los mismos de dashboard-wallet-logos.js) */
-  const LOGO = {"wc": "data:image/svg+xml,<svg width=\"28\" height=\"28\" viewBox=\"0 0 28 28\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">%0A<rect width=\"28\" height=\"28\" fill=\"%233B99FC\"/>%0A<path d=\"M8.38969 10.3739C11.4882 7.27538 16.5118 7.27538 19.6103 10.3739L19.9832 10.7468C20.1382 10.9017 20.1382 11.1529 19.9832 11.3078L18.7076 12.5835C18.6301 12.6609 18.5045 12.6609 18.4271 12.5835L17.9139 12.0703C15.7523 9.9087 12.2477 9.9087 10.0861 12.0703L9.53655 12.6198C9.45909 12.6973 9.3335 12.6973 9.25604 12.6198L7.98039 11.3442C7.82547 11.1893 7.82547 10.9381 7.98039 10.7832L8.38969 10.3739ZM22.2485 13.012L23.3838 14.1474C23.5387 14.3023 23.5387 14.5535 23.3838 14.7084L18.2645 19.8277C18.1096 19.9827 17.8584 19.9827 17.7035 19.8277C17.7035 19.8277 17.7035 19.8277 17.7035 19.8277L14.0702 16.1944C14.0314 16.1557 13.9686 16.1557 13.9299 16.1944C13.9299 16.1944 13.9299 16.1944 13.9299 16.1944L10.2966 19.8277C10.1417 19.9827 9.89053 19.9827 9.73561 19.8278C9.7356 19.8278 9.7356 19.8277 9.7356 19.8277L4.61619 14.7083C4.46127 14.5534 4.46127 14.3022 4.61619 14.1473L5.75152 13.012C5.90645 12.857 6.15763 12.857 6.31255 13.012L9.94595 16.6454C9.98468 16.6841 10.0475 16.6841 10.0862 16.6454C10.0862 16.6454 10.0862 16.6454 10.0862 16.6454L13.7194 13.012C13.8743 12.857 14.1255 12.857 14.2805 13.012C14.2805 13.012 14.2805 13.012 14.2805 13.012L17.9139 16.6454C17.9526 16.6841 18.0154 16.6841 18.0541 16.6454L21.6874 13.012C21.8424 12.8571 22.0936 12.8571 22.2485 13.012Z\" fill=\"white\"/>%0A</svg>%0A", "mm": "data:image/svg+xml,<svg width=\"28\" height=\"28\" viewBox=\"0 0 28 28\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">%0A<rect width=\"28\" height=\"28\" fill=\"white\"/>%0A<path d=\"M24.0891 3.1199L15.3446 9.61456L16.9617 5.7828L24.0891 3.1199Z\" fill=\"%23E2761B\" stroke=\"%23E2761B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M3.90207 3.1199L12.5763 9.67608L11.0383 5.7828L3.90207 3.1199Z\" fill=\"%23E4761B\" stroke=\"%23E4761B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M20.9429 18.1745L18.6139 21.7426L23.597 23.1136L25.0295 18.2536L20.9429 18.1745Z\" fill=\"%23E4761B\" stroke=\"%23E4761B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M2.97929 18.2536L4.40301 23.1136L9.38607 21.7426L7.05713 18.1745L2.97929 18.2536Z\" fill=\"%23E4761B\" stroke=\"%23E4761B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M9.10483 12.1456L7.71626 14.2461L12.6642 14.4658L12.4884 9.14877L9.10483 12.1456Z\" fill=\"%23E4761B\" stroke=\"%23E4761B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M18.8864 12.1456L15.4589 9.08725L15.3446 14.4658L20.2837 14.2461L18.8864 12.1456Z\" fill=\"%23E4761B\" stroke=\"%23E4761B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M9.38606 21.7426L12.3566 20.2925L9.79033 18.2888L9.38606 21.7426Z\" fill=\"%23E4761B\" stroke=\"%23E4761B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M15.6347 20.2925L18.6139 21.7426L18.2009 18.2888L15.6347 20.2925Z\" fill=\"%23E4761B\" stroke=\"%23E4761B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M18.6139 21.7426L15.6347 20.2925L15.8719 22.2348L15.8456 23.0521L18.6139 21.7426Z\" fill=\"%23D7C1B3\" stroke=\"%23D7C1B3\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M9.38606 21.7426L12.1544 23.0521L12.1368 22.2348L12.3566 20.2925L9.38606 21.7426Z\" fill=\"%23D7C1B3\" stroke=\"%23D7C1B3\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M12.1984 17.0056L9.72002 16.2762L11.4689 15.4765L12.1984 17.0056Z\" fill=\"%23233447\" stroke=\"%23233447\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M15.7928 17.0056L16.5223 15.4765L18.28 16.2762L15.7928 17.0056Z\" fill=\"%23233447\" stroke=\"%23233447\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M9.38606 21.7426L9.80791 18.1745L7.05712 18.2536L9.38606 21.7426Z\" fill=\"%23CD6116\" stroke=\"%23CD6116\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M18.1921 18.1745L18.6139 21.7426L20.9429 18.2536L18.1921 18.1745Z\" fill=\"%23CD6116\" stroke=\"%23CD6116\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M20.2837 14.2461L15.3446 14.4658L15.8016 17.0057L16.5311 15.4765L18.2888 16.2762L20.2837 14.2461Z\" fill=\"%23CD6116\" stroke=\"%23CD6116\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M9.72002 16.2762L11.4777 15.4765L12.1984 17.0057L12.6642 14.4658L7.71626 14.2461L9.72002 16.2762Z\" fill=\"%23CD6116\" stroke=\"%23CD6116\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M7.71626 14.2461L9.79033 18.2888L9.72002 16.2762L7.71626 14.2461Z\" fill=\"%23E4751F\" stroke=\"%23E4751F\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M18.2888 16.2762L18.2009 18.2888L20.2837 14.2461L18.2888 16.2762Z\" fill=\"%23E4751F\" stroke=\"%23E4751F\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M12.6642 14.4658L12.1984 17.0057L12.7784 20.0025L12.9102 16.0565L12.6642 14.4658Z\" fill=\"%23E4751F\" stroke=\"%23E4751F\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M15.3446 14.4658L15.1073 16.0477L15.2128 20.0025L15.8016 17.0057L15.3446 14.4658Z\" fill=\"%23E4751F\" stroke=\"%23E4751F\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M15.8016 17.0056L15.2128 20.0025L15.6347 20.2925L18.2009 18.2888L18.2888 16.2762L15.8016 17.0056Z\" fill=\"%23F6851B\" stroke=\"%23F6851B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M9.72002 16.2762L9.79033 18.2888L12.3566 20.2925L12.7784 20.0025L12.1984 17.0056L9.72002 16.2762Z\" fill=\"%23F6851B\" stroke=\"%23F6851B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M15.8456 23.0521L15.8719 22.2348L15.6522 22.0414H12.339L12.1368 22.2348L12.1544 23.0521L9.38606 21.7426L10.3528 22.5336L12.3126 23.8958H15.6786L17.6472 22.5336L18.6139 21.7426L15.8456 23.0521Z\" fill=\"%23C0AD9E\" stroke=\"%23C0AD9E\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M15.6347 20.2925L15.2128 20.0025H12.7784L12.3566 20.2925L12.1368 22.2348L12.339 22.0414H15.6522L15.8719 22.2348L15.6347 20.2925Z\" fill=\"%23161616\" stroke=\"%23161616\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M24.4583 10.0364L25.2053 6.45072L24.0891 3.1199L15.6347 9.39485L18.8864 12.1456L23.4827 13.4903L24.5022 12.3038L24.0628 11.9874L24.7658 11.3459L24.221 10.924L24.924 10.3879L24.4583 10.0364Z\" fill=\"%23763D16\" stroke=\"%23763D16\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M2.79472 6.45072L3.54174 10.0364L3.06717 10.3879L3.77024 10.924L3.23415 11.3459L3.93722 11.9874L3.4978 12.3038L4.50847 13.4903L9.10483 12.1456L12.3566 9.39485L3.90207 3.1199L2.79472 6.45072Z\" fill=\"%23763D16\" stroke=\"%23763D16\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M23.4827 13.4903L18.8864 12.1456L20.2837 14.2461L18.2009 18.2888L20.9429 18.2536H25.0295L23.4827 13.4903Z\" fill=\"%23F6851B\" stroke=\"%23F6851B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M9.10484 12.1456L4.50848 13.4903L2.97929 18.2536H7.05713L9.79033 18.2888L7.71626 14.2461L9.10484 12.1456Z\" fill=\"%23F6851B\" stroke=\"%23F6851B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A<path d=\"M15.3446 14.4658L15.6347 9.39485L16.9705 5.7828H11.0383L12.3566 9.39485L12.6642 14.4658L12.7696 16.0653L12.7784 20.0025H15.2128L15.2304 16.0653L15.3446 14.4658Z\" fill=\"%23F6851B\" stroke=\"%23F6851B\" stroke-width=\"0.0878845\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>%0A</svg>%0A", "trust": "data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" width=\"28\" height=\"28\" viewBox=\"0 0 28 28\"><path fill=\"%23fff\" d=\"M0 0h28v28H0z\"/><path fill=\"%230500FF\" d=\"M6 7.583 13.53 5v17.882C8.15 20.498 6 15.928 6 13.345V7.583Z\"/><path fill=\"url(%23a)\" d=\"M22 7.583 13.53 5v17.882c6.05-2.384 8.47-6.954 8.47-9.537V7.583Z\"/><defs><linearGradient id=\"a\" x1=\"19.768\" x2=\"14.072\" y1=\"3.753\" y2=\"22.853\" gradientUnits=\"userSpaceOnUse\"><stop offset=\".02\" stop-color=\"%2300F\"/><stop offset=\".08\" stop-color=\"%230094FF\"/><stop offset=\".16\" stop-color=\"%2348FF91\"/><stop offset=\".42\" stop-color=\"%230094FF\"/><stop offset=\".68\" stop-color=\"%230038FF\"/><stop offset=\".9\" stop-color=\"%230500FF\"/></linearGradient></defs></svg>%0A", "cb": "data:image/svg+xml,<svg width=\"28\" height=\"28\" viewBox=\"0 0 28 28\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">%0A<rect width=\"28\" height=\"28\" fill=\"%232C5FF6\"/>%0A<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M14 23.8C19.4124 23.8 23.8 19.4124 23.8 14C23.8 8.58761 19.4124 4.2 14 4.2C8.58761 4.2 4.2 8.58761 4.2 14C4.2 19.4124 8.58761 23.8 14 23.8ZM11.55 10.8C11.1358 10.8 10.8 11.1358 10.8 11.55V16.45C10.8 16.8642 11.1358 17.2 11.55 17.2H16.45C16.8642 17.2 17.2 16.8642 17.2 16.45V11.55C17.2 11.1358 16.8642 10.8 16.45 10.8H11.55Z\" fill=\"white\"/>%0A</svg>%0A"};
-  const DEEP = [
-    {n:'MetaMask', i:LOGO.mm, u:d => 'https://metamask.app.link/dapp/'+d},
-    {n:'Trust Wallet', i:LOGO.trust, u:d => 'https://link.trustwallet.com/open_url?url=https://'+d},
-    {n:'Coinbase Wallet', i:LOGO.cb, u:d => 'https://go.cb-w.com/dapp?cb_url=https://'+d}
+  /* logos oficiales de cada wallet: dashboard-wallet-logos.js se carga al abrir la ventana */
+  const LOGO = () => window.SECTORA_WALLET_LOGOS || {};
+  function cargaLogos(){
+    if(window.SECTORA_WALLET_LOGOS || document.getElementById('wselLogos')) return;
+    const sc = document.createElement('script');
+    sc.id = 'wselLogos'; sc.src = '/dashboard-wallet-logos.js';
+    sc.onload = () => { if(caja.classList.contains('on')) pinta(); };
+    document.head.appendChild(sc);
+  }
+  /* wallets compatibles con Ethereum que permiten la red de pruebas Sepolia.
+     app: abre el dash dentro de la app de la wallet (movil); web: su pagina oficial de descarga */
+  const OTRAS = [
+    {n:'MetaMask', k:'metaMask', web:'https://metamask.io/download/', app:d => 'https://metamask.app.link/dapp/'+d},
+    {n:'Trust Wallet', k:'trust', web:'https://trustwallet.com/download', app:d => 'https://link.trustwallet.com/open_url?url=https://'+d},
+    {n:'Coinbase Wallet', k:'coinbase', web:'https://www.coinbase.com/wallet/downloads', app:d => 'https://go.cb-w.com/dapp?cb_url=https://'+d},
+    {n:'OKX Wallet', k:'okx', web:'https://www.okx.com/web3'},
+    {n:'Bitget Wallet', k:'bitget', web:'https://web3.bitget.com/en/wallet-download', app:d => 'https://bkcode.vip?action=dapp&url='+encodeURIComponent('https://'+d)},
+    {n:'Rainbow', k:'rainbow', web:'https://rainbow.me/download'},
+    {n:'TokenPocket', k:'tokenPocket', web:'https://www.tokenpocket.pro/en/download/app'}
   ];
+  const ENLACE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#13213d"/><path d="M12.2 15.8l3.6-3.6M11 13.4l-1.6 1.6a2.6 2.6 0 0 0 3.6 3.6l1.6-1.6M17 14.6l1.6-1.6a2.6 2.6 0 0 0-3.6-3.6L13.4 11" fill="none" stroke="#4d8dff" stroke-width="1.6" stroke-linecap="round"/></svg>');
 
   function fila({icono, nombre, etiqueta, accion}){
     const b = document.createElement('button');
@@ -3275,32 +3292,58 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     }
 
     lista.appendChild(fila({
-      icono: LOGO.wc, nombre: 'WalletConnect',
+      icono: LOGO().walletConnect, nombre: 'WalletConnect',
       etiqueta: CONFIG.walletConnectProjectId ? t('hashdash.wallet.qrCode','QR code') : t('hashdash.wallet.soon','Soon'),
       accion: porWalletConnect
     }));
 
-    if(!dets.length && !window.ethereum){
+    const hay = dets.length > 0 || !!window.ethereum;
+    if(!hay){
       const d = document.createElement('div');
       d.className = 'wsel-none';
-      d.innerHTML = movil
+      d.textContent = movil
         ? t('hashdash.wallet.noneMobile','No wallet detected in this browser. Open Sectora inside your wallet app:')
-        : t('hashdash.wallet.noneDesktop','No wallet extension detected. Install one to continue: ')+
-          '<a href="https://metamask.io/download/" target="_blank" rel="noopener">MetaMask</a>, '+
-          '<a href="https://rabby.io/" target="_blank" rel="noopener">Rabby</a> '+t('hashdash.wallet.or','or')+' '+
-          '<a href="https://www.coinbase.com/wallet/downloads" target="_blank" rel="noopener">Coinbase Wallet</a>.';
+        : t('hashdash.wallet.noneDesktop','No wallet extension detected. Install one to continue: ').replace(/[:\s]+$/, '.');
       lista.appendChild(d);
-      if(movil){
-        const dom = location.host || 'sectoraorg.com';
-        DEEP.forEach(w => lista.appendChild(fila({
-          icono: w.i, nombre: t('hashdash.wallet.openIn','Open in {name}').replace('{name}', w.n), etiqueta: t('hashdash.wallet.app','App'),
-          accion: () => location.href = w.u(dom + location.pathname)
-        })));
+    }
+
+    /* el resto de wallets compatibles: en el movil sin wallet se abre el dash dentro de su app;
+       si no, su pagina oficial de descarga */
+    const ya = dets.map(d => (d.info.name || '').toLowerCase());
+    const resto = OTRAS.filter(w => !ya.some(n => n.indexOf(w.n.split(' ')[0].toLowerCase()) >= 0));
+    if(resto.length){
+      const h = document.createElement('div');
+      h.className = 'wsel-sub'; h.textContent = t('hashdash.wallet.others','Other compatible wallets');
+      lista.appendChild(h);
+      const dom = (location.host || 'sectoraorg.com') + location.pathname;
+      resto.forEach(w => {
+        const app = movil && !hay && w.app;
+        lista.appendChild(fila({
+          icono: LOGO()[w.k], nombre: app ? t('hashdash.wallet.openIn','Open in {name}').replace('{name}', w.n) : w.n,
+          etiqueta: app ? t('hashdash.wallet.app','App') : t('hashdash.wallet.install','Install'),
+          accion: () => { if(app) location.href = w.app(dom); else window.open(w.web, '_blank', 'noopener'); }
+        }));
+      });
+      /* cualquier otra wallet con navegador propio: abrir este enlace dentro de ella */
+      if(movil && !hay){
+        lista.appendChild(fila({
+          icono: ENLACE, nombre: t('hashdash.wallet.copyLink','Another wallet? Copy the link and open it in its browser'), etiqueta: '',
+          accion: () => {
+            const u = 'https://' + dom;
+            (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject())
+              .then(() => avisar(t('hashdash.wallet.copied','Link copied')), () => avisar(u));
+          }
+        }));
       }
     }
+    const nota = document.createElement('div');
+    nota.className = 'wsel-note';
+    nota.textContent = t('hashdash.wallet.sepolia','Works with any Ethereum wallet that allows the Sepolia test network. If you don\'t see it, turn on test networks in your wallet settings.');
+    lista.appendChild(nota);
   }
 
   function abre(){
+    cargaLogos();
     pinta();
     caja.classList.add('on');
     requestAnimationFrame(() => caja.classList.add('vis'));
@@ -3554,6 +3597,6 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 })();
 </script>
 <script src="dashboard-testnet.js?v=20261026"></script>
-<script src="dashboard-node-guide.js?v=2" defer></script>
+<script src="dashboard-node-guide.js?v=3" defer></script>
 </body>
 </html>

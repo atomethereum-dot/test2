@@ -20,40 +20,40 @@
       note: "¿Participas en el Airdrop Genesis? Conecta la misma wallet donde tienes tus SECT en staking y no pauses el nodo: el tiempo en pausa no suma.",
       done: "Hecho", close: "Cerrar", zoom: "Toca una imagen para verla en grande",
       s: [
-        ["Conecta tu wallet", "Pulsa «{connect}» arriba a la derecha y elige tu wallet. El dash te cambia solo a la red de pruebas Sepolia.", "Conectar ahora"],
+        ["Conecta tu wallet", "Pulsa «{connect}» arriba a la derecha y elige tu wallet: MetaMask, Trust Wallet, Coinbase Wallet, OKX, Bitget, Rainbow, TokenPocket u otra de Ethereum. En el móvil, abre el dash dentro de la app de tu wallet. El dash te cambia solo a la red de pruebas Sepolia.", "Conectar ahora"],
         ["Consigue gas gratis", "Cada paso necesita un poco de ETH de Sepolia, una moneda de prueba gratuita que paga la red. Pulsa «{gas}», pega la dirección de tu wallet y pide ETH. Con lo que te dan alcanza para todos los pasos.", "Abrir el grifo de Sepolia"],
         ["Reclama 5.000 tSECT", "En «{tn}», pulsa «{faucet}» y confirma en tu wallet. Es gratis y puedes repetirlo cada 24 horas.", "Ir al faucet"],
         ["Compra el Node Kit", "En «{market}», abre la pestaña «{phys}» (1) y elige el {kit} de 50 TH/s por 4.300 tSECT (2): con eso llegas al mínimo para validar. Pulsa «{buy}» (3). Tu wallet pide dos confirmaciones: primero aprobar el pago y después la compra.", "Ir al mercado"],
         ["Registra tu nodo", "En «{node}», escribe un nombre y la ubicación aproximada de tu ciudad (latitud y longitud: las encuentras en Google Maps al marcar un punto). Pulsa «{reg}» y confirma en tu wallet.", "Ir a mi nodo"],
         ["Listo: déjalo encendido", "El botón cambia a «{registered}» y tu nodo aparece en el mapa de la red. Mantenlo encendido: si lo pausas, deja de contar.", "Ver el mapa"]
       ],
-      help: "¿Algo falla? Si dice que no tienes ETH de Sepolia, vuelve al paso 2. Si no te alcanzan los tSECT, al paso 3. Si tu wallet está en otra red, toca el aviso de arriba para cambiar a Sepolia." },
+      help: "¿Algo falla? Si dice que no tienes ETH de Sepolia, vuelve al paso 2. Si no te alcanzan los tSECT, al paso 3. Si tu wallet está en otra red, toca el aviso de arriba para cambiar a Sepolia. Si tu wallet no muestra Sepolia, activa las redes de prueba en sus ajustes." },
     en: { fab: "Node guide", k: "Hash Node · step by step", h: "Turn on your node in 6 steps",
       sub: "About 10 minutes. Everything is free: it's the test network and you don't spend real money.",
       note: "Joining Airdrop Genesis? Connect the same wallet that holds your staked SECT and don't pause the node: paused time doesn't count.",
       done: "Done", close: "Close", zoom: "Tap an image to see it larger",
       s: [
-        ["Connect your wallet", "Press “{connect}” at the top right and choose your wallet. The dash moves you to the Sepolia test network on its own.", "Connect now"],
+        ["Connect your wallet", "Press “{connect}” at the top right and choose your wallet: MetaMask, Trust Wallet, Coinbase Wallet, OKX, Bitget, Rainbow, TokenPocket or any other Ethereum wallet. On your phone, open the dash inside your wallet app. The dash moves you to the Sepolia test network on its own.", "Connect now"],
         ["Get free gas", "Every step needs a little Sepolia ETH, a free test coin that pays the network. Press “{gas}”, paste your wallet address and request ETH. What you get is enough for every step.", "Open the Sepolia faucet"],
         ["Claim 5,000 tSECT", "In “{tn}”, press “{faucet}” and confirm in your wallet. It's free and you can do it again every 24 hours.", "Go to the faucet"],
         ["Buy the Node Kit", "In “{market}”, open the “{phys}” tab (1) and pick the {kit}: 50 TH/s for 4,300 tSECT (2), enough to reach the validator minimum. Press “{buy}” (3). Your wallet asks twice: first to allow the payment, then to confirm the purchase.", "Go to the market"],
         ["Register your node", "In “{node}”, type a name and the rough location of your city (latitude and longitude: Google Maps shows them when you drop a pin). Press “{reg}” and confirm in your wallet.", "Go to my node"],
         ["Done: keep it on", "The button changes to “{registered}” and your node shows up on the network map. Keep it on: if you pause it, it stops counting.", "See the map"]
       ],
-      help: "Something wrong? If it says you have no Sepolia ETH, go back to step 2. If you're short on tSECT, step 3. If your wallet is on another network, tap the notice at the top to switch to Sepolia." },
+      help: "Something wrong? If it says you have no Sepolia ETH, go back to step 2. If you're short on tSECT, step 3. If your wallet is on another network, tap the notice at the top to switch to Sepolia. If your wallet doesn't show Sepolia, turn on test networks in its settings." },
     pt: { fab: "Guia do nó", k: "Hash Node · passo a passo", h: "Ative seu nó em 6 passos",
       sub: "Uns 10 minutos. Tudo é grátis: é a rede de testes e você não gasta dinheiro real.",
       note: "Participa do Airdrop Genesis? Conecte a mesma carteira onde estão seus SECT em staking e não pause o nó: o tempo em pausa não conta.",
       done: "Feito", close: "Fechar", zoom: "Toque em uma imagem para vê-la maior",
       s: [
-        ["Conecte sua carteira", "Toque em “{connect}” no canto superior direito e escolha sua carteira. O dash muda sozinho para a rede de testes Sepolia.", "Conectar agora"],
+        ["Conecte sua carteira", "Toque em “{connect}” no canto superior direito e escolha sua carteira: MetaMask, Trust Wallet, Coinbase Wallet, OKX, Bitget, Rainbow, TokenPocket ou outra de Ethereum. No celular, abra o dash dentro do app da sua carteira. O dash muda sozinho para a rede de testes Sepolia.", "Conectar agora"],
         ["Pegue gás grátis", "Cada passo precisa de um pouco de ETH da Sepolia, uma moeda de teste gratuita que paga a rede. Toque em “{gas}”, cole o endereço da sua carteira e peça ETH. O que você recebe dá para todos os passos.", "Abrir a torneira da Sepolia"],
         ["Resgate 5.000 tSECT", "Em “{tn}”, toque em “{faucet}” e confirme na carteira. É grátis e dá para repetir a cada 24 horas.", "Ir à torneira"],
         ["Compre o Node Kit", "Em “{market}”, abra a aba “{phys}” (1) e escolha o {kit} de 50 TH/s por 4.300 tSECT (2): com isso você chega ao mínimo para validar. Toque em “{buy}” (3). A carteira pede duas confirmações: primeiro aprovar o pagamento e depois a compra.", "Ir ao mercado"],
         ["Registre seu nó", "Em “{node}”, escreva um nome e a localização aproximada da sua cidade (latitude e longitude: o Google Maps mostra ao marcar um ponto). Toque em “{reg}” e confirme na carteira.", "Ir ao meu nó"],
         ["Pronto: deixe ligado", "O botão muda para “{registered}” e seu nó aparece no mapa da rede. Mantenha ligado: se pausar, ele para de contar.", "Ver o mapa"]
       ],
-      help: "Algo deu errado? Se disser que você não tem ETH da Sepolia, volte ao passo 2. Se faltar tSECT, ao passo 3. Se a carteira estiver em outra rede, toque no aviso no topo para mudar para a Sepolia." }
+      help: "Algo deu errado? Se disser que você não tem ETH da Sepolia, volte ao passo 2. Se faltar tSECT, ao passo 3. Se a carteira estiver em outra rede, toque no aviso no topo para mudar para a Sepolia. Se a carteira não mostrar a Sepolia, ative as redes de teste nas configurações." }
   };
   // capturas de cada paso y adonde lleva su boton
   var STEPS = [
@@ -147,7 +147,7 @@
           : '<button class="ng-go" type="button" data-go="' + st.go + '">' + s[2] + " →</button>";
         return '<section class="ng-s" data-i="' + i + '"><span class="ng-n">' + (i + 1) + "</span>" +
           "<h3>" + s[0] + '<span class="ng-ok">' + L.done + "</span></h3><p>" + fill(s[1]) + "</p>" +
-          "<figure>" + st.img.map(function (f) { return '<img src="' + IMG + pre + f + '.jpg?v=2" alt="" loading="lazy" decoding="async">'; }).join("") + "</figure>" +
+          "<figure>" + st.img.map(function (f) { return '<img src="' + IMG + pre + f + '.jpg?v=3" alt="" loading="lazy" decoding="async">'; }).join("") + "</figure>" +
           act + "</section>";
       }).join("") + '<p class="ng-help">' + L.help + "</p>";
     marks();
