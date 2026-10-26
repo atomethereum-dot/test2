@@ -193,7 +193,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   </div>
 </div>
 
-<script src="/airdroptesting/count.js?v=9"></script>
+<script src="/airdroptesting/count.js?v=10"></script>
 <script>
 (function () {
   "use strict";
@@ -245,7 +245,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   /* ---------- lectura ---------- */
   function load() {
     $("refresh").disabled = true; $("load").hidden = false; $("step").textContent = "Leyendo la blockchain…";
-    var steps = { staking: "Leyendo los depósitos del staking…", horas: "Ordenando por fecha…", nodos: "Leyendo los nodos de la testnet…", saldos: "Leyendo saldos y recompensas…" };
+    var steps = { staking: "Leyendo los depósitos del staking…", horas: "Ordenando por fecha…", nodos: "Leyendo los nodos de la testnet…", historial: "Leyendo cuándo se apagó o encendió cada nodo…", saldos: "Leyendo saldos y recompensas…" };
     C.everyone(function (s) { $("step").textContent = steps[s] || s; }).then(function (d) {
       data = d; $("load").hidden = true; $("sum").hidden = false; $("refresh").disabled = false;
       $("upd").textContent = "Actualizado " + new Date().toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
@@ -338,6 +338,16 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     var n = b < 100 ? [100, "ser Scout (40 %)"] : b < 500 ? [500, "ser Sentinel (50 %)"] : b < 1000 ? [1000, "ser Guardian (60 %)"] : [4000, "ser Titan (85 %)"];
     return "Le faltan " + nf0.format(Math.ceil(n[0] - b)) + " SECT en staking para " + n[1] + ".";
   }
+  // tiempo con el nodo apagado desde la apertura (o desde su registro), segun su historial en Sepolia
+  function offTime(nd) {
+    if (!nd) return "—";
+    if (!nd.spans) return "Sin historial: se usó solo el estado actual";
+    var now = Date.now(), from = Math.max(openAt() || now, nd.at), on = 0;
+    if (from >= now) return "—";
+    nd.spans.forEach(function (sp) { var a = Math.max(sp[0], from), b = Math.min(sp[1], now); if (b > a) on += b - a; });
+    var off = Math.max(0, now - from - on) / C.DAY;
+    return off < 1 / 24 ? "Nunca" : off < 1 ? Math.round(off * 24) + " h" : nf2.format(off) + " días";
+  }
   function kv(k, v) { return '<div class="kv"><span>' + k + "</span><b>" + v + "</b></div>"; }
   function show(i) {
     var x = rows[i]; if (!x) return; cur = i;
@@ -356,7 +366,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       kv("Tendrá al completar su tiempo", r.proj ? nf0.format(r.proj) + " SECT" : "—") +
       kv("Asegurado (día 30 o más)", nf2.format(r.secured) + " SECT") +
       kv("Días dentro", r.day ? r.day : "—") +
-      kv("Empezó a contar", d(r.start)) +
+      kv("Empezó a contar (sin pausas)", d(r.start)) +
       kv("Asegura lo ganado el", r.start ? d(r.start + 30 * C.DAY) : "—") +
       kv("Completa la última parte", r.end ? d(r.end) : "—") +
       kv("Cobra", r.pays.length ? r.pays.map(function (p) { return d(p.t) + " · " + nf0.format(p.p) + " SECT"; }).join("<br>") : "—") +
@@ -369,7 +379,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       kv("Primer depósito", d(first)) + "</div>";
     h += '<div class="box"><h4>Hash Node</h4>' +
       kv("Estado", r.node === "on" ? "Activo" : r.node === "off" ? "Pausado" : "Sin nodo") +
-      kv("Registrado el", d(r.nodeAt)) + "</div>";
+      kv("Registrado el", d(r.nodeAt)) +
+      kv("Apagado desde la apertura", offTime(x.node)) + "</div>";
     if (r.lay.length) {
       h += '<div class="box"><h4>Partes del premio</h4><table class="mini"><thead><tr><th>Parte</th><th class="r">SECT</th><th>Desde</th><th class="r">Ganado</th><th>Cobra</th><th>Estado</th></tr></thead><tbody>' +
         r.lay.map(function (L) { var s2 = LAY[L.state] || ["—", "mute"];

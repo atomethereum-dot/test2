@@ -15,7 +15,8 @@
      del nodo). Si el saldo baja, la capa se pausa con los dias que lleva; si vuelve a subir, sigue
      donde quedo: las horas fuera no suman y su fecha de cobro se corre lo mismo. Con menos de 30
      dias dentro no gana nada; desde el dia 30 lo ganado es suyo. Nunca paga mas que su parte del premio.
-   - Sin nodo activo no cuenta (estimacion conservadora: no se conoce cuando se apago).
+   - El nodo: se lee su historial en Sepolia (apagados y encendidos del registro). El tiempo con el
+     nodo apagado no suma, igual que estar fuera del staking: la parte se pausa y sigue al encenderlo.
    Usado por el verificador publico (una wallet) y por el panel privado (todas). */
 (function (root) {
   "use strict";
@@ -26,6 +27,10 @@
   var T_DEP = "0x2da466a7b24304f47e87fa2e1e5a81b9831ce54fec19055ce277ca2f39ba42c4"; // Deposited(address,uint256)
   var T_WD = "0x7084f5476618d8e60b11ef0d7d3f06914655adb8793e28ff7f018d4c76d505d5";  // Withdrawn(address,uint256)
   var SEL = { indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44", count: "0x0f43a677" };
+  // registro de nodos: apagado, encendido y nuevo registro (que tambien lo enciende)
+  var T_OFF = "0x23d934bfe7f1275bc6fd70432159c9cc1c0075d069f89da6a40f43bfe7a94ed3"; // ValidatorDeactivated(address)
+  var T_ON = "0x65cf6d2b9cf96b1ffffa32041ec7c360f76b05f5f4f5e13c7f19495246d6f4f4";  // ValidatorReactivated(address)
+  var T_UPD = "0xc2d41a2c5080290dc5fce01cd3232300d606ae866d8685d46b8ba3814adc5823"; // ValidatorUpdated(address,string,int32,int32,uint256)
   // el staking se desplego el 9 oct 2026: se leen eventos desde un dia antes
   var DEPLOYED = Date.UTC(2026, 9, 8);
   // fecha de apertura del airdrop (ms). null = aun no abre. Ej.: Date.UTC(2026, 10, 1)
@@ -75,33 +80,62 @@
   function word(h, n) { return BigInt("0x" + (h.slice(2 + 64 * n, 2 + 64 * (n + 1)) || "0")); }
   function sect(big) { return Number(big / 10n ** 14n) / 1e4; }
 
-  // eventos del staking por tramos; si el nodo rechaza el tramo, se parte a la mitad
-  function logs(topic1) {
-    return rpc(MAINNET, "eth_blockNumber", []).then(function (h) {
-      var latest = parseInt(h, 16), from = Math.max(0, latest - Math.ceil((Date.now() - DEPLOYED) / 12000) - 2000);
+  // eventos de un contrato desde `since`, por tramos (12 s por bloque); si el nodo rechaza el tramo, se parte a la mitad
+  function scan(urls, address, topics, since) {
+    return rpc(urls, "eth_blockNumber", []).then(function (h) {
+      var latest = parseInt(h, 16), from = Math.max(0, latest - Math.ceil((Date.now() - since) / 12000) - 2000);
       var all = [], step = 50000;
       function go(a) {
         if (a > latest) return Promise.resolve(all);
         var b = Math.min(latest, a + step - 1);
-        return rpc(MAINNET, "eth_getLogs", [{ address: STAKING, fromBlock: hex(a), toBlock: hex(b), topics: [[T_DEP, T_WD], topic1 || null] }])
+        return rpc(urls, "eth_getLogs", [{ address: address, fromBlock: hex(a), toBlock: hex(b), topics: topics }])
           .then(function (r) { all = all.concat(r); return go(b + 1); })
           .catch(function (e) { if (step <= 500) throw e; step = Math.floor(step / 2); return go(a); });
       }
       return go(from);
     });
   }
-  // hora de cada bloque (si el nodo no la trae en el evento)
-  function stamp(list) {
+  // hora de cada evento (si el nodo no la trae) y orden de la cadena
+  function times(urls, list) {
     var need = {}; list.forEach(function (l) { if (!l.blockTimestamp) need[l.blockNumber] = 1; });
     var blocks = Object.keys(need);
-    return batch(MAINNET, blocks.map(function (b) { return ["eth_getBlockByNumber", [b, false]]; })).then(function (res) {
+    return batch(urls, blocks.map(function (b) { return ["eth_getBlockByNumber", [b, false]]; })).then(function (res) {
       var t = {}; blocks.forEach(function (b, i) { t[b] = res[i] && res[i].timestamp; });
-      return list.map(function (l) {
-        var ts = parseInt(l.blockTimestamp || t[l.blockNumber], 16) * 1000;
-        return { who: "0x" + l.topics[1].slice(26).toLowerCase(), dep: l.topics[0] === T_DEP, amt: sect(BigInt(l.data)), t: ts,
-          bn: parseInt(l.blockNumber, 16), li: parseInt(l.logIndex, 16), tx: l.transactionHash || "" };
-      }).sort(function (x, y) { return x.bn - y.bn || x.li - y.li; });
+      return list.map(function (l) { return { l: l, t: parseInt(l.blockTimestamp || t[l.blockNumber], 16) * 1000, bn: parseInt(l.blockNumber, 16), li: parseInt(l.logIndex, 16) }; })
+        .sort(function (x, y) { return x.bn - y.bn || x.li - y.li; });
     });
+  }
+  function logs(topic1) { return scan(MAINNET, STAKING, [[T_DEP, T_WD], topic1 || null], DEPLOYED); }
+  function stamp(list) {
+    return times(MAINNET, list).then(function (x) {
+      return x.map(function (o) {
+        var l = o.l;
+        return { who: "0x" + l.topics[1].slice(26).toLowerCase(), dep: l.topics[0] === T_DEP, amt: sect(BigInt(l.data)), t: o.t, bn: o.bn, li: o.li, tx: l.transactionHash || "" };
+      });
+    });
+  }
+  // tramos con el nodo encendido: desde el registro, cortados por cada apagado y reabiertos al encender
+  function spans(n, evs) {
+    var out = [], cur = n.at;
+    evs.forEach(function (e) {
+      if (e.t < n.at) return;
+      if (!e.on && cur != null) { if (e.t > cur) out.push([cur, e.t]); cur = null; }
+      else if (e.on && cur == null) cur = e.t;
+    });
+    if (cur != null && n.active) out.push([cur, Infinity]);   // si no cuadra con el estado actual, lo seguro: apagado
+    return out;
+  }
+  // historial de los nodos en Sepolia; si no se puede leer, se queda sin `spans` y cuenta solo el estado actual
+  function history(nd, topic1) {
+    var list = Object.keys(nd).map(function (k) { return nd[k]; });
+    if (!list.length) return Promise.resolve(nd);
+    var since = Math.min.apply(null, list.map(function (n) { return n.at; }));
+    return scan(SEPOLIA, REGISTRY, [[T_OFF, T_ON, T_UPD], topic1 || null], since).then(function (l) { return times(SEPOLIA, l); }).then(function (x) {
+      var by = {};
+      x.forEach(function (o) { var w = "0x" + o.l.topics[1].slice(26).toLowerCase(); (by[w] = by[w] || []).push({ t: o.t, on: o.l.topics[0] !== T_OFF }); });
+      list.forEach(function (n) { n.spans = spans(n, by[n.who] || []); });
+      return nd;
+    }).catch(function () { return nd; });
   }
   function node(addr) {
     return rpc(SEPOLIA, "eth_call", [{ to: REGISTRY, data: SEL.indexPlusOne + pad(addr).slice(2) }, "latest"]).then(function (h) {
@@ -151,15 +185,19 @@
     var r = { bal: h.bal, level: lv, rate: RATE[lv], prize: prize(h.bal), node: nd ? (nd.active ? "on" : "off") : "none",
       earned: 0, secured: 0, closed: 0, proj: 0, items: [], lay: [], pays: [], day: 0, left: 0, status: "", start: 0, end: 0, deliver: 0, nodeAt: nd ? nd.at : 0 };
     if (!open || now < open) { r.status = lv ? (nd && nd.active ? "pre" : "nonode") : (nd ? "p2" : "out"); return r; }
-    if (!lv) { r.status = nd ? "p2" : "out"; return r; }
-    if (!nd || !nd.active) { r.status = "nonode"; return r; }
+    if (!nd) { r.status = lv ? "nonode" : "out"; return r; }
+    var on = nd.spans || (nd.active ? [[nd.at, Infinity]] : []);
     var base = null, last = 0, pays = {}, by = {};
     h.layers.forEach(function (L) { (by[L.at] = by[L.at] || []).push(L); });
     Object.keys(by).map(Number).sort(function (a, b) { return a - b; }).forEach(function (at) {
       var P = by[at][0].p, acc = 0, paid = 0, prevE = 0, segs = [];
       by[at].forEach(function (L) {
-        var s = Math.max(L.start, open, nd.at), e = L.end == null ? now : L.end;
-        if (e > s) segs.push({ s: s, e: e, end: L.end });
+        var s0 = Math.max(L.start, open), e0 = L.end == null ? now : L.end;
+        // solo suma el tiempo con el nodo encendido: con el nodo apagado, la parte se pausa
+        on.forEach(function (sp) {
+          var s = Math.max(s0, sp[0]), e = Math.min(e0, sp[1]);
+          if (e > s) segs.push({ s: s, e: e, end: L.end == null && sp[1] === Infinity ? null : e });
+        });
       });
       if (!segs.length) return;
       // los dias dentro se acumulan: si sale, la parte se pausa; si vuelve, sigue donde quedo
@@ -195,7 +233,8 @@
     r.pays = Object.keys(pays).map(Number).sort(function (a, b) { return a - b; }).map(function (t) { return { t: t, p: pays[t] }; });
     r.deliver = r.pays.length ? r.pays[0].t : 0;
     if (base) { r.day = Math.floor((now - base.s) / DAY) + 1; r.end = last; r.left = Math.max(0, Math.ceil((r.end - now) / DAY)); r.start = base.s; }
-    r.status = !base ? (r.closed > 0 ? "left" : "out") : now >= r.end ? "full" : r.day < MIN ? "early" : "run";
+    r.status = base ? (now >= r.end ? "full" : r.day < MIN ? "early" : "run") :
+      lv && !nd.active ? "nonode" : r.closed > 0 ? "left" : lv ? "out" : "p2";
     return r;
   }
   // lo ganado en un instante, solo con las capas abiertas (para el contador en vivo)
@@ -205,14 +244,17 @@
 
   /* ---------- una wallet (verificador) o todas (panel) ---------- */
   function wallet(addr) {
-    return Promise.all([logs(pad(addr)).then(stamp), node(addr).catch(function () { return null; })])
+    var nd = node(addr).then(function (n) {
+      return n ? history({ x: n }, pad(addr)).then(function () { return n; }) : null;
+    }).catch(function () { return null; });
+    return Promise.all([logs(pad(addr)).then(stamp), nd])
       .then(function (r) { return { ev: r[0], node: r[1] }; });
   }
   function everyone(onStep) {
     onStep && onStep("staking");
     return logs(null).then(function (l) { onStep && onStep("horas"); return stamp(l); }).then(function (ev) {
       onStep && onStep("nodos");
-      return nodes().catch(function () { return {}; }).then(function (nd) {
+      return nodes().catch(function () { return {}; }).then(function (nd) { onStep && onStep("historial"); return history(nd); }).then(function (nd) {
         var by = {}; ev.forEach(function (e) { (by[e.who] = by[e.who] || []).push(e); });
         Object.keys(nd).forEach(function (w) { by[w] = by[w] || []; });
         var list = Object.keys(by);
