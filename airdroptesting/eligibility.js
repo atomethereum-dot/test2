@@ -49,7 +49,7 @@
       foot: "We only read public data: no signature, no transaction, nothing leaves your wallet. Your level is checked once a day.",
       err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
       rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet",
-      acc: "You've earned {n} SECT", of: "{n} SECT when you complete your time", day: "Delivered on SectoraEVM · Mar 25, 2027, 10 days after the burn", day2: "You complete your time on {d} · delivered that day on SectoraEVM", lock: "What you earn is secured on {d}", full: "Full prize complete · delivered on SectoraEVM",
+      acc: "You've earned {n} SECT", of: "{n} SECT when you complete your time", day: "Delivered on SectoraEVM · Mar 25, 2027, 10 days after the burn", day2: "You complete your time on {d} · delivered that day on SectoraEVM", day3: "Each part is delivered on SectoraEVM when it completes its time · next: {d}", lock: "What you earn is secured on {d}", full: "Full prize complete · delivered on SectoraEVM",
       pre: "Starts adding up on opening day. Everyone has the same time to complete the prize, counted from the day they join. Deliveries start 10 days after the burn.", wait: "Your count will show as soon as the network confirms your staking." },
     es: { loc: "es-ES", k: "Sectora // Airdrop Genesis", pv: "Vista previa", h: "Tu airdrop",
       intro: "Conecta tu wallet para ver cuánto ganas en el airdrop.",
@@ -67,7 +67,7 @@
       foot: "Solo leemos datos públicos: no hay firmas ni transacciones y nada sale de tu wallet. Tu nivel se revisa una vez al día.",
       err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
       rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet",
-      acc: "Llevas {n} SECT", of: "{n} SECT al completar tu tiempo", day: "Se entrega en SectoraEVM · 25 mar 2027, 10 días después de la quema", day2: "Completas tu tiempo el {d} · se entrega ese día en SectoraEVM", lock: "Lo ganado queda asegurado el {d}", full: "Premio completo · se entrega en SectoraEVM",
+      acc: "Llevas {n} SECT", of: "{n} SECT al completar tu tiempo", day: "Se entrega en SectoraEVM · 25 mar 2027, 10 días después de la quema", day2: "Completas tu tiempo el {d} · se entrega ese día en SectoraEVM", day3: "Cada parte se entrega en SectoraEVM al completar su tiempo · la próxima, el {d}", lock: "Lo ganado queda asegurado el {d}", full: "Premio completo · se entrega en SectoraEVM",
       pre: "Empieza a sumar el día de la apertura. Todos tienen el mismo tiempo para completar el premio, contado desde que entran. Las entregas empiezan 10 días después de la quema.", wait: "Tu conteo aparecerá en cuanto la red confirme tu staking." },
     pt: { loc: "pt-BR", k: "Sectora // Airdrop Genesis", pv: "Prévia", h: "Seu airdrop",
       intro: "Conecte sua carteira para ver quanto você ganha no airdrop.",
@@ -85,7 +85,7 @@
       foot: "Só lemos dados públicos: sem assinatura, sem transação, nada sai da sua carteira. Seu nível é verificado uma vez por dia.",
       err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
       rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira",
-      acc: "Você já tem {n} SECT", of: "{n} SECT ao completar seu tempo", day: "Entregue na SectoraEVM · 25 mar 2027, 10 dias depois da queima", day2: "Você completa seu tempo em {d} · entregue nesse dia na SectoraEVM", lock: "O que você ganha fica garantido em {d}", full: "Prêmio completo · entregue na SectoraEVM",
+      acc: "Você já tem {n} SECT", of: "{n} SECT ao completar seu tempo", day: "Entregue na SectoraEVM · 25 mar 2027, 10 dias depois da queima", day2: "Você completa seu tempo em {d} · entregue nesse dia na SectoraEVM", day3: "Cada parte é entregue na SectoraEVM ao completar seu tempo · a próxima, em {d}", lock: "O que você ganha fica garantido em {d}", full: "Prêmio completo · entregue na SectoraEVM",
       pre: "Começa a somar no dia da abertura. Todos têm o mesmo tempo para completar o prêmio, contado desde que entram. As entregas começam 10 dias depois da queima.", wait: "Sua contagem vai aparecer assim que a rede confirmar seu staking." }
   };
   function lang() { var l = (document.documentElement.lang || "en").slice(0, 2); return L[l] ? l : "en"; }
@@ -292,7 +292,10 @@
   function live(items, closed, proj) {
     var acc = bd.querySelector("[data-acc]"), bar = bd.querySelector("[data-bar]"), days = bd.querySelector("[data-days]");
     var nf = new Intl.NumberFormat(L[lang()].loc, { minimumFractionDigits: 4, maximumFractionDigits: 4, useGrouping: "always" });
-    var st = items.map(function (it) { return it.s; }), first = Math.min.apply(null, st), done = Math.max.apply(null, st) + DUR;
+    // cada parte se paga por separado: al completar su tiempo, nunca antes del 25 de marzo
+    var first = Math.min.apply(null, items.map(function (it) { return it.s; }));
+    var due = items.map(function (it) { return Math.max(END, it.s + DUR); }), done = Math.max.apply(null, due);
+    var many = due.some(function (x) { return x !== due[0]; });
     var df = new Intl.DateTimeFormat(L[lang()].loc, { day: "numeric", month: "short", year: "numeric" });
     function tick() {
       var now = Date.now(), earned = closed;
@@ -300,9 +303,9 @@
       acc.textContent = nf.format(earned);
       bar.style.width = (proj ? Math.min(100, earned / proj * 100) : 0) + "%";
       // minimo de 30 dias: antes de eso, lo ganado aun no esta asegurado
-      // cobra el 25 de marzo o el dia que completa su tiempo, lo que llegue despues
+      var next = Math.min.apply(null, due.filter(function (x) { return x > now; }));
       days.textContent = now >= done ? t("full") : now - first < MIN * DAY ? t("lock", { d: df.format(first + MIN * DAY) }) :
-        done <= END ? t("day") : t("day2", { d: df.format(done) });
+        many ? t("day3", { d: df.format(next) }) : done <= END ? t("day") : t("day2", { d: df.format(done) });
     }
     stop(); tick(); timer = setInterval(tick, 100);
   }

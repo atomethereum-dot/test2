@@ -193,7 +193,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   </div>
 </div>
 
-<script src="/airdroptesting/count.js?v=5"></script>
+<script src="/airdroptesting/count.js?v=6"></script>
 <script>
 (function () {
   "use strict";
@@ -321,7 +321,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       html += '<tr data-r="' + i + '"><td><button class="w" type="button" data-r="' + i + '">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + "</button></td>" +
         "<td>" + lvl + "</td><td class=\"r\">" + nf0.format(r.bal) + "</td><td>" + node + "</td><td>" + day + "</td>" +
         '<td class="r" data-e="' + i + '">' + nf2.format(earnedNow(r)) + '</td><td class="r">' + (r.proj ? nf0.format(r.proj) : r.prize ? nf0.format(r.prize) : "—") + "</td>" +
-        "<td>" + (r.deliver ? d(r.deliver) : "—") + "</td>" +
+        "<td>" + (r.deliver ? d(r.deliver) + (r.pays.length > 1 ? '<span class="sub">+' + (r.pays.length - 1) + (r.pays.length > 2 ? " pagos más" : " pago más") + "</span>" : "") : "—") + "</td>" +
         '<td><span class="chip ' + st[1] + '">' + st[0] + "</span></td></tr>";
     });
     $("rows").innerHTML = html || '<tr><td colspan="9" class="empty">No hay wallets en este filtro.</td></tr>';
@@ -357,8 +357,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       kv("Días dentro", r.day ? r.day : "—") +
       kv("Empezó a contar", d(r.start)) +
       kv("Asegura lo ganado el", r.start ? d(r.start + 30 * C.DAY) : "—") +
-      kv("Completa su tiempo", r.end ? d(r.end) : "—") +
-      kv("Cobra", r.deliver ? d(r.deliver) + (r.deliver === C.END ? " · primeras entregas, 10 días tras la quema" : "") : "—") +
+      kv("Completa la última parte", r.end ? d(r.end) : "—") +
+      kv("Cobra", r.pays.length ? r.pays.map(function (p) { return d(p.t) + " · " + nf0.format(p.p) + " SECT"; }).join("<br>") : "—") +
       '<p class="hint">' + nextLv(r.bal) + "</p></div>";
     h += '<div class="box"><h4>Staking</h4>' +
       kv("SECT en staking", nf0.format(a ? a.staked : r.bal)) +
@@ -370,10 +370,10 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       kv("Estado", r.node === "on" ? "Activo" : r.node === "off" ? "Pausado" : "Sin nodo") +
       kv("Registrado el", d(r.nodeAt)) + "</div>";
     if (r.lay.length) {
-      h += '<div class="box"><h4>Partes del premio</h4><table class="mini"><thead><tr><th>Parte</th><th class="r">SECT</th><th>Desde</th><th class="r">Ganado</th><th>Estado</th></tr></thead><tbody>' +
+      h += '<div class="box"><h4>Partes del premio</h4><table class="mini"><thead><tr><th>Parte</th><th class="r">SECT</th><th>Desde</th><th class="r">Ganado</th><th>Cobra</th><th>Estado</th></tr></thead><tbody>' +
         r.lay.map(function (L) { var s2 = LAY[L.state] || ["—", "mute"];
           return "<tr><td>" + layName(L.at) + '<span class="sub">desde ' + nf0.format(L.at) + " en staking</span></td><td class=\"r\">" + nf0.format(L.p) + "</td><td>" + d(L.s) +
-            '<span class="sub">día ' + (Math.floor(L.d) + 1) + '</span></td><td class="r">' + nf2.format(L.got) + '</td><td><span class="chip ' + s2[1] + '">' + s2[0] + "</span></td></tr>"; }).join("") +
+            '<span class="sub">día ' + (Math.floor(L.d) + 1) + '</span></td><td class="r">' + nf2.format(L.got) + "</td><td>" + d(L.due) + '</td><td><span class="chip ' + s2[1] + '">' + s2[0] + "</span></td></tr>"; }).join("") +
         "</tbody></table></div>";
     }
     if (x.ev.length) {
@@ -392,13 +392,13 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   $("dr").addEventListener("click", function (e) { if (e.target === $("dr")) hide(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("dr").hidden) hide(); });
   function csv() {
-    var lines = [["wallet", "nivel", "plazas", "en_staking", "en_wallet", "recompensas_staking", "nodo", "nodo_registrado", "dia", "empezo", "asegura_el", "completo_el", "cobra",
+    var lines = [["wallet", "nivel", "plazas", "en_staking", "en_wallet", "recompensas_staking", "nodo", "nodo_registrado", "dia", "empezo", "asegura_el", "completo_el", "cobra_fecha:sect",
       "ganado", "asegurado", "premio_nivel", "a_la_entrega", "total_depositado", "total_retirado", "primer_deposito", "estado"].join(",")];
     rows.forEach(function (x) {
       var r = x.r, a = x.acc, dep = 0, wd = 0, first = 0; if (r.status === "out") return;
       x.ev.forEach(function (e) { if (e.dep) { dep += e.amt; if (!first) first = e.t; } else wd += e.amt; });
       var day = function (t) { return t ? iso(t) : ""; };
-      lines.push([x.who, LV[r.level], r.spots, r.bal, a ? a.wallet : "", a ? a.claimable.toFixed(4) : "", r.node, day(r.nodeAt), r.day, day(r.start), r.start ? day(r.start + 30 * C.DAY) : "", day(r.end), day(r.deliver),
+      lines.push([x.who, LV[r.level], r.spots, r.bal, a ? a.wallet : "", a ? a.claimable.toFixed(4) : "", r.node, day(r.nodeAt), r.day, day(r.start), r.start ? day(r.start + 30 * C.DAY) : "", day(r.end), r.pays.map(function (p) { return iso(p.t) + ":" + Math.round(p.p); }).join(" "),
         earnedNow(r).toFixed(4), r.secured.toFixed(4), r.prize, Math.round(r.proj), dep, wd, day(first), (ST[r.status] || [""])[0]].join(","));
     });
     var a = document.createElement("a");

@@ -143,11 +143,11 @@
   function evaluate(ev, nd, open, now) {
     var h = layers(ev), lv = level(h.bal), spots = lv === 4 ? Math.floor(h.bal / SPOT) : (lv ? 1 : 0);
     var r = { bal: h.bal, level: lv, spots: spots, prize: lv ? PRIZE[lv] * Math.max(1, spots) : 0, node: nd ? (nd.active ? "on" : "off") : "none",
-      earned: 0, secured: 0, closed: 0, proj: 0, items: [], lay: [], day: 0, left: 0, status: "", start: 0, end: 0, deliver: 0, nodeAt: nd ? nd.at : 0 };
+      earned: 0, secured: 0, closed: 0, proj: 0, items: [], lay: [], pays: [], day: 0, left: 0, status: "", start: 0, end: 0, deliver: 0, nodeAt: nd ? nd.at : 0 };
     if (!open || now < open) { r.status = lv ? (nd && nd.active ? "pre" : "nonode") : (nd ? "p2" : "out"); return r; }
     if (!lv) { r.status = nd ? "p2" : "out"; return r; }
     if (!nd || !nd.active) { r.status = "nonode"; return r; }
-    var base = null, last = 0;
+    var base = null, last = 0, pays = {};
     h.layers.forEach(function (L) {
       var s = Math.max(L.start, open, nd.at), e = L.end == null ? now : L.end;
       var d = (e - s) / DAY;
@@ -157,12 +157,15 @@
       if (L.end != null && d < MIN) return;           // salio antes del dia 30: nada
       var got = L.p * Math.min(1, (e - s) / DUR); row.got = got;
       r.earned += got; if (d >= MIN) r.secured += got; if (L.end != null) r.closed += got;
-      if (L.end == null) { r.items.push({ s: s, p: L.p, sp: DUR }); r.proj += L.p; if (!base || L.at < base.at) base = { at: L.at, s: s }; last = Math.max(last, s); }
-      else r.proj += got;
+      // cada parte se paga por separado: al completar su tiempo, nunca antes del 25 de marzo
+      if (L.end == null) { r.items.push({ s: s, p: L.p, sp: DUR }); r.proj += L.p; if (!base || L.at < base.at) base = { at: L.at, s: s }; last = Math.max(last, s); row.due = Math.max(END, s + DUR); }
+      else { r.proj += got; row.due = Math.max(END, L.end); }
+      pays[row.due] = (pays[row.due] || 0) + (L.end == null ? L.p : got);
     });
-    // completa su tiempo con la ultima plaza; cobra ese dia o el 25 de marzo, lo que llegue despues
-    if (base) { r.day = Math.floor((now - base.s) / DAY) + 1; r.end = last + DUR; r.deliver = Math.max(END, r.end); r.left = Math.max(0, Math.ceil((r.end - now) / DAY)); r.start = base.s; }
-    else if (r.closed) r.deliver = END;            // salio despues del dia 30: cobra lo ganado en las primeras entregas
+    // pagos por fecha; r.deliver es el primero y r.end el dia que completa la ultima parte
+    r.pays = Object.keys(pays).map(Number).sort(function (a, b) { return a - b; }).map(function (t) { return { t: t, p: pays[t] }; });
+    r.deliver = r.pays.length ? r.pays[0].t : 0;
+    if (base) { r.day = Math.floor((now - base.s) / DAY) + 1; r.end = last + DUR; r.left = Math.max(0, Math.ceil((r.end - now) / DAY)); r.start = base.s; }
     r.status = !base ? "out" : now >= r.end ? "full" : r.day < MIN ? "early" : "run";
     return r;
   }
