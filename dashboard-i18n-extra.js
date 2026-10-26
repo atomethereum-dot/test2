@@ -222,7 +222,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f3.t": "بلا أموال حقيقية",
     "hashdash.how.f3.p": "رموز tSECT و ETH على Sepolia عملات اختبار بلا قيمة. هذا اللوح لا يلمس أبدًا رموز #SECT الحقيقية لديك.",
     "hashdash.how.s2.go": "احصل على ETH على Sepolia",
-    "hashdash.tn.preview": "معاينة · {n} مدقّقين محاكين"
+    "hashdash.tn.preview": "Testnet online · تشمل {n} عقدة تجريبية"
   },
   "de": {
     "hashdash.tn.balance": "Dein Guthaben",
@@ -447,7 +447,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f3.t": "Kein echtes Geld",
     "hashdash.how.f3.p": "tSECT und Sepolia-ETH sind Testmünzen ohne Wert. Dieses Dash berührt nie deine echten #SECT.",
     "hashdash.how.s2.go": "Sepolia-ETH holen",
-    "hashdash.tn.preview": "Vorschau · {n} simulierte Validatoren"
+    "hashdash.tn.preview": "Testnet online · inkl. {n} Beispielknoten"
   },
   "en": {
     "hashdash.tn.balance": "Your balance",
@@ -672,7 +672,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f3.t": "No real money",
     "hashdash.how.f3.p": "tSECT and Sepolia ETH are test coins with no value. This dash never touches your real #SECT.",
     "hashdash.how.s2.go": "Get Sepolia ETH",
-    "hashdash.tn.preview": "Preview · {n} simulated validators"
+    "hashdash.tn.preview": "Testnet online · incl. {n} example nodes"
   },
   "es": {
     "hashdash.tn.balance": "Tu saldo",
@@ -897,7 +897,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f3.t": "Sin dinero real",
     "hashdash.how.f3.p": "Los tSECT y el ETH de Sepolia son monedas de prueba sin valor. Este dash nunca toca tus #SECT reales.",
     "hashdash.how.s2.go": "Conseguir ETH de Sepolia",
-    "hashdash.tn.preview": "Vista previa · {n} validadores simulados"
+    "hashdash.tn.preview": "Testnet online · incl. {n} nodos de ejemplo"
   },
   "fr": {
     "hashdash.tn.balance": "Votre solde",
@@ -1122,7 +1122,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f3.t": "Pas d’argent réel",
     "hashdash.how.f3.p": "Les tSECT et l’ETH Sepolia sont des monnaies de test sans valeur. Ce dash ne touche jamais à vos vrais #SECT.",
     "hashdash.how.s2.go": "Obtenir de l’ETH Sepolia",
-    "hashdash.tn.preview": "Aperçu · {n} validateurs simulés"
+    "hashdash.tn.preview": "Testnet online · dont {n} nœuds d'exemple"
   },
   "hi": {
     "hashdash.tn.balance": "आपका बैलेंस",
@@ -1347,7 +1347,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f3.t": "कोई असली पैसा नहीं",
     "hashdash.how.f3.p": "tSECT और Sepolia ETH बिना मूल्य के टेस्ट कॉइन हैं। यह डैशबोर्ड आपके असली #SECT को कभी नहीं छूता।",
     "hashdash.how.s2.go": "Sepolia ETH पाएँ",
-    "hashdash.tn.preview": "प्रीव्यू · {n} सिम्युलेटेड वैलिडेटर"
+    "hashdash.tn.preview": "Testnet online · {n} उदाहरण नोड सहित"
   },
   "ja": {
     "hashdash.tn.balance": "あなたの残高",
@@ -1572,7 +1572,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f3.t": "本物のお金は不要",
     "hashdash.how.f3.p": "tSECT と Sepolia ETH は価値のないテスト用コインです。このダッシュボードがあなたの本物の #SECT に触れることはありません。",
     "hashdash.how.s2.go": "Sepolia ETH を入手",
-    "hashdash.tn.preview": "プレビュー · シミュレーションのバリデーター {n} 件"
+    "hashdash.tn.preview": "Testnet online · サンプルノード {n} 件を含む"
   },
   "ko": {
     "hashdash.tn.balance": "내 잔액",
@@ -1797,7 +1797,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f3.t": "실제 돈 없음",
     "hashdash.how.f3.p": "tSECT와 Sepolia ETH는 가치가 없는 테스트 코인입니다. 이 대시보드는 실제 #SECT를 절대 건드리지 않습니다.",
     "hashdash.how.s2.go": "Sepolia ETH 받기",
-    "hashdash.tn.preview": "미리보기 · 시뮬레이션 검증자 {n}개"
+    "hashdash.tn.preview": "Testnet online · 예시 노드 {n}개 포함"
   },
   "pt": {
     "hashdash.tn.balance": "Seu saldo",
@@ -2022,7 +2022,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f3.t": "Sem dinheiro real",
     "hashdash.how.f3.p": "tSECT e o ETH da Sepolia são moedas de teste sem valor. Este dash nunca toca nos seus #SECT reais.",
     "hashdash.how.s2.go": "Obter ETH da Sepolia",
-    "hashdash.tn.preview": "Pré-visualização · {n} validadores simulados"
+    "hashdash.tn.preview": "Testnet online · incl. {n} nós de exemplo"
   },
   "ru": {
     "hashdash.tn.balance": "Ваш баланс",
@@ -2247,7 +2247,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f3.t": "Без реальных денег",
     "hashdash.how.f3.p": "tSECT и Sepolia ETH — тестовые монеты без ценности. Этот дашборд никогда не трогает ваши настоящие #SECT.",
     "hashdash.how.s2.go": "Получить Sepolia ETH",
-    "hashdash.tn.preview": "Предпросмотр · {n} симулированных валидаторов"
+    "hashdash.tn.preview": "Testnet online · вкл. {n} демонстрационных узлов"
   },
   "zh": {
     "hashdash.tn.balance": "你的余额",
@@ -2472,6 +2472,6 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.how.f3.t": "不涉及真钱",
     "hashdash.how.f3.p": "tSECT 和 Sepolia ETH 都是没有价值的测试币。此仪表盘绝不会动用你真实的 #SECT。",
     "hashdash.how.s2.go": "获取 Sepolia ETH",
-    "hashdash.tn.preview": "预览 · {n} 个模拟验证者"
+    "hashdash.tn.preview": "Testnet online · 含 {n} 个示例节点"
   }
 };

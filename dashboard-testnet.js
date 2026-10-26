@@ -148,8 +148,8 @@
       const pv = document.createElement('div');
       pv.id = 'tnPreview';
       pv.setAttribute('role', 'status');
-      pv.style.cssText = 'position:fixed;left:16px;bottom:16px;z-index:80;padding:9px 13px;border:1px solid rgba(232,180,92,.45);' +
-        'background:rgba(10,13,19,.92);color:var(--amber);font:400 10.5px/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase';
+      pv.style.cssText = 'position:fixed;left:16px;bottom:16px;z-index:80;display:flex;align-items:center;gap:9px;padding:9px 13px;border:1px solid rgba(62,207,142,.4);' +
+        'background:rgba(10,13,19,.92);color:#3ecf8e;font:400 10.5px/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase';
       document.body.appendChild(pv);
     }
 
@@ -163,7 +163,16 @@
   /* ----------------------------------------------------------- lecturas */
   function pintaPreview(){
     const pv = q('#tnPreview');
-    if(pv) pv.textContent = tr('hashdash.tn.preview', 'Preview · {n} simulated validators').replace('{n}', PREVIEW);
+    if(!pv) return;
+    /* "Testnet online" a la vista; debajo, en pequeno, que los nodos simulados son de ejemplo */
+    const t = tr('hashdash.tn.preview', 'Testnet online · incl. {n} example nodes').replace('{n}', PREVIEW).split(' · ');
+    pv.textContent = '';
+    const dot = document.createElement('i');
+    dot.style.cssText = 'width:7px;height:7px;border-radius:50%;background:#3ecf8e;box-shadow:0 0 0 3px rgba(62,207,142,.18);flex:none';
+    const main = document.createElement('span'); main.textContent = t[0];
+    pv.append(dot, main);
+    if(t[1]){ const sub = document.createElement('span'); sub.textContent = t[1];
+      sub.style.cssText = 'color:rgba(233,239,248,.45);letter-spacing:.04em;text-transform:none;font-size:10px'; pv.append(sub); }
   }
 
   function pintaApy(){
