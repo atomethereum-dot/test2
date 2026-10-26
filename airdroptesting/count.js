@@ -11,7 +11,9 @@
      4.000 mas es otra plaza de 3.400. Asi, subir de nivel tarde solo suma desde ese dia.
    - Una capa empieza cuando el saldo cruza su umbral (no antes de la apertura ni del registro
      del nodo) y termina si el saldo baja de el. Si termina antes del dia 30 no gana nada;
-     desde el dia 30 se queda con lo ganado. Si vuelve a cruzar, empieza de nuevo.
+     desde el dia 30 se queda con lo ganado. Si vuelve antes de 24 h, la capa sigue como estaba:
+     las horas fuera no suman y su fecha de cobro se corre lo mismo. Si tarda mas, lo ganado queda
+     y al volver sigue sumando solo lo que le falta: una capa nunca paga mas que su parte del premio.
    - Sin nodo activo no cuenta (estimacion conservadora: no se conoce cuando se apago).
    Usado por el verificador publico (una wallet) y por el panel privado (todas). */
 (function (root) {
@@ -29,7 +31,7 @@
   var OPEN = null;
   // entrega: 25 de marzo de 2027, 10 dias despues de la quema del 15 de marzo
   var END = Date.UTC(2027, 2, 25);
-  var DAY = 864e5, MIN = 30, BAG = 7e6, DUR = 150 * DAY;
+  var DAY = 864e5, MIN = 30, BAG = 7e6, DUR = 150 * DAY, GRACE = DAY; // 24 h para volver sin cortar la capa
   var LAYERS = [[100, 40, 1], [500, 210, 2], [1000, 350, 3], [4000, 2800, 4]];
   var SPOT = 4000, SPOT_PRIZE = 3400;
   var PRIZE = { 0: 0, 1: 40, 2: 250, 3: 600, 4: 3400 };
@@ -147,26 +149,46 @@
     if (!open || now < open) { r.status = lv ? (nd && nd.active ? "pre" : "nonode") : (nd ? "p2" : "out"); return r; }
     if (!lv) { r.status = nd ? "p2" : "out"; return r; }
     if (!nd || !nd.active) { r.status = "nonode"; return r; }
-    var base = null, last = 0, pays = {};
-    h.layers.forEach(function (L) {
-      var s = Math.max(L.start, open, nd.at), e = L.end == null ? now : L.end;
-      var d = (e - s) / DAY;
-      var row = { at: L.at, p: L.p, s: s, end: L.end, d: Math.max(0, d), got: 0, state: L.end == null ? (e - s >= DUR ? "full" : d >= MIN ? "run" : "early") : (d < MIN ? "lost" : "closed") };
-      r.lay.push(row);
-      if (d <= 0) { row.state = L.end == null ? "early" : "lost"; return; }
-      if (L.end != null && d < MIN) return;           // salio antes del dia 30: nada
-      var got = L.p * Math.min(1, (e - s) / DUR); row.got = got;
-      r.earned += got; if (d >= MIN) r.secured += got; if (L.end != null) r.closed += got;
-      // cada parte se paga por separado: al completar su tiempo, nunca antes del 25 de marzo
-      if (L.end == null) { r.items.push({ s: s, p: L.p, sp: DUR }); r.proj += L.p; if (!base || L.at < base.at) base = { at: L.at, s: s }; last = Math.max(last, s); row.due = Math.max(END, s + DUR); }
-      else { r.proj += got; row.due = Math.max(END, L.end); }
-      pays[row.due] = (pays[row.due] || 0) + (L.end == null ? L.p : got);
+    var base = null, last = 0, pays = {}, by = {};
+    h.layers.forEach(function (L) { (by[L.at] = by[L.at] || []).push(L); });
+    Object.keys(by).map(Number).sort(function (a, b) { return a - b; }).forEach(function (at) {
+      var P = by[at][0].p, rem = P, runs = [];
+      // tramos separados por menos de 24 h son uno solo; las horas fuera no suman
+      by[at].forEach(function (L) {
+        var s = Math.max(L.start, open, nd.at), e = L.end == null ? now : L.end, g = runs[runs.length - 1];
+        if (e <= s) return;
+        if (g && s - g.e < GRACE) { g.gap += s - g.e; g.e = e; g.end = L.end; }
+        else runs.push({ s: s, e: e, end: L.end, gap: 0 });
+      });
+      runs.forEach(function (g) {
+        var inn = g.e - g.s - g.gap, d = inn / DAY, need = rem / P * DUR;  // tiempo para completar lo que le falta
+        if (rem <= 0) return;                         // esta parte ya se completo antes
+        var row = { at: at, p: rem, s: g.s, end: g.end, d: d, gap: g.gap, got: 0, state: "" };
+        r.lay.push(row);
+        if (g.end != null && d < MIN) { row.state = "lost"; return; }   // salio antes del dia 30: nada
+        var got = Math.min(rem, P * inn / DUR); row.got = got;
+        r.earned += got; if (d >= MIN) r.secured += got;
+        // cada parte se paga por separado: al completar su tiempo, nunca antes del 25 de marzo
+        if (g.end == null) {
+          var s2 = g.s + g.gap;                       // inicio corrido por las horas fuera
+          r.items.push({ s: s2, p: rem, sp: need }); r.proj += rem;
+          if (!base || at < base.at) base = { at: at, s: s2 };
+          last = Math.max(last, s2 + need); row.due = Math.max(END, s2 + need);
+          row.state = inn >= need ? "full" : d >= MIN ? "run" : "early";
+          pays[row.due] = (pays[row.due] || 0) + rem;
+        } else {
+          row.state = got >= rem - 1e-9 ? "full" : "closed";
+          row.due = Math.max(END, Math.min(g.e, g.s + g.gap + need));
+          r.closed += got; r.proj += got; rem -= got;
+          pays[row.due] = (pays[row.due] || 0) + got;
+        }
+      });
     });
     // pagos por fecha; r.deliver es el primero y r.end el dia que completa la ultima parte
     r.pays = Object.keys(pays).map(Number).sort(function (a, b) { return a - b; }).map(function (t) { return { t: t, p: pays[t] }; });
     r.deliver = r.pays.length ? r.pays[0].t : 0;
-    if (base) { r.day = Math.floor((now - base.s) / DAY) + 1; r.end = last + DUR; r.left = Math.max(0, Math.ceil((r.end - now) / DAY)); r.start = base.s; }
-    r.status = !base ? "out" : now >= r.end ? "full" : r.day < MIN ? "early" : "run";
+    if (base) { r.day = Math.floor((now - base.s) / DAY) + 1; r.end = last; r.left = Math.max(0, Math.ceil((r.end - now) / DAY)); r.start = base.s; }
+    r.status = !base ? (r.closed > 0 ? "left" : "out") : now >= r.end ? "full" : r.day < MIN ? "early" : "run";
     return r;
   }
   // lo ganado en un instante, solo con las capas abiertas (para el contador en vivo)

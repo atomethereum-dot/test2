@@ -294,7 +294,7 @@
     var nf = new Intl.NumberFormat(L[lang()].loc, { minimumFractionDigits: 4, maximumFractionDigits: 4, useGrouping: "always" });
     // cada parte se paga por separado: al completar su tiempo, nunca antes del 25 de marzo
     var first = Math.min.apply(null, items.map(function (it) { return it.s; }));
-    var due = items.map(function (it) { return Math.max(END, it.s + DUR); }), done = Math.max.apply(null, due);
+    var due = items.map(function (it) { return Math.max(END, it.s + it.sp); }), done = Math.max.apply(null, due);
     var many = due.some(function (x) { return x !== due[0]; });
     var df = new Intl.DateTimeFormat(L[lang()].loc, { day: "numeric", month: "short", year: "numeric" });
     function tick() {
