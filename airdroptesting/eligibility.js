@@ -10,6 +10,10 @@
    - Titan, una plaza de 2.800 SECT por cada 4.000 SECT, sin maximo.
    Cada persona tiene sus propios 90 dias desde que entra; los SECT se entregan en SectoraEVM
    (al lanzarse la mainnet, o el dia 90 si llega despues).
+   Ya abierto el airdrop, lo ganado sube en vivo como en el staking: premio x dias / 90, por
+   plaza, desde el inicio de cada plaza. Los inicios salen de progress.json, que escribe el
+   programa diario: { "open": ms, "wallets": { "0x…": [inicio plaza 1, inicio plaza 2, …] } }.
+   Sin ese archivo (antes de la apertura) se muestra el premio y "empieza a sumar el dia de la apertura".
    Si la wallet tiene staking y aun no tiene el nodo activo, sale el aviso
    "solo te falta conectar el nodo". */
 (function () {
@@ -22,6 +26,8 @@
   var DASH = "/dash/";
   var STAKE = "/staking/";
   var MM = "https://metamask.app.link/dapp/sectoraorg.com/airdroptesting/";
+  var PROG = "/airdroptesting/progress.json";
+  var DAYS = 90, DAY = 864e5;
 
   var L = {
     en: { loc: "en-US", k: "Sectora // Airdrop Genesis", pv: "Preview", h: "Your airdrop",
@@ -39,7 +45,9 @@
       rule: "Scout 150 SECT · Sentinel (500 in staking) 250 SECT · Guardian (1,000) 600 SECT · Titan 2,800 SECT per 4,000 in staking, no maximum · only staking counts",
       foot: "We only read public data: no signature, no transaction, nothing leaves your wallet. Your level is checked once a day.",
       err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
-      rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet" },
+      rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet",
+      acc: "You've earned {n} SECT", of: "of {n} SECT · full prize at day 90", day: "Day {d} of 90 · {r} days to the full prize", full: "Full prize complete · delivered on SectoraEVM",
+      pre: "Starts adding up on opening day. 90 days with your node on and your SECT in staking = full prize.", wait: "Your count starts at the next daily check." },
     es: { loc: "es-ES", k: "Sectora // Airdrop Genesis", pv: "Vista previa", h: "Tu airdrop",
       intro: "Conecta tu wallet para ver cuánto ganas en el airdrop.",
       connect: "Conectar wallet", nowallet: "¿No tienes wallet en este navegador?", openmm: "Abrir en MetaMask",
@@ -55,7 +63,9 @@
       rule: "Scout 150 SECT · Sentinel (500 en staking) 250 SECT · Guardian (1.000) 600 SECT · Titan 2.800 SECT por cada 4.000 en staking, sin máximo · solo cuenta el staking",
       foot: "Solo leemos datos públicos: no hay firmas ni transacciones y nada sale de tu wallet. Tu nivel se revisa una vez al día.",
       err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
-      rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet" },
+      rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet",
+      acc: "Llevas {n} SECT", of: "de {n} SECT · premio completo el día 90", day: "Día {d} de 90 · faltan {r} días para el premio completo", full: "Premio completo · se entrega en SectoraEVM",
+      pre: "Empieza a sumar el día de la apertura. 90 días con tu nodo encendido y tus SECT en staking = premio completo.", wait: "Tu conteo empieza en la próxima revisión diaria." },
     pt: { loc: "pt-BR", k: "Sectora // Airdrop Genesis", pv: "Prévia", h: "Seu airdrop",
       intro: "Conecte sua carteira para ver quanto você ganha no airdrop.",
       connect: "Conectar carteira", nowallet: "Sem carteira neste navegador?", openmm: "Abrir no MetaMask",
@@ -71,7 +81,9 @@
       rule: "Scout 150 SECT · Sentinel (500 em staking) 250 SECT · Guardian (1.000) 600 SECT · Titan 2.800 SECT a cada 4.000 em staking, sem máximo · só conta o staking",
       foot: "Só lemos dados públicos: sem assinatura, sem transação, nada sai da sua carteira. Seu nível é verificado uma vez por dia.",
       err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
-      rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira" }
+      rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira",
+      acc: "Você já tem {n} SECT", of: "de {n} SECT · prêmio completo no dia 90", day: "Dia {d} de 90 · faltam {r} dias para o prêmio completo", full: "Prêmio completo · entregue na SectoraEVM",
+      pre: "Começa a somar no dia da abertura. 90 dias com seu nó ligado e seus SECT em staking = prêmio completo.", wait: "Sua contagem começa na próxima verificação diária." }
   };
   function lang() { var l = (document.documentElement.lang || "en").slice(0, 2); return L[l] ? l : "en"; }
   function t(k, v) { var s = L[lang()][k]; if (v) for (var x in v) s = s.replace("{" + x + "}", v[x]); return s; }
@@ -130,6 +142,11 @@
     ".el-sp{display:inline-block;width:14px;height:14px;border:2px solid rgba(7,8,10,.15);border-top-color:#1569ff;border-radius:50%;animation:elsp .8s linear infinite;vertical-align:-2px;margin-right:8px}",
     "@keyframes elsp{to{transform:rotate(360deg)}}",
     ".el-lnk{margin-top:12px;background:none;border:0;padding:0;color:#0d4fd8;cursor:pointer;font-size:14px;text-decoration:underline;text-underline-offset:3px}",
+    /* lo ganado en vivo: numero que sube, barra hasta el dia 90 y dias que faltan */
+    ".el-rows b .el-big em[data-acc]{font-variant-numeric:tabular-nums}",
+    ".el-rows .el-bar{display:block;height:8px;margin-top:10px;border-radius:99px;background:rgba(21,105,255,.12);overflow:hidden}",
+    ".el-rows .el-bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#1569ff,#4d8dff)}",
+    ".el-rows .el-days{margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#0d4fd8}",
     "@media (prefers-reduced-motion:reduce){.el-ov,.el{transition:none}}"
   ].join("\n");
   var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
@@ -174,7 +191,12 @@
         return word(v, 6) === 1n ? "active" : "paused";
       });
     }).catch(function () { return "unknown"; });
-    return Promise.all([a, b]).then(function (r) { return { staked: r[0].staked, wallet: r[0].wallet, node: r[1] }; });
+    return Promise.all([a, b, prog()]).then(function (r) { return { staked: r[0].staked, wallet: r[0].wallet, node: r[1], prog: r[2] }; });
+  }
+  // inicios de cada plaza; el archivo cambia una vez al dia, se pide como mucho una vez por hora
+  function prog() {
+    return fetch(PROG + "?h=" + Math.floor(Date.now() / 36e5))
+      .then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
   }
   function level(total) { return total < 500n ? 1 : total < 1000n ? 2 : total < 4000n ? 3 : 4; }
   var PRIZE = { 1: 150, 2: 250, 3: 600, 4: 2800 };
@@ -185,7 +207,7 @@
   /* ---------- pantallas ---------- */
   function head() { ov.querySelector(".el-k").textContent = t("k"); ov.querySelector(".el-pv").textContent = t("pv"); ov.querySelector(".el-x").setAttribute("aria-label", t("close")); }
   function start(msg) {
-    head(); cur = null;
+    stop(); head(); cur = null;
     var hasW = !!window.ethereum;
     bd.innerHTML = '<h3>' + t("h") + '</h3><p class="el-in">' + t("intro") + '</p>' +
       (hasW ? '<button class="el-b go mono" type="button" data-a="connect"><span>' + t("connect") + '</span><span>→</span></button>' : "") +
@@ -206,7 +228,7 @@
     }).catch(function () { start(t("rej")); });
   }
   function show(addr, connected) {
-    head(); cur = addr; curConn = connected;
+    stop(); head(); cur = addr; curConn = connected;
     bd.innerHTML = '<h3>' + t("h") + '</h3><p class="el-in"><span class="el-sp"></span>' + t("reading") + '</p>';
     read(addr).then(function (r) {
       if (cur !== addr) return;
@@ -214,11 +236,24 @@
       var total = r.staked, lv = level(total), on = r.node === "active";
       // Titan: una plaza por cada 4.000 SECT en staking, sin maximo
       var spots = lv === 4 ? Number(total / 4000n) : 1, prize = PRIZE[lv] * spots;
+      // antes de la apertura se muestra el premio; despues, lo ganado sube en vivo
+      var P = r.prog, now = Date.now(), starts = null, state;
+      if (!on) state = "off";
+      else if (!P || !P.open || now < P.open) state = "pre";
+      else { starts = P.wallets && P.wallets[addr.toLowerCase()]; state = starts && starts.length ? "run" : "wait"; }
       var rows = [];
       rows.push(li("ok", "", connected ? t("r1") : short(addr), connected ? short(addr) : ""));
       // el premio de su nivel (en Titan, por plaza); solo cuenta con el nodo encendido
-      rows.push(li(on ? "ok" : "wait", on ? "" : "p", '<span class="el-big">' + t("win", { n: "<em>" + fmt(prize) + "</em>" }) + "</span>",
-        (on ? t("wOn") : t("wOff")) + (lv === 1 ? "<br>" + t("sreq") : ""), spots > 1 ? t("lv4s", { s: fmt(spots) }) : t("lv" + lv)));
+      var winT, winS;
+      if (state === "run") {
+        winT = '<span class="el-big">' + t("acc", { n: "<em data-acc>0</em>" }) + "</span>";
+        winS = t("of", { n: fmt(prize) }) + '<span class="el-bar"><i data-bar></i></span><span class="el-days" data-days></span>';
+      } else {
+        winT = '<span class="el-big">' + t("win", { n: "<em>" + fmt(prize) + "</em>" }) + "</span>";
+        winS = state === "off" ? t("wOff") : state === "pre" ? t("pre") : t("wait");
+      }
+      rows.push(li(on ? "ok" : "wait", on ? "" : "p", winT, winS + (lv === 1 ? "<br>" + t("sreq") : ""),
+        spots > 1 ? t("lv4s", { s: fmt(spots) }) : t("lv" + lv)));
       if (on) rows.push(li("ok", "", t("done"), t("dones")));
       else if (r.node === "paused") rows.push(li("warn", "p", t("paused"), t("pauseds")));
       else rows.push(li("wait", "p", t("todo"), t("todos")));
@@ -232,7 +267,25 @@
         '<p class="mono el-rule">' + t("rule") + '</p><p class="el-ft">' + t("foot") + '</p>' +
         '<button class="el-lnk" type="button" data-a="other">' + t("other") + "</button>";
       bd.querySelector('[data-a="other"]').addEventListener("click", function () { start(); });
+      if (state === "run") live(starts.slice(0, spots), PRIZE[lv], prize);
     }).catch(function () { if (cur === addr) start(t("err")); });
+  }
+  /* lo ganado sube como en el staking: premio de la plaza x dias / 90, desde el inicio de cada plaza */
+  var timer = 0;
+  function stop() { if (timer) { clearInterval(timer); timer = 0; } }
+  function live(starts, per, prize) {
+    var acc = bd.querySelector("[data-acc]"), bar = bd.querySelector("[data-bar]"), days = bd.querySelector("[data-days]");
+    var nf = new Intl.NumberFormat(L[lang()].loc, { minimumFractionDigits: 4, maximumFractionDigits: 4, useGrouping: "always" });
+    var first = Math.min.apply(null, starts), last = Math.max.apply(null, starts);
+    function tick() {
+      var now = Date.now(), earned = 0;
+      starts.forEach(function (s) { earned += per * Math.min(1, Math.max(0, (now - s) / (DAYS * DAY))); });
+      acc.textContent = nf.format(earned);
+      bar.style.width = Math.min(100, earned / prize * 100) + "%";
+      var left = Math.ceil((last + DAYS * DAY - now) / DAY);
+      days.textContent = left <= 0 ? t("full") : t("day", { d: Math.min(DAYS, Math.max(1, Math.floor((now - first) / DAY) + 1)), r: left });
+    }
+    stop(); tick(); timer = setInterval(tick, 100);
   }
   var ICON = {
     ok: '<svg viewBox="0 0 16 16"><path d="M3.2 8.4l3 3 6.6-7" fill="none" stroke="#fff" stroke-width="2.2"/></svg>',
@@ -246,7 +299,7 @@
   }
 
   function open() { ov.classList.add("on"); document.documentElement.style.overflow = "hidden"; if (cur) show(cur, curConn); else start(); }
-  function close() { ov.classList.remove("on"); document.documentElement.style.overflow = ""; }
+  function close() { stop(); ov.classList.remove("on"); document.documentElement.style.overflow = ""; }
   if (window.ethereum && window.ethereum.on) window.ethereum.on("accountsChanged", function (a) { if (ov.classList.contains("on") && a && a[0]) show(a[0], true); });
 
   window.SAElig = { open: open, close: close };
