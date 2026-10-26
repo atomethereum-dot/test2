@@ -162,7 +162,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       <div class="tile hi"><span class="k">Ganado hasta ahora</span><span class="v" id="t-earned">0</span><span class="s" id="t-secured"></span></div>
       <div class="tile"><span class="k">Bolsa reservada</span><span class="v" id="t-res">0</span><div class="bar"><i id="t-resbar"></i></div><span class="s" id="t-resp"></span></div>
       <div class="tile"><span class="k">Wallets participando</span><span class="v" id="t-part">0</span><span class="s" id="t-parts"></span></div>
-      <div class="tile"><span class="k">Plazas Titan</span><span class="v" id="t-titan">0</span><span class="s" id="t-titans"></span></div>
+      <div class="tile"><span class="k">Wallets Titan</span><span class="v" id="t-titan">0</span><span class="s" id="t-titans"></span></div>
       <div class="tile"><span class="k">Falta encender el nodo</span><span class="v" id="t-nonode">0</span><span class="s">Tienen staking pero el nodo no está activo</span></div>
       <div class="tile"><span class="k">Registrados fase 2</span><span class="v" id="t-p2">0</span><span class="s">Nodo sin 100 SECT en staking</span></div>
     </div>
@@ -193,7 +193,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   </div>
 </div>
 
-<script src="/airdroptesting/count.js?v=8"></script>
+<script src="/airdroptesting/count.js?v=9"></script>
 <script>
 (function () {
   "use strict";
@@ -266,17 +266,17 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     if (pre) $("pre").innerHTML = "<b>El airdrop aún no abre.</b> Esto es una simulación con apertura el " + (open ? df.format(open) : "—") + ". Cambia la fecha arriba para ver cómo iría.";
     rows = data.map(function (d) { return { who: d.who, ev: d.ev, node: d.node, acc: d.acc, r: C.evaluate(d.ev, d.node, open, now) }; });
     rows.sort(function (a, b) { return b.r.prize - a.r.prize || b.r.bal - a.r.bal; });
-    var part = 0, titan = 0, reserved = 0, nonode = 0, p2 = 0, secured = 0, lv = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    var part = 0, titan = 0, titanBal = 0, reserved = 0, nonode = 0, p2 = 0, secured = 0, lv = { 1: 0, 2: 0, 3: 0, 4: 0 };
     rows.forEach(function (x) {
       var r = x.r;
       if (r.status === "p2") p2++;
       if (r.status === "nonode") nonode++;
-      if (r.level && r.node === "on") { part++; lv[r.level]++; reserved += r.proj || r.prize; if (r.level === 4) titan += r.spots; }
+      if (r.level && r.node === "on") { part++; lv[r.level]++; reserved += r.proj || r.prize; if (r.level === 4) { titan++; titanBal += r.bal; } }
       else reserved += r.closed;  // salio despues del dia 30: conserva lo ganado
       secured += r.secured;
     });
     $("t-part").textContent = nf0.format(part); $("t-parts").textContent = "Con 100+ SECT en staking y el nodo activo";
-    $("t-titan").textContent = nf0.format(titan); $("t-titans").textContent = nf0.format(titan * 4000) + " SECT en staking como Titan";
+    $("t-titan").textContent = nf0.format(titan); $("t-titans").textContent = nf0.format(titanBal) + " SECT en staking como Titan (85 %)";
     $("t-nonode").textContent = nf0.format(nonode); $("t-p2").textContent = nf0.format(p2);
     $("t-res").innerHTML = nf0.format(reserved) + "<small>SECT</small>";
     var pct = Math.min(100, reserved / C.BAG * 100);
@@ -315,7 +315,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     rows.forEach(function (x, i) {
       if (!pass(x)) return;
       var r = x.r, st = ST[r.status] || ["—", "mute"];
-      var lvl = r.level ? LV[r.level] + (r.level === 4 && r.spots > 1 ? " · " + r.spots + " plazas" : "") : "—";
+      var lvl = r.level ? LV[r.level] + " · " + Math.round(r.rate * 100) + " %" : "—";
       var node = r.node === "on" ? '<span class="chip ok">Activo</span>' : r.node === "off" ? '<span class="chip warn">Pausado</span>' : '<span class="chip mute">Sin nodo</span>';
       var day = r.day ? r.day + " días<span class=\"prog\"><i style=\"width:" + pct(r) + '%"></i></span>' : "—";
       html += '<tr data-r="' + i + '"><td><button class="w" type="button" data-r="' + i + '">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + "</button></td>" +
@@ -332,9 +332,10 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   var LAY = { early: ["Antes del día 30", "warn"], run: ["Asegurada", "ok"], full: ["Completa", "ok"], closed: ["En pausa · conserva lo ganado", "mute"], lost: ["En pausa · menos de 30 días", "warn"] };
   var cur = -1;
   function d(t) { return t ? df.format(t) : "—"; }
-  function layName(at) { return at === 100 ? "Scout" : at === 500 ? "Sentinel" : at === 1000 ? "Guardian" : "Titan · plaza " + (at / 4000); }
+  function layName(at) { var n = { 100: "Scout", 500: "Sentinel", 1000: "Guardian", 4000: "Titan" }[at]; return n || "Extra · " + LV[C.level(at)]; }
   function nextLv(b) {
-    var n = b < 100 ? [100, "ser Scout"] : b < 500 ? [500, "ser Sentinel"] : b < 1000 ? [500 * 2, "ser Guardian"] : b < 4000 ? [4000, "ser Titan"] : [(Math.floor(b / 4000) + 1) * 4000, "otra plaza Titan (+3.400 SECT)"];
+    if (b >= 4000) return "Titan: cada SECT más en staking suma el 85 %.";
+    var n = b < 100 ? [100, "ser Scout (40 %)"] : b < 500 ? [500, "ser Sentinel (50 %)"] : b < 1000 ? [1000, "ser Guardian (60 %)"] : [4000, "ser Titan (85 %)"];
     return "Le faltan " + nf0.format(Math.ceil(n[0] - b)) + " SECT en staking para " + n[1] + ".";
   }
   function kv(k, v) { return '<div class="kv"><span>' + k + "</span><b>" + v + "</b></div>"; }
@@ -350,8 +351,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     h += '<div class="box"><h4>Airdrop</h4><div class="big"><b data-e="' + i + '">' + nf2.format(earnedNow(r)) + "</b><span>SECT ganados de " + (r.prize ? nf0.format(r.prize) : "0") + "</span></div>" +
       (r.day ? '<span class="prog" style="width:100%;height:7px"><i style="width:' + pct(r) + '%"></i></span>' : "") +
       kv("Nivel", r.level ? LV[r.level] : "Sin nivel") +
-      kv("Plazas", r.level === 4 ? r.spots + " plaza" + (r.spots > 1 ? "s" : "") + " Titan" : r.level ? "1" : "—") +
-      kv("Premio de su nivel", r.prize ? nf0.format(r.prize) + " SECT" : "—") +
+      kv("Porcentaje", r.level ? Math.round(r.rate * 100) + " % de lo que tiene en staking" : "—") +
+      kv("Premio por su staking", r.prize ? nf0.format(r.prize) + " SECT" : "—") +
       kv("Tendrá al completar su tiempo", r.proj ? nf0.format(r.proj) + " SECT" : "—") +
       kv("Asegurado (día 30 o más)", nf2.format(r.secured) + " SECT") +
       kv("Días dentro", r.day ? r.day : "—") +
@@ -392,13 +393,13 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   $("dr").addEventListener("click", function (e) { if (e.target === $("dr")) hide(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("dr").hidden) hide(); });
   function csv() {
-    var lines = [["wallet", "nivel", "plazas", "en_staking", "en_wallet", "recompensas_staking", "nodo", "nodo_registrado", "dia", "empezo", "asegura_el", "completo_el", "cobra_fecha:sect",
+    var lines = [["wallet", "nivel", "porcentaje", "en_staking", "en_wallet", "recompensas_staking", "nodo", "nodo_registrado", "dia", "empezo", "asegura_el", "completo_el", "cobra_fecha:sect",
       "ganado", "asegurado", "premio_nivel", "a_la_entrega", "total_depositado", "total_retirado", "primer_deposito", "estado"].join(",")];
     rows.forEach(function (x) {
       var r = x.r, a = x.acc, dep = 0, wd = 0, first = 0; if (r.status === "out") return;
       x.ev.forEach(function (e) { if (e.dep) { dep += e.amt; if (!first) first = e.t; } else wd += e.amt; });
       var day = function (t) { return t ? iso(t) : ""; };
-      lines.push([x.who, LV[r.level], r.spots, r.bal, a ? a.wallet : "", a ? a.claimable.toFixed(4) : "", r.node, day(r.nodeAt), r.day, day(r.start), r.start ? day(r.start + 30 * C.DAY) : "", day(r.end), r.pays.map(function (p) { return iso(p.t) + ":" + Math.round(p.p); }).join(" "),
+      lines.push([x.who, LV[r.level], Math.round(r.rate * 100), r.bal, a ? a.wallet : "", a ? a.claimable.toFixed(4) : "", r.node, day(r.nodeAt), r.day, day(r.start), r.start ? day(r.start + 30 * C.DAY) : "", day(r.end), r.pays.map(function (p) { return iso(p.t) + ":" + Math.round(p.p); }).join(" "),
         earnedNow(r).toFixed(4), r.secured.toFixed(4), r.prize, Math.round(r.proj), dep, wd, day(first), (ST[r.status] || [""])[0]].join(","));
     });
     var a = document.createElement("a");

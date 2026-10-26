@@ -6,9 +6,11 @@
    - Todos tienen el mismo tiempo para completar su premio (DUR, 150 dias; en la web no se dice el
      numero), contado desde que entran. Las entregas empiezan el 25 mar 2027, 10 dias despues de la
      quema: quien ya completo su tiempo cobra ese dia; quien entro despues, al completarlo. Asi las
-     entregas se reparten en el tiempo. Cada umbral es una capa con su parte del premio: Scout 100 SECT = 40,
-     Sentinel 500 = +210 (250), Guardian 1.000 = +350 (600), Titan 4.000 = +2.800 (3.400) y cada
-     4.000 mas es otra plaza de 3.400. Asi, subir de nivel tarde solo suma desde ese dia.
+     entregas se reparten en el tiempo.
+   - Premio = % del nivel sobre todo lo que tiene en staking: Scout 40 % (desde 100 SECT),
+     Sentinel 50 % (500), Guardian 60 % (1.000) y Titan 85 % (4.000, sin maximo). 1.500 SECT = 900.
+     Cada saldo alcanzado es una capa con lo que suma al premio (p. ej. de 1.000 a 1.500: +300), asi
+     que lo que se agrega tarde solo suma desde ese dia.
    - Una capa suma mientras el saldo esta en su umbral o mas (no antes de la apertura ni del registro
      del nodo). Si el saldo baja, la capa se pausa con los dias que lleva; si vuelve a subir, sigue
      donde quedo: las horas fuera no suman y su fecha de cobro se corre lo mismo. Con menos de 30
@@ -31,9 +33,8 @@
   // entrega: 25 de marzo de 2027, 10 dias despues de la quema del 15 de marzo
   var END = Date.UTC(2027, 2, 25);
   var DAY = 864e5, MIN = 30, BAG = 7e6, DUR = 150 * DAY;
-  var LAYERS = [[100, 40, 1], [500, 210, 2], [1000, 350, 3], [4000, 2800, 4]];
-  var SPOT = 4000, SPOT_PRIZE = 3400;
-  var PRIZE = { 0: 0, 1: 40, 2: 250, 3: 600, 4: 3400 };
+  var LEVELS = [100, 500, 1000, 4000];
+  var RATE = { 0: 0, 1: 0.4, 2: 0.5, 3: 0.6, 4: 0.85 };
 
   /* ---------- red ---------- */
   function post(url, body) {
@@ -123,12 +124,16 @@
 
   /* ---------- reglas ---------- */
   function level(b) { return b < 100 ? 0 : b < 500 ? 1 : b < 1000 ? 2 : b < 4000 ? 3 : 4; }
+  function prize(b) { return b * RATE[level(b)]; }
   // capas abiertas y cerradas a partir de la historia del saldo
   function layers(ev) {
     var bal = 0, max = 0, steps = [];
     ev.forEach(function (e) { bal = Math.max(0, bal + (e.dep ? e.amt : -e.amt)); max = Math.max(max, bal); steps.push({ t: e.t, b: bal }); });
-    var th = LAYERS.map(function (l) { return { at: l[0], p: l[1] }; });
-    for (var k = 2; k * SPOT <= max; k++) th.push({ at: k * SPOT, p: SPOT_PRIZE });
+    // umbrales: los de cada nivel y cada saldo alcanzado; cada capa vale lo que suma al premio
+    var at = {}; LEVELS.forEach(function (x) { if (x <= max) at[x] = 1; });
+    steps.forEach(function (s) { if (s.b >= 100) at[s.b] = 1; });
+    var th = [], prev = 0;
+    Object.keys(at).map(Number).sort(function (a, b) { return a - b; }).forEach(function (x) { th.push({ at: x, p: prize(x) - prize(prev) }); prev = x; });
     var out = [];
     th.forEach(function (x) {
       var cur = null;
@@ -142,8 +147,8 @@
   }
   /* estado de una wallet en el instante `now` con apertura `open` */
   function evaluate(ev, nd, open, now) {
-    var h = layers(ev), lv = level(h.bal), spots = lv === 4 ? Math.floor(h.bal / SPOT) : (lv ? 1 : 0);
-    var r = { bal: h.bal, level: lv, spots: spots, prize: lv ? PRIZE[lv] * Math.max(1, spots) : 0, node: nd ? (nd.active ? "on" : "off") : "none",
+    var h = layers(ev), lv = level(h.bal);
+    var r = { bal: h.bal, level: lv, rate: RATE[lv], prize: prize(h.bal), node: nd ? (nd.active ? "on" : "off") : "none",
       earned: 0, secured: 0, closed: 0, proj: 0, items: [], lay: [], pays: [], day: 0, left: 0, status: "", start: 0, end: 0, deliver: 0, nodeAt: nd ? nd.at : 0 };
     if (!open || now < open) { r.status = lv ? (nd && nd.active ? "pre" : "nonode") : (nd ? "p2" : "out"); return r; }
     if (!lv) { r.status = nd ? "p2" : "out"; return r; }
@@ -219,6 +224,6 @@
     });
   }
 
-  root.SACount = { OPEN: root.SA_OPEN !== undefined ? root.SA_OPEN : OPEN, END: END, DAY: DAY, DUR: DUR, MIN: MIN, BAG: BAG, PRIZE: PRIZE,
+  root.SACount = { OPEN: root.SA_OPEN !== undefined ? root.SA_OPEN : OPEN, END: END, DAY: DAY, DUR: DUR, MIN: MIN, BAG: BAG, RATE: RATE, prize: prize,
     level: level, layers: layers, evaluate: evaluate, liveEarned: liveEarned, wallet: wallet, everyone: everyone };
 })(window);
