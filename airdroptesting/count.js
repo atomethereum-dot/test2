@@ -7,9 +7,9 @@
      numero), contado desde que entran. Las entregas empiezan el 25 mar 2027, 10 dias despues de la
      quema: quien ya completo su tiempo cobra ese dia; quien entro despues, al completarlo. Asi las
      entregas se reparten en el tiempo.
-   - Premio = % del nivel sobre todo lo que tiene en staking: Scout 40 % (desde 100 SECT),
-     Sentinel 50 % (500), Guardian 60 % (1.000) y Titan 85 % (4.000, sin maximo). 1.500 SECT = 900.
-     Cada saldo alcanzado es una capa con lo que suma al premio (p. ej. de 1.000 a 1.500: +300), asi
+   - Premio = % del nivel sobre todo lo que tiene en staking: Scout 55 % (desde 100 SECT),
+     Sentinel 65 % (500), Guardian 75 % (1.000) y Titan 90 % (4.000, sin maximo). 2.000 SECT = 1.500.
+     Cada saldo alcanzado es una capa con lo que suma al premio (p. ej. de 1.000 a 1.500: +375), asi
      que lo que se agrega tarde solo suma desde ese dia.
    - Una capa suma mientras el saldo esta en su umbral o mas (no antes de la apertura ni del registro
      del nodo). Si el saldo baja, la capa se pausa con los dias que lleva; si vuelve a subir, sigue
@@ -39,7 +39,7 @@
   var END = Date.UTC(2027, 2, 25);
   var DAY = 864e5, MIN = 30, BAG = 7e6, DUR = 150 * DAY;
   var LEVELS = [100, 500, 1000, 4000];
-  var RATE = { 0: 0, 1: 0.4, 2: 0.5, 3: 0.6, 4: 0.85 };
+  var RATE = { 0: 0, 1: 0.55, 2: 0.65, 3: 0.75, 4: 0.9 };
 
   /* ---------- red ---------- */
   function post(url, body) {

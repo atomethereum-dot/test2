@@ -193,7 +193,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   </div>
 </div>
 
-<script src="/airdroptesting/count.js?v=10"></script>
+<script src="/airdroptesting/count.js?v=11"></script>
 <script>
 (function () {
   "use strict";
@@ -276,7 +276,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       secured += r.secured;
     });
     $("t-part").textContent = nf0.format(part); $("t-parts").textContent = "Con 100+ SECT en staking y el nodo activo";
-    $("t-titan").textContent = nf0.format(titan); $("t-titans").textContent = nf0.format(titanBal) + " SECT en staking como Titan (85 %)";
+    $("t-titan").textContent = nf0.format(titan); $("t-titans").textContent = nf0.format(titanBal) + " SECT en staking como Titan (90 %)";
     $("t-nonode").textContent = nf0.format(nonode); $("t-p2").textContent = nf0.format(p2);
     $("t-res").innerHTML = nf0.format(reserved) + "<small>SECT</small>";
     var pct = Math.min(100, reserved / C.BAG * 100);
@@ -334,8 +334,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   function d(t) { return t ? df.format(t) : "—"; }
   function layName(at) { var n = { 100: "Scout", 500: "Sentinel", 1000: "Guardian", 4000: "Titan" }[at]; return n || "Extra · " + LV[C.level(at)]; }
   function nextLv(b) {
-    if (b >= 4000) return "Titan: cada SECT más en staking suma el 85 %.";
-    var n = b < 100 ? [100, "ser Scout (40 %)"] : b < 500 ? [500, "ser Sentinel (50 %)"] : b < 1000 ? [1000, "ser Guardian (60 %)"] : [4000, "ser Titan (85 %)"];
+    if (b >= 4000) return "Titan: cada SECT más en staking suma el 90 %.";
+    var n = b < 100 ? [100, "ser Scout (55 %)"] : b < 500 ? [500, "ser Sentinel (65 %)"] : b < 1000 ? [1000, "ser Guardian (75 %)"] : [4000, "ser Titan (90 %)"];
     return "Le faltan " + nf0.format(Math.ceil(n[0] - b)) + " SECT en staking para " + n[1] + ".";
   }
   // tiempo con el nodo apagado desde la apertura (o desde su registro), segun su historial en Sepolia
