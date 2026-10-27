@@ -114,12 +114,12 @@ h1 b{font-weight:400}
 .req{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:18px 0 0;padding:0;border:1px solid var(--hair);background:var(--panel)}
 .req li{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border-left:1px solid var(--hair);list-style:none}
 .req li:first-child{border-left:0}
-.ic{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.06)}
-.ic svg{width:12px;height:12px}
-.ic.ok{background:#16a34a}
-.ic.wait{background:rgba(224,160,48,.16)}
+.req .ic{flex:none;display:grid;place-items:center;width:22px;height:22px;margin:-1px 0 0;border-radius:50%;background:rgba(255,255,255,.06);line-height:0}
+.req .ic svg{display:block;width:14px;height:14px}
+.req .ic.ok{background:#16a34a}
+.req .ic.wait{background:rgba(224,160,48,.16)}
 .req b{display:block;font-weight:400;font-size:14px}
-.req span{display:block;margin-top:3px;color:var(--ink-3);font-size:12.5px;line-height:1.5}
+.req li>div>span{display:block;margin-top:3px;color:var(--ink-3);font-size:12.5px;line-height:1.5}
 
 /* tarjetas */
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
@@ -216,6 +216,6 @@ window.SA_OPEN = Date.UTC(2026, 9, 27);
 </script>
 <script src="/airdroptesting/count.js?v=13"></script>
 <script src="/myairdrop/myairdrop-wallet.js?v=1"></script>
-<script src="/myairdrop/myairdrop.js?v=3"></script>
+<script src="/myairdrop/myairdrop.js?v=5"></script>
 </body>
 </html>

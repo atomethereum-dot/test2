@@ -103,9 +103,9 @@
       hEmpty: "Ainda não há movimentos.", hErr: "Não conseguimos ler o histórico agora. Toque em Atualizar em um instante.", d: "d", h: "h", m: "min" }
   };
 
-  /* idioma: el que se eligio en el airdrop (sa_lang); si no, el del navegador si es es/pt; si no, ingles */
+  /* idioma: abre siempre en ingles; el que se elija arriba se mantiene solo durante esa visita */
   var lang = "en";
-  try { var sv = localStorage.getItem("sa_lang"); if (sv && T[sv]) lang = sv; else { var nl = (navigator.language || "").slice(0, 2); if (T[nl]) lang = nl; } } catch (e) {}
+  try { var sv = sessionStorage.getItem("ma_lang"); if (sv && T[sv]) lang = sv; } catch (e) {}
   function t(k, v) { var s = T[lang][k] != null ? T[lang][k] : T.en[k]; if (v) for (var x in v) s = s.split("{" + x + "}").join(v[x]); return s; }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function nf(d) { return new Intl.NumberFormat(T[lang].loc, { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0, useGrouping: "always" }); }
@@ -368,7 +368,7 @@
   /* ---------- arranque ---------- */
   document.querySelectorAll(".langs button").forEach(function (b) {
     b.addEventListener("click", function () {
-      lang = b.getAttribute("data-l"); try { localStorage.setItem("sa_lang", lang); } catch (e) {}
+      lang = b.getAttribute("data-l"); try { sessionStorage.setItem("ma_lang", lang); } catch (e) {}
       statics(); if (data && cur) render(); else if (!cur) start();
     });
   });
