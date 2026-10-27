@@ -1,6 +1,10 @@
 /* Sectora Airdrop · staking panel
-   A window that sits beside the staking console and tells stakers that their
-   deposit already counts for the airdrop, so nobody withdraws to take part.
+   A window that sits beside the staking console and tells stakers where they
+   stand in Airdrop Genesis: step 1 (SECT in staking) is done, their level and
+   spots for what they have staked, the prize that adds up to, and that the only
+   thing left is to connect their Hash Node. Prize = SECT in staking x the rate
+   of the level (Scout 55, Sentinel 65, Guardian 75, Titan 90 per 100 SECT);
+   spots = SECT in staking / the minimum of the level.
    It only reads what the staking page already shows (#earnDep, the amount
    deposited by the connected wallet): it never talks to the wallet or to the
    contract, and it can be dropped into /staking/ with one script tag. */
@@ -9,31 +13,37 @@
   if (document.querySelector(".sad")) return;
 
   var AIRDROP_URL = "/airdroptesting/";
-  var X_URL = "https://x.com/sectora__";
-  var TG_URL = "https://t.me/sectoraorg";
+  var NODE_URL = "/dashboard.html#guia-nodo";
+  var LV = [{ min: 100, rate: .55, n: "Scout" }, { min: 500, rate: .65, n: "Sentinel" }, { min: 1000, rate: .75, n: "Guardian" }, { min: 4000, rate: .9, n: "Titan" }];
 
   var T = {
-    en: { loc: "en-US", bar: "airdrop genesis", band: "Airdrop for stakers", k: "For stakers",
-      h: "Complete your <b>staking airdrop</b>",
-      p: "Your staking already counts for the airdrop. Don't withdraw anything: keep earning and collect stars.",
-      st: "Your SECT in staking", none: "Connect your wallet", chip: "10 → 25 points",
-      stars: "{n} of 6 stars", hint: "Connect your wallet in the console to check your staking.",
-      t: { stake: "Stake SECT", sentinel: "500 SECT staked", guardian: "1,000 SECT staked", x: "Follow Sectora on X", tg: "Join the Telegram", node: "Turn on a node" },
-      s1: "Season 1", cta: "See the airdrop", note: "Preview · points start in Season 1", min: "Minimise", max: "Open" },
-    es: { loc: "es-ES", bar: "airdrop genesis", band: "Airdrop para staking", k: "Para quien hace staking",
-      h: "Completa tu <b>airdrop de staking</b>",
-      p: "Tu staking ya cuenta para el airdrop. No retires nada: sigue ganando y junta estrellas.",
-      st: "Tus SECT en staking", none: "Conecta tu wallet", chip: "10 → 25 puntos",
-      stars: "{n} de 6 estrellas", hint: "Conecta tu wallet en la consola para ver tu staking.",
-      t: { stake: "Haz staking", sentinel: "500 SECT en staking", guardian: "1.000 SECT en staking", x: "Sigue a Sectora en X", tg: "Únete al Telegram", node: "Enciende un nodo" },
-      s1: "Temporada 1", cta: "Ver el airdrop", note: "Vista previa · los puntos empiezan en la temporada 1", min: "Minimizar", max: "Abrir" },
-    pt: { loc: "pt-BR", bar: "airdrop genesis", band: "Airdrop para staking", k: "Para quem faz staking",
-      h: "Complete seu <b>airdrop de staking</b>",
-      p: "Seu staking já conta para o airdrop. Não saque nada: continue ganhando e junte estrelas.",
-      st: "Seus SECT em staking", none: "Conecte sua carteira", chip: "10 → 25 pontos",
-      stars: "{n} de 6 estrelas", hint: "Conecte sua carteira no console para ver seu staking.",
-      t: { stake: "Faça staking", sentinel: "500 SECT em staking", guardian: "1.000 SECT em staking", x: "Siga a Sectora no X", tg: "Entre no Telegram", node: "Ligue um nó" },
-      s1: "Temporada 1", cta: "Ver o airdrop", note: "Prévia · os pontos começam na temporada 1", min: "Minimizar", max: "Abrir" }
+    en: { loc: "en-US", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Your airdrop",
+      h0: "Connect your wallet to see <b>your level.</b>", p0: "Your staking counts for the airdrop, without withdrawing anything.",
+      h1: "You need <b>{x} SECT</b> more to join.", p1: "With 100 SECT in staking you're Scout and you're in the airdrop.",
+      h2: "Step 1 <b>completed.</b>", p2: "Your SECT in staking already count. All that's left is to connect your Hash Node.",
+      s1: "Step 1 · SECT in staking", s1min: "Min. 100", s2: "Step 2 · Connect your Hash Node", s2t: "Last step",
+      lv: "Your level", lvs: "Level {n}", sp: "Spots", sps: "of {l}", pz: "Your prize", pzs: "SECT on completing your time",
+      up: "With {x} SECT more you move up to {l} and your prize rises to {p} SECT.", top: "Titan has no maximum: every 1,000 SECT more add 900 SECT.",
+      cta: "Connect my Hash Node", more: "See the airdrop", have: "Already on? Check it in the airdrop.",
+      note: "No lock-up: if you withdraw, your count pauses and continues when you come back.", min: "Minimise", max: "Open", done: "Step 1 ✓", wait: "Connect wallet" },
+    es: { loc: "es-ES", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Tu airdrop",
+      h0: "Conecta tu wallet para ver <b>tu nivel.</b>", p0: "Tu staking cuenta para el airdrop, sin retirar nada.",
+      h1: "Te faltan <b>{x} SECT</b> para entrar.", p1: "Con 100 SECT en staking eres Scout y entras al airdrop.",
+      h2: "Paso 1 <b>completado.</b>", p2: "Tus SECT en staking ya cuentan. Solo te falta conectar tu Hash Node.",
+      s1: "Paso 1 · SECT en staking", s1min: "Mín. 100", s2: "Paso 2 · Conecta tu Hash Node", s2t: "Último paso",
+      lv: "Tu nivel", lvs: "Nivel {n}", sp: "Plazas", sps: "de {l}", pz: "Tu premio", pzs: "SECT al completar tu tiempo",
+      up: "Con {x} SECT más subes a {l} y tu premio pasa a {p} SECT.", top: "Titan no tiene máximo: cada 1.000 SECT más suman 900 SECT.",
+      cta: "Conectar mi Hash Node", more: "Ver el airdrop", have: "¿Ya lo tienes encendido? Compruébalo en el airdrop.",
+      note: "Sin bloqueo: si retiras, tu conteo se pausa y sigue al volver.", min: "Minimizar", max: "Abrir", done: "Paso 1 ✓", wait: "Conecta tu wallet" },
+    pt: { loc: "pt-BR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Seu airdrop",
+      h0: "Conecte sua carteira para ver <b>seu nível.</b>", p0: "Seu staking conta para o airdrop, sem sacar nada.",
+      h1: "Faltam <b>{x} SECT</b> para você entrar.", p1: "Com 100 SECT em staking você é Scout e entra no airdrop.",
+      h2: "Passo 1 <b>concluído.</b>", p2: "Seus SECT em staking já contam. Só falta conectar seu Hash Node.",
+      s1: "Passo 1 · SECT em staking", s1min: "Mín. 100", s2: "Passo 2 · Conecte seu Hash Node", s2t: "Último passo",
+      lv: "Seu nível", lvs: "Nível {n}", sp: "Vagas", sps: "de {l}", pz: "Seu prêmio", pzs: "SECT ao completar seu tempo",
+      up: "Com mais {x} SECT você sobe para {l} e seu prêmio passa a {p} SECT.", top: "Titan não tem máximo: cada 1.000 SECT a mais somam 900 SECT.",
+      cta: "Conectar meu Hash Node", more: "Ver o airdrop", have: "Já está ligado? Confira no airdrop.",
+      note: "Sem bloqueio: se você sacar, sua contagem pausa e continua quando voltar.", min: "Minimizar", max: "Abrir", done: "Passo 1 ✓", wait: "Conecte a carteira" }
   };
   function pick() {
     var l = "";
@@ -43,28 +53,12 @@
   }
   var L = T[pick()];
 
-  /* six stars: three read from the staked amount, two social, and a node on the testnet */
-  var TASKS = [
-    { id: "stake", tag: "+100", auto: function (d) { return d > 0; } },
-    { id: "sentinel", tag: "Sentinel", auto: function (d) { return d >= 500; } },
-    { id: "guardian", tag: "Guardian", auto: function (d) { return d >= 1000; } },
-    { id: "x", tag: "+25", href: X_URL },
-    { id: "tg", tag: "+25", href: TG_URL },
-    { id: "node", tag: "+300", href: "/dash/" }
-  ];
-
-  /* same look as the staking console beside it: a frame with blue registration
-     crosses, a band, and a white card with the blue top line; stars in yellow */
+  /* same look as the staking console beside it: a band and a white card with
+     the blue top line; a level box in light grey and the node step in blue */
   var css = "" +
-    ".sad{--b:#1569ff;--bd:#0d4fd8;--ink:#07080a;--ink2:#3c414c;--ink3:#6b7280;--ink4:#9aa0ab;--line:rgba(0,0,0,.11);--star:#f5b400;--star-d:#d99a00;" +
+    ".sad{--b:#1569ff;--bd:#0d4fd8;--ink:#07080a;--ink2:#3c414c;--ink3:#6b7280;--ink4:#9aa0ab;--line:rgba(0,0,0,.11);--ok:#0f8f52;" +
     "position:relative;margin:0 0 clamp(18px,2.4vw,28px);padding:clamp(14px,1.4vw,20px);border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.35);" +
     "font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:300;color:var(--ink)}" +
-    ".sad-plus{display:none}" +
-    ".sad-plus i{position:absolute;width:13px;height:13px}" +
-    ".sad-plus i::before,.sad-plus i::after{content:'';position:absolute;background:var(--b)}" +
-    ".sad-plus i::before{left:50%;top:0;bottom:0;width:1px;transform:translateX(-.5px)}" +
-    ".sad-plus i::after{top:50%;left:0;right:0;height:1px;transform:translateY(-.5px)}" +
-    ".sad-plus i:nth-child(1){left:0;top:0}.sad-plus i:nth-child(2){right:0;top:0}.sad-plus i:nth-child(3){left:0;bottom:0}.sad-plus i:nth-child(4){right:0;bottom:0}" +
     ".sad .m{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:400}" +
     ".sad-band{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;font-size:10.5px}" +
     ".sad-band span{color:var(--ink3)}" +
@@ -74,7 +68,7 @@
     ".sad-card::after{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:var(--b)}" +
     ".sad-head{display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line);font-size:9.5px;color:var(--ink4)}" +
     ".sad-head .sp{flex:1}" +
-    ".sad-cnt{display:none;color:var(--star-d)}" +
+    ".sad-cnt{display:none;color:var(--bd)}" +
     ".sad.min .sad-cnt{display:inline}" +
     ".sad-min{display:grid;place-items:center;width:28px;height:24px;padding:0;border:1px solid var(--line);border-radius:8px;background:none;color:var(--ink3);cursor:pointer;font:inherit;transition:border-color .3s,color .3s}" +
     ".sad-min:hover{border-color:var(--ink3);color:var(--ink)}" +
@@ -86,47 +80,51 @@
     ".sad h3{margin:10px 0 0;font-size:clamp(22px,1.9vw,27px);font-weight:300;letter-spacing:-.02em;line-height:1.15;color:var(--ink)}" +
     ".sad h3 b{font-weight:400;color:var(--b)}" +
     ".sad-p{margin:10px 0 0;font-size:14.5px;line-height:1.6;color:var(--ink2)}" +
-    ".sad-lbl{display:block;margin:20px 0 10px;color:var(--ink3)}" +
-    ".sad-st{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 12px;border:1px solid rgba(0,0,0,.14);border-radius:12px;background:#f7f7f5;padding:14px 16px}" +
-    ".sad-st b{font-size:clamp(24px,2.4vw,30px);font-weight:200;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}" +
-    ".sad-st b.off{font-size:16px;font-weight:300;color:var(--ink3);letter-spacing:0}" +
-    ".sad-chip{flex:none;padding:7px 11px;border-radius:999px;border:1px solid var(--b);background:rgba(21,105,255,.08);color:var(--bd);font-size:9.5px;letter-spacing:.12em;white-space:nowrap}" +
-    ".sad-stars{display:flex;align-items:center;gap:6px;margin-top:20px}" +
-    ".sad-stars svg{width:26px;height:26px;flex:none}" +
-    ".sad-stars span{margin-left:auto;color:var(--ink3)}" +
-    ".sad-star path{fill:none;stroke:#c3c7cf;stroke-width:1.3;stroke-linejoin:round;transition:fill .4s,stroke .4s}" +
-    ".sad-star.on path{fill:var(--star);stroke:var(--star-d)}" +
-    ".sad-star.on{filter:drop-shadow(0 1px 4px rgba(245,180,0,.45))}" +
-    ".sad-star.pop{animation:sadPop .6s cubic-bezier(.22,.72,.24,1)}" +
-    "@keyframes sadPop{0%{transform:scale(.4)}60%{transform:scale(1.25)}100%{transform:scale(1)}}" +
-    ".sad-hint{margin:12px 0 0;font-size:13px;line-height:1.5;color:var(--ink3)}" +
-    ".sad-tasks{list-style:none;margin:10px 0 0;padding:0;border-top:1px solid var(--line)}" +
-    ".sad-tasks li{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.4;color:var(--ink3)}" +
-    ".sad-tasks li svg{width:18px;height:18px}" +
-    ".sad-tasks li.done{color:var(--ink)}" +
-    ".sad-tasks li .tg{color:var(--ink4)}" +
-    ".sad-tasks li.done .tg{color:var(--bd)}" +
-    ".sad-tasks li.lock{opacity:.55}" +
-    ".sad-tasks a{color:inherit;text-decoration:underline;text-decoration-color:rgba(0,0,0,.22);text-underline-offset:3px;transition:text-decoration-color .3s,color .3s}" +
-    ".sad-tasks a:hover{color:var(--ink);text-decoration-color:var(--b)}" +
-    ".sad-cta{position:relative;overflow:hidden;display:flex;justify-content:center;align-items:center;gap:11px;margin-top:18px;padding:17px 22px;border-radius:12px;background:var(--b);color:#fff;text-decoration:none}" +
+    /* the two steps */
+    ".sad-steps{list-style:none;margin:18px 0 0;padding:0;border-top:1px solid var(--line)}" +
+    ".sad-steps li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.4;color:var(--ink2)}" +
+    ".sad-ic{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid #c3c7cf;color:transparent;font-size:12px;line-height:1;font-weight:500}" +
+    ".sad-steps li.done{color:var(--ink)}" +
+    ".sad-steps li.done .sad-ic{border-color:var(--ok);background:var(--ok);color:#fff}" +
+    ".sad-steps li.next .sad-ic{border-color:var(--b);box-shadow:0 0 0 4px rgba(21,105,255,.12)}" +
+    ".sad-steps li.next .sad-ic::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--b);animation:sadPulse 1.8s ease-in-out infinite}" +
+    "@keyframes sadPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}" +
+    ".sad-steps .v{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:400;white-space:nowrap}" +
+    ".sad-steps li .tg{color:var(--ink4);white-space:nowrap}" +
+    ".sad-steps li.next .tg{color:var(--bd)}" +
+    /* level, spots and prize */
+    ".sad-lv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px;border:1px solid rgba(0,0,0,.12);border-radius:12px;background:#f7f7f5}" +
+    ".sad-lv > div{padding:14px 14px 13px;min-width:0}" +
+    ".sad-lv > div + div{border-left:1px solid rgba(0,0,0,.09)}" +
+    ".sad-lv .m{display:block;color:var(--ink3);font-size:9.5px}" +
+    ".sad-lv b{display:block;margin-top:8px;font-size:clamp(20px,1.8vw,25px);font-weight:300;letter-spacing:-.02em;line-height:1.05;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}" +
+    ".sad-lv .lv b{color:var(--bd);font-weight:400}" +
+    ".sad-lv small{display:block;margin-top:5px;font-size:12px;line-height:1.35;color:var(--ink3)}" +
+    ".sad-up{margin:12px 0 0;font-size:13.5px;line-height:1.55;color:var(--ink2)}" +
+    ".sad-up b{font-weight:500;color:var(--ink)}" +
+    /* buttons and notes */
+    ".sad-cta{position:relative;overflow:hidden;display:flex;justify-content:center;align-items:center;gap:11px;margin-top:18px;padding:17px 22px;border-radius:12px;background:var(--b);color:#fff;text-decoration:none;font-size:10.5px}" +
     ".sad-cta::before{content:'';position:absolute;inset:0;background:var(--bd);transform:translateY(101%);transition:transform .42s cubic-bezier(.22,.72,.24,1)}" +
     ".sad-cta:hover::before{transform:none}" +
     ".sad-cta span,.sad-cta i{position:relative;font-style:normal}" +
-    ".sad-note{margin:12px 0 0;color:var(--ink4);line-height:1.6;text-align:center}" +
-    ".sad-min:focus-visible,.sad-cta:focus-visible,.sad-tasks a:focus-visible{outline:2px solid var(--b);outline-offset:3px}" +
+    ".sad-links{display:flex;justify-content:space-between;align-items:center;gap:8px 14px;flex-wrap:wrap;margin-top:12px;font-size:13px;line-height:1.45;color:var(--ink3)}" +
+    ".sad-links a{color:var(--ink2);text-decoration:underline;text-decoration-color:rgba(0,0,0,.22);text-underline-offset:3px;transition:text-decoration-color .3s,color .3s}" +
+    ".sad-links a:hover{color:var(--ink);text-decoration-color:var(--b)}" +
+    ".sad-links a.m{font-size:9.5px;text-decoration:none;color:var(--bd)}" +
+    ".sad-note{display:flex;gap:9px;align-items:flex-start;margin:14px 0 0;padding:11px 13px;border-radius:10px;background:rgba(21,105,255,.06);border:1px solid rgba(21,105,255,.18);font-size:12.5px;line-height:1.5;color:var(--ink2)}" +
+    ".sad-note svg{flex:none;width:16px;height:16px;margin-top:1px;fill:none;stroke:var(--b);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}" +
+    ".sad [hidden]{display:none!important}" +
+    ".sad-min:focus-visible,.sad-cta:focus-visible,.sad-links a:focus-visible{outline:2px solid var(--b);outline-offset:3px}" +
     /* beside the console: the window takes the top of the right column, the steps go below it */
-    ".pp-body.sad-on{grid-template-rows:auto 1fr}" +
     ".pp-body.sad-on > .frame{grid-row:1 / span 2}" +
     ".pp-body.sad-on > .sad{grid-column:2;grid-row:1}" +
     ".pp-body.sad-on > .steps{grid-column:2;grid-row:2}" +
     "@media (max-width:980px){.pp-body.sad-on{grid-template-rows:none}.pp-body.sad-on > .frame,.pp-body.sad-on > .sad,.pp-body.sad-on > .steps{grid-column:auto;grid-row:auto}}" +
+    "@media (max-width:420px){.sad-lv{grid-template-columns:1fr 1fr}.sad-lv .pz{grid-column:1 / -1;border-left:0!important;border-top:1px solid rgba(0,0,0,.09)}}" +
     "@media (prefers-reduced-motion:reduce){.sad *{animation:none!important;transition:none!important}}";
 
-  function star(cls) {
-    return '<svg class="sad-star ' + (cls || "") + '" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.75 5.6 6.15.9-4.45 4.34 1.05 6.12L12 16.87l-5.5 2.89 1.05-6.12L3.1 9.3l6.15-.9z"/></svg>';
-  }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  var LOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 7.6-1.7"/></svg>';
 
   function mount() {
     var body = document.querySelector("#stake .pp-body");
@@ -140,13 +138,7 @@
     var el = document.createElement("aside");
     el.className = "sad";
     el.setAttribute("aria-label", "Sectora Airdrop");
-    var stars = ""; for (var i = 0; i < 6; i++) stars += star();
-    var rows = TASKS.map(function (t) {
-      var label = t.href ? '<a href="' + t.href + '" target="_blank" rel="noopener">' + esc(L.t[t.id]) + "</a>" : esc(L.t[t.id]);
-      return '<li data-t="' + t.id + '"' + (t.lock ? ' class="lock"' : "") + ">" + star() + "<span>" + label + '</span><span class="tg m">' + esc(t.tag) + "</span></li>";
-    }).join("");
     el.innerHTML =
-      '<span class="sad-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>' +
       '<div class="sad-band m"><span>' + esc(L.band) + '</span><b>SA&middot;ST&middot;01&middot;26</b></div>' +
       '<div class="sad-card">' +
         '<div class="sad-head m"><span>Sectora &nbsp;//&nbsp; ' + esc(L.bar) + '</span><span class="sp"></span><span class="sad-cnt"></span>' +
@@ -154,25 +146,29 @@
         "</div>" +
         '<div class="sad-body">' +
           '<p class="sad-k m">' + esc(L.k) + "</p>" +
-          "<h3>" + L.h + "</h3>" +
-          '<p class="sad-p">' + esc(L.p) + "</p>" +
-          '<span class="sad-lbl m">' + esc(L.st) + "</span>" +
-          '<div class="sad-st"><b class="sad-dep off">' + esc(L.none) + '</b><span class="sad-chip m">' + esc(L.chip) + "</span></div>" +
-          '<div class="sad-stars" role="img">' + stars + '<span class="m"></span></div>' +
-          '<p class="sad-hint"></p>' +
-          '<ul class="sad-tasks">' + rows + "</ul>" +
-          '<a class="sad-cta m" href="' + AIRDROP_URL + '"><span>' + esc(L.cta) + "</span><i>→</i></a>" +
-          '<p class="sad-note m">' + esc(L.note) + "</p>" +
+          '<h3 class="sad-h"></h3>' +
+          '<p class="sad-p"></p>' +
+          '<ul class="sad-steps">' +
+            '<li class="s1"><span class="sad-ic">✓</span><span>' + esc(L.s1) + '</span><span class="v"></span></li>' +
+            '<li class="s2"><span class="sad-ic"></span><span>' + esc(L.s2) + '</span><span class="tg m">' + esc(L.s2t) + "</span></li>" +
+          "</ul>" +
+          '<div class="sad-lv" hidden>' +
+            '<div class="lv"><span class="m">' + esc(L.lv) + '</span><b></b><small></small></div>' +
+            '<div class="spt"><span class="m">' + esc(L.sp) + '</span><b></b><small></small></div>' +
+            '<div class="pz"><span class="m">' + esc(L.pz) + '</span><b></b><small>' + esc(L.pzs) + "</small></div>" +
+          "</div>" +
+          '<p class="sad-up" hidden></p>' +
+          '<a class="sad-cta m" href="' + NODE_URL + '"><span>' + esc(L.cta) + "</span><i>→</i></a>" +
+          '<div class="sad-links"><a href="' + AIRDROP_URL + '">' + esc(L.have) + '</a><a class="m" href="' + AIRDROP_URL + '">' + esc(L.more) + " →</a></div>" +
+          '<p class="sad-note">' + LOCK + "<span>" + esc(L.note) + "</span></p>" +
         "</div>" +
       "</div>";
     body.insertBefore(el, steps);
     body.classList.add("sad-on");
 
-    var depEl = el.querySelector(".sad-dep"), hint = el.querySelector(".sad-hint"), cnt = el.querySelector(".sad-cnt");
-    var starRow = el.querySelector(".sad-stars"), starLbl = starRow.querySelector("span");
-    var minBtn = el.querySelector(".sad-min");
-    var social = {};
-    try { social = JSON.parse(localStorage.getItem("sad_tasks") || "{}") || {}; } catch (e) {}
+    var $ = function (s) { return el.querySelector(s); };
+    var hEl = $(".sad-h"), pEl = $(".sad-p"), s1 = $(".s1"), s1v = $(".s1 .v"), s2 = $(".s2"), lvBox = $(".sad-lv"), up = $(".sad-up"), cnt = $(".sad-cnt");
+    var minBtn = $(".sad-min");
     try { if (localStorage.getItem("sad_min") === "1") setMin(true); } catch (e) {}
 
     function setMin(on) {
@@ -183,15 +179,6 @@
     }
     minBtn.addEventListener("click", function () { setMin(!el.classList.contains("min")); });
 
-    el.querySelectorAll(".sad-tasks a").forEach(function (a) {
-      a.addEventListener("click", function () {
-        var id = a.closest("li").getAttribute("data-t");
-        social[id] = 1;
-        try { localStorage.setItem("sad_tasks", JSON.stringify(social)); } catch (e) {}
-        paint();
-      });
-    });
-
     /* the deposited amount, as the staking page prints it for the connected wallet */
     function deposited() {
       var d = document.getElementById("earnDep");
@@ -199,56 +186,43 @@
       var n = parseFloat((d.textContent || "").replace(/[^0-9.]/g, ""));
       return isFinite(n) ? n : null;
     }
-
-    function fmt(n) {
-      try { return new Intl.NumberFormat(L.loc, { maximumFractionDigits: 2, useGrouping: "always" }).format(n); }
-      catch (e) { return new Intl.NumberFormat(L.loc, { maximumFractionDigits: 2 }).format(n); }
+    function fmt(n, dec) {
+      var o = { maximumFractionDigits: dec == null ? 2 : dec };
+      try { o.useGrouping = "always"; return new Intl.NumberFormat(L.loc, o).format(n); }
+      catch (e) { delete o.useGrouping; return new Intl.NumberFormat(L.loc, o).format(n); }
     }
-    var lastKey = "", seen = false, shown = [];
+    function tpl(s, m) { return s.replace(/\{(\w)\}/g, function (_, k) { return m[k]; }); }
+
+    var lastKey = "";
     function paint() {
-      var dep = deposited();
-      var done = TASKS.map(function (t) {
-        if (t.auto) return dep !== null && t.auto(dep);
-        if (t.href) return !!social[t.id];
-        return false;
-      });
-      var n = done.filter(Boolean).length;
-      var key = dep + "|" + done.join("");
+      var dep = deposited(), key = String(dep);
       if (key === lastKey) return;
       lastKey = key;
+      var lv = -1;
+      if (dep !== null) for (var i = 0; i < LV.length; i++) if (dep >= LV[i].min) lv = i;
 
-      if (dep === null) { depEl.textContent = L.none; depEl.classList.add("off"); hint.textContent = L.hint; hint.hidden = false; }
-      else { depEl.textContent = fmt(dep) + " SECT"; depEl.classList.remove("off"); hint.hidden = true; }
+      if (dep === null) { hEl.innerHTML = L.h0; pEl.textContent = L.p0; }
+      else if (lv < 0) { hEl.innerHTML = tpl(L.h1, { x: fmt(100 - dep) }); pEl.textContent = L.p1; }
+      else { hEl.innerHTML = L.h2; pEl.textContent = L.p2; }
 
-      el.querySelectorAll(".sad-tasks li").forEach(function (li, i) {
-        li.classList.toggle("done", done[i]);
-        li.querySelector(".sad-star").classList.toggle("on", done[i]);
-      });
-      var big = starRow.querySelectorAll(".sad-star");
-      for (var i = 0; i < 6; i++) {
-        var on = i < n;
-        if (on && !shown[i] && seen) { big[i].classList.remove("pop"); void big[i].getBoundingClientRect(); big[i].classList.add("pop"); }
-        big[i].classList.toggle("on", on);
-        shown[i] = on;
+      s1.classList.toggle("done", lv >= 0);
+      s1.classList.toggle("next", lv < 0);
+      s1v.textContent = dep === null ? "—" : lv < 0 ? fmt(dep) + " / 100" : fmt(dep) + " SECT";
+      s2.classList.toggle("next", lv >= 0);
+      cnt.textContent = dep === null ? L.wait : lv >= 0 ? L.done : fmt(dep) + " / 100";
+
+      lvBox.hidden = lv < 0; up.hidden = lv < 0;
+      if (lv >= 0) {
+        var c = LV[lv], spots = Math.floor(dep / c.min * 10) / 10;
+        $(".lv b").textContent = c.n; $(".lv small").textContent = tpl(L.lvs, { n: lv + 1 });
+        $(".spt b").textContent = fmt(spots, 1); $(".spt small").textContent = tpl(L.sps, { l: c.n });
+        $(".pz b").textContent = fmt(Math.floor(dep * c.rate * 100) / 100);
+        if (lv < LV.length - 1) { var nx = LV[lv + 1];
+          up.innerHTML = tpl(esc(L.up), { x: "<b>" + fmt(nx.min - dep) + "</b>", l: "<b>" + nx.n + "</b>", p: "<b>" + fmt(nx.min * nx.rate) + "</b>" }); }
+        else up.textContent = L.top;
       }
-      var txt = L.stars.replace("{n}", n);
-      starLbl.textContent = n + " / 6";
-      starRow.setAttribute("aria-label", txt);
-      cnt.textContent = "★ " + n + " / 6";
     }
     paint();
-
-    /* stars light up one by one the first time the window is seen */
-    if ("IntersectionObserver" in window) {
-      var io = new IntersectionObserver(function (es) {
-        if (!es[0].isIntersecting) return;
-        io.disconnect(); seen = true;
-        var big = starRow.querySelectorAll(".sad-star.on");
-        big.forEach(function (s, i) { setTimeout(function () { s.classList.remove("pop"); void s.getBoundingClientRect(); s.classList.add("pop"); }, 120 * i); });
-      }, { threshold: .4 });
-      io.observe(el);
-    } else seen = true;
-
     setInterval(paint, 1500);
   }
 
