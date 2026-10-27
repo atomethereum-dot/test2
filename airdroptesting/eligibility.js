@@ -23,7 +23,7 @@
   var STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
   var MAINNET = ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org", "https://1rpc.io/eth"];
-  var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.drpc.org"];
+  var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.drpc.org", "https://1rpc.io/sepolia", "https://sepolia.gateway.tenderly.co"];
   var SEL = { accountView: "0xf85b90e2", indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44" };
   var DASH = "/dash/";
   var STAKE = "/staking/";
@@ -42,7 +42,7 @@
       lv0: "Phase 2 · registered", lv1: "Level 1 · Scout", lv2: "Level 2 · Sentinel", lv3: "Level 3 · Guardian", lv4: "Level 4 · Titan",
       up0: "With 100 SECT in staking you become Scout and win 55 SECT.", up1: "With 500 SECT in staking you become Sentinel and win 325 SECT.", up2: "With 1,000 SECT in staking you become Guardian and win 750 SECT.", up3: "With 4,000 SECT in staking you become Titan and win 3,600 SECT.", up4: "Every 1,000 SECT more in staking add 900 SECT, with no maximum.", p2: "Phase 2 benefits", p2s: "Testing the node for free registers you for phase 2. To win SECT now, stake 100 SECT and you become Scout.",
       stk: "Staker detected", stks: "You're already in. You only need to connect your node and you're done.",
-      todo: "Activate your Hash Node", todos: "Turn on your node on the testnet with this same wallet. No node, no prize.",
+      todo: "Activate your Hash Node", todos: "Turn on your node on the testnet with this same wallet. No node, no prize.", nu: "We couldn't check your Hash Node", nus: "The test network didn't answer. Check again in a few seconds.",
       node: "Activate my Hash Node", done: "Hash Node active", dones: "This wallet's node is on.",
       paused: "Hash Node paused", pauseds: "Your node is registered but paused. While it's paused your count doesn't add up: turn it back on and it continues where it left off.", stake: "Stake my SECT", reopen: "Open the dashboard",
       rule: "100 in staking → 55 SECT (Scout) · 500 → 325 (Sentinel) · 1,000 → 750 (Guardian) · 4,000 → 3,600 (Titan) · more, in proportion, no maximum",
@@ -60,7 +60,7 @@
       lv0: "Fase 2 · registrado", lv1: "Nivel 1 · Scout", lv2: "Nivel 2 · Sentinel", lv3: "Nivel 3 · Guardian", lv4: "Nivel 4 · Titan",
       up0: "Con 100 SECT en staking pasas a Scout y ganas 55 SECT.", up1: "Con 500 SECT en staking pasas a Sentinel y ganas 325 SECT.", up2: "Con 1.000 SECT en staking pasas a Guardian y ganas 750 SECT.", up3: "Con 4.000 SECT en staking pasas a Titan y ganas 3.600 SECT.", up4: "Cada 1.000 SECT más en staking suman 900 SECT, sin máximo.", p2: "Beneficios de la fase 2", p2s: "Probar el nodo gratis te registra para la fase 2. Para ganar SECT ahora, pon 100 SECT en staking y pasas a Scout.",
       stk: "Staker detectado", stks: "Ya estás dentro. Solo te falta conectar el nodo y listo.",
-      todo: "Activa tu Hash Node", todos: "Enciende tu nodo en la testnet con esta misma wallet. Sin nodo no hay premio.",
+      todo: "Activa tu Hash Node", todos: "Enciende tu nodo en la testnet con esta misma wallet. Sin nodo no hay premio.", nu: "No pudimos comprobar tu Hash Node", nus: "La red de pruebas no respondió. Vuelve a comprobar en unos segundos.",
       node: "Activar mi Hash Node", done: "Hash Node activo", dones: "El nodo de esta wallet está encendido.",
       paused: "Hash Node pausado", pauseds: "Tu nodo está registrado pero pausado. Mientras está en pausa tu conteo no suma: enciéndelo y sigue donde quedó.", stake: "Hacer staking de mis SECT", reopen: "Abrir el panel",
       rule: "100 en staking → 55 SECT (Scout) · 500 → 325 (Sentinel) · 1.000 → 750 (Guardian) · 4.000 → 3.600 (Titan) · más, en proporción, sin máximo",
@@ -78,7 +78,7 @@
       lv0: "Fase 2 · registrado", lv1: "Nível 1 · Scout", lv2: "Nível 2 · Sentinel", lv3: "Nível 3 · Guardian", lv4: "Nível 4 · Titan",
       up0: "Com 100 SECT em staking você vira Scout e ganha 55 SECT.", up1: "Com 500 SECT em staking você vira Sentinel e ganha 325 SECT.", up2: "Com 1.000 SECT em staking você vira Guardian e ganha 750 SECT.", up3: "Com 4.000 SECT em staking você vira Titan e ganha 3.600 SECT.", up4: "Cada 1.000 SECT a mais em staking somam 900 SECT, sem máximo.", p2: "Benefícios da fase 2", p2s: "Testar o nó de graça registra você para a fase 2. Para ganhar SECT agora, coloque 100 SECT em staking e você vira Scout.",
       stk: "Staker detectado", stks: "Você já está dentro. Só falta conectar o nó e pronto.",
-      todo: "Ative seu Hash Node", todos: "Ligue seu nó na testnet com esta mesma carteira. Sem nó não há prêmio.",
+      todo: "Ative seu Hash Node", todos: "Ligue seu nó na testnet com esta mesma carteira. Sem nó não há prêmio.", nu: "Não conseguimos verificar seu Hash Node", nus: "A rede de teste não respondeu. Verifique de novo em alguns segundos.",
       node: "Ativar meu Hash Node", done: "Hash Node ativo", dones: "O nó desta carteira está ligado.",
       paused: "Hash Node pausado", pauseds: "Seu nó está registrado, mas pausado. Enquanto está pausado sua contagem não soma: ligue de novo e ela continua de onde parou.", stake: "Fazer staking dos meus SECT", reopen: "Abrir o painel",
       rule: "100 em staking → 55 SECT (Scout) · 500 → 325 (Sentinel) · 1.000 → 750 (Guardian) · 4.000 → 3.600 (Titan) · mais, em proporção, sem máximo",
@@ -271,6 +271,7 @@
       rows.push(li(on ? "ok" : "wait", on ? "" : "p", winT, winS, t("lv" + lv)));
       if (on) rows.push(li("ok", "", t("done"), t("dones")));
       else if (r.node === "paused") rows.push(li("warn", "p", t("paused"), t("pauseds")));
+      else if (r.node === "unknown") rows.push(li("warn", "p", t("nu"), t("nus")));
       else rows.push(li("wait", "p", t("todo"), t("todos")));
       rows.push(li("ok", "", t("r2", { n: fmt(total) }), t("r2s", { w: fmt(r.wallet) }) + "<br>" + t("up" + lv)));
       // con staking y sin nodo encendido: el aviso de que solo falta el nodo
