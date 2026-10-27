@@ -6,7 +6,7 @@ t: {
 "n1": "So machst du mit", "n2": "Stufen", "n3": "Belohnungen", "n4": "Ist es sicher?", "n5": "FAQ", "nc": "Wallet verbinden",
 "h.e": "Offizielle Kampagne · Sectora Foundation",
 "h.l": "<b>7.000.000 SECT</b> an Belohnungen für alle, die das Sectora-Netzwerk aufbauen. Schalte den Hash Node ein und halte deine SECT im Staking: Mit 4.000 SECT gewinnst du 3.600 SECT, und wenn du mehr stakst, gewinnst du anteilig, ohne Obergrenze. Die Auszahlungen beginnen mit dem Start von SectoraEVM.",
-"b.join": "Mitmachen", "b.my": "Mein Airdrop ansehen", "b.how": "Die 4 Schritte ansehen", "b.buy": "SECT auf Uniswap kaufen",
+"b.join": "Mitmachen", "b.my": "Mein Airdrop ansehen", "b.how": "Die 4 Schritte ansehen", "b.guide": "Schritt-für-Schritt-Anleitung", "b.buy": "SECT auf Uniswap kaufen",
 "sh.t": "Kurz gesagt", "sh.1": "Belohnung", "sh.2": "Teilnahme", "sh.2v": "Ab 100 SECT im Staking", "sh.3": "Dauer", "sh.3v": "Gleiche Zeit für alle, ab deinem Einstieg", "sh.4": "Du erhältst sie", "sh.4v": "Auf SectoraEVM · beim Mainnet-Start", 
 
 "sh.n": "Deine SECT gehen ins Sectora-Staking, ohne Sperrfrist. Abheben, wann du willst.",

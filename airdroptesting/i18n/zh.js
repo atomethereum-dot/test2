@@ -6,7 +6,7 @@ t: {
 "n1": "如何参与", "n2": "等级", "n3": "奖励", "n4": "安全吗？", "n5": "常见问题", "nc": "连接钱包",
 "h.e": "官方活动 · Sectora Foundation",
 "h.l": "<b>7,000,000 SECT</b> 奖励给建设 Sectora 网络的人。开启 Hash Node 并保持 SECT 质押：质押 4,000 SECT 赢得 3,600 SECT，质押更多则按比例获得，没有上限。发放从 SectoraEVM 上线时开始。",
-"b.join": "参与", "b.my": "查看我的空投", "b.how": "查看 4 个步骤", "b.buy": "在 Uniswap 购买 SECT",
+"b.join": "参与", "b.my": "查看我的空投", "b.how": "查看 4 个步骤", "b.guide": "分步指南", "b.buy": "在 Uniswap 购买 SECT",
 "sh.t": "简要", "sh.1": "奖励", "sh.2": "参与条件", "sh.2v": "质押 100 SECT 起", "sh.3": "时长", "sh.3v": "所有人时间相同，从加入当天算起", "sh.4": "领取方式", "sh.4v": "在 SectoraEVM · 主网上线时", 
 
 "sh.n": "你的 SECT 进入 Sectora 质押，没有锁定期，随时可以取回。",
