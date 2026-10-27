@@ -4676,16 +4676,19 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     padding-bottom:clamp(12px,1.2vw,16px);border-bottom:1px solid rgba(255,255,255,.09)}
   .adp-band span{color:#7c8496}
   .adp-band b{color:var(--blue-l,#4d8dff);font-weight:500}
-  .adp-main{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(20px,3vw,48px);align-items:center;
+  .adp-main{display:grid;grid-template-columns:minmax(0,.74fr) minmax(0,1.26fr);gap:clamp(20px,3vw,48px);align-items:center;
     padding:clamp(22px,3vw,44px) clamp(4px,1.2vw,18px) clamp(18px,2.4vw,32px)}
   .adp-num{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;line-height:.9}
-  .adp-big{font-size:clamp(54px,7.6vw,118px);font-weight:200;letter-spacing:-.045em;font-variant-numeric:tabular-nums;
+  .adp-big{font-size:clamp(50px,5.4vw,92px);font-weight:200;letter-spacing:-.045em;font-variant-numeric:tabular-nums;
     background:linear-gradient(180deg,#fff 30%,#a9c4ff);-webkit-background-clip:text;background-clip:text;color:transparent}
   .adp-num small{color:var(--blue-l,#4d8dff);font-size:clamp(12px,1.1vw,15px);letter-spacing:.24em}
   .adp-sub{margin-top:clamp(16px,1.8vw,24px);max-width:34ch;color:#b9c1cf;font-size:clamp(15px,1.15vw,17px);line-height:1.6;font-weight:300}
-  .adp-viz{margin:0;min-width:0}
-  .adp-net{display:block;width:100%;height:clamp(230px,24vw,340px)}
-  .adp-viz figcaption{margin-top:10px;color:#6f7889;font-size:9.5px;text-align:right}
+  /* el film del airdrop, en el sitio de la red: 16:9 con su boton de sonido */
+  .adp-film{margin:0;min-width:0}
+  .adp-media{position:relative;aspect-ratio:16/9;background:#02040a;overflow:hidden;
+    box-shadow:0 0 0 1px rgba(255,255,255,.08),0 30px 80px -30px rgba(21,105,255,.5)}
+  .adp-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .adp-film figcaption{margin-top:10px;color:#6f7889;font-size:9.5px;text-align:right}
 
   /* los cuatro niveles: lo que hay en staking, lo que se recibe y una barra */
   .adp-lv{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
@@ -4751,13 +4754,12 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     .adp-l:nth-child(n+3){border-top:1px solid rgba(255,255,255,.09)}
     .adp-pt:nth-child(n+3){border-top:1px solid var(--fs-line)}
     .adp-cta{border-top:0;padding-top:0}
-    .adp-viz figcaption{text-align:left}
+    .adp-film figcaption{text-align:left}
   }
   @media (max-width:620px){
     .adp-pts{grid-template-columns:minmax(0,1fr)}
     .adp-pt + .adp-pt{border-left:0;border-top:1px solid var(--fs-line)}
     .adp-pt{padding-left:0;padding-right:0}
-    .adp-net{height:220px}
   }
   @media (max-width:560px){
     .adp-btn{width:100%;justify-content:space-between}
@@ -5890,8 +5892,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 
 <!-- ============ airdrop genesis: unete y construye la red ============
      Hoja clara despues del Hash Market, en la cadena de noche como sus vecinas.
-     Su pieza es un escenario negro: la bolsa de 7.000.000 SECT, una red que se
-     va encendiendo nodo a nodo (lienzo .adp-net) y los cuatro niveles. Debajo,
+     Su pieza es un escenario negro: la bolsa de 7.000.000 SECT, el film que
+     explica el airdrop en un minuto y los cuatro niveles. Debajo,
      los cuatro pasos y los botones a /airdrop, la guia y Mi Airdrop. -->
 <section class="fst adp" id="airdrop" aria-labelledby="adp-h">
   <div class="spine" aria-hidden="true"><em><b>07</b><span>Airdrop Genesis</span></em><i></i></div>
@@ -5914,9 +5916,12 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
           <p class="adp-num"><span class="adp-big">7,000,000</span><small class="mono">SECT</small></p>
           <p class="adp-sub">For the people who build the network. Delivered on SectoraEVM at its mainnet launch.</p>
         </div>
-        <figure class="adp-viz">
-          <canvas class="adp-net" aria-hidden="true"></canvas>
-          <figcaption class="mono">Every node that turns on makes the network stronger.</figcaption>
+        <figure class="adp-film">
+          <div class="adp-media">
+            <video data-poster="images/airdrop-film-poster.jpg" data-src="media/sectora-airdrop-film-1080.mp4" data-src-m="media/sectora-airdrop-film-720.mp4" playsinline preload="none" aria-label="Video: Airdrop Genesis explained in one minute"></video>
+            <button class="pr-snd adp-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+          </div>
+          <figcaption class="mono">Film · Airdrop Genesis in one minute</figcaption>
         </figure>
       </div>
       <ol class="adp-lv">
@@ -10465,7 +10470,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
      ancho de banda se lo quitaban a las fotos de prensa y de eventos */
   const carga=()=>{ if(!v.src){ v.preload='metadata'; v.src=v.dataset.src; } };
   const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
-  const callaPrensa=()=>document.querySelectorAll('.press video, .why video, .stk video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
+  const callaPrensa=()=>document.querySelectorAll('.press video, .why video, .stk video, .adp video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
   const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
   const para=()=>{ v.preload='metadata'; if(!v.paused){ propia=true; v.pause(); } };
   const juega=()=>{
@@ -10513,7 +10518,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   const ligero=matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
   const carga=()=>{ if(!v.src){ v.preload='metadata'; v.src=(ligero && v.dataset.srcM) || v.dataset.src; } };
   const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
-  const callaOtros=()=>document.querySelectorAll('.press video, .hmk video, .stk video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
+  const callaOtros=()=>document.querySelectorAll('.press video, .hmk video, .stk video, .adp video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
   const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
   const para=()=>{ v.preload='metadata'; if(!v.paused){ propia=true; v.pause(); } };
   const juega=()=>{
@@ -11276,7 +11281,7 @@ window.__lejos = function(el){
   const ligero=matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
   const carga=()=>{ if(!v.src){ v.preload='metadata'; v.src=(ligero && v.dataset.srcM) || v.dataset.src; } };
   const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
-  const callaOtros=()=>document.querySelectorAll('.press video, .hmk video, .why video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
+  const callaOtros=()=>document.querySelectorAll('.press video, .hmk video, .why video, .adp video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
   const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
   const para=()=>{ v.preload='metadata'; if(!v.paused){ propia=true; v.pause(); } };
   const juega=()=>{
@@ -11324,157 +11329,61 @@ window.__lejos = function(el){
 })();
 </script>
 <script>
-/* ---------- airdrop en la portada: entrada y la red que se enciende ----------
+/* ---------- airdrop en la portada: entrada ----------
    El titular sube, el escenario aparece y las barras de los niveles se llenan
-   al llegar la seccion (.on, como en el staking). En el lienzo, los nodos se
-   encienden uno a uno de dentro hacia fuera, se enlazan con sus vecinos ya
-   encendidos y por los enlaces corren pulsos. Solo se anima con el lienzo
-   cerca y la pestana delante, a 30 fps; con movimiento reducido, foto fija. */
+   al llegar la seccion (.on, como en el staking). */
 (function(){
   const sec = document.getElementById('airdrop');
   if(!sec) return;
-  if(!('IntersectionObserver' in window)) sec.classList.add('on');
-  else {
-    const io = new IntersectionObserver((es) => {
-      if(es[0].isIntersecting){ sec.classList.add('on'); io.disconnect(); }
-    }, {rootMargin:'-10% 0px -14% 0px', threshold:0});
-    io.observe(sec);
-  }
-
-  const cv = sec.querySelector('.adp-net');
-  const ctx = cv && cv.getContext && cv.getContext('2d');
-  if(!ctx) return;
-  const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let W = 0, H = 0, nodos = [], enlaces = [], pulsos = [], rejilla = null, fin = 0;
-  let t0 = 0, raf = 0, ultimo = 0, sigPulso = 0, cerca = false, visto = false;
-
-  /* azar con semilla: la misma red en cada visita y en cada tamano */
-  let sem = 7;
-  const rnd = () => { sem = sem * 16807 % 2147483647; return (sem - 1) / 2147483646; };
-  const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
-
-  function armar(){
-    const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
-    W = Math.max(1, Math.round(r.width)); H = Math.max(1, Math.round(r.height));
-    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    /* la rejilla de puntos se pinta una vez aparte y se copia en cada fotograma */
-    rejilla = document.createElement('canvas'); rejilla.width = cv.width; rejilla.height = cv.height;
-    const g = rejilla.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.fillStyle = 'rgba(255,255,255,.07)';
-    for(let x = 9; x < W; x += 18) for(let y = 9; y < H; y += 18) g.fillRect(x, y, 1, 1);
-
-    sem = 7; nodos = []; enlaces = []; pulsos = [];
-    const hub = {x: W * .5, y: H * .5, t: 0, hub: true};
-    nodos.push(hub);
-    const n = Math.round(Math.min(44, Math.max(20, W * H / 5600)));
-    const dmin = Math.sqrt(W * H / n) * .6;
-    for(let k = 0; nodos.length <= n && k < 5000; k++){
-      const p = {x: 16 + rnd() * (W - 32), y: 16 + rnd() * (H - 32)};
-      if(dist(p, hub) < 52 || nodos.some(q => dist(p, q) < dmin)) continue;
-      nodos.push(p);
-    }
-    /* de dentro hacia fuera, con algo de azar; cada uno se enlaza con los dos
-       vecinos mas cercanos que ya estaban encendidos */
-    const resto = nodos.slice(1);
-    resto.forEach(p => { p.k = dist(p, hub) + rnd() * 70; });
-    resto.sort((a, b) => a.k - b.k);
-    resto.forEach((p, i) => { p.t = .4 + i * .15; });
-    for(const p of resto){
-      nodos.filter(q => q !== p && q.t < p.t).sort((a, b) => dist(a, p) - dist(b, p)).slice(0, 2)
-        .forEach(q => enlaces.push({a: q, b: p, t: p.t, l: dist(q, p)}));
-    }
-    fin = resto.length ? resto[resto.length - 1].t + .6 : 0;
-  }
-
-  function pintar(s){
-    ctx.clearRect(0, 0, W, H);
-    ctx.drawImage(rejilla, 0, 0, W, H);
-    const hub = nodos[0];
-
-    /* halo de la marca */
-    const halo = ctx.createRadialGradient(hub.x, hub.y, 0, hub.x, hub.y, 90);
-    halo.addColorStop(0, 'rgba(21,105,255,.28)'); halo.addColorStop(1, 'rgba(21,105,255,0)');
-    ctx.fillStyle = halo; ctx.fillRect(hub.x - 90, hub.y - 90, 180, 180);
-
-    /* enlaces: se tienden desde el nodo viejo hacia el nuevo */
-    ctx.lineWidth = 1;
-    for(const e of enlaces){
-      const k = Math.min(1, (s - e.t) / .45);
-      if(k <= 0) continue;
-      ctx.strokeStyle = 'rgba(77,141,255,' + (.16 + .2 * k) + ')';
-      ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y);
-      ctx.lineTo(e.a.x + (e.b.x - e.a.x) * k, e.a.y + (e.b.y - e.a.y) * k); ctx.stroke();
-    }
-
-    /* pulsos que corren por los enlaces */
-    for(const p of pulsos){
-      const k = (s - p.t) / p.d;
-      if(k < 0 || k > 1) continue;
-      const x = p.e.a.x + (p.e.b.x - p.e.a.x) * (p.ida ? k : 1 - k), y = p.e.a.y + (p.e.b.y - p.e.a.y) * (p.ida ? k : 1 - k);
-      const gl = ctx.createRadialGradient(x, y, 0, x, y, 9);
-      gl.addColorStop(0, 'rgba(190,214,255,.95)'); gl.addColorStop(1, 'rgba(77,141,255,0)');
-      ctx.fillStyle = gl; ctx.fillRect(x - 9, y - 9, 18, 18);
-    }
-
-    /* nodos: apagados, gris; al encenderse, azul con un anillo que se abre */
-    for(let i = 1; i < nodos.length; i++){
-      const p = nodos[i], d = s - p.t;
-      if(d < 0){ ctx.fillStyle = 'rgba(255,255,255,.22)'; ctx.fillRect(p.x - 1.5, p.y - 1.5, 3, 3); continue; }
-      if(d < 1.3){
-        ctx.strokeStyle = 'rgba(77,141,255,' + (1 - d / 1.3) * .7 + ')';
-        ctx.beginPath(); ctx.arc(p.x, p.y, 4 + d * 16, 0, 6.2832); ctx.stroke();
-      }
-      const gl = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 10);
-      gl.addColorStop(0, 'rgba(77,141,255,.55)'); gl.addColorStop(1, 'rgba(77,141,255,0)');
-      ctx.fillStyle = gl; ctx.fillRect(p.x - 10, p.y - 10, 20, 20);
-      ctx.fillStyle = d < .25 ? '#dce8ff' : '#4d8dff'; ctx.fillRect(p.x - 2.5, p.y - 2.5, 5, 5);
-    }
-
-    /* la marca en el centro: el anillo de Sectora en su casilla */
-    ctx.fillStyle = '#1569ff'; ctx.fillRect(hub.x - 15, hub.y - 15, 30, 30);
-    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.6;
-    ctx.beginPath(); ctx.arc(hub.x, hub.y, 7.6, 0, 6.2832); ctx.stroke();
-    ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(77,141,255,.35)';
-    ctx.strokeRect(hub.x - 22.5, hub.y - 22.5, 45, 45);
-  }
-
-  function lanzarPulso(s){
-    const vivos = enlaces.filter(e => s > e.t + .45);
-    if(!vivos.length) return;
-    const e = vivos[Math.floor(Math.random() * vivos.length)];
-    pulsos.push({e: e, t: s, d: Math.max(.6, e.l / 140), ida: Math.random() < .7});
-    if(pulsos.length > 18) pulsos.shift();
-  }
-
-  function cuadro(ahora){
-    raf = 0;
-    if(!cerca || document.hidden) return;
-    raf = requestAnimationFrame(cuadro);
-    if(ahora - ultimo < 32) return;
-    ultimo = ahora;
-    const s = (ahora - t0) / 1000;
-    if(s > sigPulso){ lanzarPulso(s); sigPulso = s + (s < fin ? .5 : .22); }
-    pintar(s);
-  }
-  const decidir = () => {
-    if(quieto){ pintar(fin + 9); return; }
-    if(cerca && !document.hidden && !raf){ if(!visto){ visto = true; t0 = performance.now(); sigPulso = 1; } raf = requestAnimationFrame(cuadro); }
+  if(!('IntersectionObserver' in window)){ sec.classList.add('on'); return; }
+  const io = new IntersectionObserver((es) => {
+    if(es[0].isIntersecting){ sec.classList.add('on'); io.disconnect(); }
+  }, {rootMargin:'-10% 0px -14% 0px', threshold:0});
+  io.observe(sec);
+})();
+</script>
+<script>
+/* film del airdrop: como el del staking. Se descarga al acercarse (a 720p en
+   pantallas pequenas o con ahorro de datos), arranca con musica al verse (mudo
+   si el navegador aun no deja sonar; el sonido entra con el primer toque) y se
+   para al salir. Cuando suena, calla los demas videos. */
+(() => {
+  const v=document.querySelector('.adp video'), b=document.querySelector('.adp-snd'); if(!v||!b) return;
+  let quiere=true, visto=false, propia=false;
+  const ligero=matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
+  const carga=()=>{ if(!v.src){ v.preload='metadata'; v.src=(ligero && v.dataset.srcM) || v.dataset.src; } };
+  const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
+  const callaOtros=()=>document.querySelectorAll('.press video, .hmk video, .why video, .stk video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
+  const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
+  const para=()=>{ v.preload='metadata'; if(!v.paused){ propia=true; v.pause(); } };
+  const juega=()=>{
+    carga(); v.preload='auto'; if(v.ended) v.currentTime=0;
+    v.muted=!quiere; if(quiere) callaOtros();
+    const p=v.play();
+    if(p&&p.catch) p.catch(e=>{ if(e && e.name==='NotAllowedError' && visto && !document.hidden) mudo(); });
+    marca();
   };
-
-  armar();
-  pintar(quieto ? fin + 9 : 0);
+  v.addEventListener('pause',()=>{ if(!propia && !v.ended && visto && !document.hidden) mudo(); propia=false; });
   if('IntersectionObserver' in window){
-    new IntersectionObserver((es) => { cerca = es[es.length - 1].isIntersecting; decidir(); }, {rootMargin:'0px 0px -12% 0px'}).observe(cv);
-  } else { cerca = true; decidir(); }
-  document.addEventListener('visibilitychange', decidir);
-  if('ResizeObserver' in window){
-    let w0 = 0;
-    new ResizeObserver(() => {
-      const w = Math.round(cv.getBoundingClientRect().width);
-      if(w === w0) return; w0 = w;
-      armar(); pintar(quieto || !visto ? (quieto ? fin + 9 : 0) : (performance.now() - t0) / 1000);
-    }).observe(cv);
+    new IntersectionObserver(es=>{ if(es[0].isIntersecting) carga(); },{rootMargin:'100% 0px'}).observe(v);
+    new IntersectionObserver(es=>{
+      visto=es[0].isIntersecting;
+      if(visto && !document.hidden) juega(); else para();
+    },{threshold:.5}).observe(v);
   }
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden) para(); else if(visto) juega(); });
+  const gesto=e=>{
+    if(e.target.closest && e.target.closest('.adp-snd')) return;
+    if(navigator.userActivation && !navigator.userActivation.isActive) return;
+    if(quiere && visto && v.muted && !v.paused){ v.muted=false; callaOtros(); marca(); }
+  };
+  ['click','touchend','keydown'].forEach(t=>document.addEventListener(t,gesto,{capture:true,passive:true}));
+  b.addEventListener('click',()=>{
+    quiere=v.muted;
+    if(quiere){ v.muted=false; callaOtros(); if(v.paused) juega(); }
+    else v.muted=true;
+    marca();
+  });
 })();
 </script>
 <script>
