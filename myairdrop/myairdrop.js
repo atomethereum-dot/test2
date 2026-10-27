@@ -202,7 +202,7 @@
     document.documentElement.lang = lang;
     document.querySelectorAll("[data-t]").forEach(function (el) { var v = t(el.getAttribute("data-t")); if (el.hasAttribute("data-html")) el.innerHTML = v; else el.textContent = v; });
     document.querySelectorAll(".langs button").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-l") === lang); b.setAttribute("aria-pressed", b.getAttribute("data-l") === lang); });
-    document.title = t("brand") + " · Sectora";
+    document.title = "My AirDrop - Sectora Foundation";
   }
   function stop() { if (timer) { clearInterval(timer); timer = 0; } }
 
