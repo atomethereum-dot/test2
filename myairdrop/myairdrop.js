@@ -192,7 +192,7 @@
   }
 
   /* ---------- pantallas ---------- */
-  var app = document.getElementById("app"), cur = null, conn = false, data = null, timer = 0, busy = false;
+  var app = document.getElementById("app"), cur = null, conn = false, via = "", data = null, timer = 0, busy = false;
   var ICON = {
     ok: '<svg viewBox="0 0 16 16"><path d="M4 8.4l2.8 2.7 5.4-5.9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     wait: '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.6" fill="#e0a030"/></svg>'
@@ -208,7 +208,8 @@
 
   function start(msg) {
     stop(); cur = null; data = null;
-    var hasW = !!window.ethereum;
+    // con el selector de wallets se conecta desde cualquier navegador (tambien Chrome o Safari del movil)
+    var hasW = !!window.SectoraMyWallet || !!window.ethereum;
     app.innerHTML = '<div class="start"><p>' + esc(t("intro")) + '</p>' +
       (hasW ? '<button class="btn go mono" type="button" data-a="connect" style="margin-top:18px"><span>' + esc(t("connect")) + '</span><span>→</span></button>' : "") +
       (msg ? '<p class="msg">' + esc(msg) + "</p>" : "") +
@@ -222,12 +223,13 @@
     });
   }
   function connect() {
+    if (window.SectoraMyWallet) { window.SectoraMyWallet.abrir(); return; }
     window.ethereum.request({ method: "eth_requestAccounts" }).then(function (acc) {
       if (acc && acc[0]) show(acc[0], true); else start(t("rej"));
     }).catch(function () { start(t("rej")); });
   }
-  function show(addr, connected) {
-    stop(); cur = addr; conn = connected;
+  function show(addr, connected, how) {
+    stop(); cur = addr; conn = connected; via = connected ? how || "" : "";
     try { localStorage.setItem("ma_addr", addr); } catch (e) {}
     if (!data || data.addr.toLowerCase() !== addr.toLowerCase()) app.innerHTML = '<p class="loading"><span class="spin"></span>' + esc(t("reading")) + "</p>";
     busy = true;
@@ -241,7 +243,7 @@
     var lvName = a.lv >= 0 ? LEVELS[a.lv].n : t("nolv");
 
     /* barra de la wallet */
-    var html = '<div class="wbar"><div class="who"><i class="dot"></i><div><span class="mono st">' + esc(conn ? t("conn") : t("view")) + '</span><br><span class="ad">' + esc(d.addr) + "</span></div></div>" +
+    var html = '<div class="wbar"><div class="who"><i class="dot"></i><div><span class="mono st">' + esc(conn ? t("conn") + (via ? " · " + via : "") : t("view")) + '</span><br><span class="ad">' + esc(d.addr) + "</span></div></div>" +
       '<div class="acts"><button class="btn sm mono" type="button" data-a="copy">' + esc(t("copy")) + '</button><button class="btn sm mono" type="button" data-a="refresh">' + esc(t("refresh")) + " ↻</button>" +
       '<button class="btn sm mono" type="button" data-a="change">' + esc(t("change")) + "</button></div></div>";
 
@@ -301,7 +303,11 @@
     app.innerHTML = html;
 
     app.querySelector('[data-a="refresh"]').addEventListener("click", function () { if (!busy) show(d.addr, conn); });
-    app.querySelector('[data-a="change"]').addEventListener("click", function () { try { localStorage.removeItem("ma_addr"); } catch (e) {} start(); });
+    app.querySelector('[data-a="change"]').addEventListener("click", function () {
+      try { localStorage.removeItem("ma_addr"); } catch (e) {}
+      if (window.SectoraMyWallet) window.SectoraMyWallet.salir();
+      start();
+    });
     app.querySelector('[data-a="copy"]').addEventListener("click", function () {
       var b = this; try { navigator.clipboard.writeText(d.addr).then(function () { b.textContent = t("copied"); setTimeout(function () { b.textContent = t("copy"); }, 1400); }); } catch (e) {}
     });
@@ -367,6 +373,11 @@
     });
   });
   statics();
+  var MW = window.SectoraMyWallet;
+  if (MW) {
+    MW.alDir(function (a, how) { show(a, true, how); });
+    MW.alSalir(function () { if (conn) start(); });
+  }
   var q = (location.search.match(/[?&]a(?:ddress)?=(0x[0-9a-fA-F]{40})/) || [])[1];
   if (q) show(q, false);
   else {
@@ -377,6 +388,7 @@
     var again = function () { if (!cur && saved && /^0x[0-9a-fA-F]{40}$/.test(saved)) show(saved, false); };
     if (w && w.request) w.request({ method: "eth_accounts" }).then(function (acc) { if (!cur && acc && acc[0]) show(acc[0], true); else again(); }).catch(again);
     else again();
+    if (MW) MW.restaurar();   // la sesion de WalletConnect que se abrio aqui (por ejemplo, desde Safari del movil)
     if (w && w.on) w.on("accountsChanged", function (acc) { if (acc && acc[0] && conn) show(acc[0], true); });
   }
 })();
