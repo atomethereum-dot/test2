@@ -387,18 +387,27 @@
     "}" +
     "@media (max-width:980px){.pp-body.sad-on{grid-template-rows:none}.pp-body.sad-on > .frame,.pp-body.sad-on > .sad,.pp-body.sad-on > .sad-lede,.pp-body.sad-on > .steps{grid-column:auto;grid-row:auto}}" +
     /* en la cabecera, donde estaba ese texto: el mensaje para quienes ya hacen staking */
-    /* un recuadro blanco como la consola (linea azul arriba), compacto y centrado con el titulo */
-    ".sad-msg{position:relative;align-self:center;max-width:440px;padding:16px 18px 15px;background:#fff;border:1px solid rgba(0,0,0,.09);box-shadow:0 18px 44px -32px rgba(7,8,10,.35);font-family:'IBM Plex Sans',system-ui,sans-serif}" +
+    /* el mismo ancho que la ventana del Airdrop de abajo (las dos columnas de la cabecera son las de las
+       consolas) y a la altura del titulo; esquinas en cruz como la consola, fondo azulado, etiqueta
+       "Nuevo", linea azul arriba con un brillo que la recorre y un boton azul a la ventana */
+    "@media (min-width:981px){.pp-head.sad-msg-on{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,3.4vw,56px);align-items:start}" +
+      ".pp-head.sad-msg-on .hw{padding-top:0}}" +
+    ".sad-msg{position:relative;padding:18px 22px 18px;background:linear-gradient(135deg,#fff 0%,#f3f7ff 100%);border:1px solid rgba(21,105,255,.3);box-shadow:0 26px 54px -34px rgba(21,105,255,.55);font-family:'IBM Plex Sans',system-ui,sans-serif}" +
     ".sad-msg::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:#1569ff}" +
-    ".pp-head.sad-msg-on{align-items:center}" +
-    ".pp-head .sad-msg-k{display:flex;align-items:flex-start;gap:9px;margin:0 0 9px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#0d4fd8;font-weight:500;line-height:1.5}" +
-    ".sad-msg-k i{flex:none;width:6px;height:6px;margin-top:.45em;border-radius:50%;background:#1569ff;box-shadow:0 0 0 3px rgba(21,105,255,.16)}" +
-    ".pp-head .sad-msg-t{max-width:none;margin:0;color:var(--p-ink-2,#3c414c);font-size:13.5px;line-height:1.6;font-weight:300}" +
-    ".sad-msg-a{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:11px}" +
-    ".sad-msg-a a{color:#0d4fd8;font-weight:400;font-size:13px;text-decoration:none;border-bottom:1px solid rgba(13,79,216,.32);padding-bottom:1px;transition:color .3s,border-color .3s}" +
+    ".sad-msg::after{content:'';position:absolute;top:-1px;left:-1px;height:2px;width:30%;background:linear-gradient(90deg,transparent,#9cc0ff,#fff,#9cc0ff,transparent);animation:sadShine 3.6s ease-in-out infinite}" +
+    "@keyframes sadShine{0%{transform:translateX(-40%);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translateX(370%);opacity:0}}" +
+    ".pp-head .sad-msg-k{max-width:none;display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;margin:0 0 10px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#0d4fd8;font-weight:500;line-height:1.5}" +
+    ".sad-msg-k b{display:inline-flex;align-items:center;gap:7px;padding:3px 8px;background:#1569ff;color:#fff;font-weight:500;letter-spacing:.14em}" +
+    ".sad-msg-k b i{width:6px;height:6px;border-radius:50%;background:#fff;animation:sadBeat 1.8s ease-in-out infinite}" +
+    "@keyframes sadBeat{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}50%{box-shadow:0 0 0 4px rgba(255,255,255,0)}}" +
+    ".pp-head .sad-msg-t{max-width:none;margin:0;color:#2b303a;font-size:14px;line-height:1.6;font-weight:300}" +
+    ".sad-msg-a{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin-top:14px}" +
+    ".sad-msg-a a{color:#0d4fd8;font-weight:400;font-size:13px;text-decoration:none;border-bottom:1px solid rgba(13,79,216,.32);padding-bottom:1px;transition:color .3s,border-color .3s,background .3s}" +
     ".sad-msg-a a:hover{color:#1569ff;border-color:#1569ff}" +
-    "@media (max-width:980px){.sad-msg{align-self:start;max-width:none}}" +
-    "@media (max-width:620px){.sad-msg{padding:14px 15px 13px}}" +
+    ".sad-msg-a a.sad-msg-go{padding:10px 16px;border:0;background:#1569ff;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}" +
+    ".sad-msg-a a.sad-msg-go:hover{background:#0d4fd8;color:#fff}" +
+    "@media (max-width:620px){.sad-msg{padding:16px 16px 15px}.pp-head .sad-msg-t{font-size:13.5px}}" +
+    "@media (prefers-reduced-motion:reduce){.sad-msg::after,.sad-msg-k b i{animation:none}.sad-msg::after{display:none}}" +
     "@media (max-width:420px){.sad-lv{grid-template-columns:1fr 1fr}.sad-lv .pz{grid-column:1 / -1;border-left:0!important;border-top:1px solid rgba(0,0,0,.09)}}" +
     "@media (prefers-reduced-motion:reduce){.sad *{animation:none!important;transition:none!important}}" +
     /* the same frame as the staking console: square corners, blue + marks on the corners, the same
@@ -473,7 +482,8 @@
     if (lede && !document.querySelector(".sad-msg")) {
       var msg = document.createElement("div");
       msg.className = "sad-msg";
-      msg.innerHTML = '<p class="sad-msg-k"><i aria-hidden="true"></i>' + tt("msgK") + "</p>" +
+      msg.innerHTML = '<span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>' +
+        '<p class="sad-msg-k"><b><i aria-hidden="true"></i>' + tt("newB") + "</b>" + tt("msgK") + "</p>" +
         '<p class="sad-msg-t">' + tt("msgT") + "</p>" +
         '<div class="sad-msg-a"><a href="#airdrop-genesis" class="sad-msg-go">' + tt("msgA") + ' ↓</a><a href="' + AIRDROP_URL + '">' + tt("msgR") + " →</a></div>";
       lede.parentNode.classList.add("sad-msg-on");
