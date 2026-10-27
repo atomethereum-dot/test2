@@ -801,6 +801,7 @@ html.aiboot{overflow:hidden}
         <p class="lede fx" style="--d:.55s" data-i="h.l"><b>7,000,000 SECT</b> in rewards for those who build the Sectora network. Turn on the Hash Node and keep your SECT in staking: with 4,000 SECT you win 3,600 SECT, and if you stake more, you win in proportion, no maximum. Deliveries start at the launch of SectoraEVM.</p>
         <div class="actions">
           <a class="btn btn-primary mono js-connect fx" style="--d:.7s" href="#steps"><span data-i="b.join">Take part</span><span class="arrow">→</span></a>
+          <a class="btn btn-ghost mono fx" style="--d:.74s" href="/myairdrop/"><span data-i="b.my">View my airdrop</span><span class="arrow">→</span></a>
           <a class="btn btn-guide mono fx" style="--d:.78s" href="#steps"><span class="gs" aria-hidden="true"><b></b><b></b><b></b><b></b></span><span data-i="b.how">See the 4 steps</span><span class="arrow">→</span></a>
           <a class="btn btn-ghost mono fx" style="--d:.86s" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener"><span data-i="b.buy">Buy SECT on Uniswap</span><span class="arrow">↗</span></a>
         </div>
@@ -1334,7 +1335,7 @@ es:{
 n1:"Cómo entrar",n2:"Niveles",n3:"Premios",n4:"¿Es seguro?",n5:"Preguntas",nc:"Conectar wallet",
 "h.e":"Campaña oficial · Sectora Foundation",
 "h.l":"<b>7.000.000 SECT</b> en recompensas para quienes construyen la red de Sectora. Activa el Hash Node y mantén tus SECT en staking: con 4.000 SECT ganas 3.600 SECT, y si pones más, ganas en proporción, sin máximo. Las entregas empiezan en el lanzamiento de SectoraEVM.",
-"b.join":"Participar","b.how":"Ver los 4 pasos","b.buy":"Comprar SECT en Uniswap",
+"b.join":"Participar","b.my":"Ver mi airdrop","b.how":"Ver los 4 pasos","b.buy":"Comprar SECT en Uniswap",
 "sh.t":"En resumen","sh.1":"Premio","sh.2":"Participación","sh.2v":"Desde 100 SECT en staking","sh.3":"Duración","sh.3v":"El mismo tiempo para todos, desde que entras","sh.4":"Lo recibes","sh.4v":"En SectoraEVM · en su lanzamiento","sh.5":"Bloqueo del premio",
 "sh.n":"Tus SECT van al staking de Sectora, sin bloqueo. Retiras cuando quieras.",
 "st.pend":"Pendiente","st.ok":"Verificable","st.rule":"Regla",
@@ -1396,7 +1397,7 @@ pt:{
 n1:"Como entrar",n2:"Níveis",n3:"Prêmios",n4:"É seguro?",n5:"Perguntas",nc:"Conectar carteira",
 "h.e":"Campanha oficial · Sectora Foundation",
 "h.l":"<b>7.000.000 SECT</b> em recompensas para quem constrói a rede da Sectora. Ative o Hash Node e mantenha seus SECT em staking: com 4.000 SECT você ganha 3.600 SECT, e se colocar mais, ganha em proporção, sem máximo. As entregas começam no lançamento da SectoraEVM.",
-"b.join":"Participar","b.how":"Ver os 4 passos","b.buy":"Comprar SECT na Uniswap",
+"b.join":"Participar","b.my":"Ver meu airdrop","b.how":"Ver os 4 passos","b.buy":"Comprar SECT na Uniswap",
 "sh.t":"Resumo","sh.1":"Prêmio","sh.2":"Participação","sh.2v":"A partir de 100 SECT em staking","sh.3":"Duração","sh.3v":"O mesmo tempo para todos, desde que você entra","sh.4":"Você recebe","sh.4v":"Na SectoraEVM · no lançamento","sh.5":"Bloqueio do prêmio",
 "sh.n":"Seus SECT vão para o staking da Sectora, sem bloqueio. Saque quando quiser.",
 "st.pend":"Pendente","st.ok":"Verificável","st.rule":"Regra",
@@ -1678,7 +1679,7 @@ function toast(msg){ var t = $("#toast"); t.textContent = msg; t.classList.add("
 $$(".lang button").forEach(function(b){
   b.addEventListener("click", function(){
     lang = b.getAttribute("data-l");
-    try{ localStorage.setItem("sa_lang", lang); }catch(e){}
+    try{ sessionStorage.setItem("sa_lang_visit", lang); }catch(e){}
     render();
   });
 });
@@ -1690,8 +1691,8 @@ $$(".js-connect").forEach(function(a){
   });
 });
 
-try{ var saved = localStorage.getItem("sa_lang"); if(saved && D[saved]) lang = saved; }catch(e){}
-if(lang === "en"){ var nl = (navigator.language || "").slice(0,2); if(nl === "es" || nl === "pt"){ try{ if(!localStorage.getItem("sa_lang")) lang = nl; }catch(e){ lang = nl; } } }
+/* abre siempre en ingles; el idioma elegido arriba se mantiene solo durante esa visita */
+try{ var saved = sessionStorage.getItem("sa_lang_visit"); if(saved && D[saved]) lang = saved; }catch(e){}
 render();
 reveals();
 countUp();
