@@ -74,6 +74,8 @@
     ".ng-fab i{position:relative;display:grid;place-items:center;width:26px;height:26px;background:var(--blue);color:#fff}",
     ".ng-fab i svg{width:15px;height:15px}",
     ".ng-fab.new i::after{content:'';position:absolute;inset:-5px;border:1px solid var(--blue);animation:ngp 1.8s ease-out infinite}",
+    /* en la portada del panel, bajo el texto: ya no flota encima del contenido */
+    ".ng-fab.in{position:relative;right:auto;bottom:auto;z-index:2;display:inline-flex;align-self:flex-start;justify-self:start;width:max-content;margin-top:26px;box-shadow:none}",
     "@keyframes ngp{from{opacity:.9;transform:scale(.8)}to{opacity:0;transform:scale(1.5)}}",
     ".ng{position:fixed;inset:0;z-index:410;display:none}",
     ".ng.on{display:block}",
@@ -111,6 +113,7 @@
     ".ng-lb img{max-width:100%;max-height:100%;border:1px solid var(--rule)}",
     "@media (max-width:640px){",
     "  .ng-fab{right:14px;bottom:14px;padding:11px 13px 11px 11px;font-size:10px}",
+    "  .ng-fab.in{margin-top:20px}",
     "  .ng-h{padding:18px 16px 14px}.ng-h h2{font-size:22px}",
     "  .ng-b{padding:14px 16px 28px}.ng-s{padding:16px 14px 16px 54px}.ng-n{left:12px;top:16px}",
     "}",
@@ -194,7 +197,10 @@
     box.innerHTML = '<div class="ng-bg"></div><div class="ng-p"><div class="ng-h"><div><p class="ng-k"></p><h2></h2><p class="ng-sub"></p></div>' +
       '<button class="ng-x" type="button"></button></div><div class="ng-b"></div></div>';
     lb = document.createElement("div"); lb.className = "ng-lb"; lb.innerHTML = '<img alt="">';
-    document.body.appendChild(fab); document.body.appendChild(box); document.body.appendChild(lb);
+    // va en la portada, justo bajo el texto principal; si no la encuentra, flota abajo a la derecha
+    var sub = document.querySelector('#state [data-i18n="hashdash.hero.sub"]');
+    if (sub) { fab.classList.add("in"); sub.parentNode.insertBefore(fab, sub.nextSibling); } else document.body.appendChild(fab);
+    document.body.appendChild(box); document.body.appendChild(lb);
     list = box.querySelector(".ng-b");
     fab.querySelector("span").textContent = T[lang()].fab;
 
