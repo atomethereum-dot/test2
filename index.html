@@ -4801,6 +4801,11 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .film-cv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;cursor:pointer;transition:opacity .4s var(--ease)}
   .film-cv.off{opacity:0;pointer-events:none}
   .film-cv ~ .pr-snd{z-index:3}
+  .film-pp{position:absolute;left:12px;bottom:12px;z-index:3;width:30px;height:30px;display:grid;place-items:center;padding:0;
+    background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.25);cursor:pointer;transition:border-color .3s var(--ease),background-color .3s var(--ease)}
+  .film-pp:hover,.film-pp:focus-visible{border-color:#fff;background:rgba(0,0,0,.75)}
+  .film-pp i{display:block;width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent #fff;margin-left:2px}
+  .film-pp.on i{width:8px;height:10px;border:0;margin:0;background:linear-gradient(90deg,#fff 0 3px,transparent 3px 5px,#fff 5px 8px)}
   .pr-snd{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px;
     background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;
     font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase}
@@ -10487,8 +10492,12 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(!v || !b) return;
     const caja = v.parentElement;
     const cv = document.createElement('img'); cv.className = 'film-cv'; cv.alt = ''; cv.decoding = 'async';
-    caja.insertBefore(cv, b);
-    const f = { v: v, quiere: true, enSec: false, seVe: false, va: false, propia: false };
+    /* play / pausa: un cuadrado pequeno en la esquina, como el boton de sonido */
+    const pp = document.createElement('button'); pp.type = 'button'; pp.className = 'film-pp'; pp.setAttribute('aria-label', 'Play'); pp.innerHTML = '<i aria-hidden="true"></i>';
+    caja.insertBefore(cv, b); caja.insertBefore(pp, b);
+    const f = { v: v, quiere: true, enSec: false, seVe: false, va: false, propia: false, parado: false };
+    const marcaPP = () => { const on = !v.paused && !v.ended; pp.classList.toggle('on', on); pp.setAttribute('aria-label', on ? 'Pause' : 'Play'); };
+    ['play', 'playing', 'pause', 'ended'].forEach(t => v.addEventListener(t, marcaPP));
     f.marca = () => { const on = !v.muted; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); };
     todos.push(f);
     const carga = () => { if(!v.src){ v.preload = 'metadata'; v.src = (ligero && v.dataset.srcM) || v.dataset.src; } };
@@ -10517,8 +10526,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     };
     const decide = () => {
       if(document.hidden){ if(f.va) para(false); return; }
-      if(!f.enSec){ if(f.va || !v.paused || !v.ended) para(true); return; }
-      if(f.seVe && !f.va && !v.ended) juega(false);
+      if(!f.enSec){ f.parado = false; if(f.va || !v.paused || !v.ended) para(true); return; }
+      if(f.seVe && !f.va && !v.ended && !f.parado) juega(false);
     };
     /* si el navegador lo para por quitarle el mudo sin permiso, sigue mudo */
     v.addEventListener('pause', () => {
@@ -10527,6 +10536,11 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     });
     const tocar = () => { f.quiere = true; juega(true); };
     cv.addEventListener('click', tocar);
+    /* la pausa del visitante se respeta mientras siga en la seccion */
+    pp.addEventListener('click', () => {
+      if(v.paused || v.ended){ f.parado = false; tocar(); }
+      else { f.parado = true; para(false); }
+    });
     b.addEventListener('click', () => {
       f.quiere = v.muted;
       if(f.quiere){ if(v.paused) juega(true); else { v.muted = false; callaOtros(f); } }
@@ -10542,7 +10556,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   });
   /* primer toque o clic en cualquier parte: el film que suena mudo enciende el sonido */
   const gesto = e => {
-    if(e.target.closest && e.target.closest('.pr-snd, .film-cv')) return;
+    if(e.target.closest && e.target.closest('.pr-snd, .film-cv, .film-pp')) return;
     if(navigator.userActivation && !navigator.userActivation.isActive) return;
     todos.forEach(f => { if(f.quiere && f.va && f.v.muted && !f.v.paused){ f.v.muted = false; callaOtros(f); f.marca(); } });
   };
