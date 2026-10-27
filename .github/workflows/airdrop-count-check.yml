@@ -1,0 +1,40 @@
+name: Airdrop count check
+
+# Solo lectura: ejecuta airdroptesting/count.js (el mismo calculo que la web) para una wallet
+# con la apertura de prueba y muestra lo que veria el contador.
+on:
+  workflow_dispatch:
+    inputs:
+      address:
+        description: "Wallet a revisar"
+        required: true
+  push:
+    paths:
+      - ".github/workflows/airdrop-count-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Calcular
+        env:
+          ADDR: ${{ github.event.inputs.address || '0x659afdD493AcDf9EAA16a5221dcC522fA0A37704' }}
+        run: |
+          cat > run.cjs <<'JS'
+          global.window = globalThis; window.SA_OPEN = Date.UTC(2026, 9, 27);
+          require("./airdroptesting/count.js");
+          const C = window.SACount, t0 = Date.now();
+          console.log("OPEN", new Date(C.OPEN).toISOString(), "ahora", new Date().toISOString());
+          C.wallet(process.env.ADDR).then(h => {
+            console.log("historia en", Date.now() - t0, "ms · eventos staking:", h.ev.length, JSON.stringify(h.ev.map(e => [e.dep ? "dep" : "wd", e.amt, new Date(e.t).toISOString()])));
+            console.log("nodo:", JSON.stringify(h.node && { at: new Date(h.node.at).toISOString(), active: h.node.active, spans: (h.node.spans || []).map(s => [new Date(s[0]).toISOString(), s[1] === Infinity ? "ahora" : new Date(s[1]).toISOString()]) }));
+            const r = C.evaluate(h.ev, h.node, C.OPEN, Date.now());
+            console.log("estado:", r.status, "· nivel", r.level, "· premio", r.prize, "· items", JSON.stringify(r.items.map(i => ({ desde: new Date(i.s).toISOString(), p: i.p }))));
+            console.log("generado ahora:", C.liveEarned(r.items, r.closed, Date.now()).toFixed(6), "SECT");
+          }).catch(e => { console.log("ERROR", e && e.message, "en", Date.now() - t0, "ms"); process.exit(1); });
+          JS
+          node run.cjs
