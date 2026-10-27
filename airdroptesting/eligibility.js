@@ -42,7 +42,7 @@
       lv0: "Phase 2 · registered", lv1: "Level 1 · Scout", lv2: "Level 2 · Sentinel", lv3: "Level 3 · Guardian", lv4: "Level 4 · Titan",
       up0: "With 100 SECT in staking you become Scout and win 55 SECT.", up1: "With 500 SECT in staking you become Sentinel and win 325 SECT.", up2: "With 1,000 SECT in staking you become Guardian and win 750 SECT.", up3: "With 4,000 SECT in staking you become Titan and win 3,600 SECT.", up4: "Every 1,000 SECT more in staking add 900 SECT, with no maximum.", p2: "Phase 2 benefits", p2s: "Testing the node for free registers you for phase 2. To win SECT now, stake 100 SECT and you become Scout.",
       stk: "Staker detected", stks: "You're already in. You only need to connect your node and you're done.",
-      todo: "Activate your Hash Node", todos: "Turn on your node on the testnet with this same wallet. No node, no prize.", nu: "We couldn't check your Hash Node", nus: "The test network didn't answer. Check again in a few seconds.",
+      todo: "Activate your Hash Node", hw: "How to turn on your Hash Node", hw1: "Get free Sepolia ETH for the gas", hw2: "Buy the 50 TH/s plan", hw3: "Register your node with this same wallet", hwp: "Open the plan", hwn: "Go to your node", todos: "Turn on your node on the testnet with this same wallet. No node, no prize.", nu: "We couldn't check your Hash Node", nus: "The test network didn't answer. Check again in a few seconds.",
       node: "Activate my Hash Node", done: "Hash Node active", dones: "This wallet's node is on.",
       paused: "Hash Node paused", pauseds: "Your node is registered but paused. While it's paused your count doesn't add up: turn it back on and it continues where it left off.", stake: "Stake my SECT", reopen: "Open the dashboard",
       rule: "100 in staking → 55 SECT (Scout) · 500 → 325 (Sentinel) · 1,000 → 750 (Guardian) · 4,000 → 3,600 (Titan) · more, in proportion, no maximum",
@@ -60,7 +60,7 @@
       lv0: "Fase 2 · registrado", lv1: "Nivel 1 · Scout", lv2: "Nivel 2 · Sentinel", lv3: "Nivel 3 · Guardian", lv4: "Nivel 4 · Titan",
       up0: "Con 100 SECT en staking pasas a Scout y ganas 55 SECT.", up1: "Con 500 SECT en staking pasas a Sentinel y ganas 325 SECT.", up2: "Con 1.000 SECT en staking pasas a Guardian y ganas 750 SECT.", up3: "Con 4.000 SECT en staking pasas a Titan y ganas 3.600 SECT.", up4: "Cada 1.000 SECT más en staking suman 900 SECT, sin máximo.", p2: "Beneficios de la fase 2", p2s: "Probar el nodo gratis te registra para la fase 2. Para ganar SECT ahora, pon 100 SECT en staking y pasas a Scout.",
       stk: "Staker detectado", stks: "Ya estás dentro. Solo te falta conectar el nodo y listo.",
-      todo: "Activa tu Hash Node", todos: "Enciende tu nodo en la testnet con esta misma wallet. Sin nodo no hay premio.", nu: "No pudimos comprobar tu Hash Node", nus: "La red de pruebas no respondió. Vuelve a comprobar en unos segundos.",
+      todo: "Activa tu Hash Node", hw: "Cómo encender tu Hash Node", hw1: "Consigue ETH de Sepolia gratis para el gas", hw2: "Compra el plan de 50 TH/s", hw3: "Registra tu nodo con esta misma wallet", hwp: "Abrir el plan", hwn: "Ir a tu nodo", todos: "Enciende tu nodo en la testnet con esta misma wallet. Sin nodo no hay premio.", nu: "No pudimos comprobar tu Hash Node", nus: "La red de pruebas no respondió. Vuelve a comprobar en unos segundos.",
       node: "Activar mi Hash Node", done: "Hash Node activo", dones: "El nodo de esta wallet está encendido.",
       paused: "Hash Node pausado", pauseds: "Tu nodo está registrado pero pausado. Mientras está en pausa tu conteo no suma: enciéndelo y sigue donde quedó.", stake: "Hacer staking de mis SECT", reopen: "Abrir el panel",
       rule: "100 en staking → 55 SECT (Scout) · 500 → 325 (Sentinel) · 1.000 → 750 (Guardian) · 4.000 → 3.600 (Titan) · más, en proporción, sin máximo",
@@ -78,7 +78,7 @@
       lv0: "Fase 2 · registrado", lv1: "Nível 1 · Scout", lv2: "Nível 2 · Sentinel", lv3: "Nível 3 · Guardian", lv4: "Nível 4 · Titan",
       up0: "Com 100 SECT em staking você vira Scout e ganha 55 SECT.", up1: "Com 500 SECT em staking você vira Sentinel e ganha 325 SECT.", up2: "Com 1.000 SECT em staking você vira Guardian e ganha 750 SECT.", up3: "Com 4.000 SECT em staking você vira Titan e ganha 3.600 SECT.", up4: "Cada 1.000 SECT a mais em staking somam 900 SECT, sem máximo.", p2: "Benefícios da fase 2", p2s: "Testar o nó de graça registra você para a fase 2. Para ganhar SECT agora, coloque 100 SECT em staking e você vira Scout.",
       stk: "Staker detectado", stks: "Você já está dentro. Só falta conectar o nó e pronto.",
-      todo: "Ative seu Hash Node", todos: "Ligue seu nó na testnet com esta mesma carteira. Sem nó não há prêmio.", nu: "Não conseguimos verificar seu Hash Node", nus: "A rede de teste não respondeu. Verifique de novo em alguns segundos.",
+      todo: "Ative seu Hash Node", hw: "Como ligar seu Hash Node", hw1: "Pegue ETH da Sepolia grátis para o gás", hw2: "Compre o plano de 50 TH/s", hw3: "Registre seu nó com esta mesma carteira", hwp: "Abrir o plano", hwn: "Ir ao seu nó", todos: "Ligue seu nó na testnet com esta mesma carteira. Sem nó não há prêmio.", nu: "Não conseguimos verificar seu Hash Node", nus: "A rede de teste não respondeu. Verifique de novo em alguns segundos.",
       node: "Ativar meu Hash Node", done: "Hash Node ativo", dones: "O nó desta carteira está ligado.",
       paused: "Hash Node pausado", pauseds: "Seu nó está registrado, mas pausado. Enquanto está pausado sua contagem não soma: ligue de novo e ela continua de onde parou.", stake: "Fazer staking dos meus SECT", reopen: "Abrir o painel",
       rule: "100 em staking → 55 SECT (Scout) · 500 → 325 (Sentinel) · 1.000 → 750 (Guardian) · 4.000 → 3.600 (Titan) · mais, em proporção, sem máximo",
@@ -170,6 +170,15 @@
     ".el-st{padding:13px 15px;gap:2px 12px}.el-st i{width:30px;height:30px}.el-st b{font-size:15px}.el-st span{font-size:13.5px}",
     ".el .el-rule{margin-top:14px;padding:10px 12px;border-radius:10px;background:#f6f7f9;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:12.5px;font-weight:400;letter-spacing:0;text-transform:none;line-height:1.6;color:#3c414c}",
     ".el-ft{font-size:12px}",
+    ".el-how{margin-top:12px;padding:12px 14px;border-radius:12px;background:#f6f7f9;border:1px solid rgba(7,8,10,.06)}",
+    ".el-how p{color:#0d4fd8}",
+    ".el-how ol{list-style:none;margin-top:8px}",
+    ".el-how li{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:7px 0;font-size:13.5px;line-height:22px;color:#07080a;font-weight:400}",
+    ".el-how li + li{border-top:1px solid rgba(7,8,10,.06)}",
+    ".el-how li > span{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#fff;border:1px solid rgba(21,105,255,.4);color:#0d4fd8;font-family:'IBM Plex Mono',monospace;font-size:11px}",
+    ".el-how em{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;font-style:normal}",
+    ".el-how a{padding:3px 9px;border-radius:999px;border:1px solid rgba(21,105,255,.35);background:#fff;color:#0d4fd8;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;line-height:18px}",
+    ".el-how a:hover{background:rgba(21,105,255,.08)}",
     "@media (max-width:520px){.el-pv{display:none}.el h3{font-size:22px}.el-bd{padding:16px 18px 18px}.el-rows li{padding:11px 0}.el-rows b .el-big{font-size:25px}}",
     "@media (max-height:720px){.el-rows li{padding:9px 0}.el-rows b .el-big{font-size:23px}}"
   ].join("\n");
@@ -300,7 +309,12 @@
       var btn = (on ? "" :
         '<a class="el-b go mono" href="' + DASH + '"><span>' + (r.node === "paused" ? t("reopen") : t("node")) + '</span><span>↗</span></a>') +
         '<a class="el-b mono" href="' + STAKE + '"><span>' + t("stake") + '</span><span>↗</span></a>';
-      bd.innerHTML = '<h3>' + t("h") + '</h3>' + stk + '<ul class="el-rows">' + rows.join("") + "</ul>" + btn +
+      /* sin nodo: los pasos para encenderlo, con el gas de Sepolia primero */
+      var how = on || r.node === "unknown" ? "" : '<div class="el-how"><p class="mono">' + t("hw") + "</p><ol>" +
+        '<li><span>1</span><div>' + t("hw1") + '<em><a href="https://faucet.quicknode.com/ethereum/sepolia" target="_blank" rel="noopener noreferrer">QuickNode ↗</a><a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer">Google ↗</a></em></div></li>' +
+        '<li><span>2</span><div>' + t("hw2") + '<em><a href="/dashboard.html#plan">' + t("hwp") + " ↗</a></em></div></li>" +
+        '<li><span>3</span><div>' + t("hw3") + '<em><a href="/dashboard.html#node">' + t("hwn") + " ↗</a></em></div></li></ol></div>";
+      bd.innerHTML = '<h3>' + t("h") + '</h3>' + stk + '<ul class="el-rows">' + rows.join("") + "</ul>" + how + btn +
         '<p class="mono el-rule">' + t("rule") + '</p><p class="el-ft">' + t("foot") + '</p>' +
         '<button class="el-lnk" type="button" data-a="other">' + t("other") + "</button>";
       bd.querySelector('[data-a="other"]').addEventListener("click", function () { start(); });

@@ -34,6 +34,7 @@
       h3: "You're in the <b>airdrop.</b>", p3: "Staking and Hash Node ready. Keep both until you complete your time to win your prize.",
       p1n: "Your Hash Node is already on. With 100 SECT in staking you're in the airdrop.", poff: "Your Hash Node is off: turn it on so your count keeps going.",
       on: "On", off: "Off", chk: "Checking…", ctaOn: "See my airdrop", ctaOff: "Turn on my Hash Node", both: "2/2 ✓",
+      hw: "How to turn on your Hash Node", hw1: "Get free Sepolia ETH for the gas", hw2: "Buy the 50 TH/s plan", hw3: "Register your node with this same wallet", hwp: "Open the plan", hwn: "Go to your node",
       who: "Wallet {a}", wNone: "no node registered with this wallet", wOn: "node on", wOff: "node off", wChk: "checking its node…", wErr: "couldn't check the network, retrying…" },
     es: { loc: "es-ES", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Tu airdrop",
       h0: "Conecta tu wallet para ver <b>tu nivel.</b>", p0: "Tu staking cuenta para el airdrop, sin retirar nada.",
@@ -47,6 +48,7 @@
       h3: "Ya participas en el <b>airdrop.</b>", p3: "Staking y Hash Node listos. Mantén los dos hasta completar tu tiempo para ganar tu premio.",
       p1n: "Tu Hash Node ya está encendido. Con 100 SECT en staking entras al airdrop.", poff: "Tu Hash Node está apagado: enciéndelo para que tu conteo siga.",
       on: "Encendido", off: "Apagado", chk: "Comprobando…", ctaOn: "Ver mi airdrop", ctaOff: "Encender mi Hash Node", both: "2/2 ✓",
+      hw: "Cómo encender tu Hash Node", hw1: "Consigue ETH de Sepolia gratis para el gas", hw2: "Compra el plan de 50 TH/s", hw3: "Registra tu nodo con esta misma wallet", hwp: "Abrir el plan", hwn: "Ir a tu nodo",
       who: "Wallet {a}", wNone: "sin nodo registrado con esta wallet", wOn: "nodo encendido", wOff: "nodo apagado", wChk: "comprobando su nodo…", wErr: "no se pudo consultar la red, reintentando…" },
     pt: { loc: "pt-BR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Seu airdrop",
       h0: "Conecte sua carteira para ver <b>seu nível.</b>", p0: "Seu staking conta para o airdrop, sem sacar nada.",
@@ -60,6 +62,7 @@
       h3: "Você já participa do <b>airdrop.</b>", p3: "Staking e Hash Node prontos. Mantenha os dois até completar seu tempo para ganhar seu prêmio.",
       p1n: "Seu Hash Node já está ligado. Com 100 SECT em staking você entra no airdrop.", poff: "Seu Hash Node está desligado: ligue-o para sua contagem continuar.",
       on: "Ligado", off: "Desligado", chk: "Verificando…", ctaOn: "Ver meu airdrop", ctaOff: "Ligar meu Hash Node", both: "2/2 ✓",
+      hw: "Como ligar seu Hash Node", hw1: "Pegue ETH da Sepolia grátis para o gás", hw2: "Compre o plano de 50 TH/s", hw3: "Registre seu nó com esta mesma carteira", hwp: "Abrir o plano", hwn: "Ir ao seu nó",
       who: "Carteira {a}", wNone: "sem nó registrado nesta carteira", wOn: "nó ligado", wOff: "nó desligado", wChk: "verificando o nó…", wErr: "não foi possível consultar a rede, tentando de novo…" }
   };
   function pick() {
@@ -100,11 +103,11 @@
     /* the two steps */
     ".sad-steps{list-style:none;margin:18px 0 0;padding:0;border-top:1px solid var(--line)}" +
     ".sad-steps li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.4;color:var(--ink2)}" +
-    ".sad-ic{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid #c3c7cf;color:transparent;font-size:12px;line-height:1;font-weight:500}" +
+    ".sad-ic{position:relative;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid #c3c7cf;color:transparent;font-size:12px;line-height:1;font-weight:500}" +
     ".sad-steps li.done{color:var(--ink)}" +
     ".sad-steps li.done .sad-ic{border-color:var(--ok);background:var(--ok);color:#fff}" +
     ".sad-steps li.next .sad-ic{border-color:var(--b);box-shadow:0 0 0 4px rgba(21,105,255,.12)}" +
-    ".sad-steps li.next .sad-ic::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--b);animation:sadPulse 1.8s ease-in-out infinite}" +
+    ".sad-steps li.next .sad-ic::after{content:'';position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--b);animation:sadPulse 1.8s ease-in-out infinite}" +
     "@keyframes sadPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}" +
     ".sad-steps .v{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:400;white-space:nowrap}" +
     ".sad-steps li .tg{color:var(--ink4);white-space:nowrap}" +
@@ -112,6 +115,15 @@
     ".sad-steps li.done .tg{color:var(--ok)}" +
     ".sad-steps li.off .tg{color:#a86400}" +
     ".sad-who{margin:10px 0 0;font-size:9.5px;line-height:1.6;color:var(--ink3)}" +
+    ".sad-how{margin-top:14px;padding:12px 14px;border-radius:12px;background:#f7f7f5;border:1px solid rgba(0,0,0,.08)}" +
+    ".sad-how .m{color:var(--b);font-size:9.5px}" +
+    ".sad-how ol{list-style:none;margin:8px 0 0;padding:0}" +
+    ".sad-how li{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:7px 0;font-size:13.5px;line-height:22px;color:var(--ink);font-weight:400}" +
+    ".sad-how li + li{border-top:1px solid rgba(0,0,0,.07)}" +
+    ".sad-how li > span{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#fff;border:1px solid rgba(21,105,255,.4);color:var(--bd);font-family:'IBM Plex Mono',monospace;font-size:11px}" +
+    ".sad-how em{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;font-style:normal}" +
+    ".sad-how a{padding:3px 9px;border-radius:999px;border:1px solid rgba(21,105,255,.35);background:#fff;color:var(--bd);text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;line-height:18px}" +
+    ".sad-how a:hover{background:rgba(21,105,255,.08)}" +
     ".sad-who b{font-weight:500;color:var(--ink2)}" +
     /* level, spots and prize */
     ".sad-lv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px;border:1px solid rgba(0,0,0,.12);border-radius:12px;background:#f7f7f5}" +
@@ -174,6 +186,10 @@
             '<li class="s2"><span class="sad-ic"></span><span>' + esc(L.s2) + '</span><span class="tg m">' + esc(L.s2t) + "</span></li>" +
           "</ul>" +
           '<p class="sad-who m" hidden></p>' +
+          '<div class="sad-how" hidden><p class="m">' + esc(L.hw) + "</p><ol>" +
+            '<li><span>1</span><div>' + esc(L.hw1) + '<em><a href="https://faucet.quicknode.com/ethereum/sepolia" target="_blank" rel="noopener noreferrer">QuickNode ↗</a><a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer">Google ↗</a></em></div></li>' +
+            '<li><span>2</span><div>' + esc(L.hw2) + '<em><a href="/dashboard.html#plan">' + esc(L.hwp) + " ↗</a></em></div></li>" +
+            '<li><span>3</span><div>' + esc(L.hw3) + '<em><a href="/dashboard.html#node">' + esc(L.hwn) + " ↗</a></em></div></li></ol></div>" +
           '<div class="sad-lv" hidden>' +
             '<div class="lv"><span class="m">' + esc(L.lv) + '</span><b></b><small></small></div>' +
             '<div class="spt"><span class="m">' + esc(L.sp) + '</span><b></b><small></small></div>' +
@@ -266,6 +282,7 @@
       else { hEl.innerHTML = L.h2; pEl.textContent = paused ? L.poff : L.p2; }
 
       s1.classList.toggle("done", lv >= 0);
+      s1.querySelector(".sad-ic").textContent = lv >= 0 ? "✓" : "";
       s1.classList.toggle("next", lv < 0);
       s1v.textContent = dep === null ? "—" : lv < 0 ? fmt(dep) + " / 100" : fmt(dep) + " SECT";
       s2.classList.toggle("done", on);
@@ -276,6 +293,7 @@
       cnt.textContent = dep === null ? L.wait : lv >= 0 && on ? L.both : lv >= 0 ? L.done : fmt(dep) + " / 100";
       cta.href = on ? AIRDROP_URL : NODE_URL; ctaT.textContent = on ? (lv >= 0 ? L.ctaOn : L.more) : paused ? L.ctaOff : L.cta;
       have.parentNode.hidden = on;
+      $(".sad-how").hidden = on || dep === null;
       /* que wallet se comprobo y que dijo la red de nodos */
       who.hidden = !addr;
       if (addr) who.innerHTML = tpl(esc(L.who), { a: "<b>" + addr.slice(0, 6) + "…" + addr.slice(-4) + "</b>" }) + " · " +
