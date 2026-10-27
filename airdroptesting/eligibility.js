@@ -150,7 +150,28 @@
     ".el-rows .el-bar{display:block;height:8px;margin-top:10px;border-radius:99px;background:rgba(21,105,255,.12);overflow:hidden}",
     ".el-rows .el-bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#1569ff,#4d8dff)}",
     ".el-rows .el-days{margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#0d4fd8}",
-    "@media (prefers-reduced-motion:reduce){.el-ov,.el{transition:none}}"
+    "@media (prefers-reduced-motion:reduce){.el-ov,.el{transition:none}}",
+    /* ajuste fino: ventana mas estrecha, textos mas contenidos, checks verdes centrados con el titulo */
+    ".el{width:min(500px,100%)}",
+    ".el .mono{font-size:10px;letter-spacing:.12em}",
+    ".el-hd .el-k,.el-hd .el-pv{white-space:nowrap}",
+    ".el h3{font-size:24px;letter-spacing:-.015em}",
+    ".el-in{font-size:14.5px}",
+    ".el-rows{margin-top:10px}",
+    ".el-rows li{grid-template-columns:24px minmax(0,1fr);column-gap:14px;align-items:start;padding:13px 0}",
+    ".el-rows .el-ic{display:grid;place-items:center;width:24px;height:24px;margin:0;border-radius:50%;background:#16a34a;box-shadow:0 0 0 4px rgba(22,163,74,.12)}",
+    ".el-rows .el-ic svg{width:13px;height:13px}",
+    ".el-rows .el-ic.p{background:#fff7e8;border:1.5px dashed #e0a030;box-shadow:none}",
+    ".el-rows b{font-size:15.5px;line-height:24px;letter-spacing:-.005em}",
+    ".el-rows span{margin-top:1px;font-size:13.5px;line-height:1.5}",
+    ".el-rows b .el-big{font-size:28px;line-height:24px;padding:2px 0 4px;letter-spacing:-.025em}",
+    ".el-rows .chip{margin-top:8px;padding:4px 9px;font-size:9.5px;letter-spacing:.12em}",
+    ".el-b{margin-top:14px;padding:14px 16px}",
+    ".el-st{padding:13px 15px;gap:2px 12px}.el-st i{width:30px;height:30px}.el-st b{font-size:15px}.el-st span{font-size:13.5px}",
+    ".el .el-rule{margin-top:14px;padding:10px 12px;border-radius:10px;background:#f6f7f9;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:12.5px;font-weight:400;letter-spacing:0;text-transform:none;line-height:1.6;color:#3c414c}",
+    ".el-ft{font-size:12px}",
+    "@media (max-width:520px){.el-pv{display:none}.el h3{font-size:22px}.el-bd{padding:16px 18px 18px}.el-rows li{padding:11px 0}.el-rows b .el-big{font-size:25px}}",
+    "@media (max-height:720px){.el-rows li{padding:9px 0}.el-rows b .el-big{font-size:23px}}"
   ].join("\n");
   var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
 
@@ -312,7 +333,7 @@
     stop(); tick(); timer = setInterval(tick, 100);
   }
   var ICON = {
-    ok: '<svg viewBox="0 0 16 16"><path d="M3.2 8.4l3 3 6.6-7" fill="none" stroke="#fff" stroke-width="2.2"/></svg>',
+    ok: '<svg viewBox="0 0 16 16"><path d="M4 8.4l2.8 2.7 5.4-5.9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     wait: '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.6" fill="#e0a030"/></svg>',
     warn: '<svg viewBox="0 0 16 16"><path d="M8 3.5v6" stroke="#b26b00" stroke-width="2.2"/><circle cx="8" cy="12.4" r="1.3" fill="#b26b00"/></svg>',
     bolt: '<svg viewBox="0 0 16 16"><path d="M9.2 1.5L3.6 9h3.9l-.9 5.5L12.4 7H8.4z" fill="#fff"/></svg>'
