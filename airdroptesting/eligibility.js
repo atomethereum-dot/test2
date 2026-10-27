@@ -50,7 +50,8 @@
       err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.",
       rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet",
       acc: "You've earned {n} SECT", of: "{n} SECT when you complete your time", day: "Delivered at the launch of SectoraEVM", day2: "You complete your time on {d} · delivered on SectoraEVM", day3: "Each part is delivered on SectoraEVM when it completes its time · the next one completes on {d}", lock: "What you earn is secured on {d}", full: "Full prize complete · delivered on SectoraEVM",
-      pre: "Starts adding up on opening day. Everyone has the same time to complete the prize, counted from the day they join. Deliveries start at the launch of SectoraEVM.", wait: "Your count will show as soon as the network confirms your staking." },
+      pre: "Starts adding up on opening day. Everyone has the same time to complete the prize, counted from the day they join. Deliveries start at the launch of SectoraEVM.", wait: "Your count will show as soon as the network confirms your staking.",
+      demo: "Sample view", demos: "{n} SECT in staking · node on · day {d} of the count" },
     es: { loc: "es-ES", k: "Sectora // Airdrop Genesis", pv: "Vista previa", h: "Tu airdrop",
       intro: "Conecta tu wallet para ver cuánto ganas en el airdrop.",
       connect: "Conectar wallet", nowallet: "¿No tienes wallet en este navegador?", openmm: "Abrir en MetaMask",
@@ -68,7 +69,8 @@
       err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.",
       rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet",
       acc: "Llevas {n} SECT", of: "{n} SECT al completar tu tiempo", day: "Se entrega en el lanzamiento de SectoraEVM", day2: "Completas tu tiempo el {d} · se entrega en SectoraEVM", day3: "Cada parte se entrega en SectoraEVM al completar su tiempo · la próxima se completa el {d}", lock: "Lo ganado queda asegurado el {d}", full: "Premio completo · se entrega en SectoraEVM",
-      pre: "Empieza a sumar el día de la apertura. Todos tienen el mismo tiempo para completar el premio, contado desde que entran. Las entregas empiezan en el lanzamiento de SectoraEVM.", wait: "Tu conteo aparecerá en cuanto la red confirme tu staking." },
+      pre: "Empieza a sumar el día de la apertura. Todos tienen el mismo tiempo para completar el premio, contado desde que entran. Las entregas empiezan en el lanzamiento de SectoraEVM.", wait: "Tu conteo aparecerá en cuanto la red confirme tu staking.",
+      demo: "Vista de ejemplo", demos: "{n} SECT en staking · nodo encendido · día {d} del conteo" },
     pt: { loc: "pt-BR", k: "Sectora // Airdrop Genesis", pv: "Prévia", h: "Seu airdrop",
       intro: "Conecte sua carteira para ver quanto você ganha no airdrop.",
       connect: "Conectar carteira", nowallet: "Sem carteira neste navegador?", openmm: "Abrir no MetaMask",
@@ -86,7 +88,8 @@
       err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.",
       rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira",
       acc: "Você já tem {n} SECT", of: "{n} SECT ao completar seu tempo", day: "Entregue no lançamento da SectoraEVM", day2: "Você completa seu tempo em {d} · entregue na SectoraEVM", day3: "Cada parte é entregue na SectoraEVM ao completar seu tempo · a próxima se completa em {d}", lock: "O que você ganha fica garantido em {d}", full: "Prêmio completo · entregue na SectoraEVM",
-      pre: "Começa a somar no dia da abertura. Todos têm o mesmo tempo para completar o prêmio, contado desde que entram. As entregas começam no lançamento da SectoraEVM.", wait: "Sua contagem vai aparecer assim que a rede confirmar seu staking." }
+      pre: "Começa a somar no dia da abertura. Todos têm o mesmo tempo para completar o prêmio, contado desde que entram. As entregas começam no lançamento da SectoraEVM.", wait: "Sua contagem vai aparecer assim que a rede confirmar seu staking.",
+      demo: "Visualização de exemplo", demos: "{n} SECT em staking · nó ligado · dia {d} da contagem" }
   };
   function lang() { var l = (document.documentElement.lang || "en").slice(0, 2); return L[l] ? l : "en"; }
   function t(k, v) { var s = L[lang()][k]; if (v) for (var x in v) s = s.replace("{" + x + "}", v[x]); return s; }
@@ -194,6 +197,14 @@
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
 
   var cur = null, curConn = false; // direccion revisada y si vino de la wallet
+  /* vista de ejemplo (solo en esta pagina de prueba): ?demo=<SECT en staking>&d=<dias dentro>. No lee la red:
+     muestra como ve la ventana un participante con el nodo encendido, con su premio y el contador subiendo */
+  var DEMO = +((location.search.match(/[?&]demo=(\d+)/) || [])[1] || 0), DEMO_D = +((location.search.match(/[?&]d=(\d+)/) || [])[1] || 12);
+  var DEMO_A = "0x0000000000000000000000000000000000de0000";
+  function demo() {
+    var s = Date.now() - DEMO_D * DAY, w = {}; w[DEMO_A] = [s];
+    return { staked: BigInt(DEMO), wallet: 0n, node: "active", prog: { open: s, wallets: w }, hist: null, demo: true };
+  }
 
   /* ---------- lectura publica ---------- */
   function pad(a) { return a.toLowerCase().replace(/^0x/, "").padStart(64, "0"); }
@@ -214,6 +225,7 @@
   function word(hex, n) { return BigInt("0x" + (hex.slice(2 + 64 * n, 2 + 64 * (n + 1)) || "0")); }
   var WEI = 10n ** 18n;
   function read(addr) {
+    if (DEMO && addr === DEMO_A) return Promise.resolve(demo());
     var a = call(MAINNET, STAKING, SEL.accountView + pad(addr)).then(function (h) {
       return { staked: word(h, 0) / WEI, wallet: word(h, 2) / WEI };
     });
@@ -284,7 +296,8 @@
         if (ev.items.length) { state = "run"; items = ev.items; closed = ev.closed; } else state = "wait";
       } else state = (C && C.OPEN && now >= C.OPEN) || (P && P.open && now >= P.open) ? "wait" : "pre";
       var rows = [];
-      rows.push(li("ok", "", connected ? t("r1") : short(addr), connected ? short(addr) : ""));
+      if (r.demo) rows.push(li("ok", "", t("demo"), t("demos", { n: fmt(total), d: DEMO_D + 1 })));
+      else rows.push(li("ok", "", connected ? t("r1") : short(addr), connected ? short(addr) : ""));
       // su premio (el % de su nivel sobre su staking); solo cuenta con el nodo encendido
       var winT, winS;
       if (state === "run") {
@@ -362,4 +375,5 @@
   if (window.ethereum && window.ethereum.on) window.ethereum.on("accountsChanged", function (a) { if (ov.classList.contains("on") && a && a[0]) show(a[0], true); });
 
   window.SAElig = { open: open, close: close };
+  if (DEMO) { cur = DEMO_A; if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", open); else open(); }
 })();
