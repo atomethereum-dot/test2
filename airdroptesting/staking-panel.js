@@ -5,15 +5,20 @@
    thing left is to connect their Hash Node. Prize = SECT in staking x the rate
    of the level (Scout 55, Sentinel 65, Guardian 75, Titan 90 per 100 SECT);
    spots = SECT in staking / the minimum of the level.
-   It only reads what the staking page already shows (#earnDep, the amount
-   deposited by the connected wallet): it never talks to the wallet or to the
-   contract, and it can be dropped into /staking/ with one script tag. */
+   It reads what the staking page already shows (#earnDep, the amount deposited
+   by the connected wallet) and, when the page announces the connected address
+   (the "sectora:account" event, only in /stakingtest for now), it looks that
+   address up in the Hash Node registry on Sepolia to mark step 2. It never
+   talks to the wallet or to the staking contract. */
 (function () {
   "use strict";
   if (document.querySelector(".sad")) return;
 
   var AIRDROP_URL = "/airdroptesting/";
   var NODE_URL = "/dashboard.html#guia-nodo";
+  var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
+  var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.drpc.org"];
+  var SEL = { indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44" };
   var LV = [{ min: 100, rate: .55, n: "Scout" }, { min: 500, rate: .65, n: "Sentinel" }, { min: 1000, rate: .75, n: "Guardian" }, { min: 4000, rate: .9, n: "Titan" }];
 
   var T = {
@@ -25,7 +30,10 @@
       lv: "Your level", lvs: "Level {n}", sp: "Spots", sps: "of {l}", pz: "Your prize", pzs: "SECT on completing your time",
       up: "With {x} SECT more you move up to {l} and your prize rises to {p} SECT.", top: "Titan has no maximum: every 1,000 SECT more add 900 SECT.",
       cta: "Connect my Hash Node", more: "See the airdrop", have: "Already on? Check it in the airdrop.",
-      note: "No lock-up: if you withdraw, your count pauses and continues when you come back.", min: "Minimise", max: "Open", done: "Step 1 ✓", wait: "Connect wallet" },
+      note: "No lock-up: if you withdraw, your count pauses and continues when you come back.", min: "Minimise", max: "Open", done: "Step 1 ✓", wait: "Connect wallet",
+      h3: "You're in the <b>airdrop.</b>", p3: "Staking and Hash Node ready. Keep both until you complete your time to win your prize.",
+      p1n: "Your Hash Node is already on. With 100 SECT in staking you're in the airdrop.", poff: "Your Hash Node is off: turn it on so your count keeps going.",
+      on: "On", off: "Off", chk: "Checking…", ctaOn: "See my airdrop", ctaOff: "Turn on my Hash Node", both: "2/2 ✓" },
     es: { loc: "es-ES", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Tu airdrop",
       h0: "Conecta tu wallet para ver <b>tu nivel.</b>", p0: "Tu staking cuenta para el airdrop, sin retirar nada.",
       h1: "Te faltan <b>{x} SECT</b> para entrar.", p1: "Con 100 SECT en staking eres Scout y entras al airdrop.",
@@ -34,7 +42,10 @@
       lv: "Tu nivel", lvs: "Nivel {n}", sp: "Plazas", sps: "de {l}", pz: "Tu premio", pzs: "SECT al completar tu tiempo",
       up: "Con {x} SECT más subes a {l} y tu premio pasa a {p} SECT.", top: "Titan no tiene máximo: cada 1.000 SECT más suman 900 SECT.",
       cta: "Conectar mi Hash Node", more: "Ver el airdrop", have: "¿Ya lo tienes encendido? Compruébalo en el airdrop.",
-      note: "Sin bloqueo: si retiras, tu conteo se pausa y sigue al volver.", min: "Minimizar", max: "Abrir", done: "Paso 1 ✓", wait: "Conecta tu wallet" },
+      note: "Sin bloqueo: si retiras, tu conteo se pausa y sigue al volver.", min: "Minimizar", max: "Abrir", done: "Paso 1 ✓", wait: "Conecta tu wallet",
+      h3: "Ya participas en el <b>airdrop.</b>", p3: "Staking y Hash Node listos. Mantén los dos hasta completar tu tiempo para ganar tu premio.",
+      p1n: "Tu Hash Node ya está encendido. Con 100 SECT en staking entras al airdrop.", poff: "Tu Hash Node está apagado: enciéndelo para que tu conteo siga.",
+      on: "Encendido", off: "Apagado", chk: "Comprobando…", ctaOn: "Ver mi airdrop", ctaOff: "Encender mi Hash Node", both: "2/2 ✓" },
     pt: { loc: "pt-BR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Seu airdrop",
       h0: "Conecte sua carteira para ver <b>seu nível.</b>", p0: "Seu staking conta para o airdrop, sem sacar nada.",
       h1: "Faltam <b>{x} SECT</b> para você entrar.", p1: "Com 100 SECT em staking você é Scout e entra no airdrop.",
@@ -43,7 +54,10 @@
       lv: "Seu nível", lvs: "Nível {n}", sp: "Vagas", sps: "de {l}", pz: "Seu prêmio", pzs: "SECT ao completar seu tempo",
       up: "Com mais {x} SECT você sobe para {l} e seu prêmio passa a {p} SECT.", top: "Titan não tem máximo: cada 1.000 SECT a mais somam 900 SECT.",
       cta: "Conectar meu Hash Node", more: "Ver o airdrop", have: "Já está ligado? Confira no airdrop.",
-      note: "Sem bloqueio: se você sacar, sua contagem pausa e continua quando voltar.", min: "Minimizar", max: "Abrir", done: "Passo 1 ✓", wait: "Conecte a carteira" }
+      note: "Sem bloqueio: se você sacar, sua contagem pausa e continua quando voltar.", min: "Minimizar", max: "Abrir", done: "Passo 1 ✓", wait: "Conecte a carteira",
+      h3: "Você já participa do <b>airdrop.</b>", p3: "Staking e Hash Node prontos. Mantenha os dois até completar seu tempo para ganhar seu prêmio.",
+      p1n: "Seu Hash Node já está ligado. Com 100 SECT em staking você entra no airdrop.", poff: "Seu Hash Node está desligado: ligue-o para sua contagem continuar.",
+      on: "Ligado", off: "Desligado", chk: "Verificando…", ctaOn: "Ver meu airdrop", ctaOff: "Ligar meu Hash Node", both: "2/2 ✓" }
   };
   function pick() {
     var l = "";
@@ -92,6 +106,8 @@
     ".sad-steps .v{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:400;white-space:nowrap}" +
     ".sad-steps li .tg{color:var(--ink4);white-space:nowrap}" +
     ".sad-steps li.next .tg{color:var(--bd)}" +
+    ".sad-steps li.done .tg{color:var(--ok)}" +
+    ".sad-steps li.off .tg{color:#a86400}" +
     /* level, spots and prize */
     ".sad-lv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px;border:1px solid rgba(0,0,0,.12);border-radius:12px;background:#f7f7f5}" +
     ".sad-lv > div{padding:14px 14px 13px;min-width:0}" +
@@ -167,7 +183,8 @@
     body.classList.add("sad-on");
 
     var $ = function (s) { return el.querySelector(s); };
-    var hEl = $(".sad-h"), pEl = $(".sad-p"), s1 = $(".s1"), s1v = $(".s1 .v"), s2 = $(".s2"), lvBox = $(".sad-lv"), up = $(".sad-up"), cnt = $(".sad-cnt");
+    var hEl = $(".sad-h"), pEl = $(".sad-p"), s1 = $(".s1"), s1v = $(".s1 .v"), s2 = $(".s2"), s2t = $(".s2 .tg"), lvBox = $(".sad-lv"), up = $(".sad-up"), cnt = $(".sad-cnt");
+    var cta = $(".sad-cta"), ctaT = $(".sad-cta span"), have = $(".sad-links a:not(.m)");
     var minBtn = $(".sad-min");
     try { if (localStorage.getItem("sad_min") === "1") setMin(true); } catch (e) {}
 
@@ -191,25 +208,68 @@
       try { o.useGrouping = "always"; return new Intl.NumberFormat(L.loc, o).format(n); }
       catch (e) { delete o.useGrouping; return new Intl.NumberFormat(L.loc, o).format(n); }
     }
+    /* el Hash Node de la wallet conectada, leido del registro en Sepolia (como el verificador del airdrop) */
+    var addr = null, node = null, nodeT = 0;
+    function pad(a) { return a.toLowerCase().replace(/^0x/, "").padStart(64, "0"); }
+    function call(to, data) {
+      var i = 0;
+      function next() {
+        if (i >= SEPOLIA.length) return Promise.reject(new Error("rpc"));
+        var url = SEPOLIA[i++], ctl = new AbortController(), tm = setTimeout(function () { ctl.abort(); }, 7000);
+        return fetch(url, { method: "POST", headers: { "content-type": "application/json" }, signal: ctl.signal,
+          body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: to, data: data }, "latest"] }) })
+          .then(function (r) { return r.json(); })
+          .then(function (j) { clearTimeout(tm); if (!j || !j.result || j.error) throw new Error("rpc"); return j.result; })
+          .catch(function () { clearTimeout(tm); return next(); });
+      }
+      return next();
+    }
+    function word(hex, n) { return BigInt("0x" + (hex.slice(2 + 64 * n, 2 + 64 * (n + 1)) || "0")); }
+    function checkNode() {
+      var a = addr; if (!a) return;
+      if (node === null) { node = "checking"; paint(); }
+      nodeT = Date.now();
+      call(REGISTRY, SEL.indexPlusOne + pad(a)).then(function (h) {
+        var n = word(h, 0);
+        if (n === 0n) return "none";
+        return call(REGISTRY, SEL.validators + pad((n - 1n).toString(16))).then(function (v) { return word(v, 6) === 1n ? "active" : "paused"; });
+      }).catch(function () { return "unknown"; }).then(function (r) { if (a === addr) { node = r; paint(); } });
+    }
+    function setAddr(a) {
+      a = a && /^0x[0-9a-fA-F]{40}$/.test(a) ? a : null;
+      if (a === addr) return;
+      addr = a; node = null; paint();
+      if (addr) checkNode();
+    }
+    window.addEventListener("sectora:account", function (e) { setAddr(e.detail); });
+
     function tpl(s, m) { return s.replace(/\{(\w)\}/g, function (_, k) { return m[k]; }); }
 
     var lastKey = "";
     function paint() {
-      var dep = deposited(), key = String(dep);
+      var dep = deposited(), key = dep + "|" + addr + "|" + node;
       if (key === lastKey) return;
       lastKey = key;
       var lv = -1;
       if (dep !== null) for (var i = 0; i < LV.length; i++) if (dep >= LV[i].min) lv = i;
 
+      var on = node === "active", paused = node === "paused";
       if (dep === null) { hEl.innerHTML = L.h0; pEl.textContent = L.p0; }
-      else if (lv < 0) { hEl.innerHTML = tpl(L.h1, { x: fmt(100 - dep) }); pEl.textContent = L.p1; }
-      else { hEl.innerHTML = L.h2; pEl.textContent = L.p2; }
+      else if (lv < 0) { hEl.innerHTML = tpl(L.h1, { x: fmt(100 - dep) }); pEl.textContent = on ? L.p1n : L.p1; }
+      else if (on) { hEl.innerHTML = L.h3; pEl.textContent = L.p3; }
+      else { hEl.innerHTML = L.h2; pEl.textContent = paused ? L.poff : L.p2; }
 
       s1.classList.toggle("done", lv >= 0);
       s1.classList.toggle("next", lv < 0);
       s1v.textContent = dep === null ? "—" : lv < 0 ? fmt(dep) + " / 100" : fmt(dep) + " SECT";
-      s2.classList.toggle("next", lv >= 0);
-      cnt.textContent = dep === null ? L.wait : lv >= 0 ? L.done : fmt(dep) + " / 100";
+      s2.classList.toggle("done", on);
+      s2.classList.toggle("off", paused);
+      s2.classList.toggle("next", lv >= 0 && !on);
+      s2.querySelector(".sad-ic").textContent = on ? "✓" : "";
+      s2t.textContent = on ? L.on : paused ? L.off : node === "checking" ? L.chk : L.s2t;
+      cnt.textContent = dep === null ? L.wait : lv >= 0 && on ? L.both : lv >= 0 ? L.done : fmt(dep) + " / 100";
+      cta.href = on ? AIRDROP_URL : NODE_URL; ctaT.textContent = on ? (lv >= 0 ? L.ctaOn : L.more) : paused ? L.ctaOff : L.cta;
+      have.parentNode.hidden = on;
 
       lvBox.hidden = lv < 0; up.hidden = lv < 0;
       if (lv >= 0) {
@@ -223,7 +283,9 @@
       }
     }
     paint();
-    setInterval(paint, 1500);
+    if (window.__sectoraAccount) setAddr(window.__sectoraAccount);
+    /* cada 1,5 s repinta lo que muestra la consola; el nodo se vuelve a mirar cada minuto */
+    setInterval(function () { paint(); if (addr && Date.now() - nodeT > 6e4) checkNode(); }, 1500);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
