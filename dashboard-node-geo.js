@@ -28,13 +28,19 @@
     ".node-geo.fail i{background:#e0a030}" +
     ".node-geo b{color:#fff;font-weight:500}" +
     ".node-geo button{margin-left:auto;padding:4px 0;color:var(--blue-l,#4d8dff);font:inherit;font-size:12.5px;background:none;border:0;cursor:pointer;text-decoration:underline}" +
-    ".node-geo-n{margin:-6px 0 14px;color:var(--ink-3,#7c8496);font-size:12px;line-height:1.5}";
+    ".node-geo-n{margin:-6px 0 14px;color:var(--ink-3,#7c8496);font-size:12px;line-height:1.5}" +
+    ".node-geo-a{display:flex;gap:10px;align-items:flex-start;margin:14px 0 0;padding:12px 14px;border:1px solid rgba(62,207,142,.28);background:rgba(62,207,142,.06);color:var(--ink-2,#c6ccd8);font-size:13px;line-height:1.55}" +
+    ".node-geo-a[hidden]{display:none}" +
+    ".node-geo-a svg{flex:none;width:16px;height:16px;margin-top:2px;color:#3ecf8e}";
   document.head.appendChild(st);
   [lat, lon].forEach(function (el) { var f = el.closest(".fld"); if (f) f.classList.add("fld-geo"); });
   form.classList.add("geo-auto");
   var line = document.createElement("p"); line.className = "node-geo wait"; line.id = "nGeo"; line.setAttribute("aria-live", "polite");
   var note = document.createElement("p"); note.className = "node-geo-n";
   card.insertBefore(line, form); card.insertBefore(note, form);
+  // aviso debajo del formulario: la ubicacion la ponen nuestros sistemas, solo hay que registrar
+  var auto = document.createElement("p"); auto.className = "node-geo-a"; auto.id = "nGeoAuto";
+  card.insertBefore(auto, form.nextSibling);
 
   function paint() {
     line.className = "node-geo " + state;
@@ -45,6 +51,9 @@
     var b = line.querySelector("button");
     if (b) b.addEventListener("click", function () { form.classList.remove("geo-auto"); paint(); lat.focus(); });
     note.textContent = tr("hashdash.node.geoNote", "Only an approximate location (city level) is saved on the network, never your address.");
+    auto.hidden = state === "fail" || !form.classList.contains("geo-auto");
+    auto.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M5 8.2l2 2 4-4.2"/></svg><span>' +
+      esc(tr("hashdash.node.geoAuto", "Our systems automatically detect and assign your node's location, so no coordinates are needed. Just press “Register node” and confirm in your wallet — your node will be activated on the network.")) + "</span>";
   }
 
   /* ---------- ubicacion aproximada de la conexion ---------- */
