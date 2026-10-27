@@ -89,6 +89,7 @@
     "name": "Illinois file number",
     "value": "18523639"
   },
+  "taxID": "32-0868576",
   "contactPoint": [
     {
       "@type": "ContactPoint",
@@ -5435,6 +5436,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <h3>Registered company</h3>
         <p>Sectora Foundation is a company incorporated in Illinois, United States. Its filing is a matter of public record and can be checked with the state registry.</p>
         <p class="m-src mono"><b>Source</b> · Illinois Secretary of State</p>
+        <p class="m-src mono"><b>Illinois file</b> · 18523639 · <b>EIN</b> · 32-0868576</p>
         <a class="m-link mono" href="https://sectoraorg.com/legal" target="_blank" rel="noopener noreferrer">Check the registry <i>↗</i></a>
       </article>
       <article class="m-card reveal" style="--d:.26s">
@@ -10343,7 +10345,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261046';
+      sc.src = 'i18n-home.js?v=20261047';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
