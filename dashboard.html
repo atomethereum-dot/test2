@@ -939,6 +939,31 @@ html.booting,body.booting{overflow:hidden}
 .readout.on-light::before{border-left-color:#0d4fd8;border-top-color:#0d4fd8}
 @media (pointer:coarse){.reticle,.readout{display:none}}
 
+/* ================= plan del Airdrop Genesis: 50 TH/s de una vez ================= */
+.plan{position:relative;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.9fr);gap:clamp(18px,3vw,44px);align-items:center;
+  margin-bottom:18px;padding:clamp(20px,2.6vw,32px);border:1px solid rgba(77,141,255,.42);
+  background:linear-gradient(120deg,rgba(21,105,255,.17),rgba(21,105,255,.04) 58%,rgba(10,13,19,.6))}
+.plan::before{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:var(--blue)}
+.plan-k{color:var(--blue2)}
+.plan h3{margin-top:12px;font-size:clamp(22px,2.2vw,30px);font-weight:300;letter-spacing:-.02em;line-height:1.15}
+.plan h3 b{font-weight:400;color:var(--blue2)}
+.plan-p{margin-top:10px;font-size:14.5px;line-height:1.6;color:var(--ink2);max-width:58ch}
+.plan-s{list-style:none;margin-top:16px;display:grid;gap:8px}
+.plan-s li{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--ink)}
+.plan-s .num{display:grid;place-items:center;flex:none;width:24px;height:24px;border:1px solid rgba(77,141,255,.6);color:var(--blue2);font-size:11.5px}
+.plan-r{display:flex;flex-direction:column;gap:10px;padding:clamp(16px,2vw,22px);border:1px solid var(--hair);background:rgba(5,7,11,.55)}
+.plan-big{font-size:clamp(44px,4.4vw,62px);font-weight:200;letter-spacing:-.04em;line-height:1}
+.plan-big em{margin-left:8px;font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.18em;color:var(--ink3)}
+.plan-pr{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--ink2)}
+.plan-st{display:flex;gap:9px;align-items:flex-start;margin:4px 0 2px;font-size:13.5px;line-height:1.5;color:var(--ink2)}
+.plan-st i{flex:none;width:8px;height:8px;margin-top:6px;border-radius:50%;background:var(--amber)}
+.plan-st.go i{background:var(--blue2)}
+.plan-st.ok{color:var(--ink)}
+.plan-st.ok i{background:var(--live);box-shadow:0 0 10px rgba(62,207,142,.7)}
+.plan-r .btn{width:100%;padding:14px}
+#bPlan[hidden],.node-need[hidden]{display:none!important}
+.node-need{margin-bottom:16px;padding:11px 14px;border:1px solid rgba(232,180,92,.4);background:rgba(232,180,92,.07);font-size:13.5px;line-height:1.5;color:var(--ink)}
+@media (max-width:900px){.plan{grid-template-columns:1fr}}
 </style>
 <script src="/analytics.js" defer></script>
 </head>
@@ -1063,13 +1088,32 @@ html.booting,body.booting{overflow:hidden}
         <span data-i18n="hashdash.market.sub">Rented online or physical node hardware</span>
       </div>
 
+      <div class="plan rv" id="plan">
+        <div class="plan-l">
+          <p class="lbl plan-k" data-i18n="hashdash.plan.k">Airdrop Genesis · the plan</p>
+          <h3 data-i18n="hashdash.plan.h" data-i18n-html>The plan to join the airdrop: <b>50 TH/s</b> in one go</h3>
+          <p class="plan-p" data-i18n="hashdash.plan.p">The Node Kit gives exactly 50 TH/s, the minimum to register your Hash Node. It costs 4,300 tSECT: your first faucet claim (5,000 tSECT) covers it.</p>
+          <ol class="plan-s">
+            <li><span class="num">1</span><span data-i18n="hashdash.plan.s1">Claim 5,000 tSECT from the faucet</span></li>
+            <li><span class="num">2</span><span data-i18n="hashdash.plan.s2">Buy the 50 TH/s plan</span></li>
+            <li><span class="num">3</span><span data-i18n="hashdash.plan.s3">Register your node with the same wallet you stake with</span></li>
+          </ol>
+        </div>
+        <div class="plan-r">
+          <div class="plan-big num">50<em>TH/s</em></div>
+          <div class="plan-pr num">4,300 tSECT</div>
+          <p class="plan-st" id="planSt"><i></i><span></span></p>
+          <button class="btn key" id="bPlan" type="button"><span data-i18n="hashdash.plan.btn">Choose the 50 TH/s plan</span></button>
+        </div>
+      </div>
+
       <div class="hm">
         <div class="card rv">
           <div class="tabs" role="tablist">
-            <button class="tab on" data-k="0" type="button" role="tab" aria-selected="true">
+            <button class="tab" data-k="0" type="button" role="tab" aria-selected="false">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.5 19H9a7 7 0 1 1 6.7-9h.8a4.5 4.5 0 1 1 0 9Z"/></svg><span data-i18n="hashdash.market.tab.online">Online hash</span>
             </button>
-            <button class="tab" data-k="1" type="button" role="tab" aria-selected="false">
+            <button class="tab on" data-k="1" type="button" role="tab" aria-selected="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="6" rx="1.5"/><rect x="4" y="14" width="16" height="6" rx="1.5"/><path d="M8 7h.01M8 17h.01"/></svg><span data-i18n="hashdash.market.tab.physical">Physical node</span>
             </button>
           </div>
@@ -1115,6 +1159,7 @@ html.booting,body.booting{overflow:hidden}
       </div>
 
       <div class="card rv">
+        <p class="node-need" id="nNeed" hidden></p>
         <div class="form">
           <div class="fld">
             <label class="lbl" for="nName" data-i18n="hashdash.node.name">Node name</label>
@@ -1309,7 +1354,7 @@ html.booting,body.booting{overflow:hidden}
 </div>
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="translations.js"></script>
-<script src="dashboard-i18n-extra.js?v=20261026b"></script>
+<script src="dashboard-i18n-extra.js?v=20261027"></script>
 <script src="i18n.js"></script>
 <script src="dashboard-reticle.js?v=20260820b"></script>
 <script>
@@ -1683,11 +1728,12 @@ const PK = [
     {nk:'hashdash.pk.pro.n',     n:'Pro',     h:100, p:8200,  tagk:'hashdash.pk.tag.bestRate', tag:'Best rate', notak:'hashdash.pk.pro.note', nota:'Twice the minimum, best price per TH/s.'}
   ],
   [ // equipo fisico
-    {nk:'hashdash.pk.kit.n',   n:'Node Kit',   h:50,  p:4300,  tagk:'hashdash.pk.tag.validatorReady', tag:'Validator ready', notak:'hashdash.pk.kit.note', nota:'Meets the minimum on its own.'},
+    {nk:'hashdash.pk.kit.n',   n:'Node Kit',   h:50,  p:4300,  tagk:'hashdash.pk.tag.airdrop', tag:'Airdrop plan', notak:'hashdash.pk.kit.note', nota:'Meets the minimum on its own.'},
     {nk:'hashdash.pk.kitxl.n', n:'Node Kit XL',h:250, p:19500, tagk:'hashdash.pk.tag.bestRate', tag:'Best rate', notak:'hashdash.pk.kitxl.note', nota:'Rack unit. Lowest cost per TH/s.'}
   ]
 ];
-let kind = 0, sel = null, conectado = false, mio = 0, saldo = 0;
+/* de entrada, el plan del airdrop: Node Kit de 50 TH/s en la pestana de nodo fisico */
+let kind = 1, sel = 0, conectado = false, mio = 0, saldo = 0, reg = false;
 
 function pintaPks(){
   $('#pks').innerHTML = PK[kind].map((p,i) => `
@@ -1718,8 +1764,33 @@ function progreso(){
   if(!$('#pNow')) return;
   $('#pNow').textContent = mio;
   $('#pFill').style.transform = 'scaleX('+pct+')';
-  $('#bReg').disabled = !(conectado && mio >= 50);
+  $('#bReg').disabled = !(conectado && mio >= 50) || reg;
+  plan();
 }
+/* el plan del airdrop: cuanto hash tienes, cuanto falta y si el nodo ya esta registrado */
+function plan(){
+  const st = $('#planSt'), bp = $('#bPlan'), need = $('#nNeed'); if(!st) return;
+  const fill = (k, v) => t(k, '').replace('{h}', nf(mio)).replace('{f}', nf(Math.max(0, 50 - mio)));
+  let txt, ok = 0, act = 'plan';
+  if(!conectado) txt = t('hashdash.plan.st0', 'Connect your wallet to see your progress.');
+  else if(reg){ txt = fill('hashdash.plan.st3'); ok = 2; act = 'none'; }
+  else if(mio >= 50){ txt = fill('hashdash.plan.st2'); ok = 1; act = 'reg'; }
+  else txt = fill('hashdash.plan.st1');
+  st.querySelector('span').textContent = txt;
+  st.className = 'plan-st' + (ok === 2 ? ' ok' : ok === 1 ? ' go' : '');
+  bp.hidden = act === 'none';
+  bp.dataset.act = act;
+  bp.querySelector('span').textContent = act === 'reg' ? t('hashdash.plan.reg', 'Register my node') : t('hashdash.plan.btn', 'Choose the 50 TH/s plan');
+  if(need){ need.hidden = !(conectado && mio < 50 && !reg); need.textContent = fill('hashdash.node.need'); }
+}
+document.addEventListener('sectora:langchange', plan);
+const _bp = $('#bPlan'); if(_bp) _bp.onclick = () => {
+  if(_bp.dataset.act === 'reg'){ document.getElementById('node').scrollIntoView({behavior:'smooth', block:'start'}); setTimeout(() => { const n = $('#nName'); if(n) n.focus({preventScroll:true}); }, 600); return; }
+  /* elige el Node Kit de 50 TH/s y lleva a la compra */
+  $$('.tab').forEach(x => { const on = x.dataset.k === '1'; x.classList.toggle('on', on); x.setAttribute('aria-selected', String(on)); });
+  kind = 1; sel = 0; pintaPks(); resumen();
+  const b = $('#bBuy'); if(b) b.scrollIntoView({behavior:'smooth', block:'center'});
+};
 $$('.tab').forEach(t => t.onclick = () => {
   $$('.tab').forEach(x => { x.classList.remove('on'); x.setAttribute('aria-selected','false'); });
   t.classList.add('on'); t.setAttribute('aria-selected','true');
@@ -1787,6 +1858,7 @@ const _br = $('#bReg'); if(_br) _br.onclick = () => {
   aviso(t('hashdash.toast.registered','Node "{n}" registered · live on the network map').replace('{n}', n));
   $('#bReg').textContent = t('hashdash.node.registered','Registered');
   $('#bReg').disabled = true;
+  reg = true; plan();
 };
 
 pintaPks(); resumen(); progreso();
@@ -1795,6 +1867,7 @@ pintaPks(); resumen(); progreso();
 window.__sectoraMarket = {
   pick: () => sel === null ? null : { kind, sel, p: PK[kind][sel] },
   setHash: v => { mio = v; progreso(); },
+  setReg: v => { reg = !!v; progreso(); },
   setValid: n => { VALID = n; }
 };
 
@@ -3621,7 +3694,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   }));
 })();
 </script>
-<script src="dashboard-testnet.js?v=20261027"></script>
+<script src="dashboard-testnet.js?v=20261027b"></script>
 <script src="dashboard-node-guide.js?v=3" defer></script>
 <script src="dashboard-gas.js?v=1" defer></script>
 </body>

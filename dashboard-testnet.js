@@ -255,6 +255,8 @@
     pintaFaucet();
     const br = q('#bReg');
     if(br && me.reg){ br.disabled = true; br.textContent = tr('hashdash.node.registered','Registered'); }
+    /* el plan del airdrop sabe si el nodo de esta wallet ya esta registrado */
+    const mk = window.__sectoraMarket; if(mk && mk.setReg) mk.setReg(me.reg);
   }
 
   function pintaFaucet(){
