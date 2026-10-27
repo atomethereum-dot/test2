@@ -35,40 +35,12 @@ jobs:
           }).catch(e => { console.log("ERROR", e && e.message, "en", Date.now() - t0, "ms"); process.exitCode = 0; });
           JS
           cat > probe.cjs <<'JS'
-          const STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0", SECT = "0x8C9984B06281f1CA9416e493c2E602AaB08513db";
-          const T_DEP = "0x2da466a7b24304f47e87fa2e1e5a81b9831ce54fec19055ce277ca2f39ba42c4", T_WD = "0x7084f5476618d8e60b11ef0d7d3f06914655adb8793e28ff7f018d4c76d505d5";
-          const T_TR = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
-          const ADDR = process.env.ADDR, P = "0x" + ADDR.toLowerCase().slice(2).padStart(64, "0");
-          const PN = "https://ethereum-rpc.publicnode.com";
-          const post = async (u, b) => { try { const r = await fetch(u, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, ...b }) }); const t = await r.text(); try { return JSON.parse(t); } catch (e) { return { error: "HTTP " + r.status + " " + t.slice(0, 80) }; } } catch (e) { return { error: String(e).slice(0, 80) }; } };
-          const amt = h => (Number(BigInt(h) / 10n ** 14n) / 1e4).toString();
-          const w = (h, n) => BigInt("0x" + (h.slice(2 + 64 * n, 2 + 64 * (n + 1)) || "0"));
           (async () => {
-            const latest = parseInt((await post(PN, { method: "eth_blockNumber", params: [] })).result, 16);
-            const av = await post(PN, { method: "eth_call", params: [{ to: STAKING, data: "0xf85b90e2" + P.slice(2) }, "latest"] });
-            if (av.result) console.log("AHORA staking:", amt("0x" + w(av.result, 0).toString(16)), "| reclamable:", amt("0x" + w(av.result, 1).toString(16)), "| en la wallet:", amt("0x" + w(av.result, 2).toString(16)));
-            // eventos recientes de la wallet en el staking y transferencias de SECT (ultimos 4000 bloques)
-            const from = "0x" + (latest - 4000).toString(16);
-            for (const [name, q] of [["staking", { address: STAKING, topics: [[T_DEP, T_WD], P] }], ["SECT sale", { address: SECT, topics: [T_TR, P] }], ["SECT entra", { address: SECT, topics: [T_TR, null, P] }]]) {
-              const r = await post(PN, { method: "eth_getLogs", params: [{ ...q, fromBlock: from, toBlock: "latest" }] });
-              console.log("reciente", name + ":", r.result ? r.result.map(l => "blq " + parseInt(l.blockNumber, 16) + " " + (l.topics[0] === T_DEP ? "Deposito" : l.topics[0] === T_WD ? "Retiro" : "Transfer de 0x" + l.topics[1].slice(26) + " a 0x" + l.topics[2].slice(26)) + " " + amt(l.data) + " tx " + l.transactionHash).join(" || ") || "ninguno" : JSON.stringify(r.error));
-              if (name === "staking" && r.result) for (const l of r.result) {
-                const tx = await post(PN, { method: "eth_getTransactionByHash", params: [l.transactionHash] });
-                if (tx.result) console.log("   tx", l.transactionHash, "firmada por", tx.result.from, "a", tx.result.to, "funcion", tx.result.input.slice(0, 10));
-              }
-            }
-            // historial completo: blockscout (sin clave) contra flashbots
-            const bs = await fetch("https://eth.blockscout.com/api?module=logs&action=getLogs&fromBlock=0&toBlock=latest&address=" + STAKING + "&topic1=" + P + "&topic0_1_opr=and&topic0=" + T_DEP).then(r => r.json()).catch(e => ({ error: String(e) }));
-            console.log("blockscout depositos:", JSON.stringify(bs.result ? bs.result.map(l => [parseInt(l.blockNumber, 16), amt(l.data), new Date(parseInt(l.timeStamp, 16) * 1000).toISOString()]) : bs).slice(0, 400));
-            const cors = await fetch("https://eth.blockscout.com/api?module=block&action=eth_block_number", { headers: { origin: "https://sectoraorg.com" } }).then(r => r.headers.get("access-control-allow-origin")).catch(e => String(e));
-            console.log("blockscout CORS:", cors);
-            if (bs.result && bs.result[0]) {
-              const b0 = parseInt(bs.result[0].blockNumber, 16);
-              for (const u of ["https://rpc.flashbots.net", "https://gateway.tenderly.co/public/mainnet", "https://eth.merkle.io", "https://rpc.mevblocker.io", "https://eth.meowrpc.com", "https://eth-pokt.nodies.app", "https://ethereum.public.blockpi.network/v1/rpc/public", "https://eth1.lava.build"]) {
-                const r = await post(u, { method: "eth_getLogs", params: [{ address: STAKING, topics: [[T_DEP, T_WD], P], fromBlock: "0x" + (b0 - 100).toString(16), toBlock: "0x" + (b0 + 100).toString(16) }] });
-                const r2 = await post(u, { method: "eth_getLogs", params: [{ address: STAKING, topics: [[T_DEP, T_WD], P], fromBlock: "0x" + (b0 - 20000).toString(16), toBlock: "0x" + (b0 + 20000).toString(16) }] });
-                console.log("deposito antiguo en", u, "| 200 bloques:", r.result ? "ok(" + r.result.length + ")" : JSON.stringify(r.error).slice(0, 80), "| 40000 bloques:", r2.result ? "ok(" + r2.result.length + ")" : JSON.stringify(r2.error).slice(0, 80));
-              }
+            for (const u of ["https://gateway.tenderly.co/public/mainnet", "https://rpc.mevblocker.io"]) {
+              const o = await fetch(u, { method: "OPTIONS", headers: { origin: "https://sectoraorg.com", "access-control-request-method": "POST", "access-control-request-headers": "content-type" } }).catch(e => ({ status: String(e), headers: new Map() }));
+              const g = await fetch(u, { method: "POST", headers: { origin: "https://sectoraorg.com", "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_getBlockByNumber", params: ["0x18f3f2c", false] }) }).catch(e => ({ status: String(e), headers: new Map(), json: async () => ({}) }));
+              const j = await g.json().catch(() => ({}));
+              console.log("CORS", u, "| preflight", o.status, o.headers.get("access-control-allow-origin"), o.headers.get("access-control-allow-headers"), "| post", g.status, g.headers.get("access-control-allow-origin"), "| bloque antiguo:", j.result ? "ok" : JSON.stringify(j.error).slice(0, 80));
             }
           })();
           JS
