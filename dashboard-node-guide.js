@@ -15,7 +15,7 @@
   };
 
   var T = {
-    es: { fab: "Guía del nodo", k: "Hash Node · paso a paso", h: "Activa tu nodo en 6 pasos",
+    es: { fab: "Guía para conectar tu nodo", k: "Hash Node · paso a paso", h: "Activa tu nodo en 6 pasos",
       sub: "Unos 10 minutos. Todo es gratis: es la red de pruebas y no gastas dinero real.",
       note: "¿Participas en el Airdrop Genesis? Conecta la misma wallet donde tienes tus SECT en staking y no pauses el nodo: el tiempo en pausa no suma.",
       done: "Hecho", close: "Cerrar", zoom: "Toca una imagen para verla en grande",
@@ -28,7 +28,7 @@
         ["Listo: déjalo encendido", "El botón cambia a «{registered}» y tu nodo aparece en el mapa de la red. Mantenlo encendido: si lo pausas, deja de contar.", "Ver el mapa"]
       ],
       help: "¿Algo falla? Si dice que no tienes ETH de Sepolia, vuelve al paso 2. Si no te alcanzan los tSECT, al paso 3. Si tu wallet está en otra red, toca el aviso de arriba para cambiar a Sepolia. Si tu wallet no muestra Sepolia, activa las redes de prueba en sus ajustes." },
-    en: { fab: "Node guide", k: "Hash Node · step by step", h: "Turn on your node in 6 steps",
+    en: { fab: "Guide to connect your node", k: "Hash Node · step by step", h: "Turn on your node in 6 steps",
       sub: "About 10 minutes. Everything is free: it's the test network and you don't spend real money.",
       note: "Joining Airdrop Genesis? Connect the same wallet that holds your staked SECT and don't pause the node: paused time doesn't count.",
       done: "Done", close: "Close", zoom: "Tap an image to see it larger",
@@ -41,7 +41,7 @@
         ["Done: keep it on", "The button changes to “{registered}” and your node shows up on the network map. Keep it on: if you pause it, it stops counting.", "See the map"]
       ],
       help: "Something wrong? If it says you have no Sepolia ETH, go back to step 2. If you're short on tSECT, step 3. If your wallet is on another network, tap the notice at the top to switch to Sepolia. If your wallet doesn't show Sepolia, turn on test networks in its settings." },
-    pt: { fab: "Guia do nó", k: "Hash Node · passo a passo", h: "Ative seu nó em 6 passos",
+    pt: { fab: "Guia para conectar seu nó", k: "Hash Node · passo a passo", h: "Ative seu nó em 6 passos",
       sub: "Uns 10 minutos. Tudo é grátis: é a rede de testes e você não gasta dinheiro real.",
       note: "Participa do Airdrop Genesis? Conecte a mesma carteira onde estão seus SECT em staking e não pause o nó: o tempo em pausa não conta.",
       done: "Feito", close: "Fechar", zoom: "Toque em uma imagem para vê-la maior",
