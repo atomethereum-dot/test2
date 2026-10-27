@@ -23,7 +23,7 @@
         ["Consigue gas gratis", "Cada paso necesita un poco de ETH de Sepolia, una moneda de prueba gratuita que paga la red. Pulsa «{gas}», pega la dirección de tu wallet y pide ETH. Con lo que te dan alcanza para todos los pasos.", "Abrir el grifo de Sepolia"],
         ["Reclama 5.000 tSECT", "En «{tn}», pulsa «{faucet}» y confirma en tu wallet. Es gratis y puedes repetirlo cada 24 horas.", "Ir al faucet"],
         ["Compra el Node Kit", "En «{market}», abre la pestaña «{phys}» (1) y elige el {kit} de 50 TH/s por 4.300 tSECT (2): con eso llegas al mínimo para validar. Pulsa «{buy}» (3). Tu wallet pide dos confirmaciones: primero aprobar el pago y después la compra.", "Ir al mercado"],
-        ["Registra tu nodo", "En «{node}», escribe un nombre y la ubicación aproximada de tu ciudad (latitud y longitud: las encuentras en Google Maps al marcar un punto). Pulsa «{reg}» y confirma en tu wallet.", "Ir a mi nodo"],
+        ["Registra tu nodo", "En «{node}», la ubicación aproximada de tu nodo y su nombre ya aparecen solos. Pulsa «{reg}» y confirma en tu wallet. Eso es todo.", "Ir a mi nodo"],
         ["Listo: déjalo encendido", "El botón cambia a «{registered}» y tu nodo aparece en el mapa de la red. Mantenlo encendido: si lo pausas, deja de contar.", "Ver el mapa"]
       ],
       help: "¿Algo falla? Si dice que no tienes ETH de Sepolia, vuelve al paso 2. Si no te alcanzan los tSECT, al paso 3. Si tu wallet está en otra red, toca el aviso de arriba para cambiar a Sepolia. Si tu wallet no muestra Sepolia, activa las redes de prueba en sus ajustes." },
@@ -36,7 +36,7 @@
         ["Get free gas", "Every step needs a little Sepolia ETH, a free test coin that pays the network. Press “{gas}”, paste your wallet address and request ETH. What you get is enough for every step.", "Open the Sepolia faucet"],
         ["Claim 5,000 tSECT", "In “{tn}”, press “{faucet}” and confirm in your wallet. It's free and you can do it again every 24 hours.", "Go to the faucet"],
         ["Buy the Node Kit", "In “{market}”, open the “{phys}” tab (1) and pick the {kit}: 50 TH/s for 4,300 tSECT (2), enough to reach the validator minimum. Press “{buy}” (3). Your wallet asks twice: first to allow the payment, then to confirm the purchase.", "Go to the market"],
-        ["Register your node", "In “{node}”, type a name and the rough location of your city (latitude and longitude: Google Maps shows them when you drop a pin). Press “{reg}” and confirm in your wallet.", "Go to my node"],
+        ["Register your node", "In “{node}”, your node's approximate location and its name are filled in for you. Press “{reg}” and confirm in your wallet. That's it.", "Go to my node"],
         ["Done: keep it on", "The button changes to “{registered}” and your node shows up on the network map. Keep it on: if you pause it, it stops counting.", "See the map"]
       ],
       help: "Something wrong? If it says you have no Sepolia ETH, go back to step 2. If you're short on tSECT, step 3. If your wallet is on another network, tap the notice at the top to switch to Sepolia. If your wallet doesn't show Sepolia, turn on test networks in its settings." },
@@ -49,7 +49,7 @@
         ["Pegue gás grátis", "Cada passo precisa de um pouco de ETH da Sepolia, uma moeda de teste gratuita que paga a rede. Toque em “{gas}”, cole o endereço da sua carteira e peça ETH. O que você recebe dá para todos os passos.", "Abrir a torneira da Sepolia"],
         ["Resgate 5.000 tSECT", "Em “{tn}”, toque em “{faucet}” e confirme na carteira. É grátis e dá para repetir a cada 24 horas.", "Ir à torneira"],
         ["Compre o Node Kit", "Em “{market}”, abra a aba “{phys}” (1) e escolha o {kit} de 50 TH/s por 4.300 tSECT (2): com isso você chega ao mínimo para validar. Toque em “{buy}” (3). A carteira pede duas confirmações: primeiro aprovar o pagamento e depois a compra.", "Ir ao mercado"],
-        ["Registre seu nó", "Em “{node}”, escreva um nome e a localização aproximada da sua cidade (latitude e longitude: o Google Maps mostra ao marcar um ponto). Toque em “{reg}” e confirme na carteira.", "Ir ao meu nó"],
+        ["Registre seu nó", "Em “{node}”, a localização aproximada do seu nó e o nome já aparecem sozinhos. Toque em “{reg}” e confirme na sua carteira. Só isso.", "Ir ao meu nó"],
         ["Pronto: deixe ligado", "O botão muda para “{registered}” e seu nó aparece no mapa da rede. Mantenha ligado: se pausar, ele para de contar.", "Ver o mapa"]
       ],
       help: "Algo deu errado? Se disser que você não tem ETH da Sepolia, volte ao passo 2. Se faltar tSECT, ao passo 3. Se a carteira estiver em outra rede, toque no aviso no topo para mudar para a Sepolia. Se a carteira não mostrar a Sepolia, ative as redes de teste nas configurações." }
