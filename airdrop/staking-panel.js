@@ -5,12 +5,13 @@
    thing left is to connect their Hash Node. Prize = SECT in staking x the rate
    of the level (Scout 55, Sentinel 65, Guardian 75, Titan 90 per 100 SECT);
    spots = SECT in staking / the minimum of the level.
-   It reads what the staking page already shows (#earnDep, the amount deposited
-   by the connected wallet) and, when the page announces the connected address
-   (the "sectora:account" event from staking-chain.js), it looks that address up
-   in the Hash Node registry on Sepolia to mark step 2. It never talks to the
-   wallet or to the staking contract: staking works exactly the same with or
-   without it. It also puts a small "Airdrop Genesis is open" tag under the
+   When the page announces the connected address (the "sectora:account" event
+   from staking-chain.js), it reads that address's deposit from the staking
+   contract (accountView, a public read) and looks it up in the Hash Node registry
+   on Sepolia to mark step 2. The amount the console prints (#earnDep) is only a
+   fallback and a signal to read again: a translator such as Google Translate
+   rewrites "4,000" as "4.000", which would read as 4. It never asks the wallet to
+   sign anything: staking works exactly the same with or without it. It also puts a small "Airdrop Genesis is open" tag under the
    "Live" tag of the hero, which scrolls down to this window. */
 (function () {
   "use strict";
@@ -21,7 +22,9 @@
   var COUNT_JS = "/airdrop/count.js?v=14";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
   var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.gateway.tenderly.co", "https://ethereum-sepolia.publicnode.com"];
-  var SEL = { indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44" };
+  var STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
+  var MAINNET = ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org", "https://1rpc.io/eth"];
+  var SEL = { indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44", accountView: "0xf85b90e2" };
   var LV = [{ min: 100, rate: .55, n: "Scout" }, { min: 500, rate: .65, n: "Sentinel" }, { min: 1000, rate: .75, n: "Guardian" }, { min: 4000, rate: .9, n: "Titan" }];
 
   var T = {
@@ -286,12 +289,29 @@
     }
     minBtn.addEventListener("click", function () { setMin(!el.classList.contains("min")); });
 
-    /* the deposited amount, as the staking page prints it for the connected wallet */
-    function deposited() {
+    /* the deposited amount of the connected wallet: read from the staking contract; until that read
+       arrives, what the console prints (only if no translator has rewritten it) */
+    var chainDep = null, depFor = "", depT = 0, depTxt = "";
+    function shown() {
       var d = document.getElementById("earnDep");
       if (!d || !d.isConnected) return null;
+      if (!d.classList.contains("notranslate")) { d.classList.add("notranslate"); d.setAttribute("translate", "no"); }
+      var h = document.documentElement;
+      if (d.querySelector("font") || /\btranslated-(ltr|rtl)\b/.test(h.className)) return null;
       var n = parseFloat((d.textContent || "").replace(/[^0-9.]/g, ""));
       return isFinite(n) ? n : null;
+    }
+    function deposited() {
+      if (addr && depFor === addr && chainDep !== null) return chainDep;
+      return shown();
+    }
+    function readDep() {
+      var a = addr; if (!a) return;
+      depT = Date.now();
+      call(STAKING, SEL.accountView + pad(a), MAINNET).then(function (h) {
+        if (a !== addr) return;
+        chainDep = Number(word(h, 0) / 10n ** 14n) / 1e4; depFor = a; paint();
+      }).catch(function () {});
     }
     function fmt(n, dec) {
       var o = { maximumFractionDigits: dec == null ? 2 : dec };
@@ -301,11 +321,11 @@
     /* el Hash Node de la wallet conectada, leido del registro en Sepolia (como el verificador del airdrop) */
     var addr = null, node = null, nodeT = 0;
     function pad(a) { return a.toLowerCase().replace(/^0x/, "").padStart(64, "0"); }
-    function call(to, data) {
-      var i = 0;
+    function call(to, data, rpcs) {
+      var i = 0; rpcs = rpcs || SEPOLIA;
       function next() {
-        if (i >= SEPOLIA.length) return Promise.reject(new Error("rpc"));
-        var url = SEPOLIA[i++], ctl = new AbortController(), tm = setTimeout(function () { ctl.abort(); }, 7000);
+        if (i >= rpcs.length) return Promise.reject(new Error("rpc"));
+        var url = rpcs[i++], ctl = new AbortController(), tm = setTimeout(function () { ctl.abort(); }, 7000);
         return fetch(url, { method: "POST", headers: { "content-type": "application/json" }, signal: ctl.signal,
           body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: to, data: data }, "latest"] }) })
           .then(function (r) { return r.json(); })
@@ -365,8 +385,8 @@
     function setAddr(a) {
       a = a && /^0x[0-9a-fA-F]{40}$/.test(a) ? a : null;
       if (a === addr) return;
-      addr = a; node = null; paint();
-      if (addr) checkNode();
+      addr = a; node = null; chainDep = null; depFor = ""; paint();
+      if (addr) { checkNode(); readDep(); }
     }
     window.addEventListener("sectora:account", function (e) { setAddr(e.detail); });
 
@@ -426,8 +446,11 @@
       var w = window.ethereum;
       if (w && w.request) w.request({ method: "eth_accounts" }).then(function (a) { if (!addr && a && a[0]) setAddr(a[0]); }).catch(function () {});
     }
-    /* cada 1,5 s repinta lo que muestra la consola; el nodo se vuelve a mirar cada minuto (10 s si fallo la red) */
+    /* cada 1,5 s repinta lo que muestra la consola; el deposito se vuelve a leer cuando la consola cambia
+       (deposito o retiro) y cada minuto; el nodo, cada minuto (10 s si fallo la red) */
     setInterval(function () {
+      var d = document.getElementById("earnDep"), tx = d ? d.textContent : "";
+      if (addr && (tx !== depTxt ? Date.now() - depT > 4000 : Date.now() - depT > (depFor === addr ? 6e4 : 1e4))) { depTxt = tx; readDep(); }
       paint();
       if (!addr && deposited() !== null && Date.now() - t0 > 2500 && Date.now() - askT > 1e4) askWallet();
       if (addr && Date.now() - nodeT > (node === "unknown" ? 1e4 : 6e4)) checkNode();
