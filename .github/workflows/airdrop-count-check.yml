@@ -36,11 +36,12 @@ jobs:
           JS
           cat > probe.cjs <<'JS'
           (async () => {
-            for (const u of ["https://gateway.tenderly.co/public/mainnet", "https://rpc.mevblocker.io"]) {
-              const o = await fetch(u, { method: "OPTIONS", headers: { origin: "https://sectoraorg.com", "access-control-request-method": "POST", "access-control-request-headers": "content-type" } }).catch(e => ({ status: String(e), headers: new Map() }));
-              const g = await fetch(u, { method: "POST", headers: { origin: "https://sectoraorg.com", "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_getBlockByNumber", params: ["0x18f3f2c", false] }) }).catch(e => ({ status: String(e), headers: new Map(), json: async () => ({}) }));
-              const j = await g.json().catch(() => ({}));
-              console.log("CORS", u, "| preflight", o.status, o.headers.get("access-control-allow-origin"), o.headers.get("access-control-allow-headers"), "| post", g.status, g.headers.get("access-control-allow-origin"), "| bloque antiguo:", j.result ? "ok" : JSON.stringify(j.error).slice(0, 80));
+            for (const u of ["https://get.geojs.io/v1/ip/geo.json", "https://ipapi.co/json/", "https://ipwho.is/", "https://freeipapi.com/api/json"]) {
+              try {
+                const r = await fetch(u, { headers: { origin: "https://sectoraorg.com" } });
+                const t = await r.text(); let j = {}; try { j = JSON.parse(t); } catch (e) {}
+                console.log("GEO", u, "| http", r.status, "| CORS", r.headers.get("access-control-allow-origin"), "| lat", j.latitude, "lon", j.longitude, "ciudad", j.city || j.cityName, "pais", j.country || j.country_name || j.countryName);
+              } catch (e) { console.log("GEO", u, "ERROR", String(e).slice(0, 80)); }
             }
           })();
           JS
