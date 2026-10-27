@@ -129,7 +129,7 @@ module.exports = {
       planCap: "Solo cuando no se pudo detectar la ubicación: (1) {ui:lat} · (2) {ui:lon}" },
     14: { k: "Listo", h: "Listo: tu nodo está encendido",
       do: ["El botón cambia a {ui:registered}.", "Tu nodo aparece en el mapa de la red. Desde ahora, cuenta."],
-      onoff: [["SÍ", "Puedes cerrar la pestaña", "Tu nodo sigue encendido en la red por sí solo."], ["SÍ", "Puedes apagar tu ordenador", "Tu nodo no depende de tu ordenador ni de tu teléfono."], ["NO", "Nunca desactives tu nodo", "Un nodo desactivado deja de contar hasta que lo vuelvas a encender."]],
+      onoff: [["SÍ", "Puedes cerrar la pestaña", "Tu nodo sigue encendido en la red por sí solo."], ["SÍ", "Puedes apagar tu ordenador", "Tu nodo no depende de tu ordenador ni de tu teléfono."], ["NO", "Nunca desactives tu nodo", "No pulses ningún botón ni firmes ninguna transacción que desactive o apague tu nodo. Mientras está apagado, deja de contar hasta que lo vuelvas a encender."]],
       done: ["Parte B terminada. Estás en el airdrop.", "Staking + nodo encendido, con la misma wallet. Tu conteo está corriendo."] },
     15: { k: "Mi Airdrop", h: "Abre Mi Airdrop",
       do: ["Abre <b>sectoraorg.com/myairdrop</b>.", "Pulsa {ui:myConnect}, o pega tu dirección de wallet y pulsa {ui:myCheck}.", "Ves lo que llevas generado, tu <b>nivel</b>, tu <b>premio</b> y los tres requisitos."],

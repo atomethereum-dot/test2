@@ -129,7 +129,7 @@ module.exports = {
       planCap: "Seulement quand l’emplacement n’a pas pu être détecté : (1) {ui:lat} · (2) {ui:lon}" },
     14: { k: "Terminé", h: "Terminé : votre nœud est allumé",
       do: ["Le bouton devient {ui:registered}.", "Votre nœud apparaît sur la carte du réseau. À partir de maintenant, il compte."],
-      onoff: [["OUI", "Vous pouvez fermer l’onglet", "Votre nœud reste allumé tout seul sur le réseau."], ["OUI", "Vous pouvez éteindre votre ordinateur", "Votre nœud ne dépend ni de votre ordinateur ni de votre téléphone."], ["NON", "Ne désactivez jamais votre nœud", "Un nœud désactivé arrête de compter jusqu’à ce que vous le rallumiez."]],
+      onoff: [["OUI", "Vous pouvez fermer l’onglet", "Votre nœud reste allumé tout seul sur le réseau."], ["OUI", "Vous pouvez éteindre votre ordinateur", "Votre nœud ne dépend ni de votre ordinateur ni de votre téléphone."], ["NON", "Ne désactivez jamais votre nœud", "N’appuyez sur aucun bouton et ne signez aucune transaction qui désactive ou éteint votre nœud. Tant qu’il est éteint, il ne compte plus jusqu’à ce que vous le rallumiez."]],
       done: ["Partie B terminée. Vous êtes dans l’airdrop.", "Staking + nœud allumé, avec le même wallet. Votre compteur tourne."] },
     15: { k: "Mon Airdrop", h: "Ouvrez Mon Airdrop",
       do: ["Ouvrez <b>sectoraorg.com/myairdrop</b>.", "Appuyez sur {ui:myConnect}, ou collez l’adresse de votre wallet et appuyez sur {ui:myCheck}.", "Vous voyez ce que vous avez déjà gagné, votre <b>niveau</b>, votre <b>prix</b> et les trois conditions."],

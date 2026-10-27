@@ -131,7 +131,7 @@ module.exports = {
       planCap: "Only when the location could not be detected: (1) {ui:lat} · (2) {ui:lon}" },
     14: { k: "Done", h: "Done: your node is on",
       do: ["The button changes to {ui:registered}.", "Your node appears on the network map. From now on, it counts."],
-      onoff: [["YES", "You can close the tab", "Your node stays on in the network by itself."], ["YES", "You can turn off your computer", "Your node does not depend on your computer or your phone."], ["NO", "Never deactivate your node", "A deactivated node stops counting until you turn it on again."]],
+      onoff: [["YES", "You can close the tab", "Your node stays on in the network by itself."], ["YES", "You can turn off your computer", "Your node does not depend on your computer or your phone."], ["NO", "Never deactivate your node", "Don't press any button or sign any transaction that deactivates or turns off your node. While it is off, it stops counting until you turn it back on."]],
       done: ["Part B done. You are in the airdrop.", "Staking + node on, with the same wallet. Your count is running."] },
     15: { k: "My Airdrop", h: "Open My Airdrop",
       do: ["Open <b>sectoraorg.com/myairdrop</b>.", "Press {ui:myConnect}, or paste your wallet address and press {ui:myCheck}.", "You see what you have earned so far, your <b>level</b>, your <b>prize</b> and the three requirements."],

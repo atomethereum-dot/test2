@@ -129,7 +129,7 @@ module.exports = {
       planCap: "Só quando a localização não pôde ser detectada: (1) {ui:lat} · (2) {ui:lon}" },
     14: { k: "Pronto", h: "Pronto: seu nó está ligado",
       do: ["O botão muda para {ui:registered}.", "Seu nó aparece no mapa da rede. A partir de agora, ele conta."],
-      onoff: [["SIM", "Você pode fechar a aba", "Seu nó continua ligado na rede sozinho."], ["SIM", "Você pode desligar o computador", "Seu nó não depende do seu computador nem do seu celular."], ["NÃO", "Nunca desative seu nó", "Um nó desativado para de contar até você ligar de novo."]],
+      onoff: [["SIM", "Você pode fechar a aba", "Seu nó continua ligado na rede sozinho."], ["SIM", "Você pode desligar o computador", "Seu nó não depende do seu computador nem do seu celular."], ["NÃO", "Nunca desative seu nó", "Não toque em nenhum botão nem assine nenhuma transação que desative ou desligue seu nó. Enquanto estiver desligado, ele para de contar até você ligá-lo de novo."]],
       done: ["Parte B concluída. Você está no airdrop.", "Staking + nó ligado, com a mesma carteira. Sua contagem está correndo."] },
     15: { k: "Meu Airdrop", h: "Abra o Meu Airdrop",
       do: ["Abra <b>sectoraorg.com/myairdrop</b>.", "Toque em {ui:myConnect}, ou cole o endereço da sua carteira e toque em {ui:myCheck}.", "Você vê quanto já gerou, seu <b>nível</b>, seu <b>prêmio</b> e os três requisitos."],

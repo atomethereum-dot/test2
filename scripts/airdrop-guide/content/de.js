@@ -129,7 +129,7 @@ module.exports = {
       planCap: "Nur wenn der Standort nicht erkannt werden konnte: (1) {ui:lat} · (2) {ui:lon}" },
     14: { k: "Fertig", h: "Fertig: dein Node läuft",
       do: ["Der Button wechselt zu {ui:registered}.", "Dein Node erscheint auf der Netzwerkkarte. Ab jetzt zählt er."],
-      onoff: [["JA", "Du kannst den Tab schließen", "Dein Node bleibt von selbst im Netzwerk an."], ["JA", "Du kannst den Computer ausschalten", "Dein Node hängt nicht von deinem Computer oder Handy ab."], ["NEIN", "Deaktiviere deinen Node nie", "Ein deaktivierter Node zählt nicht, bis du ihn wieder einschaltest."]],
+      onoff: [["JA", "Du kannst den Tab schließen", "Dein Node bleibt von selbst im Netzwerk an."], ["JA", "Du kannst den Computer ausschalten", "Dein Node hängt nicht von deinem Computer oder Handy ab."], ["NEIN", "Deaktiviere deinen Node nie", "Drück keinen Button und unterschreib keine Transaktion, die deinen Node deaktiviert oder ausschaltet. Solange er aus ist, zählt er nicht, bis du ihn wieder einschaltest."]],
       done: ["Teil B erledigt. Du bist im Airdrop.", "Staking + Node an, mit derselben Wallet. Dein Zähler läuft."] },
     15: { k: "Mein Airdrop", h: "Öffne „Mein Airdrop“",
       do: ["Öffne <b>sectoraorg.com/myairdrop</b>.", "Drück auf {ui:myConnect} oder füg deine Wallet-Adresse ein und drück auf {ui:myCheck}.", "Du siehst, was du bisher verdient hast, dein <b>Level</b>, deinen <b>Preis</b> und die drei Bedingungen."],
