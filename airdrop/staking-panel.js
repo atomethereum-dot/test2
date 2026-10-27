@@ -190,7 +190,20 @@
     "}" +
     "@media (max-width:980px){.pp-body.sad-on{grid-template-rows:none}.pp-body.sad-on > .frame,.pp-body.sad-on > .sad,.pp-body.sad-on > .steps{grid-column:auto;grid-row:auto}}" +
     "@media (max-width:420px){.sad-lv{grid-template-columns:1fr 1fr}.sad-lv .pz{grid-column:1 / -1;border-left:0!important;border-top:1px solid rgba(0,0,0,.09)}}" +
-    "@media (prefers-reduced-motion:reduce){.sad *{animation:none!important;transition:none!important}}";
+    "@media (prefers-reduced-motion:reduce){.sad *{animation:none!important;transition:none!important}}" +
+    /* the same frame as the staking console: square corners, blue + marks on the corners, the same
+       padding and a 2px blue top line; on desktop both windows share the row at the same size */
+    ".sad{border-radius:0;margin:0;display:flex;flex-direction:column}" +
+    ".sad-card{flex:1;overflow:visible;border-radius:0;padding:clamp(20px,2.4vw,32px)}" +
+    ".sad-card::after{left:-1px;right:-1px;top:-1px;height:2px}" +
+    ".sad-min,.sad-keep,.sad-acc,.sad-acc .bar,.sad-how,.sad-how a,.sad-lv,.sad-cta,.sad-note{border-radius:0}" +
+    "@media (min-width:981px){" +
+      ".pp-body.sad-on{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}" +
+      ".pp-body.sad-on > .frame{display:flex;flex-direction:column}" +
+      ".pp-body.sad-on > .frame > .console{flex:1}" +
+      ".pp-body.sad-on > .sad.min{align-self:start}" +
+    "}" +
+    "@media (max-width:620px){.sad{padding:10px}.sad-card{padding:18px 16px}}";
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   var LOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 7.6-1.7"/></svg>';
@@ -210,6 +223,7 @@
     el.setAttribute("aria-label", "Sectora Airdrop");
     el.id = "airdrop-genesis";
     el.innerHTML =
+      '<span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>' +
       '<div class="sad-band m"><span>' + esc(L.band) + '</span><b>SA&middot;ST&middot;01&middot;26</b></div>' +
       '<div class="sad-card">' +
         '<div class="sad-head m"><span>Sectora &nbsp;//&nbsp; ' + esc(L.bar) + '</span><span class="sp"></span><span class="sad-cnt"></span>' +
