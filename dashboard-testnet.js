@@ -148,9 +148,11 @@
       const pv = document.createElement('div');
       pv.id = 'tnPreview';
       pv.setAttribute('role', 'status');
-      pv.style.cssText = 'position:fixed;left:16px;bottom:16px;z-index:80;display:flex;align-items:center;gap:9px;padding:9px 13px;border:1px solid rgba(62,207,142,.4);' +
-        'background:rgba(10,13,19,.92);color:#3ecf8e;font:400 10.5px/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase';
-      document.body.appendChild(pv);
+      /* banda fina encima de la cabecera: no choca con el boton de la guia del nodo */
+      pv.style.cssText = 'position:relative;z-index:61;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;column-gap:9px;row-gap:2px;padding:6px 16px;' +
+        'border-bottom:1px solid rgba(62,207,142,.22);background:rgba(62,207,142,.07);color:#3ecf8e;font:400 10px/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase;text-align:center';
+      const top = q('header.top');
+      if(top) top.parentNode.insertBefore(pv, top); else document.body.prepend(pv);
     }
 
     if(window.SECTORA_APPLY_LANG) window.SECTORA_APPLY_LANG(window.SECTORA_CURRENT_LANG || 'en', { silent:true });
