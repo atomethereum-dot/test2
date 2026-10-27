@@ -1,18 +1,19 @@
 name: Guide screenshots
 
-# Solo lectura: capturas para la guia del airdrop (/airdrop-guide). Abre el grifo de Sepolia de Google
-# en los 11 idiomas y el staking y el dashboard de sectoraorg.com en un iPhone, sin wallet y sin firmar
-# nada, y deja las imagenes como artefacto. Solo se lanza a mano y no falla.
+# Capturas para la guia del airdrop (/airdrop-guide). Abre el grifo de Sepolia de Google y el staking y el
+# dashboard de sectoraorg.com en un iPhone, sin wallet y sin firmar nada, y sube las imagenes (JPEG) a
+# airdrop-guide/img/. Solo se lanza a mano y no falla.
 on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   shots:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -20,7 +21,7 @@ jobs:
         run: |
           npm i --silent playwright@1.48.2 >/dev/null 2>&1 || true
           npx --yes playwright@1.48.2 install --with-deps chromium >/dev/null 2>&1 || true
-          mkdir -p out
+          mkdir -p out airdrop-guide/img
           cat > shots.cjs <<'JS'
           const { chromium, devices } = require("playwright");
           const LANGS = ["en", "es", "zh", "pt", "ru", "fr", "ja", "ko", "ar", "de", "hi"];
@@ -41,7 +42,7 @@ jobs:
           (async () => {
             const b = await chromium.launch();
             // 1. grifo de Sepolia de Google, en cada idioma
-            for (const l of LANGS) {
+            for (const l of ["en"]) {
               try {
                 const ctx = await b.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 2, locale: HL[l] || l });
                 const p = await ctx.newPage();
@@ -55,7 +56,7 @@ jobs:
                 if (inp[0]) els.push(await inp[0].evaluateHandle(e => e));
                 if (btn) els.push(await btn.evaluateHandle(e => e));
                 await ring(p, els);
-                await p.screenshot({ path: "out/fct-" + l + ".png" });
+                await p.screenshot({ path: "airdrop-guide/img/fct-desk.jpg", type: "jpeg", quality: 82 });
                 console.log("FAUCET", l, "inputs:", inp.length, "button:", btn ? (await btn.innerText()).trim() : "-");
                 if (l === "en") console.log((await p.evaluate(() => document.body.innerText)).replace(/\s+/g, " ").slice(0, 1500));
                 await ctx.close();
@@ -63,14 +64,14 @@ jobs:
             }
             // 2. staking en un iPhone: la lista de apps al pulsar Connect wallet
             try {
-              const ctx = await b.newContext({ ...devices["iPhone 13"], locale: "en-US" });
+              const ctx = await b.newContext({ ...devices["iPhone 13"], deviceScaleFactor: 2, locale: "en-US" });
               const p = await ctx.newPage();
               await p.goto("https://sectoraorg.com/staking/?nc=" + Date.now(), { waitUntil: "networkidle", timeout: 60000 });
               await p.addStyleTag({ content: "*{animation-duration:0s!important;transition-duration:0s!important}html{scroll-behavior:auto!important}" });
               await p.evaluate(() => document.getElementById("connectBtn").scrollIntoView({ block: "center" }));
               await p.waitForTimeout(1500);
               await ring(p, [await p.$("#connectBtn")]);
-              await p.screenshot({ path: "out/stk-phone-1.png" });
+              await p.screenshot({ path: "airdrop-guide/img/stk-phone-1.jpg", type: "jpeg", quality: 80 });
               await p.evaluate(() => document.querySelectorAll(".gx-ring").forEach(e => e.remove()));
               await p.click("#connectBtn");
               await p.waitForSelector(".wpick-row[href]", { timeout: 40000 }).catch(() => {});
@@ -79,14 +80,15 @@ jobs:
               await p.evaluate(() => scrollBy(0, -70));
               await p.waitForTimeout(500);
               await ring(p, [await p.$(".wpick-list > *:first-child")]);
-              await p.screenshot({ path: "out/stk-phone-2.png" });
+              await p.screenshot({ path: "airdrop-guide/img/stk-phone-2.jpg", type: "jpeg", quality: 80 });
               console.log("STAKING PHONE", (await p.innerText(".wpick")).replace(/\s+/g, " ").slice(0, 400));
               await ctx.close();
             } catch (e) { console.log("STAKING PHONE ERROR", e.message); }
             // 3. dashboard en un iPhone, en cada idioma: el boton de conectar y la lista de wallets
             for (const l of LANGS) {
               try {
-                const ctx = await b.newContext({ ...devices["iPhone 13"], locale: "en-US" });
+                const ctx = await b.newContext({ ...devices["iPhone 13"], deviceScaleFactor: 2, locale: "en-US" });
+                require("fs").mkdirSync("airdrop-guide/img/" + l, { recursive: true });
                 await ctx.addInitScript(() => { try { sessionStorage.setItem("hni_vista", "1"); localStorage.setItem("sectora:node-guide", "1"); } catch (e) {} });
                 const p = await ctx.newPage();
                 await p.goto("https://sectoraorg.com/dashboard?nc=" + Date.now(), { waitUntil: "networkidle", timeout: 60000 });
@@ -96,11 +98,11 @@ jobs:
                 await p.waitForTimeout(1200);
                 await p.evaluate(() => scrollTo(0, 0));
                 await ring(p, [await p.$("#bConnect")]);
-                await p.screenshot({ path: "out/dsh-phone-1-" + l + ".png" });
+                await p.screenshot({ path: "airdrop-guide/img/" + l + "/dsh-phone-1.jpg", type: "jpeg", quality: 80 });
                 await p.evaluate(() => document.querySelectorAll(".gx-ring").forEach(e => e.remove()));
                 await p.click("#bConnect");
                 await p.waitForTimeout(1500);
-                await p.screenshot({ path: "out/dsh-phone-2-" + l + ".png" });
+                await p.screenshot({ path: "airdrop-guide/img/" + l + "/dsh-phone-2.jpg", type: "jpeg", quality: 80 });
                 if (l === "en") console.log("DASH PHONE", (await p.evaluate(() => document.body.innerText)).replace(/\s+/g, " ").slice(0, 600));
                 await ctx.close();
               } catch (e) { console.log("DASH PHONE", l, "ERROR", e.message); }
@@ -109,9 +111,11 @@ jobs:
           })().catch(e => console.log("NO SE PUDO:", e.message));
           JS
           node shots.cjs || true
-          ls -la out || true
-      - uses: actions/upload-artifact@v4
-        with:
-          name: guide-shots
-          path: out/
-          retention-days: 3
+          ls -laR airdrop-guide/img | head -60 || true
+      - name: Subir las capturas
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add airdrop-guide/img
+          git commit -q -m "Guia del airdrop: capturas del grifo de Sepolia y del movil (CI)" || exit 0
+          for i in 1 2 3; do git pull -q --rebase origin "$GITHUB_REF_NAME" && git push -q origin "HEAD:$GITHUB_REF_NAME" && break; sleep 5; done || true
