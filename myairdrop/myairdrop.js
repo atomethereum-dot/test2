@@ -107,7 +107,7 @@
   // los otros 8 idiomas de sectoraorg.com (i18n-more.js)
   if (window.MA_I18N) for (var lk in window.MA_I18N) T[lk] = window.MA_I18N[lk];
   var lang = "en";
-  try { var sv = sessionStorage.getItem("ma_lang"); if (sv && T[sv]) lang = sv; } catch (e) {}
+  try { var sv = sessionStorage.getItem("sa_lang_visit"); if (sv && T[sv]) lang = sv; } catch (e) {}
   function t(k, v) { var s = T[lang][k] != null ? T[lang][k] : T.en[k]; if (v) for (var x in v) s = s.split("{" + x + "}").join(v[x]); return s; }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function nf(d) { return new Intl.NumberFormat(T[lang].loc, { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0, useGrouping: "always" }); }
@@ -373,7 +373,7 @@
   var host = document.getElementById("langPick");
   if (host && window.SALangPick) picker = window.SALangPick(host, function () { return lang; }, function (c) {
     if (!T[c]) return;
-    lang = c; try { sessionStorage.setItem("ma_lang", lang); } catch (e) {}
+    lang = c; try { sessionStorage.setItem("sa_lang_visit", lang); } catch (e) {}
     statics(); if (data && cur) render(); else if (!cur) start();
   });
   statics();

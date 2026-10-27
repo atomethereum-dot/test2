@@ -91,7 +91,11 @@
       pre: "Começa a somar no dia da abertura. Todos têm o mesmo tempo para completar o prêmio, contado desde que entram. As entregas começam no lançamento da SectoraEVM.", wait: "Sua contagem vai aparecer assim que a rede confirmar seu staking.",
       demo: "Visualização de exemplo", demos: "{n} SECT em staking · nó ligado · dia {d} da contagem" }
   };
-  function lang() { var l = (document.documentElement.lang || "en").slice(0, 2); return L[l] ? l : "en"; }
+  function lang() {
+    var l = (document.documentElement.lang || "en").slice(0, 2), P = window.SA_LANG_PACK && window.SA_LANG_PACK[l];
+    if (!L[l] && P && P.elig) L[l] = P.elig;   // los otros idiomas llegan con el paquete del idioma (i18n/<idioma>.js)
+    return L[l] ? l : "en";
+  }
   function t(k, v) { var s = L[lang()][k]; if (v) for (var x in v) s = s.replace("{" + x + "}", v[x]); return s; }
 
   /* ---------- estilos ---------- */
@@ -374,6 +378,7 @@
   function close() { stop(); ov.classList.remove("on"); document.documentElement.style.overflow = ""; }
   if (window.ethereum && window.ethereum.on) window.ethereum.on("accountsChanged", function (a) { if (ov.classList.contains("on") && a && a[0]) show(a[0], true); });
 
+  document.addEventListener("sa:lang", function () { if (ov.classList.contains("on")) { if (cur) show(cur, curConn); else start(); } });
   window.SAElig = { open: open, close: close };
   if (DEMO) { cur = DEMO_A; if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", open); else open(); }
 })();

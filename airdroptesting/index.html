@@ -784,11 +784,7 @@ html.aiboot{overflow:hidden}
         <a href="#faq" data-i="n5">FAQ</a>
       </div>
       <div class="nr">
-        <div class="lang mono" role="group" aria-label="Language">
-          <button type="button" data-l="en" aria-pressed="true">EN</button>
-          <button type="button" data-l="es" aria-pressed="false">ES</button>
-          <button type="button" data-l="pt" aria-pressed="false">PT</button>
-        </div>
+        <div id="langPick"></div>
         <a class="docs mono js-connect" href="#steps"><span data-i="nc">Connect wallet</span></a>
       </div>
     </nav>
@@ -1320,6 +1316,7 @@ html.aiboot{overflow:hidden}
 
 <div class="toast mono" id="toast" role="status" aria-live="polite"></div>
 
+<script src="/airdroptesting/lang-pick.js?v=2"></script>
 <script>
 (function(){
 "use strict";
@@ -1472,7 +1469,8 @@ function render(){
   $$("[data-i]").forEach(function(el){ var k = el.getAttribute("data-i"); var v = dict[k]; if(v == null) v = EN[k]; if(el.innerHTML !== v) el.innerHTML = v; });
   $$("[data-n]").forEach(function(el){ el.textContent = nf(+el.getAttribute("data-n")); });
   document.documentElement.lang = lang;
-  $$(".lang button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-l") === lang)); });
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  if(picker) picker.refresh();
   $$(".sec").forEach(function(s){
     var e = s.querySelector(".eyebrow span"), sp = s.querySelector(".spine span");
     if(e && sp) sp.textContent = e.textContent.split("·").pop().trim();
@@ -1676,12 +1674,27 @@ function reveals(){
 var tt = 0;
 function toast(msg){ var t = $("#toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove("on"); }, 3600); }
 
-$$(".lang button").forEach(function(b){
-  b.addEventListener("click", function(){
-    lang = b.getAttribute("data-l");
-    try{ sessionStorage.setItem("sa_lang_visit", lang); }catch(e){}
-    render();
+/* idiomas: en, es y pt van en la pagina; los otros 8 de sectoraorg.com (zh, ru, fr, ja, ko, ar, de, hi)
+   se descargan solo al elegirlos (/airdroptesting/i18n/<idioma>.js) */
+var MORE = ["zh","ru","fr","ja","ko","ar","de","hi"], picker = null;
+function pack(c, cb){
+  var use = function(){ var P = window.SA_LANG_PACK && window.SA_LANG_PACK[c]; if(P && !T[c]){ T[c] = P.t; D[c] = P.d; } cb(); };
+  if(c === "en" || T[c] || MORE.indexOf(c) < 0) return cb();
+  if(window.SA_LANG_PACK && window.SA_LANG_PACK[c]) return use();
+  var sc = document.createElement("script"); sc.src = "/airdroptesting/i18n/" + c + ".js?v=1";
+  sc.onload = use; sc.onerror = function(){ cb(); };
+  document.head.appendChild(sc);
+}
+function setLang(c){
+  pack(c, function(){
+    if(c !== "en" && !T[c]) { if(picker) picker.refresh(); return; }
+    lang = c; render();
+    document.dispatchEvent(new Event("sa:lang"));   // la ventana "Tu airdrop" se vuelve a pintar en el idioma nuevo
   });
+}
+if(window.SALangPick && $("#langPick")) picker = window.SALangPick($("#langPick"), function(){ return lang; }, function(c){
+  try{ sessionStorage.setItem("sa_lang_visit", c); }catch(e){}
+  setLang(c);
 });
 $$(".js-connect").forEach(function(a){
   a.addEventListener("click", function(e){
@@ -1692,8 +1705,12 @@ $$(".js-connect").forEach(function(a){
 });
 
 /* abre siempre en ingles; el idioma elegido arriba se mantiene solo durante esa visita */
-try{ var saved = sessionStorage.getItem("sa_lang_visit"); if(saved && D[saved]) lang = saved; }catch(e){}
+var saved = null;
+try{ saved = sessionStorage.getItem("sa_lang_visit"); }catch(e){}
+if(saved && D[saved]) lang = saved;
 render();
+// un idioma extra elegido en esta visita: se descarga su paquete y se vuelve a pintar (la intro ya lo usa)
+if(saved && !D[saved] && MORE.indexOf(saved) >= 0){ document.documentElement.lang = saved; setLang(saved); }
 reveals();
 countUp();
 irisCentre();
@@ -1702,9 +1719,9 @@ if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){
 $$("canvas.grid").forEach(gridFx);
 })();
 </script>
-<script src="/airdroptesting/airdrop-intro.js?v=1" defer></script>
+<script src="/airdroptesting/airdrop-intro.js?v=2" defer></script>
 <script>/* solo en la vista de prueba: apertura simulada (hoy) para ver el contador en vivo; la fecha real ira en count.js */ window.SA_OPEN = Date.UTC(2026, 9, 27);</script>
 <script src="/airdroptesting/count.js?v=13" defer></script>
-<script src="/airdroptesting/eligibility.js?v=42" defer></script>
+<script src="/airdroptesting/eligibility.js?v=44" defer></script>
 </body>
 </html>

@@ -22,7 +22,15 @@
   const L = {
     en: { k: "Sectora Foundation · Official campaign", s: "<b>7,000,000 SECT</b> for those who build the network", sk: "Skip →" },
     es: { k: "Sectora Foundation · Campaña oficial", s: "<b>7.000.000 SECT</b> para quienes construyen la red", sk: "Saltar →" },
-    pt: { k: "Sectora Foundation · Campanha oficial", s: "<b>7.000.000 SECT</b> para quem constrói a rede", sk: "Pular →" }
+    pt: { k: "Sectora Foundation · Campanha oficial", s: "<b>7.000.000 SECT</b> para quem constrói a rede", sk: "Pular →" },
+    zh: { k: "Sectora Foundation · 官方活动", s: "<b>7,000,000 SECT</b> 献给建设网络的人", sk: "跳过 →" },
+    ru: { k: "Sectora Foundation · Официальная кампания", s: "<b>7 000 000 SECT</b> для тех, кто строит сеть", sk: "Пропустить →" },
+    fr: { k: "Sectora Foundation · Campagne officielle", s: "<b>7 000 000 SECT</b> pour ceux qui construisent le réseau", sk: "Passer →" },
+    ja: { k: "Sectora Foundation · 公式キャンペーン", s: "ネットワークを築く人へ <b>7,000,000 SECT</b>", sk: "スキップ →" },
+    ko: { k: "Sectora Foundation · 공식 캠페인", s: "네트워크를 만드는 사람들을 위한 <b>7,000,000 SECT</b>", sk: "건너뛰기 →" },
+    ar: { k: "Sectora Foundation · الحملة الرسمية", s: "<b>7,000,000 SECT</b> لمن يبنون الشبكة", sk: "تخطَّ ←" },
+    de: { k: "Sectora Foundation · Offizielle Kampagne", s: "<b>7.000.000 SECT</b> für alle, die das Netzwerk aufbauen", sk: "Überspringen →" },
+    hi: { k: "Sectora Foundation · आधिकारिक अभियान", s: "नेटवर्क बनाने वालों के लिए <b>7,000,000 SECT</b>", sk: "छोड़ें →" }
   }[(document.documentElement.lang || "en").slice(0, 2)] || null;
   const tx = L || { k: "Sectora Foundation · Official campaign", s: "<b>7,000,000 SECT</b> for those who build the network", sk: "Skip →" };
   const LOGO = '<svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>';
