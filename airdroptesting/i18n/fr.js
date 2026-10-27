@@ -7,8 +7,8 @@ t: {
 "h.e": "Campagne officielle · Sectora Foundation",
 "h.l": "<b>7 000 000 SECT</b> de récompenses pour celles et ceux qui construisent le réseau Sectora. Allumez le Hash Node et gardez vos SECT en staking : avec 4 000 SECT vous gagnez 3 600 SECT, et si vous en mettez plus, vous gagnez en proportion, sans maximum. Les distributions commencent au lancement de SectoraEVM.",
 "b.join": "Participer", "b.my": "Voir mon airdrop", "b.how": "Voir les 4 étapes", "b.buy": "Acheter du SECT sur Uniswap",
-"sh.t": "En bref", "sh.1": "Récompense", "sh.2": "Participation", "sh.2v": "À partir de 100 SECT en staking", "sh.3": "Durée", "sh.3v": "La même pour tous, dès votre entrée", "sh.4": "Vous la recevez", "sh.4v": "Sur SectoraEVM · à son lancement", "sh.5": "Verrouillage de la récompense",
-"st.pend": "En attente",
+"sh.t": "En bref", "sh.1": "Récompense", "sh.2": "Participation", "sh.2v": "À partir de 100 SECT en staking", "sh.3": "Durée", "sh.3v": "La même pour tous, dès votre entrée", "sh.4": "Vous la recevez", "sh.4v": "Sur SectoraEVM · à son lancement", 
+
 "sh.n": "Vos SECT vont au staking de Sectora, sans blocage. Retirez quand vous voulez.",
 "pz.e": "Récompense totale", "pz.u": "SECT à partager",
 "lv.k1": "Niveau 1", "pz.1": "Scout · 100 SECT en staking + Hash Node allumé",
@@ -120,7 +120,7 @@ t: {
 "sf.e": "09 · Est-ce sûr ?", "sf.h": "Vérifiez-le <b>vous-même.</b>", "sf.p": "Un vrai airdrop ne vous demande jamais d’envoyer de l’argent.",
 "st.ok": "Vérifiable",
 "vf.1h": "Vous n’envoyez jamais d’argent", "vf.1p": "Vous stakez uniquement dans le staking officiel de Sectora, sans blocage. Si quelqu’un vous demande d’envoyer des tokens à une adresse pour cet airdrop, c’est une arnaque.", "vf.1l": "SECT sur Etherscan",
-"vf.2h": "La récompense existe déjà", "vf.2p": "Les 7 000 000 SECT seront verrouillés sur Team Finance avant l’ouverture de l’airdrop. Le lien apparaîtra ici.", "vf.2l": "Lien disponible avant le début",
+
 "st.rule": "Règle",
 "vf.3h": "Aucun gain promis", "vf.3p": "Nous ne promettons pas d’argent. Le prix du SECT peut monter ou baisser.", "vf.3l": "Lire les questions",
 "vf.4h": "Enregistrée et auditée", "vf.4p": "Sectora Foundation est enregistrée dans l’Illinois, aux États-Unis. Le contrat SECT a été audité par Cyberscope et la liquidité est verrouillée.", "vf.4a": "Audit Cyberscope", "vf.4b": "Liquidité verrouillée", "vf.4c": "Informations légales",

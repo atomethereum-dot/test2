@@ -548,6 +548,7 @@ h2.t b{font-weight:400;color:var(--b-ink)}
 .ver-l{position:sticky;top:48px}
 .ver-l .sub{margin-top:22px;max-width:30ch}
 .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.cards .vc:last-child:nth-child(odd){grid-column:1 / -1}
 .vc{position:relative;display:flex;flex-direction:column;padding:clamp(24px,2.5vw,32px) clamp(22px,2.6vw,34px);background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.13);border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12);transition:transform .5s var(--ease),border-color .5s var(--ease)}
 .vc:hover{transform:translateY(-3px);border-color:rgba(21,105,255,.55)}
 .vc::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;border-radius:3px 3px 0 0;background:var(--blue)}
@@ -810,7 +811,6 @@ html.aiboot{overflow:hidden}
           <dt data-i="sh.2">Participation</dt><dd><b data-i="sh.2v">From 100 SECT in staking</b></dd>
           <dt data-i="sh.3">Duration</dt><dd data-i="sh.3v">Same time for everyone, from the day you join</dd>
           <dt data-i="sh.4">You get it</dt><dd data-i="sh.4v">On SectoraEVM · at its launch</dd>
-          <dt data-i="sh.5">Prize lock</dt><dd><span class="chip wait mono" data-i="st.pend">Pending</span></dd>
         </dl>
         <p class="note" data-i="sh.n">Your SECT go to Sectora staking, with no lock-up. Withdraw whenever you want.</p>
       </aside>
@@ -1225,20 +1225,14 @@ html.aiboot{overflow:hidden}
         <p data-i="vf.1p">You only stake in the official Sectora staking, with no lock-up. If someone asks you to send tokens to an address for this airdrop, it's a scam.</p>
         <div class="lk mono"><a href="https://etherscan.io/token/0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener"><span data-i="vf.1l">SECT on Etherscan</span><i>↗</i></a></div>
       </article>
-      <article class="vc pend">
-        <div class="top"><span class="mono">02</span><span class="chip wait mono" data-i="st.pend">Pending</span></div>
-        <h3 data-i="vf.2h">The prize already exists</h3>
-        <p data-i="vf.2p">The 7,000,000 SECT will be locked on Team Finance before the airdrop opens. The link will appear here.</p>
-        <div class="lk mono"><span class="soon" data-i="vf.2l">Link coming before the start</span></div>
-      </article>
       <article class="vc">
-        <div class="top"><span class="mono">03</span><span class="chip blue mono" data-i="st.rule">Rule</span></div>
+        <div class="top"><span class="mono">02</span><span class="chip blue mono" data-i="st.rule">Rule</span></div>
         <h3 data-i="vf.3h">No promised profits</h3>
         <p data-i="vf.3p">We don't promise money. The price of SECT can go up or down.</p>
         <div class="lk mono"><a href="#faq"><span data-i="vf.3l">Read the questions</span><i>→</i></a></div>
       </article>
       <article class="vc">
-        <div class="top"><span class="mono">04</span><span class="chip ok mono" data-i="st.ok">Verifiable</span></div>
+        <div class="top"><span class="mono">03</span><span class="chip ok mono" data-i="st.ok">Verifiable</span></div>
         <h3 data-i="vf.4h">Registered and audited</h3>
         <p data-i="vf.4p">Sectora Foundation is registered in Illinois, USA. The SECT contract was audited by Cyberscope and the liquidity is locked.</p>
         <div class="lk mono">
@@ -1333,9 +1327,9 @@ n1:"Cómo entrar",n2:"Niveles",n3:"Premios",n4:"¿Es seguro?",n5:"Preguntas",nc:
 "h.e":"Campaña oficial · Sectora Foundation",
 "h.l":"<b>7.000.000 SECT</b> en recompensas para quienes construyen la red de Sectora. Activa el Hash Node y mantén tus SECT en staking: con 4.000 SECT ganas 3.600 SECT, y si pones más, ganas en proporción, sin máximo. Las entregas empiezan en el lanzamiento de SectoraEVM.",
 "b.join":"Participar","b.my":"Ver mi airdrop","b.how":"Ver los 4 pasos","b.buy":"Comprar SECT en Uniswap",
-"sh.t":"En resumen","sh.1":"Premio","sh.2":"Participación","sh.2v":"Desde 100 SECT en staking","sh.3":"Duración","sh.3v":"El mismo tiempo para todos, desde que entras","sh.4":"Lo recibes","sh.4v":"En SectoraEVM · en su lanzamiento","sh.5":"Bloqueo del premio",
+"sh.t":"En resumen","sh.1":"Premio","sh.2":"Participación","sh.2v":"Desde 100 SECT en staking","sh.3":"Duración","sh.3v":"El mismo tiempo para todos, desde que entras","sh.4":"Lo recibes","sh.4v":"En SectoraEVM · en su lanzamiento",
 "sh.n":"Tus SECT van al staking de Sectora, sin bloqueo. Retiras cuando quieras.",
-"st.pend":"Pendiente","st.ok":"Verificable","st.rule":"Regla",
+"st.ok":"Verificable","st.rule":"Regla",
 "pz.e":"Premio total","pz.u":"SECT para repartir","pz.h":"Desliza",
 "pz.1":"Scout · 100 SECT en staking + Hash Node encendido","pz.2":"Sentinel · 500 SECT en staking + Hash Node encendido",
 "sp.e":"02 · Cómo entrar","sp.h":"Prueba el nodo. <b>Gana SECT.</b>","sp.p":"No necesitas dinero para empezar.",
@@ -1367,7 +1361,7 @@ s4h:"Recibe tus SECT","s4p":"Las entregas empiezan en el lanzamiento de SectoraE
 "wh.dh":"Se entregan en SectoraEVM","wh.dp":"Tus SECT llegan directamente a la blockchain de Sectora, para que los uses desde el primer día. Al terminar esta primera parte del airdrop, empieza la fase 2.",
 "sf.e":"09 · ¿Es seguro?","sf.h":"Compruébalo <b>tú mismo.</b>","sf.p":"Un airdrop real nunca te pide enviar dinero.",
 "vf.1h":"Nunca envías dinero","vf.1p":"Solo haces staking en el staking oficial de Sectora, sin bloqueo. Si alguien te pide enviar tokens a una dirección para este airdrop, es una estafa.","vf.1l":"SECT en Etherscan",
-"vf.2h":"El premio ya existe","vf.2p":"Los 7.000.000 SECT se bloquearán en Team Finance antes de que se abra el airdrop. El enlace aparecerá aquí.","vf.2l":"Enlace antes del inicio",
+
 "vf.3h":"Sin ganancias prometidas","vf.3p":"No prometemos dinero. El precio de SECT puede subir o bajar.","vf.3l":"Leer las preguntas",
 "vf.4h":"Registrada y auditada","vf.4p":"Sectora Foundation está registrada en Illinois, EE. UU. El contrato de SECT fue auditado por Cyberscope y la liquidez está bloqueada.","vf.4a":"Auditoría de Cyberscope","vf.4b":"Liquidez bloqueada","vf.4c":"Información legal",
 "fq.e":"10 · Preguntas","fq.h":"Respuestas <b>simples.</b>","fq.p":"¿Dudas? Pregunta en nuestro Telegram.",
@@ -1395,9 +1389,9 @@ n1:"Como entrar",n2:"Níveis",n3:"Prêmios",n4:"É seguro?",n5:"Perguntas",nc:"C
 "h.e":"Campanha oficial · Sectora Foundation",
 "h.l":"<b>7.000.000 SECT</b> em recompensas para quem constrói a rede da Sectora. Ative o Hash Node e mantenha seus SECT em staking: com 4.000 SECT você ganha 3.600 SECT, e se colocar mais, ganha em proporção, sem máximo. As entregas começam no lançamento da SectoraEVM.",
 "b.join":"Participar","b.my":"Ver meu airdrop","b.how":"Ver os 4 passos","b.buy":"Comprar SECT na Uniswap",
-"sh.t":"Resumo","sh.1":"Prêmio","sh.2":"Participação","sh.2v":"A partir de 100 SECT em staking","sh.3":"Duração","sh.3v":"O mesmo tempo para todos, desde que você entra","sh.4":"Você recebe","sh.4v":"Na SectoraEVM · no lançamento","sh.5":"Bloqueio do prêmio",
+"sh.t":"Resumo","sh.1":"Prêmio","sh.2":"Participação","sh.2v":"A partir de 100 SECT em staking","sh.3":"Duração","sh.3v":"O mesmo tempo para todos, desde que você entra","sh.4":"Você recebe","sh.4v":"Na SectoraEVM · no lançamento",
 "sh.n":"Seus SECT vão para o staking da Sectora, sem bloqueio. Saque quando quiser.",
-"st.pend":"Pendente","st.ok":"Verificável","st.rule":"Regra",
+"st.ok":"Verificável","st.rule":"Regra",
 "pz.e":"Prêmio total","pz.u":"SECT para dividir","pz.h":"Role",
 "pz.1":"Scout · 100 SECT em staking + Hash Node ligado","pz.2":"Sentinel · 500 SECT em staking + Hash Node ligado",
 "sp.e":"02 · Como entrar","sp.h":"Teste o nó. <b>Ganhe SECT.</b>","sp.p":"Você não precisa de dinheiro para começar.",
@@ -1429,7 +1423,7 @@ s4h:"Receba seus SECT","s4p":"As entregas começam no lançamento da SectoraEVM.
 "wh.dh":"Entregues na SectoraEVM","wh.dp":"Seus SECT chegam direto na blockchain da Sectora, para você usar desde o primeiro dia. Quando esta primeira parte do airdrop terminar, começa a fase 2.",
 "sf.e":"09 · É seguro?","sf.h":"Confira <b>você mesmo.</b>","sf.p":"Um airdrop de verdade nunca pede para você enviar dinheiro.",
 "vf.1h":"Você nunca envia dinheiro","vf.1p":"Você só faz staking no staking oficial da Sectora, sem bloqueio. Se alguém pedir para você enviar tokens a um endereço para este airdrop, é golpe.","vf.1l":"SECT no Etherscan",
-"vf.2h":"O prêmio já existe","vf.2p":"Os 7.000.000 SECT serão bloqueados na Team Finance antes de o airdrop abrir. O link vai aparecer aqui.","vf.2l":"Link antes do início",
+
 "vf.3h":"Sem lucros prometidos","vf.3p":"Não prometemos dinheiro. O preço do SECT pode subir ou cair.","vf.3l":"Ler as perguntas",
 "vf.4h":"Registrada e auditada","vf.4p":"A Sectora Foundation é registrada em Illinois, EUA. O contrato do SECT foi auditado pela Cyberscope e a liquidez está bloqueada.","vf.4a":"Auditoria da Cyberscope","vf.4b":"Liquidez bloqueada","vf.4c":"Informações legais",
 "fq.e":"10 · Perguntas","fq.h":"Respostas <b>simples.</b>","fq.p":"Dúvidas? Pergunte no nosso Telegram.",
@@ -1681,7 +1675,7 @@ function pack(c, cb){
   var use = function(){ var P = window.SA_LANG_PACK && window.SA_LANG_PACK[c]; if(P && !T[c]){ T[c] = P.t; D[c] = P.d; } cb(); };
   if(c === "en" || T[c] || MORE.indexOf(c) < 0) return cb();
   if(window.SA_LANG_PACK && window.SA_LANG_PACK[c]) return use();
-  var sc = document.createElement("script"); sc.src = "/airdroptesting/i18n/" + c + ".js?v=1";
+  var sc = document.createElement("script"); sc.src = "/airdroptesting/i18n/" + c + ".js?v=2";
   sc.onload = use; sc.onerror = function(){ cb(); };
   document.head.appendChild(sc);
 }

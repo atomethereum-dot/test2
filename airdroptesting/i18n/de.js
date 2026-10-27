@@ -7,8 +7,8 @@ t: {
 "h.e": "Offizielle Kampagne · Sectora Foundation",
 "h.l": "<b>7.000.000 SECT</b> an Belohnungen für alle, die das Sectora-Netzwerk aufbauen. Schalte den Hash Node ein und halte deine SECT im Staking: Mit 4.000 SECT gewinnst du 3.600 SECT, und wenn du mehr stakst, gewinnst du anteilig, ohne Obergrenze. Die Auszahlungen beginnen mit dem Start von SectoraEVM.",
 "b.join": "Mitmachen", "b.my": "Mein Airdrop ansehen", "b.how": "Die 4 Schritte ansehen", "b.buy": "SECT auf Uniswap kaufen",
-"sh.t": "Kurz gesagt", "sh.1": "Belohnung", "sh.2": "Teilnahme", "sh.2v": "Ab 100 SECT im Staking", "sh.3": "Dauer", "sh.3v": "Gleiche Zeit für alle, ab deinem Einstieg", "sh.4": "Du erhältst sie", "sh.4v": "Auf SectoraEVM · bei dessen Start", "sh.5": "Sperre der Belohnung",
-"st.pend": "Ausstehend",
+"sh.t": "Kurz gesagt", "sh.1": "Belohnung", "sh.2": "Teilnahme", "sh.2v": "Ab 100 SECT im Staking", "sh.3": "Dauer", "sh.3v": "Gleiche Zeit für alle, ab deinem Einstieg", "sh.4": "Du erhältst sie", "sh.4v": "Auf SectoraEVM · bei dessen Start", 
+
 "sh.n": "Deine SECT gehen ins Sectora-Staking, ohne Sperrfrist. Abheben, wann du willst.",
 "pz.e": "Gesamtbelohnung", "pz.u": "SECT zu verteilen",
 "lv.k1": "Stufe 1", "pz.1": "Scout · 100 SECT im Staking + Hash Node an",
@@ -120,7 +120,7 @@ t: {
 "sf.e": "09 · Ist es sicher?", "sf.h": "Prüf es <b>selbst.</b>", "sf.p": "Ein echter Airdrop fordert dich nie auf, Geld zu senden.",
 "st.ok": "Überprüfbar",
 "vf.1h": "Du sendest nie Geld", "vf.1p": "Du stakst nur im offiziellen Sectora-Staking, ohne Sperrfrist. Wenn dich jemand auffordert, für diesen Airdrop Token an eine Adresse zu senden, ist es Betrug.", "vf.1l": "SECT auf Etherscan",
-"vf.2h": "Die Belohnung existiert bereits", "vf.2p": "Die 7.000.000 SECT werden vor der Öffnung des Airdrops auf Team Finance gesperrt. Der Link erscheint hier.", "vf.2l": "Link folgt vor dem Start",
+
 "st.rule": "Regel",
 "vf.3h": "Keine versprochenen Gewinne", "vf.3p": "Wir versprechen kein Geld. Der Preis von SECT kann steigen oder fallen.", "vf.3l": "Fragen lesen",
 "vf.4h": "Registriert und geprüft", "vf.4p": "Sectora Foundation ist in Illinois, USA, registriert. Der SECT-Vertrag wurde von Cyberscope geprüft und die Liquidität ist gesperrt.", "vf.4a": "Cyberscope-Audit", "vf.4b": "Gesperrte Liquidität", "vf.4c": "Rechtliche Informationen",
