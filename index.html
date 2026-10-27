@@ -4641,6 +4641,134 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   @media (prefers-reduced-motion:reduce){
     .stk-hw h2,.stk-head p,.stk-pt,.stk-film{transform:none!important;opacity:1!important;transition:none!important}
   }
+  /* ============ airdrop genesis en la portada ============
+     Hoja clara despues del Hash Market. Lleva .fst, asi que hereda su papel y
+     entra en la cadena de noche como sus vecinas. Su pieza es un escenario
+     negro con la bolsa, la red que se enciende (lienzo) y los cuatro niveles;
+     el resto copia la gramatica del staking: puntos en fila, botones, nota. */
+  .adp{scroll-margin-top:70px}
+  .adp-in{position:relative;z-index:1;max-width:1280px}
+  .adp-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:30px}
+  .adp-live{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border:1px solid rgba(15,143,82,.38);
+    background:rgba(15,143,82,.07);color:#0f8f52;font-size:11px}
+  .adp .led{position:relative;width:6px;height:6px;border-radius:50%;flex:none;background:#25d366;
+    box-shadow:0 0 10px 1px rgba(37,211,102,.65);clip-path:inset(-18px)}
+  .adp .led::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid #25d366;
+    animation:ping 2.6s var(--ease) infinite}
+  .adp-ser{color:var(--fs-ink-3);font-size:11px}
+  .adp-head{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,90px);align-items:end;
+    margin-bottom:clamp(40px,5vw,72px)}
+  .adp-hw{overflow:hidden;padding-bottom:.12em}
+  .adp-hw h2{font-size:clamp(34px,4.6vw,68px);font-weight:300;line-height:1.02;letter-spacing:-.03em;max-width:15ch;
+    text-wrap:balance;color:var(--fs-ink);transform:translateY(104%);transition:transform 1.1s var(--ease-out)}
+  .adp-hw h2 b{display:block;font-weight:400;color:var(--blue)}
+  .adp-head p{color:var(--fs-ink-2);font-size:clamp(15px,1.15vw,18px);line-height:1.65;font-weight:300;max-width:50ch;
+    opacity:0;transform:translateY(12px);transition:opacity .9s var(--ease-out) .2s,transform .9s var(--ease-out) .2s}
+  #airdrop.on .adp-hw h2{transform:none}
+  #airdrop.on .adp-head p{opacity:1;transform:none}
+
+  /* el escenario: negro siempre, aunque la hoja ya se haya apagado */
+  .adp-stage{position:relative;margin:0 0 clamp(36px,4.6vw,64px);padding:clamp(16px,1.6vw,24px);
+    background:radial-gradient(90% 120% at 72% 40%,rgba(21,105,255,.16),rgba(21,105,255,0) 60%),#03050a;color:#fff;
+    opacity:0;transform:translateY(22px);transition:opacity 1s var(--ease-out) .35s,transform 1s var(--ease-out) .35s}
+  #airdrop.on .adp-stage{opacity:1;transform:none}
+  .adp-band{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:10.5px;
+    padding-bottom:clamp(12px,1.2vw,16px);border-bottom:1px solid rgba(255,255,255,.09)}
+  .adp-band span{color:#7c8496}
+  .adp-band b{color:var(--blue-l,#4d8dff);font-weight:500}
+  .adp-main{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(20px,3vw,48px);align-items:center;
+    padding:clamp(22px,3vw,44px) clamp(4px,1.2vw,18px) clamp(18px,2.4vw,32px)}
+  .adp-num{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;line-height:.9}
+  .adp-big{font-size:clamp(54px,7.6vw,118px);font-weight:200;letter-spacing:-.045em;font-variant-numeric:tabular-nums;
+    background:linear-gradient(180deg,#fff 30%,#a9c4ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .adp-num small{color:var(--blue-l,#4d8dff);font-size:clamp(12px,1.1vw,15px);letter-spacing:.24em}
+  .adp-sub{margin-top:clamp(16px,1.8vw,24px);max-width:34ch;color:#b9c1cf;font-size:clamp(15px,1.15vw,17px);line-height:1.6;font-weight:300}
+  .adp-viz{margin:0;min-width:0}
+  .adp-net{display:block;width:100%;height:clamp(230px,24vw,340px)}
+  .adp-viz figcaption{margin-top:10px;color:#6f7889;font-size:9.5px;text-align:right}
+
+  /* los cuatro niveles: lo que hay en staking, lo que se recibe y una barra */
+  .adp-lv{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+    border-top:1px solid rgba(255,255,255,.09)}
+  .adp-l{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-width:0;
+    padding:clamp(18px,2vw,26px) clamp(14px,1.6vw,22px) clamp(16px,1.8vw,22px)}
+  .adp-l + .adp-l{border-left:1px solid rgba(255,255,255,.09)}
+  .adp-ln{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;min-height:20px;color:#fff;font-size:11px}
+  .adp-ln i{font-style:normal;color:var(--blue-l,#4d8dff)}
+  .adp-ln em{font-style:normal;padding:2px 6px;border:1px solid rgba(77,141,255,.55);color:#9dbcff;font-size:8.5px;line-height:14px;letter-spacing:.12em}
+  .adp-lk{margin-top:16px;color:#6f7889;font-size:9.5px}
+  .adp-ls{margin-top:4px;color:#c6ccd8;font-size:15px;font-variant-numeric:tabular-nums}
+  .adp-lr{margin-top:4px;color:#fff;font-size:clamp(22px,2.2vw,32px);font-weight:300;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .adp-l.top .adp-lr{color:#9dbcff}
+  .adp-lb{position:relative;align-self:stretch;height:2px;margin-top:18px;background:rgba(255,255,255,.08);overflow:hidden}
+  .adp-lb i{position:absolute;left:0;top:0;bottom:0;width:calc(var(--w,1) * 100%);background:var(--blue);
+    transform:scaleX(0);transform-origin:0 50%;transition:transform 1.2s var(--ease-out) .7s}
+  .adp-l:nth-child(2) .adp-lb i{transition-delay:.82s}
+  .adp-l:nth-child(3) .adp-lb i{transition-delay:.94s}
+  .adp-l:nth-child(4) .adp-lb i{transition-delay:1.06s}
+  #airdrop.on .adp-lb i{transform:none}
+  /* Titan no tiene tope: su barra llega al borde y la recorre un brillo */
+  .adp-l.top .adp-lb i{background:linear-gradient(90deg,var(--blue),#8fb4ff);box-shadow:0 0 12px rgba(77,141,255,.8)}
+  .adp-l.top .adp-lb::after{content:'';position:absolute;top:0;bottom:0;left:0;width:30%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);transform:translateX(-110%);
+    animation:adp-run 3.2s var(--ease) 2.4s infinite}
+  @keyframes adp-run{0%{transform:translateX(-110%)}55%,100%{transform:translateX(340%)}}
+
+  .adp-pts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+    border-top:1px solid var(--fs-line);border-bottom:1px solid var(--fs-line)}
+  .adp-pt{position:relative;display:flex;flex-direction:column;align-items:flex-start;
+    padding:clamp(20px,2.2vw,28px) clamp(16px,1.8vw,26px) clamp(20px,2.2vw,26px);
+    opacity:0;transform:translateY(12px);transition:opacity .8s var(--ease-out),transform .8s var(--ease-out)}
+  #airdrop.on .adp-pt{opacity:1;transform:none}
+  #airdrop.on .adp-pt:nth-child(2){transition-delay:.08s}
+  #airdrop.on .adp-pt:nth-child(3){transition-delay:.16s}
+  #airdrop.on .adp-pt:nth-child(4){transition-delay:.24s}
+  .adp-pt + .adp-pt{border-left:1px solid var(--fs-line)}
+  .adp-pt::before{content:'';position:absolute;left:0;top:-1px;height:1.5px;width:100%;background:var(--blue);
+    transform:scaleX(0);transform-origin:0 50%;transition:transform .55s var(--ease)}
+  .adp-pt:hover::before{transform:scaleX(1)}
+  .adp-n{color:var(--blue);font-size:11px;margin-bottom:14px}
+  .adp-pt h3{font-size:clamp(20px,1.7vw,25px);font-weight:400;letter-spacing:-.016em;line-height:1.2;color:var(--fs-ink)}
+  .adp-pt p{margin:8px 0 16px;color:var(--fs-ink-3);font-size:14.5px;line-height:1.65;max-width:46ch}
+  .adp-fact{margin-top:auto;padding:6px 10px;border:1px solid var(--fs-line);color:var(--fs-ink);font-size:10px}
+  .adp-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px 30px;
+    margin-top:clamp(36px,4vw,56px);padding-top:clamp(24px,2.6vw,32px);border-top:1px solid var(--fs-line)}
+  .adp-btns{display:flex;flex-wrap:wrap;gap:12px}
+  .adp-btn{display:inline-flex;align-items:center;gap:12px;height:56px;padding:0 22px;border:1px solid var(--fs-ink);
+    color:var(--fs-ink);font-size:11px;text-decoration:none;
+    transition:background .3s var(--ease),border-color .3s var(--ease),color .3s var(--ease)}
+  .adp-btn i{font-style:normal;transition:transform .38s var(--ease)}
+  .adp-btn:hover{border-color:var(--blue);color:var(--blue)}
+  .adp-btn:hover i{transform:translate(3px,-3px)}
+  .adp-btn.go{background:var(--blue);border-color:var(--blue);color:#fff}
+  .adp-btn.go:hover{background:#0f57db;border-color:#0f57db;color:#fff}
+  .adp-note{color:var(--fs-ink-3);font-size:13px;line-height:1.6;max-width:56ch}
+  @media (max-width:1000px){
+    .adp-head,.adp-main{grid-template-columns:1fr}
+    .adp-hw h2{max-width:16ch}
+    .adp-lv,.adp-pts{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .adp-l:nth-child(3),.adp-pt:nth-child(3){border-left:0}
+    .adp-l:nth-child(n+3){border-top:1px solid rgba(255,255,255,.09)}
+    .adp-pt:nth-child(n+3){border-top:1px solid var(--fs-line)}
+    .adp-cta{border-top:0;padding-top:0}
+    .adp-viz figcaption{text-align:left}
+  }
+  @media (max-width:620px){
+    .adp-pts{grid-template-columns:minmax(0,1fr)}
+    .adp-pt + .adp-pt{border-left:0;border-top:1px solid var(--fs-line)}
+    .adp-pt{padding-left:0;padding-right:0}
+    .adp-net{height:220px}
+  }
+  @media (max-width:560px){
+    .adp-btn{width:100%;justify-content:space-between}
+    .adp-btns{width:100%}
+  }
+  [dir=rtl] .adp-l + .adp-l,[dir=rtl] .adp-pt + .adp-pt{border-left:0;border-right:1px solid rgba(255,255,255,.09)}
+  [dir=rtl] .adp-pt + .adp-pt{border-right-color:var(--fs-line)}
+  @media (prefers-reduced-motion:reduce){
+    .adp-hw h2,.adp-head p,.adp-pt,.adp-stage,.adp-lb i{transform:none!important;opacity:1!important;transition:none!important}
+    .adp-l.top .adp-lb::after{animation:none;opacity:0}
+  }
   .hero > div{position:relative}
   .press{position:relative;background:#000;color:#fff;padding:clamp(96px,14vh,170px) var(--pad) clamp(90px,13vh,150px)}
   .gs-in{position:relative;max-width:1600px;margin:0 auto}
@@ -5760,9 +5888,104 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   </div>
 </section>
 
+<!-- ============ airdrop genesis: unete y construye la red ============
+     Hoja clara despues del Hash Market, en la cadena de noche como sus vecinas.
+     Su pieza es un escenario negro: la bolsa de 7.000.000 SECT, una red que se
+     va encendiendo nodo a nodo (lienzo .adp-net) y los cuatro niveles. Debajo,
+     los cuatro pasos y los botones a /airdrop, la guia y Mi Airdrop. -->
+<section class="fst adp" id="airdrop" aria-labelledby="adp-h">
+  <div class="spine" aria-hidden="true"><em><b>07</b><span>Airdrop Genesis</span></em><i></i></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
+  <div class="lux" aria-hidden="true"></div>
+  <div class="adp-in">
+    <div class="adp-top">
+      <span class="adp-live mono"><span class="led" aria-hidden="true"></span>Open now</span>
+      <span class="adp-ser mono">Airdrop Genesis · Open since Oct 27, 2026</span>
+    </div>
+    <div class="adp-head">
+      <div class="adp-hw"><h2 id="adp-h">Join the Airdrop. <b>Build the network with us.</b></h2></div>
+      <p>Be part of building the Sectora network and get rewarded for working with us. Turn on your Hash Node, keep your #SECT in staking and your reward grows every day you stay.</p>
+    </div>
+    <div class="adp-stage">
+      <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+      <div class="adp-band mono"><span>Reward pool</span><b>SF·AG·01·26</b></div>
+      <div class="adp-main">
+        <div class="adp-pool">
+          <p class="adp-num"><span class="adp-big">7,000,000</span><small class="mono">SECT</small></p>
+          <p class="adp-sub">For the people who build the network. Delivered on SectoraEVM at its mainnet launch.</p>
+        </div>
+        <figure class="adp-viz">
+          <canvas class="adp-net" aria-hidden="true"></canvas>
+          <figcaption class="mono">Every node that turns on makes the network stronger.</figcaption>
+        </figure>
+      </div>
+      <ol class="adp-lv">
+        <li class="adp-l" style="--w:.14">
+          <span class="adp-ln mono"><i>01</i>Scout</span>
+          <span class="adp-lk mono">In staking</span><span class="adp-ls">100 SECT</span>
+          <span class="adp-lk mono">Reward</span><span class="adp-lr">55 SECT</span>
+          <span class="adp-lb" aria-hidden="true"><i></i></span>
+        </li>
+        <li class="adp-l" style="--w:.32">
+          <span class="adp-ln mono"><i>02</i>Sentinel</span>
+          <span class="adp-lk mono">In staking</span><span class="adp-ls">500 SECT</span>
+          <span class="adp-lk mono">Reward</span><span class="adp-lr">325 SECT</span>
+          <span class="adp-lb" aria-hidden="true"><i></i></span>
+        </li>
+        <li class="adp-l" style="--w:.48">
+          <span class="adp-ln mono"><i>03</i>Guardian</span>
+          <span class="adp-lk mono">In staking</span><span class="adp-ls">1,000 SECT</span>
+          <span class="adp-lk mono">Reward</span><span class="adp-lr">750 SECT</span>
+          <span class="adp-lb" aria-hidden="true"><i></i></span>
+        </li>
+        <li class="adp-l top" style="--w:1">
+          <span class="adp-ln mono"><i>04</i>Titan<em>No maximum</em></span>
+          <span class="adp-lk mono">In staking</span><span class="adp-ls">4,000 SECT</span>
+          <span class="adp-lk mono">Reward</span><span class="adp-lr">3,600 SECT</span>
+          <span class="adp-lb" aria-hidden="true"><i></i></span>
+        </li>
+      </ol>
+    </div>
+    <ol class="adp-pts">
+      <li class="adp-pt">
+        <span class="adp-n mono">01</span>
+        <h3>Stake your #SECT</h3>
+        <p>Keep at least 100 #SECT in the Sectora Foundation staking contract on Ethereum.</p>
+        <span class="adp-fact mono">From 100 SECT</span>
+      </li>
+      <li class="adp-pt">
+        <span class="adp-n mono">02</span>
+        <h3>Turn on your Hash Node</h3>
+        <p>Register your node on the Sectora testnet with free test tokens. No computer needs to stay on.</p>
+        <span class="adp-fact mono">Free · testnet</span>
+      </li>
+      <li class="adp-pt">
+        <span class="adp-n mono">03</span>
+        <h3>Build every day</h3>
+        <p>Your reward grows every day your node stays on. Stay at least 30 days to keep what you earn.</p>
+        <span class="adp-fact mono">Minimum 30 days</span>
+      </li>
+      <li class="adp-pt">
+        <span class="adp-n mono">04</span>
+        <h3>Receive on SectoraEVM</h3>
+        <p>Your #SECT arrive on the Sectora blockchain at its mainnet launch, ready to use from day one.</p>
+        <span class="adp-fact mono">At mainnet launch</span>
+      </li>
+    </ol>
+    <div class="adp-cta">
+      <div class="adp-btns">
+        <a class="adp-btn go mono" href="https://sectoraorg.com/airdrop/" target="_blank" rel="noopener"><span class="led" aria-hidden="true"></span><span>Join the airdrop</span><i aria-hidden="true">↗</i></a>
+        <a class="adp-btn mono" href="https://sectoraorg.com/airdrop-guide/" target="_blank" rel="noopener"><span>Step-by-step guide</span><i aria-hidden="true">↗</i></a>
+        <a class="adp-btn mono" href="https://sectoraorg.com/myairdrop/" target="_blank" rel="noopener"><span>View my airdrop</span><i aria-hidden="true">↗</i></a>
+      </div>
+      <p class="adp-note">One level per person, with anti-bot checks. Rewards are paid in #SECT on SectoraEVM at its mainnet launch. Nothing here is a promise about the price of #SECT.</p>
+    </div>
+  </div>
+</section>
+
 <section class="offer" id="offer">
   <!-- aqui iba <div class="of-halo">: la mancha de luz azul de la derecha. Retirada a peticion. -->
-  <div class="spine" aria-hidden="true"><em><b>07</b><span>Distribution</span></em><i></i></div>
+  <div class="spine" aria-hidden="true"><em><b>08</b><span>Distribution</span></em><i></i></div>
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="of-inner">
@@ -10345,7 +10568,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261047';
+      sc.src = 'i18n-home.js?v=20261048';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
@@ -10750,7 +10973,7 @@ window.__lejos = function(el){
      que ella: si llegara a negro, el titulo quedaria carbon con papel
      justo debajo. Se queda en un atenuado suave, y como su avance nunca
      alcanza el punto de cruce, su texto sigue siendo oscuro. */
-  const secs = [['what',1], ['mandates',1], ['statement',1], ['why',1], ['staking',1], ['hashmarket',1], ['offer',1]]
+  const secs = [['what',1], ['mandates',1], ['statement',1], ['why',1], ['staking',1], ['hashmarket',1], ['airdrop',1], ['offer',1]]
     .map(function(par){
       const el = document.getElementById(par[0]);
       return el ? {el: el, tope: par[1], v: -1, n: 0, vf: -1, cerca: false} : null;
@@ -11098,6 +11321,160 @@ window.__lejos = function(el){
     if(es[0].isIntersecting){ sec.classList.add('on'); io.disconnect(); }
   }, {rootMargin:'-10% 0px -14% 0px', threshold:0});
   io.observe(sec);
+})();
+</script>
+<script>
+/* ---------- airdrop en la portada: entrada y la red que se enciende ----------
+   El titular sube, el escenario aparece y las barras de los niveles se llenan
+   al llegar la seccion (.on, como en el staking). En el lienzo, los nodos se
+   encienden uno a uno de dentro hacia fuera, se enlazan con sus vecinos ya
+   encendidos y por los enlaces corren pulsos. Solo se anima con el lienzo
+   cerca y la pestana delante, a 30 fps; con movimiento reducido, foto fija. */
+(function(){
+  const sec = document.getElementById('airdrop');
+  if(!sec) return;
+  if(!('IntersectionObserver' in window)) sec.classList.add('on');
+  else {
+    const io = new IntersectionObserver((es) => {
+      if(es[0].isIntersecting){ sec.classList.add('on'); io.disconnect(); }
+    }, {rootMargin:'-10% 0px -14% 0px', threshold:0});
+    io.observe(sec);
+  }
+
+  const cv = sec.querySelector('.adp-net');
+  const ctx = cv && cv.getContext && cv.getContext('2d');
+  if(!ctx) return;
+  const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W = 0, H = 0, nodos = [], enlaces = [], pulsos = [], rejilla = null, fin = 0;
+  let t0 = 0, raf = 0, ultimo = 0, sigPulso = 0, cerca = false, visto = false;
+
+  /* azar con semilla: la misma red en cada visita y en cada tamano */
+  let sem = 7;
+  const rnd = () => { sem = sem * 16807 % 2147483647; return (sem - 1) / 2147483646; };
+  const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+  function armar(){
+    const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = Math.max(1, Math.round(r.width)); H = Math.max(1, Math.round(r.height));
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    /* la rejilla de puntos se pinta una vez aparte y se copia en cada fotograma */
+    rejilla = document.createElement('canvas'); rejilla.width = cv.width; rejilla.height = cv.height;
+    const g = rejilla.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.fillStyle = 'rgba(255,255,255,.07)';
+    for(let x = 9; x < W; x += 18) for(let y = 9; y < H; y += 18) g.fillRect(x, y, 1, 1);
+
+    sem = 7; nodos = []; enlaces = []; pulsos = [];
+    const hub = {x: W * .5, y: H * .5, t: 0, hub: true};
+    nodos.push(hub);
+    const n = Math.round(Math.min(44, Math.max(20, W * H / 5600)));
+    const dmin = Math.sqrt(W * H / n) * .6;
+    for(let k = 0; nodos.length <= n && k < 5000; k++){
+      const p = {x: 16 + rnd() * (W - 32), y: 16 + rnd() * (H - 32)};
+      if(dist(p, hub) < 52 || nodos.some(q => dist(p, q) < dmin)) continue;
+      nodos.push(p);
+    }
+    /* de dentro hacia fuera, con algo de azar; cada uno se enlaza con los dos
+       vecinos mas cercanos que ya estaban encendidos */
+    const resto = nodos.slice(1);
+    resto.forEach(p => { p.k = dist(p, hub) + rnd() * 70; });
+    resto.sort((a, b) => a.k - b.k);
+    resto.forEach((p, i) => { p.t = .4 + i * .15; });
+    for(const p of resto){
+      nodos.filter(q => q !== p && q.t < p.t).sort((a, b) => dist(a, p) - dist(b, p)).slice(0, 2)
+        .forEach(q => enlaces.push({a: q, b: p, t: p.t, l: dist(q, p)}));
+    }
+    fin = resto.length ? resto[resto.length - 1].t + .6 : 0;
+  }
+
+  function pintar(s){
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(rejilla, 0, 0, W, H);
+    const hub = nodos[0];
+
+    /* halo de la marca */
+    const halo = ctx.createRadialGradient(hub.x, hub.y, 0, hub.x, hub.y, 90);
+    halo.addColorStop(0, 'rgba(21,105,255,.28)'); halo.addColorStop(1, 'rgba(21,105,255,0)');
+    ctx.fillStyle = halo; ctx.fillRect(hub.x - 90, hub.y - 90, 180, 180);
+
+    /* enlaces: se tienden desde el nodo viejo hacia el nuevo */
+    ctx.lineWidth = 1;
+    for(const e of enlaces){
+      const k = Math.min(1, (s - e.t) / .45);
+      if(k <= 0) continue;
+      ctx.strokeStyle = 'rgba(77,141,255,' + (.16 + .2 * k) + ')';
+      ctx.beginPath(); ctx.moveTo(e.a.x, e.a.y);
+      ctx.lineTo(e.a.x + (e.b.x - e.a.x) * k, e.a.y + (e.b.y - e.a.y) * k); ctx.stroke();
+    }
+
+    /* pulsos que corren por los enlaces */
+    for(const p of pulsos){
+      const k = (s - p.t) / p.d;
+      if(k < 0 || k > 1) continue;
+      const x = p.e.a.x + (p.e.b.x - p.e.a.x) * (p.ida ? k : 1 - k), y = p.e.a.y + (p.e.b.y - p.e.a.y) * (p.ida ? k : 1 - k);
+      const gl = ctx.createRadialGradient(x, y, 0, x, y, 9);
+      gl.addColorStop(0, 'rgba(190,214,255,.95)'); gl.addColorStop(1, 'rgba(77,141,255,0)');
+      ctx.fillStyle = gl; ctx.fillRect(x - 9, y - 9, 18, 18);
+    }
+
+    /* nodos: apagados, gris; al encenderse, azul con un anillo que se abre */
+    for(let i = 1; i < nodos.length; i++){
+      const p = nodos[i], d = s - p.t;
+      if(d < 0){ ctx.fillStyle = 'rgba(255,255,255,.22)'; ctx.fillRect(p.x - 1.5, p.y - 1.5, 3, 3); continue; }
+      if(d < 1.3){
+        ctx.strokeStyle = 'rgba(77,141,255,' + (1 - d / 1.3) * .7 + ')';
+        ctx.beginPath(); ctx.arc(p.x, p.y, 4 + d * 16, 0, 6.2832); ctx.stroke();
+      }
+      const gl = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 10);
+      gl.addColorStop(0, 'rgba(77,141,255,.55)'); gl.addColorStop(1, 'rgba(77,141,255,0)');
+      ctx.fillStyle = gl; ctx.fillRect(p.x - 10, p.y - 10, 20, 20);
+      ctx.fillStyle = d < .25 ? '#dce8ff' : '#4d8dff'; ctx.fillRect(p.x - 2.5, p.y - 2.5, 5, 5);
+    }
+
+    /* la marca en el centro: el anillo de Sectora en su casilla */
+    ctx.fillStyle = '#1569ff'; ctx.fillRect(hub.x - 15, hub.y - 15, 30, 30);
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.6;
+    ctx.beginPath(); ctx.arc(hub.x, hub.y, 7.6, 0, 6.2832); ctx.stroke();
+    ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(77,141,255,.35)';
+    ctx.strokeRect(hub.x - 22.5, hub.y - 22.5, 45, 45);
+  }
+
+  function lanzarPulso(s){
+    const vivos = enlaces.filter(e => s > e.t + .45);
+    if(!vivos.length) return;
+    const e = vivos[Math.floor(Math.random() * vivos.length)];
+    pulsos.push({e: e, t: s, d: Math.max(.6, e.l / 140), ida: Math.random() < .7});
+    if(pulsos.length > 18) pulsos.shift();
+  }
+
+  function cuadro(ahora){
+    raf = 0;
+    if(!cerca || document.hidden) return;
+    raf = requestAnimationFrame(cuadro);
+    if(ahora - ultimo < 32) return;
+    ultimo = ahora;
+    const s = (ahora - t0) / 1000;
+    if(s > sigPulso){ lanzarPulso(s); sigPulso = s + (s < fin ? .5 : .22); }
+    pintar(s);
+  }
+  const decidir = () => {
+    if(quieto){ pintar(fin + 9); return; }
+    if(cerca && !document.hidden && !raf){ if(!visto){ visto = true; t0 = performance.now(); sigPulso = 1; } raf = requestAnimationFrame(cuadro); }
+  };
+
+  armar();
+  pintar(quieto ? fin + 9 : 0);
+  if('IntersectionObserver' in window){
+    new IntersectionObserver((es) => { cerca = es[es.length - 1].isIntersecting; decidir(); }, {rootMargin:'0px 0px -12% 0px'}).observe(cv);
+  } else { cerca = true; decidir(); }
+  document.addEventListener('visibilitychange', decidir);
+  if('ResizeObserver' in window){
+    let w0 = 0;
+    new ResizeObserver(() => {
+      const w = Math.round(cv.getBoundingClientRect().width);
+      if(w === w0) return; w0 = w;
+      armar(); pintar(quieto || !visto ? (quieto ? fin + 9 : 0) : (performance.now() - t0) / 1000);
+    }).observe(cv);
+  }
 })();
 </script>
 <script>
