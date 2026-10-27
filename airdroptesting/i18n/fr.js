@@ -123,7 +123,7 @@ t: {
 
 "st.rule": "Règle",
 "vf.3h": "Aucun gain promis", "vf.3p": "Nous ne promettons pas d’argent. Le prix du SECT peut monter ou baisser.", "vf.3l": "Lire les questions",
-"vf.4h": "Enregistrée et auditée", "vf.4p": "Sectora Foundation est enregistrée dans l’Illinois, aux États-Unis. Le contrat SECT a été audité par Cyberscope et la liquidité est verrouillée.", "vf.4a": "Audit Cyberscope", "vf.4b": "Liquidité verrouillée", "vf.4c": "Informations légales",
+"vf.4h": "Une entreprise de cybersécurité enregistrée", "vf.4p": "Sectora Foundation est une entreprise de cybersécurité enregistrée à Chicago, dans l’Illinois, aux États-Unis. Le contrat SECT a été audité par Cyberscope et la liquidité est verrouillée.", "vf.4n": "Numéro d’enregistrement en Illinois", "vf.4v": "Vérifier l’enregistrement", "vf.4a": "Audit Cyberscope", "vf.4b": "Liquidité verrouillée", "vf.4c": "Informations légales",
 "fq.e": "10 · Questions", "fq.h": "Des réponses <b>simples.</b>", "fq.p": "Encore un doute ? Demandez sur notre Telegram.",
 "q1": "Est-ce gratuit ?", "a1": "Tester le nœud est gratuit et vous inscrit pour les avantages de la phase 2. Pour gagner des SECT en phase 1, il faut au moins 100 SECT en staking : avec 100 SECT vous êtes Scout et gagnez 55 SECT.",
 "q10": "Pourquoi dois-je staker des SECT pour gagner plus ?",
@@ -146,7 +146,7 @@ t: {
 "q13": "Y aura-t-il une phase 2 ?",
 "a13": "Oui. Quand la première partie de l’airdrop se termine, la phase 2 commence. Elle n’a pas encore été révélée : ses tâches seront annoncées sur X et Telegram. Les participants de la phase 1 auront des avantages en plus. La phase 1 ne change pas : vos SECT en staking avec votre nœud allumé, jusqu’à la fin de votre durée, gagnent la récompense de votre niveau.",
 "fn.e": "Airdrop Genesis · date bientôt", "fn.h": "Entrez <b>tôt.</b>", "fn.p": "Pas de limite de participants jusqu’à ce que les 7 000 000 SECT soient réservés. Les distributions commencent au lancement de SectoraEVM. Tester le nœud est gratuit.",
-"ft.1": "Sectora Foundation · Illinois, États-Unis · Dossier 18523639",
+"ft.1": "Sectora Foundation · Entreprise de cybersécurité · Chicago, IL, États-Unis · Dossier 18523639 · EIN 32-0868576",
 "ft.2": "La récompense n’est versée que lorsque ces conditions sont réunies : vos SECT restent dans le staking de Sectora et votre Hash Node reste allumé jusqu’à la fin de votre durée, votre wallet passe le contrôle anti-bot, et votre date de distribution arrive sur SectoraEVM. Les distributions commencent au lancement de SectoraEVM ; qui est entré plus tard reçoit à la fin de sa durée. La moitié ce jour-là et l’autre moitié 30 jours plus tard."
 },
 elig: { loc: "fr-FR", k: "Sectora // Airdrop Genesis", pv: "Aperçu", h: "Votre airdrop",
