@@ -1,0 +1,62 @@
+name: Sepolia node check
+
+# Solo lectura: consulta el registro de nodos de la testnet (Sepolia) y el staking (mainnet)
+# para una direccion y lo imprime en el log. No firma ni envia nada.
+on:
+  workflow_dispatch:
+    inputs:
+      address:
+        description: "Wallet a revisar"
+        required: true
+  push:
+    paths:
+      - ".github/workflows/sepolia-node-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Leer la red
+        env:
+          ADDR: ${{ github.event.inputs.address || '0x659afdD493AcDf9EAA16a5221dcC522fA0A37704' }}
+        run: |
+          cat > check.mjs <<'JS'
+          const ADDR = process.env.ADDR;
+          const REG = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1", MKT = "0x8C9984B06281f1CA9416e493c2E602AaB08513db";
+          const STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
+          const SEP = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.drpc.org", "https://1rpc.io/sepolia", "https://sepolia.gateway.tenderly.co"];
+          const MAIN = ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org"];
+          const pad = a => a.toLowerCase().replace(/^0x/, "").padStart(64, "0");
+          const word = (h, n) => BigInt("0x" + (h.slice(2 + 64 * n, 2 + 64 * (n + 1)) || "0"));
+          async function rpc(url, method, params) {
+            const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }) });
+            const t = await r.text(); try { return JSON.parse(t); } catch (e) { return { error: "HTTP " + r.status + " " + t.slice(0, 120) }; }
+          }
+          const call = (url, to, data) => rpc(url, "eth_call", [{ to, data }, "latest"]);
+          console.log("Direccion:", ADDR);
+          for (const u of SEP) {
+            const b = await rpc(u, "eth_blockNumber", []).catch(e => ({ error: String(e) }));
+            const i = await call(u, REG, "0x7f0b8642" + pad(ADDR)).catch(e => ({ error: String(e) }));
+            console.log("\n[" + u + "] bloque:", b.result ? parseInt(b.result, 16) : JSON.stringify(b.error), "| indexPlusOne:", i.result ? word(i.result, 0).toString() : JSON.stringify(i.error));
+            if (i.result && word(i.result, 0) > 0n) {
+              const v = await call(u, REG, "0x35aa2e44" + pad((word(i.result, 0) - 1n).toString(16)));
+              if (v.result) {
+                const h = v.result, off = Number(word(h, 1)), len = Number(BigInt("0x" + h.slice(2 + off * 2, 2 + off * 2 + 64)));
+                const name = Buffer.from(h.slice(2 + off * 2 + 64, 2 + off * 2 + 64 + len * 2), "hex").toString();
+                console.log("  operador:", "0x" + h.slice(2 + 24, 2 + 64), "| nombre:", name, "| hash al registrar:", word(h, 4).toString(), "| registrado:", new Date(Number(word(h, 5)) * 1000).toISOString(), "| active (word 6):", word(h, 6).toString());
+              } else console.log("  validators() error:", JSON.stringify(v.error));
+            }
+          }
+          const u = SEP[0];
+          const cnt = await call(u, REG, "0x0f43a677"); // validatorCount()
+          const hp = await call(u, MKT, "0x9173e163" + pad(ADDR)); // hashPower(address)
+          console.log("\nvalidatorCount:", cnt.result ? word(cnt.result, 0).toString() : JSON.stringify(cnt.error), "| hashPower de la wallet:", hp.result ? word(hp.result, 0).toString() : JSON.stringify(hp.error));
+          for (const m of MAIN) {
+            const a = await call(m, STAKING, "0xf85b90e2" + pad(ADDR)).catch(e => ({ error: String(e) }));
+            console.log("[mainnet " + m + "] staking depositado:", a.result ? (word(a.result, 0) / 10n ** 18n).toString() + " SECT" : JSON.stringify(a.error));
+          }
+          JS
+          node check.mjs
