@@ -273,7 +273,11 @@
   }
 
   /* el pendiente sube en vivo entre lecturas: 25% anual sobre lo gastado */
-  function tic(){
+  /* 4 veces por segundo basta para el contador; antes reescribia el texto en cada cuadro */
+  let ticT = 0;
+  function tic(now){
+    if(now - ticT < 250){ requestAnimationFrame(tic); return; }
+    ticT = now;
     const el = q('#tnPending');
     if(el && me){
       const seg = (Date.now() - me.t0) / 1000;
@@ -302,7 +306,7 @@
     const m = (e && (e.shortMessage || e.reason || e.message)) || String(e);
     if(/user rejected|denied|ACTION_REJECTED|4001/i.test(m)) return tr('hashdash.tn.errRejected','Transaction cancelled in your wallet');
     if(/cooldown/i.test(m)) return tr('hashdash.tn.claimedToday','Claimed · come back tomorrow');
-    if(/insufficient funds/i.test(m)) return tr('hashdash.tn.errGas','You need a little Sepolia ETH for gas');
+    if(/insufficient funds/i.test(m)){ if(window.SectoraGas) setTimeout(window.SectoraGas.open, 700); return tr('hashdash.tn.errGas','You need a little Sepolia ETH for gas'); }
     if(/reserve empty/i.test(m)) return tr('hashdash.tn.errReserve','Reward reserve is being refilled, try again later');
     if(/not enough hash/i.test(m)) return tr('hashdash.toast.needHash','Not enough hash power to register');
     return m.length > 140 ? m.slice(0, 140) + '…' : m;

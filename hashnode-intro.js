@@ -10,7 +10,10 @@
   const acabar = rapido => { if (window.SECTORA_BOOT) window.SECTORA_BOOT(rapido); };
   if (!capa) return;
   const T = window.THREE;
-  if (!T || !window.SECTORA_GLOBE_TOPOLOGY || matchMedia("(prefers-reduced-motion: reduce)").matches || scrollY > 40) { acabar(true); return; }
+  /* una vez por sesion: al volver al dash (o al entrar directo a la guia, #guia-nodo) no se repite */
+  let vista = false;
+  try { vista = sessionStorage.getItem("hni_vista") === "1"; sessionStorage.setItem("hni_vista", "1"); } catch (e) {}
+  if (!T || !window.SECTORA_GLOBE_TOPOLOGY || matchMedia("(prefers-reduced-motion: reduce)").matches || scrollY > 40 || vista || location.hash.length > 1) { acabar(true); return; }
 
   const D = Math.PI / 180;
   const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
