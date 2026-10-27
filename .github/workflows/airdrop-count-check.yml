@@ -37,4 +37,24 @@ jobs:
             console.log("generado ahora:", C.liveEarned(r.items, r.closed, Date.now()).toFixed(6), "SECT");
           }).catch(e => { console.log("ERROR", e && e.message, "en", Date.now() - t0, "ms"); process.exit(1); });
           JS
+          cat > probe.cjs <<'JS'
+          const STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
+          const T = ["0x2da466a7b24304f47e87fa2e1e5a81b9831ce54fec19055ce277ca2f39ba42c4", "0x7084f5476618d8e60b11ef0d7d3f06914655adb8793e28ff7f018d4c76d505d5"];
+          const pad = a => "0x" + a.toLowerCase().replace(/^0x/, "").padStart(64, "0");
+          const URLS = ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org", "https://1rpc.io/eth", "https://eth.llamarpc.com", "https://rpc.ankr.com/eth", "https://cloudflare-eth.com", "https://eth-mainnet.public.blastapi.io", "https://ethereum.blockpi.network/v1/rpc/public", "https://rpc.flashbots.net", "https://eth.merkle.io"];
+          (async () => {
+            for (const u of URLS) {
+              const post = async b => { try { const r = await fetch(u, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(b) }); const t = await r.text(); try { return JSON.parse(t); } catch (e) { return { error: "HTTP " + r.status + " " + t.slice(0, 100) }; } } catch (e) { return { error: String(e).slice(0, 100) }; } };
+              const bn = await post({ jsonrpc: "2.0", id: 1, method: "eth_blockNumber", params: [] });
+              const latest = bn.result ? parseInt(bn.result, 16) : 0;
+              const out = [];
+              for (const span of [500, 5000, 50000, 140000]) {
+                const q = await post({ jsonrpc: "2.0", id: 1, method: "eth_getLogs", params: [{ address: STAKING, fromBlock: "0x" + (latest - span).toString(16), toBlock: "0x" + latest.toString(16), topics: [T, pad(process.env.ADDR)] }] });
+                out.push(span + ":" + (q.result ? "ok(" + q.result.length + ")" : JSON.stringify(q.error).slice(0, 90)));
+              }
+              console.log(u, "| bloque", latest, "|", out.join(" | "));
+            }
+          })();
+          JS
+          node probe.cjs
           node run.cjs
