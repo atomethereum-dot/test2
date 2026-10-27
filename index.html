@@ -4797,14 +4797,9 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .dp-media{position:relative;aspect-ratio:16/9;max-width:100%;background:#05070b;border:1px solid rgba(255,255,255,.14);overflow:hidden}
   .dp-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   .dp-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-  /* portada de cada film encima del video hasta que esta en marcha, y su play si el navegador no deja arrancar */
+  /* portada de cada film encima del video hasta que esta en marcha; si el navegador no deja arrancar, se toca para verlo */
   .film-cv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;cursor:pointer;transition:opacity .4s var(--ease)}
   .film-cv.off{opacity:0;pointer-events:none}
-  .film-pl{position:absolute;left:50%;top:50%;z-index:2;width:68px;height:68px;margin:-34px 0 0 -34px;display:none;place-items:center;
-    background:#fff;border:0;cursor:pointer;box-shadow:0 14px 34px -12px rgba(7,8,10,.5)}
-  .film-pl i{display:block;width:0;height:0;border-style:solid;border-width:12px 0 12px 20px;border-color:transparent transparent transparent #1569ff;margin-left:5px}
-  .film-blk .film-pl{display:grid}
-  @media (max-width:620px){.film-pl{width:52px;height:52px;margin:-26px 0 0 -26px}.film-pl i{border-width:9px 0 9px 15px;margin-left:4px}}
   .film-cv ~ .pr-snd{z-index:3}
   .pr-snd{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px;
     background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;
@@ -10476,8 +10471,8 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
    ella la proxima vez. Si el visitante aun no ha tocado la pagina arranca mudo
    (los moviles solo dejan arrancar solos a los videos mudos) y el sonido entra
    con el primer toque; "Sound" lo quita o lo pone. Si el navegador no deja
-   arrancar ni mudo (modo de bajo consumo, navegadores dentro de apps), la
-   portada se queda con un boton de play. Solo suena uno a la vez. */
+   arrancar ni mudo (modo de bajo consumo, navegadores dentro de apps), se
+   queda en la portada y arranca al tocarla. Solo suena uno a la vez. */
 (() => {
   const FILMS = [['why', '.wh-snd'], ['airdrop', '.adp-snd'], ['staking', '.stk-snd'], ['hashmarket', '.hmk-snd']];
   const ligero = matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
@@ -10492,8 +10487,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(!v || !b) return;
     const caja = v.parentElement;
     const cv = document.createElement('img'); cv.className = 'film-cv'; cv.alt = ''; cv.decoding = 'async';
-    const pl = document.createElement('button'); pl.type = 'button'; pl.className = 'film-pl'; pl.setAttribute('aria-label', 'Play'); pl.innerHTML = '<i aria-hidden="true"></i>';
-    caja.insertBefore(cv, b); caja.insertBefore(pl, b);
+    caja.insertBefore(cv, b);
     const f = { v: v, quiere: true, enSec: false, seVe: false, va: false, propia: false };
     f.marca = () => { const on = !v.muted; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); };
     todos.push(f);
@@ -10532,7 +10526,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
       f.propia = false;
     });
     const tocar = () => { f.quiere = true; juega(true); };
-    cv.addEventListener('click', tocar); pl.addEventListener('click', tocar);
+    cv.addEventListener('click', tocar);
     b.addEventListener('click', () => {
       f.quiere = v.muted;
       if(f.quiere){ if(v.paused) juega(true); else { v.muted = false; callaOtros(f); } }
@@ -10548,7 +10542,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   });
   /* primer toque o clic en cualquier parte: el film que suena mudo enciende el sonido */
   const gesto = e => {
-    if(e.target.closest && e.target.closest('.pr-snd, .film-pl, .film-cv')) return;
+    if(e.target.closest && e.target.closest('.pr-snd, .film-cv')) return;
     if(navigator.userActivation && !navigator.userActivation.isActive) return;
     todos.forEach(f => { if(f.quiere && f.va && f.v.muted && !f.v.paused){ f.v.muted = false; callaOtros(f); f.marca(); } });
   };
