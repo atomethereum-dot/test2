@@ -1569,7 +1569,7 @@
   .wh-band span{color:var(--wh-ink-3)}
   .wh-band b{color:var(--blue);font-weight:500}
   .wh-media{position:relative;aspect-ratio:16/9;background:#1569ff;overflow:hidden}
-  .wh-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .wh-media video,.wh-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 
   @media (max-width:980px){
     .wh-top{grid-template-columns:minmax(0,1fr);gap:clamp(16px,2.4vh,24px)}
@@ -4517,7 +4517,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .hmk-band span{color:var(--fs-ink-3)}
   .hmk-band b{color:var(--blue);font-weight:500}
   .hmk-media{position:relative;aspect-ratio:16/9;background:#1569ff;overflow:hidden}
-  .hmk-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .hmk-media video,.hmk-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   .hmk-steps{list-style:none;margin:0;padding:0;border-top:1px solid var(--fs-line)}
   .hmk-step{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);column-gap:16px;
     padding:clamp(18px,2vw,26px) 0;border-bottom:1px solid var(--fs-line)}
@@ -4585,7 +4585,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   #staking.on .stk-film{opacity:1;transform:none}
   .stk-fig{position:relative;margin:0;padding:clamp(14px,1.4vw,20px);border:1px solid var(--fs-line)}
   .stk-media{position:relative;aspect-ratio:16/9;background:#1569ff;overflow:hidden}
-  .stk-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .stk-media video,.stk-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 
   .stk-band{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;font-size:10.5px}
   .stk-band span{color:var(--fs-ink-3)}
@@ -4684,11 +4684,11 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     color:var(--fs-ink)}
   .adp-num small{color:var(--blue);font-size:clamp(12px,1.1vw,15px);letter-spacing:.24em}
   .adp-sub{margin-top:clamp(16px,1.8vw,24px);max-width:34ch;color:var(--fs-ink-2);font-size:clamp(15px,1.15vw,17px);line-height:1.6;font-weight:300}
-  /* el film del airdrop, en el sitio de la red: 16:9 con su boton de sonido */
+  /* la portada del film del airdrop: imagen fija 16:9 */
   .adp-film{margin:0;min-width:0}
   .adp-media{position:relative;aspect-ratio:16/9;background:#1569ff;overflow:hidden;
     box-shadow:0 0 0 1px rgba(7,8,10,.06),0 30px 70px -32px rgba(21,105,255,.55)}
-  .adp-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .adp-media video,.adp-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   .adp-film figcaption{margin-top:10px;color:var(--fs-ink-3);font-size:9.5px;text-align:right}
 
   /* los cuatro niveles: lo que hay en staking, lo que se recibe y una barra */
@@ -4797,15 +4797,6 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .dp-media{position:relative;aspect-ratio:16/9;max-width:100%;background:#05070b;border:1px solid rgba(255,255,255,.14);overflow:hidden}
   .dp-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   .dp-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-  /* portada de cada film encima del video hasta que esta en marcha; si el navegador no deja arrancar, se toca para verlo */
-  .film-cv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;cursor:pointer;transition:opacity .4s var(--ease)}
-  .film-cv.off{opacity:0;pointer-events:none}
-  .film-cv ~ .pr-snd{z-index:3}
-  .film-pp{position:absolute;left:12px;bottom:12px;z-index:3;width:30px;height:30px;display:grid;place-items:center;padding:0;
-    background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.25);cursor:pointer;transition:border-color .3s var(--ease),background-color .3s var(--ease)}
-  .film-pp:hover,.film-pp:focus-visible{border-color:#fff;background:rgba(0,0,0,.75)}
-  .film-pp i{display:block;width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent #fff;margin-left:2px}
-  .film-pp.on i{width:8px;height:10px;border:0;margin:0;background:linear-gradient(90deg,#fff 0 3px,transparent 3px 5px,#fff 5px 8px)}
   .pr-snd{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px;
     background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;
     font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase}
@@ -5766,8 +5757,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
         <div class="wh-band mono"><span translate="no">Film · Why hold #SECT</span><b>SF·WH·01·26</b></div>
         <div class="wh-media">
-          <video data-poster="images/why-hold-poster.jpg" data-src="media/sectora-why-hold-web-1080.mp4" data-src-m="media/sectora-why-hold-web-720.mp4" playsinline preload="none" aria-label="Video: Why hold #SECT?"></video>
-          <button class="pr-snd wh-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+          <img src="images/why-hold-poster.jpg" width="1280" height="720" alt="Why hold #SECT? Everything is still ahead." loading="lazy" decoding="async">
         </div>
       </figure>
     </div>
@@ -5778,8 +5768,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 <!-- ============ airdrop genesis: unete y construye la red ============
      Hoja clara despues de "Why hold" y antes del staking y el Hash Market,
      en la cadena de noche como sus vecinas.
-     Su pieza es una hoja blanca: la bolsa de 7.000.000 SECT, el film que
-     explica el airdrop en un minuto y los cuatro niveles. Debajo,
+     Su pieza es una hoja blanca: la bolsa de 7.000.000 SECT, la portada del
+     film del airdrop (imagen fija) y los cuatro niveles. Debajo,
      los cuatro pasos y los botones a /airdrop, la guia y Mi Airdrop. -->
 <section class="fst adp" id="airdrop" aria-labelledby="adp-h">
   <div class="spine" aria-hidden="true"><em><b>05</b><span>Airdrop Genesis</span></em><i></i></div>
@@ -5804,10 +5794,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         </div>
         <figure class="adp-film">
           <div class="adp-media">
-            <video data-poster="images/airdrop-film-poster.jpg" data-src="media/sectora-airdrop-film-1080.mp4" data-src-m="media/sectora-airdrop-film-720.mp4" playsinline preload="none" aria-label="Video: Airdrop Genesis explained in one minute"></video>
-            <button class="pr-snd adp-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+            <img src="images/airdrop-film-poster.jpg" width="1600" height="900" alt="Airdrop Genesis: join the Airdrop, build the network, get rewarded." loading="lazy" decoding="async">
           </div>
-          <figcaption class="mono">Film · Airdrop Genesis in one minute</figcaption>
         </figure>
       </div>
       <ol class="adp-lv">
@@ -5895,8 +5883,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
         <div class="stk-band mono"><span>Film · Stake #SECT</span><b>SF·HR·FM·26</b></div>
         <div class="stk-media">
-          <video data-poster="images/stake-poster.jpg" data-src="media/sectora-stake-web-1080.mp4" data-src-m="media/sectora-stake-web-720.mp4" playsinline preload="none" aria-label="Video: Stake #SECT. Earn every second."></video>
-          <button class="pr-snd stk-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+          <img src="images/stake-poster.jpg" width="1280" height="720" alt="Stake #SECT. Earn every second." loading="lazy" decoding="async">
         </div>
       </figure>
     </div>
@@ -5957,8 +5944,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
         <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
         <div class="hmk-band mono"><span>Launch film</span><b>SF·HM·01·26</b></div>
         <div class="hmk-media">
-          <video data-poster="images/hashmarket-testnet-poster.jpg" data-src="media/sectora-hash-market-testnet-X-1080p.mp4" playsinline preload="none" aria-label="Video: the Sectora Hash Market, live on testnet"></video>
-          <button class="pr-snd hmk-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+          <img src="images/hashmarket-testnet-poster.jpg" width="1280" height="720" alt="Hash Market, live on testnet." loading="lazy" decoding="async">
         </div>
       </figure>
       <ol class="hmk-steps">
@@ -10464,103 +10450,6 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   if(!('IntersectionObserver' in window)){ vs.forEach(poner); return; }
   const io=new IntersectionObserver(es=>{ for(const e of es) if(e.isIntersecting){ poner(e.target); io.unobserve(e.target); } },{rootMargin:'150% 0px'});
   vs.forEach(v=>io.observe(v));
-})();
-</script>
-<script>
-/* ---------- films de la portada: Why hold, Airdrop, Staking y Hash Market ----------
-   Cada film muestra su portada (la imagen de data-poster, encima del video) hasta
-   que de verdad esta en marcha: Safari, al cargar los datos, cambia el poster por
-   el primer fotograma, y en el movil se veia un recuadro azul o negro.
-   Arranca solo cuando su seccion ocupa el centro de la pantalla y el video ya se
-   ve; al salir de la seccion se para y vuelve a la portada, para arrancar desde
-   ella la proxima vez. Si el visitante aun no ha tocado la pagina arranca mudo
-   (los moviles solo dejan arrancar solos a los videos mudos) y el sonido entra
-   con el primer toque; "Sound" lo quita o lo pone. Si el navegador no deja
-   arrancar ni mudo (modo de bajo consumo, navegadores dentro de apps), se
-   queda en la portada y arranca al tocarla. Solo suena uno a la vez. */
-(() => {
-  const FILMS = [['why', '.wh-snd'], ['airdrop', '.adp-snd'], ['staking', '.stk-snd'], ['hashmarket', '.hmk-snd']];
-  const ligero = matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
-  const activo = () => !!(navigator.userActivation && navigator.userActivation.hasBeenActive);
-  const todos = [];
-  const callaOtros = yo => {
-    document.querySelectorAll('.press video').forEach(o => { o.muted = true; const ob = o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed', 'false'); } });
-    todos.forEach(f => { if(f !== yo){ f.v.muted = true; f.marca(); } });
-  };
-  FILMS.forEach(([id, sb]) => {
-    const sec = document.getElementById(id), v = sec && sec.querySelector('video'), b = sec && sec.querySelector(sb);
-    if(!v || !b) return;
-    const caja = v.parentElement;
-    const cv = document.createElement('img'); cv.className = 'film-cv'; cv.alt = ''; cv.decoding = 'async';
-    /* play / pausa: un cuadrado pequeno en la esquina, como el boton de sonido */
-    const pp = document.createElement('button'); pp.type = 'button'; pp.className = 'film-pp'; pp.setAttribute('aria-label', 'Play'); pp.innerHTML = '<i aria-hidden="true"></i>';
-    caja.insertBefore(cv, b); caja.insertBefore(pp, b);
-    const f = { v: v, quiere: true, enSec: false, seVe: false, va: false, propia: false, parado: false };
-    const marcaPP = () => { const on = !v.paused && !v.ended; pp.classList.toggle('on', on); pp.setAttribute('aria-label', on ? 'Pause' : 'Play'); };
-    ['play', 'playing', 'pause', 'ended'].forEach(t => v.addEventListener(t, marcaPP));
-    f.marca = () => { const on = !v.muted; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); };
-    todos.push(f);
-    const carga = () => { if(!v.src){ v.preload = 'metadata'; v.src = (ligero && v.dataset.srcM) || v.dataset.src; } };
-    const portada = on => { cv.classList.toggle('off', !on); };
-    const bloqueado = on => { caja.classList.toggle('film-blk', on); if(on) portada(true); };
-    v.addEventListener('playing', () => { portada(false); bloqueado(false); });
-    v.addEventListener('ended', () => { f.va = false; });
-    const juega = gesto => {
-      carga(); v.preload = 'auto';
-      if(v.ended){ try{ v.currentTime = 0; }catch(e){} }
-      v.muted = !(f.quiere && (gesto || activo()));
-      if(!v.muted) callaOtros(f);
-      f.marca(); f.va = true;
-      const p = v.play();
-      if(p && p.catch) p.catch(e => {
-        if(!e || e.name !== 'NotAllowedError') return;
-        if(!v.muted){ v.muted = true; f.marca(); const q = v.play(); if(q && q.catch) q.catch(() => bloqueado(true)); }
-        else bloqueado(true);
-      });
-    };
-    const para = rebobina => {
-      f.va = false;
-      if(!v.paused){ f.propia = true; v.pause(); }
-      v.preload = 'metadata';
-      if(rebobina){ try{ if(v.readyState) v.currentTime = 0; }catch(e){} bloqueado(false); portada(true); }
-    };
-    const decide = () => {
-      if(document.hidden){ if(f.va) para(false); return; }
-      if(!f.enSec){ f.parado = false; if(f.va || !v.paused || !v.ended) para(true); return; }
-      if(f.seVe && !f.va && !v.ended && !f.parado) juega(false);
-    };
-    /* si el navegador lo para por quitarle el mudo sin permiso, sigue mudo */
-    v.addEventListener('pause', () => {
-      if(!f.propia && f.va && !v.ended && !document.hidden){ v.muted = true; f.marca(); const q = v.play(); if(q && q.catch) q.catch(() => bloqueado(true)); }
-      f.propia = false;
-    });
-    const tocar = () => { f.quiere = true; juega(true); };
-    cv.addEventListener('click', tocar);
-    /* la pausa del visitante se respeta mientras siga en la seccion */
-    pp.addEventListener('click', () => {
-      if(v.paused || v.ended){ f.parado = false; tocar(); }
-      else { f.parado = true; para(false); }
-    });
-    b.addEventListener('click', () => {
-      f.quiere = v.muted;
-      if(f.quiere){ if(v.paused) juega(true); else { v.muted = false; callaOtros(f); } }
-      else v.muted = true;
-      f.marca();
-    });
-    if('IntersectionObserver' in window){
-      new IntersectionObserver(es => { if(es[es.length - 1].isIntersecting){ if(!cv.getAttribute('src')) cv.src = v.dataset.poster; carga(); } }, {rootMargin:'120% 0px'}).observe(v);
-      new IntersectionObserver(es => { f.enSec = es[es.length - 1].isIntersecting; decide(); }, {rootMargin:'-40% 0px -40% 0px'}).observe(sec);
-      new IntersectionObserver(es => { f.seVe = es[es.length - 1].isIntersecting; decide(); }, {threshold:.35}).observe(v);
-    } else { cv.src = v.dataset.poster; }
-    document.addEventListener('visibilitychange', decide);
-  });
-  /* primer toque o clic en cualquier parte: el film que suena mudo enciende el sonido */
-  const gesto = e => {
-    if(e.target.closest && e.target.closest('.pr-snd, .film-cv, .film-pp')) return;
-    if(navigator.userActivation && !navigator.userActivation.isActive) return;
-    todos.forEach(f => { if(f.quiere && f.va && f.v.muted && !f.v.paused){ f.v.muted = false; callaOtros(f); f.marca(); } });
-  };
-  ['click', 'touchend', 'keydown'].forEach(t => document.addEventListener(t, gesto, {capture:true, passive:true}));
 })();
 </script>
 
