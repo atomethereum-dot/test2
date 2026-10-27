@@ -122,6 +122,8 @@ h1 .b{font-weight:400}
 .sheet dt{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-4);white-space:nowrap}
 .sheet dd{color:var(--ink-2);font-size:14px;font-weight:400;text-align:right;font-variant-numeric:tabular-nums}
 .sheet dd b{color:#fff;font-weight:400}
+.sheet dd .sh-lk{display:block;margin-top:7px;color:var(--blue-l);font-size:10.5px;letter-spacing:.14em;text-decoration:none}
+.sheet dd .sh-lk:hover{color:#fff}
 .sheet dl > *:nth-last-child(-n+2){border-bottom:0}
 .sheet .note{display:flex;gap:10px;align-items:baseline;padding-top:14px;margin-top:2px;border-top:1px solid var(--hair);font-size:13.5px;line-height:1.55;color:var(--ink-2)}
 .sheet .note::before{content:'';flex:none;width:4px;height:8px;border:solid #3ddc97;border-width:0 1.5px 1.5px 0;transform:rotate(45deg) translateY(-2px)}
@@ -815,7 +817,7 @@ html.aiboot{overflow:hidden}
           <dt data-i="sh.1">Prize</dt><dd><b><span data-n="7000000"></span> SECT</b></dd>
           <dt data-i="sh.2">Participation</dt><dd><b data-i="sh.2v">From 100 SECT in staking</b></dd>
           <dt data-i="sh.3">Duration</dt><dd data-i="sh.3v">Same time for everyone, from the day you join</dd>
-          <dt data-i="sh.4">You get it</dt><dd data-i="sh.4v">On SectoraEVM · at its launch</dd>
+          <dt data-i="sh.4">You get it</dt><dd><span data-i="sh.4v">On SectoraEVM · at its mainnet launch</span><a class="sh-lk mono" href="/sectorascan/" target="_blank" rel="noopener">SectoraScan ↗</a></dd>
         </dl>
         <p class="note" data-i="sh.n">Your SECT go to Sectora staking, with no lock-up. Withdraw whenever you want.</p>
       </aside>
@@ -1334,7 +1336,7 @@ n1:"Cómo entrar",n2:"Niveles",n3:"Premios",n4:"¿Es seguro?",n5:"Preguntas",nc:
 "h.e":"Campaña oficial · Sectora Foundation",
 "h.l":"<b>7.000.000 SECT</b> en recompensas para quienes construyen la red de Sectora. Activa el Hash Node y mantén tus SECT en staking: con 4.000 SECT ganas 3.600 SECT, y si pones más, ganas en proporción, sin máximo. Las entregas empiezan en el lanzamiento de SectoraEVM.",
 "b.join":"Participar","b.my":"Ver mi airdrop","b.how":"Ver los 4 pasos","b.buy":"Comprar SECT en Uniswap",
-"sh.t":"En resumen","sh.1":"Premio","sh.2":"Participación","sh.2v":"Desde 100 SECT en staking","sh.3":"Duración","sh.3v":"El mismo tiempo para todos, desde que entras","sh.4":"Lo recibes","sh.4v":"En SectoraEVM · en su lanzamiento",
+"sh.t":"En resumen","sh.1":"Premio","sh.2":"Participación","sh.2v":"Desde 100 SECT en staking","sh.3":"Duración","sh.3v":"El mismo tiempo para todos, desde que entras","sh.4":"Lo recibes","sh.4v":"En SectoraEVM · en su lanzamiento en mainnet",
 "sh.n":"Tus SECT van al staking de Sectora, sin bloqueo. Retiras cuando quieras.",
 "st.ok":"Verificable","st.rule":"Regla",
 "pz.e":"Premio total","pz.u":"SECT para repartir","pz.h":"Desliza",
@@ -1396,7 +1398,7 @@ n1:"Como entrar",n2:"Níveis",n3:"Prêmios",n4:"É seguro?",n5:"Perguntas",nc:"C
 "h.e":"Campanha oficial · Sectora Foundation",
 "h.l":"<b>7.000.000 SECT</b> em recompensas para quem constrói a rede da Sectora. Ative o Hash Node e mantenha seus SECT em staking: com 4.000 SECT você ganha 3.600 SECT, e se colocar mais, ganha em proporção, sem máximo. As entregas começam no lançamento da SectoraEVM.",
 "b.join":"Participar","b.my":"Ver meu airdrop","b.how":"Ver os 4 passos","b.buy":"Comprar SECT na Uniswap",
-"sh.t":"Resumo","sh.1":"Prêmio","sh.2":"Participação","sh.2v":"A partir de 100 SECT em staking","sh.3":"Duração","sh.3v":"O mesmo tempo para todos, desde que você entra","sh.4":"Você recebe","sh.4v":"Na SectoraEVM · no lançamento",
+"sh.t":"Resumo","sh.1":"Prêmio","sh.2":"Participação","sh.2v":"A partir de 100 SECT em staking","sh.3":"Duração","sh.3v":"O mesmo tempo para todos, desde que você entra","sh.4":"Você recebe","sh.4v":"Na SectoraEVM · no lançamento da mainnet",
 "sh.n":"Seus SECT vão para o staking da Sectora, sem bloqueio. Saque quando quiser.",
 "st.ok":"Verificável","st.rule":"Regra",
 "pz.e":"Prêmio total","pz.u":"SECT para dividir","pz.h":"Role",
@@ -1682,7 +1684,7 @@ function pack(c, cb){
   var use = function(){ var P = window.SA_LANG_PACK && window.SA_LANG_PACK[c]; if(P && !T[c]){ T[c] = P.t; D[c] = P.d; } cb(); };
   if(c === "en" || T[c] || MORE.indexOf(c) < 0) return cb();
   if(window.SA_LANG_PACK && window.SA_LANG_PACK[c]) return use();
-  var sc = document.createElement("script"); sc.src = "/airdroptesting/i18n/" + c + ".js?v=4";
+  var sc = document.createElement("script"); sc.src = "/airdroptesting/i18n/" + c + ".js?v=5";
   sc.onload = use; sc.onerror = function(){ cb(); };
   document.head.appendChild(sc);
 }
