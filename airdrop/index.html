@@ -111,7 +111,11 @@ h1 .b{font-weight:400}
 /* guia paso a paso (/airdrop-guide): el mismo boton de linea que los demas, en una fila propia
    (es mas alto y estiraria las filas 1fr), con la portada del PDF en pequeno y una hoja en linea detras */
 .btn.gdoc{display:flex;max-width:620px;margin-top:12px;padding:12px 26px 12px 18px;gap:18px}
-.gd-st{flex:none;width:34px;height:48px}
+/* sin overflow:hidden para que la linea azul se vea sobre el borde; el relleno del hover sube escalando, sin salirse */
+.btn.gdoc{overflow:visible}
+.btn.gdoc::before{transform:scaleY(0);transform-origin:50% 100%}
+.btn.gdoc:hover::before,.btn.gdoc:focus-visible::before{transform:none}
+.gd-st{flex:none;width:38px;height:54px}
 .gd-st::before{content:'';position:absolute;inset:0;border:1px solid rgba(255,255,255,.2);transform:translate(4px,-4px);transition:transform .45s var(--ease)}
 .gd-cv{position:relative;display:block;width:100%;height:100%;object-fit:cover;box-shadow:0 0 0 1px rgba(255,255,255,.16)}
 .gd-tx{display:flex;flex-direction:column;gap:7px;min-width:0}
@@ -124,6 +128,10 @@ h1 .b{font-weight:400}
 [dir=rtl] .gd-st::before{transform:translate(-4px,-4px)}
 [dir=rtl] .btn.gdoc:hover .gd-st::before{transform:translate(-6px,-6px)}
 @media (max-width:640px){.btn.gdoc{padding:12px 20px 12px 16px;gap:16px}[dir=rtl] .btn.gdoc{padding:12px 16px 12px 20px}}
+/* linea azul que recorre el borde (el largo del trazo y la vuelta se fijan en JS segun el tamano del boton) */
+.gd-bd{position:absolute;inset:-.5px;width:calc(100% + 1px);height:calc(100% + 1px);overflow:visible;pointer-events:none;z-index:2;
+  filter:drop-shadow(0 0 3px rgba(21,105,255,.9))}
+.gd-bd rect{fill:none;stroke:var(--blue-l);stroke-width:1.2;stroke-linecap:round;stroke-dasharray:0 1}
 .gs{display:inline-flex;gap:3px;flex:none}
 .gs b{width:5px;height:5px;background:rgba(255,255,255,.2);animation:paso 3.6s infinite}
 .gs b:nth-child(2){animation-delay:.3s}.gs b:nth-child(3){animation-delay:.6s}.gs b:nth-child(4){animation-delay:.9s}
@@ -822,7 +830,7 @@ html.aiboot{overflow:hidden}
           <a class="btn btn-guide mono fx" style="--d:.78s" href="#steps"><span class="gs" aria-hidden="true"><b></b><b></b><b></b><b></b></span><span data-i="b.how">See the 4 steps</span><span class="arrow">→</span></a>
           <a class="btn btn-ghost mono fx" style="--d:.86s" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener"><span data-i="b.buy">Buy SECT on Uniswap</span><span class="arrow">↗</span></a>
         </div>
-        <a class="btn btn-ghost gdoc mono fx js-guide" style="--d:.92s" href="/airdrop-guide/"><span class="gd-st" aria-hidden="true"><img class="gd-cv" src="/airdrop-guide/img/cover/en.jpg?v=1" alt="" width="34" height="48" decoding="async"></span><span class="gd-tx"><span data-i="b.guide">Step-by-step guide</span><span class="gd-k"><b>PDF</b> · <span data-i="b.guideK">24 pages · 11 languages</span></span></span><span class="arrow">→</span></a>
+        <a class="btn btn-ghost gdoc mono fx js-guide" style="--d:.92s" href="/airdrop-guide/"><svg class="gd-bd" aria-hidden="true"><rect width="100%" height="100%"/></svg><span class="gd-st" aria-hidden="true"><img class="gd-cv" src="/airdrop-guide/img/cover/en-sm.jpg?v=2" srcset="/airdrop-guide/img/cover/en-sm@2x.jpg?v=2 2x, /airdrop-guide/img/cover/en-sm@3x.jpg?v=2 3x" alt="" width="38" height="54" decoding="async"></span><span class="gd-tx"><span data-i="b.guide">Step-by-step guide</span><span class="gd-k"><b>PDF</b> · <span data-i="b.guideK">24 pages · 11 languages</span></span></span><span class="arrow">→</span></a>
       </div>
 
       <aside class="sheet fx" style="--d:.45s" aria-label="In short">
@@ -1486,7 +1494,11 @@ function render(){
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
   $$(".js-guide").forEach(function(a){ a.href = "/airdrop-guide/" + (lang === "en" ? "" : lang + "/"); });
-  $$(".gd-cv").forEach(function(im){ var u = "/airdrop-guide/img/cover/" + lang + ".jpg?v=1"; if(im.getAttribute("src") !== u) im.src = u; });
+  $$(".gd-cv").forEach(function(im){
+    var u = "/airdrop-guide/img/cover/" + lang + "-sm";
+    if(im.getAttribute("src") === u + ".jpg?v=2") return;
+    im.srcset = u + "@2x.jpg?v=2 2x, " + u + "@3x.jpg?v=2 3x"; im.src = u + ".jpg?v=2";
+  });
   if(picker) picker.refresh();
   $$(".sec").forEach(function(s){
     var e = s.querySelector(".eyebrow span"), sp = s.querySelector(".spine span");
@@ -1712,6 +1724,20 @@ function setLang(c){
 if(window.SALangPick && $("#langPick")) picker = window.SALangPick($("#langPick"), function(){ return lang; }, function(c){
   try{ sessionStorage.setItem("sa_lang_visit", c); }catch(e){}
   setLang(c);
+});
+/* boton de la guia: un trazo azul da la vuelta al borde a velocidad constante (~200 px/s), sea cual sea su ancho */
+$$(".gd-bd rect").forEach(function(r){
+  var a = r.closest("a"), run = null;
+  if(reduce || !r.animate) return;
+  function lap(){
+    var p = r.getTotalLength ? r.getTotalLength() : 2 * (a.offsetWidth + a.offsetHeight) + 4, len = Math.round(Math.min(150, p * .11));
+    if(!p) return;
+    r.style.strokeDasharray = len + " " + (p - len);
+    if(run) run.cancel();
+    run = r.animate([{ strokeDashoffset: 0 }, { strokeDashoffset: -p }], { duration: p * 5, iterations: Infinity });
+  }
+  lap();
+  if(window.ResizeObserver) new ResizeObserver(lap).observe(a); else addEventListener("resize", lap);
 });
 $$(".js-connect").forEach(function(a){
   a.addEventListener("click", function(e){
