@@ -17,7 +17,7 @@
   var AIRDROP_URL = "/airdroptesting/";
   var NODE_URL = "/dashboard.html#guia-nodo";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
-  var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.drpc.org"];
+  var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.drpc.org", "https://1rpc.io/sepolia", "https://sepolia.gateway.tenderly.co"];
   var SEL = { indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44" };
   var LV = [{ min: 100, rate: .55, n: "Scout" }, { min: 500, rate: .65, n: "Sentinel" }, { min: 1000, rate: .75, n: "Guardian" }, { min: 4000, rate: .9, n: "Titan" }];
 
@@ -33,7 +33,8 @@
       note: "No lock-up: if you withdraw, your count pauses and continues when you come back.", min: "Minimise", max: "Open", done: "Step 1 ✓", wait: "Connect wallet",
       h3: "You're in the <b>airdrop.</b>", p3: "Staking and Hash Node ready. Keep both until you complete your time to win your prize.",
       p1n: "Your Hash Node is already on. With 100 SECT in staking you're in the airdrop.", poff: "Your Hash Node is off: turn it on so your count keeps going.",
-      on: "On", off: "Off", chk: "Checking…", ctaOn: "See my airdrop", ctaOff: "Turn on my Hash Node", both: "2/2 ✓" },
+      on: "On", off: "Off", chk: "Checking…", ctaOn: "See my airdrop", ctaOff: "Turn on my Hash Node", both: "2/2 ✓",
+      who: "Wallet {a}", wNone: "no node registered with this wallet", wOn: "node on", wOff: "node off", wChk: "checking its node…", wErr: "couldn't check the network, retrying…" },
     es: { loc: "es-ES", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Tu airdrop",
       h0: "Conecta tu wallet para ver <b>tu nivel.</b>", p0: "Tu staking cuenta para el airdrop, sin retirar nada.",
       h1: "Te faltan <b>{x} SECT</b> para entrar.", p1: "Con 100 SECT en staking eres Scout y entras al airdrop.",
@@ -45,7 +46,8 @@
       note: "Sin bloqueo: si retiras, tu conteo se pausa y sigue al volver.", min: "Minimizar", max: "Abrir", done: "Paso 1 ✓", wait: "Conecta tu wallet",
       h3: "Ya participas en el <b>airdrop.</b>", p3: "Staking y Hash Node listos. Mantén los dos hasta completar tu tiempo para ganar tu premio.",
       p1n: "Tu Hash Node ya está encendido. Con 100 SECT en staking entras al airdrop.", poff: "Tu Hash Node está apagado: enciéndelo para que tu conteo siga.",
-      on: "Encendido", off: "Apagado", chk: "Comprobando…", ctaOn: "Ver mi airdrop", ctaOff: "Encender mi Hash Node", both: "2/2 ✓" },
+      on: "Encendido", off: "Apagado", chk: "Comprobando…", ctaOn: "Ver mi airdrop", ctaOff: "Encender mi Hash Node", both: "2/2 ✓",
+      who: "Wallet {a}", wNone: "sin nodo registrado con esta wallet", wOn: "nodo encendido", wOff: "nodo apagado", wChk: "comprobando su nodo…", wErr: "no se pudo consultar la red, reintentando…" },
     pt: { loc: "pt-BR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Seu airdrop",
       h0: "Conecte sua carteira para ver <b>seu nível.</b>", p0: "Seu staking conta para o airdrop, sem sacar nada.",
       h1: "Faltam <b>{x} SECT</b> para você entrar.", p1: "Com 100 SECT em staking você é Scout e entra no airdrop.",
@@ -57,7 +59,8 @@
       note: "Sem bloqueio: se você sacar, sua contagem pausa e continua quando voltar.", min: "Minimizar", max: "Abrir", done: "Passo 1 ✓", wait: "Conecte a carteira",
       h3: "Você já participa do <b>airdrop.</b>", p3: "Staking e Hash Node prontos. Mantenha os dois até completar seu tempo para ganhar seu prêmio.",
       p1n: "Seu Hash Node já está ligado. Com 100 SECT em staking você entra no airdrop.", poff: "Seu Hash Node está desligado: ligue-o para sua contagem continuar.",
-      on: "Ligado", off: "Desligado", chk: "Verificando…", ctaOn: "Ver meu airdrop", ctaOff: "Ligar meu Hash Node", both: "2/2 ✓" }
+      on: "Ligado", off: "Desligado", chk: "Verificando…", ctaOn: "Ver meu airdrop", ctaOff: "Ligar meu Hash Node", both: "2/2 ✓",
+      who: "Carteira {a}", wNone: "sem nó registrado nesta carteira", wOn: "nó ligado", wOff: "nó desligado", wChk: "verificando o nó…", wErr: "não foi possível consultar a rede, tentando de novo…" }
   };
   function pick() {
     var l = "";
@@ -108,6 +111,8 @@
     ".sad-steps li.next .tg{color:var(--bd)}" +
     ".sad-steps li.done .tg{color:var(--ok)}" +
     ".sad-steps li.off .tg{color:#a86400}" +
+    ".sad-who{margin:10px 0 0;font-size:9.5px;line-height:1.6;color:var(--ink3)}" +
+    ".sad-who b{font-weight:500;color:var(--ink2)}" +
     /* level, spots and prize */
     ".sad-lv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px;border:1px solid rgba(0,0,0,.12);border-radius:12px;background:#f7f7f5}" +
     ".sad-lv > div{padding:14px 14px 13px;min-width:0}" +
@@ -168,6 +173,7 @@
             '<li class="s1"><span class="sad-ic">✓</span><span>' + esc(L.s1) + '</span><span class="v"></span></li>' +
             '<li class="s2"><span class="sad-ic"></span><span>' + esc(L.s2) + '</span><span class="tg m">' + esc(L.s2t) + "</span></li>" +
           "</ul>" +
+          '<p class="sad-who m" hidden></p>' +
           '<div class="sad-lv" hidden>' +
             '<div class="lv"><span class="m">' + esc(L.lv) + '</span><b></b><small></small></div>' +
             '<div class="spt"><span class="m">' + esc(L.sp) + '</span><b></b><small></small></div>' +
@@ -184,7 +190,7 @@
 
     var $ = function (s) { return el.querySelector(s); };
     var hEl = $(".sad-h"), pEl = $(".sad-p"), s1 = $(".s1"), s1v = $(".s1 .v"), s2 = $(".s2"), s2t = $(".s2 .tg"), lvBox = $(".sad-lv"), up = $(".sad-up"), cnt = $(".sad-cnt");
-    var cta = $(".sad-cta"), ctaT = $(".sad-cta span"), have = $(".sad-links a:not(.m)");
+    var cta = $(".sad-cta"), ctaT = $(".sad-cta span"), have = $(".sad-links a:not(.m)"), who = $(".sad-who");
     var minBtn = $(".sad-min");
     try { if (localStorage.getItem("sad_min") === "1") setMin(true); } catch (e) {}
 
@@ -270,6 +276,10 @@
       cnt.textContent = dep === null ? L.wait : lv >= 0 && on ? L.both : lv >= 0 ? L.done : fmt(dep) + " / 100";
       cta.href = on ? AIRDROP_URL : NODE_URL; ctaT.textContent = on ? (lv >= 0 ? L.ctaOn : L.more) : paused ? L.ctaOff : L.cta;
       have.parentNode.hidden = on;
+      /* que wallet se comprobo y que dijo la red de nodos */
+      who.hidden = !addr;
+      if (addr) who.innerHTML = tpl(esc(L.who), { a: "<b>" + addr.slice(0, 6) + "…" + addr.slice(-4) + "</b>" }) + " · " +
+        esc(on ? L.wOn : paused ? L.wOff : node === "none" ? L.wNone : node === "unknown" ? L.wErr : L.wChk);
 
       lvBox.hidden = lv < 0; up.hidden = lv < 0;
       if (lv >= 0) {
@@ -284,8 +294,20 @@
     }
     paint();
     if (window.__sectoraAccount) setAddr(window.__sectoraAccount);
-    /* cada 1,5 s repinta lo que muestra la consola; el nodo se vuelve a mirar cada minuto */
-    setInterval(function () { paint(); if (addr && Date.now() - nodeT > 6e4) checkNode(); }, 1500);
+    /* si la pagina no avisa de la wallet (p. ej. una version guardada en cache), se le pregunta a la
+       wallet del navegador que cuenta tiene abierta: solo lectura, sin ventanas ni firmas */
+    var t0 = Date.now(), askT = 0;
+    function askWallet() {
+      askT = Date.now();
+      var w = window.ethereum;
+      if (w && w.request) w.request({ method: "eth_accounts" }).then(function (a) { if (!addr && a && a[0]) setAddr(a[0]); }).catch(function () {});
+    }
+    /* cada 1,5 s repinta lo que muestra la consola; el nodo se vuelve a mirar cada minuto (10 s si fallo la red) */
+    setInterval(function () {
+      paint();
+      if (!addr && deposited() !== null && Date.now() - t0 > 2500 && Date.now() - askT > 1e4) askWallet();
+      if (addr && Date.now() - nodeT > (node === "unknown" ? 1e4 : 6e4)) checkNode();
+    }, 1500);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
