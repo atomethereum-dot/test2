@@ -1568,7 +1568,7 @@
   .wh-band{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;font-size:10.5px}
   .wh-band span{color:var(--wh-ink-3)}
   .wh-band b{color:var(--blue);font-weight:500}
-  .wh-media{position:relative;aspect-ratio:16/9;background:#05070b;overflow:hidden}
+  .wh-media{position:relative;aspect-ratio:16/9;background:#1569ff;overflow:hidden}
   .wh-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 
   @media (max-width:980px){
@@ -4516,7 +4516,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .hmk-band{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;font-size:10.5px}
   .hmk-band span{color:var(--fs-ink-3)}
   .hmk-band b{color:var(--blue);font-weight:500}
-  .hmk-media{position:relative;aspect-ratio:16/9;background:#05070b;overflow:hidden}
+  .hmk-media{position:relative;aspect-ratio:16/9;background:#1569ff;overflow:hidden}
   .hmk-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   .hmk-steps{list-style:none;margin:0;padding:0;border-top:1px solid var(--fs-line)}
   .hmk-step{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);column-gap:16px;
@@ -4584,7 +4584,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     opacity:0;transform:translateY(22px);transition:opacity 1s var(--ease-out) .35s,transform 1s var(--ease-out) .35s}
   #staking.on .stk-film{opacity:1;transform:none}
   .stk-fig{position:relative;margin:0;padding:clamp(14px,1.4vw,20px);border:1px solid var(--fs-line)}
-  .stk-media{position:relative;aspect-ratio:16/9;background:#05070b;overflow:hidden}
+  .stk-media{position:relative;aspect-ratio:16/9;background:#1569ff;overflow:hidden}
   .stk-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 
   .stk-band{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;font-size:10.5px}
@@ -4797,6 +4797,15 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .dp-media{position:relative;aspect-ratio:16/9;max-width:100%;background:#05070b;border:1px solid rgba(255,255,255,.14);overflow:hidden}
   .dp-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   .dp-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  /* portada de cada film encima del video hasta que esta en marcha, y su play si el navegador no deja arrancar */
+  .film-cv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;cursor:pointer;transition:opacity .4s var(--ease)}
+  .film-cv.off{opacity:0;pointer-events:none}
+  .film-pl{position:absolute;left:50%;top:50%;z-index:2;width:68px;height:68px;margin:-34px 0 0 -34px;display:none;place-items:center;
+    background:#fff;border:0;cursor:pointer;box-shadow:0 14px 34px -12px rgba(7,8,10,.5)}
+  .film-pl i{display:block;width:0;height:0;border-style:solid;border-width:12px 0 12px 20px;border-color:transparent transparent transparent #1569ff;margin-left:5px}
+  .film-blk .film-pl{display:grid}
+  @media (max-width:620px){.film-pl{width:52px;height:52px;margin:-26px 0 0 -26px}.film-pl i{border-width:9px 0 9px 15px;margin-left:4px}}
+  .film-cv ~ .pr-snd{z-index:3}
   .pr-snd{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px;
     background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;
     font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase}
@@ -10458,98 +10467,92 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
 })();
 </script>
 <script>
-/* hash market: el video se descarga al acercarse, arranca solo con musica
-   cuando se ve y se para al salir de la seccion. Si el navegador no deja
-   sonar antes de que el visitante toque la pagina, arranca mudo y el sonido
-   entra con el primer toque o clic; "Sound" lo quita o lo pone. */
+/* ---------- films de la portada: Why hold, Airdrop, Staking y Hash Market ----------
+   Cada film muestra su portada (la imagen de data-poster, encima del video) hasta
+   que de verdad esta en marcha: Safari, al cargar los datos, cambia el poster por
+   el primer fotograma, y en el movil se veia un recuadro azul o negro.
+   Arranca solo cuando su seccion ocupa el centro de la pantalla y el video ya se
+   ve; al salir de la seccion se para y vuelve a la portada, para arrancar desde
+   ella la proxima vez. Si el visitante aun no ha tocado la pagina arranca mudo
+   (los moviles solo dejan arrancar solos a los videos mudos) y el sonido entra
+   con el primer toque; "Sound" lo quita o lo pone. Si el navegador no deja
+   arrancar ni mudo (modo de bajo consumo, navegadores dentro de apps), la
+   portada se queda con un boton de play. Solo suena uno a la vez. */
 (() => {
-  const v=document.querySelector('.hmk video'), b=document.querySelector('.hmk-snd'); if(!v||!b) return;
-  let quiere=true, visto=false, propia=false;
-  /* al acercarse solo se piden los metadatos; el buffer entero solo
-     mientras suena. Con preload='auto' los tres films de la portada se
-     bajaban completos (8 a 12 MB) aunque solo se pasara de largo, y ese
-     ancho de banda se lo quitaban a las fotos de prensa y de eventos */
-  const carga=()=>{ if(!v.src){ v.preload='metadata'; v.src=v.dataset.src; } };
-  const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
-  const callaPrensa=()=>document.querySelectorAll('.press video, .why video, .stk video, .adp video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
-  const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
-  const para=()=>{ v.preload='metadata'; if(!v.paused){ propia=true; v.pause(); } };
-  const juega=()=>{
-    carga(); v.preload='auto'; if(v.ended) v.currentTime=0;
-    v.muted=!quiere; if(quiere) callaPrensa();
-    const p=v.play();
-    if(p&&p.catch) p.catch(e=>{ if(e && e.name==='NotAllowedError' && visto && !document.hidden) mudo(); });
-    marca();
+  const FILMS = [['why', '.wh-snd'], ['airdrop', '.adp-snd'], ['staking', '.stk-snd'], ['hashmarket', '.hmk-snd']];
+  const ligero = matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
+  const activo = () => !!(navigator.userActivation && navigator.userActivation.hasBeenActive);
+  const todos = [];
+  const callaOtros = yo => {
+    document.querySelectorAll('.press video').forEach(o => { o.muted = true; const ob = o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed', 'false'); } });
+    todos.forEach(f => { if(f !== yo){ f.v.muted = true; f.marca(); } });
   };
-  /* si el navegador lo para por quitarle el mudo sin permiso, sigue mudo */
-  v.addEventListener('pause',()=>{ if(!propia && !v.ended && visto && !document.hidden) mudo(); propia=false; });
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(es=>{ if(es[0].isIntersecting) carga(); },{rootMargin:'100% 0px'}).observe(v);
-    new IntersectionObserver(es=>{
-      visto=es[0].isIntersecting;
-      if(visto && !document.hidden) juega(); else para();
-    },{threshold:.5}).observe(v);
-  }
-  document.addEventListener('visibilitychange',()=>{ if(document.hidden) para(); else if(visto) juega(); });
-  /* primer toque o clic en cualquier parte: si quiere sonido y sono mudo, lo enciende */
-  const gesto=e=>{
-    if(e.target.closest && e.target.closest('.hmk-snd')) return;
-    if(navigator.userActivation && !navigator.userActivation.isActive) return;
-    if(quiere && visto && v.muted && !v.paused){ v.muted=false; callaPrensa(); marca(); }
-  };
-  ['click','touchend','keydown'].forEach(t=>document.addEventListener(t,gesto,{capture:true,passive:true}));
-  b.addEventListener('click',()=>{
-    quiere=v.muted;
-    if(quiere){ v.muted=false; callaPrensa(); if(v.paused) juega(); }
-    else v.muted=true;
-    marca();
+  FILMS.forEach(([id, sb]) => {
+    const sec = document.getElementById(id), v = sec && sec.querySelector('video'), b = sec && sec.querySelector(sb);
+    if(!v || !b) return;
+    const caja = v.parentElement;
+    const cv = document.createElement('img'); cv.className = 'film-cv'; cv.alt = ''; cv.decoding = 'async';
+    const pl = document.createElement('button'); pl.type = 'button'; pl.className = 'film-pl'; pl.setAttribute('aria-label', 'Play'); pl.innerHTML = '<i aria-hidden="true"></i>';
+    caja.insertBefore(cv, b); caja.insertBefore(pl, b);
+    const f = { v: v, quiere: true, enSec: false, seVe: false, va: false, propia: false };
+    f.marca = () => { const on = !v.muted; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); };
+    todos.push(f);
+    const carga = () => { if(!v.src){ v.preload = 'metadata'; v.src = (ligero && v.dataset.srcM) || v.dataset.src; } };
+    const portada = on => { cv.classList.toggle('off', !on); };
+    const bloqueado = on => { caja.classList.toggle('film-blk', on); if(on) portada(true); };
+    v.addEventListener('playing', () => { portada(false); bloqueado(false); });
+    v.addEventListener('ended', () => { f.va = false; });
+    const juega = gesto => {
+      carga(); v.preload = 'auto';
+      if(v.ended){ try{ v.currentTime = 0; }catch(e){} }
+      v.muted = !(f.quiere && (gesto || activo()));
+      if(!v.muted) callaOtros(f);
+      f.marca(); f.va = true;
+      const p = v.play();
+      if(p && p.catch) p.catch(e => {
+        if(!e || e.name !== 'NotAllowedError') return;
+        if(!v.muted){ v.muted = true; f.marca(); const q = v.play(); if(q && q.catch) q.catch(() => bloqueado(true)); }
+        else bloqueado(true);
+      });
+    };
+    const para = rebobina => {
+      f.va = false;
+      if(!v.paused){ f.propia = true; v.pause(); }
+      v.preload = 'metadata';
+      if(rebobina){ try{ if(v.readyState) v.currentTime = 0; }catch(e){} bloqueado(false); portada(true); }
+    };
+    const decide = () => {
+      if(document.hidden){ if(f.va) para(false); return; }
+      if(!f.enSec){ if(f.va || !v.paused || !v.ended) para(true); return; }
+      if(f.seVe && !f.va && !v.ended) juega(false);
+    };
+    /* si el navegador lo para por quitarle el mudo sin permiso, sigue mudo */
+    v.addEventListener('pause', () => {
+      if(!f.propia && f.va && !v.ended && !document.hidden){ v.muted = true; f.marca(); const q = v.play(); if(q && q.catch) q.catch(() => bloqueado(true)); }
+      f.propia = false;
+    });
+    const tocar = () => { f.quiere = true; juega(true); };
+    cv.addEventListener('click', tocar); pl.addEventListener('click', tocar);
+    b.addEventListener('click', () => {
+      f.quiere = v.muted;
+      if(f.quiere){ if(v.paused) juega(true); else { v.muted = false; callaOtros(f); } }
+      else v.muted = true;
+      f.marca();
+    });
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(es => { if(es[es.length - 1].isIntersecting){ if(!cv.getAttribute('src')) cv.src = v.dataset.poster; carga(); } }, {rootMargin:'120% 0px'}).observe(v);
+      new IntersectionObserver(es => { f.enSec = es[es.length - 1].isIntersecting; decide(); }, {rootMargin:'-40% 0px -40% 0px'}).observe(sec);
+      new IntersectionObserver(es => { f.seVe = es[es.length - 1].isIntersecting; decide(); }, {threshold:.35}).observe(v);
+    } else { cv.src = v.dataset.poster; }
+    document.addEventListener('visibilitychange', decide);
   });
-})();
-</script>
-<script>
-/* por que holdear: el film se porta como el del hash market. Se descarga al
-   acercarse, arranca solo con musica cuando se ve (mudo si el navegador aun
-   no deja sonar; el sonido entra con el primer toque) y se para al salir.
-   Cuando suena, calla los demas videos de la portada. */
-(() => {
-  const v=document.querySelector('.why video'), b=document.querySelector('.wh-snd'); if(!v||!b) return;
-  let quiere=true, visto=false, propia=false;
-  /* en la web va a 30 fps (la mitad de trabajo de decodificacion que el
-     master de 60) y en pantallas pequenas o con ahorro de datos, a 720p */
-  const ligero=matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
-  const carga=()=>{ if(!v.src){ v.preload='metadata'; v.src=(ligero && v.dataset.srcM) || v.dataset.src; } };
-  const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
-  const callaOtros=()=>document.querySelectorAll('.press video, .hmk video, .stk video, .adp video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
-  const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
-  const para=()=>{ v.preload='metadata'; if(!v.paused){ propia=true; v.pause(); } };
-  const juega=()=>{
-    carga(); v.preload='auto'; if(v.ended) v.currentTime=0;
-    v.muted=!quiere; if(quiere) callaOtros();
-    const p=v.play();
-    if(p&&p.catch) p.catch(e=>{ if(e && e.name==='NotAllowedError' && visto && !document.hidden) mudo(); });
-    marca();
-  };
-  v.addEventListener('pause',()=>{ if(!propia && !v.ended && visto && !document.hidden) mudo(); propia=false; });
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(es=>{ if(es[0].isIntersecting) carga(); },{rootMargin:'100% 0px'}).observe(v);
-    new IntersectionObserver(es=>{
-      visto=es[0].isIntersecting;
-      if(visto && !document.hidden) juega(); else para();
-    },{threshold:.5}).observe(v);
-  }
-  document.addEventListener('visibilitychange',()=>{ if(document.hidden) para(); else if(visto) juega(); });
-  const gesto=e=>{
-    if(e.target.closest && e.target.closest('.wh-snd')) return;
+  /* primer toque o clic en cualquier parte: el film que suena mudo enciende el sonido */
+  const gesto = e => {
+    if(e.target.closest && e.target.closest('.pr-snd, .film-pl, .film-cv')) return;
     if(navigator.userActivation && !navigator.userActivation.isActive) return;
-    if(quiere && visto && v.muted && !v.paused){ v.muted=false; callaOtros(); marca(); }
+    todos.forEach(f => { if(f.quiere && f.va && f.v.muted && !f.v.paused){ f.v.muted = false; callaOtros(f); f.marca(); } });
   };
-  ['click','touchend','keydown'].forEach(t=>document.addEventListener(t,gesto,{capture:true,passive:true}));
-  b.addEventListener('click',()=>{
-    quiere=v.muted;
-    if(quiere){ v.muted=false; callaOtros(); if(v.paused) juega(); }
-    else v.muted=true;
-    marca();
-  });
+  ['click', 'touchend', 'keydown'].forEach(t => document.addEventListener(t, gesto, {capture:true, passive:true}));
 })();
 </script>
 
@@ -11272,50 +11275,6 @@ window.__lejos = function(el){
 })();
 </script>
 <script>
-/* film del staking: como el de "Why hold". Se descarga al acercarse (a 720p
-   en pantallas pequenas o con ahorro de datos), arranca con musica al verse
-   (mudo si el navegador aun no deja sonar; el sonido entra con el primer
-   toque) y se para al salir. Cuando suena, calla los demas videos. */
-(() => {
-  const v=document.querySelector('.stk video'), b=document.querySelector('.stk-snd'); if(!v||!b) return;
-  let quiere=true, visto=false, propia=false;
-  const ligero=matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
-  const carga=()=>{ if(!v.src){ v.preload='metadata'; v.src=(ligero && v.dataset.srcM) || v.dataset.src; } };
-  const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
-  const callaOtros=()=>document.querySelectorAll('.press video, .hmk video, .why video, .adp video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
-  const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
-  const para=()=>{ v.preload='metadata'; if(!v.paused){ propia=true; v.pause(); } };
-  const juega=()=>{
-    carga(); v.preload='auto'; if(v.ended) v.currentTime=0;
-    v.muted=!quiere; if(quiere) callaOtros();
-    const p=v.play();
-    if(p&&p.catch) p.catch(e=>{ if(e && e.name==='NotAllowedError' && visto && !document.hidden) mudo(); });
-    marca();
-  };
-  v.addEventListener('pause',()=>{ if(!propia && !v.ended && visto && !document.hidden) mudo(); propia=false; });
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(es=>{ if(es[0].isIntersecting) carga(); },{rootMargin:'100% 0px'}).observe(v);
-    new IntersectionObserver(es=>{
-      visto=es[0].isIntersecting;
-      if(visto && !document.hidden) juega(); else para();
-    },{threshold:.5}).observe(v);
-  }
-  document.addEventListener('visibilitychange',()=>{ if(document.hidden) para(); else if(visto) juega(); });
-  const gesto=e=>{
-    if(e.target.closest && e.target.closest('.stk-snd')) return;
-    if(navigator.userActivation && !navigator.userActivation.isActive) return;
-    if(quiere && visto && v.muted && !v.paused){ v.muted=false; callaOtros(); marca(); }
-  };
-  ['click','touchend','keydown'].forEach(t=>document.addEventListener(t,gesto,{capture:true,passive:true}));
-  b.addEventListener('click',()=>{
-    quiere=v.muted;
-    if(quiere){ v.muted=false; callaOtros(); if(v.paused) juega(); }
-    else v.muted=true;
-    marca();
-  });
-})();
-</script>
-<script>
 /* ---------- staking en la portada: entrada ----------
    El titular sube, y el film y los cuatro puntos aparecen, al llegar la
    seccion (la clase .on, como en la declaracion de los fundadores). */
@@ -11341,50 +11300,6 @@ window.__lejos = function(el){
     if(es[0].isIntersecting){ sec.classList.add('on'); io.disconnect(); }
   }, {rootMargin:'-10% 0px -14% 0px', threshold:0});
   io.observe(sec);
-})();
-</script>
-<script>
-/* film del airdrop: como el del staking. Se descarga al acercarse (a 720p en
-   pantallas pequenas o con ahorro de datos), arranca con musica al verse (mudo
-   si el navegador aun no deja sonar; el sonido entra con el primer toque) y se
-   para al salir. Cuando suena, calla los demas videos. */
-(() => {
-  const v=document.querySelector('.adp video'), b=document.querySelector('.adp-snd'); if(!v||!b) return;
-  let quiere=true, visto=false, propia=false;
-  const ligero=matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
-  const carga=()=>{ if(!v.src){ v.preload='metadata'; v.src=(ligero && v.dataset.srcM) || v.dataset.src; } };
-  const marca=()=>{ const on=!v.muted; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); };
-  const callaOtros=()=>document.querySelectorAll('.press video, .hmk video, .why video, .stk video').forEach(o=>{ o.muted=true; const ob=o.parentElement.querySelector('.pr-snd'); if(ob){ ob.classList.remove('on'); ob.setAttribute('aria-pressed','false'); } });
-  const mudo=()=>{ v.muted=true; marca(); const q=v.play(); if(q&&q.catch) q.catch(()=>{}); };
-  const para=()=>{ v.preload='metadata'; if(!v.paused){ propia=true; v.pause(); } };
-  const juega=()=>{
-    carga(); v.preload='auto'; if(v.ended) v.currentTime=0;
-    v.muted=!quiere; if(quiere) callaOtros();
-    const p=v.play();
-    if(p&&p.catch) p.catch(e=>{ if(e && e.name==='NotAllowedError' && visto && !document.hidden) mudo(); });
-    marca();
-  };
-  v.addEventListener('pause',()=>{ if(!propia && !v.ended && visto && !document.hidden) mudo(); propia=false; });
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(es=>{ if(es[0].isIntersecting) carga(); },{rootMargin:'100% 0px'}).observe(v);
-    new IntersectionObserver(es=>{
-      visto=es[0].isIntersecting;
-      if(visto && !document.hidden) juega(); else para();
-    },{threshold:.5}).observe(v);
-  }
-  document.addEventListener('visibilitychange',()=>{ if(document.hidden) para(); else if(visto) juega(); });
-  const gesto=e=>{
-    if(e.target.closest && e.target.closest('.adp-snd')) return;
-    if(navigator.userActivation && !navigator.userActivation.isActive) return;
-    if(quiere && visto && v.muted && !v.paused){ v.muted=false; callaOtros(); marca(); }
-  };
-  ['click','touchend','keydown'].forEach(t=>document.addEventListener(t,gesto,{capture:true,passive:true}));
-  b.addEventListener('click',()=>{
-    quiere=v.muted;
-    if(quiere){ v.muted=false; callaOtros(); if(v.paused) juega(); }
-    else v.muted=true;
-    marca();
-  });
 })();
 </script>
 <script>
