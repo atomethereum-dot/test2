@@ -177,10 +177,17 @@
     ".sad-new:hover{border-color:#7fa8ff;background:rgba(21,105,255,.24)}" +
     "@keyframes sadIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}" +
     ".sad-min:focus-visible,.sad-cta:focus-visible,.sad-links a:focus-visible{outline:2px solid var(--b);outline-offset:3px}" +
-    /* beside the console: the window takes the top of the right column, the steps go below it */
-    ".pp-body.sad-on > .frame{grid-row:1 / span 2}" +
+    /* beside the console: the window takes the right column; the three steps go below both, side by side */
+    ".pp-body.sad-on > .frame{grid-row:1}" +
     ".pp-body.sad-on > .sad{grid-column:2;grid-row:1}" +
-    ".pp-body.sad-on > .steps{grid-column:2;grid-row:2}" +
+    ".pp-body.sad-on > .steps{grid-column:1 / -1;grid-row:2}" +
+    "@media (min-width:981px){" +
+      ".pp-body.sad-on > .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid var(--p-line)}" +
+      ".pp-body.sad-on > .steps > .step{grid-template-rows:auto 1fr auto;padding:clamp(22px,2.2vw,30px) clamp(18px,2vw,30px);border-bottom:0;border-left:1px solid var(--p-line)}" +
+      ".pp-body.sad-on > .steps > .step:first-child{padding-left:0;border-left:0}" +
+      ".pp-body.sad-on > .steps > .step:last-child{padding-right:0}" +
+      ".pp-body.sad-on > .steps .fact{align-self:end}" +
+    "}" +
     "@media (max-width:980px){.pp-body.sad-on{grid-template-rows:none}.pp-body.sad-on > .frame,.pp-body.sad-on > .sad,.pp-body.sad-on > .steps{grid-column:auto;grid-row:auto}}" +
     "@media (max-width:420px){.sad-lv{grid-template-columns:1fr 1fr}.sad-lv .pz{grid-column:1 / -1;border-left:0!important;border-top:1px solid rgba(0,0,0,.09)}}" +
     "@media (prefers-reduced-motion:reduce){.sad *{animation:none!important;transition:none!important}}";
