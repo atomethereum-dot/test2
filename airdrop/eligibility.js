@@ -27,8 +27,8 @@
   var SEL = { accountView: "0xf85b90e2", indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44" };
   var DASH = "/dash/";
   var STAKE = "/staking/";
-  var MM = "https://metamask.app.link/dapp/sectoraorg.com/airdroptesting/";
-  var PROG = "/airdroptesting/progress.json";
+  var MM = "https://metamask.app.link/dapp/sectoraorg.com/airdrop/";
+  var PROG = "/airdrop/progress.json";
   // END: fecha prevista (interna) del lanzamiento de SectoraEVM, no se muestra; DUR: el mismo tiempo para todos
   var MIN = 30, DAY = 864e5, END = Date.UTC(2027, 2, 25), DUR = 150 * DAY;
 
@@ -201,7 +201,7 @@
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
 
   var cur = null, curConn = false; // direccion revisada y si vino de la wallet
-  /* vista de ejemplo (solo en esta pagina de prueba): ?demo=<SECT en staking>&d=<dias dentro>. No lee la red:
+  /* vista de ejemplo (solo para capturas y la guia): ?demo=<SECT en staking>&d=<dias dentro>. No lee la red:
      muestra como ve la ventana un participante con el nodo encendido, con su premio y el contador subiendo */
   var DEMO = +((location.search.match(/[?&]demo=(\d+)/) || [])[1] || 0), DEMO_D = +((location.search.match(/[?&]d=(\d+)/) || [])[1] || 12);
   var DEMO_A = "0x0000000000000000000000000000000000de0000";
@@ -255,7 +255,7 @@
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
   /* ---------- pantallas ---------- */
-  function head() { ov.querySelector(".el-k").textContent = t("k"); ov.querySelector(".el-pv").textContent = t("pv"); ov.querySelector(".el-x").setAttribute("aria-label", t("close")); }
+  function head() { ov.querySelector(".el-k").textContent = t("k"); ov.querySelector(".el-pv").textContent = DEMO ? t("pv") : ""; ov.querySelector(".el-x").setAttribute("aria-label", t("close")); }
   function start(msg) {
     stop(); head(); cur = null;
     var hasW = !!window.ethereum;

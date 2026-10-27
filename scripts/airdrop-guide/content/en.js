@@ -139,7 +139,7 @@ module.exports = {
       checkH: "The three requirements",
       check: [["✓ 100+ SECT in staking", "Done in Part A."], ["✓ Hash Node on", "Done in Part B."], ["30 days inside", "Starts by itself when the two above are true. Just wait and don't touch anything."]] },
     16: { k: "Airdrop page", h: "Quick check on the airdrop page",
-      do: ["Open the airdrop page, <b>sectoraorg.com/airdroptesting</b>, and press {ui:takePart}.", "Connect your wallet. The window <b>“Your airdrop”</b> shows what you have earned so far, your prize and your level."],
+      do: ["Open the airdrop page, <b>sectoraorg.com/airdrop</b>, and press {ui:takePart}.", "Connect your wallet. The window <b>“Your airdrop”</b> shows what you have earned so far, your prize and your level."],
       cap1: "The airdrop page: press {ui:takePart}.", cap2: "Example of the “Your airdrop” window.",
       see: "<b>When do I receive my SECT?</b> On SectoraEVM, at its mainnet launch. You will be able to follow it on <a href=\"/sectorascan/\">SectoraScan</a>." }
   },

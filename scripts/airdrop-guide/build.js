@@ -157,7 +157,6 @@ function build(l) {
 <meta name="color-scheme" content="light">
 <title>${C.meta.title}</title>
 <meta name="description" content="${C.meta.desc}">
-<meta name="robots" content="noindex, nofollow">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${BASE}${l === "en" ? "" : l + "/"}">
 <meta property="og:title" content="${C.meta.title}">
@@ -181,7 +180,7 @@ ${alt}
     <a class="brand" href="https://sectoraorg.com/">${LOGO}<b>SECTORA</b><span class="m">${C.nav.sub}</span></a>
     <div class="top-r">
       <span id="langPick" aria-label="${C.nav.lang}"></span>
-      <a class="back m" href="/airdroptesting/">← ${C.nav.back}</a>
+      <a class="back m" href="/airdrop/">← ${C.nav.back}</a>
       <a class="dl m" href="${PDF(l)}" download>${C.nav.pdf} ↓</a>
     </div>
   </div>
@@ -270,10 +269,10 @@ ${partWeb("C", 15, 16)}
 <footer>
   <div class="wrap">
     <p>${C.foot.legal}<br>${C.foot.token}: <span class="addr">${TOKEN}</span> · ${C.foot.staking}: <span class="addr">${STAKING}</span><br>${C.foot.support}</p>
-    <nav>${["/airdroptesting/", "/staking/", "/dashboard", "/myairdrop/", "/docs/#s02"].map((h, i) => '<a href="' + h + '">' + C.foot.nav[i] + "</a>").join("")}</nav>
+    <nav>${["/airdrop/", "/staking/", "/dashboard", "/myairdrop/", "/docs/#s02"].map((h, i) => '<a href="' + h + '">' + C.foot.nav[i] + "</a>").join("")}</nav>
   </div>
 </footer>
-<script src="/airdroptesting/lang-pick.js?v=2"></script>
+<script src="/airdrop/lang-pick.js?v=2"></script>
 <script>
 (function () {
   var URLS = ${JSON.stringify(Object.fromEntries(LANGS.map((x) => [x, PAGE(x)])))};

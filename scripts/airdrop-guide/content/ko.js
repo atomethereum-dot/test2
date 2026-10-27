@@ -137,7 +137,7 @@ module.exports = {
       checkH: "세 가지 조건",
       check: [["✓ 100+ SECT 스테이킹", "파트 A에서 완료."], ["✓ Hash Node 켜짐", "파트 B에서 완료."], ["30일 참여", "위의 두 가지가 충족되면 자동으로 시작됩니다. 기다리기만 하고 아무것도 건드리지 마세요."]] },
     16: { k: "에어드랍 페이지", h: "에어드랍 페이지에서 빠르게 확인",
-      do: ["에어드랍 페이지 <b>sectoraorg.com/airdroptesting</b>을 열고 {ui:takePart}를 누르세요.", "지갑을 연결하세요. <b>“내 에어드랍”</b> 창에 지금까지 쌓인 양, 보상, 레벨이 표시됩니다."],
+      do: ["에어드랍 페이지 <b>sectoraorg.com/airdrop</b>을 열고 {ui:takePart}를 누르세요.", "지갑을 연결하세요. <b>“내 에어드랍”</b> 창에 지금까지 쌓인 양, 보상, 레벨이 표시됩니다."],
       cap1: "에어드랍 페이지: {ui:takePart}를 누르세요.", cap2: "“내 에어드랍” 창 예시.",
       see: "<b>SECT는 언제 받나요?</b> SectoraEVM 메인넷 출시 때 지급됩니다. <a href=\"/sectorascan/\">SectoraScan</a>에서 확인할 수 있습니다." }
   },

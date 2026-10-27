@@ -1,6 +1,6 @@
 /* Mi Airdrop (sectoraorg.com/myairdrop): todo lo que una wallet tiene en Sectora, leido de la blockchain.
    - Premio del Airdrop Genesis: nivel, plazas, premio y lo generado subiendo en vivo (las mismas reglas
-     que /airdroptesting, con count.js).
+     que /airdrop, con count.js).
    - Staking en Ethereum: SECT en staking, recompensas por reclamar y SECT en la wallet (accountView).
    - Hash Node en la testnet (Sepolia): estado, nombre, fecha de registro, poder de hash y tiempo encendido.
    - Recompensas de la testnet: tSECT, tSECT gastados en hash, rendimiento por reclamar (sube en vivo),
@@ -175,7 +175,7 @@
     });
   }
 
-  /* ---------- estado del airdrop (mismas reglas que /airdroptesting) ---------- */
+  /* ---------- estado del airdrop (mismas reglas que /airdrop) ---------- */
   function levelOf(b) { var lv = -1; LEVELS.forEach(function (x, i) { if (b >= x.min) lv = i; }); return lv; }
   function airdrop(d) {
     var staked = d.stake.staked, lv = levelOf(staked), on = d.node.st === "on", now = Date.now();
@@ -346,7 +346,7 @@
     }).join("") + "</ol>";
   }
 
-  /* lo generado sube en vivo (como en /airdroptesting) y el rendimiento de la testnet tambien */
+  /* lo generado sube en vivo (como en /airdrop) y el rendimiento de la testnet tambien */
   function live(a, tn) {
     var acc = app.querySelector("[data-acc]"), bar = app.querySelector("[data-bar]"), days = app.querySelector("[data-days]"), pend = app.querySelector("[data-pend]");
     var n4 = nf(4), t0 = Date.now();

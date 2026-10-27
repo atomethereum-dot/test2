@@ -14,11 +14,11 @@
   "use strict";
   if (document.querySelector(".sad")) return;
 
-  var AIRDROP_URL = "/airdroptesting/";
+  var AIRDROP_URL = "/airdrop/";
   var NODE_URL = "/dashboard.html#guia-nodo";
   /* solo pruebas: apertura simulada para ver el contador en vivo. Al lanzar se quita: la fecha real va en count.js */
   var TEST_OPEN = Date.UTC(2026, 9, 27);
-  var COUNT_JS = "/airdroptesting/count.js?v=13";
+  var COUNT_JS = "/airdrop/count.js?v=14";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
   var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.gateway.tenderly.co", "https://ethereum-sepolia.publicnode.com"];
   var SEL = { indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44" };

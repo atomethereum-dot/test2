@@ -1,5 +1,5 @@
 /* Selector de idioma con banderas (el mismo del dashboard): boton con la bandera y el nombre,
-   y una lista con los 11 idiomas de sectoraorg.com. Lo usan /airdroptesting y /myairdrop.
+   y una lista con los 11 idiomas de sectoraorg.com. Lo usan /airdrop, /myairdrop y /airdrop-guide.
    SALangPick(host, actual, elegir): host = contenedor; actual() = codigo actual; elegir(codigo). */
 (function () {
   "use strict";

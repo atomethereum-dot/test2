@@ -1,6 +1,6 @@
 name: Airdrop count check
 
-# Solo lectura: ejecuta airdroptesting/count.js (el mismo calculo que la web) para una wallet
+# Solo lectura: ejecuta airdrop/count.js (el mismo calculo que la web) para una wallet
 # con la apertura de prueba y muestra lo que veria el contador.
 on:
   workflow_dispatch:
@@ -23,7 +23,7 @@ jobs:
         run: |
           cat > run.cjs <<'JS'
           global.window = globalThis; window.SA_OPEN = Date.UTC(2026, 9, 27);
-          require("./airdroptesting/count.js");
+          require("./airdrop/count.js");
           const C = window.SACount, t0 = Date.now();
           console.log("OPEN", new Date(C.OPEN).toISOString(), "ahora", new Date().toISOString());
           C.wallet(process.env.ADDR).then(h => {

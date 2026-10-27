@@ -26,8 +26,8 @@ function dash(l, key) {
 }
 
 // pagina del airdrop: ingles en el HTML, espanol y portugues en linea, el resto en paquetes
-const air = rd("airdroptesting/index.html");
-const packs = run(LANGS.filter((l) => !["en", "es", "pt"].includes(l)).map((l) => "airdroptesting/i18n/" + l + ".js")).SA_LANG_PACK || {};
+const air = rd("airdrop/index.html");
+const packs = run(LANGS.filter((l) => !["en", "es", "pt"].includes(l)).map((l) => "airdrop/i18n/" + l + ".js")).SA_LANG_PACK || {};
 function airL(l, key) {
   if (l === "en") { const m = air.match(new RegExp('data-i="' + key.replace(/\./g, "\\.") + '">([^<]*)<')); return m && m[1]; }
   if (l === "es" || l === "pt") {

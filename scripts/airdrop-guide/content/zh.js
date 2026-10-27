@@ -137,7 +137,7 @@ module.exports = {
       checkH: "三个条件",
       check: [["✓ 质押 100+ SECT", "在 A 部分完成。"], ["✓ Hash Node 已开启", "在 B 部分完成。"], ["持续 30 天", "前两个条件满足后自动开始。只需等待，什么都不要动。"]] },
     16: { k: "空投页面", h: "在空投页面快速查看",
-      do: ["打开空投页面 <b>sectoraorg.com/airdroptesting</b>，点 {ui:takePart}。", "连接你的钱包。<b>“你的空投”</b>窗口会显示你目前获得的数量、奖励和等级。"],
+      do: ["打开空投页面 <b>sectoraorg.com/airdrop</b>，点 {ui:takePart}。", "连接你的钱包。<b>“你的空投”</b>窗口会显示你目前获得的数量、奖励和等级。"],
       cap1: "空投页面：点 {ui:takePart}。", cap2: "“你的空投”窗口示例。",
       see: "<b>什么时候收到我的 SECT？</b>在 SectoraEVM 主网上线时发放。你可以在 <a href=\"/sectorascan/\">SectoraScan</a> 上关注。" }
   },

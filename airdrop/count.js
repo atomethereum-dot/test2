@@ -35,8 +35,8 @@
   var T_UPD = "0xc2d41a2c5080290dc5fce01cd3232300d606ae866d8685d46b8ba3814adc5823"; // ValidatorUpdated(address,string,int32,int32,uint256)
   // el staking se desplego el 9 oct 2026: se leen eventos desde un dia antes
   var DEPLOYED = Date.UTC(2026, 9, 8);
-  // fecha de apertura del airdrop (ms). null = aun no abre. Ej.: Date.UTC(2026, 10, 1)
-  var OPEN = null;
+  // apertura oficial del airdrop (ms): 27 oct 2026, dia del lanzamiento
+  var OPEN = Date.UTC(2026, 9, 27);
   // fecha prevista (interna) del lanzamiento de SectoraEVM, cuando empiezan las entregas; la web no la muestra
   var END = Date.UTC(2027, 2, 25);
   var DAY = 864e5, MIN = 30, BAG = 7e6, DUR = 150 * DAY;

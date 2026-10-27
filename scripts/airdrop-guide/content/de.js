@@ -137,7 +137,7 @@ module.exports = {
       checkH: "Die drei Bedingungen",
       check: [["✓ 100+ SECT im Staking", "Erledigt in Teil A."], ["✓ Hash Node an", "Erledigt in Teil B."], ["30 Tage dabei", "Startet von selbst, sobald die zwei oberen erfüllt sind. Einfach warten und nichts anfassen."]] },
     16: { k: "Airdrop-Seite", h: "Schneller Check auf der Airdrop-Seite",
-      do: ["Öffne die Airdrop-Seite, <b>sectoraorg.com/airdroptesting</b>, und drück auf {ui:takePart}.", "Verbinde deine Wallet. Das Fenster <b>„Dein Airdrop“</b> zeigt, was du bisher verdient hast, deinen Preis und dein Level."],
+      do: ["Öffne die Airdrop-Seite, <b>sectoraorg.com/airdrop</b>, und drück auf {ui:takePart}.", "Verbinde deine Wallet. Das Fenster <b>„Dein Airdrop“</b> zeigt, was du bisher verdient hast, deinen Preis und dein Level."],
       cap1: "Die Airdrop-Seite: drück auf {ui:takePart}.", cap2: "Beispiel des Fensters „Dein Airdrop“.",
       see: "<b>Wann bekomme ich meine SECT?</b> Auf SectoraEVM, bei seinem Mainnet-Start. Du kannst es auf <a href=\"/sectorascan/\">SectoraScan</a> verfolgen." }
   },
