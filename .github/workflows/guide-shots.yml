@@ -1,0 +1,117 @@
+name: Guide screenshots
+
+# Solo lectura: capturas para la guia del airdrop (/airdrop-guide). Abre el grifo de Sepolia de Google
+# en los 11 idiomas y el staking y el dashboard de sectoraorg.com en un iPhone, sin wallet y sin firmar
+# nada, y deja las imagenes como artefacto. Solo se lanza a mano y no falla.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Capturas
+        run: |
+          npm i --silent playwright@1.48.2 >/dev/null 2>&1 || true
+          npx --yes playwright@1.48.2 install --with-deps chromium >/dev/null 2>&1 || true
+          mkdir -p out
+          cat > shots.cjs <<'JS'
+          const { chromium, devices } = require("playwright");
+          const LANGS = ["en", "es", "zh", "pt", "ru", "fr", "ja", "ko", "ar", "de", "hi"];
+          const HL = { zh: "zh-CN", pt: "pt-BR" };
+          // anillo azul alrededor de un elemento, como en el resto de capturas de la guia
+          async function ring(p, els) {
+            await p.evaluate(list => {
+              document.querySelectorAll(".gx-ring").forEach(e => e.remove());
+              list.forEach(el => {
+                if (!el) return;
+                const r = el.getBoundingClientRect(), d = document.createElement("div");
+                d.className = "gx-ring";
+                d.style.cssText = `position:absolute;z-index:2147483647;pointer-events:none;left:${r.left + scrollX - 7}px;top:${r.top + scrollY - 7}px;width:${r.width + 14}px;height:${r.height + 14}px;border:3px solid #1569ff;border-radius:10px;box-shadow:0 0 0 6px rgba(21,105,255,.22),0 0 28px rgba(21,105,255,.55)`;
+                document.body.appendChild(d);
+              });
+            }, els);
+          }
+          (async () => {
+            const b = await chromium.launch();
+            // 1. grifo de Sepolia de Google, en cada idioma
+            for (const l of LANGS) {
+              try {
+                const ctx = await b.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 2, locale: HL[l] || l });
+                const p = await ctx.newPage();
+                await p.goto("https://cloud.google.com/application/web3/faucet/ethereum/sepolia?hl=" + (HL[l] || l), { waitUntil: "networkidle", timeout: 60000 }).catch(() => {});
+                await p.waitForTimeout(5000);
+                const inp = await p.$$("input:visible, textarea:visible");
+                const btns = await p.$$("button:visible");
+                let btn = null;
+                for (const x of btns) { const t = (await x.innerText().catch(() => "")) || ""; if (/ETH/.test(t) && t.length < 60) { btn = x; break; } }
+                const els = [];
+                if (inp[0]) els.push(await inp[0].evaluateHandle(e => e));
+                if (btn) els.push(await btn.evaluateHandle(e => e));
+                await ring(p, els);
+                await p.screenshot({ path: "out/fct-" + l + ".png" });
+                console.log("FAUCET", l, "inputs:", inp.length, "button:", btn ? (await btn.innerText()).trim() : "-");
+                if (l === "en") console.log((await p.evaluate(() => document.body.innerText)).replace(/\s+/g, " ").slice(0, 1500));
+                await ctx.close();
+              } catch (e) { console.log("FAUCET", l, "ERROR", e.message); }
+            }
+            // 2. staking en un iPhone: la lista de apps al pulsar Connect wallet
+            try {
+              const ctx = await b.newContext({ ...devices["iPhone 13"], locale: "en-US" });
+              const p = await ctx.newPage();
+              await p.goto("https://sectoraorg.com/staking/?nc=" + Date.now(), { waitUntil: "networkidle", timeout: 60000 });
+              await p.addStyleTag({ content: "*{animation-duration:0s!important;transition-duration:0s!important}html{scroll-behavior:auto!important}" });
+              await p.evaluate(() => document.getElementById("connectBtn").scrollIntoView({ block: "center" }));
+              await p.waitForTimeout(1500);
+              await ring(p, [await p.$("#connectBtn")]);
+              await p.screenshot({ path: "out/stk-phone-1.png" });
+              await p.evaluate(() => document.querySelectorAll(".gx-ring").forEach(e => e.remove()));
+              await p.click("#connectBtn");
+              await p.waitForSelector(".wpick-row[href]", { timeout: 40000 }).catch(() => {});
+              await p.waitForTimeout(1500);
+              await p.evaluate(() => document.querySelector(".wpick").scrollIntoView({ block: "start" }));
+              await p.evaluate(() => scrollBy(0, -70));
+              await p.waitForTimeout(500);
+              await ring(p, [await p.$(".wpick-list > *:first-child")]);
+              await p.screenshot({ path: "out/stk-phone-2.png" });
+              console.log("STAKING PHONE", (await p.innerText(".wpick")).replace(/\s+/g, " ").slice(0, 400));
+              await ctx.close();
+            } catch (e) { console.log("STAKING PHONE ERROR", e.message); }
+            // 3. dashboard en un iPhone, en cada idioma: el boton de conectar y la lista de wallets
+            for (const l of LANGS) {
+              try {
+                const ctx = await b.newContext({ ...devices["iPhone 13"], locale: "en-US" });
+                await ctx.addInitScript(() => { try { sessionStorage.setItem("hni_vista", "1"); localStorage.setItem("sectora:node-guide", "1"); } catch (e) {} });
+                const p = await ctx.newPage();
+                await p.goto("https://sectoraorg.com/dashboard?nc=" + Date.now(), { waitUntil: "networkidle", timeout: 60000 });
+                await p.waitForTimeout(2500);
+                await p.evaluate(l => window.SECTORA_APPLY_LANG && window.SECTORA_APPLY_LANG(l), l);
+                await p.addStyleTag({ content: "*{animation-duration:0s!important;transition-duration:0s!important}#toast{display:none!important}" });
+                await p.waitForTimeout(1200);
+                await p.evaluate(() => scrollTo(0, 0));
+                await ring(p, [await p.$("#bConnect")]);
+                await p.screenshot({ path: "out/dsh-phone-1-" + l + ".png" });
+                await p.evaluate(() => document.querySelectorAll(".gx-ring").forEach(e => e.remove()));
+                await p.click("#bConnect");
+                await p.waitForTimeout(1500);
+                await p.screenshot({ path: "out/dsh-phone-2-" + l + ".png" });
+                if (l === "en") console.log("DASH PHONE", (await p.evaluate(() => document.body.innerText)).replace(/\s+/g, " ").slice(0, 600));
+                await ctx.close();
+              } catch (e) { console.log("DASH PHONE", l, "ERROR", e.message); }
+            }
+            await b.close();
+          })().catch(e => console.log("NO SE PUDO:", e.message));
+          JS
+          node shots.cjs || true
+          ls -la out || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: guide-shots
+          path: out/
+          retention-days: 3
