@@ -4643,8 +4643,8 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   }
   /* ============ airdrop genesis en la portada ============
      Hoja clara despues del Hash Market. Lleva .fst, asi que hereda su papel y
-     entra en la cadena de noche como sus vecinas. Su pieza es un escenario
-     negro con la bolsa, la red que se enciende (lienzo) y los cuatro niveles;
+     entra en la cadena de noche como sus vecinas. Su pieza es una hoja
+     blanca con la bolsa, el film del airdrop y los cuatro niveles;
      el resto copia la gramatica del staking: puntos en fila, botones, nota. */
   .adp{scroll-margin-top:70px}
   .adp-in{position:relative;z-index:1;max-width:1280px}
@@ -4667,43 +4667,44 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   #airdrop.on .adp-hw h2{transform:none}
   #airdrop.on .adp-head p{opacity:1;transform:none}
 
-  /* el escenario: negro siempre, aunque la hoja ya se haya apagado */
+  /* el escenario: una hoja blanca con filete y marcas azules; entra en la cadena de noche con la seccion */
   .adp-stage{position:relative;margin:0 0 clamp(36px,4.6vw,64px);padding:clamp(16px,1.6vw,24px);
-    background:radial-gradient(90% 120% at 72% 40%,rgba(21,105,255,.16),rgba(21,105,255,0) 60%),#03050a;color:#fff;
+    background:var(--papel-w);color:var(--fs-ink);border:1px solid var(--fs-line);
+    box-shadow:0 40px 90px -50px rgba(7,8,10,.22);
     opacity:0;transform:translateY(22px);transition:opacity 1s var(--ease-out) .35s,transform 1s var(--ease-out) .35s}
   #airdrop.on .adp-stage{opacity:1;transform:none}
   .adp-band{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:10.5px;
-    padding-bottom:clamp(12px,1.2vw,16px);border-bottom:1px solid rgba(255,255,255,.09)}
-  .adp-band span{color:#7c8496}
-  .adp-band b{color:var(--blue-l,#4d8dff);font-weight:500}
+    padding-bottom:clamp(12px,1.2vw,16px);border-bottom:1px solid var(--fs-line)}
+  .adp-band span{color:var(--fs-ink-3)}
+  .adp-band b{color:var(--blue);font-weight:500}
   .adp-main{display:grid;grid-template-columns:minmax(0,.74fr) minmax(0,1.26fr);gap:clamp(20px,3vw,48px);align-items:center;
     padding:clamp(22px,3vw,44px) clamp(4px,1.2vw,18px) clamp(18px,2.4vw,32px)}
   .adp-num{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;line-height:.9}
   .adp-big{font-size:clamp(50px,5.4vw,92px);font-weight:200;letter-spacing:-.045em;font-variant-numeric:tabular-nums;
-    background:linear-gradient(180deg,#fff 30%,#a9c4ff);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .adp-num small{color:var(--blue-l,#4d8dff);font-size:clamp(12px,1.1vw,15px);letter-spacing:.24em}
-  .adp-sub{margin-top:clamp(16px,1.8vw,24px);max-width:34ch;color:#b9c1cf;font-size:clamp(15px,1.15vw,17px);line-height:1.6;font-weight:300}
+    color:var(--fs-ink)}
+  .adp-num small{color:var(--blue);font-size:clamp(12px,1.1vw,15px);letter-spacing:.24em}
+  .adp-sub{margin-top:clamp(16px,1.8vw,24px);max-width:34ch;color:var(--fs-ink-2);font-size:clamp(15px,1.15vw,17px);line-height:1.6;font-weight:300}
   /* el film del airdrop, en el sitio de la red: 16:9 con su boton de sonido */
   .adp-film{margin:0;min-width:0}
   .adp-media{position:relative;aspect-ratio:16/9;background:#1569ff;overflow:hidden;
-    box-shadow:0 0 0 1px rgba(255,255,255,.08),0 30px 80px -30px rgba(21,105,255,.5)}
+    box-shadow:0 0 0 1px rgba(7,8,10,.06),0 30px 70px -32px rgba(21,105,255,.55)}
   .adp-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-  .adp-film figcaption{margin-top:10px;color:#6f7889;font-size:9.5px;text-align:right}
+  .adp-film figcaption{margin-top:10px;color:var(--fs-ink-3);font-size:9.5px;text-align:right}
 
   /* los cuatro niveles: lo que hay en staking, lo que se recibe y una barra */
   .adp-lv{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
-    border-top:1px solid rgba(255,255,255,.09)}
+    border-top:1px solid var(--fs-line)}
   .adp-l{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-width:0;
     padding:clamp(18px,2vw,26px) clamp(14px,1.6vw,22px) clamp(16px,1.8vw,22px)}
-  .adp-l + .adp-l{border-left:1px solid rgba(255,255,255,.09)}
-  .adp-ln{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;min-height:20px;color:#fff;font-size:11px}
-  .adp-ln i{font-style:normal;color:var(--blue-l,#4d8dff)}
-  .adp-ln em{font-style:normal;padding:2px 6px;border:1px solid rgba(77,141,255,.55);color:#9dbcff;font-size:8.5px;line-height:14px;letter-spacing:.12em}
-  .adp-lk{margin-top:16px;color:#6f7889;font-size:9.5px}
-  .adp-ls{margin-top:4px;color:#c6ccd8;font-size:15px;font-variant-numeric:tabular-nums}
-  .adp-lr{margin-top:4px;color:#fff;font-size:clamp(22px,2.2vw,32px);font-weight:300;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-  .adp-l.top .adp-lr{color:#9dbcff}
-  .adp-lb{position:relative;align-self:stretch;height:2px;margin-top:18px;background:rgba(255,255,255,.08);overflow:hidden}
+  .adp-l + .adp-l{border-left:1px solid var(--fs-line)}
+  .adp-ln{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;min-height:20px;color:var(--fs-ink);font-size:11px}
+  .adp-ln i{font-style:normal;color:var(--blue)}
+  .adp-ln em{font-style:normal;padding:2px 6px;border:1px solid var(--blue);color:var(--blue);font-size:8.5px;line-height:14px;letter-spacing:.12em}
+  .adp-lk{margin-top:16px;color:var(--fs-ink-3);font-size:9.5px}
+  .adp-ls{margin-top:4px;color:var(--fs-ink-2);font-size:15px;font-variant-numeric:tabular-nums}
+  .adp-lr{margin-top:4px;color:var(--fs-ink);font-size:clamp(22px,2.2vw,32px);font-weight:300;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .adp-l.top .adp-lr{color:var(--blue)}
+  .adp-lb{position:relative;align-self:stretch;height:2px;margin-top:18px;background:var(--fs-line-2);overflow:hidden}
   .adp-lb i{position:absolute;left:0;top:0;bottom:0;width:calc(var(--w,1) * 100%);background:var(--blue);
     transform:scaleX(0);transform-origin:0 50%;transition:transform 1.2s var(--ease-out) .7s}
   .adp-l:nth-child(2) .adp-lb i{transition-delay:.82s}
@@ -4711,7 +4712,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .adp-l:nth-child(4) .adp-lb i{transition-delay:1.06s}
   #airdrop.on .adp-lb i{transform:none}
   /* Titan no tiene tope: su barra llega al borde y la recorre un brillo */
-  .adp-l.top .adp-lb i{background:linear-gradient(90deg,var(--blue),#8fb4ff);box-shadow:0 0 12px rgba(77,141,255,.8)}
+  .adp-l.top .adp-lb i{background:linear-gradient(90deg,var(--blue),#5b95ff);box-shadow:0 0 10px rgba(21,105,255,.45)}
   .adp-l.top .adp-lb::after{content:'';position:absolute;top:0;bottom:0;left:0;width:30%;
     background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);transform:translateX(-110%);
     animation:adp-run 3.2s var(--ease) 2.4s infinite}
@@ -4751,7 +4752,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     .adp-hw h2{max-width:16ch}
     .adp-lv,.adp-pts{grid-template-columns:repeat(2,minmax(0,1fr))}
     .adp-l:nth-child(3),.adp-pt:nth-child(3){border-left:0}
-    .adp-l:nth-child(n+3){border-top:1px solid rgba(255,255,255,.09)}
+    .adp-l:nth-child(n+3){border-top:1px solid var(--fs-line)}
     .adp-pt:nth-child(n+3){border-top:1px solid var(--fs-line)}
     .adp-cta{border-top:0;padding-top:0}
     .adp-film figcaption{text-align:left}
@@ -4765,8 +4766,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
     .adp-btn{width:100%;justify-content:space-between}
     .adp-btns{width:100%}
   }
-  [dir=rtl] .adp-l + .adp-l,[dir=rtl] .adp-pt + .adp-pt{border-left:0;border-right:1px solid rgba(255,255,255,.09)}
-  [dir=rtl] .adp-pt + .adp-pt{border-right-color:var(--fs-line)}
+  [dir=rtl] .adp-l + .adp-l,[dir=rtl] .adp-pt + .adp-pt{border-left:0;border-right:1px solid var(--fs-line)}
   @media (prefers-reduced-motion:reduce){
     .adp-hw h2,.adp-head p,.adp-pt,.adp-stage,.adp-lb i{transform:none!important;opacity:1!important;transition:none!important}
     .adp-l.top .adp-lb::after{animation:none;opacity:0}
@@ -5892,7 +5892,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 
 <!-- ============ airdrop genesis: unete y construye la red ============
      Hoja clara despues del Hash Market, en la cadena de noche como sus vecinas.
-     Su pieza es un escenario negro: la bolsa de 7.000.000 SECT, el film que
+     Su pieza es una hoja blanca: la bolsa de 7.000.000 SECT, el film que
      explica el airdrop en un minuto y los cuatro niveles. Debajo,
      los cuatro pasos y los botones a /airdrop, la guia y Mi Airdrop. -->
 <section class="fst adp" id="airdrop" aria-labelledby="adp-h">
