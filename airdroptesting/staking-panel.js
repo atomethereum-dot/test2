@@ -16,6 +16,9 @@
 
   var AIRDROP_URL = "/airdroptesting/";
   var NODE_URL = "/dashboard.html#guia-nodo";
+  /* solo pruebas: apertura simulada para ver el contador en vivo. Al lanzar se quita: la fecha real va en count.js */
+  var TEST_OPEN = Date.UTC(2026, 9, 27);
+  var COUNT_JS = "/airdroptesting/count.js?v=11";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
   var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.gateway.tenderly.co", "https://ethereum-sepolia.publicnode.com"];
   var SEL = { indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44" };
@@ -35,6 +38,7 @@
       p1n: "Your Hash Node is already on. With 100 SECT in staking you're in the airdrop.", poff: "Your Hash Node is off: turn it on so your count keeps going.",
       on: "On", off: "Off", chk: "Checking…", ctaOn: "See my airdrop", ctaOff: "Turn on my Hash Node", both: "2/2 ✓",
       hw: "How to turn on your Hash Node", hw1: "Get free Sepolia ETH for the gas", hw2: "Buy the 50 TH/s plan", hw3: "Register your node with this same wallet", hwp: "Open the plan", hwn: "Go to your node",
+      acc: "Generated so far", of: "of {n} SECT on completing your time", calc: "Calculating with the network…", pre: "It starts counting the day the airdrop opens.", lock: "From {d} (30 days in) what you generate is yours.", mine: "What you generate is already yours.",
       who: "Wallet {a}", wNone: "no node registered with this wallet", wOn: "node on", wOff: "node off", wChk: "checking its node…", wErr: "couldn't check the network, retrying…" },
     es: { loc: "es-ES", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Tu airdrop",
       h0: "Conecta tu wallet para ver <b>tu nivel.</b>", p0: "Tu staking cuenta para el airdrop, sin retirar nada.",
@@ -49,6 +53,7 @@
       p1n: "Tu Hash Node ya está encendido. Con 100 SECT en staking entras al airdrop.", poff: "Tu Hash Node está apagado: enciéndelo para que tu conteo siga.",
       on: "Encendido", off: "Apagado", chk: "Comprobando…", ctaOn: "Ver mi airdrop", ctaOff: "Encender mi Hash Node", both: "2/2 ✓",
       hw: "Cómo encender tu Hash Node", hw1: "Consigue ETH de Sepolia gratis para el gas", hw2: "Compra el plan de 50 TH/s", hw3: "Registra tu nodo con esta misma wallet", hwp: "Abrir el plan", hwn: "Ir a tu nodo",
+      acc: "Llevas generado", of: "de {n} SECT al completar tu tiempo", calc: "Calculando con la red…", pre: "Empieza a contar el día de la apertura del airdrop.", lock: "Desde el {d} (30 días dentro) lo generado es tuyo.", mine: "Lo generado ya es tuyo.",
       who: "Wallet {a}", wNone: "sin nodo registrado con esta wallet", wOn: "nodo encendido", wOff: "nodo apagado", wChk: "comprobando su nodo…", wErr: "no se pudo consultar la red, reintentando…" },
     pt: { loc: "pt-BR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Seu airdrop",
       h0: "Conecte sua carteira para ver <b>seu nível.</b>", p0: "Seu staking conta para o airdrop, sem sacar nada.",
@@ -63,6 +68,7 @@
       p1n: "Seu Hash Node já está ligado. Com 100 SECT em staking você entra no airdrop.", poff: "Seu Hash Node está desligado: ligue-o para sua contagem continuar.",
       on: "Ligado", off: "Desligado", chk: "Verificando…", ctaOn: "Ver meu airdrop", ctaOff: "Ligar meu Hash Node", both: "2/2 ✓",
       hw: "Como ligar seu Hash Node", hw1: "Pegue ETH da Sepolia grátis para o gás", hw2: "Compre o plano de 50 TH/s", hw3: "Registre seu nó com esta mesma carteira", hwp: "Abrir o plano", hwn: "Ir ao seu nó",
+      acc: "Você já gerou", of: "de {n} SECT ao completar seu tempo", calc: "Calculando com a rede…", pre: "Começa a contar no dia da abertura do airdrop.", lock: "A partir de {d} (30 dias dentro) o que você gera é seu.", mine: "O que você gerou já é seu.",
       who: "Carteira {a}", wNone: "sem nó registrado nesta carteira", wOn: "nó ligado", wOff: "nó desligado", wChk: "verificando o nó…", wErr: "não foi possível consultar a rede, tentando de novo…" }
   };
   function pick() {
@@ -115,6 +121,13 @@
     ".sad-steps li.done .tg{color:var(--ok)}" +
     ".sad-steps li.off .tg{color:#a86400}" +
     ".sad-who{margin:10px 0 0;font-size:9.5px;line-height:1.6;color:var(--ink3)}" +
+    ".sad-acc{margin-top:14px;padding:14px 16px;border-radius:12px;border:1px solid rgba(15,143,82,.28);background:linear-gradient(135deg,rgba(15,143,82,.08),rgba(15,143,82,.02))}" +
+    ".sad-acc .m{color:var(--ok);font-size:9.5px}" +
+    ".sad-acc b{display:block;margin-top:6px;font-size:clamp(26px,2.4vw,32px);font-weight:300;letter-spacing:-.02em;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums}" +
+    ".sad-acc b em{font-style:normal;font-weight:400}" +
+    ".sad-acc .bar{display:block;height:6px;margin-top:10px;border-radius:99px;background:rgba(15,143,82,.12);overflow:hidden}" +
+    ".sad-acc .bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#0f8f52,#3ecf8e)}" +
+    ".sad-acc small{display:block;margin-top:8px;font-size:12.5px;line-height:1.45;color:var(--ink3)}" +
     ".sad-how{margin-top:14px;padding:12px 14px;border-radius:12px;background:#f7f7f5;border:1px solid rgba(0,0,0,.08)}" +
     ".sad-how .m{color:var(--b);font-size:9.5px}" +
     ".sad-how ol{list-style:none;margin:8px 0 0;padding:0}" +
@@ -186,6 +199,7 @@
             '<li class="s2"><span class="sad-ic"></span><span>' + esc(L.s2) + '</span><span class="tg m">' + esc(L.s2t) + "</span></li>" +
           "</ul>" +
           '<p class="sad-who m" hidden></p>' +
+          '<div class="sad-acc" hidden><span class="m">' + esc(L.acc) + '</span><b><em>0</em> SECT</b><i class="bar"><i></i></i><small></small></div>' +
           '<div class="sad-how" hidden><p class="m">' + esc(L.hw) + "</p><ol>" +
             '<li><span>1</span><div>' + esc(L.hw1) + '<em><a href="https://faucet.quicknode.com/ethereum/sepolia" target="_blank" rel="noopener noreferrer">QuickNode ↗</a><a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer">Google ↗</a></em></div></li>' +
             '<li><span>2</span><div>' + esc(L.hw2) + '<em><a href="/dashboard.html#plan">' + esc(L.hwp) + " ↗</a></em></div></li>" +
@@ -257,6 +271,44 @@
         return call(REGISTRY, SEL.validators + pad((n - 1n).toString(16))).then(function (v) { return word(v, 6) === 1n ? "active" : "paused"; });
       }).catch(function () { return "unknown"; }).then(function (r) { if (a === addr) { node = r; paint(); } });
     }
+    /* lo generado en vivo, con la misma regla que el verificador del airdrop (count.js) */
+    var accBox = $(".sad-acc"), accN = $(".sad-acc em"), accBar = $(".sad-acc .bar i"), accTxt = $(".sad-acc small");
+    var hist = null, histFor = "", histT = 0, histBusy = false;
+    var nf4 = new Intl.NumberFormat(L.loc, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+    function loadCount(cb) {
+      if (window.SACount) return cb();
+      if (window.SA_OPEN === undefined) window.SA_OPEN = TEST_OPEN;
+      var sc = document.createElement("script"); sc.src = COUNT_JS; sc.onload = cb; document.head.appendChild(sc);
+    }
+    function readCount() {
+      var a = addr; if (!a || histBusy) return;
+      histBusy = true; histT = Date.now();
+      loadCount(function () {
+        var C = window.SACount;
+        if (!C.OPEN || Date.now() < C.OPEN) { histBusy = false; hist = { pre: true }; histFor = a; return; }
+        C.wallet(a).then(function (h) {
+          var ev = C.evaluate(h.ev, h.node, C.OPEN, Date.now()), proj = ev.closed;
+          ev.items.forEach(function (it) { proj += it.p; });
+          if (a === addr) { hist = { items: ev.items, closed: ev.closed, proj: proj, first: ev.start }; histFor = a; }
+        }).catch(function () {}).then(function () { histBusy = false; });
+      });
+    }
+    function tickCount() {
+      var show = !!addr && node === "active" && accBox.dataset.lv === "1";
+      accBox.hidden = !show; if (!show) return;
+      if (histFor !== addr || Date.now() - histT > 3e5) readCount();
+      if (!hist || histFor !== addr) { accN.textContent = nf4.format(0); accTxt.textContent = L.calc; return; }
+      if (hist.pre) { accN.textContent = nf4.format(0); accBar.style.width = "0%"; accTxt.textContent = L.pre; return; }
+      var now = Date.now(), e = hist.closed;
+      hist.items.forEach(function (it) { e += it.p * Math.min(1, Math.max(0, (now - it.s) / it.sp)); });
+      accN.textContent = nf4.format(e);
+      accBar.style.width = (hist.proj ? Math.min(100, e / hist.proj * 100) : 0) + "%";
+      var lockAt = hist.first + 30 * 864e5;
+      accTxt.textContent = tpl(L.of, { n: fmt(hist.proj, 0) }) + " · " + (hist.first && now < lockAt ?
+        tpl(L.lock, { d: new Intl.DateTimeFormat(L.loc, { day: "numeric", month: "short" }).format(lockAt) }) : L.mine);
+    }
+    setInterval(tickCount, 200);
+
     function setAddr(a) {
       a = a && /^0x[0-9a-fA-F]{40}$/.test(a) ? a : null;
       if (a === addr) return;
@@ -293,6 +345,7 @@
       cnt.textContent = dep === null ? L.wait : lv >= 0 && on ? L.both : lv >= 0 ? L.done : fmt(dep) + " / 100";
       cta.href = on ? AIRDROP_URL : NODE_URL; ctaT.textContent = on ? (lv >= 0 ? L.ctaOn : L.more) : paused ? L.ctaOff : L.cta;
       have.parentNode.hidden = on;
+      accBox.dataset.lv = lv >= 0 ? "1" : "0";
       $(".sad-how").hidden = on || dep === null;
       /* que wallet se comprobo y que dijo la red de nodos */
       who.hidden = !addr;
