@@ -19,6 +19,10 @@
   // Spanish-speaking visitors default to English unless they pick Spanish
   // themselves from the switcher — browser-language auto-detection skips it.
   const AUTO_DETECT_EXCLUDE = new Set(["es"]);
+  // A page can set window.SECTORA_LANG_START (e.g. the dashboard: "en") to always open in that
+  // language; a language picked from its switcher holds only for the rest of that visit.
+  const START = typeof window.SECTORA_LANG_START === "string" && SUPPORTED.has(window.SECTORA_LANG_START) ? window.SECTORA_LANG_START : null;
+  const VISIT_KEY = "sectora_lang_visit";
 
   function dict() {
     const base = window.SECTORA_I18N || {};
@@ -33,6 +37,15 @@
   }
 
   function detectInitialLang() {
+    if (START) {
+      try {
+        const picked = window.sessionStorage.getItem(VISIT_KEY);
+        if (picked && SUPPORTED.has(picked)) return picked;
+      } catch (e) {
+        /* sessionStorage unavailable */
+      }
+      return START;
+    }
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
       if (stored && SUPPORTED.has(stored)) return stored;
@@ -102,10 +115,14 @@
 
     syncSelects(lang);
 
-    try {
-      window.localStorage.setItem(STORAGE_KEY, lang);
-    } catch (e) {
-      /* ignore persistence failures (private browsing, storage disabled) */
+    // with a fixed start language only a choice from the switcher is remembered (not the start itself)
+    if (!START || !(opts && opts.silent)) {
+      try {
+        window.localStorage.setItem(STORAGE_KEY, lang);
+        if (START) window.sessionStorage.setItem(VISIT_KEY, lang);
+      } catch (e) {
+        /* ignore persistence failures (private browsing, storage disabled) */
+      }
     }
 
     if (!opts || !opts.silent) {

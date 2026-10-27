@@ -9,8 +9,7 @@
   // nombre de un boton tal como se ve en el dash, sin flecha final
   var ui = function (k, f) { return tr(k, f).replace(/\s*↗\s*$/, ""); };
   var lang = function () {
-    var l = (document.documentElement.lang || "en").slice(0, 2);
-    try { l = localStorage.getItem("sectora_lang") || l; } catch (e) {}
+    var l = (window.SECTORA_CURRENT_LANG || document.documentElement.lang || "en").slice(0, 2);
     return T[l] ? l : "en";
   };
 
