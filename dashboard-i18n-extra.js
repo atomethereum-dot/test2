@@ -1,5 +1,6 @@
 window.SECTORA_I18N_EXTRA = {
   "ar": {
+    "hashdash.plan.s0": "احصل على ETH مجاني على Sepolia لدفع الغاز",
     "hashdash.pk.tag.airdrop": "خطة الإيردروب",
     "hashdash.plan.k": "Airdrop Genesis · الخطة",
     "hashdash.plan.h": "خطة المشاركة في الإيردروب: <b>50 TH/s</b> دفعة واحدة",
@@ -244,6 +245,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.tn.preview": "Testnet online · تشمل {n} عقدة تجريبية"
   },
   "de": {
+    "hashdash.plan.s0": "Hol dir kostenloses Sepolia-ETH für das Gas",
     "hashdash.pk.tag.airdrop": "Airdrop-Plan",
     "hashdash.plan.k": "Airdrop Genesis · der Plan",
     "hashdash.plan.h": "Der Plan für das Airdrop: <b>50 TH/s</b> auf einmal",
@@ -488,6 +490,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.tn.preview": "Testnet online · inkl. {n} Beispielknoten"
   },
   "en": {
+    "hashdash.plan.s0": "Get free Sepolia ETH to pay the gas",
     "hashdash.pk.tag.airdrop": "Airdrop plan",
     "hashdash.plan.k": "Airdrop Genesis · the plan",
     "hashdash.plan.h": "The plan to join the airdrop: <b>50 TH/s</b> in one go",
@@ -732,6 +735,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.tn.preview": "Testnet online · incl. {n} example nodes"
   },
   "es": {
+    "hashdash.plan.s0": "Consigue ETH de Sepolia gratis para pagar el gas",
     "hashdash.pk.tag.airdrop": "Plan Airdrop",
     "hashdash.plan.k": "Airdrop Genesis · el plan",
     "hashdash.plan.h": "El plan para participar en el airdrop: <b>50 TH/s</b> de una vez",
@@ -976,6 +980,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.tn.preview": "Testnet online · incl. {n} nodos de ejemplo"
   },
   "fr": {
+    "hashdash.plan.s0": "Obtenez de l’ETH Sepolia gratuit pour payer le gas",
     "hashdash.pk.tag.airdrop": "Plan Airdrop",
     "hashdash.plan.k": "Airdrop Genesis · le plan",
     "hashdash.plan.h": "Le plan pour participer à l’airdrop : <b>50 TH/s</b> d’un coup",
@@ -1220,6 +1225,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.tn.preview": "Testnet online · dont {n} nœuds d'exemple"
   },
   "hi": {
+    "hashdash.plan.s0": "गैस के लिए मुफ़्त Sepolia ETH पाएँ",
     "hashdash.pk.tag.airdrop": "एयरड्रॉप प्लान",
     "hashdash.plan.k": "Airdrop Genesis · प्लान",
     "hashdash.plan.h": "एयरड्रॉप में भाग लेने का प्लान: एक बार में <b>50 TH/s</b>",
@@ -1464,6 +1470,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.tn.preview": "Testnet online · {n} उदाहरण नोड सहित"
   },
   "ja": {
+    "hashdash.plan.s0": "ガス代用の Sepolia ETH を無料で入手",
     "hashdash.pk.tag.airdrop": "エアドロッププラン",
     "hashdash.plan.k": "Airdrop Genesis · プラン",
     "hashdash.plan.h": "エアドロップに参加するプラン：<b>50 TH/s</b> を一度に",
@@ -1708,6 +1715,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.tn.preview": "Testnet online · サンプルノード {n} 件を含む"
   },
   "ko": {
+    "hashdash.plan.s0": "가스비용 Sepolia ETH 무료로 받기",
     "hashdash.pk.tag.airdrop": "에어드롭 플랜",
     "hashdash.plan.k": "Airdrop Genesis · 플랜",
     "hashdash.plan.h": "에어드롭 참여 플랜: <b>50 TH/s</b> 한 번에",
@@ -1952,6 +1960,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.tn.preview": "Testnet online · 예시 노드 {n}개 포함"
   },
   "pt": {
+    "hashdash.plan.s0": "Pegue ETH da Sepolia grátis para pagar o gás",
     "hashdash.pk.tag.airdrop": "Plano Airdrop",
     "hashdash.plan.k": "Airdrop Genesis · o plano",
     "hashdash.plan.h": "O plano para participar do airdrop: <b>50 TH/s</b> de uma vez",
@@ -2196,6 +2205,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.tn.preview": "Testnet online · incl. {n} nós de exemplo"
   },
   "ru": {
+    "hashdash.plan.s0": "Получите бесплатный Sepolia ETH для оплаты газа",
     "hashdash.pk.tag.airdrop": "План Airdrop",
     "hashdash.plan.k": "Airdrop Genesis · план",
     "hashdash.plan.h": "План участия в аирдропе: <b>50 TH/s</b> сразу",
@@ -2440,6 +2450,7 @@ window.SECTORA_I18N_EXTRA = {
     "hashdash.tn.preview": "Testnet online · вкл. {n} демонстрационных узлов"
   },
   "zh": {
+    "hashdash.plan.s0": "免费领取 Sepolia ETH 用于支付 Gas",
     "hashdash.pk.tag.airdrop": "空投方案",
     "hashdash.plan.k": "Airdrop Genesis · 方案",
     "hashdash.plan.h": "参与空投的方案：一次性 <b>50 TH/s</b>",
