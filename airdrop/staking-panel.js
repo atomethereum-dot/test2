@@ -87,12 +87,196 @@
       newB: "Novo", newT: "Airdrop Genesis aberto",
       msgK: "Mensagem para quem faz staking · Airdrop Genesis",
       msgT: "O Airdrop Genesis já está aberto. Seu staking continua funcionando exatamente como hoje: as mesmas recompensas, sem bloqueio e sem retirar nada. Participar é opcional: conecte um Hash Node com esta mesma carteira e seus SECT em staking também contam para o Airdrop Genesis.",
-      msgA: "Sua janela do airdrop", msgR: "Ler as regras" }
+      msgA: "Sua janela do airdrop", msgR: "Ler as regras" },
+    zh: { loc: "zh-CN", bar: "airdrop genesis", band: "Airdrop Genesis", k: "你的空投",
+      h0: "连接钱包，查看<b>你的等级。</b>", p0: "你的质押计入空投，无需取出任何东西。",
+      h1: "还差 <b>{x} SECT</b> 即可加入。", p1: "质押 100 SECT 即为 Scout，进入空投。",
+      h2: "第 1 步<b>已完成。</b>", p2: "你已经在其中：无需再做任何事。只需用同一个钱包开启你的 Hash Node，即可开始参与。",
+      s1: "第 1 步 · 质押 SECT", s1min: "最少 100", s2: "第 2 步 · 连接你的 Hash Node", s2t: "最后一步",
+      lv: "你的等级", lvs: "等级 {n}", sp: "名额", sps: "{l} 名额", pz: "你的奖励", pzs: "完成时长后可得 SECT",
+      up: "再质押 {x} SECT 即升到 {l}，奖励提高到 {p} SECT。", top: "Titan 没有上限：每多 1,000 SECT 多得 900 SECT。",
+      cta: "连接我的 Hash Node", more: "查看空投", have: "已经开启？在空投页面查看。",
+      note: "无锁定：如果取出，计数会暂停，回来后继续。", min: "最小化", max: "打开", done: "第 1 步 ✓", wait: "连接钱包",
+      h3: "你已进入<b>空投。</b>", p3: "质押和 Hash Node 均已就绪。两者都保持到完成时长，即可赢得奖励。",
+      p1n: "你的 Hash Node 已开启。质押 100 SECT 即可进入空投。", poff: "你的 Hash Node 已关闭：开启它，计数才会继续。",
+      on: "已开启", off: "已关闭", chk: "检查中…", ctaOn: "查看我的空投", ctaOff: "开启我的 Hash Node", both: "2/2 ✓",
+      hw: "如何开启你的 Hash Node", hw1: "领取免费的 Sepolia ETH 作为 Gas", hw2: "购买 50 TH/s 套餐", hw3: "用同一个钱包注册你的节点", hwp: "打开套餐", hwn: "前往你的节点",
+      acc: "目前已产生", of: "完成时长后共 {n} SECT", calc: "正在与网络计算…", pre: "从空投开放当天开始计数。", lock: "自 {d}（满 30 天）起，产生的部分归你所有。", mine: "已产生的部分归你所有。",
+      who: "钱包 {a}", wNone: "此钱包没有注册节点", wOn: "节点已开启", wOff: "节点已关闭", wChk: "正在检查节点…", wErr: "无法查询网络，正在重试…",
+      keep: "你的质押照常运行。加入我们的验证者网络是可选的：只需连接一个 Hash Node，就能额外获得 Airdrop Genesis 奖励。",
+      newB: "新", newT: "Airdrop Genesis 已开放",
+      msgK: "致质押用户 · Airdrop Genesis",
+      msgT: "Airdrop Genesis 现已开放。你的质押和现在完全一样：同样的奖励、无锁定、无需取出任何东西。参与是可选的：用同一个钱包连接一个 Hash Node，你质押的 SECT 也会计入 Airdrop Genesis。",
+      msgA: "你的空投窗口", msgR: "阅读规则" },
+    hi: { loc: "hi-IN", bar: "airdrop genesis", band: "Airdrop Genesis", k: "आपका एयरड्रॉप",
+      h0: "<b>अपना लेवल</b> देखने के लिए वॉलेट कनेक्ट करें।", p0: "आपकी स्टेकिंग एयरड्रॉप में गिनी जाती है, कुछ भी निकाले बिना।",
+      h1: "जुड़ने के लिए <b>{x} SECT</b> और चाहिए।", p1: "100 SECT स्टेकिंग में होने पर आप Scout हैं और एयरड्रॉप में हैं।",
+      h2: "चरण 1 <b>पूरा।</b>", p2: "आप पहले से शामिल हैं: और कुछ नहीं करना है। बस इसी वॉलेट से अपना Hash Node चालू करें और भाग लेना शुरू करें।",
+      s1: "चरण 1 · स्टेकिंग में SECT", s1min: "न्यूनतम 100", s2: "चरण 2 · अपना Hash Node कनेक्ट करें", s2t: "आख़िरी चरण",
+      lv: "आपका लेवल", lvs: "लेवल {n}", sp: "स्थान", sps: "{l} स्थान", pz: "आपका इनाम", pzs: "अपना समय पूरा करने पर SECT",
+      up: "{x} SECT और जोड़ें तो आप {l} पर पहुँचेंगे और इनाम {p} SECT हो जाएगा।", top: "Titan की कोई सीमा नहीं: हर 1,000 SECT और पर 900 SECT जुड़ते हैं।",
+      cta: "मेरा Hash Node कनेक्ट करें", more: "एयरड्रॉप देखें", have: "पहले से चालू है? एयरड्रॉप में जाँचें।",
+      note: "कोई लॉक-अप नहीं: निकालने पर आपकी गिनती रुकती है और लौटने पर जारी रहती है।", min: "छोटा करें", max: "खोलें", done: "चरण 1 ✓", wait: "वॉलेट कनेक्ट करें",
+      h3: "आप <b>एयरड्रॉप</b> में हैं।", p3: "स्टेकिंग और Hash Node तैयार हैं। इनाम जीतने के लिए समय पूरा होने तक दोनों रखें।",
+      p1n: "आपका Hash Node पहले से चालू है। 100 SECT स्टेकिंग में होने पर आप एयरड्रॉप में हैं।", poff: "आपका Hash Node बंद है: उसे चालू करें ताकि गिनती चलती रहे।",
+      on: "चालू", off: "बंद", chk: "जाँच हो रही है…", ctaOn: "मेरा एयरड्रॉप देखें", ctaOff: "मेरा Hash Node चालू करें", both: "2/2 ✓",
+      hw: "अपना Hash Node कैसे चालू करें", hw1: "गैस के लिए मुफ़्त Sepolia ETH लें", hw2: "50 TH/s प्लान खरीदें", hw3: "इसी वॉलेट से अपना नोड रजिस्टर करें", hwp: "प्लान खोलें", hwn: "अपने नोड पर जाएँ",
+      acc: "अब तक बना", of: "समय पूरा होने पर {n} SECT में से", calc: "नेटवर्क से गणना हो रही है…", pre: "गिनती एयरड्रॉप खुलने के दिन से शुरू होती है।", lock: "{d} से (30 दिन बाद) जो बनता है वह आपका है।", mine: "जो बना है वह अब आपका है।",
+      who: "वॉलेट {a}", wNone: "इस वॉलेट से कोई नोड रजिस्टर नहीं", wOn: "नोड चालू", wOff: "नोड बंद", wChk: "नोड जाँचा जा रहा है…", wErr: "नेटवर्क नहीं जाँच सके, फिर कोशिश हो रही है…",
+      keep: "आपकी स्टेकिंग पहले की तरह चलती रहती है। हमारे वैलिडेटर नेटवर्क से जुड़ना वैकल्पिक है: बस एक Hash Node कनेक्ट करें और आप Airdrop Genesis इनाम भी जोड़ सकते हैं।",
+      newB: "नया", newT: "Airdrop Genesis खुला है",
+      msgK: "स्टेकर्स के लिए संदेश · Airdrop Genesis",
+      msgT: "Airdrop Genesis अब खुला है। आपकी स्टेकिंग बिल्कुल आज की तरह चलती रहती है: वही इनाम, कोई लॉक-अप नहीं और कुछ भी निकालना नहीं। भाग लेना वैकल्पिक है: इसी वॉलेट से एक Hash Node कनेक्ट करें और स्टेकिंग में आपके SECT भी Airdrop Genesis में गिने जाएँगे।",
+      msgA: "आपकी एयरड्रॉप विंडो", msgR: "नियम पढ़ें" },
+    ar: { loc: "ar-u-nu-latn", bar: "airdrop genesis", band: "Airdrop Genesis", k: "إيردروبك",
+      h0: "اربط محفظتك لترى <b>مستواك.</b>", p0: "تُحتسب عملية التخزين لديك في الإيردروب، دون سحب أي شيء.",
+      h1: "تحتاج إلى <b>{x} SECT</b> إضافية للانضمام.", p1: "مع 100 SECT في التخزين تصبح Scout وتدخل الإيردروب.",
+      h2: "الخطوة 1 <b>مكتملة.</b>", p2: "أنت مشارك بالفعل: لا داعي لفعل أي شيء آخر. فقط شغّل Hash Node بالمحفظة نفسها وتبدأ المشاركة.",
+      s1: "الخطوة 1 · SECT في التخزين", s1min: "الحد الأدنى 100", s2: "الخطوة 2 · اربط Hash Node", s2t: "الخطوة الأخيرة",
+      lv: "مستواك", lvs: "المستوى {n}", sp: "المقاعد", sps: "من {l}", pz: "جائزتك", pzs: "SECT عند إكمال مدتك",
+      up: "مع {x} SECT إضافية تنتقل إلى {l} وترتفع جائزتك إلى {p} SECT.", top: "لا حد أقصى لـ Titan: كل 1,000 SECT إضافية تضيف 900 SECT.",
+      cta: "اربط Hash Node الخاص بي", more: "عرض الإيردروب", have: "مشغّل بالفعل؟ تحقّق منه في الإيردروب.",
+      note: "بلا قفل: إذا سحبت، يتوقف العد مؤقتًا ويستمر عند عودتك.", min: "تصغير", max: "فتح", done: "الخطوة 1 ✓", wait: "اربط المحفظة",
+      h3: "أنت في <b>الإيردروب.</b>", p3: "التخزين وHash Node جاهزان. حافظ عليهما حتى تكمل مدتك لتربح جائزتك.",
+      p1n: "Hash Node لديك يعمل بالفعل. مع 100 SECT في التخزين تدخل الإيردروب.", poff: "Hash Node لديك متوقف: شغّله ليستمر العد.",
+      on: "يعمل", off: "متوقف", chk: "جارٍ التحقق…", ctaOn: "عرض إيردروبي", ctaOff: "شغّل Hash Node الخاص بي", both: "2/2 ✓",
+      hw: "كيف تشغّل Hash Node", hw1: "احصل على ETH مجاني على Sepolia للغاز", hw2: "اشترِ خطة 50 TH/s", hw3: "سجّل عقدتك بالمحفظة نفسها", hwp: "افتح الخطة", hwn: "اذهب إلى عقدتك",
+      acc: "ما تولّد حتى الآن", of: "من {n} SECT عند إكمال مدتك", calc: "جارٍ الحساب مع الشبكة…", pre: "يبدأ العد يوم افتتاح الإيردروب.", lock: "اعتبارًا من {d} (بعد 30 يومًا) يصبح ما يتولّد ملكك.", mine: "ما تولّد أصبح ملكك.",
+      who: "المحفظة {a}", wNone: "لا توجد عقدة مسجّلة بهذه المحفظة", wOn: "العقدة تعمل", wOff: "العقدة متوقفة", wChk: "جارٍ التحقق من العقدة…", wErr: "تعذّر الاتصال بالشبكة، جارٍ إعادة المحاولة…",
+      keep: "يستمر التخزين لديك كالمعتاد. الانضمام إلى شبكة المدققين لدينا اختياري: فقط اربط Hash Node ويمكنك إضافة مكافآت Airdrop Genesis.",
+      newB: "جديد", newT: "Airdrop Genesis مفتوح",
+      msgK: "رسالة لمستخدمي التخزين · Airdrop Genesis",
+      msgT: "Airdrop Genesis مفتوح الآن. يستمر التخزين لديك تمامًا كما هو اليوم: المكافآت نفسها، بلا قفل ودون سحب أي شيء. المشاركة اختيارية: اربط Hash Node بالمحفظة نفسها وستُحتسب SECT المخزّنة لديك أيضًا في Airdrop Genesis.",
+      msgA: "نافذة الإيردروب الخاصة بك", msgR: "اقرأ القواعد" },
+    fr: { loc: "fr-FR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Votre airdrop",
+      h0: "Connectez votre wallet pour voir <b>votre niveau.</b>", p0: "Votre staking compte pour l’airdrop, sans rien retirer.",
+      h1: "Il vous manque <b>{x} SECT</b> pour participer.", p1: "Avec 100 SECT en staking, vous êtes Scout et vous entrez dans l’airdrop.",
+      h2: "Étape 1 <b>terminée.</b>", p2: "Vous y êtes déjà : vous n’avez rien d’autre à faire. Allumez simplement votre Hash Node avec ce même wallet et vous commencez à participer.",
+      s1: "Étape 1 · SECT en staking", s1min: "Min. 100", s2: "Étape 2 · Connectez votre Hash Node", s2t: "Dernière étape",
+      lv: "Votre niveau", lvs: "Niveau {n}", sp: "Places", sps: "de {l}", pz: "Votre prix", pzs: "SECT à la fin de votre durée",
+      up: "Avec {x} SECT de plus, vous passez à {l} et votre prix monte à {p} SECT.", top: "Titan n’a pas de maximum : chaque 1 000 SECT de plus ajoutent 900 SECT.",
+      cta: "Connecter mon Hash Node", more: "Voir l’airdrop", have: "Déjà allumé ? Vérifiez-le dans l’airdrop.",
+      note: "Sans blocage : si vous retirez, votre décompte se met en pause et reprend à votre retour.", min: "Réduire", max: "Ouvrir", done: "Étape 1 ✓", wait: "Connecter le wallet",
+      h3: "Vous êtes dans <b>l’airdrop.</b>", p3: "Staking et Hash Node prêts. Gardez les deux jusqu’à la fin de votre durée pour gagner votre prix.",
+      p1n: "Votre Hash Node est déjà allumé. Avec 100 SECT en staking, vous entrez dans l’airdrop.", poff: "Votre Hash Node est éteint : allumez-le pour que votre décompte continue.",
+      on: "Allumé", off: "Éteint", chk: "Vérification…", ctaOn: "Voir mon airdrop", ctaOff: "Allumer mon Hash Node", both: "2/2 ✓",
+      hw: "Comment allumer votre Hash Node", hw1: "Obtenez de l’ETH Sepolia gratuit pour le gas", hw2: "Achetez le plan de 50 TH/s", hw3: "Enregistrez votre nœud avec ce même wallet", hwp: "Ouvrir le plan", hwn: "Aller à votre nœud",
+      acc: "Généré jusqu’ici", of: "sur {n} SECT à la fin de votre durée", calc: "Calcul avec le réseau…", pre: "Le décompte commence le jour de l’ouverture de l’airdrop.", lock: "À partir du {d} (30 jours dedans), ce que vous générez vous appartient.", mine: "Ce que vous avez généré vous appartient déjà.",
+      who: "Wallet {a}", wNone: "aucun nœud enregistré avec ce wallet", wOn: "nœud allumé", wOff: "nœud éteint", wChk: "vérification de son nœud…", wErr: "impossible de consulter le réseau, nouvel essai…",
+      keep: "Votre staking continue de fonctionner normalement. Rejoindre notre réseau de validateurs est facultatif : connectez simplement un Hash Node et vous pourrez ajouter des récompenses Airdrop Genesis.",
+      newB: "Nouveau", newT: "Airdrop Genesis est ouvert",
+      msgK: "Message aux utilisateurs du staking · Airdrop Genesis",
+      msgT: "Airdrop Genesis est maintenant ouvert. Votre staking fonctionne exactement comme aujourd’hui : les mêmes récompenses, sans blocage et sans rien retirer. Participer est facultatif : connectez un Hash Node avec ce même wallet et vos SECT en staking comptent aussi pour Airdrop Genesis.",
+      msgA: "Votre fenêtre airdrop", msgR: "Lire les règles" },
+    ru: { loc: "ru-RU", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Ваш аирдроп",
+      h0: "Подключите кошелёк, чтобы увидеть <b>свой уровень.</b>", p0: "Ваш стейкинг засчитывается в аирдроп, ничего выводить не нужно.",
+      h1: "Чтобы участвовать, не хватает <b>{x} SECT</b>.", p1: "Со 100 SECT в стейкинге вы Scout и участвуете в аирдропе.",
+      h2: "Шаг 1 <b>выполнен.</b>", p2: "Вы уже участвуете: больше ничего делать не нужно. Просто включите свой Hash Node с этим же кошельком — и вы начнёте участвовать.",
+      s1: "Шаг 1 · SECT в стейкинге", s1min: "Мин. 100", s2: "Шаг 2 · Подключите Hash Node", s2t: "Последний шаг",
+      lv: "Ваш уровень", lvs: "Уровень {n}", sp: "Места", sps: "уровня {l}", pz: "Ваш приз", pzs: "SECT по завершении срока",
+      up: "Добавьте {x} SECT — перейдёте на {l}, и приз вырастет до {p} SECT.", top: "У Titan нет максимума: каждые 1 000 SECT сверху добавляют 900 SECT.",
+      cta: "Подключить мой Hash Node", more: "Открыть аирдроп", have: "Уже включён? Проверьте в аирдропе.",
+      note: "Без блокировки: если выведете, счёт встанет на паузу и продолжится, когда вернётесь.", min: "Свернуть", max: "Открыть", done: "Шаг 1 ✓", wait: "Подключить кошелёк",
+      h3: "Вы участвуете в <b>аирдропе.</b>", p3: "Стейкинг и Hash Node готовы. Сохраняйте оба до конца срока, чтобы получить приз.",
+      p1n: "Ваш Hash Node уже включён. Со 100 SECT в стейкинге вы участвуете в аирдропе.", poff: "Ваш Hash Node выключен: включите его, чтобы счёт продолжился.",
+      on: "Включён", off: "Выключен", chk: "Проверка…", ctaOn: "Мой аирдроп", ctaOff: "Включить мой Hash Node", both: "2/2 ✓",
+      hw: "Как включить Hash Node", hw1: "Получите бесплатный Sepolia ETH для газа", hw2: "Купите план 50 TH/s", hw3: "Зарегистрируйте узел с этим же кошельком", hwp: "Открыть план", hwn: "К вашему узлу",
+      acc: "Уже накоплено", of: "из {n} SECT по завершении срока", calc: "Расчёт по данным сети…", pre: "Счёт начнётся в день открытия аирдропа.", lock: "С {d} (30 дней внутри) накопленное — ваше.", mine: "Накопленное уже ваше.",
+      who: "Кошелёк {a}", wNone: "с этим кошельком не зарегистрирован узел", wOn: "узел включён", wOff: "узел выключен", wChk: "проверяем узел…", wErr: "не удалось проверить сеть, повторяем…",
+      keep: "Ваш стейкинг работает как обычно. Присоединиться к нашей сети валидаторов — по желанию: просто подключите Hash Node, и вы сможете дополнительно получать награды Airdrop Genesis.",
+      newB: "Новое", newT: "Airdrop Genesis открыт",
+      msgK: "Сообщение для участников стейкинга · Airdrop Genesis",
+      msgT: "Airdrop Genesis уже открыт. Ваш стейкинг работает точно так же, как сегодня: те же награды, без блокировки и без вывода. Участие — по желанию: подключите Hash Node с этим же кошельком, и ваши SECT в стейкинге тоже будут засчитываться в Airdrop Genesis.",
+      msgA: "Ваше окно аирдропа", msgR: "Читать правила" },
+    de: { loc: "de-DE", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Dein Airdrop",
+      h0: "Verbinde deine Wallet, um <b>dein Level</b> zu sehen.", p0: "Dein Staking zählt für den Airdrop, ohne dass du etwas abhebst.",
+      h1: "Dir fehlen noch <b>{x} SECT</b>, um dabei zu sein.", p1: "Mit 100 SECT im Staking bist du Scout und im Airdrop dabei.",
+      h2: "Schritt 1 <b>erledigt.</b>", p2: "Du bist schon dabei: Du musst nichts weiter tun. Schalte einfach deinen Hash Node mit derselben Wallet ein und du nimmst teil.",
+      s1: "Schritt 1 · SECT im Staking", s1min: "Min. 100", s2: "Schritt 2 · Verbinde deinen Hash Node", s2t: "Letzter Schritt",
+      lv: "Dein Level", lvs: "Level {n}", sp: "Plätze", sps: "von {l}", pz: "Dein Preis", pzs: "SECT nach Ablauf deiner Zeit",
+      up: "Mit {x} SECT mehr steigst du zu {l} auf und dein Preis wächst auf {p} SECT.", top: "Titan hat kein Maximum: je 1.000 SECT mehr kommen 900 SECT dazu.",
+      cta: "Meinen Hash Node verbinden", more: "Zum Airdrop", have: "Schon an? Prüf es im Airdrop.",
+      note: "Keine Sperre: Wenn du abhebst, pausiert dein Zähler und läuft weiter, wenn du zurückkommst.", min: "Minimieren", max: "Öffnen", done: "Schritt 1 ✓", wait: "Wallet verbinden",
+      h3: "Du bist im <b>Airdrop.</b>", p3: "Staking und Hash Node bereit. Behalte beides, bis deine Zeit um ist, um deinen Preis zu gewinnen.",
+      p1n: "Dein Hash Node ist schon an. Mit 100 SECT im Staking bist du im Airdrop dabei.", poff: "Dein Hash Node ist aus: Schalte ihn ein, damit dein Zähler weiterläuft.",
+      on: "An", off: "Aus", chk: "Wird geprüft…", ctaOn: "Mein Airdrop", ctaOff: "Meinen Hash Node einschalten", both: "2/2 ✓",
+      hw: "So schaltest du deinen Hash Node ein", hw1: "Hol dir kostenloses Sepolia-ETH für das Gas", hw2: "Kauf den 50-TH/s-Plan", hw3: "Registriere deinen Node mit derselben Wallet", hwp: "Plan öffnen", hwn: "Zu deinem Node",
+      acc: "Bisher erzeugt", of: "von {n} SECT nach Ablauf deiner Zeit", calc: "Wird mit dem Netzwerk berechnet…", pre: "Die Zählung beginnt am Tag der Airdrop-Eröffnung.", lock: "Ab dem {d} (30 Tage dabei) gehört dir, was du erzeugst.", mine: "Was du erzeugt hast, gehört schon dir.",
+      who: "Wallet {a}", wNone: "kein Node mit dieser Wallet registriert", wOn: "Node an", wOff: "Node aus", wChk: "Node wird geprüft…", wErr: "Netzwerk nicht erreichbar, neuer Versuch…",
+      keep: "Dein Staking läuft ganz normal weiter. Unserem Validator-Netzwerk beizutreten ist freiwillig: Verbinde einfach einen Hash Node und du kannst zusätzlich Airdrop-Genesis-Belohnungen erhalten.",
+      newB: "Neu", newT: "Airdrop Genesis ist offen",
+      msgK: "Nachricht an alle Staker · Airdrop Genesis",
+      msgT: "Airdrop Genesis ist jetzt offen. Dein Staking läuft genau wie heute weiter: dieselben Belohnungen, keine Sperre und nichts abzuheben. Mitmachen ist freiwillig: Verbinde einen Hash Node mit derselben Wallet und deine SECT im Staking zählen auch für Airdrop Genesis.",
+      msgA: "Dein Airdrop-Fenster", msgR: "Regeln lesen" },
+    ja: { loc: "ja-JP", bar: "airdrop genesis", band: "Airdrop Genesis", k: "あなたのエアドロップ",
+      h0: "ウォレットを接続して<b>レベルを確認。</b>", p0: "ステーキングはそのままエアドロップの対象です。何も引き出す必要はありません。",
+      h1: "参加まであと <b>{x} SECT</b>。", p1: "100 SECT をステーキングすれば Scout としてエアドロップに参加できます。",
+      h2: "ステップ 1 <b>完了。</b>", p2: "すでに参加しています。ほかに必要なことはありません。同じウォレットで Hash Node をオンにすれば参加が始まります。",
+      s1: "ステップ 1 · ステーキング中の SECT", s1min: "最低 100", s2: "ステップ 2 · Hash Node を接続", s2t: "最後のステップ",
+      lv: "あなたのレベル", lvs: "レベル {n}", sp: "枠", sps: "{l} の枠", pz: "あなたの賞品", pzs: "期間を満了すると受け取れる SECT",
+      up: "あと {x} SECT で {l} に上がり、賞品は {p} SECT になります。", top: "Titan に上限はありません：1,000 SECT 増えるごとに 900 SECT 加算。",
+      cta: "Hash Node を接続", more: "エアドロップを見る", have: "すでにオン？エアドロップで確認。",
+      note: "ロックなし：引き出すとカウントは一時停止し、戻ると再開します。", min: "最小化", max: "開く", done: "ステップ 1 ✓", wait: "ウォレットを接続",
+      h3: "<b>エアドロップ</b>に参加中です。", p3: "ステーキングと Hash Node の準備完了。期間を満了するまで両方を維持すると賞品を獲得できます。",
+      p1n: "Hash Node はすでにオンです。100 SECT をステーキングすればエアドロップに参加できます。", poff: "Hash Node がオフです。カウントを続けるにはオンにしてください。",
+      on: "オン", off: "オフ", chk: "確認中…", ctaOn: "マイエアドロップ", ctaOff: "Hash Node をオンにする", both: "2/2 ✓",
+      hw: "Hash Node をオンにする方法", hw1: "ガス用の無料 Sepolia ETH を入手", hw2: "50 TH/s プランを購入", hw3: "同じウォレットでノードを登録", hwp: "プランを開く", hwn: "ノードへ",
+      acc: "これまでの生成量", of: "期間満了で {n} SECT のうち", calc: "ネットワークで計算中…", pre: "エアドロップ開始日からカウントが始まります。", lock: "{d}（30 日経過）以降、生成分はあなたのものです。", mine: "生成分はすでにあなたのものです。",
+      who: "ウォレット {a}", wNone: "このウォレットで登録されたノードはありません", wOn: "ノード オン", wOff: "ノード オフ", wChk: "ノードを確認中…", wErr: "ネットワークを確認できません。再試行中…",
+      keep: "ステーキングはこれまでどおり動きます。バリデーターネットワークへの参加は任意です。Hash Node を接続するだけで Airdrop Genesis の報酬を上乗せできます。",
+      newB: "新着", newT: "Airdrop Genesis 開始",
+      msgK: "ステーキング利用者へのお知らせ · Airdrop Genesis",
+      msgT: "Airdrop Genesis が始まりました。ステーキングは今日とまったく同じように動きます。報酬も同じ、ロックなし、引き出しも不要です。参加は任意です。同じウォレットで Hash Node を接続すると、ステーキング中の SECT も Airdrop Genesis の対象になります。",
+      msgA: "エアドロップ画面", msgR: "ルールを読む" },
+    ko: { loc: "ko-KR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "내 에어드롭",
+      h0: "지갑을 연결해 <b>내 레벨</b>을 확인하세요.", p0: "스테이킹은 아무것도 출금하지 않고 그대로 에어드롭에 반영됩니다.",
+      h1: "참여까지 <b>{x} SECT</b> 더 필요합니다.", p1: "100 SECT를 스테이킹하면 Scout로 에어드롭에 참여합니다.",
+      h2: "1단계 <b>완료.</b>", p2: "이미 참여 중입니다. 더 할 일은 없습니다. 같은 지갑으로 Hash Node를 켜기만 하면 참여가 시작됩니다.",
+      s1: "1단계 · 스테이킹 중인 SECT", s1min: "최소 100", s2: "2단계 · Hash Node 연결", s2t: "마지막 단계",
+      lv: "내 레벨", lvs: "레벨 {n}", sp: "자리", sps: "{l} 자리", pz: "내 보상", pzs: "기간을 채우면 받는 SECT",
+      up: "{x} SECT를 더하면 {l}로 올라가고 보상은 {p} SECT가 됩니다.", top: "Titan은 상한이 없습니다: 1,000 SECT마다 900 SECT가 더해집니다.",
+      cta: "내 Hash Node 연결", more: "에어드롭 보기", have: "이미 켜져 있나요? 에어드롭에서 확인하세요.",
+      note: "잠금 없음: 출금하면 집계가 일시 중지되고 돌아오면 이어집니다.", min: "최소화", max: "열기", done: "1단계 ✓", wait: "지갑 연결",
+      h3: "<b>에어드롭</b>에 참여 중입니다.", p3: "스테이킹과 Hash Node 준비 완료. 보상을 받으려면 기간을 채울 때까지 둘 다 유지하세요.",
+      p1n: "Hash Node는 이미 켜져 있습니다. 100 SECT를 스테이킹하면 에어드롭에 참여합니다.", poff: "Hash Node가 꺼져 있습니다. 집계가 계속되도록 켜 주세요.",
+      on: "켜짐", off: "꺼짐", chk: "확인 중…", ctaOn: "내 에어드롭 보기", ctaOff: "내 Hash Node 켜기", both: "2/2 ✓",
+      hw: "Hash Node 켜는 방법", hw1: "가스용 무료 Sepolia ETH 받기", hw2: "50 TH/s 플랜 구매", hw3: "같은 지갑으로 노드 등록", hwp: "플랜 열기", hwn: "내 노드로",
+      acc: "지금까지 생성", of: "기간 완료 시 {n} SECT 중", calc: "네트워크로 계산 중…", pre: "에어드롭이 열리는 날부터 집계가 시작됩니다.", lock: "{d}(30일 경과)부터 생성분은 당신의 것입니다.", mine: "생성분은 이미 당신의 것입니다.",
+      who: "지갑 {a}", wNone: "이 지갑으로 등록된 노드 없음", wOn: "노드 켜짐", wOff: "노드 꺼짐", wChk: "노드 확인 중…", wErr: "네트워크를 확인할 수 없어 다시 시도 중…",
+      keep: "스테이킹은 평소대로 작동합니다. 검증자 네트워크 참여는 선택 사항입니다. Hash Node만 연결하면 Airdrop Genesis 보상을 추가로 받을 수 있습니다.",
+      newB: "신규", newT: "Airdrop Genesis 오픈",
+      msgK: "스테이킹 이용자 안내 · Airdrop Genesis",
+      msgT: "Airdrop Genesis가 열렸습니다. 스테이킹은 지금과 똑같이 작동합니다. 같은 보상, 잠금 없음, 출금할 필요도 없습니다. 참여는 선택 사항입니다. 같은 지갑으로 Hash Node를 연결하면 스테이킹 중인 SECT도 Airdrop Genesis에 반영됩니다.",
+      msgA: "내 에어드롭 창", msgR: "규칙 읽기" },
+    it: { loc: "it-IT", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Il tuo airdrop",
+      h0: "Collega il wallet per vedere <b>il tuo livello.</b>", p0: "Il tuo staking conta per l’airdrop, senza ritirare nulla.",
+      h1: "Ti mancano <b>{x} SECT</b> per entrare.", p1: "Con 100 SECT in staking sei Scout ed entri nell’airdrop.",
+      h2: "Passo 1 <b>completato.</b>", p2: "Sei già dentro: non devi fare altro. Accendi il tuo Hash Node con questo stesso wallet e inizi a partecipare.",
+      s1: "Passo 1 · SECT in staking", s1min: "Min. 100", s2: "Passo 2 · Collega il tuo Hash Node", s2t: "Ultimo passo",
+      lv: "Il tuo livello", lvs: "Livello {n}", sp: "Posti", sps: "di {l}", pz: "Il tuo premio", pzs: "SECT al termine del tuo periodo",
+      up: "Con altri {x} SECT sali a {l} e il tuo premio arriva a {p} SECT.", top: "Titan non ha massimo: ogni 1.000 SECT in più aggiungono 900 SECT.",
+      cta: "Collega il mio Hash Node", more: "Vedi l’airdrop", have: "Già acceso? Controllalo nell’airdrop.",
+      note: "Nessun blocco: se ritiri, il conteggio si mette in pausa e riprende quando torni.", min: "Riduci", max: "Apri", done: "Passo 1 ✓", wait: "Collega il wallet",
+      h3: "Sei nell’<b>airdrop.</b>", p3: "Staking e Hash Node pronti. Mantienili entrambi fino al termine del tuo periodo per vincere il premio.",
+      p1n: "Il tuo Hash Node è già acceso. Con 100 SECT in staking entri nell’airdrop.", poff: "Il tuo Hash Node è spento: accendilo perché il conteggio continui.",
+      on: "Acceso", off: "Spento", chk: "Verifica…", ctaOn: "Il mio airdrop", ctaOff: "Accendi il mio Hash Node", both: "2/2 ✓",
+      hw: "Come accendere il tuo Hash Node", hw1: "Ottieni ETH Sepolia gratis per il gas", hw2: "Acquista il piano da 50 TH/s", hw3: "Registra il nodo con questo stesso wallet", hwp: "Apri il piano", hwn: "Vai al tuo nodo",
+      acc: "Generato finora", of: "su {n} SECT al termine del periodo", calc: "Calcolo con la rete…", pre: "Il conteggio parte il giorno di apertura dell’airdrop.", lock: "Dal {d} (30 giorni dentro) ciò che generi è tuo.", mine: "Ciò che hai generato è già tuo.",
+      who: "Wallet {a}", wNone: "nessun nodo registrato con questo wallet", wOn: "nodo acceso", wOff: "nodo spento", wChk: "verifica del nodo…", wErr: "impossibile consultare la rete, nuovo tentativo…",
+      keep: "Il tuo staking continua a funzionare come sempre. Unirti alla nostra rete di validatori è facoltativo: collega un Hash Node e potrai aggiungere le ricompense di Airdrop Genesis.",
+      newB: "Novità", newT: "Airdrop Genesis è aperto",
+      msgK: "Messaggio per chi fa staking · Airdrop Genesis",
+      msgT: "Airdrop Genesis è aperto. Il tuo staking funziona esattamente come oggi: stesse ricompense, nessun blocco e niente da ritirare. Partecipare è facoltativo: collega un Hash Node con questo stesso wallet e i tuoi SECT in staking contano anche per Airdrop Genesis.",
+      msgA: "La tua finestra airdrop", msgR: "Leggi le regole" }
   };
+  // el idioma de la pagina: el que el visitante elige en su selector (staking-i18n.js); abre en ingles
   function pick() {
-    var l = "";
-    try { l = localStorage.getItem("sa_lang") || ""; } catch (e) {}
-    if (!T[l]) l = (navigator.language || "").slice(0, 2);
+    var l = window.SECTORA_STAKE_LANG || "";
+    // sin el selector de la pagina (staking-i18n.js), el idioma del navegador
+    if (!l && !window.SectoraStakeT) {
+      try { l = localStorage.getItem("sa_lang") || ""; } catch (e) {}
+      if (!T[l]) l = (navigator.language || "").slice(0, 2);
+    }
     return T[l] ? l : "en";
   }
   var L = T[pick()];
@@ -203,14 +387,18 @@
     "}" +
     "@media (max-width:980px){.pp-body.sad-on{grid-template-rows:none}.pp-body.sad-on > .frame,.pp-body.sad-on > .sad,.pp-body.sad-on > .sad-lede,.pp-body.sad-on > .steps{grid-column:auto;grid-row:auto}}" +
     /* en la cabecera, donde estaba ese texto: el mensaje para quienes ya hacen staking */
-    ".sad-msg{position:relative;max-width:52ch;padding:4px 0 4px 22px;border-left:2px solid #1569ff;font-family:'IBM Plex Sans',system-ui,sans-serif}" +
-    ".sad-msg-k{display:flex;align-items:flex-start;gap:10px;margin:0 0 12px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#0d4fd8;font-weight:500;line-height:1.5}" +
-    ".sad-msg-k i{flex:none;width:7px;height:7px;margin-top:.5em;border-radius:50%;background:#1569ff;box-shadow:0 0 0 4px rgba(21,105,255,.16)}" +
-    ".sad-msg-t{margin:0;color:var(--p-ink-2,#3c414c);font-size:clamp(15px,1.1vw,17px);line-height:1.65;font-weight:300}" +
-    ".sad-msg-a{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:14px}" +
-    ".sad-msg-a a{color:#0d4fd8;font-weight:400;font-size:15px;text-decoration:none;border-bottom:1px solid rgba(13,79,216,.32);padding-bottom:2px;transition:color .3s,border-color .3s}" +
+    /* un recuadro blanco como la consola (linea azul arriba), compacto y centrado con el titulo */
+    ".sad-msg{position:relative;align-self:center;max-width:440px;padding:16px 18px 15px;background:#fff;border:1px solid rgba(0,0,0,.09);box-shadow:0 18px 44px -32px rgba(7,8,10,.35);font-family:'IBM Plex Sans',system-ui,sans-serif}" +
+    ".sad-msg::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:#1569ff}" +
+    ".pp-head.sad-msg-on{align-items:center}" +
+    ".pp-head .sad-msg-k{display:flex;align-items:flex-start;gap:9px;margin:0 0 9px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#0d4fd8;font-weight:500;line-height:1.5}" +
+    ".sad-msg-k i{flex:none;width:6px;height:6px;margin-top:.45em;border-radius:50%;background:#1569ff;box-shadow:0 0 0 3px rgba(21,105,255,.16)}" +
+    ".pp-head .sad-msg-t{max-width:none;margin:0;color:var(--p-ink-2,#3c414c);font-size:13.5px;line-height:1.6;font-weight:300}" +
+    ".sad-msg-a{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:11px}" +
+    ".sad-msg-a a{color:#0d4fd8;font-weight:400;font-size:13px;text-decoration:none;border-bottom:1px solid rgba(13,79,216,.32);padding-bottom:1px;transition:color .3s,border-color .3s}" +
     ".sad-msg-a a:hover{color:#1569ff;border-color:#1569ff}" +
-    "@media (max-width:620px){.sad-msg{padding-left:16px}.sad-msg-k{font-size:10px;letter-spacing:.14em}}" +
+    "@media (max-width:980px){.sad-msg{align-self:start;max-width:none}}" +
+    "@media (max-width:620px){.sad-msg{padding:14px 15px 13px}}" +
     "@media (max-width:420px){.sad-lv{grid-template-columns:1fr 1fr}.sad-lv .pz{grid-column:1 / -1;border-left:0!important;border-top:1px solid rgba(0,0,0,.09)}}" +
     "@media (prefers-reduced-motion:reduce){.sad *{animation:none!important;transition:none!important}}" +
     /* the same frame as the staking console: square corners, blue + marks on the corners, the same
@@ -227,6 +415,7 @@
     "}" +
     "@media (max-width:620px){.sad{padding:10px}.sad-card{padding:18px 16px}}";
 
+  function tt(k) { return '<span data-t="' + k + '">' + esc(L[k]) + "</span>"; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   var LOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 7.6-1.7"/></svg>';
   var OK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><path d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg>';
@@ -246,35 +435,35 @@
     el.id = "airdrop-genesis";
     el.innerHTML =
       '<span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>' +
-      '<div class="sad-band m"><span>' + esc(L.band) + '</span><b>SA&middot;ST&middot;01&middot;26</b></div>' +
+      '<div class="sad-band m"><span>' + tt("band") + '</span><b>SA&middot;ST&middot;01&middot;26</b></div>' +
       '<div class="sad-card">' +
-        '<div class="sad-head m"><span>Sectora &nbsp;//&nbsp; ' + esc(L.bar) + '</span><span class="sp"></span><span class="sad-cnt"></span>' +
+        '<div class="sad-head m"><span>Sectora &nbsp;//&nbsp; airdrop genesis</span><span class="sp"></span><span class="sad-cnt"></span>' +
           '<button type="button" class="sad-min" aria-expanded="true" aria-label="' + esc(L.min) + '"><i></i></button>' +
         "</div>" +
         '<div class="sad-body">' +
-          '<p class="sad-keep">' + OK + "<span>" + esc(L.keep) + "</span></p>" +
-          '<p class="sad-k m">' + esc(L.k) + "</p>" +
+          '<p class="sad-keep">' + OK + "<span>" + tt("keep") + "</span></p>" +
+          '<p class="sad-k m">' + tt("k") + "</p>" +
           '<h3 class="sad-h"></h3>' +
           '<p class="sad-p"></p>' +
           '<ul class="sad-steps">' +
-            '<li class="s1"><span class="sad-ic">✓</span><span>' + esc(L.s1) + '</span><span class="v"></span></li>' +
-            '<li class="s2"><span class="sad-ic"></span><span>' + esc(L.s2) + '</span><span class="tg m">' + esc(L.s2t) + "</span></li>" +
+            '<li class="s1"><span class="sad-ic">✓</span><span>' + tt("s1") + '</span><span class="v"></span></li>' +
+            '<li class="s2"><span class="sad-ic"></span><span>' + tt("s2") + '</span><span class="tg m">' + esc(L.s2t) + "</span></li>" +
           "</ul>" +
           '<p class="sad-who m" hidden></p>' +
-          '<div class="sad-acc" hidden><span class="m">' + esc(L.acc) + '</span><b><em>0</em> SECT</b><i class="bar"><i></i></i><small></small></div>' +
-          '<div class="sad-how" hidden><p class="m">' + esc(L.hw) + "</p><ol>" +
-            '<li><span>1</span><div>' + esc(L.hw1) + '<em><a href="https://faucet.quicknode.com/ethereum/sepolia" target="_blank" rel="noopener noreferrer">QuickNode ↗</a><a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer">Google ↗</a></em></div></li>' +
-            '<li><span>2</span><div>' + esc(L.hw2) + '<em><a href="/dashboard.html#plan">' + esc(L.hwp) + " ↗</a></em></div></li>" +
-            '<li><span>3</span><div>' + esc(L.hw3) + '<em><a href="/dashboard.html#node">' + esc(L.hwn) + " ↗</a></em></div></li></ol></div>" +
+          '<div class="sad-acc" hidden><span class="m">' + tt("acc") + '</span><b><em>0</em> SECT</b><i class="bar"><i></i></i><small></small></div>' +
+          '<div class="sad-how" hidden><p class="m">' + tt("hw") + "</p><ol>" +
+            '<li><span>1</span><div>' + tt("hw1") + '<em><a href="https://faucet.quicknode.com/ethereum/sepolia" target="_blank" rel="noopener noreferrer">QuickNode ↗</a><a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer">Google ↗</a></em></div></li>' +
+            '<li><span>2</span><div>' + tt("hw2") + '<em><a href="/dashboard.html#plan">' + tt("hwp") + " ↗</a></em></div></li>" +
+            '<li><span>3</span><div>' + tt("hw3") + '<em><a href="/dashboard.html#node">' + tt("hwn") + " ↗</a></em></div></li></ol></div>" +
           '<div class="sad-lv" hidden>' +
-            '<div class="lv"><span class="m">' + esc(L.lv) + '</span><b></b><small></small></div>' +
-            '<div class="spt"><span class="m">' + esc(L.sp) + '</span><b></b><small></small></div>' +
-            '<div class="pz"><span class="m">' + esc(L.pz) + '</span><b></b><small>' + esc(L.pzs) + "</small></div>" +
+            '<div class="lv"><span class="m">' + tt("lv") + '</span><b></b><small></small></div>' +
+            '<div class="spt"><span class="m">' + tt("sp") + '</span><b></b><small></small></div>' +
+            '<div class="pz"><span class="m">' + tt("pz") + '</span><b></b><small>' + tt("pzs") + "</small></div>" +
           "</div>" +
           '<p class="sad-up" hidden></p>' +
           '<a class="sad-cta m" href="' + NODE_URL + '"><span>' + esc(L.cta) + "</span><i>→</i></a>" +
-          '<div class="sad-links"><a href="' + AIRDROP_URL + '">' + esc(L.have) + '</a><a class="m" href="' + AIRDROP_URL + '">' + esc(L.more) + " →</a></div>" +
-          '<p class="sad-note">' + LOCK + "<span>" + esc(L.note) + "</span></p>" +
+          '<div class="sad-links"><a href="' + AIRDROP_URL + '">' + tt("have") + '</a><a class="m" href="' + AIRDROP_URL + '">' + tt("more") + " →</a></div>" +
+          '<p class="sad-note">' + LOCK + "<span>" + tt("note") + "</span></p>" +
         "</div>" +
       "</div>";
     body.insertBefore(el, steps);
@@ -284,9 +473,10 @@
     if (lede && !document.querySelector(".sad-msg")) {
       var msg = document.createElement("div");
       msg.className = "sad-msg";
-      msg.innerHTML = '<p class="sad-msg-k"><i aria-hidden="true"></i>' + esc(L.msgK) + "</p>" +
-        '<p class="sad-msg-t">' + esc(L.msgT) + "</p>" +
-        '<div class="sad-msg-a"><a href="#airdrop-genesis" class="sad-msg-go">' + esc(L.msgA) + ' ↓</a><a href="' + AIRDROP_URL + '">' + esc(L.msgR) + " →</a></div>";
+      msg.innerHTML = '<p class="sad-msg-k"><i aria-hidden="true"></i>' + tt("msgK") + "</p>" +
+        '<p class="sad-msg-t">' + tt("msgT") + "</p>" +
+        '<div class="sad-msg-a"><a href="#airdrop-genesis" class="sad-msg-go">' + tt("msgA") + ' ↓</a><a href="' + AIRDROP_URL + '">' + tt("msgR") + " →</a></div>";
+      lede.parentNode.classList.add("sad-msg-on");
       lede.parentNode.replaceChild(msg, lede);
       lede.classList.add("sad-lede");
       body.insertBefore(lede, steps);
@@ -302,7 +492,7 @@
     if (live && !document.querySelector(".sad-new")) {
       var tag = document.createElement("a");
       tag.className = "sad-new"; tag.href = "#airdrop-genesis";
-      tag.innerHTML = '<span class="d" aria-hidden="true"></span><b>' + esc(L.newB) + "</b><span>" + esc(L.newT) + '</span><i aria-hidden="true">↓</i>';
+      tag.innerHTML = '<span class="d" aria-hidden="true"></span><b>' + tt("newB") + "</b><span>" + tt("newT") + '</span><i aria-hidden="true">↓</i>';
       tag.addEventListener("click", function (e) {
         e.preventDefault();
         el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -425,6 +615,16 @@
       if (addr) { checkNode(); readDep(); }
     }
     window.addEventListener("sectora:account", function (e) { setAddr(e.detail); });
+    /* el visitante cambia el idioma de la pagina: los textos fijos (data-t), el boton de minimizar y lo que pinta paint() */
+    window.addEventListener("sectora:lang", function (e) {
+      var nuevo = T[e.detail] || T.en;
+      if (nuevo === L) return;
+      L = nuevo;
+      nf4 = new Intl.NumberFormat(L.loc, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+      document.querySelectorAll(".sad [data-t], .sad-msg [data-t], .sad-new [data-t]").forEach(function (n) { n.textContent = L[n.getAttribute("data-t")]; });
+      minBtn.setAttribute("aria-label", el.classList.contains("min") ? L.max : L.min);
+      lastKey = ""; paint(); tickCount();
+    });
 
     function tpl(s, m) { return s.replace(/\{(\w)\}/g, function (_, k) { return m[k]; }); }
 

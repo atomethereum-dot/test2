@@ -39,6 +39,8 @@
   const seg = (p, a, b) => clamp((p - a) / (b - a));
   const suave = (x) => { x = clamp(x); return x * x * (3 - 2 * x); };
   const f2 = (v) => v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  // lo que se dibuja en el canvas, en el idioma elegido (staking-i18n.js)
+  const tr = (s) => (window.SectoraStakeT ? window.SectoraStakeT(s) : s);
 
   // la tasa de la pagina; staking.js la cambia en todas las .apy-n
   let ano = 149;
@@ -142,14 +144,14 @@
       c.beginPath(); c.moveTo(x + 0.5, y0); c.lineTo(x + 0.5, y0 + 6); c.stroke();
       if (!movil || m % 3 === 0) {
         c.fillStyle = pasado ? "rgba(255,255,255,.7)" : "rgba(255,255,255,.3)";
-        c.fillText(m ? "M" + String(m).padStart(2, "0") : "Start", x, y0 + 12);
+        c.fillText(m ? "M" + String(m).padStart(2, "0") : tr("Start"), x, y0 + 12);
       }
     }
     // hacia donde va: la recta completa en discontinuo; la linea la tapa al pasar
     c.strokeStyle = "rgba(255,255,255,.2)"; c.setLineDash([4, 7]);
     c.beginPath(); c.moveTo(X(0), Y(0)); c.lineTo(X(1), Y(1)); c.stroke(); c.setLineDash([]);
     c.fillStyle = "rgba(255,255,255,.4)"; c.textAlign = "right"; c.textBaseline = "bottom";
-    c.fillText("+" + f2(ano) + " in 12 months", X(1), Y(1) - 12);
+    c.fillText("+" + f2(ano) + " " + tr("in 12 months"), X(1), Y(1) - 12);
   }
 
   // la linea con su area, los puntos de cada mes y el punto vivo
