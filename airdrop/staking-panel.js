@@ -7,17 +7,17 @@
    spots = SECT in staking / the minimum of the level.
    It reads what the staking page already shows (#earnDep, the amount deposited
    by the connected wallet) and, when the page announces the connected address
-   (the "sectora:account" event, only in /stakingtest for now), it looks that
-   address up in the Hash Node registry on Sepolia to mark step 2. It never
-   talks to the wallet or to the staking contract. */
+   (the "sectora:account" event from staking-chain.js), it looks that address up
+   in the Hash Node registry on Sepolia to mark step 2. It never talks to the
+   wallet or to the staking contract: staking works exactly the same with or
+   without it. It also puts a small "Airdrop Genesis is open" tag under the
+   "Live" tag of the hero, which scrolls down to this window. */
 (function () {
   "use strict";
   if (document.querySelector(".sad")) return;
 
   var AIRDROP_URL = "/airdrop/";
   var NODE_URL = "/dashboard.html#guia-nodo";
-  /* solo pruebas: apertura simulada para ver el contador en vivo. Al lanzar se quita: la fecha real va en count.js */
-  var TEST_OPEN = Date.UTC(2026, 9, 27);
   var COUNT_JS = "/airdrop/count.js?v=14";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
   var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.gateway.tenderly.co", "https://ethereum-sepolia.publicnode.com"];
@@ -39,7 +39,9 @@
       on: "On", off: "Off", chk: "Checking…", ctaOn: "See my airdrop", ctaOff: "Turn on my Hash Node", both: "2/2 ✓",
       hw: "How to turn on your Hash Node", hw1: "Get free Sepolia ETH for the gas", hw2: "Buy the 50 TH/s plan", hw3: "Register your node with this same wallet", hwp: "Open the plan", hwn: "Go to your node",
       acc: "Generated so far", of: "of {n} SECT on completing your time", calc: "Calculating with the network…", pre: "It starts counting the day the airdrop opens.", lock: "From {d} (30 days in) what you generate is yours.", mine: "What you generate is already yours.",
-      who: "Wallet {a}", wNone: "no node registered with this wallet", wOn: "node on", wOff: "node off", wChk: "checking its node…", wErr: "couldn't check the network, retrying…" },
+      who: "Wallet {a}", wNone: "no node registered with this wallet", wOn: "node on", wOff: "node off", wChk: "checking its node…", wErr: "couldn't check the network, retrying…",
+      keep: "Your staking keeps working as usual. Joining our validator network is optional: just connect a Hash Node and you can add Airdrop Genesis rewards on top.",
+      newB: "New", newT: "Airdrop Genesis is open" },
     es: { loc: "es-ES", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Tu airdrop",
       h0: "Conecta tu wallet para ver <b>tu nivel.</b>", p0: "Tu staking cuenta para el airdrop, sin retirar nada.",
       h1: "Te faltan <b>{x} SECT</b> para entrar.", p1: "Con 100 SECT en staking eres Scout y entras al airdrop.",
@@ -54,7 +56,9 @@
       on: "Encendido", off: "Apagado", chk: "Comprobando…", ctaOn: "Ver mi airdrop", ctaOff: "Encender mi Hash Node", both: "2/2 ✓",
       hw: "Cómo encender tu Hash Node", hw1: "Consigue ETH de Sepolia gratis para el gas", hw2: "Compra el plan de 50 TH/s", hw3: "Registra tu nodo con esta misma wallet", hwp: "Abrir el plan", hwn: "Ir a tu nodo",
       acc: "Llevas generado", of: "de {n} SECT al completar tu tiempo", calc: "Calculando con la red…", pre: "Empieza a contar el día de la apertura del airdrop.", lock: "Desde el {d} (30 días dentro) lo generado es tuyo.", mine: "Lo generado ya es tuyo.",
-      who: "Wallet {a}", wNone: "sin nodo registrado con esta wallet", wOn: "nodo encendido", wOff: "nodo apagado", wChk: "comprobando su nodo…", wErr: "no se pudo consultar la red, reintentando…" },
+      who: "Wallet {a}", wNone: "sin nodo registrado con esta wallet", wOn: "nodo encendido", wOff: "nodo apagado", wChk: "comprobando su nodo…", wErr: "no se pudo consultar la red, reintentando…",
+      keep: "Tu staking sigue funcionando con normalidad. Unirte a nuestra red de validadores es opcional: solo conecta un Hash Node y podrás sumar recompensas de Airdrop Genesis.",
+      newB: "Nuevo", newT: "Airdrop Genesis abierto" },
     pt: { loc: "pt-BR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Seu airdrop",
       h0: "Conecte sua carteira para ver <b>seu nível.</b>", p0: "Seu staking conta para o airdrop, sem sacar nada.",
       h1: "Faltam <b>{x} SECT</b> para você entrar.", p1: "Com 100 SECT em staking você é Scout e entra no airdrop.",
@@ -69,7 +73,9 @@
       on: "Ligado", off: "Desligado", chk: "Verificando…", ctaOn: "Ver meu airdrop", ctaOff: "Ligar meu Hash Node", both: "2/2 ✓",
       hw: "Como ligar seu Hash Node", hw1: "Pegue ETH da Sepolia grátis para o gás", hw2: "Compre o plano de 50 TH/s", hw3: "Registre seu nó com esta mesma carteira", hwp: "Abrir o plano", hwn: "Ir ao seu nó",
       acc: "Você já gerou", of: "de {n} SECT ao completar seu tempo", calc: "Calculando com a rede…", pre: "Começa a contar no dia da abertura do airdrop.", lock: "A partir de {d} (30 dias dentro) o que você gera é seu.", mine: "O que você gerou já é seu.",
-      who: "Carteira {a}", wNone: "sem nó registrado nesta carteira", wOn: "nó ligado", wOff: "nó desligado", wChk: "verificando o nó…", wErr: "não foi possível consultar a rede, tentando de novo…" }
+      who: "Carteira {a}", wNone: "sem nó registrado nesta carteira", wOn: "nó ligado", wOff: "nó desligado", wChk: "verificando o nó…", wErr: "não foi possível consultar a rede, tentando de novo…",
+      keep: "Seu staking continua funcionando normalmente. Entrar na nossa rede de validadores é opcional: basta conectar um Hash Node e você pode somar recompensas do Airdrop Genesis.",
+      newB: "Novo", newT: "Airdrop Genesis aberto" }
   };
   function pick() {
     var l = "";
@@ -159,7 +165,17 @@
     ".sad-links a.m{font-size:9.5px;text-decoration:none;color:var(--bd)}" +
     ".sad-note{display:flex;gap:9px;align-items:flex-start;margin:14px 0 0;padding:11px 13px;border-radius:10px;background:rgba(21,105,255,.06);border:1px solid rgba(21,105,255,.18);font-size:12.5px;line-height:1.5;color:var(--ink2)}" +
     ".sad-note svg{flex:none;width:16px;height:16px;margin-top:1px;fill:none;stroke:var(--b);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}" +
+    ".sad-keep{display:flex;gap:10px;align-items:flex-start;margin:0 0 16px;padding:12px 14px;border-radius:12px;background:rgba(15,143,82,.07);border:1px solid rgba(15,143,82,.26);font-size:13.5px;line-height:1.5;color:var(--ink)}" +
+    ".sad-keep svg{flex:none;width:18px;height:18px;margin-top:1px;fill:none;stroke:var(--ok);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}" +
     ".sad [hidden]{display:none!important}" +
+    /* la etiqueta azul bajo la de "Live" en la cabecera de la pagina */
+    ".sad-new{display:flex;width:max-content;max-width:100%;align-items:center;gap:12px;margin:-10px 0 22px;padding:10px 14px;border:1px solid rgba(77,141,255,.55);background:rgba(21,105,255,.14);" +
+    "color:#dbe6ff;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;animation:sadIn .8s ease .4s both;transition:border-color .3s,background-color .3s}" +
+    ".sad-new b{color:#7fa8ff;font-weight:500}" +
+    ".sad-new i{font-style:normal;color:#7fa8ff}" +
+    ".sad-new .d{width:7px;height:7px;border-radius:50%;background:#4d8dff;box-shadow:0 0 10px 2px rgba(77,141,255,.7);flex:none}" +
+    ".sad-new:hover{border-color:#7fa8ff;background:rgba(21,105,255,.24)}" +
+    "@keyframes sadIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}" +
     ".sad-min:focus-visible,.sad-cta:focus-visible,.sad-links a:focus-visible{outline:2px solid var(--b);outline-offset:3px}" +
     /* beside the console: the window takes the top of the right column, the steps go below it */
     ".pp-body.sad-on > .frame{grid-row:1 / span 2}" +
@@ -171,6 +187,7 @@
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   var LOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 7.6-1.7"/></svg>';
+  var OK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><path d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg>';
 
   function mount() {
     var body = document.querySelector("#stake .pp-body");
@@ -184,6 +201,7 @@
     var el = document.createElement("aside");
     el.className = "sad";
     el.setAttribute("aria-label", "Sectora Airdrop");
+    el.id = "airdrop-genesis";
     el.innerHTML =
       '<div class="sad-band m"><span>' + esc(L.band) + '</span><b>SA&middot;ST&middot;01&middot;26</b></div>' +
       '<div class="sad-card">' +
@@ -191,6 +209,7 @@
           '<button type="button" class="sad-min" aria-expanded="true" aria-label="' + esc(L.min) + '"><i></i></button>' +
         "</div>" +
         '<div class="sad-body">' +
+          '<p class="sad-keep">' + OK + "<span>" + esc(L.keep) + "</span></p>" +
           '<p class="sad-k m">' + esc(L.k) + "</p>" +
           '<h3 class="sad-h"></h3>' +
           '<p class="sad-p"></p>' +
@@ -217,6 +236,20 @@
       "</div>";
     body.insertBefore(el, steps);
     body.classList.add("sad-on");
+
+    /* la etiqueta de la cabecera: lleva a esta ventana */
+    var live = document.querySelector(".hero .hero-new");
+    if (live && !document.querySelector(".sad-new")) {
+      var tag = document.createElement("a");
+      tag.className = "sad-new"; tag.href = "#airdrop-genesis";
+      tag.innerHTML = '<span class="d" aria-hidden="true"></span><b>' + esc(L.newB) + "</b><span>" + esc(L.newT) + '</span><i aria-hidden="true">↓</i>';
+      tag.addEventListener("click", function (e) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (el.classList.contains("min")) setMin(false);
+      });
+      live.parentNode.insertBefore(tag, live.nextSibling);
+    }
 
     var $ = function (s) { return el.querySelector(s); };
     var hEl = $(".sad-h"), pEl = $(".sad-p"), s1 = $(".s1"), s1v = $(".s1 .v"), s2 = $(".s2"), s2t = $(".s2 .tg"), lvBox = $(".sad-lv"), up = $(".sad-up"), cnt = $(".sad-cnt");
@@ -277,7 +310,6 @@
     var nf4 = new Intl.NumberFormat(L.loc, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
     function loadCount(cb) {
       if (window.SACount) return cb();
-      if (window.SA_OPEN === undefined) window.SA_OPEN = TEST_OPEN;
       var sc = document.createElement("script"); sc.src = COUNT_JS; sc.onload = cb; document.head.appendChild(sc);
     }
     function readCount() {

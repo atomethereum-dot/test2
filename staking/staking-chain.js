@@ -381,6 +381,8 @@
     proveedor = new ethers.BrowserProvider(eip1193);
     firmante = await proveedor.getSigner();
     cuenta = direccion;
+    // avisa a la ventana del airdrop (staking-panel.js) de que wallet esta conectada: no toca fondos ni firmas
+    window.__sectoraAccount = direccion; window.dispatchEvent(new CustomEvent("sectora:account", { detail: direccion }));
 
     const red = hexRed(await eip1193.request({ method: "eth_chainId" }));
     if (red !== CONTRACTS.chainId) {
@@ -450,6 +452,7 @@
   let activo = null;   // el proveedor en uso
   function olvidar() {
     clearInterval(refrescoId); cuenta = null; firmante = null; activo = null; aviso("");
+    window.__sectoraAccount = null; window.dispatchEvent(new CustomEvent("sectora:account", { detail: null }));
     clearInterval(contador.id); contador.t0 = 0;
     ["earnLive", "chainActions"].forEach((id) => { const n = $(id); if (n) n.remove(); });
     if (btn) btn.textContent = "Connect wallet";
