@@ -99,7 +99,7 @@ function build(l) {
     7: [["do"], ["vis", [shot("stk-4-done", { light: true, bar: "staking", cap: S[7].cap }), wallet("deposit")], "w2"], ["warn"], ["done", S[7].done]],
     8: [["do"], ["lang"], ["vis", [shot("dsh-1-connect", { bar: "dashboard" })]], ["vis", [shot("dsh-phone-1", { phone: true, cap: S[8].capPhone }), shot("dsh-phone-2", { phone: true, cap: S[8].capPhone2 })], "phones"], ["warn"]],
     9: [["do"], ["vis", [shot("dsh-2-wallet", { size: "narrow" }), wallet("sw")], "w2"], ["tip"]],
-    10: [["do"], ["tipx", S[10].copy], ["vis", [shot("dsh-3-gas", { cap: S[10].capDash }), shot("fct", { cap: S[10].capGoogle })], "two"], ["warn"]],
+    10: [["do"], ["vis", [shot("dsh-3-how", { bar: "dashboard", cap: S[10].capHow })]], ["tipx", S[10].copy], ["vis", [shot("fct", { cap: S[10].capGoogle }), shot("dsh-3-gas", { cap: S[10].capDash })], "two"], ["warn"]],
     11: [["do"], ["vis", [shot("dsh-4-faucet", { size: "mid" })]], ["tip"]],
     12: [["do"], ["vis", [shot("dsh-5-kit", { cap: S[12].cap1 }), shot("dsh-6-buy", { cap: S[12].cap2 })], "two"], ["see"]],
     13: [["do"], ["vis", [shot("dsh-7-register", { cap: S[13].cap })]], ["tip"], ["break"], ["check", S[13].planH, S[13].plan, "manual"], ["vis", [shot("dsh-7b-manual", { cap: S[13].planCap })]]],
@@ -376,6 +376,8 @@ ${pages.join("\n")}
         var tall = 0;
         v.querySelectorAll("figure").forEach(function (f) {
           var cap = f.querySelector("figcaption"), ch = cap ? cap.offsetHeight + 8 : 0;
+          // la barra del navegador encima de la captura tambien ocupa su alto
+          var bar = f.querySelector(".bar"); if (bar) ch += bar.offsetHeight;
           var im = f.querySelector("img"); if (im) im.style.maxHeight = Math.max(40, each - ch - (f.querySelector(".phone") ? 22 : 4)) + "px";
           var wm = f.querySelector(".wm-card"); if (wm) { wm.style.transform = ""; var s = Math.min(1, (each - ch) / wm.offsetHeight); if (s < 1) { wm.style.transform = "scale(" + s + ")"; wm.style.transformOrigin = "top center"; f.style.height = (wm.offsetHeight * s + ch) + "px"; } }
         });

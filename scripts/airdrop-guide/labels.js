@@ -16,7 +16,8 @@ const DASH = {
   market: "hashdash.market.title", physical: "hashdash.market.tab.physical", airdropPlan: "hashdash.pk.tag.airdrop", buyN: "hashdash.buy.buyN",
   node: "hashdash.node.title", register: "hashdash.node.register", registered: "hashdash.node.registered", change: "hashdash.node.geoEdit",
   geoFail: "hashdash.node.geoFail", lat: "hashdash.node.lat", lon: "hashdash.node.lon", nodeName: "hashdash.node.name",
-  openIn: "hashdash.wallet.openIn"
+  openIn: "hashdash.wallet.openIn",
+  howTitle: "hashdash.how.title", howGas: "hashdash.how.s2.t", howGasBtn: "hashdash.how.s2.go"
 };
 const dashHtml = rd("dashboard.html") + rd("dashboard-testnet.js");
 function dashEn(key) { const m = dashHtml.match(new RegExp('data-i18n="' + key.replace(/\./g, "\\.") + '"[^>]*>([^<]*)<')); return m ? m[1] : null; }
