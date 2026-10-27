@@ -18,6 +18,7 @@
   if (document.querySelector(".sad")) return;
 
   var AIRDROP_URL = "/airdrop/";
+  var MY_URL = "/myairdrop/";
   var NODE_URL = "/dashboard.html#guia-nodo";
   var COUNT_JS = "/airdrop/count.js?v=14";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
@@ -47,7 +48,7 @@
       newB: "New", newT: "Airdrop Genesis is open",
       msgK: "Message for stakers · Airdrop Genesis",
       msgT: "Airdrop Genesis is now open. Your staking keeps working exactly as it does today: the same rewards, no lock-up and nothing to withdraw. Taking part is optional: connect a Hash Node with this same wallet and your staked SECT also count toward Airdrop Genesis.",
-      msgA: "Your airdrop window", msgR: "Read the rules" },
+      msgA: "Your airdrop window", msgR: "Read the rules", cInfo: "Airdrop info", cMy: "My Airdrop" },
     es: { loc: "es-ES", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Tu airdrop",
       h0: "Conecta tu wallet para ver <b>tu nivel.</b>", p0: "Tu staking cuenta para el airdrop, sin retirar nada.",
       h1: "Te faltan <b>{x} SECT</b> para entrar.", p1: "Con 100 SECT en staking eres Scout y entras al airdrop.",
@@ -67,7 +68,7 @@
       newB: "Nuevo", newT: "Airdrop Genesis abierto",
       msgK: "Mensaje para los usuarios del stake · Airdrop Genesis",
       msgT: "Airdrop Genesis ya está abierto. Tu staking sigue funcionando exactamente igual que hoy: las mismas recompensas, sin bloqueo y sin retirar nada. Participar es opcional: conecta un Hash Node con esta misma wallet y tus SECT en staking también cuentan para Airdrop Genesis.",
-      msgA: "Tu ventana del airdrop", msgR: "Leer las reglas" },
+      msgA: "Tu ventana del airdrop", msgR: "Leer las reglas", cInfo: "Info del airdrop", cMy: "Mi Airdrop" },
     pt: { loc: "pt-BR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Seu airdrop",
       h0: "Conecte sua carteira para ver <b>seu nível.</b>", p0: "Seu staking conta para o airdrop, sem sacar nada.",
       h1: "Faltam <b>{x} SECT</b> para você entrar.", p1: "Com 100 SECT em staking você é Scout e entra no airdrop.",
@@ -87,7 +88,7 @@
       newB: "Novo", newT: "Airdrop Genesis aberto",
       msgK: "Mensagem para quem faz staking · Airdrop Genesis",
       msgT: "O Airdrop Genesis já está aberto. Seu staking continua funcionando exatamente como hoje: as mesmas recompensas, sem bloqueio e sem retirar nada. Participar é opcional: conecte um Hash Node com esta mesma carteira e seus SECT em staking também contam para o Airdrop Genesis.",
-      msgA: "Sua janela do airdrop", msgR: "Ler as regras" },
+      msgA: "Sua janela do airdrop", msgR: "Ler as regras", cInfo: "Info do airdrop", cMy: "Meu Airdrop" },
     zh: { loc: "zh-CN", bar: "airdrop genesis", band: "Airdrop Genesis", k: "你的空投",
       h0: "连接钱包，查看<b>你的等级。</b>", p0: "你的质押计入空投，无需取出任何东西。",
       h1: "还差 <b>{x} SECT</b> 即可加入。", p1: "质押 100 SECT 即为 Scout，进入空投。",
@@ -107,7 +108,7 @@
       newB: "新", newT: "Airdrop Genesis 已开放",
       msgK: "致质押用户 · Airdrop Genesis",
       msgT: "Airdrop Genesis 现已开放。你的质押和现在完全一样：同样的奖励、无锁定、无需取出任何东西。参与是可选的：用同一个钱包连接一个 Hash Node，你质押的 SECT 也会计入 Airdrop Genesis。",
-      msgA: "你的空投窗口", msgR: "阅读规则" },
+      msgA: "你的空投窗口", msgR: "阅读规则", cInfo: "空投信息", cMy: "我的空投" },
     hi: { loc: "hi-IN", bar: "airdrop genesis", band: "Airdrop Genesis", k: "आपका एयरड्रॉप",
       h0: "<b>अपना लेवल</b> देखने के लिए वॉलेट कनेक्ट करें।", p0: "आपकी स्टेकिंग एयरड्रॉप में गिनी जाती है, कुछ भी निकाले बिना।",
       h1: "जुड़ने के लिए <b>{x} SECT</b> और चाहिए।", p1: "100 SECT स्टेकिंग में होने पर आप Scout हैं और एयरड्रॉप में हैं।",
@@ -127,7 +128,7 @@
       newB: "नया", newT: "Airdrop Genesis खुला है",
       msgK: "स्टेकर्स के लिए संदेश · Airdrop Genesis",
       msgT: "Airdrop Genesis अब खुला है। आपकी स्टेकिंग बिल्कुल आज की तरह चलती रहती है: वही इनाम, कोई लॉक-अप नहीं और कुछ भी निकालना नहीं। भाग लेना वैकल्पिक है: इसी वॉलेट से एक Hash Node कनेक्ट करें और स्टेकिंग में आपके SECT भी Airdrop Genesis में गिने जाएँगे।",
-      msgA: "आपकी एयरड्रॉप विंडो", msgR: "नियम पढ़ें" },
+      msgA: "आपकी एयरड्रॉप विंडो", msgR: "नियम पढ़ें", cInfo: "एयरड्रॉप जानकारी", cMy: "मेरा एयरड्रॉप" },
     ar: { loc: "ar-u-nu-latn", bar: "airdrop genesis", band: "Airdrop Genesis", k: "إيردروبك",
       h0: "اربط محفظتك لترى <b>مستواك.</b>", p0: "تُحتسب عملية التخزين لديك في الإيردروب، دون سحب أي شيء.",
       h1: "تحتاج إلى <b>{x} SECT</b> إضافية للانضمام.", p1: "مع 100 SECT في التخزين تصبح Scout وتدخل الإيردروب.",
@@ -147,7 +148,7 @@
       newB: "جديد", newT: "Airdrop Genesis مفتوح",
       msgK: "رسالة لمستخدمي التخزين · Airdrop Genesis",
       msgT: "Airdrop Genesis مفتوح الآن. يستمر التخزين لديك تمامًا كما هو اليوم: المكافآت نفسها، بلا قفل ودون سحب أي شيء. المشاركة اختيارية: اربط Hash Node بالمحفظة نفسها وستُحتسب SECT المخزّنة لديك أيضًا في Airdrop Genesis.",
-      msgA: "نافذة الإيردروب الخاصة بك", msgR: "اقرأ القواعد" },
+      msgA: "نافذة الإيردروب الخاصة بك", msgR: "اقرأ القواعد", cInfo: "معلومات الإيردروب", cMy: "إيردروبي" },
     fr: { loc: "fr-FR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Votre airdrop",
       h0: "Connectez votre wallet pour voir <b>votre niveau.</b>", p0: "Votre staking compte pour l’airdrop, sans rien retirer.",
       h1: "Il vous manque <b>{x} SECT</b> pour participer.", p1: "Avec 100 SECT en staking, vous êtes Scout et vous entrez dans l’airdrop.",
@@ -167,7 +168,7 @@
       newB: "Nouveau", newT: "Airdrop Genesis est ouvert",
       msgK: "Message aux utilisateurs du staking · Airdrop Genesis",
       msgT: "Airdrop Genesis est maintenant ouvert. Votre staking fonctionne exactement comme aujourd’hui : les mêmes récompenses, sans blocage et sans rien retirer. Participer est facultatif : connectez un Hash Node avec ce même wallet et vos SECT en staking comptent aussi pour Airdrop Genesis.",
-      msgA: "Votre fenêtre airdrop", msgR: "Lire les règles" },
+      msgA: "Votre fenêtre airdrop", msgR: "Lire les règles", cInfo: "Infos airdrop", cMy: "Mon airdrop" },
     ru: { loc: "ru-RU", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Ваш аирдроп",
       h0: "Подключите кошелёк, чтобы увидеть <b>свой уровень.</b>", p0: "Ваш стейкинг засчитывается в аирдроп, ничего выводить не нужно.",
       h1: "Чтобы участвовать, не хватает <b>{x} SECT</b>.", p1: "Со 100 SECT в стейкинге вы Scout и участвуете в аирдропе.",
@@ -187,7 +188,7 @@
       newB: "Новое", newT: "Airdrop Genesis открыт",
       msgK: "Сообщение для участников стейкинга · Airdrop Genesis",
       msgT: "Airdrop Genesis уже открыт. Ваш стейкинг работает точно так же, как сегодня: те же награды, без блокировки и без вывода. Участие — по желанию: подключите Hash Node с этим же кошельком, и ваши SECT в стейкинге тоже будут засчитываться в Airdrop Genesis.",
-      msgA: "Ваше окно аирдропа", msgR: "Читать правила" },
+      msgA: "Ваше окно аирдропа", msgR: "Читать правила", cInfo: "Об аирдропе", cMy: "Мой аирдроп" },
     de: { loc: "de-DE", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Dein Airdrop",
       h0: "Verbinde deine Wallet, um <b>dein Level</b> zu sehen.", p0: "Dein Staking zählt für den Airdrop, ohne dass du etwas abhebst.",
       h1: "Dir fehlen noch <b>{x} SECT</b>, um dabei zu sein.", p1: "Mit 100 SECT im Staking bist du Scout und im Airdrop dabei.",
@@ -207,7 +208,7 @@
       newB: "Neu", newT: "Airdrop Genesis ist offen",
       msgK: "Nachricht an alle Staker · Airdrop Genesis",
       msgT: "Airdrop Genesis ist jetzt offen. Dein Staking läuft genau wie heute weiter: dieselben Belohnungen, keine Sperre und nichts abzuheben. Mitmachen ist freiwillig: Verbinde einen Hash Node mit derselben Wallet und deine SECT im Staking zählen auch für Airdrop Genesis.",
-      msgA: "Dein Airdrop-Fenster", msgR: "Regeln lesen" },
+      msgA: "Dein Airdrop-Fenster", msgR: "Regeln lesen", cInfo: "Airdrop-Infos", cMy: "Mein Airdrop" },
     ja: { loc: "ja-JP", bar: "airdrop genesis", band: "Airdrop Genesis", k: "あなたのエアドロップ",
       h0: "ウォレットを接続して<b>レベルを確認。</b>", p0: "ステーキングはそのままエアドロップの対象です。何も引き出す必要はありません。",
       h1: "参加まであと <b>{x} SECT</b>。", p1: "100 SECT をステーキングすれば Scout としてエアドロップに参加できます。",
@@ -227,7 +228,7 @@
       newB: "新着", newT: "Airdrop Genesis 開始",
       msgK: "ステーキング利用者へのお知らせ · Airdrop Genesis",
       msgT: "Airdrop Genesis が始まりました。ステーキングは今日とまったく同じように動きます。報酬も同じ、ロックなし、引き出しも不要です。参加は任意です。同じウォレットで Hash Node を接続すると、ステーキング中の SECT も Airdrop Genesis の対象になります。",
-      msgA: "エアドロップ画面", msgR: "ルールを読む" },
+      msgA: "エアドロップ画面", msgR: "ルールを読む", cInfo: "エアドロップ情報", cMy: "マイエアドロップ" },
     ko: { loc: "ko-KR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "내 에어드롭",
       h0: "지갑을 연결해 <b>내 레벨</b>을 확인하세요.", p0: "스테이킹은 아무것도 출금하지 않고 그대로 에어드롭에 반영됩니다.",
       h1: "참여까지 <b>{x} SECT</b> 더 필요합니다.", p1: "100 SECT를 스테이킹하면 Scout로 에어드롭에 참여합니다.",
@@ -247,7 +248,7 @@
       newB: "신규", newT: "Airdrop Genesis 오픈",
       msgK: "스테이킹 이용자 안내 · Airdrop Genesis",
       msgT: "Airdrop Genesis가 열렸습니다. 스테이킹은 지금과 똑같이 작동합니다. 같은 보상, 잠금 없음, 출금할 필요도 없습니다. 참여는 선택 사항입니다. 같은 지갑으로 Hash Node를 연결하면 스테이킹 중인 SECT도 Airdrop Genesis에 반영됩니다.",
-      msgA: "내 에어드롭 창", msgR: "규칙 읽기" },
+      msgA: "내 에어드롭 창", msgR: "규칙 읽기", cInfo: "에어드롭 정보", cMy: "내 에어드롭" },
     it: { loc: "it-IT", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Il tuo airdrop",
       h0: "Collega il wallet per vedere <b>il tuo livello.</b>", p0: "Il tuo staking conta per l’airdrop, senza ritirare nulla.",
       h1: "Ti mancano <b>{x} SECT</b> per entrare.", p1: "Con 100 SECT in staking sei Scout ed entri nell’airdrop.",
@@ -267,7 +268,7 @@
       newB: "Novità", newT: "Airdrop Genesis è aperto",
       msgK: "Messaggio per chi fa staking · Airdrop Genesis",
       msgT: "Airdrop Genesis è aperto. Il tuo staking funziona esattamente come oggi: stesse ricompense, nessun blocco e niente da ritirare. Partecipare è facoltativo: collega un Hash Node con questo stesso wallet e i tuoi SECT in staking contano anche per Airdrop Genesis.",
-      msgA: "La tua finestra airdrop", msgR: "Leggi le regole" }
+      msgA: "La tua finestra airdrop", msgR: "Leggi le regole", cInfo: "Info airdrop", cMy: "Il mio airdrop" }
   };
   // el idioma de la pagina: el que el visitante elige en su selector (staking-i18n.js); abre en ingles
   function pick() {
@@ -355,6 +356,13 @@
     ".sad-cta::before{content:'';position:absolute;inset:0;background:var(--bd);transform:translateY(101%);transition:transform .42s cubic-bezier(.22,.72,.24,1)}" +
     ".sad-cta:hover::before{transform:none}" +
     ".sad-cta span,.sad-cta i{position:relative;font-style:normal}" +
+    ".sad-ctas{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:18px}" +
+    ".sad-ctas > .sad-cta{margin-top:0}" +
+    ".sad-ctas.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}" +
+    ".sad-ctas.two > .sad-cta{padding:17px 12px;gap:8px;text-align:center}" +
+    ".sad-ctas.two > .sad-cta:first-child{background:#fff;color:var(--bd);box-shadow:inset 0 0 0 1px var(--b)}" +
+    ".sad-ctas.two > .sad-cta:first-child::before{background:rgba(21,105,255,.08)}" +
+    "@media (max-width:520px){.sad-ctas.two > .sad-cta{padding:14px 8px;letter-spacing:.1em;line-height:1.5}.sad-ctas.two > .sad-cta i{display:none}}" +
     ".sad-links{display:flex;justify-content:space-between;align-items:center;gap:8px 14px;flex-wrap:wrap;margin-top:12px;font-size:13px;line-height:1.45;color:var(--ink3)}" +
     ".sad-links a{color:var(--ink2);text-decoration:underline;text-decoration-color:rgba(0,0,0,.22);text-underline-offset:3px;transition:text-decoration-color .3s,color .3s}" +
     ".sad-links a:hover{color:var(--ink);text-decoration-color:var(--b)}" +
@@ -470,7 +478,8 @@
             '<div class="pz"><span class="m">' + tt("pz") + '</span><b></b><small>' + tt("pzs") + "</small></div>" +
           "</div>" +
           '<p class="sad-up" hidden></p>' +
-          '<a class="sad-cta m" href="' + NODE_URL + '"><span>' + esc(L.cta) + "</span><i>→</i></a>" +
+          '<div class="sad-ctas"><a class="sad-cta m" href="' + NODE_URL + '"><span>' + esc(L.cta) + "</span><i>→</i></a>" +
+            '<a class="sad-cta sad-cta2 m" href="' + MY_URL + '" hidden><span data-t="cMy">' + esc(L.cMy) + "</span><i>→</i></a></div>" +
           '<div class="sad-links"><a href="' + AIRDROP_URL + '">' + tt("have") + '</a><a class="m" href="' + AIRDROP_URL + '">' + tt("more") + " →</a></div>" +
           '<p class="sad-note">' + LOCK + "<span>" + tt("note") + "</span></p>" +
         "</div>" +
@@ -513,7 +522,7 @@
 
     var $ = function (s) { return el.querySelector(s); };
     var hEl = $(".sad-h"), pEl = $(".sad-p"), s1 = $(".s1"), s1v = $(".s1 .v"), s2 = $(".s2"), s2t = $(".s2 .tg"), lvBox = $(".sad-lv"), up = $(".sad-up"), cnt = $(".sad-cnt");
-    var cta = $(".sad-cta"), ctaT = $(".sad-cta span"), have = $(".sad-links a:not(.m)"), who = $(".sad-who");
+    var cta = $(".sad-cta"), ctaT = $(".sad-cta span"), cta2 = $(".sad-cta2"), ctas = $(".sad-ctas"), have = $(".sad-links a:not(.m)"), who = $(".sad-who");
     var minBtn = $(".sad-min");
     try { if (localStorage.getItem("sad_min") === "1") setMin(true); } catch (e) {}
 
@@ -662,7 +671,9 @@
       s2.querySelector(".sad-ic").textContent = on ? "✓" : "";
       s2t.textContent = on ? L.on : paused ? L.off : node === "checking" ? L.chk : L.s2t;
       cnt.textContent = dep === null ? L.wait : lv >= 0 && on ? L.both : lv >= 0 ? L.done : fmt(dep) + " / 100";
-      cta.href = on ? AIRDROP_URL : NODE_URL; ctaT.textContent = on ? (lv >= 0 ? L.ctaOn : L.more) : paused ? L.ctaOff : L.cta;
+      cta.href = on ? AIRDROP_URL : NODE_URL; ctaT.textContent = on ? (lv >= 0 ? L.cInfo : L.more) : paused ? L.ctaOff : L.cta;
+      // ya participa: dos botones del mismo alto que el de antes, la web del airdrop y su panel (Mi Airdrop)
+      cta2.hidden = !(on && lv >= 0); ctas.classList.toggle("two", on && lv >= 0);
       have.parentNode.hidden = on;
       accBox.dataset.lv = lv >= 0 ? "1" : "0";
       $(".sad-how").hidden = on || dep === null;
