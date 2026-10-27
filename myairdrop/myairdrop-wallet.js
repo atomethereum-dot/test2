@@ -52,6 +52,7 @@
       retry: "Tentar de novo", noqr: "Não foi possível desenhar o QR. Use Copiar link de conexão.", own: "Prefere o navegador da sua carteira? Abra esta página no ",
       or: " ou ", only: "Só o seu endereço é lido: sem assinaturas nem transações." }
   };
+  if (window.MA_WALLET_I18N) for (var lk in window.MA_WALLET_I18N) T[lk] = window.MA_WALLET_I18N[lk];
   function t(k, v) { var l = (document.documentElement.lang || "en").slice(0, 2), s = (T[l] || T.en)[k]; if (v) for (var x in v) s = s.split("{" + x + "}").join(v[x]); return s; }
 
   function binance() {

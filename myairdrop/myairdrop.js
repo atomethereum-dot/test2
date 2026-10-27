@@ -104,6 +104,8 @@
   };
 
   /* idioma: abre siempre en ingles; el que se elija arriba se mantiene solo durante esa visita */
+  // los otros 8 idiomas de sectoraorg.com (i18n-more.js)
+  if (window.MA_I18N) for (var lk in window.MA_I18N) T[lk] = window.MA_I18N[lk];
   var lang = "en";
   try { var sv = sessionStorage.getItem("ma_lang"); if (sv && T[sv]) lang = sv; } catch (e) {}
   function t(k, v) { var s = T[lang][k] != null ? T[lang][k] : T.en[k]; if (v) for (var x in v) s = s.split("{" + x + "}").join(v[x]); return s; }
@@ -192,7 +194,7 @@
   }
 
   /* ---------- pantallas ---------- */
-  var app = document.getElementById("app"), cur = null, conn = false, via = "", data = null, timer = 0, busy = false;
+  var picker = null, app = document.getElementById("app"), cur = null, conn = false, via = "", data = null, timer = 0, busy = false;
   var ICON = {
     ok: '<svg viewBox="0 0 16 16"><path d="M4 8.4l2.8 2.7 5.4-5.9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     wait: '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.6" fill="#e0a030"/></svg>'
@@ -200,8 +202,9 @@
 
   function statics() {
     document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
     document.querySelectorAll("[data-t]").forEach(function (el) { var v = t(el.getAttribute("data-t")); if (el.hasAttribute("data-html")) el.innerHTML = v; else el.textContent = v; });
-    document.querySelectorAll(".langs button").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-l") === lang); b.setAttribute("aria-pressed", b.getAttribute("data-l") === lang); });
+    if (picker) picker.refresh();
     document.title = "My AirDrop - Sectora Foundation";
   }
   function stop() { if (timer) { clearInterval(timer); timer = 0; } }
@@ -366,11 +369,12 @@
   }
 
   /* ---------- arranque ---------- */
-  document.querySelectorAll(".langs button").forEach(function (b) {
-    b.addEventListener("click", function () {
-      lang = b.getAttribute("data-l"); try { sessionStorage.setItem("ma_lang", lang); } catch (e) {}
-      statics(); if (data && cur) render(); else if (!cur) start();
-    });
+  // selector de idioma con banderas, el mismo del dashboard (lang-pick.js)
+  var host = document.getElementById("langPick");
+  if (host && window.SALangPick) picker = window.SALangPick(host, function () { return lang; }, function (c) {
+    if (!T[c]) return;
+    lang = c; try { sessionStorage.setItem("ma_lang", lang); } catch (e) {}
+    statics(); if (data && cur) render(); else if (!cur) start();
   });
   statics();
   var MW = window.SectoraMyWallet;

@@ -44,9 +44,6 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 .brand span{color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand b{color:var(--ink);font-weight:500;margin-right:10px}
 .top-r{display:flex;align-items:center;gap:10px}
-.langs{display:flex;border:1px solid var(--hair)}
-.langs button{padding:8px 10px;color:var(--ink-3)}
-.langs button.on{color:var(--ink);background:var(--hair)}
 
 main{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:clamp(32px,6vw,72px) var(--pad) 72px}
 .eyebrow{display:flex;align-items:center;gap:14px;margin:0 0 22px;color:var(--ink-3)}
@@ -95,7 +92,7 @@ h1 b{font-weight:400}
 .chip.warn{border-color:rgba(224,160,48,.4);color:var(--warn)}
 .big{margin:22px 0 0;font-weight:200;font-size:clamp(44px,8vw,104px);letter-spacing:-.04em;line-height:1}
 .big em{font-style:normal;color:var(--ink)}
-.big small{display:inline-block;margin-left:14px;font-size:clamp(11px,1.1vw,14px);letter-spacing:.14em;color:var(--ink-3);vertical-align:.6em}
+.big small{display:inline-block;margin-inline-start:14px;font-size:clamp(11px,1.1vw,14px);letter-spacing:.14em;color:var(--ink-3);vertical-align:.6em}
 .of{margin:12px 0 0;color:var(--ink-2);font-size:clamp(15px,1.4vw,19px)}
 .bar{height:6px;margin:22px 0 0;background:rgba(255,255,255,.08);overflow:hidden}
 .bar i{display:block;height:100%;width:0;background:var(--blue);transition:width .3s linear}
@@ -128,12 +125,12 @@ h1 b{font-weight:400}
 .card .lead2{margin:0 0 6px;font-weight:200;font-size:clamp(30px,3.2vw,40px);letter-spacing:-.03em;line-height:1.05}
 .card .lead2.ok{color:var(--ok)}
 .card .lead2.warn{color:var(--warn)}
-.card .lead2 small{font-size:.42em;color:var(--ink-3);letter-spacing:0;margin-left:.25em}
+.card .lead2 small{font-size:.42em;color:var(--ink-3);letter-spacing:0;margin-inline-start:.25em}
 .card .cap{margin:0 0 16px;color:var(--ink-3);font-size:13px}
 .kv{margin:0;padding:0;list-style:none;border-top:1px solid var(--hair)}
 .kv li{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--hair-soft);font-size:14px}
 .kv li span{color:var(--ink-3)}
-.kv li b{font-weight:400;text-align:right;font-variant-numeric:tabular-nums;word-break:break-word}
+.kv li b{font-weight:400;text-align:end;font-variant-numeric:tabular-nums;word-break:break-word}
 .kv li b.ok{color:var(--ok)}
 .kv li b.warn{color:var(--warn)}
 .kv li b small{display:block;color:var(--ink-3);font-size:11.5px;font-weight:300}
@@ -190,9 +187,7 @@ h1 b{font-weight:400}
     <span class="mono"><b>Sectora</b><span data-t="brand">My Airdrop</span></span>
   </a>
   <div class="top-r">
-    <div class="langs mono" role="group" aria-label="Language">
-      <button type="button" data-l="en">EN</button><button type="button" data-l="es">ES</button><button type="button" data-l="pt">PT</button>
-    </div>
+    <div id="langPick"></div>
   </div>
 </header>
 <main>
@@ -215,7 +210,9 @@ h1 b{font-weight:400}
 window.SA_OPEN = Date.UTC(2026, 9, 27);
 </script>
 <script src="/airdroptesting/count.js?v=13"></script>
-<script src="/myairdrop/myairdrop-wallet.js?v=1"></script>
-<script src="/myairdrop/myairdrop.js?v=6"></script>
+<script src="/airdroptesting/lang-pick.js?v=2"></script>
+<script src="/myairdrop/i18n-more.js?v=1"></script>
+<script src="/myairdrop/myairdrop-wallet.js?v=2"></script>
+<script src="/myairdrop/myairdrop.js?v=7"></script>
 </body>
 </html>
