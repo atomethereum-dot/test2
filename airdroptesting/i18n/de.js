@@ -123,7 +123,7 @@ t: {
 
 "st.rule": "Regel",
 "vf.3h": "Keine versprochenen Gewinne", "vf.3p": "Wir versprechen kein Geld. Der Preis von SECT kann steigen oder fallen.", "vf.3l": "Fragen lesen",
-"vf.4h": "Ein registriertes Cybersecurity-Unternehmen", "vf.4p": "Sectora Foundation ist ein in Chicago, Illinois, USA, registriertes Cybersecurity-Unternehmen. Der SECT-Vertrag wurde von Cyberscope geprüft und die Liquidität ist gesperrt.", "vf.4n": "Registernummer in Illinois", "vf.4v": "Registrierung prüfen", "vf.4a": "Cyberscope-Audit", "vf.4b": "Gesperrte Liquidität", "vf.4c": "Rechtliche Informationen",
+"vf.4h": "Ein registriertes Cybersecurity-Unternehmen", "vf.4p": "Sectora Foundation ist ein in Chicago, Illinois, USA, registriertes Cybersecurity-Unternehmen.", "vf.4n": "Registernummer in Illinois", "vf.4v": "Registrierung prüfen", "vf.4c": "Rechtliche Informationen",
 "fq.e": "10 · Fragen", "fq.h": "Einfache <b>Antworten.</b>", "fq.p": "Noch unsicher? Frag in unserem Telegram.",
 "q1": "Ist es kostenlos?", "a1": "Den Node zu testen ist kostenlos und registriert dich für die Vorteile von Phase 2. Um in Phase 1 SECT zu gewinnen, brauchst du mindestens 100 SECT im Staking: Mit 100 SECT bist du Scout und gewinnst 55 SECT.",
 "q10": "Warum muss ich SECT staken, um mehr zu gewinnen?",

@@ -123,7 +123,7 @@ t: {
 
 "st.rule": "Règle",
 "vf.3h": "Aucun gain promis", "vf.3p": "Nous ne promettons pas d’argent. Le prix du SECT peut monter ou baisser.", "vf.3l": "Lire les questions",
-"vf.4h": "Une entreprise de cybersécurité enregistrée", "vf.4p": "Sectora Foundation est une entreprise de cybersécurité enregistrée à Chicago, dans l’Illinois, aux États-Unis. Le contrat SECT a été audité par Cyberscope et la liquidité est verrouillée.", "vf.4n": "Numéro d’enregistrement en Illinois", "vf.4v": "Vérifier l’enregistrement", "vf.4a": "Audit Cyberscope", "vf.4b": "Liquidité verrouillée", "vf.4c": "Informations légales",
+"vf.4h": "Une entreprise de cybersécurité enregistrée", "vf.4p": "Sectora Foundation est une entreprise de cybersécurité enregistrée à Chicago, dans l’Illinois, aux États-Unis.", "vf.4n": "Numéro d’enregistrement en Illinois", "vf.4v": "Vérifier l’enregistrement", "vf.4c": "Informations légales",
 "fq.e": "10 · Questions", "fq.h": "Des réponses <b>simples.</b>", "fq.p": "Encore un doute ? Demandez sur notre Telegram.",
 "q1": "Est-ce gratuit ?", "a1": "Tester le nœud est gratuit et vous inscrit pour les avantages de la phase 2. Pour gagner des SECT en phase 1, il faut au moins 100 SECT en staking : avec 100 SECT vous êtes Scout et gagnez 55 SECT.",
 "q10": "Pourquoi dois-je staker des SECT pour gagner plus ?",
