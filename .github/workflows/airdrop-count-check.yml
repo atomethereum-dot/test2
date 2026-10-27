@@ -48,13 +48,13 @@ jobs:
               const bn = await post({ jsonrpc: "2.0", id: 1, method: "eth_blockNumber", params: [] });
               const latest = bn.result ? parseInt(bn.result, 16) : 0;
               const out = [];
-              for (const span of [500, 5000, 50000, 140000]) {
-                const q = await post({ jsonrpc: "2.0", id: 1, method: "eth_getLogs", params: [{ address: STAKING, fromBlock: "0x" + (latest - span).toString(16), toBlock: "0x" + latest.toString(16), topics: [T, pad(process.env.ADDR)] }] });
-                out.push(span + ":" + (q.result ? "ok(" + q.result.length + ")" : JSON.stringify(q.error).slice(0, 90)));
+              for (const [back, span] of [[500, 500], [140000, 1000], [140000, 5000], [140000, 10000], [140000, 50000]]) {
+                const q = await post({ jsonrpc: "2.0", id: 1, method: "eth_getLogs", params: [{ address: STAKING, fromBlock: "0x" + (latest - back).toString(16), toBlock: "0x" + (latest - back + span).toString(16), topics: [T] }] });
+                out.push(back + "/" + span + ":" + (q.result ? "ok(" + q.result.length + ")" : String(JSON.stringify(q.error || q)).slice(0, 90)));
               }
               console.log(u, "| bloque", latest, "|", out.join(" | "));
             }
           })();
           JS
-          node probe.cjs
+          node probe.cjs || true
           node run.cjs
