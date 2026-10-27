@@ -17,7 +17,7 @@
   var AIRDROP_URL = "/airdroptesting/";
   var NODE_URL = "/dashboard.html#guia-nodo";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
-  var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.drpc.org", "https://1rpc.io/sepolia", "https://sepolia.gateway.tenderly.co"];
+  var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.gateway.tenderly.co", "https://ethereum-sepolia.publicnode.com"];
   var SEL = { indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44" };
   var LV = [{ min: 100, rate: .55, n: "Scout" }, { min: 500, rate: .65, n: "Sentinel" }, { min: 1000, rate: .75, n: "Guardian" }, { min: 4000, rate: .9, n: "Titan" }];
 

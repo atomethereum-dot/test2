@@ -23,7 +23,7 @@
   var STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
   var MAINNET = ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org", "https://1rpc.io/eth"];
-  var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.drpc.org", "https://1rpc.io/sepolia", "https://sepolia.gateway.tenderly.co"];
+  var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.gateway.tenderly.co", "https://ethereum-sepolia.publicnode.com"];
   var SEL = { accountView: "0xf85b90e2", indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44" };
   var DASH = "/dash/";
   var STAKE = "/staking/";
