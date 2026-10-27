@@ -1,0 +1,1158 @@
+[
+{
+"id": "k000",
+"en": "Skip to content"
+},
+{
+"id": "k001",
+"en": "Guide"
+},
+{
+"id": "k002",
+"en": "Stake"
+},
+{
+"id": "k003",
+"en": "Terms"
+},
+{
+"id": "k004",
+"en": "Security"
+},
+{
+"id": "k005",
+"en": "FAQ"
+},
+{
+"id": "k006",
+"en": "Whitepaper"
+},
+{
+"id": "k007",
+"en": "Main site"
+},
+{
+"id": "k008",
+"en": "Live"
+},
+{
+"id": "k009",
+"en": "Staking on Ethereum mainnet"
+},
+{
+"id": "k010",
+"en": "#SECT holder rewards · Sectora Foundation"
+},
+{
+"id": "k011",
+"en": "Holder rewards"
+},
+{
+"id": "k012",
+"en": "% APY"
+},
+{
+"id": "k013",
+"en": "Deposit #SECT and earn"
+},
+{
+"id": "k014",
+"en": "% a year, accrued every second and paid by the Sectora Foundation treasury from a reward pool funded in advance. No lock-up and no deposit cap: claim your rewards and withdraw your deposit whenever you want."
+},
+{
+"id": "k015",
+"en": "Start staking"
+},
+{
+"id": "k016",
+"en": "Verify the contract"
+},
+{
+"id": "k017",
+"en": "Program"
+},
+{
+"id": "k018",
+"en": "Network"
+},
+{
+"id": "k019",
+"en": "Reward rate"
+},
+{
+"id": "k020",
+"en": "Accrual"
+},
+{
+"id": "k021",
+"en": "Every second"
+},
+{
+"id": "k022",
+"en": "Lock-up"
+},
+{
+"id": "k023",
+"en": "None"
+},
+{
+"id": "k024",
+"en": "Deposit cap"
+},
+{
+"id": "k025",
+"en": "Total deposited"
+},
+{
+"id": "k026",
+"en": "Holders in"
+},
+{
+"id": "k027",
+"en": "Contract"
+},
+{
+"id": "k028",
+"en": "Verified"
+},
+{
+"id": "k029",
+"en": "Address"
+},
+{
+"id": "k030",
+"en": "Paid by the Sectora Foundation · Exact-amount approvals"
+},
+{
+"id": "k031",
+"en": "Holder rewards · Guide"
+},
+{
+"id": "k032",
+"en": "Step by step to"
+},
+{
+"id": "k033",
+"en": "Example:"
+},
+{
+"id": "k034",
+"en": "1,000 #SECT"
+},
+{
+"id": "k035",
+"en": "deposited for 12 months. Rewards accrue every second, with no lock-up and no compounding."
+},
+{
+"id": "k036",
+"en": "Earned"
+},
+{
+"id": "k037",
+"en": "Per day"
+},
+{
+"id": "k038",
+"en": "Per month"
+},
+{
+"id": "k039",
+"en": "Per year"
+},
+{
+"id": "k040",
+"en": "Accruing"
+},
+{
+"id": "k041",
+"en": "Keep scrolling"
+},
+{
+"id": "k042",
+"en": "Scroll to draw 12 months"
+},
+{
+"id": "k043",
+"en": "8 steps · about 5 minutes"
+},
+{
+"id": "k044",
+"en": "Holder rewards · Step by step"
+},
+{
+"id": "k045",
+"en": "How to stake,"
+},
+{
+"id": "k046",
+"en": "step by step."
+},
+{
+"id": "k047",
+"en": "Step"
+},
+{
+"id": "k048",
+"en": "Get #SECT and a little ETH"
+},
+{
+"id": "k049",
+"en": "From buying #SECT to claiming your first rewards. Depositing takes two confirmations in your wallet; claiming and withdrawing take one."
+},
+{
+"id": "k050",
+"en": "Before you start"
+},
+{
+"id": "k051",
+"en": "Buy #SECT on Uniswap, on Ethereum mainnet, and keep a little ETH in the same wallet: every confirmation pays a small network fee in ETH."
+},
+{
+"id": "k052",
+"en": "Buy #SECT on Uniswap"
+},
+{
+"id": "k053",
+"en": "What you will see"
+},
+{
+"id": "k054",
+"en": "Where"
+},
+{
+"id": "k055",
+"en": "Swap"
+},
+{
+"id": "k056",
+"en": "Keep"
+},
+{
+"id": "k057",
+"en": "A little ETH for fees"
+},
+{
+"id": "k058",
+"en": "Token"
+},
+{
+"id": "k059",
+"en": "Any browser"
+},
+{
+"id": "k060",
+"en": "Open sectoraorg.com/staking"
+},
+{
+"id": "k061",
+"en": "In Chrome, Safari or your wallet’s own browser, on a phone or a computer. Check the address bar: the only real page is"
+},
+{
+"id": "k062",
+"en": "Check the address bar"
+},
+{
+"id": "k063",
+"en": "Browser"
+},
+{
+"id": "k064",
+"en": "Chrome, Safari or your wallet’s"
+},
+{
+"id": "k065",
+"en": "Connect"
+},
+{
+"id": "k066",
+"en": "Connect your wallet"
+},
+{
+"id": "k067",
+"en": "Tap"
+},
+{
+"id": "k068",
+"en": "Connect wallet"
+},
+{
+"id": "k069",
+"en": "in the console below and pick yours. On a phone the wallet app opens: approve the connection there and come back to this tab. On a computer, use your browser extension or scan the QR code with your phone."
+},
+{
+"id": "k070",
+"en": "Button"
+},
+{
+"id": "k071",
+"en": "Phone"
+},
+{
+"id": "k072",
+"en": "Approve in the app, come back"
+},
+{
+"id": "k073",
+"en": "Computer"
+},
+{
+"id": "k074",
+"en": "Extension or QR code"
+},
+{
+"id": "k075",
+"en": "Check you are on Ethereum"
+},
+{
+"id": "k076",
+"en": "The blue button now shows your address and the console reads"
+},
+{
+"id": "k077",
+"en": ". If a red message asks you to switch to the Ethereum network, change the network in your wallet."
+},
+{
+"id": "k078",
+"en": "Your address, 0x…"
+},
+{
+"id": "k079",
+"en": "Console"
+},
+{
+"id": "k080",
+"en": "If not"
+},
+{
+"id": "k081",
+"en": "Switch to Ethereum"
+},
+{
+"id": "k082",
+"en": "Estimate"
+},
+{
+"id": "k083",
+"en": "Type the amount"
+},
+{
+"id": "k084",
+"en": "Enter how many #SECT you want to deposit. The console shows what it earns per second, day, month and year before you sign anything."
+},
+{
+"id": "k085",
+"en": "Estimate first, sign after"
+},
+{
+"id": "k086",
+"en": "Field"
+},
+{
+"id": "k087",
+"en": "You deposit"
+},
+{
+"id": "k088",
+"en": "Preview"
+},
+{
+"id": "k089",
+"en": "Second · day · month · year"
+},
+{
+"id": "k090",
+"en": "Wallet · confirmation 1 of 2"
+},
+{
+"id": "k091",
+"en": "Approve the exact amount"
+},
+{
+"id": "k092",
+"en": "Deposit #SECT"
+},
+{
+"id": "k093",
+"en": ". Your wallet asks you to let the staking contract take exactly that amount, never more. Nothing moves yet."
+},
+{
+"id": "k094",
+"en": "Check before you confirm"
+},
+{
+"id": "k095",
+"en": "Request"
+},
+{
+"id": "k096",
+"en": "Approve · spending cap"
+},
+{
+"id": "k097",
+"en": "Amount"
+},
+{
+"id": "k098",
+"en": "The exact #SECT you typed"
+},
+{
+"id": "k099",
+"en": "Spender"
+},
+{
+"id": "k100",
+"en": "Wallet · confirmation 2 of 2"
+},
+{
+"id": "k101",
+"en": "Confirm the deposit"
+},
+{
+"id": "k102",
+"en": "Once the approval is confirmed on-chain, your wallet asks for the deposit itself. Confirm it and your #SECT start earning that same second."
+},
+{
+"id": "k103",
+"en": "Deposit"
+},
+{
+"id": "k104",
+"en": "Starts"
+},
+{
+"id": "k105",
+"en": "Earning that same second"
+},
+{
+"id": "k106",
+"en": "Any time"
+},
+{
+"id": "k107",
+"en": "Claim or withdraw whenever you want"
+},
+{
+"id": "k108",
+"en": "Your rewards grow live in the console."
+},
+{
+"id": "k109",
+"en": "Claim rewards"
+},
+{
+"id": "k110",
+"en": "Withdraw"
+},
+{
+"id": "k111",
+"en": "and"
+},
+{
+"id": "k112",
+"en": "Withdraw all"
+},
+{
+"id": "k113",
+"en": "take a single confirmation each, with no lock-up and no penalty. Every new deposit repeats steps 05 to 07."
+},
+{
+"id": "k114",
+"en": "No lock-up · one confirmation"
+},
+{
+"id": "k115",
+"en": "Buttons"
+},
+{
+"id": "k116",
+"en": "Claim · Withdraw · Withdraw all"
+},
+{
+"id": "k117",
+"en": "Wallet"
+},
+{
+"id": "k118",
+"en": "One confirmation each"
+},
+{
+"id": "k119",
+"en": "Go to the console"
+},
+{
+"id": "k120",
+"en": "Network fees are paid in ETH to Ethereum, not to Sectora. Nobody from Sectora will ever ask for your seed phrase or private key, or message you first to help you stake. If someone does, it is a scam."
+},
+{
+"id": "k121",
+"en": "Mainnet live"
+},
+{
+"id": "k122",
+"en": "Holder rewards · Ethereum mainnet"
+},
+{
+"id": "k123",
+"en": "Estimate it, then stake it."
+},
+{
+"id": "k124",
+"en": "Staking console"
+},
+{
+"id": "k125",
+"en": "// holder rewards"
+},
+{
+"id": "k126",
+"en": "12 months · cumulative rewards"
+},
+{
+"id": "k127",
+"en": "Staking contract:"
+},
+{
+"id": "k128",
+"en": ". You only approve the exact amount you deposit, never more, and your wallet must show this same address when you approve."
+},
+{
+"id": "k129",
+"en": "% a year on what you deposit, accrued every second, straight from your own wallet. Type an amount to see what it earns, then connect and deposit."
+},
+{
+"id": "k130",
+"en": "First time? Read the step-by-step guide"
+},
+{
+"id": "k131",
+"en": "Connect and approve"
+},
+{
+"id": "k132",
+"en": "Connect your wallet and approve the exact amount you want to deposit, never more. Then confirm the deposit."
+},
+{
+"id": "k133",
+"en": "Exact amount only"
+},
+{
+"id": "k134",
+"en": "Earn every second"
+},
+{
+"id": "k135",
+"en": "Rewards start accruing the second your deposit lands and grow continuously while it stays in."
+},
+{
+"id": "k136",
+"en": "% APY · every second"
+},
+{
+"id": "k137",
+"en": "Claim and withdraw"
+},
+{
+"id": "k138",
+"en": "Claim your rewards whenever you like and withdraw part or all of your deposit at any time, with no penalty."
+},
+{
+"id": "k139",
+"en": "No lock-up · no fees"
+},
+{
+"id": "k140",
+"en": "The program, in one table."
+},
+{
+"id": "k141",
+"en": "Every term below is enforced by the contract, not by a promise on this page."
+},
+{
+"id": "k142",
+"en": "08 terms · on-chain"
+},
+{
+"id": "k143",
+"en": "Read from the contract"
+},
+{
+"id": "k144",
+"en": "No compounding"
+},
+{
+"id": "k145",
+"en": "Claim"
+},
+{
+"id": "k146",
+"en": "Also after withdrawing"
+},
+{
+"id": "k147",
+"en": "Withdraw any time, no penalty"
+},
+{
+"id": "k148",
+"en": "Approval"
+},
+{
+"id": "k149",
+"en": "Exact amount"
+},
+{
+"id": "k150",
+"en": "Never unlimited"
+},
+{
+"id": "k151",
+"en": "Funded by"
+},
+{
+"id": "k152",
+"en": "Treasury, deposited in advance"
+},
+{
+"id": "k153",
+"en": "Rewards are paid from #SECT the treasury deposits into the contract in advance; nothing is minted. The foundation can top up the reward pool, take back the part not yet earned and adjust the rate, which only counts from that second on. Deposits and rewards already earned stay yours. If the pool ran dry, rewards would stop accruing until it is refilled. The contract has been tested but not externally audited."
+},
+{
+"id": "k154",
+"en": "Why this isn't just a promised number."
+},
+{
+"id": "k155",
+"en": "Four rules written into the contract. Each one can be checked on Etherscan without asking the foundation for anything."
+},
+{
+"id": "k156",
+"en": "04 rules"
+},
+{
+"id": "k157",
+"en": "Every reward is deposited first"
+},
+{
+"id": "k158",
+"en": "#SECT has no mint function and its ownership is renounced. The treasury transfers the reward budget into the contract before it is paid out, and the size of that pool is public on-chain."
+},
+{
+"id": "k159",
+"en": "View the pool on Etherscan"
+},
+{
+"id": "k160",
+"en": "What you earn stays earned"
+},
+{
+"id": "k161",
+"en": "The APY starts at 14.9% and the foundation can adjust it on-chain; a change only counts from that second on, so nothing already earned is ever recalculated."
+},
+{
+"id": "k162",
+"en": "View the contract on Etherscan"
+},
+{
+"id": "k163",
+"en": "Deposits never pay anyone else"
+},
+{
+"id": "k164",
+"en": "Deposits and rewards are accounted separately. No function lets the owner touch a deposit or a reward already earned, and withdrawing always works."
+},
+{
+"id": "k165",
+"en": "You approve only what you deposit"
+},
+{
+"id": "k166",
+"en": "This page asks your wallet to approve the exact amount you are depositing, never an unlimited allowance. The deposit uses all of it, so nothing stays approved afterwards."
+},
+{
+"id": "k167",
+"en": "Frequently asked."
+},
+{
+"id": "k168",
+"en": "What to know before depositing #SECT."
+},
+{
+"id": "k169",
+"en": "06 questions"
+},
+{
+"id": "k170",
+"en": "Can I deposit right now?"
+},
+{
+"id": "k171",
+"en": "Yes. Connect your wallet in the console above, enter an amount and deposit. Rewards start accruing from that moment."
+},
+{
+"id": "k172",
+"en": "When can I collect my rewards?"
+},
+{
+"id": "k173",
+"en": "Whenever you want. Rewards accrue every second and you can claim them at any time, including after you have withdrawn your deposit."
+},
+{
+"id": "k174",
+"en": "Can I withdraw whenever I want?"
+},
+{
+"id": "k175",
+"en": "Yes. There is no lock-up and no penalty. You can take out part or all of your deposit at any moment, and everything you earned until then stays claimable."
+},
+{
+"id": "k176",
+"en": "Where does the reward money come from?"
+},
+{
+"id": "k177",
+"en": "From the Sectora Foundation treasury, deposited into the contract in advance. No new tokens are created. If the reward pool ever ran out, rewards would pause until it is refilled."
+},
+{
+"id": "k178",
+"en": "Is there a limit on how much can be deposited?"
+},
+{
+"id": "k179",
+"en": "No. There is no cap on deposits. The foundation can close the program to new deposits; anyone already in can still withdraw and claim at any time."
+},
+{
+"id": "k180",
+"en": "How do I know I'm on the real contract?"
+},
+{
+"id": "k181",
+"en": "When you approve, your wallet shows the address that receives the approval. It must be 0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0, the same one shown in the console and on Etherscan. If it is different, stop."
+},
+{
+"id": "k182",
+"en": "Holder rewards for #SECT on Ethereum mainnet, paid by the Sectora Foundation treasury from a reward pool funded in advance."
+},
+{
+"id": "k183",
+"en": "Illinois, United States ·"
+},
+{
+"id": "k184",
+"en": "Staking"
+},
+{
+"id": "k185",
+"en": "Legal documents"
+},
+{
+"id": "k186",
+"en": "On-chain"
+},
+{
+"id": "k187",
+"en": "Staking contract"
+},
+{
+"id": "k188",
+"en": "#SECT token"
+},
+{
+"id": "k189",
+"en": "Support"
+},
+{
+"id": "k190",
+"en": "Copy"
+},
+{
+"id": "k191",
+"en": "Sectora app"
+},
+{
+"id": "k192",
+"en": "Coming soon"
+},
+{
+"id": "k193",
+"en": "Coming soon on the"
+},
+{
+"id": "k194",
+"en": "Coming soon on"
+},
+{
+"id": "k195",
+"en": "© 2026 Sectora Foundation · Illinois file no. 18523639"
+},
+{
+"id": "k196",
+"en": "Back to top"
+},
+{
+"id": "k197",
+"en": "Rewards are paid in #SECT from a pool funded in advance; the rate can change. Nothing on this page is a promise about the price of #SECT."
+},
+{
+"id": "k198",
+"en": "Sectora Foundation IL"
+},
+{
+"id": "k199",
+"en": "Grid 54px · raster ok"
+},
+{
+"id": "k200",
+"en": "Dial 60 ticks · 1 s each"
+},
+{
+"id": "k201",
+"en": "Contract {0}"
+},
+{
+"id": "k202",
+"en": "Accrual · every second"
+},
+{
+"id": "k203",
+"en": "Initializing"
+},
+{
+"id": "k204",
+"en": "Counting"
+},
+{
+"id": "k205",
+"en": "Signal locked"
+},
+{
+"id": "k206",
+"en": "Ready"
+},
+{
+"id": "k207",
+"en": "APY"
+},
+{
+"id": "k208",
+"en": "Month {0}"
+},
+{
+"id": "k209",
+"en": "{0} / 08 · {1}"
+},
+{
+"id": "k210",
+"en": "12 months accrued"
+},
+{
+"id": "k211",
+"en": "Next · the guide, 8 steps"
+},
+{
+"id": "k212",
+"en": "Claim or withdraw any time"
+},
+{
+"id": "k213",
+"en": "Start"
+},
+{
+"id": "k214",
+"en": "in 12 months"
+},
+{
+"id": "k215",
+"en": "Your rewards · accruing every second"
+},
+{
+"id": "k216",
+"en": "Deposited"
+},
+{
+"id": "k217",
+"en": "#SECT / min"
+},
+{
+"id": "k218",
+"en": "Cancelled in your wallet."
+},
+{
+"id": "k219",
+"en": "Deposits are not open yet."
+},
+{
+"id": "k220",
+"en": "Nothing to claim yet."
+},
+{
+"id": "k221",
+"en": "More than you have deposited."
+},
+{
+"id": "k222",
+"en": "The token spend has not been approved."
+},
+{
+"id": "k223",
+"en": "Not enough balance."
+},
+{
+"id": "k224",
+"en": "Your wallet changed network. Reload the page."
+},
+{
+"id": "k225",
+"en": "The transaction failed."
+},
+{
+"id": "k226",
+"en": "Rewards paused: the reward pool is waiting to be refilled."
+},
+{
+"id": "k227",
+"en": "Your wallet is not on the Ethereum network."
+},
+{
+"id": "k228",
+"en": "Your wallet account changed. Reload the page."
+},
+{
+"id": "k229",
+"en": "Enter a valid amount, like 1000 or 1000.5."
+},
+{
+"id": "k230",
+"en": "You do not have that many #SECT in your wallet."
+},
+{
+"id": "k231",
+"en": "Approving exactly {0} #SECT (nothing more)"
+},
+{
+"id": "k232",
+"en": "Depositing"
+},
+{
+"id": "k233",
+"en": "Claiming"
+},
+{
+"id": "k234",
+"en": "Withdrawing"
+},
+{
+"id": "k235",
+"en": "Withdrawing all"
+},
+{
+"id": "k236",
+"en": "{0}…"
+},
+{
+"id": "k237",
+"en": "{0}: confirming…"
+},
+{
+"id": "k238",
+"en": "{0}: done."
+},
+{
+"id": "k239",
+"en": "Enter the amount to withdraw, or use Withdraw all."
+},
+{
+"id": "k240",
+"en": "You have nothing deposited."
+},
+{
+"id": "k241",
+"en": "Switch your wallet to the Ethereum network."
+},
+{
+"id": "k242",
+"en": "Could not read the token decimals; stopping here."
+},
+{
+"id": "k243",
+"en": "Unexpected token decimals; stopping here."
+},
+{
+"id": "k244",
+"en": "Misconfigured: the staking contract points at a different token."
+},
+{
+"id": "k245",
+"en": "Could not verify the contract token; stopping here."
+},
+{
+"id": "k246",
+"en": "No wallet detected in this browser."
+},
+{
+"id": "k247",
+"en": "Other wallets"
+},
+{
+"id": "k248",
+"en": "Browser wallet"
+},
+{
+"id": "k249",
+"en": "Choose a wallet"
+},
+{
+"id": "k250",
+"en": "Close"
+},
+{
+"id": "k251",
+"en": "Copy connection link"
+},
+{
+"id": "k252",
+"en": "Choose your wallet app"
+},
+{
+"id": "k253",
+"en": "Detected in this browser"
+},
+{
+"id": "k254",
+"en": "Approve in the app"
+},
+{
+"id": "k255",
+"en": "Opens this page in the app"
+},
+{
+"id": "k256",
+"en": "Approve the connection in {0}, then come back to this tab."
+},
+{
+"id": "k257",
+"en": "Any WalletConnect wallet"
+},
+{
+"id": "k258",
+"en": "Approve the connection in your wallet, then come back to this tab."
+},
+{
+"id": "k259",
+"en": "Prefer your wallet’s own browser? Open this page in"
+},
+{
+"id": "k260",
+"en": "or"
+},
+{
+"id": "k261",
+"en": "Connect a wallet"
+},
+{
+"id": "k262",
+"en": "Browser extension"
+},
+{
+"id": "k263",
+"en": "Scan a QR code with your phone"
+},
+{
+"id": "k264",
+"en": "Wallet on your phone"
+},
+{
+"id": "k265",
+"en": "Scan with your phone’s wallet app (MetaMask, Trust, Binance, Coinbase…) and approve there."
+},
+{
+"id": "k266",
+"en": "Could not draw the QR code. Use Copy connection link."
+},
+{
+"id": "k267",
+"en": "Tap your wallet app. Approve the connection there, then come back to this tab."
+},
+{
+"id": "k268",
+"en": "Scan the code with your phone to connect."
+},
+{
+"id": "k269",
+"en": "Preparing a secure connection…"
+},
+{
+"id": "k270",
+"en": "WalletConnect did not load. Check your connection and try again."
+},
+{
+"id": "k271",
+"en": "The connection was rejected in the wallet."
+},
+{
+"id": "k272",
+"en": "The link expired."
+},
+{
+"id": "k273",
+"en": "Try again"
+},
+{
+"id": "k274",
+"en": "Connected"
+},
+{
+"id": "k275",
+"en": "Disconnect"
+},
+{
+"id": "k276",
+"en": "Browser wallet · {0}"
+},
+{
+"id": "k277",
+"en": "{0} · WalletConnect · {1}"
+},
+{
+"id": "k278",
+"en": "Open {0} to confirm"
+},
+{
+"id": "k279",
+"en": "Confirm in {0}"
+},
+{
+"id": "k280",
+"en": "Confirm on your phone in {0}"
+},
+{
+"id": "k281",
+"en": "your wallet"
+},
+{
+"id": "k282",
+"en": "Sectora Foundation, main site"
+},
+{
+"id": "k283",
+"en": "Example with 1,000 #SECT"
+},
+{
+"id": "k284",
+"en": "Quick amounts for the estimate"
+},
+{
+"id": "k285",
+"en": "Footer"
+},
+{
+"id": "k286",
+"en": "Language"
+},
+{
+"id": "k287",
+"en": "Copied"
+},
+{
+"id": "k288",
+"en": "Sectora Foundation — #SECT Holder Rewards"
+}
+]
