@@ -23,7 +23,9 @@
   var STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
   var MAINNET = ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org", "https://1rpc.io/eth"];
-  var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.drpc.org"];
+  // historial de eventos: los nodos publicos gratis no dan bloques antiguos (piden token de archivo); flashbots si
+  var LOGS = ["https://rpc.flashbots.net", "https://ethereum-rpc.publicnode.com"];
+  var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.gateway.tenderly.co"];
   var T_DEP = "0x2da466a7b24304f47e87fa2e1e5a81b9831ce54fec19055ce277ca2f39ba42c4"; // Deposited(address,uint256)
   var T_WD = "0x7084f5476618d8e60b11ef0d7d3f06914655adb8793e28ff7f018d4c76d505d5";  // Withdrawn(address,uint256)
   var SEL = { indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44", count: "0x0f43a677" };
@@ -105,7 +107,7 @@
         .sort(function (x, y) { return x.bn - y.bn || x.li - y.li; });
     });
   }
-  function logs(topic1) { return scan(MAINNET, STAKING, [[T_DEP, T_WD], topic1 || null], DEPLOYED); }
+  function logs(topic1) { return scan(LOGS, STAKING, [[T_DEP, T_WD], topic1 || null], DEPLOYED); }
   function stamp(list) {
     return times(MAINNET, list).then(function (x) {
       return x.map(function (o) {
