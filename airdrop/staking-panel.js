@@ -44,7 +44,10 @@
       acc: "Generated so far", of: "of {n} SECT on completing your time", calc: "Calculating with the network…", pre: "It starts counting the day the airdrop opens.", lock: "From {d} (30 days in) what you generate is yours.", mine: "What you generate is already yours.",
       who: "Wallet {a}", wNone: "no node registered with this wallet", wOn: "node on", wOff: "node off", wChk: "checking its node…", wErr: "couldn't check the network, retrying…",
       keep: "Your staking keeps working as usual. Joining our validator network is optional: just connect a Hash Node and you can add Airdrop Genesis rewards on top.",
-      newB: "New", newT: "Airdrop Genesis is open" },
+      newB: "New", newT: "Airdrop Genesis is open",
+      msgK: "Message for stakers · Airdrop Genesis",
+      msgT: "Airdrop Genesis is now open. Your staking keeps working exactly as it does today: the same rewards, no lock-up and nothing to withdraw. Taking part is optional: connect a Hash Node with this same wallet and your staked SECT also count toward Airdrop Genesis.",
+      msgA: "Your airdrop window", msgR: "Read the rules" },
     es: { loc: "es-ES", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Tu airdrop",
       h0: "Conecta tu wallet para ver <b>tu nivel.</b>", p0: "Tu staking cuenta para el airdrop, sin retirar nada.",
       h1: "Te faltan <b>{x} SECT</b> para entrar.", p1: "Con 100 SECT en staking eres Scout y entras al airdrop.",
@@ -61,7 +64,10 @@
       acc: "Llevas generado", of: "de {n} SECT al completar tu tiempo", calc: "Calculando con la red…", pre: "Empieza a contar el día de la apertura del airdrop.", lock: "Desde el {d} (30 días dentro) lo generado es tuyo.", mine: "Lo generado ya es tuyo.",
       who: "Wallet {a}", wNone: "sin nodo registrado con esta wallet", wOn: "nodo encendido", wOff: "nodo apagado", wChk: "comprobando su nodo…", wErr: "no se pudo consultar la red, reintentando…",
       keep: "Tu staking sigue funcionando con normalidad. Unirte a nuestra red de validadores es opcional: solo conecta un Hash Node y podrás sumar recompensas de Airdrop Genesis.",
-      newB: "Nuevo", newT: "Airdrop Genesis abierto" },
+      newB: "Nuevo", newT: "Airdrop Genesis abierto",
+      msgK: "Mensaje para los usuarios del stake · Airdrop Genesis",
+      msgT: "Airdrop Genesis ya está abierto. Tu staking sigue funcionando exactamente igual que hoy: las mismas recompensas, sin bloqueo y sin retirar nada. Participar es opcional: conecta un Hash Node con esta misma wallet y tus SECT en staking también cuentan para Airdrop Genesis.",
+      msgA: "Tu ventana del airdrop", msgR: "Leer las reglas" },
     pt: { loc: "pt-BR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Seu airdrop",
       h0: "Conecte sua carteira para ver <b>seu nível.</b>", p0: "Seu staking conta para o airdrop, sem sacar nada.",
       h1: "Faltam <b>{x} SECT</b> para você entrar.", p1: "Com 100 SECT em staking você é Scout e entra no airdrop.",
@@ -78,7 +84,10 @@
       acc: "Você já gerou", of: "de {n} SECT ao completar seu tempo", calc: "Calculando com a rede…", pre: "Começa a contar no dia da abertura do airdrop.", lock: "A partir de {d} (30 dias dentro) o que você gera é seu.", mine: "O que você gerou já é seu.",
       who: "Carteira {a}", wNone: "sem nó registrado nesta carteira", wOn: "nó ligado", wOff: "nó desligado", wChk: "verificando o nó…", wErr: "não foi possível consultar a rede, tentando de novo…",
       keep: "Seu staking continua funcionando normalmente. Entrar na nossa rede de validadores é opcional: basta conectar um Hash Node e você pode somar recompensas do Airdrop Genesis.",
-      newB: "Novo", newT: "Airdrop Genesis aberto" }
+      newB: "Novo", newT: "Airdrop Genesis aberto",
+      msgK: "Mensagem para quem faz staking · Airdrop Genesis",
+      msgT: "O Airdrop Genesis já está aberto. Seu staking continua funcionando exatamente como hoje: as mesmas recompensas, sem bloqueio e sem retirar nada. Participar é opcional: conecte um Hash Node com esta mesma carteira e seus SECT em staking também contam para o Airdrop Genesis.",
+      msgA: "Sua janela do airdrop", msgR: "Ler as regras" }
   };
   function pick() {
     var l = "";
@@ -183,7 +192,8 @@
     /* beside the console: the window takes the right column; the three steps go below both, side by side */
     ".pp-body.sad-on > .frame{grid-row:1}" +
     ".pp-body.sad-on > .sad{grid-column:2;grid-row:1}" +
-    ".pp-body.sad-on > .steps{grid-column:1 / -1;grid-row:2}" +
+    ".pp-body.sad-on > .sad-lede{grid-column:1 / -1;grid-row:2;margin:0 0 calc(18px - clamp(24px,3.4vw,56px));max-width:62ch;color:var(--p-ink-2);font-size:clamp(15px,1.15vw,18px);line-height:1.65;font-weight:300}" +
+    ".pp-body.sad-on > .steps{grid-column:1 / -1;grid-row:3}" +
     "@media (min-width:981px){" +
       ".pp-body.sad-on > .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid var(--p-line)}" +
       ".pp-body.sad-on > .steps > .step{grid-template-rows:auto 1fr auto;padding:clamp(22px,2.2vw,30px) clamp(18px,2vw,30px);border-bottom:0;border-left:1px solid var(--p-line)}" +
@@ -191,7 +201,16 @@
       ".pp-body.sad-on > .steps > .step:last-child{padding-right:0}" +
       ".pp-body.sad-on > .steps .fact{align-self:end}" +
     "}" +
-    "@media (max-width:980px){.pp-body.sad-on{grid-template-rows:none}.pp-body.sad-on > .frame,.pp-body.sad-on > .sad,.pp-body.sad-on > .steps{grid-column:auto;grid-row:auto}}" +
+    "@media (max-width:980px){.pp-body.sad-on{grid-template-rows:none}.pp-body.sad-on > .frame,.pp-body.sad-on > .sad,.pp-body.sad-on > .sad-lede,.pp-body.sad-on > .steps{grid-column:auto;grid-row:auto}}" +
+    /* en la cabecera, donde estaba ese texto: el mensaje para quienes ya hacen staking */
+    ".sad-msg{position:relative;max-width:52ch;padding:4px 0 4px 22px;border-left:2px solid #1569ff;font-family:'IBM Plex Sans',system-ui,sans-serif}" +
+    ".sad-msg-k{display:flex;align-items:flex-start;gap:10px;margin:0 0 12px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#0d4fd8;font-weight:500;line-height:1.5}" +
+    ".sad-msg-k i{flex:none;width:7px;height:7px;margin-top:.5em;border-radius:50%;background:#1569ff;box-shadow:0 0 0 4px rgba(21,105,255,.16)}" +
+    ".sad-msg-t{margin:0;color:var(--p-ink-2,#3c414c);font-size:clamp(15px,1.1vw,17px);line-height:1.65;font-weight:300}" +
+    ".sad-msg-a{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:14px}" +
+    ".sad-msg-a a{color:#0d4fd8;font-weight:400;font-size:15px;text-decoration:none;border-bottom:1px solid rgba(13,79,216,.32);padding-bottom:2px;transition:color .3s,border-color .3s}" +
+    ".sad-msg-a a:hover{color:#1569ff;border-color:#1569ff}" +
+    "@media (max-width:620px){.sad-msg{padding-left:16px}.sad-msg-k{font-size:10px;letter-spacing:.14em}}" +
     "@media (max-width:420px){.sad-lv{grid-template-columns:1fr 1fr}.sad-lv .pz{grid-column:1 / -1;border-left:0!important;border-top:1px solid rgba(0,0,0,.09)}}" +
     "@media (prefers-reduced-motion:reduce){.sad *{animation:none!important;transition:none!important}}" +
     /* the same frame as the staking console: square corners, blue + marks on the corners, the same
@@ -260,6 +279,23 @@
       "</div>";
     body.insertBefore(el, steps);
     body.classList.add("sad-on");
+
+    var lede = document.querySelector("#stake .pp-head > p");
+    if (lede && !document.querySelector(".sad-msg")) {
+      var msg = document.createElement("div");
+      msg.className = "sad-msg";
+      msg.innerHTML = '<p class="sad-msg-k"><i aria-hidden="true"></i>' + esc(L.msgK) + "</p>" +
+        '<p class="sad-msg-t">' + esc(L.msgT) + "</p>" +
+        '<div class="sad-msg-a"><a href="#airdrop-genesis" class="sad-msg-go">' + esc(L.msgA) + ' ↓</a><a href="' + AIRDROP_URL + '">' + esc(L.msgR) + " →</a></div>";
+      lede.parentNode.replaceChild(msg, lede);
+      lede.classList.add("sad-lede");
+      body.insertBefore(lede, steps);
+      msg.querySelector(".sad-msg-go").addEventListener("click", function (e) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (el.classList.contains("min")) setMin(false);
+      });
+    }
 
     /* la etiqueta de la cabecera: lleva a esta ventana */
     var live = document.querySelector(".hero .hero-new");

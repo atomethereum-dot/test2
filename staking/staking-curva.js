@@ -44,7 +44,8 @@
   let ano = 149;
   function leerTasa() {
     const el = document.querySelector(".sheet .apy-n") || document.querySelector(".apy-n");
-    const v = parseFloat(el && el.textContent);
+    // con un traductor la tasa puede llegar como "14,9"
+    const v = parseFloat(el && el.textContent.replace(",", "."));
     ano = DEPOSITO * (isFinite(v) ? v : 14.9) / 100;
     if (elDia) elDia.textContent = f2(ano / 365);
     if (elMes) elMes.textContent = f2(ano / 12);
