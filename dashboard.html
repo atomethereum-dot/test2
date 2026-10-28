@@ -821,6 +821,14 @@ svg{display:block}
 .wsel-sub{padding:14px 12px 6px;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--ink4);border-top:1px solid var(--hair);margin-top:6px}
 .wsel-note{padding:12px 12px 6px;color:var(--ink4);font-size:12px;line-height:1.55}
+/* WalletConnect: QR en el ordenador, apps en el movil */
+.wsel-wc{padding:6px 4px 4px}
+.wsel-wc p{padding:8px 8px 4px;color:var(--ink3);font-size:13px;line-height:1.6}
+.wsel-qr{width:min(250px,100%);margin:10px auto 6px;padding:12px;background:#fff;border-radius:10px}
+.wsel-qr svg{display:block;width:100%;height:auto}
+.wsel-wait{display:flex;align-items:center;gap:10px;padding:10px 8px;color:var(--ink4);font-size:12px}
+.wsel-wait i{width:12px;height:12px;border:2px solid rgba(255,255,255,.18);border-top-color:var(--blue2);border-radius:50%;animation:wselSp .8s linear infinite}
+@keyframes wselSp{to{transform:rotate(360deg)}}
 .wsel-f{padding:12px 18px;border-top:1px solid var(--hair);
   font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--ink4);line-height:1.7}
@@ -1360,7 +1368,7 @@ html.booting,body.booting{overflow:hidden}
 </div>
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="translations.js"></script>
-<script src="dashboard-i18n-extra.js?v=20261027d"></script>
+<script src="dashboard-i18n-extra.js?v=20261028a"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="i18n.js?v=2"></script>
 <script src="dashboard-reticle.js?v=20260820b"></script>
@@ -3203,12 +3211,12 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   const CONFIG = {
     chainId: '0xaa36a7',                 /* Sepolia testnet */
     chainName: 'Sepolia',
-    rpc: ['https://rpc.sepolia.org'],
+    rpc: ['https://ethereum-sepolia-rpc.publicnode.com', 'https://rpc.sepolia.org'],
     explorer: 'https://sepolia.etherscan.io',
     moneda: { name:'Sepolia Ether', symbol:'ETH', decimals:18 },
     token: '',                           /* direccion del tSECT: '' = aun sin desplegar */
     decimales: 18,
-    walletConnectProjectId: ''           /* opcional: activa WalletConnect si se rellena */
+    walletConnectProjectId: 'a491fc0784a2751d886adfc7a687c8cb'   /* el mismo del staking */
   };
 
   const puente = () => window.__sectoraWallet;
@@ -3219,7 +3227,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   addEventListener('eip6963:announceProvider', e => {
     const d = e.detail; if(!d || !d.info) return;
     hallados.set(d.info.uuid, d);
-    if(caja.classList.contains('on')) pinta();
+    if(caja.classList.contains('on') && !wcVista) pinta();
   });
   dispatchEvent(new Event('eip6963:requestProvider'));
 
@@ -3288,6 +3296,8 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   }
 
   function desconecta(silencio){
+    /* una sesion de WalletConnect se cierra tambien en la app de la wallet */
+    if(prov && prov.__rdns === 'walletconnect' && prov.disconnect){ try{ prov.disconnect().catch(() => {}); }catch(e){} wcPromesa = null; }
     prov = null; cuenta = null; cadena = null;
     try{ localStorage.removeItem('sectora:wallet'); }catch(e){}
     const p = puente(); if(p) p.onDisconnect();
@@ -3323,22 +3333,87 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     }
   }
 
-  /* ---- WalletConnect: solo si hay projectId configurado ---- */
-  async function porWalletConnect(){
-    if(!CONFIG.walletConnectProjectId){
-      avisar(t('hashdash.wallet.wcNotConfigured','WalletConnect not configured yet')); return;
+  /* ---- WalletConnect: QR en el ordenador; en el movil, botones que abren la app de la wallet.
+     Usa el proveedor local (el mismo que el staking): mainnet como red de la sesion y Sepolia
+     opcional; al conectar, conecta() pasa la wallet a Sepolia como con cualquier otra. ---- */
+  const WC_JS = '/walletconnect-provider.min.js?v=20260809a', QR_JS = '/qrcode-generator.min.js?v=20260809a';
+  const WC_APPS = [
+    {n:'MetaMask', k:'metaMask', s:'metamask://'},
+    {n:'Trust Wallet', k:'trust', s:'trust://'},
+    {n:'Rainbow', k:'rainbow', s:'rainbow://'}
+  ];
+  const cargaJS = (src, listo) => new Promise((ok, mal) => {
+    if(listo()) return ok();
+    const sc = document.createElement('script'); sc.src = src;
+    sc.onload = () => listo() ? ok() : mal(new Error('load')); sc.onerror = mal;
+    document.head.appendChild(sc);
+  });
+  const guardaWC = v => { try{ v ? localStorage.setItem('WALLETCONNECT_DEEPLINK_CHOICE', v) : localStorage.removeItem('WALLETCONNECT_DEEPLINK_CHOICE'); }catch(e){} };
+  let wcPromesa = null, wcVista = false;
+  const marcaWC = () => { try{ localStorage.setItem('sectora:wc-pending', String(Date.now())); }catch(e){} };
+  function proveedorWC(){
+    if(wcPromesa) return wcPromesa;
+    wcPromesa = cargaJS(WC_JS, () => !!window.WalletConnectEthereumProvider)
+      .then(() => window.WalletConnectEthereumProvider.EthereumProvider.init({
+        projectId: CONFIG.walletConnectProjectId,
+        chains: [1], optionalChains: [11155111, 1],
+        rpcMap: { 1: 'https://ethereum-rpc.publicnode.com', 11155111: CONFIG.rpc[0] },
+        showQrModal: false,
+        metadata: { name: 'Sectora Dashboard', description: 'Sectora testnet dashboard and Hash Node.',
+          url: location.origin, icons: [location.origin + '/icons/v2/icon-192.png'] }
+      }))
+      .catch(e => { wcPromesa = null; throw e; });
+    return wcPromesa;
+  }
+  function vistaWC(uri){
+    wcVista = true;
+    lista.innerHTML = '';
+    const v = document.createElement('div'); v.className = 'wsel-wc';
+    const txt = document.createElement('p');
+    txt.textContent = movil
+      ? t('hashdash.wallet.wcPick','Choose your wallet app. Approve the connection there, then come back to this tab.')
+      : t('hashdash.wallet.wcScan','Scan this QR code with your wallet app (MetaMask, Trust Wallet, Rainbow…).');
+    v.appendChild(txt);
+    if(movil){
+      WC_APPS.forEach(a => v.appendChild(fila({ icono: LOGO()[a.k], nombre: a.n, etiqueta: t('hashdash.wallet.app','App'),
+        accion: () => { guardaWC(JSON.stringify({href: a.s, name: a.n})); marcaWC(); location.href = a.s + 'wc?uri=' + encodeURIComponent(uri); } })));
+      v.appendChild(fila({ icono: LOGO().walletConnect, nombre: t('hashdash.wallet.wcOther','Other wallet'), etiqueta: '',
+        accion: () => { guardaWC(null); marcaWC(); location.href = uri; } }));
+    } else {
+      const q = document.createElement('div'); q.className = 'wsel-qr'; v.appendChild(q);
+      cargaJS(QR_JS, () => !!window.SectoraQR).then(() => {
+        const qr = window.SectoraQR(0, 'M'); qr.addData(uri); qr.make(); q.innerHTML = qr.createSvgTag({cellSize: 4, margin: 2});
+      }).catch(() => { q.remove(); });
     }
+    v.appendChild(fila({ icono: ENLACE, nombre: t('hashdash.wallet.wcCopyUri','Copy connection link'), etiqueta: '',
+      accion: () => (navigator.clipboard ? navigator.clipboard.writeText(uri) : Promise.reject())
+        .then(() => avisar(t('hashdash.wallet.copied','Link copied')), () => avisar(uri)) }));
+    const w = document.createElement('div'); w.className = 'wsel-wait';
+    w.innerHTML = '<i></i><span></span>'; w.querySelector('span').textContent = t('hashdash.wallet.wcWait','Waiting for approval in your wallet…');
+    v.appendChild(w);
+    lista.appendChild(v);
+  }
+  async function porWalletConnect(){
+    let wc = null, alUri = null;
     try{
       avisar(t('hashdash.wallet.wcOpening','Opening WalletConnect…'));
-      const mod = await import('https://esm.sh/@walletconnect/ethereum-provider@2.13.0');
-      const wc = await mod.EthereumProvider.init({
-        projectId: CONFIG.walletConnectProjectId,
-        chains: [parseInt(CONFIG.chainId, 16)],
-        showQrModal: true
-      });
-      await wc.enable();
-      conecta(wc);
-    }catch(e){ avisar(t('hashdash.wallet.wcFail','WalletConnect failed')); }
+      wc = await proveedorWC();
+      alUri = uri => vistaWC(uri);
+      wc.on('display_uri', alUri);
+      const espera = new Promise((_, mal) => setTimeout(() => mal(new Error('timeout')), 180000));
+      await Promise.race([wc.connect ? wc.connect() : wc.enable(), espera]);
+      wc.removeListener && wc.removeListener('display_uri', alUri);
+      wcVista = false;
+      if(!movil) guardaWC(null);   /* en el ordenador el SDK no debe abrir apps al firmar */
+      wc.__rdns = 'walletconnect';
+      wc.on('session_delete', () => desconecta(true));
+      await conecta(wc);
+    }catch(e){
+      if(wc && alUri && wc.removeListener) wc.removeListener('display_uri', alUri);
+      wcVista = false; wcPromesa = null;
+      if(caja.classList.contains('on')) pinta();
+      avisar(t('hashdash.wallet.wcFail','WalletConnect failed'));
+    }
   }
 
   /* ---- listado ---- */
@@ -3349,7 +3424,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     if(window.SECTORA_WALLET_LOGOS || document.getElementById('wselLogos')) return;
     const sc = document.createElement('script');
     sc.id = 'wselLogos'; sc.src = '/dashboard-wallet-logos.js';
-    sc.onload = () => { if(caja.classList.contains('on')) pinta(); };
+    sc.onload = () => { if(caja.classList.contains('on') && !wcVista) pinta(); };
     document.head.appendChild(sc);
   }
   /* wallets compatibles con Ethereum que permiten la red de pruebas Sepolia.
@@ -3398,7 +3473,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 
     lista.appendChild(fila({
       icono: LOGO().walletConnect, nombre: 'WalletConnect',
-      etiqueta: CONFIG.walletConnectProjectId ? t('hashdash.wallet.qrCode','QR code') : t('hashdash.wallet.soon','Soon'),
+      etiqueta: movil ? t('hashdash.wallet.app','App') : t('hashdash.wallet.qrCode','QR code'),
       accion: porWalletConnect
     }));
 
@@ -3449,6 +3524,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 
   function abre(){
     cargaLogos();
+    wcVista = false;
     pinta();
     caja.classList.add('on');
     requestAnimationFrame(() => caja.classList.add('vis'));
@@ -3477,6 +3553,19 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   setTimeout(async () => {
     let guardado = null;
     try{ guardado = localStorage.getItem('sectora:wallet'); }catch(e){}
+    /* sesion de WalletConnect: tambien si la pagina se recargo mientras se aprobaba en la app */
+    let pend = 0; try{ pend = +localStorage.getItem('sectora:wc-pending') || 0; localStorage.removeItem('sectora:wc-pending'); }catch(e){}
+    if(guardado === 'walletconnect' || Date.now() - pend < 600000){
+      try{
+        const wc = await proveedorWC();
+        if(wc.session && wc.accounts && wc.accounts.length){
+          wc.__rdns = 'walletconnect'; wc.on('session_delete', () => desconecta(true));
+          prov = wc; escucha(wc); await aplica(wc.accounts[0]);
+          if(cadena && cadena.toLowerCase() !== CONFIG.chainId) cambiaRed();
+        }
+      }catch(e){}
+      return;
+    }
     if(!guardado) return;
     const d = [...hallados.values()].find(x => x.info.rdns === guardado);
     const p = d ? d.provider : window.ethereum;
