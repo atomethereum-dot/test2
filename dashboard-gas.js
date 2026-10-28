@@ -14,37 +14,37 @@
   var T = {
     en: { k: "Free gas · Sepolia", h: "Get free Sepolia ETH", p: "Copy your address, open a faucet and paste it. If one fails, try the next one: a little Sepolia ETH covers every step.",
       qn: "No account and no balance needed · every 12 h", gg: "With your Google account · once a day", pow: "No requirements: leave the tab open a few minutes while it fills up",
-      best: "Recommended", open: "Open", addr: "Your address", copy: "Copy", copied: "Copied", noacct: "Connect your wallet to copy your address here.", close: "Close" },
+      best: "Recommended", open: "Open", addr: "Your address", copy: "Copy", copied: "Copied", noacct: "Connect your wallet to copy your address here.", close: "Close", mk: "If it does not appear automatically", mp: "Sepolia ETH is the native currency of the Sepolia network, so it has no contract address. If it does not appear in your wallet automatically, add the Sepolia network manually with these details:", nn: "Network name", ci: "Chain ID", rp: "RPC URL", sy: "Currency symbol", ex: "Block explorer" },
     es: { k: "Gas gratis · Sepolia", h: "Consigue ETH de Sepolia gratis", p: "Copia tu dirección, abre un grifo y pégala. Si uno falla, prueba el siguiente: con un poco de ETH de Sepolia te alcanza para todos los pasos.",
       qn: "Sin cuenta ni saldo previo · cada 12 h", gg: "Con tu cuenta de Google · una vez al día", pow: "Sin requisitos: deja la pestaña abierta unos minutos mientras se llena",
-      best: "Recomendado", open: "Abrir", addr: "Tu dirección", copy: "Copiar", copied: "Copiada", noacct: "Conecta tu wallet para copiar aquí tu dirección.", close: "Cerrar" },
+      best: "Recomendado", open: "Abrir", addr: "Tu dirección", copy: "Copiar", copied: "Copiada", noacct: "Conecta tu wallet para copiar aquí tu dirección.", close: "Cerrar", mk: "Si no aparece automáticamente", mp: "El ETH de Sepolia es la moneda nativa de la red Sepolia, por lo que no tiene dirección de contrato. Si no aparece automáticamente en tu wallet, agrega la red Sepolia de forma manual con estos datos:", nn: "Nombre de la red", ci: "Chain ID", rp: "URL de RPC", sy: "Símbolo de la moneda", ex: "Explorador de bloques" },
     pt: { k: "Gás grátis · Sepolia", h: "Consiga ETH da Sepolia grátis", p: "Copie seu endereço, abra uma torneira e cole. Se uma falhar, tente a próxima: um pouco de ETH da Sepolia basta para todos os passos.",
       qn: "Sem conta e sem saldo · a cada 12 h", gg: "Com sua conta Google · uma vez por dia", pow: "Sem requisitos: deixe a aba aberta alguns minutos enquanto enche",
-      best: "Recomendado", open: "Abrir", addr: "Seu endereço", copy: "Copiar", copied: "Copiado", noacct: "Conecte sua carteira para copiar seu endereço aqui.", close: "Fechar" },
+      best: "Recomendado", open: "Abrir", addr: "Seu endereço", copy: "Copiar", copied: "Copiado", noacct: "Conecte sua carteira para copiar seu endereço aqui.", close: "Fechar", mk: "Se não aparecer automaticamente", mp: "O ETH da Sepolia é a moeda nativa da rede Sepolia, por isso não tem endereço de contrato. Se não aparecer automaticamente na sua carteira, adicione a rede Sepolia manualmente com estes dados:", nn: "Nome da rede", ci: "Chain ID", rp: "URL do RPC", sy: "Símbolo da moeda", ex: "Explorador de blocos" },
     fr: { k: "Gas gratuit · Sepolia", h: "Obtenez de l’ETH Sepolia gratuit", p: "Copiez votre adresse, ouvrez un faucet et collez-la. Si l’un échoue, essayez le suivant : un peu d’ETH Sepolia suffit pour toutes les étapes.",
       qn: "Sans compte ni solde · toutes les 12 h", gg: "Avec votre compte Google · une fois par jour", pow: "Sans conditions : laissez l’onglet ouvert quelques minutes pendant qu’il se remplit",
-      best: "Recommandé", open: "Ouvrir", addr: "Votre adresse", copy: "Copier", copied: "Copiée", noacct: "Connectez votre wallet pour copier votre adresse ici.", close: "Fermer" },
+      best: "Recommandé", open: "Ouvrir", addr: "Votre adresse", copy: "Copier", copied: "Copiée", noacct: "Connectez votre wallet pour copier votre adresse ici.", close: "Fermer", mk: "S’il n’apparaît pas automatiquement", mp: "L’ETH Sepolia est la monnaie native du réseau Sepolia : il n’a donc pas d’adresse de contrat. S’il n’apparaît pas automatiquement dans votre wallet, ajoutez le réseau Sepolia manuellement avec ces informations :", nn: "Nom du réseau", ci: "Chain ID", rp: "URL RPC", sy: "Symbole de la devise", ex: "Explorateur de blocs" },
     de: { k: "Gratis-Gas · Sepolia", h: "Kostenloses Sepolia-ETH holen", p: "Kopiere deine Adresse, öffne einen Faucet und füge sie ein. Wenn einer nicht klappt, nimm den nächsten: etwas Sepolia-ETH reicht für alle Schritte.",
       qn: "Ohne Konto und ohne Guthaben · alle 12 h", gg: "Mit deinem Google-Konto · einmal am Tag", pow: "Ohne Voraussetzungen: Tab ein paar Minuten offen lassen, bis er sich füllt",
-      best: "Empfohlen", open: "Öffnen", addr: "Deine Adresse", copy: "Kopieren", copied: "Kopiert", noacct: "Verbinde deine Wallet, um deine Adresse hier zu kopieren.", close: "Schließen" },
+      best: "Empfohlen", open: "Öffnen", addr: "Deine Adresse", copy: "Kopieren", copied: "Kopiert", noacct: "Verbinde deine Wallet, um deine Adresse hier zu kopieren.", close: "Schließen", mk: "Falls es nicht automatisch erscheint", mp: "Sepolia-ETH ist die native Währung des Sepolia-Netzwerks und hat daher keine Vertragsadresse. Falls es nicht automatisch in deiner Wallet erscheint, füge das Sepolia-Netzwerk mit diesen Angaben manuell hinzu:", nn: "Netzwerkname", ci: "Chain-ID", rp: "RPC-URL", sy: "Währungssymbol", ex: "Block-Explorer" },
     ru: { k: "Бесплатный газ · Sepolia", h: "Получите бесплатный Sepolia ETH", p: "Скопируйте адрес, откройте кран и вставьте его. Если один не сработал, попробуйте следующий: немного Sepolia ETH хватит на все шаги.",
       qn: "Без аккаунта и баланса · каждые 12 ч", gg: "С аккаунтом Google · раз в день", pow: "Без условий: оставьте вкладку открытой на несколько минут, пока она наполняется",
-      best: "Рекомендуем", open: "Открыть", addr: "Ваш адрес", copy: "Копировать", copied: "Скопировано", noacct: "Подключите кошелёк, чтобы скопировать адрес здесь.", close: "Закрыть" },
+      best: "Рекомендуем", open: "Открыть", addr: "Ваш адрес", copy: "Копировать", copied: "Скопировано", noacct: "Подключите кошелёк, чтобы скопировать адрес здесь.", close: "Закрыть", mk: "Если не появляется автоматически", mp: "Sepolia ETH — нативная валюта сети Sepolia, поэтому у неё нет адреса контракта. Если она не появилась в кошельке автоматически, добавьте сеть Sepolia вручную с этими данными:", nn: "Название сети", ci: "Chain ID", rp: "URL RPC", sy: "Символ валюты", ex: "Обозреватель блоков" },
     zh: { k: "免费 Gas · Sepolia", h: "免费领取 Sepolia ETH", p: "复制你的地址，打开一个水龙头并粘贴。如果一个失败，就试下一个：少量 Sepolia ETH 就足够完成所有步骤。",
       qn: "无需账户，无需余额 · 每 12 小时", gg: "使用你的 Google 账户 · 每天一次", pow: "无任何要求：让标签页保持打开几分钟，等它累积",
-      best: "推荐", open: "打开", addr: "你的地址", copy: "复制", copied: "已复制", noacct: "连接钱包后可在此复制你的地址。", close: "关闭" },
+      best: "推荐", open: "打开", addr: "你的地址", copy: "复制", copied: "已复制", noacct: "连接钱包后可在此复制你的地址。", close: "关闭", mk: "如果没有自动显示", mp: "Sepolia ETH 是 Sepolia 网络的原生代币，因此没有合约地址。如果它没有自动显示在你的钱包中，请使用以下信息手动添加 Sepolia 网络：", nn: "网络名称", ci: "链 ID", rp: "RPC 地址", sy: "货币符号", ex: "区块浏览器" },
     ja: { k: "無料ガス · Sepolia", h: "Sepolia ETH を無料で入手", p: "アドレスをコピーし、フォーセットを開いて貼り付けます。うまくいかなければ次を試してください。少しの Sepolia ETH ですべての手順に足ります。",
       qn: "アカウント・残高不要 · 12 時間ごと", gg: "Google アカウントで · 1 日 1 回", pow: "条件なし：数分間タブを開いたままにして貯める",
-      best: "おすすめ", open: "開く", addr: "あなたのアドレス", copy: "コピー", copied: "コピー済み", noacct: "ウォレットを接続すると、ここでアドレスをコピーできます。", close: "閉じる" },
+      best: "おすすめ", open: "開く", addr: "あなたのアドレス", copy: "コピー", copied: "コピー済み", noacct: "ウォレットを接続すると、ここでアドレスをコピーできます。", close: "閉じる", mk: "自動で表示されない場合", mp: "Sepolia ETH は Sepolia ネットワークのネイティブ通貨のため、コントラクトアドレスはありません。ウォレットに自動で表示されない場合は、以下の情報で Sepolia ネットワークを手動で追加してください。", nn: "ネットワーク名", ci: "チェーン ID", rp: "RPC URL", sy: "通貨記号", ex: "ブロックエクスプローラー" },
     ko: { k: "무료 가스 · Sepolia", h: "Sepolia ETH 무료로 받기", p: "주소를 복사하고 포싯을 열어 붙여넣으세요. 하나가 안 되면 다음 것을 시도하세요. 약간의 Sepolia ETH로 모든 단계를 진행할 수 있습니다.",
       qn: "계정·잔액 필요 없음 · 12시간마다", gg: "Google 계정으로 · 하루 한 번", pow: "조건 없음: 탭을 몇 분간 열어 두면 채워집니다",
-      best: "추천", open: "열기", addr: "내 주소", copy: "복사", copied: "복사됨", noacct: "지갑을 연결하면 여기서 주소를 복사할 수 있습니다.", close: "닫기" },
+      best: "추천", open: "열기", addr: "내 주소", copy: "복사", copied: "복사됨", noacct: "지갑을 연결하면 여기서 주소를 복사할 수 있습니다.", close: "닫기", mk: "자동으로 표시되지 않으면", mp: "Sepolia ETH는 Sepolia 네트워크의 기본 통화이므로 컨트랙트 주소가 없습니다. 지갑에 자동으로 표시되지 않으면 아래 정보로 Sepolia 네트워크를 직접 추가하세요.", nn: "네트워크 이름", ci: "체인 ID", rp: "RPC URL", sy: "통화 기호", ex: "블록 탐색기" },
     ar: { k: "غاز مجاني · Sepolia", h: "احصل على ETH على Sepolia مجانًا", p: "انسخ عنوانك وافتح صنبورًا والصقه. إذا فشل أحدها جرّب التالي: القليل من ETH على Sepolia يكفي لكل الخطوات.",
       qn: "بلا حساب وبلا رصيد · كل 12 ساعة", gg: "بحساب Google · مرة يوميًا", pow: "بلا شروط: اترك التبويب مفتوحًا بضع دقائق حتى يمتلئ",
-      best: "موصى به", open: "فتح", addr: "عنوانك", copy: "نسخ", copied: "تم النسخ", noacct: "اربط محفظتك لنسخ عنوانك هنا.", close: "إغلاق" },
+      best: "موصى به", open: "فتح", addr: "عنوانك", copy: "نسخ", copied: "تم النسخ", noacct: "اربط محفظتك لنسخ عنوانك هنا.", close: "إغلاق", mk: "إذا لم يظهر تلقائيًا", mp: "‏ETH على Sepolia هو العملة الأصلية لشبكة Sepolia، لذلك ليس له عنوان عقد. إذا لم يظهر تلقائيًا في محفظتك، فأضِف شبكة Sepolia يدويًا بهذه البيانات:", nn: "اسم الشبكة", ci: "معرّف السلسلة (Chain ID)", rp: "رابط RPC", sy: "رمز العملة", ex: "مستكشف الكتل" },
     hi: { k: "मुफ़्त गैस · Sepolia", h: "मुफ़्त Sepolia ETH पाएँ", p: "अपना पता कॉपी करें, एक फ़ॉसेट खोलें और पेस्ट करें। एक न चले तो अगला आज़माएँ: थोड़ा Sepolia ETH सभी चरणों के लिए काफ़ी है।",
       qn: "न खाता, न बैलेंस · हर 12 घंटे", gg: "अपने Google खाते से · दिन में एक बार", pow: "कोई शर्त नहीं: टैब कुछ मिनट खुला छोड़ें, वह भरता जाएगा",
-      best: "सुझाया गया", open: "खोलें", addr: "आपका पता", copy: "कॉपी", copied: "कॉपी हुआ", noacct: "अपना पता यहाँ कॉपी करने के लिए वॉलेट जोड़ें।", close: "बंद करें" }
+      best: "सुझाया गया", open: "खोलें", addr: "आपका पता", copy: "कॉपी", copied: "कॉपी हुआ", noacct: "अपना पता यहाँ कॉपी करने के लिए वॉलेट जोड़ें।", close: "बंद करें", mk: "अगर अपने-आप न दिखे", mp: "Sepolia ETH, Sepolia नेटवर्क की मूल मुद्रा है, इसलिए इसका कोई कॉन्ट्रैक्ट पता नहीं है। अगर यह आपके वॉलेट में अपने-आप न दिखे, तो इन विवरणों से Sepolia नेटवर्क मैन्युअल रूप से जोड़ें:", nn: "नेटवर्क का नाम", ci: "चेन ID", rp: "RPC URL", sy: "मुद्रा चिह्न", ex: "ब्लॉक एक्सप्लोरर" }
   };
   function L() { var l = (document.documentElement.lang || "en").slice(0, 2); return T[l] || T.en; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
@@ -74,6 +74,16 @@
     ".gas-l b i{margin-left:8px;padding:3px 6px;border:1px solid rgba(61,220,151,.45);color:#3ddc97;font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;font-style:normal;vertical-align:2px}" +
     ".gas-l small{display:block;margin-top:4px;font-size:12.5px;line-height:1.45;color:#7b8598}" +
     ".gas-l .go{font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:#4d8dff;white-space:nowrap}" +
+    /* datos de la red Sepolia para agregarla a mano */
+    ".gas-m{margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}" +
+    ".gas-m h4{margin:0;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.18em;text-transform:uppercase;color:#4d8dff}" +
+    ".gas-m p{margin:8px 0 6px;font-size:13px;line-height:1.55;color:#b6c0d1}" +
+    ".gas-r{display:grid;grid-template-columns:minmax(0,128px) minmax(0,1fr);gap:4px 12px;align-items:center;padding:9px 0;border-top:1px solid rgba(255,255,255,.06)}" +
+    ".gas-r > span{font:400 9.5px/1.4 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#7b8598}" +
+    ".gas-r > div{display:flex;align-items:center;gap:8px;min-width:0}" +
+    ".gas-r code{flex:1;min-width:0;font:400 12.5px/1.45 'IBM Plex Mono',monospace;color:#f2f5fa;overflow-wrap:anywhere}" +
+    ".gas-r button{flex:none;padding:6px 9px;border:1px solid rgba(255,255,255,.14);background:none;color:#b6c0d1;cursor:pointer;font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase}" +
+    "@media (max-width:520px){.gas-r{grid-template-columns:1fr}}" +
     "@media (prefers-reduced-motion:reduce){.gas,.gas-box{transition:none}}";
 
   var box = null, addr = null;
@@ -94,12 +104,26 @@
       '<p class="gas-k">' + esc(t.k) + "</p><h3>" + esc(t.h) + '</h3><p class="gas-p">' + esc(t.p) + "</p>" +
       (addr ? '<div class="gas-ad"><span>' + esc(t.addr) + "</span><code>" + esc(addr) + '</code><button type="button" class="gas-cp">' + esc(t.copy) + "</button></div>"
             : '<p class="gas-na">' + esc(t.noacct) + "</p>") +
-      '<ul class="gas-l">' + rows + "</ul></div>";
+      '<ul class="gas-l">' + rows + "</ul>" + manual(t) + "</div>";
+    box.querySelectorAll(".gas-m [data-cp]").forEach(function (bt) {
+      bt.addEventListener("click", function () {
+        var v = bt.getAttribute("data-cp"), ok = function () { bt.textContent = t.copied; setTimeout(function () { bt.textContent = t.copy; }, 1600); };
+        if (navigator.clipboard) navigator.clipboard.writeText(v).then(ok, function () {}); else ok();
+      });
+    });
     var cp = box.querySelector(".gas-cp");
     if (cp) cp.addEventListener("click", function () {
       var done = function () { cp.textContent = t.copied; setTimeout(function () { cp.textContent = t.copy; }, 1600); };
       if (navigator.clipboard) navigator.clipboard.writeText(addr).then(done, function () {}); else done();
     });
+  }
+  /* si el ETH de Sepolia no aparece solo: no tiene contrato, se agrega la red a mano */
+  var RED = [["nn", "Sepolia"], ["ci", "11155111"], ["rp", "https://ethereum-sepolia-rpc.publicnode.com", 1], ["sy", "ETH"], ["ex", "https://sepolia.etherscan.io"]];
+  function manual(t) {
+    return '<div class="gas-m"><h4>' + esc(t.mk) + "</h4><p>" + esc(t.mp) + "</p>" + RED.map(function (r) {
+      return '<div class="gas-r"><span>' + esc(t[r[0]]) + "</span><div><code>" + esc(r[1]) + "</code>" +
+        (r[2] ? '<button type="button" data-cp="' + esc(r[1]) + '">' + esc(t.copy) + "</button>" : "") + "</div></div>";
+    }).join("") + "</div>";
   }
   function open() {
     if (!box) build();

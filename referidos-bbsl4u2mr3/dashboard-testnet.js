@@ -115,6 +115,16 @@
         '<button class="btn" id="tnAdd" type="button" style="width:100%;padding:12px">' + tr('hashdash.tn.addToken','Add tSECT to your wallet') + '</button>' +
         '<p class="note" style="margin-top:14px"><span data-i18n="hashdash.tn.gasNote">You also need a little Sepolia ETH to pay gas.</span> ' +
           '<a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer" style="color:var(--blue)" data-i18n="hashdash.tn.gasLink">Get Sepolia ETH ↗</a></p>' +
+        /* datos para agregarlos a mano si la wallet no los muestra sola */
+        '<div class="tn-man">' +
+          '<span class="lbl" data-i18n="hashdash.tn.manK">Add manually</span>' +
+          '<p class="note" data-i18n="hashdash.tn.manP">If Sepolia ETH or tSECT does not appear in your wallet automatically, please add it manually using the details below.</p>' +
+          '<div class="tn-man-r"><span data-i18n="hashdash.tn.manNet">Sepolia network</span><div><code>Chain ID ' + cfg.chainId + '</code></div></div>' +
+          '<div class="tn-man-r"><span data-i18n="hashdash.tn.manRpc">RPC URL</span><div><code>' + (cfg.rpc || 'https://ethereum-sepolia-rpc.publicnode.com') + '</code><button type="button" data-cp="' + (cfg.rpc || 'https://ethereum-sepolia-rpc.publicnode.com') + '" data-i18n="hashdash.tn.manCopy">Copy</button></div></div>' +
+          '<div class="tn-man-r"><span data-i18n="hashdash.tn.manEth">Sepolia ETH</span><div><em data-i18n="hashdash.tn.manEthV">Native currency of the Sepolia network. It has no contract address: it appears once your wallet is on Sepolia.</em></div></div>' +
+          '<div class="tn-man-r"><span data-i18n="hashdash.tn.manTok">tSECT contract</span><div><code>' + cfg.token + '</code><button type="button" data-cp="' + cfg.token + '" data-i18n="hashdash.tn.manCopy">Copy</button></div>' +
+            '<em data-i18n="hashdash.tn.manTokV">Symbol tSECT · 18 decimals · Sepolia network</em></div>' +
+        '</div>' +
       '</div>' +
       '<div class="card tn-card">' +
         '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">' +
@@ -176,6 +186,25 @@
 
     q('#tnFaucet').onclick = reclamaFaucet;
     q('#tnAdd').onclick = anadeToken;
+    /* copiar la RPC o el contrato del tSECT */
+    grid.querySelectorAll('.tn-man [data-cp]').forEach(bt => bt.addEventListener('click', () => {
+      const v = bt.getAttribute('data-cp');
+      const ok = () => { bt.textContent = tr('hashdash.tn.manCopied','Copied'); setTimeout(() => { bt.textContent = tr('hashdash.tn.manCopy','Copy'); }, 1600); };
+      (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(ok, () => window.prompt('', v));
+    }));
+    if(!document.getElementById('tnManCss')){
+      const st = document.createElement('style'); st.id = 'tnManCss';
+      st.textContent = '.tn-man{margin-top:18px;padding-top:16px;border-top:1px solid var(--hair)}.tn-man .note{margin:8px 0 8px;font:300 13.5px/1.6 "IBM Plex Sans",system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--ink3)}' +
+        '.tn-man-r{display:grid;grid-template-columns:minmax(0,130px) minmax(0,1fr);gap:4px 14px;align-items:start;padding:10px 0;border-top:1px solid var(--hair)}' +
+        '.tn-man-r > span{font:400 9px/1.6 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4)}' +
+        '.tn-man-r > div{display:flex;align-items:center;gap:8px;min-width:0}' +
+        '.tn-man-r code{flex:1;min-width:0;overflow-wrap:anywhere;font:400 12px/1.45 "IBM Plex Mono",monospace;color:var(--ink)}' +
+        '.tn-man-r em{grid-column:2;font-style:normal;font-size:12.5px;line-height:1.5;color:var(--ink3)}.tn-man-r > div em{grid-column:auto}' +
+        '.tn-man-r button{flex:none;padding:6px 9px;border:1px solid var(--rule);background:transparent;color:var(--ink2);cursor:pointer;font:400 9px/1 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}' +
+        '.tn-man-r button:hover{color:var(--ink);border-color:var(--blue)}' +
+        '@media (max-width:520px){.tn-man-r{grid-template-columns:1fr}.tn-man-r em{grid-column:1}}';
+      document.head.appendChild(st);
+    }
     q('#tnClaim').onclick = cobra;
   }
 
