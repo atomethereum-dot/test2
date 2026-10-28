@@ -128,6 +128,21 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
 .mini th{background:none;padding-top:0}
 .mini tr:last-child td{border-bottom:0}
 .mini a{font-size:12px}
+/* ultimos registros: la mas reciente arriba, con su numero de orden */
+.rc{min-width:760px}
+.rc td.n{font:500 13px var(--mono);color:var(--ink-3)}
+.rc tr:first-child td.n{color:var(--blue-l)}
+.rc .when{display:flex;align-items:center;gap:8px}
+.more{display:flex;justify-content:center;margin-top:12px}
+.rc .m-only{display:none}
+/* en el telefono: n.º, fecha con la wallet debajo y el nodo; el resto, en el detalle */
+@media (max-width:640px){
+  .rc{min-width:0}
+  .rc th,.rc td{padding:12px 10px;white-space:normal}
+  .rc :is(th,td):is(:nth-child(3),:nth-child(5),:nth-child(6),:nth-child(7)){display:none}
+  .rc .when{flex-wrap:wrap}
+  .rc .m-only{display:block;margin-top:5px;font:400 12.5px var(--mono);color:var(--ink-2)}
+}
 @media (max-width:760px){.lvls{grid-template-columns:repeat(2,minmax(0,1fr))}.tile .v{font-size:26px}}
 @media (prefers-reduced-motion:reduce){.spin{animation:none}.bar i{transition:none}}
 </style>
@@ -174,6 +189,17 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     </div>
 
     <div class="bar2">
+      <h2>Últimos registros</h2>
+      <span class="upd" id="rc-sum"></span>
+    </div>
+    <div class="tabs" id="rtabs" role="group" aria-label="Tipo de registro"></div>
+    <div class="tbl"><table class="rc">
+      <thead><tr><th class="r">N.º</th><th>Fecha</th><th>Wallet</th><th>Nodo</th><th class="r">En staking</th><th>Nivel</th><th>Estado</th></tr></thead>
+      <tbody id="rrows"></tbody>
+    </table></div>
+    <div class="more"><button class="btn ghost" id="rmore" type="button" hidden>Ver 20 más</button></div>
+
+    <div class="bar2">
       <h2>Wallets</h2>
       <div class="ctl"><input class="find" id="find" placeholder="Buscar 0x…" aria-label="Buscar wallet"><button class="btn ghost" id="csv" type="button">Descargar CSV</button></div>
     </div>
@@ -207,6 +233,10 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   var nf2 = new Intl.NumberFormat("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: "always" });
   var df = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
   var data = null, rows = [], tab = "all", q = "", tick = 0;
+  // ultimos registros: nodos registrados, entradas al airdrop (staking de 100+ y nodo) y primer deposito
+  var RT = [["node", "Nodos registrados"], ["entry", "Entradas al airdrop"], ["stake", "Primer staking"]];
+  var rtab = "node", rshow = 20, recent = {};
+  var dtf = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
 
   /* ---------- PIN ---------- */
@@ -237,7 +267,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     if (C.OPEN) $("open").disabled = true;
     $("open").addEventListener("change", function () { store("sa-panel-open", $("open").value); compute(); });
     $("refresh").addEventListener("click", load);
-    $("find").addEventListener("input", function () { q = this.value.trim().toLowerCase(); draw(); });
+    $("find").addEventListener("input", function () { q = this.value.trim().toLowerCase(); draw(); recentDraw(); });
+    $("rmore").addEventListener("click", function () { rshow += 20; recentDraw(); });
     $("csv").addEventListener("click", csv);
     load();
   }
@@ -283,7 +314,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     $("t-resbar").style.width = pct + "%"; $("t-resp").textContent = nf2.format(pct) + " % de 7.000.000" + (reserved >= C.BAG ? " · bolsa completa" : "");
     $("t-secured").textContent = nf0.format(secured) + " SECT ya asegurados (día 30 o más)";
     [1, 2, 3, 4].forEach(function (k) { $("l" + k).textContent = nf0.format(lv[k]); });
-    tabsDraw(); draw();
+    tabsDraw(); draw(); recentBuild(); recentDraw();
     clearInterval(tick); tick = setInterval(live, 250); live();
   }
   // avance hacia lo que tendra al completar su tiempo
@@ -326,6 +357,58 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     });
     $("rows").innerHTML = html || '<tr><td colspan="9" class="empty">No hay wallets en este filtro.</td></tr>';
     $("rows").querySelectorAll("tr[data-r]").forEach(function (tr) { tr.addEventListener("click", function () { show(+tr.dataset.r); }); });
+  }
+
+  /* ---------- ultimos registros ---------- */
+  // primer deposito y momento en que llego a 100 SECT en staking
+  function firstTimes(ev) {
+    var bal = 0, first = 0, t100 = 0;
+    ev.forEach(function (e) { bal = Math.max(0, bal + (e.dep ? e.amt : -e.amt)); if (e.dep && !first) first = e.t; if (!t100 && bal >= 100) t100 = e.t; });
+    return { first: first, t100: t100 };
+  }
+  function recentBuild() {
+    var L = { node: [], entry: [], stake: [] };
+    rows.forEach(function (x, i) {
+      var f = firstTimes(x.ev), n = x.node;
+      if (n && n.at) L.node.push({ t: n.at, i: i });
+      if (f.first) L.stake.push({ t: f.first, i: i });
+      if (n && n.at && f.t100) L.entry.push({ t: Math.max(n.at, f.t100), i: i });
+    });
+    // n.º de orden: 1 es el primero que se registro; la lista se muestra de la mas reciente a la mas antigua
+    Object.keys(L).forEach(function (k) {
+      L[k].sort(function (a, b) { return a.t - b.t || (rows[a.i].who < rows[b.i].who ? -1 : 1); });
+      L[k].forEach(function (o, j) { o.n = j + 1; });
+      L[k].reverse();
+    });
+    recent = L;
+  }
+  function ago(t) {
+    var s = (Date.now() - t) / 1000;
+    if (s < 3600) return "hace " + Math.max(1, Math.round(s / 60)) + " min";
+    if (s < 86400) return "hace " + Math.round(s / 3600) + " h";
+    var n = Math.floor(s / 86400); return "hace " + n + (n === 1 ? " día" : " días");
+  }
+  function recentDraw() {
+    var all = recent[rtab] || [], now = Date.now(), open = openAt() || 0;
+    $("rtabs").innerHTML = RT.map(function (t) {
+      return '<button type="button" data-t="' + t[0] + '" aria-pressed="' + (rtab === t[0]) + '">' + t[1] + "<em>" + (recent[t[0]] || []).length + "</em></button>";
+    }).join("");
+    $("rtabs").querySelectorAll("button").forEach(function (b) { b.addEventListener("click", function () { rtab = b.dataset.t; rshow = 20; recentDraw(); }); });
+    var n24 = all.filter(function (o) { return now - o.t < C.DAY; }).length, n7 = all.filter(function (o) { return now - o.t < 7 * C.DAY; }).length;
+    $("rc-sum").textContent = nf0.format(n24) + " en las últimas 24 h · " + nf0.format(n7) + " en 7 días · " + nf0.format(all.length) + " en total";
+    var list = q ? all.filter(function (o) { return rows[o.i].who.indexOf(q) >= 0; }) : all, html = "";
+    list.slice(0, rshow).forEach(function (o) {
+      var x = rows[o.i], r = x.r, st = ST[r.status] || ["—", "mute"];
+      var node = r.node === "on" ? '<span class="chip ok">Activo</span>' : r.node === "off" ? '<span class="chip warn">Pausado</span>' : '<span class="chip mute">Sin nodo</span>';
+      var note = ago(o.t) + (rtab !== "stake" && open && o.t < open ? " · antes de la apertura" : "");
+      html += '<tr data-r="' + o.i + '"><td class="r n">' + nf0.format(o.n) + '</td><td><span class="when">' + dtf.format(o.t) + (now - o.t < C.DAY ? '<span class="chip blue">Nuevo</span>' : "") + '</span><span class="sub">' + note + '</span><span class="m-only">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + " · " + (r.level ? LV[r.level] : nf0.format(r.bal) + " SECT") + "</span></td>" +
+        '<td><button class="w" type="button">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + "</button></td><td>" + node + '</td><td class="r">' + nf0.format(r.bal) + "</td>" +
+        "<td>" + (r.level ? LV[r.level] : "—") + '</td><td><span class="chip ' + st[1] + '">' + st[0] + "</span></td></tr>";
+    });
+    $("rrows").innerHTML = html || '<tr><td colspan="7" class="empty">' + (q ? "Ninguna wallet coincide con la búsqueda." : "Todavía no hay registros.") + "</td></tr>";
+    $("rrows").querySelectorAll("tr[data-r]").forEach(function (tr) { tr.addEventListener("click", function () { show(+tr.dataset.r); }); });
+    var rest = list.length - rshow;
+    $("rmore").hidden = rest <= 0; if (rest > 0) $("rmore").textContent = "Ver " + Math.min(20, rest) + " más";
   }
 
   /* ---------- detalle de una wallet ---------- */
