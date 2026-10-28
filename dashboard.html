@@ -822,21 +822,37 @@ svg{display:block}
   text-transform:uppercase;color:var(--ink4);border-top:1px solid var(--hair);margin-top:6px}
 .wsel-note{padding:12px 12px 6px;color:var(--ink4);font-size:12px;line-height:1.55}
 /* WalletConnect: QR en el ordenador, apps en el movil */
-.wsel-wc{padding:6px 4px 4px}
-.wsel-wc p{padding:8px 8px 4px;color:var(--ink3);font-size:13px;line-height:1.6}
-.wsel-qr{width:min(250px,100%);margin:10px auto 6px;padding:12px;background:#fff;border-radius:10px}
-.wsel-qr svg{display:block;width:100%;height:auto}
-.wsel-err{padding:0 8px 8px!important;font:11px/1.5 'IBM Plex Mono',monospace!important;color:#ff9a9a!important;word-break:break-word}
-.wsel-wait{display:flex;align-items:center;gap:10px;padding:10px 8px;color:var(--ink4);font-size:12px}
-.wsel-wait i{width:12px;height:12px;border:2px solid rgba(255,255,255,.18);border-top-color:var(--blue2);border-radius:50%;animation:wselSp .8s linear infinite}
+.wsel-i .wsel-t{display:flex;flex-direction:column;gap:3px;min-width:0}
+.wsel-i .wsel-t small{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.04em;color:var(--ink4)}
+a.wsel-i{text-decoration:none}
+.wsel-i[aria-disabled="true"]{opacity:.45}
+.wsel-state{display:flex;align-items:flex-start;gap:10px;margin:2px 4px 8px;padding:11px 12px;
+  border:1px solid var(--hair);background:rgba(21,105,255,.06);color:var(--ink2);font-size:12.5px;line-height:1.55}
+.wsel-state:empty{display:none}
+.wsel-state i{flex:none;width:11px;height:11px;margin-top:3px;border:2px solid rgba(255,255,255,.18);
+  border-top-color:var(--blue2);border-radius:50%;animation:wselSp .8s linear infinite}
+.wsel-state.err{color:#ffb4b4;border-color:rgba(255,120,120,.3);background:rgba(255,80,80,.06);flex-wrap:wrap}
+.wsel-retry{padding:6px 10px;border:1px solid var(--rule);color:var(--ink);cursor:pointer;
+  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase}
 @keyframes wselSp{to{transform:rotate(360deg)}}
+.wsel-qrw{padding:4px 4px 2px}
+.wsel-qr{width:min(240px,100%);margin:8px auto 6px;padding:12px;background:#fff;border-radius:10px}
+.wsel-qr:empty{aspect-ratio:1;background:rgba(255,255,255,.06)}
+.wsel-qr svg{display:block;width:100%;height:auto}
+.wsel-qrtxt{padding:4px 10px 2px;color:var(--ink3);font-size:12.5px;line-height:1.55;text-align:center}
+.wsel-copy{display:block;width:calc(100% - 8px);margin:8px 4px 4px;padding:11px;border:1px solid var(--rule);
+  color:var(--ink2);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase}
+.wsel-copy:disabled{opacity:.4;cursor:default}
+.wsel-alt{padding:10px 10px 2px;color:var(--ink4);font-size:12px;line-height:1.6}
+.wsel-alt a{color:var(--blue2);text-decoration:underline;text-underline-offset:3px}
 .wsel-f{padding:12px 18px;border-top:1px solid var(--hair);
   font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--ink4);line-height:1.7}
 .pill.wrong{border-color:rgba(232,180,92,.4);color:var(--amber);cursor:pointer}
 @media (max-width:640px){
-  .wsel{padding:9vh 14px 14px}
-  .wsel-i{padding:14px 12px}
+  .wsel{padding:7vh 14px 14px}
+  .wsel-i{padding:12px 10px}
+  .wsel-list{max-height:calc(100svh - 7vh - 150px)}
 }
 
 
@@ -1369,7 +1385,7 @@ html.booting,body.booting{overflow:hidden}
 </div>
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="translations.js"></script>
-<script src="dashboard-i18n-extra.js?v=20261028b"></script>
+<script src="dashboard-i18n-extra.js?v=20261028c"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="i18n.js?v=2"></script>
 <script src="dashboard-reticle.js?v=20260820b"></script>
@@ -3226,16 +3242,33 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   /* ---- descubrimiento de carteras: EIP-6963 detecta todas las instaladas ---- */
   const hallados = new Map();
   addEventListener('eip6963:announceProvider', e => {
-    const d = e.detail; if(!d || !d.info) return;
+    const d = e.detail; if(!d || !d.info || !d.provider) return;
+    /* por uuid: un anuncio posterior no puede sustituir a una wallet ya anunciada */
+    if(d.info.uuid && hallados.has(d.info.uuid)) return;
     hallados.set(d.info.uuid, d);
-    if(caja.classList.contains('on') && !wcVista) pinta();
+    if(caja.classList.contains('on')) refresca();
   });
   dispatchEvent(new Event('eip6963:requestProvider'));
+
+  function inyectadas(){
+    const l = [...hallados.values()].map(d => ({ nombre: d.info.name || t('hashdash.wallet.browserWallet','Browser wallet'),
+      icono: d.info.icon, proveedor: d.provider, rdns: d.info.rdns }));
+    /* navegadores antiguos que solo exponen window.ethereum */
+    if(!l.length && window.ethereum) l.push({ nombre: t('hashdash.wallet.browserWallet','Browser wallet'), icono: null, proveedor: window.ethereum, rdns: '1' });
+    return l;
+  }
 
   /* ---- estado ---- */
   let prov = null, cuenta = null, cadena = null;
 
   const corta = a => a.slice(0,6)+'…'+a.slice(-4);
+  /* WalletConnect da eth_chainId como numero (11155111) y las extensiones como texto ('0xaa36a7'):
+     todo se compara en hex */
+  const hexRed = c => {
+    if(c === null || c === undefined || c === '') return null;
+    const n = typeof c === 'number' ? c : /^0x/i.test(String(c)) ? parseInt(c, 16) : parseInt(c, 10);
+    return isFinite(n) ? '0x' + n.toString(16) : null;
+  };
 
   /* la capa de testnet (dashboard-testnet.js) firma con esta misma cartera */
   window.__sectoraEIP1193 = () => prov;
@@ -3257,8 +3290,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   }
 
   function pintaRed(){
-    const p = document.getElementById('pRed');
-    const mal = cadena && cadena.toLowerCase() !== CONFIG.chainId;
+    const mal = cadena && cadena !== CONFIG.chainId;
     const pl = document.querySelector('.pill.live');
     if(!pl) return;
     pl.classList.toggle('wrong', !!mal);
@@ -3269,26 +3301,32 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   }
 
   async function cambiaRed(){
-    if(!prov) return;
+    const p = prov;
+    if(!p) return;
+    const pasa = () => p.request({method:'wallet_switchEthereumChain', params:[{chainId: CONFIG.chainId}]});
     try{
-      await prov.request({method:'wallet_switchEthereumChain',
-        params:[{chainId: CONFIG.chainId}]});
+      await pasa();
     }catch(e){
-      if(e && (e.code === 4902 || e.code === -32603)){
+      /* la wallet no conoce Sepolia: se anade y se vuelve a pedir el cambio */
+      const m = (e && e.message) || '';
+      if(e && (e.code === 4902 || e.code === -32603 || /unrecognized|not added|unknown chain|4902/i.test(m))){
         try{
-          await prov.request({method:'wallet_addEthereumChain', params:[{
+          await p.request({method:'wallet_addEthereumChain', params:[{
             chainId: CONFIG.chainId, chainName: CONFIG.chainName,
             rpcUrls: CONFIG.rpc, nativeCurrency: CONFIG.moneda,
             blockExplorerUrls: [CONFIG.explorer]
           }]});
-        }catch(e2){ avisar(t('hashdash.wallet.addNetworkFail','Could not add the network')); }
+          try{ await pasa(); }catch(e3){}
+        }catch(e2){ if(!(e2 && e2.code === 4001)) avisar(t('hashdash.wallet.addNetworkFail','Could not add the network')); }
       } else if(e && e.code !== 4001){ avisar(t('hashdash.wallet.switchNetworkFail','Could not switch network')); }
     }
+    if(prov !== p) return;
+    try{ cadena = hexRed(await p.request({method:'eth_chainId'})); pintaRed(); }catch(e){}
   }
 
   async function aplica(dir){
     cuenta = dir;
-    try{ cadena = await prov.request({method:'eth_chainId'}); }catch(e){}
+    try{ cadena = hexRed(await prov.request({method:'eth_chainId'})); }catch(e){}
     pintaRed();
     const bal = await saldoDe(dir);
     const p = puente(); if(p) p.onConnect(dir, bal);
@@ -3297,11 +3335,12 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   }
 
   function desconecta(silencio){
-    /* una sesion de WalletConnect se cierra tambien en la app de la wallet */
-    if(prov && prov.__rdns === 'walletconnect' && prov.disconnect){ try{ prov.disconnect().catch(() => {}); }catch(e){} wcPromesa = null; }
+    const p = prov;
     prov = null; cuenta = null; cadena = null;
+    /* una sesion de WalletConnect se cierra tambien en la app de la wallet */
+    if(p && p === wc){ try{ p.disconnect().catch(() => {}); }catch(e){} olvidaWC(); }
     try{ localStorage.removeItem('sectora:wallet'); }catch(e){}
-    const p = puente(); if(p) p.onDisconnect();
+    const x = puente(); if(x) x.onDisconnect();
     const pl = document.querySelector('.pill.live');
     if(pl){ pl.classList.remove('wrong'); pl.innerHTML = '<i class="dot"></i>'+t('hashdash.wallet.testnet','Testnet'); pl.onclick = null; }
     if(!silencio) avisar(t('hashdash.wallet.disconnected','Wallet disconnected'));
@@ -3311,12 +3350,13 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     if(!p || !p.on || p.__sectoraOn) return;
     p.__sectoraOn = true;
     p.on('accountsChanged', cs => {
+      if(prov !== p) return;
       if(!cs || !cs.length) desconecta(true);
       else aplica(cs[0]);
     });
-    p.on('chainChanged', c => { cadena = c; pintaRed(); if(cuenta) saldoDe(cuenta)
+    p.on('chainChanged', c => { if(prov !== p) return; cadena = hexRed(c); pintaRed(); if(cuenta) saldoDe(cuenta)
       .then(b => { const x = puente(); if(x) x.onBalance(b); }); });
-    p.on('disconnect', () => desconecta(true));
+    p.on('disconnect', () => { if(prov === p) desconecta(true); });
   }
 
   async function conecta(p){
@@ -3327,221 +3367,415 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       escucha(p);
       await aplica(cs[0]);
       cierra();
-      if(cadena && cadena.toLowerCase() !== CONFIG.chainId) cambiaRed();
+      if(cadena !== CONFIG.chainId) cambiaRed();
     }catch(e){
-      prov = null;
+      console.error('[sectora] wallet', e);
+      if(prov === p){ prov = null; cuenta = null; }
       avisar(e && e.code === 4001 ? t('hashdash.wallet.rejected','Connection rejected') : t('hashdash.wallet.connectFail','Could not connect'));
     }
   }
+  const conectaIny = w => { cierra(); w.proveedor.__rdns = w.rdns; conecta(w.proveedor); };
 
-  /* ---- WalletConnect: QR en el ordenador; en el movil, botones que abren la app de la wallet.
-     Usa el proveedor local (el mismo que el staking): mainnet como red de la sesion y Sepolia
-     opcional; al conectar, conecta() pasa la wallet a Sepolia como con cualquier otra. ---- */
+  /* ---- WalletConnect: el mismo flujo que el staking (staking/staking-wallet.js) ----
+     - movil dentro del navegador de una wallet (MetaMask, Trust, OKX...): conecta directa;
+     - movil en Chrome o Safari: lista de apps. MetaMask, Trust y Rainbow se abren para
+       aprobar y se vuelve a esta pestana ya conectado; Binance, Coinbase y OKX abren el
+       dashboard en su propio navegador, con la wallet inyectada;
+     - ordenador: extensiones detectadas y un QR para la wallet del telefono.
+     La sesion lleva mainnet y Sepolia; al conectar, conecta() pasa la wallet a Sepolia como
+     con cualquier otra. Guarda su sesion aparte (customStoragePrefix) para no cruzarse
+     nunca con la del staking. */
   const WC_JS = '/walletconnect-provider.min.js?v=20260809a', QR_JS = '/qrcode-generator.min.js?v=20260809a';
-  const WC_APPS = [
-    {n:'MetaMask', k:'metaMask', s:'metamask://'},
-    {n:'Trust Wallet', k:'trust', s:'trust://'},
-    {n:'Rainbow', k:'rainbow', s:'rainbow://'}
+  const MARCA = 'sectora:wc', ELEGIDA = 'sectora:wc-app', PEND = 'sectora:wc-pending';
+  const DEEPLINK = 'WALLETCONNECT_DEEPLINK_CHOICE';   /* el SDK la lee para abrir la app al firmar */
+  const ua = navigator.userAgent || '';
+  const MOVIL = /Android|iPhone|iPad|iPod/i.test(ua) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);   /* iPadOS se presenta como Mac */
+  const AQUI = location.origin + location.pathname;
+  const enc = encodeURIComponent;
+  const leer = k => { try{ return localStorage.getItem(k); }catch(e){ return null; } };
+  const guardar = (k, v) => { try{ v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); }catch(e){} };
+
+  function binance(){
+    /* el formato que usa Reown AppKit para abrir una web en Binance Wallet */
+    const dentro = new URL('bnc://app.binance.com/mp/app');
+    dentro.searchParams.set('appId', 'yFK5FCqYprrXDiVFbhyRx7');
+    dentro.searchParams.set('startPagePath', btoa('/pages/browser/index'));
+    dentro.searchParams.set('startPageQuery', btoa('url=' + enc(location.href.split('#')[0]) + '&defaultChainId=1'));
+    const u = new URL('https://app.binance.com/en/download');
+    u.searchParams.set('_dp', btoa(dentro.toString()));
+    return u.toString();
+  }
+  /* nativo: esquema de la app; con "wc?uri=" detras abre la peticion de conexion.
+     navegador: abre esta pagina dentro de la app, con la wallet inyectada */
+  const APPS = [
+    { id:'metamask', nombre:'MetaMask', logo:'metaMask', nativo:'metamask://',
+      navegador: () => 'https://metamask.app.link/dapp/' + AQUI.replace(/^https?:\/\//, '') },
+    { id:'trust', nombre:'Trust Wallet', logo:'trust', nativo:'trust://',
+      navegador: () => 'https://link.trustwallet.com/open_url?coin_id=60&url=' + enc(AQUI) },
+    { id:'binance', nombre:'Binance Wallet', logo:'binance', navegador: binance },
+    { id:'coinbase', nombre:'Coinbase Wallet', logo:'coinbase',
+      navegador: () => 'https://go.cb-w.com/dapp?cb_url=' + enc(AQUI) },
+    { id:'okx', nombre:'OKX Wallet', logo:'okx',
+      navegador: () => 'https://www.okx.com/download?deeplink=' + enc('okx://wallet/dapp/url?dappUrl=' + enc(AQUI)) },
+    { id:'rainbow', nombre:'Rainbow', logo:'rainbow', nativo:'rainbow://' }
   ];
-  const cargaJS = (src, listo) => new Promise((ok, mal) => {
-    if(listo()) return ok();
-    const sc = document.createElement('script'); sc.src = src;
-    sc.onload = () => listo() ? ok() : mal(new Error('load')); sc.onerror = mal;
-    document.head.appendChild(sc);
-  });
-  const guardaWC = v => { try{ v ? localStorage.setItem('WALLETCONNECT_DEEPLINK_CHOICE', v) : localStorage.removeItem('WALLETCONNECT_DEEPLINK_CHOICE'); }catch(e){} };
-  let wcPromesa = null, wcVista = false;
-  const marcaWC = () => { try{ localStorage.setItem('sectora:wc-pending', String(Date.now())); }catch(e){} };
+  const conWC = a => !!a.nativo;
+
+  const cargas = {};
+  function cargaJS(src, listo){
+    if(listo()) return Promise.resolve();
+    if(!cargas[src]) cargas[src] = new Promise((ok, mal) => {
+      const sc = document.createElement('script'); sc.src = src;
+      sc.onload = () => listo() ? ok() : mal(new Error('empty: ' + src));
+      sc.onerror = () => { delete cargas[src]; mal(new Error('load: ' + src)); };
+      document.head.appendChild(sc);
+    });
+    return cargas[src];
+  }
+
+  let wcPromesa = null, wc = null, entregado = null;
+  let uri = '', pidiendo = false, qrAbierto = false;
   function proveedorWC(){
     if(wcPromesa) return wcPromesa;
     wcPromesa = cargaJS(WC_JS, () => !!window.WalletConnectEthereumProvider)
       .then(() => window.WalletConnectEthereumProvider.EthereumProvider.init({
         projectId: CONFIG.walletConnectProjectId,
-        chains: [1], optionalChains: [11155111, 1],
+        /* mainnet como red de la sesion (la aceptan todas las wallets) y Sepolia opcional */
+        chains: [1], optionalChains: [1, 11155111],
         rpcMap: { 1: 'https://ethereum-rpc.publicnode.com', 11155111: CONFIG.rpc[0] },
         showQrModal: false,
+        customStoragePrefix: 'sectora-dash',
         metadata: { name: 'Sectora Dashboard', description: 'Sectora testnet dashboard and Hash Node.',
           url: location.origin, icons: [location.origin + '/icons/v2/icon-192.png'] }
       }))
+      .then(p => {
+        wc = p;
+        /* la sesion puede llegar sin la promesa de connect(): la pagina se recargo
+           mientras la persona aprobaba en la app */
+        p.on('connect', () => entregar(p));
+        p.on('disconnect', olvidaWC);
+        p.on('session_delete', olvidaWC);
+        return p;
+      })
       .catch(e => { wcPromesa = null; throw e; });
     return wcPromesa;
   }
-  /* uri null: preparando; error: texto del fallo con reintento */
-  function vistaWC(uri, error){
-    wcVista = true;
-    lista.innerHTML = '';
-    const v = document.createElement('div'); v.className = 'wsel-wc';
-    const txt = document.createElement('p'); v.appendChild(txt);
-    if(error){
-      txt.textContent = t('hashdash.wallet.wcErr','Could not start WalletConnect. Check your connection and try again.');
-      if(error !== true){ const d = document.createElement('p'); d.className = 'wsel-err'; d.textContent = String(error).slice(0, 160); v.appendChild(d); }
-      v.appendChild(fila({ icono: LOGO().walletConnect, nombre: t('hashdash.wallet.wcRetry','Try again'), etiqueta: '', accion: porWalletConnect }));
-      lista.appendChild(v); return;
-    }
-    if(!uri){
-      txt.textContent = t('hashdash.wallet.wcPrep','Preparing the connection…');
-      const w = document.createElement('div'); w.className = 'wsel-wait'; w.innerHTML = '<i></i>'; v.appendChild(w);
-      lista.appendChild(v); return;
-    }
-    txt.textContent = movil
-      ? t('hashdash.wallet.wcPick','Choose your wallet app. Approve the connection there, then come back to this tab.')
-      : t('hashdash.wallet.wcScan','Scan this QR code with your wallet app (MetaMask, Trust Wallet, Rainbow…).');
-    if(movil){
-      WC_APPS.forEach(a => v.appendChild(fila({ icono: LOGO()[a.k], nombre: a.n, etiqueta: t('hashdash.wallet.app','App'),
-        accion: () => { guardaWC(JSON.stringify({href: a.s, name: a.n})); marcaWC(); location.href = a.s + 'wc?uri=' + encodeURIComponent(uri); } })));
-      v.appendChild(fila({ icono: LOGO().walletConnect, nombre: t('hashdash.wallet.wcOther','Other wallet'), etiqueta: '',
-        accion: () => { guardaWC(null); marcaWC(); location.href = uri; } }));
-      const t2 = document.createElement('p'); t2.textContent = t('hashdash.wallet.wcScan2','Or scan this QR code with your wallet from another device:'); v.appendChild(t2);
-    }
-    /* el QR sale siempre: en el ordenador para el movil, y en el movil para escanear desde otro aparato */
-    const q = document.createElement('div'); q.className = 'wsel-qr'; v.appendChild(q);
-    cargaJS(QR_JS, () => !!window.SectoraQR).then(() => {
-      const qr = window.SectoraQR(0, 'M'); qr.addData(uri); qr.make(); q.innerHTML = qr.createSvgTag({cellSize: 4, margin: 2});
-    }).catch(() => { q.remove(); });
-    v.appendChild(fila({ icono: ENLACE, nombre: t('hashdash.wallet.wcCopyUri','Copy connection link'), etiqueta: '',
-      accion: () => (navigator.clipboard ? navigator.clipboard.writeText(uri) : Promise.reject())
-        .then(() => avisar(t('hashdash.wallet.copied','Link copied')), () => avisar(uri)) }));
-    const w = document.createElement('div'); w.className = 'wsel-wait';
-    w.innerHTML = '<i></i><span></span>'; w.querySelector('span').textContent = t('hashdash.wallet.wcWait','Waiting for approval in your wallet…');
-    v.appendChild(w);
-    lista.appendChild(v);
-  }
-  async function porWalletConnect(){
-    let wc = null, alUri = null;
-    vistaWC(null);                                   /* la ventana responde al instante */
-    try{
-      wc = await proveedorWC();
-      alUri = uri => vistaWC(uri);
-      wc.on('display_uri', alUri);
-      const espera = new Promise((_, mal) => setTimeout(() => mal(new Error('timeout')), 180000));
-      await Promise.race([wc.connect ? wc.connect() : wc.enable(), espera]);
-      wc.removeListener && wc.removeListener('display_uri', alUri);
-      wcVista = false;
-      if(!movil) guardaWC(null);   /* en el ordenador el SDK no debe abrir apps al firmar */
-      wc.__rdns = 'walletconnect';
-      wc.on('session_delete', () => desconecta(true));
-      await conecta(wc);
-    }catch(e){
-      console.error('[sectora] WalletConnect', e);
-      if(wc && alUri && wc.removeListener) wc.removeListener('display_uri', alUri);
-      wcPromesa = null;
-      if(caja.classList.contains('on')) vistaWC(null, (e && e.message) || true); else wcVista = false;
-    }
+
+  /* el resto del dashboard (dashboard-testnet.js incluido) recibe eth_chainId en hex */
+  function chainHex(p){
+    if(p.__sectoraHex) return;
+    p.__sectoraHex = true;
+    const req = p.request.bind(p);
+    p.request = async (a, ...r) => { const x = await req(a, ...r); return a && a.method === 'eth_chainId' ? hexRed(x) : x; };
   }
 
-  /* ---- listado ---- */
-  const movil = matchMedia('(max-width:900px)').matches;
+  async function entregar(p){
+    if(!p.session || !p.accounts || !p.accounts.length) return;
+    if(entregado === p) return;
+    entregado = p;
+    uri = '';
+    guardar(PEND, null);
+    guardar(MARCA, '1');
+    if(MOVIL) recordarApp(p); else guardar(DEEPLINK, null);   /* en el PC el SDK no debe abrir apps */
+    chainHex(p);
+    p.__rdns = 'walletconnect';
+    await conecta(p);
+    if(prov !== p) entregado = null;
+  }
+
+  function olvidaWC(){
+    guardar(MARCA, null); guardar(ELEGIDA, null); guardar(DEEPLINK, null);
+    entregado = null;
+    if(prov && prov === wc) desconecta(true);
+  }
+
+  /* solo enlaces que abren una app o una web segura: nada de javascript:, data:... */
+  function enlaceSeguro(u){
+    if(typeof u !== 'string' || u.length > 300) return null;
+    const m = /^([a-z][a-z0-9+.-]*):/i.exec(u.trim());
+    if(!m) return null;
+    if(['javascript','data','vbscript','file','blob','about','http'].includes(m[1].toLowerCase())) return null;
+    return u.trim();
+  }
+  const appElegida = () => APPS.find(a => a.id === leer(ELEGIDA)) || null;
+  function nombreSesion(p){
+    const m = p && p.session && p.session.peer && p.session.peer.metadata;
+    const n = m && typeof m.name === 'string' ? m.name.trim().slice(0, 40) : '';
+    return n || (appElegida() || {}).nombre || 'your wallet';
+  }
+  /* enlace para traer la wallet al frente cuando hay que firmar */
+  function enlaceApp(p){
+    const m = p && p.session && p.session.peer && p.session.peer.metadata;
+    const r = (m && m.redirect) || {};
+    const a = appElegida();
+    return enlaceSeguro(r.native) || (a && a.nativo) || enlaceSeguro(r.universal) || null;
+  }
+  function recordarApp(p){
+    const href = enlaceApp(p);
+    if(href) guardar(DEEPLINK, JSON.stringify({ href: href, name: nombreSesion(p) }));
+  }
+
+  /* ---- el selector ---- */
   /* logos oficiales de cada wallet: dashboard-wallet-logos.js se carga al abrir la ventana */
   const LOGO = () => window.SECTORA_WALLET_LOGOS || {};
   function cargaLogos(){
-    if(window.SECTORA_WALLET_LOGOS || document.getElementById('wselLogos')) return;
-    const sc = document.createElement('script');
-    sc.id = 'wselLogos'; sc.src = '/dashboard-wallet-logos.js';
-    sc.onload = () => { if(caja.classList.contains('on') && !wcVista) pinta(); };
-    document.head.appendChild(sc);
+    cargaJS('/dashboard-wallet-logos.js', () => !!window.SECTORA_WALLET_LOGOS).then(() => {
+      lista.querySelectorAll('.ph[data-logo]').forEach(s => {
+        const u = LOGO()[s.dataset.logo]; if(!u) return;
+        const i = document.createElement('img'); i.alt = ''; i.src = u; s.replaceWith(i);
+      });
+    }).catch(() => {});
   }
-  /* wallets compatibles con Ethereum que permiten la red de pruebas Sepolia.
-     app: abre el dash dentro de la app de la wallet (movil); web: su pagina oficial de descarga */
-  const OTRAS = [
-    {n:'MetaMask', k:'metaMask', web:'https://metamask.io/download/', app:d => 'https://metamask.app.link/dapp/'+d},
-    {n:'Trust Wallet', k:'trust', web:'https://trustwallet.com/download', app:d => 'https://link.trustwallet.com/open_url?url=https://'+d},
-    {n:'Coinbase Wallet', k:'coinbase', web:'https://www.coinbase.com/wallet/downloads', app:d => 'https://go.cb-w.com/dapp?cb_url=https://'+d},
+  /* para el ordenador sin extension: sus paginas oficiales de descarga */
+  const INSTALAR = [
+    {n:'MetaMask', k:'metaMask', web:'https://metamask.io/download/'},
+    {n:'Trust Wallet', k:'trust', web:'https://trustwallet.com/download'},
+    {n:'Coinbase Wallet', k:'coinbase', web:'https://www.coinbase.com/wallet/downloads'},
     {n:'OKX Wallet', k:'okx', web:'https://www.okx.com/web3'},
-    {n:'Bitget Wallet', k:'bitget', web:'https://web3.bitget.com/en/wallet-download', app:d => 'https://bkcode.vip?action=dapp&url='+encodeURIComponent('https://'+d)},
-    {n:'Rainbow', k:'rainbow', web:'https://rainbow.me/download'},
-    {n:'TokenPocket', k:'tokenPocket', web:'https://www.tokenpocket.pro/en/download/app'}
+    {n:'Rainbow', k:'rainbow', web:'https://rainbow.me/download'}
   ];
   const ENLACE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#13213d"/><path d="M12.2 15.8l3.6-3.6M11 13.4l-1.6 1.6a2.6 2.6 0 0 0 3.6 3.6l1.6-1.6M17 14.6l1.6-1.6a2.6 2.6 0 0 0-3.6-3.6L13.4 11" fill="none" stroke="#4d8dff" stroke-width="1.6" stroke-linecap="round"/></svg>');
 
-  function fila({icono, nombre, etiqueta, accion}){
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'wsel-i';
-    b.innerHTML = (icono
-        ? '<img alt="">'
-        : '<span class="ph">'+nombre.slice(0,1)+'</span>')
-      + '<span>'+nombre+'</span>'
-      + (etiqueta ? '<span class="tag">'+etiqueta+'</span>' : '');
+  /* una fila: boton, o enlace (a) si lleva href o se conecta por WalletConnect */
+  function fila({icono, logo, nombre, sub, etiqueta, accion, enlace, app}){
+    const b = document.createElement(enlace ? 'a' : 'button');
+    b.className = 'wsel-i';
+    if(!enlace) b.type = 'button';
+    if(app) b.dataset.app = app;
+    const src = icono || (logo && LOGO()[logo]);
     /* el icono va por propiedad: los SVG en data: traen comillas que romperian el HTML */
-    if(icono) b.querySelector('img').src = icono;
-    b.addEventListener('click', accion);
+    if(src){ const i = document.createElement('img'); i.alt = ''; i.src = src; b.appendChild(i); }
+    else { const s = document.createElement('span'); s.className = 'ph'; s.textContent = nombre.slice(0,1); if(logo) s.dataset.logo = logo; b.appendChild(s); }
+    const tx = document.createElement('span'); tx.className = 'wsel-t';
+    const n = document.createElement('span'); n.textContent = nombre; tx.appendChild(n);
+    if(sub){ const s = document.createElement('small'); s.textContent = sub; tx.appendChild(s); }
+    b.appendChild(tx);
+    if(etiqueta){ const g = document.createElement('span'); g.className = 'tag'; g.textContent = etiqueta; b.appendChild(g); }
+    if(typeof enlace === 'string'){ b.href = enlace; b.rel = 'noopener'; }
+    if(accion) b.addEventListener('click', accion);
     return b;
   }
 
-  function pinta(){
+  function estado(texto, error, reintento){
+    const e = lista.querySelector('.wsel-state');
+    if(!e) return;
+    e.textContent = '';
+    e.classList.toggle('err', !!error);
+    if(!texto) return;
+    if(!error) e.appendChild(document.createElement('i'));
+    const s = document.createElement('span'); s.textContent = texto; e.appendChild(s);
+    if(reintento){
+      const r = document.createElement('button'); r.type = 'button'; r.className = 'wsel-retry';
+      r.textContent = t('hashdash.wallet.wcRetry','Try again');
+      r.addEventListener('click', () => { uri = ''; vista(); if(MOVIL) pedirConexionWC(); });
+      e.appendChild(r);
+    }
+  }
+
+  function copiarBoton(){
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'wsel-copy';
+    const txt = () => t('hashdash.wallet.wcCopyUri','Copy connection link');
+    b.textContent = txt();
+    b.disabled = !uri;
+    b.addEventListener('click', () => {
+      if(!uri) return;
+      (navigator.clipboard ? navigator.clipboard.writeText(uri) : Promise.reject()).then(() => {
+        b.textContent = t('hashdash.wallet.copied','Link copied');
+        setTimeout(() => { b.textContent = txt(); }, 1600);
+      }, () => avisar(uri));
+    });
+    return b;
+  }
+
+  function cabeza(){
     lista.innerHTML = '';
-    const dets = [...hallados.values()];
+    const e = document.createElement('p'); e.className = 'wsel-state'; lista.appendChild(e);
+  }
+  function nota(){
+    const n = document.createElement('div');
+    n.className = 'wsel-note';
+    n.textContent = t('hashdash.wallet.sepolia','Works with any Ethereum wallet that allows the Sepolia test network. If you don\'t see it, turn on test networks in your wallet settings.');
+    lista.appendChild(n);
+  }
 
-    dets.forEach(d => lista.appendChild(fila({
-      icono: d.info.icon, nombre: d.info.name, etiqueta: t('hashdash.wallet.detected','Detected'),
-      accion: () => { d.provider.__rdns = d.info.rdns; conecta(d.provider); }
-    })));
+  /* movil sin wallet inyectada: Chrome, Safari, Samsung Internet... */
+  function vistaMovil(){
+    cabeza();
+    inyectadas().forEach(w => lista.appendChild(fila({ icono: w.icono, nombre: w.nombre,
+      sub: t('hashdash.wallet.wDetHere','Detected in this browser'), accion: () => conectaIny(w) })));
+    APPS.forEach(a => {
+      if(!conWC(a)){
+        lista.appendChild(fila({ logo: a.logo, nombre: a.nombre, app: a.id,
+          sub: t('hashdash.wallet.wOpensHere','Opens this page in the app'), enlace: a.navegador() }));
+        return;
+      }
+      const f = fila({ logo: a.logo, nombre: a.nombre, app: a.id, enlace: true,
+        sub: t('hashdash.wallet.wApprove','Approve in the app') });
+      f.setAttribute('aria-disabled', 'true');
+      f.addEventListener('click', e => {
+        if(!uri){ e.preventDefault(); return; }
+        guardar(ELEGIDA, a.id);
+        guardar(DEEPLINK, JSON.stringify({ href: a.nativo, name: a.nombre }));
+        guardar(PEND, String(Date.now()));
+        estado(t('hashdash.wallet.wApproveIn','Approve the connection in {name}, then come back to this tab.').replace('{name}', a.nombre));
+      });
+      lista.appendChild(f);
+    });
+    const o = fila({ logo: 'walletConnect', nombre: t('hashdash.wallet.wOtherWallets','Other wallets'), app: 'otras', enlace: true,
+      sub: t('hashdash.wallet.wAnyWC','Any WalletConnect wallet') });
+    o.setAttribute('aria-disabled', 'true');
+    o.addEventListener('click', e => {
+      if(!uri){ e.preventDefault(); return; }
+      guardar(ELEGIDA, null); guardar(DEEPLINK, null); guardar(PEND, String(Date.now()));
+      estado(t('hashdash.wallet.wApproveAny','Approve the connection in your wallet, then come back to this tab.'));
+    });
+    lista.appendChild(o);
 
-    /* navegadores antiguos que solo exponen window.ethereum */
-    if(!dets.length && window.ethereum){
-      lista.appendChild(fila({
-        icono: null, nombre: t('hashdash.wallet.browserWallet','Browser wallet'), etiqueta: t('hashdash.wallet.detected','Detected'),
-        accion: () => conecta(window.ethereum)
-      }));
+    /* QR para conectar una wallet de otro aparato */
+    const qr = document.createElement('div');
+    if(qrAbierto) mostrarQR(qr);
+    else{
+      const f = fila({ logo: 'walletConnect', nombre: t('hashdash.wallet.wOtherDevice','Wallet on another device'),
+        sub: t('hashdash.wallet.wShowQr','Show a QR code'), accion: () => { f.remove(); qrAbierto = true; mostrarQR(qr); } });
+      lista.appendChild(f);
     }
+    lista.appendChild(qr);
+    lista.appendChild(copiarBoton());
 
-    lista.appendChild(fila({
-      icono: LOGO().walletConnect, nombre: 'WalletConnect',
-      etiqueta: movil ? t('hashdash.wallet.app','App') : t('hashdash.wallet.qrCode','QR code'),
-      accion: porWalletConnect
-    }));
+    const alt = document.createElement('p'); alt.className = 'wsel-alt';
+    alt.append(t('hashdash.wallet.wPrefer','Prefer your wallet’s own browser? Open this page in:') + ' ');
+    const l = APPS.filter(a => conWC(a) && a.navegador);
+    l.forEach((a, i) => {
+      const x = document.createElement('a'); x.textContent = a.nombre; x.href = a.navegador(); x.rel = 'noopener';
+      alt.append(x, i < l.length - 1 ? ' · ' : '');
+    });
+    lista.appendChild(alt);
+    nota();
+  }
 
-    const hay = dets.length > 0 || !!window.ethereum;
-    if(!hay){
-      const d = document.createElement('div');
-      d.className = 'wsel-none';
-      d.textContent = movil
-        ? t('hashdash.wallet.noneMobile','No wallet detected in this browser. Open Sectora inside your wallet app:')
-        : t('hashdash.wallet.noneDesktop','No wallet extension detected. Install one to continue: ').replace(/[:\s]+$/, '.');
-      lista.appendChild(d);
+  /* ordenador: extensiones detectadas y QR para el telefono */
+  function vistaPC(){
+    cabeza();
+    const ext = inyectadas();
+    ext.forEach(w => lista.appendChild(fila({ icono: w.icono, nombre: w.nombre,
+      sub: t('hashdash.wallet.wExt','Browser extension'), etiqueta: t('hashdash.wallet.detected','Detected'), accion: () => conectaIny(w) })));
+    const qr = document.createElement('div');
+    if(ext.length && !qrAbierto){
+      const f = fila({ logo: 'walletConnect', nombre: t('hashdash.wallet.wPhone','Wallet on your phone'),
+        sub: t('hashdash.wallet.wPhoneSub','Scan a QR code with your phone'), etiqueta: t('hashdash.wallet.qrCode','QR code'),
+        accion: () => { f.remove(); qrAbierto = true; mostrarQR(qr); } });
+      lista.appendChild(f);
     }
-
-    /* el resto de wallets compatibles: en el movil sin wallet se abre el dash dentro de su app;
-       si no, su pagina oficial de descarga */
-    const ya = dets.map(d => (d.info.name || '').toLowerCase());
-    const resto = OTRAS.filter(w => !ya.some(n => n.indexOf(w.n.split(' ')[0].toLowerCase()) >= 0));
-    if(resto.length){
+    lista.appendChild(qr);
+    if(!ext.length || qrAbierto) mostrarQR(qr);
+    if(!ext.length){
       const h = document.createElement('div');
       h.className = 'wsel-sub'; h.textContent = t('hashdash.wallet.others','Other compatible wallets');
       lista.appendChild(h);
-      const dom = (location.host || 'sectoraorg.com') + location.pathname;
-      resto.forEach(w => {
-        const app = movil && !hay && w.app;
-        lista.appendChild(fila({
-          icono: LOGO()[w.k], nombre: app ? t('hashdash.wallet.openIn','Open in {name}').replace('{name}', w.n) : w.n,
-          etiqueta: app ? t('hashdash.wallet.app','App') : t('hashdash.wallet.install','Install'),
-          accion: () => { if(app) location.href = w.app(dom); else window.open(w.web, '_blank', 'noopener'); }
-        }));
-      });
-      /* cualquier otra wallet con navegador propio: abrir este enlace dentro de ella */
-      if(movil && !hay){
-        lista.appendChild(fila({
-          icono: ENLACE, nombre: t('hashdash.wallet.copyLink','Another wallet? Copy the link and open it in its browser'), etiqueta: '',
-          accion: () => {
-            const u = 'https://' + dom;
-            (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject())
-              .then(() => avisar(t('hashdash.wallet.copied','Link copied')), () => avisar(u));
-          }
-        }));
-      }
+      INSTALAR.forEach(w => lista.appendChild(fila({ logo: w.k, nombre: w.n, etiqueta: t('hashdash.wallet.install','Install'),
+        accion: () => window.open(w.web, '_blank', 'noopener') })));
     }
-    const nota = document.createElement('div');
-    nota.className = 'wsel-note';
-    nota.textContent = t('hashdash.wallet.sepolia','Works with any Ethereum wallet that allows the Sepolia test network. If you don\'t see it, turn on test networks in your wallet settings.');
-    lista.appendChild(nota);
+    nota();
+  }
+
+  function mostrarQR(qr){
+    qr.innerHTML = '';
+    qr.className = 'wsel-qrw';
+    const box = document.createElement('div'); box.className = 'wsel-qr'; qr.appendChild(box);
+    const p = document.createElement('p'); p.className = 'wsel-qrtxt';
+    p.textContent = MOVIL
+      ? t('hashdash.wallet.wcScan2','Or scan this QR code with your wallet from another device:').replace(/[:：]\s*$/, '.')
+      : t('hashdash.wallet.wcScan','Scan this QR code with your wallet app (MetaMask, Trust Wallet, Rainbow…).');
+    qr.appendChild(p);
+    if(!MOVIL) qr.appendChild(copiarBoton());   /* en el movil va una sola, al pie de la lista */
+    if(uri) pintarUri(); else pedirConexionWC();
+  }
+
+  /* las filas que conectan por WalletConnect (no las que abren el navegador de la app) */
+  const filasWC = () => [...lista.querySelectorAll('a.wsel-i[data-app]')].filter(f => {
+    const a = APPS.find(x => x.id === f.dataset.app);
+    return f.dataset.app === 'otras' || (a && conWC(a));
+  });
+
+  function pintarUri(){
+    filasWC().forEach(f => {
+      const a = APPS.find(x => x.id === f.dataset.app);
+      f.href = a ? a.nativo + 'wc?uri=' + enc(uri) : uri;
+      f.removeAttribute('aria-disabled');
+    });
+    lista.querySelectorAll('.wsel-copy').forEach(b => b.disabled = false);
+    const box = lista.querySelector('.wsel-qr');
+    if(box){
+      cargaJS(QR_JS, () => !!window.SectoraQR).then(() => {
+        const q = window.SectoraQR(0, 'M'); q.addData(uri); q.make();
+        box.innerHTML = q.createSvgTag({cellSize: 4, margin: 2});   /* SVG generado aqui, sin texto ajeno */
+      }).catch(() => estado(t('hashdash.wallet.wQrFail','Could not draw the QR code. Use “Copy connection link”.'), true));
+    }
+    estado(MOVIL ? t('hashdash.wallet.wcPick','Choose your wallet app. Approve the connection there, then come back to this tab.')
+                 : t('hashdash.wallet.wcWait','Waiting for approval in your wallet…'));
+  }
+
+  /* pide el enlace de conexion antes de que la persona toque su app: en Safari del
+     iPhone la app solo se abre si el enlace sale directo del toque, sin esperas */
+  async function pedirConexionWC(){
+    if(pidiendo){ if(uri) pintarUri(); else estado(t('hashdash.wallet.wcPrep','Preparing the connection…')); return; }
+    pidiendo = true;
+    estado(t('hashdash.wallet.wcPrep','Preparing the connection…'));
+    let p;
+    try{ p = await proveedorWC(); }
+    catch(e){
+      console.error('[sectora] WalletConnect', e);
+      pidiendo = false;
+      estado(t('hashdash.wallet.wcErr','Could not start WalletConnect. Check your connection and try again.'), true, true);
+      return;
+    }
+    if(p.session && p.accounts && p.accounts.length){ pidiendo = false; entregar(p); return; }   /* ya habia sesion */
+    const alUri = u => {
+      if(typeof u !== 'string' || !/^wc:/.test(u)) return;
+      uri = u;
+      if(caja.classList.contains('on')) pintarUri();
+    };
+    p.on('display_uri', alUri);
+    try{
+      await p.connect();
+      entregar(p);
+    }catch(e){
+      /* caducado (5 min) o rechazado en la app */
+      console.error('[sectora] WalletConnect', e);
+      uri = '';
+      if(caja.classList.contains('on')){
+        const rechazo = /reject|denied|cancel/i.test((e && e.message) || '');
+        estado(rechazo ? t('hashdash.wallet.rejected','Connection rejected') : t('hashdash.wallet.wExpired','The link expired.'), true, true);
+        filasWC().forEach(f => { f.removeAttribute('href'); f.setAttribute('aria-disabled', 'true'); });
+        lista.querySelectorAll('.wsel-copy').forEach(b => b.disabled = true);
+        const box = lista.querySelector('.wsel-qr'); if(box) box.textContent = '';
+      }
+    }finally{
+      p.removeListener && p.removeListener('display_uri', alUri);
+      pidiendo = false;
+    }
+  }
+
+  function vista(){ MOVIL ? vistaMovil() : vistaPC(); cargaLogos(); }
+  /* volver a pintar (idioma, wallet anunciada tarde) sin perder el enlace en curso */
+  function refresca(){
+    vista();
+    if(uri && (MOVIL || qrAbierto)) pintarUri();
+    else if(pidiendo) estado(t('hashdash.wallet.wcPrep','Preparing the connection…'));
   }
 
   function abre(){
-    cargaLogos();
-    wcVista = false;
-    pinta();
+    dispatchEvent(new Event('eip6963:requestProvider'));   /* segundo barrido */
+    const iny = inyectadas();
+    /* dentro del navegador de una wallet se conecta directa, como en el staking
+       (Brave y Opera traen su propia wallet: ahi se deja elegir) */
+    if(MOVIL && iny.length && !iny[0].proveedor.isBraveWallet && !/OPR\//.test(ua)){ conectaIny(iny[0]); return; }
+    vista();
     caja.classList.add('on');
     requestAnimationFrame(() => caja.classList.add('vis'));
-    dispatchEvent(new Event('eip6963:requestProvider'));   /* segundo barrido */
+    if(MOVIL){ if(uri) pintarUri(); else pedirConexionWC(); }
   }
   function cierra(){
     caja.classList.remove('vis');
@@ -3560,32 +3794,31 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   addEventListener('keydown', e => {
     if(e.key === 'Escape' && caja.classList.contains('on')) cierra();
   });
-  document.addEventListener('sectora:langchange', () => { pintaRed(); if(caja.classList.contains('on')) pinta(); });
+  document.addEventListener('sectora:langchange', () => { pintaRed(); if(caja.classList.contains('on')) refresca(); });
 
   /* ---- reconexion silenciosa si ya se autorizo antes ---- */
   setTimeout(async () => {
-    let guardado = null;
-    try{ guardado = localStorage.getItem('sectora:wallet'); }catch(e){}
-    /* sesion de WalletConnect: tambien si la pagina se recargo mientras se aprobaba en la app */
-    let pend = 0; try{ pend = +localStorage.getItem('sectora:wc-pending') || 0; localStorage.removeItem('sectora:wc-pending'); }catch(e){}
-    if(guardado === 'walletconnect' || Date.now() - pend < 600000){
+    const guardado = leer('sectora:wallet');
+    const pend = Date.now() - (+leer(PEND) || 0) < 600000;
+    const iny = inyectadas();
+    const dentroDeWallet = MOVIL && iny.length && !iny[0].proveedor.isBraveWallet && !/OPR\//.test(ua);
+    /* sesion de WalletConnect: tambien si la pagina se recargo mientras se aprobaba en la app;
+       dentro del navegador de una wallet manda la wallet inyectada */
+    if((leer(MARCA) === '1' || pend) && !dentroDeWallet){
       try{
-        const wc = await proveedorWC();
-        if(wc.session && wc.accounts && wc.accounts.length){
-          wc.__rdns = 'walletconnect'; wc.on('session_delete', () => desconecta(true));
-          prov = wc; escucha(wc); await aplica(wc.accounts[0]);
-          if(cadena && cadena.toLowerCase() !== CONFIG.chainId) cambiaRed();
-        }
+        const p = await proveedorWC();
+        if(p.session && p.accounts && p.accounts.length) entregar(p);
+        else if(!pend) guardar(MARCA, null);
       }catch(e){}
       return;
     }
-    if(!guardado) return;
+    if(!guardado || guardado === 'walletconnect') return;
     const d = [...hallados.values()].find(x => x.info.rdns === guardado);
     const p = d ? d.provider : window.ethereum;
     if(!p) return;
     try{
       const cs = await p.request({method:'eth_accounts'});
-      if(cs && cs.length){ prov = p; escucha(p); aplica(cs[0]); }
+      if(cs && cs.length){ p.__rdns = guardado; prov = p; escucha(p); aplica(cs[0]); }
     }catch(e){}
   }, 700);
 })();
