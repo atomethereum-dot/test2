@@ -1385,7 +1385,7 @@ html.booting,body.booting{overflow:hidden}
 </div>
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="translations.js"></script>
-<script src="dashboard-i18n-extra.js?v=20261028c"></script>
+<script src="dashboard-i18n-extra.js?v=20261028d"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="i18n.js?v=2"></script>
 <script src="dashboard-reticle.js?v=20260820b"></script>
@@ -3746,8 +3746,12 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       console.error('[sectora] WalletConnect', e);
       uri = '';
       if(caja.classList.contains('on')){
-        const rechazo = /reject|denied|cancel/i.test((e && e.message) || '');
-        estado(rechazo ? t('hashdash.wallet.rejected','Connection rejected') : t('hashdash.wallet.wExpired','The link expired.'), true, true);
+        const m = (e && e.message) || '';
+        /* wallets sin redes de prueba (Tangem...) rechazan la sesion por Sepolia */
+        const sinRed = (e && e.code === 5100) || /unsupported|not supported/i.test(m);
+        const rechazo = /reject|denied|cancel/i.test(m);
+        estado(sinRed ? t('hashdash.wallet.wNoSepolia','Your wallet does not support the Sepolia test network, where tSECT and the Hash Node run. Connect with MetaMask, Trust Wallet, OKX or Rabby.')
+          : rechazo ? t('hashdash.wallet.rejected','Connection rejected') : t('hashdash.wallet.wExpired','The link expired.'), true, true);
         filasWC().forEach(f => { f.removeAttribute('href'); f.setAttribute('aria-disabled', 'true'); });
         lista.querySelectorAll('.wsel-copy').forEach(b => b.disabled = true);
         const box = lista.querySelector('.wsel-qr'); if(box) box.textContent = '';
