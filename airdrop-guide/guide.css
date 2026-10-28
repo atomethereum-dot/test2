@@ -273,9 +273,16 @@ footer a:hover{color:var(--ink)}
 .top .lp-l li:hover,.top .lp-l li[aria-selected=true]{background:var(--blue-soft);color:var(--ink)}
 
 /* ============ capturas de movil ============ */
-.phone{width:min(260px,100%);margin:0 auto;padding:9px;border-radius:30px;background:#0b0e14;box-shadow:0 24px 50px -30px rgba(7,8,10,.6)}
-.phone img{border-radius:22px;width:100%}
-.shot.ph{max-width:280px}
+/* iPhone con sus proporciones reales: marco fino de titanio, botones laterales y la pantalla completa
+   (barra de estado e isla dinamica arriba, Safari abajo) ya dentro de la imagen */
+.phone{position:relative;width:min(220px,100%);margin:0 auto;border:2px solid transparent;border-radius:16% / 7.7%;
+  background:linear-gradient(#030405,#030405) padding-box,linear-gradient(150deg,#a7aab0,#45474c 20%,#8c8f96 46%,#33353a 72%,#9a9da4) border-box;
+  box-shadow:0 30px 56px -30px rgba(7,8,10,.6),0 2px 6px rgba(7,8,10,.12)}
+.phone img{display:block;width:93%;margin:3.5%;border-radius:13.4% / 6.2%}
+.phone::before{content:"";position:absolute;right:-4px;top:25%;width:3px;height:12%;border-radius:0 2px 2px 0;background:linear-gradient(90deg,#55575c,#9a9da4)}
+.phone::after{content:"";position:absolute;left:-4px;top:15%;width:3px;height:27%;border-radius:2px 0 0 2px;
+  background:linear-gradient(#8c8f96 0 11%,transparent 11% 27%,#8c8f96 27% 57%,transparent 57% 66%,#8c8f96 66% 96%,transparent 96%)}
+.shot.ph{max-width:240px;margin-inline:auto}
 .shots2.ph2{grid-template-columns:minmax(0,1.6fr) minmax(0,.8fr);align-items:center}
 @media (max-width:760px){.shots2.ph2{grid-template-columns:1fr}}
 
@@ -308,14 +315,29 @@ footer a:hover{color:var(--ink)}
 .vis2 .wm{margin-top:18px}
 @media (max-width:760px){.vis2{grid-template-columns:1fr}.wm{margin-inline:auto}}
 
-/* ============ con el telefono ============ */
-.phone-sec{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(20px,4vw,56px);align-items:center;margin-top:clamp(26px,4vh,40px);
-  padding:clamp(20px,3vw,36px);background:var(--blue-soft);border:1px solid rgba(13,79,216,.2);border-radius:4px}
-.phone-sec .do li{font-size:16px}
-.phone-sec .note2{margin-top:16px;font-size:14.5px;color:#103a8f}
-.phone-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+/* ============ ordenador o telefono ============ */
+.dev{margin-top:clamp(26px,4vh,40px);padding:clamp(20px,3vw,36px);background:var(--blue-soft);border:1px solid rgba(13,79,216,.2);border-radius:4px}
+.dev-h h3{margin-top:12px;font-size:clamp(22px,2.4vw,30px);font-weight:300;letter-spacing:-.02em;line-height:1.15}
+.dev-h>p:last-child{margin-top:10px;color:var(--ink-2);max-width:62ch}
+.dev-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,2.4vw,28px);margin-top:clamp(18px,2.6vw,28px)}
+.dev-card{display:grid;grid-row:span 6;grid-template-rows:subgrid;row-gap:0;align-content:start;min-width:0;padding:clamp(18px,2.4vw,28px);background:#fff;border:1px solid var(--line);border-radius:4px}
+.dev-card>.eyebrow{margin-top:24px}
+.dev-card h4{margin-top:10px;font-size:clamp(19px,1.9vw,23px);font-weight:400;letter-spacing:-.015em;line-height:1.2}
+.dev-card>p:not(.eyebrow):not(.note2){margin-top:8px;color:var(--ink-2);font-size:15px}
+.dev-card .do li{font-size:15.5px}
+.dev-card>.laptop,.dev-card>.phone-pair{align-self:end}
+.dev-card .note2{margin-top:16px;font-size:14px;color:#103a8f}
+.dev-card .phone-pair{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,22px);width:100%;max-width:320px;margin:0 auto}
 .phone-pair .phone{width:100%}
-@media (max-width:860px){.phone-sec{grid-template-columns:1fr}}
+@media (max-width:900px){.dev-grid{grid-template-columns:minmax(0,1fr)}}
+/* portatil: pantalla con bisel negro y camara, base de aluminio un poco mas ancha */
+.laptop{width:100%;max-width:560px;margin:0 auto}
+.lt-scr{position:relative;margin:0 6.5%;padding:2.3% 2.3% 3.4%;background:#0b0c0f;border-radius:12px 12px 0 0;box-shadow:inset 0 0 0 1px #2c2f36}
+.lt-scr::before{content:"";position:absolute;left:50%;top:.9%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:#262a31;box-shadow:inset 0 0 0 1px #3a3f48}
+.lt-scr img{display:block;width:100%;border-radius:2px}
+.lt-base{position:relative;height:clamp(10px,1.5vw,15px);background:linear-gradient(#eceef1,#c4c8ce 55%,#9fa3aa);border-radius:2px 2px 14px 14px / 2px 2px 100% 100%;box-shadow:0 20px 30px -20px rgba(7,8,10,.55)}
+.lt-base::before{content:"";position:absolute;left:50%;top:0;width:15%;height:45%;transform:translateX(-50%);background:linear-gradient(#b5b9c0,#cdd0d5);border-radius:0 0 7px 7px}
+.laptop figcaption{margin-top:12px;font-size:13px;color:var(--ink-3);text-align:center}
 
 .lang-note{margin-top:14px;padding:10px 14px;border-radius:3px;background:var(--paper-2);border:1px solid var(--line);font-size:14.5px;color:var(--ink-2)}
 
@@ -329,7 +351,7 @@ footer a:hover{color:var(--ink)}
 [dir="rtl"] code,[dir="rtl"] .addr,[dir="rtl"] .ui{direction:ltr;unicode-bidi:isolate}
 [dir="rtl"] .st-n small{margin-left:0}
 .phone-row{display:flex;flex-wrap:wrap;justify-content:center;gap:24px}
-.phone-row .shot.ph{margin-top:18px;width:240px}
+.phone-row .shot.ph{margin-top:18px;width:220px}
 /* la lista de pasos nunca se ensancha por un boton largo; en el movil los botones parten linea */
 .steps{grid-template-columns:minmax(0,1fr)}
 @media (max-width:560px){.step{grid-template-columns:minmax(0,1fr)}.ui{white-space:normal}}

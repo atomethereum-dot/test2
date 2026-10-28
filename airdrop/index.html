@@ -830,7 +830,7 @@ html.aiboot{overflow:hidden}
           <a class="btn btn-guide mono fx" style="--d:.78s" href="#steps"><span class="gs" aria-hidden="true"><b></b><b></b><b></b><b></b></span><span data-i="b.how">See the 4 steps</span><span class="arrow">→</span></a>
           <a class="btn btn-ghost mono fx" style="--d:.86s" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener"><span data-i="b.buy">Buy SECT on Uniswap</span><span class="arrow">↗</span></a>
         </div>
-        <a class="btn btn-ghost gdoc mono fx js-guide" style="--d:.92s" href="/airdrop-guide/"><svg class="gd-bd" aria-hidden="true"><rect width="100%" height="100%"/></svg><span class="gd-st" aria-hidden="true"><img class="gd-cv" src="/airdrop-guide/img/cover/en-sm.jpg?v=2" srcset="/airdrop-guide/img/cover/en-sm@2x.jpg?v=2 2x, /airdrop-guide/img/cover/en-sm@3x.jpg?v=2 3x" alt="" width="38" height="54" decoding="async"></span><span class="gd-tx"><span data-i="b.guide">Step-by-step guide</span><span class="gd-k"><b>PDF</b> · <span data-i="b.guideK">24 pages · 11 languages</span></span></span><span class="arrow">→</span></a>
+        <a class="btn btn-ghost gdoc mono fx js-guide" style="--d:.92s" href="/airdrop-guide/"><svg class="gd-bd" aria-hidden="true"><rect width="100%" height="100%"/></svg><span class="gd-st" aria-hidden="true"><img class="gd-cv" src="/airdrop-guide/img/cover/en-sm.jpg?v=2" srcset="/airdrop-guide/img/cover/en-sm@2x.jpg?v=2 2x, /airdrop-guide/img/cover/en-sm@3x.jpg?v=2 3x" alt="" width="38" height="54" decoding="async"></span><span class="gd-tx"><span data-i="b.guide">Step-by-step guide</span><span class="gd-k"><b>PDF</b> · <span data-i="b.guideK">25 pages · 11 languages</span></span></span><span class="arrow">→</span></a>
       </div>
 
       <aside class="sheet fx" style="--d:.45s" aria-label="In short">
@@ -1355,7 +1355,7 @@ es:{
 n1:"Cómo entrar",n2:"Niveles",n3:"Premios",n4:"¿Es seguro?",n5:"Preguntas",nc:"Conectar wallet",
 "h.e":"Campaña oficial · Sectora Foundation",
 "h.l":"<b>7.000.000 SECT</b> en recompensas para quienes construyen la red de Sectora. Activa el Hash Node y mantén tus SECT en staking: con 4.000 SECT ganas 3.600 SECT, y si pones más, ganas en proporción, sin máximo. Las entregas empiezan en el lanzamiento de SectoraEVM.",
-"b.join":"Participar","b.my":"Ver mi airdrop","b.how":"Ver los 4 pasos","b.guide":"Guía paso a paso","b.guideK":"24 páginas · 11 idiomas","b.buy":"Comprar SECT en Uniswap",
+"b.join":"Participar","b.my":"Ver mi airdrop","b.how":"Ver los 4 pasos","b.guide":"Guía paso a paso","b.guideK":"25 páginas · 11 idiomas","b.buy":"Comprar SECT en Uniswap",
 "sh.t":"En resumen","sh.1":"Premio","sh.2":"Participación","sh.2v":"Desde 100 SECT en staking","sh.3":"Duración","sh.3v":"El mismo tiempo para todos, desde que entras","sh.4":"Lo recibes","sh.4v":"En SectoraEVM · en su lanzamiento en mainnet",
 "sh.n":"Tus SECT van al staking de Sectora, sin bloqueo. Retiras cuando quieras.",
 "st.ok":"Verificable","st.rule":"Regla",
@@ -1417,7 +1417,7 @@ pt:{
 n1:"Como entrar",n2:"Níveis",n3:"Prêmios",n4:"É seguro?",n5:"Perguntas",nc:"Conectar carteira",
 "h.e":"Campanha oficial · Sectora Foundation",
 "h.l":"<b>7.000.000 SECT</b> em recompensas para quem constrói a rede da Sectora. Ative o Hash Node e mantenha seus SECT em staking: com 4.000 SECT você ganha 3.600 SECT, e se colocar mais, ganha em proporção, sem máximo. As entregas começam no lançamento da SectoraEVM.",
-"b.join":"Participar","b.my":"Ver meu airdrop","b.how":"Ver os 4 passos","b.guide":"Guia passo a passo","b.guideK":"24 páginas · 11 idiomas","b.buy":"Comprar SECT na Uniswap",
+"b.join":"Participar","b.my":"Ver meu airdrop","b.how":"Ver os 4 passos","b.guide":"Guia passo a passo","b.guideK":"25 páginas · 11 idiomas","b.buy":"Comprar SECT na Uniswap",
 "sh.t":"Resumo","sh.1":"Prêmio","sh.2":"Participação","sh.2v":"A partir de 100 SECT em staking","sh.3":"Duração","sh.3v":"O mesmo tempo para todos, desde que você entra","sh.4":"Você recebe","sh.4v":"Na SectoraEVM · no lançamento da mainnet",
 "sh.n":"Seus SECT vão para o staking da Sectora, sem bloqueio. Saque quando quiser.",
 "st.ok":"Verificável","st.rule":"Regra",
@@ -1710,7 +1710,7 @@ function pack(c, cb){
   var use = function(){ var P = window.SA_LANG_PACK && window.SA_LANG_PACK[c]; if(P && !T[c]){ T[c] = P.t; D[c] = P.d; } cb(); };
   if(c === "en" || T[c] || MORE.indexOf(c) < 0) return cb();
   if(window.SA_LANG_PACK && window.SA_LANG_PACK[c]) return use();
-  var sc = document.createElement("script"); sc.src = "/airdrop/i18n/" + c + ".js?v=11";
+  var sc = document.createElement("script"); sc.src = "/airdrop/i18n/" + c + ".js?v=12";
   sc.onload = use; sc.onerror = function(){ cb(); };
   document.head.appendChild(sc);
 }

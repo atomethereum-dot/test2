@@ -36,7 +36,7 @@ function jpg(file) {
 function img(l, name) {
   for (const rel of [l + "/" + name + ".jpg", "en/" + name + ".jpg", name + ".jpg"]) {
     const f = path.join(OUT, "img", rel);
-    if (fs.existsSync(f)) { const s = jpg(f); return { src: "/airdrop-guide/img/" + rel + "?v=2", w: s.w, h: s.h }; }
+    if (fs.existsSync(f)) { const s = jpg(f); return { src: "/airdrop-guide/img/" + rel + "?v=3", w: s.w, h: s.h }; }
   }
   return null;
 }
@@ -56,7 +56,7 @@ function build(l) {
   const C = require("./content/" + l + ".js"), U = LABELS[l];
   const errs = []; sameShape(EN, C, l, errs);
   if (errs.length) throw new Error("estructura distinta en " + l + ": " + errs.slice(0, 8).join(", "));
-  // {ui:clave} boton de la web en este idioma · {en:Texto} boton de la pagina de staking (solo ingles)
+  // {ui:clave} boton de la web en este idioma · {en:Texto} boton de la pagina de staking (se abre en ingles)
   const chip = (s) => String(s).replace(/\{ui:([a-zA-Z0-9]+)\}/g, (m, k) => '<span class="ui">' + (U[k] || EN_LAB[k] || k) + "</span>").replace(/\{en:([^}]+)\}/g, '<span class="ui en" lang="en">$1</span>');
   const plain = (s) => String(s).replace(/\{ui:([a-zA-Z0-9]+)\}/g, (m, k) => U[k] || k).replace(/\{en:([^}]+)\}/g, "$1");
   const strip = (s) => plain(s).replace(/<[^>]+>/g, "");
@@ -76,6 +76,11 @@ function build(l) {
     if (kind === "sw") body += '<div class="wm-sw"><span>' + w.from + "</span><i>→</i><span>" + w.to + "</span></div>";
     body += '<div class="wm-btns"><span class="wm-no">' + w.no + '</span><span class="wm-yes">' + w.yes + "</span></div>";
     return '<figure class="wm"><div class="wm-card"><div class="wm-top"><i>' + ICON.wallet + "</i>Wallet<b>" + (kind === "sw" ? "Ethereum" : kind === "connect" ? "Ethereum" : "Ethereum") + '</b></div><div class="wm-in">' + body + "</div></div><figcaption>" + C.common.illus + "</figcaption></figure>";
+  }
+  // portatil: la captura ya trae la ventana del navegador; el marco y la base son CSS
+  function laptop(name, cap) {
+    const I = img(l, name); if (!I) return "";
+    return '<figure class="laptop"><div class="lt-scr"><img src="' + I.src + '" width="' + I.w + '" height="' + I.h + '" alt="' + strip(cap).replace(/"/g, "&quot;") + '" loading="lazy" decoding="async"></div><div class="lt-base"></div><figcaption>' + chip(cap) + "</figcaption></figure>";
   }
   // captura: web (con barra del navegador si es una pagina clara) o movil
   function shot(name, o) {
@@ -171,7 +176,7 @@ function build(l) {
 ${alt}
 <meta name="theme-color" content="#ffffff">
 <link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/airdrop-guide/guide.css?v=3">
+<link rel="stylesheet" href="/airdrop-guide/guide.css?v=4">
 <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -215,7 +220,7 @@ ${alt}
       <a class="btn" href="#part-b">${C.already.btn} →</a>
     </div>
     <nav class="map">
-      ${C.map.map((m, i) => '<a href="#part-' + "abc"[i] + '"><span class="m">' + m[0] + "</span><b>" + m[1] + "</b><small>" + m[2] + "</small><em>" + m[3] + "</em></a>").join("\n      ")}
+      ${C.map.map((m, i) => '<a href="#part-' + "abc"[i] + '"><span class="m">' + m[0] + "</span><b>" + m[1] + "</b><small>" + m[2] + "</small></a>").join("\n      ")}
     </nav>
   </div>
 </section>
@@ -227,15 +232,30 @@ ${alt}
       ${C.before.items.map((x, i) => '<div' + (i === 3 ? ' class="key"' : "") + '><span class="m">' + x[0] + "</span><b>" + x[1] + "</b><small>" + x[2] + "</small></div>").join("\n      ")}
     </div>
     <div class="rules"><span class="rules-i" aria-hidden="true">${ICON.shield}</span><div><h3>${C.before.rulesH}</h3><p>${C.before.rules}</p></div></div>
-    <div class="phone-sec" id="phone">
-      <div>
-        <p class="eyebrow m"><i></i>${C.phone.k}</p>
-        <h3 style="margin-top:12px;font-size:clamp(22px,2.4vw,30px);font-weight:300;letter-spacing:-.02em;line-height:1.15">${C.phone.h}</h3>
-        <p style="margin-top:10px;color:var(--ink-2)">${C.phone.p}</p>
-        ${dos(C.phone.steps)}
-        <p class="note2">${C.phone.note}</p>
+    <div class="dev" id="phone">
+      <div class="dev-h">
+        <p class="eyebrow m"><i></i>${C.devices.k}</p>
+        <h3>${C.devices.h}</h3>
+        <p>${C.devices.p}</p>
       </div>
-      <div class="phone-pair">${["stk-phone-2", "dsh-phone-2"].map((n) => { const I = img(l, n); return I ? '<div class="phone"><img src="' + I.src + '" width="' + I.w + '" height="' + I.h + '" alt="" loading="lazy" decoding="async"></div>' : ""; }).join("")}</div>
+      <div class="dev-grid">
+        <article class="dev-card" id="computer">
+          ${laptop("pc-1", C.computer.cap)}
+          <p class="eyebrow m"><i></i>${C.common.computer}</p>
+          <h4>${C.computer.h}</h4>
+          <p>${C.computer.p}</p>
+          ${dos(C.computer.steps)}
+          <p class="note2">${chip(C.computer.note)}</p>
+        </article>
+        <article class="dev-card">
+          <div class="phone-pair">${["stk-phone-2", "dsh-phone-2"].map((n) => { const I = img(l, n); return I ? '<div class="phone"><img src="' + I.src + '" width="' + I.w + '" height="' + I.h + '" alt="" loading="lazy" decoding="async"></div>' : ""; }).join("")}</div>
+          <p class="eyebrow m"><i></i>${C.common.phone}</p>
+          <h4>${C.phone.h}</h4>
+          <p>${C.phone.p}</p>
+          ${dos(C.phone.steps)}
+          <p class="note2">${chip(C.phone.note)}</p>
+        </article>
+      </div>
     </div>
   </div>
 </section>
@@ -293,7 +313,7 @@ ${partWeb("C", 15, 16)}
   const pg = (id, right, body, cls) => pages.push('<section class="pg ' + (cls || "") + '" data-id="' + id + '">' + hdr(right) + '<div class="pg-b">' + body + '</div><footer class="pg-f"><span>sectoraorg.com/airdrop-guide</span><span>support@sectoraorg.com</span><span class="pn"></span></footer></section>');
   const partName = (P) => partLabel(P) + " · " + C.parts[P].h;
   // indice
-  const tocRows = [["start", C.toc.start, ""], ["before", C.toc.before, ""], ["phone", C.phone.k, ""]]
+  const tocRows = [["start", C.toc.start, ""], ["before", C.toc.before, ""], ["computer", C.common.computer, ""], ["phone", C.common.phone, ""]]
     .concat([["A", partName("A"), "pt"]]).concat([1, 2, 3, 4, 5, 6, 7].map((n) => ["s" + n, String(n).padStart(2, "0") + " · " + plain(S[n].h), ""]))
     .concat([["B", partName("B"), "pt"]]).concat([8, 9, 10, 11, 12, 13, 14].map((n) => ["s" + n, String(n).padStart(2, "0") + " · " + plain(S[n].h), ""]))
     .concat([["C", partName("C"), "pt"]]).concat([15, 16].map((n) => ["s" + n, String(n).padStart(2, "0") + " · " + plain(S[n].h), ""]))
@@ -304,11 +324,14 @@ ${partWeb("C", 15, 16)}
   pg("start", C.toc.start, '<p class="kick">' + C.hero.k + '</p><h1 class="pt-h big">' + C.hero.h1 + '</h1><p class="lede">' + C.hero.lede + "</p>" +
     '<div class="need"><p class="kick">' + C.need.k + "</p><h2>" + C.need.h + '</h2><div class="req2"><div><span>1</span><b>' + C.need.r1[0] + "</b><small>" + C.need.r1[1] + '</small></div><div><span>2</span><b>' + C.need.r2[0] + "</b><small>" + C.need.r2[1] + '</small></div></div><p class="foot">' + C.need.foot + "</p></div>" +
     '<div class="already"><i>' + ICON.see + "</i><div><b>" + C.already.h + "</b><p>" + C.already.p + "</p></div></div>" +
-    '<div class="map">' + C.map.map((m) => "<div><span>" + m[0] + "</span><b>" + m[1] + "</b><small>" + m[2] + "</small><em>" + m[3] + "</em></div>").join("") + "</div>");
+    '<div class="map">' + C.map.map((m) => "<div><span>" + m[0] + "</span><b>" + m[1] + "</b><small>" + m[2] + "</small></div>").join("") + "</div>");
   // antes de empezar
   pg("before", C.toc.before, '<p class="kick">' + C.before.k + '</p><h1 class="pt-h">' + C.before.h + '</h1><div class="before">' +
     C.before.items.map((x, i) => '<div class="' + (i === 3 ? "key" : "") + '"><span>' + x[0] + "</span><b>" + x[1] + "</b><small>" + x[2] + "</small></div>").join("") + "</div>" +
     '<div class="rules"><i>' + ICON.shield + "</i><div><b>" + C.before.rulesH + "</b><p>" + C.before.rules + "</p></div></div>");
+  // con el ordenador
+  pg("computer", C.common.computer, '<p class="kick">' + C.devices.k + '</p><h1 class="pt-h">' + C.computer.h + '</h1><p class="lede">' + C.computer.p + "</p>" + dos(C.computer.steps) +
+    '<div class="vis pc">' + laptop("pc-1", C.computer.cap).replace(' loading="lazy" decoding="async"', "") + "</div>" + box("tip", C.computer.note));
   // con el telefono
   pg("phone", C.phone.k, '<p class="kick">' + C.phone.k + '</p><h1 class="pt-h">' + C.phone.h + '</h1><p class="lede">' + C.phone.p + "</p>" + dos(C.phone.steps) +
     '<div class="vis phones">' + [["stk-phone-2", "sectoraorg.com/staking"], ["dsh-phone-2", "sectoraorg.com/dashboard"]].map((x) => { const I = img(l, x[0]); return I ? '<figure><div class="phone"><img src="' + I.src + '" alt=""></div><figcaption>' + x[1] + "</figcaption></figure>" : ""; }).join("") + "</div>" + box("tip", C.phone.note));
@@ -353,7 +376,7 @@ ${partWeb("C", 15, 16)}
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title>${C.meta.title} · PDF</title>
-<link rel="stylesheet" href="/airdrop-guide/print.css?v=2">
+<link rel="stylesheet" href="/airdrop-guide/print.css?v=3">
 </head>
 <body>
 ${cover}
@@ -378,7 +401,7 @@ ${pages.join("\n")}
           var cap = f.querySelector("figcaption"), ch = cap ? cap.offsetHeight + 8 : 0;
           // la barra del navegador encima de la captura tambien ocupa su alto
           var bar = f.querySelector(".bar"); if (bar) ch += bar.offsetHeight;
-          var im = f.querySelector("img"); if (im) im.style.maxHeight = Math.max(40, each - ch - (f.querySelector(".phone") ? 22 : 4)) + "px";
+          var im = f.querySelector("img"); if (im) im.style.maxHeight = Math.max(40, each - ch - (f.querySelector(".phone") ? 22 : f.classList.contains("laptop") ? 34 : 4)) + "px";
           var wm = f.querySelector(".wm-card"); if (wm) { wm.style.transform = ""; var s = Math.min(1, (each - ch) / wm.offsetHeight); if (s < 1) { wm.style.transform = "scale(" + s + ")"; wm.style.transformOrigin = "top center"; f.style.height = (wm.offsetHeight * s + ch) + "px"; } }
         });
         // la caja mide lo que miden sus capturas: el texto sigue justo debajo y el sobrante queda al final de la hoja

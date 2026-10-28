@@ -10,13 +10,13 @@ module.exports = {
     part: "Teil", step: "Schritt", stepOf: "Schritt {n} von 16", illus: "Illustration · deine Wallet kann etwas anders aussehen",
     example: "Die Screenshots zeigen eine Beispiel-Wallet (0x4b2f…4b3c) und Beispielbeträge. Auf deinem Bildschirm siehst du deine eigenen.",
     phone: "Auf dem Handy", computer: "Am Computer", yes: "JA", no: "NEIN", minutes: "Minuten", page: "Seite",
-    stakingEnglish: "Die Staking-Seite ist auf Englisch. Hier siehst du jeden Button so, wie er dort steht, mit der Übersetzung in Klammern."
+    stakingEnglish: "Die Staking-Seite öffnet sich auf Englisch; die Sprache änderst du mit der Flagge oben rechts. Hier siehst du jeden Button so, wie er auf Englisch dort steht, mit der Übersetzung in Klammern."
   },
   cover: {
     tag: "Offizielle Anleitung · Ausgabe 1.1", kicker: "Airdrop Genesis · Anleitung zur Teilnahme",
     h1: "So nimmst du<br>am Sectora-<b>Airdrop</b> teil.",
     p: "Schritt für Schritt, mit Screenshots: vom allerersten Klick bis zu einem Hash Node, der läuft und zählt. Lies einen Schritt, mach ihn, dann den nächsten.",
-    parts: [["Teil A", "#SECT staken", "Ethereum · Schritte 1–7"], ["Teil B", "Node einschalten", "Gratis-Testnet · Schritte 8–14"], ["Teil C", "Airdrop prüfen", "Eine Minute · Schritte 15–16"]],
+    parts: [["Teil A", "#SECT staken", "Ethereum · Schritte 1–7"], ["Teil B", "Node einschalten", "Gratis-Testnet · Schritte 8–14"], ["Teil C", "Airdrop prüfen", "Nur lesen · Schritte 15–16"]],
     issued: "Herausgeber", entity: "Unternehmen", activity: "Tätigkeit", activityV: "Cybersecurity-Unternehmen", location: "Standort", locationV: "Chicago, Illinois, Vereinigte Staaten",
     file: "Illinois-Registernr.", ein: "EIN", contracts: "Offizielle Verträge · Ethereum Mainnet", token: "#SECT-Token", staking: "Staking", web: "Website", support: "Support",
     date: "Oktober 2026 · Deutsch"
@@ -25,7 +25,7 @@ module.exports = {
   hero: {
     k: "Airdrop Genesis · Schritt-für-Schritt-Anleitung",
     h1: "So nimmst du am Sectora-Airdrop teil, <b>Schritt für Schritt.</b>",
-    lede: "Diese Anleitung führt dich vom <strong>allerersten Klick</strong> bis zu einem <strong>Hash Node, der läuft und zählt</strong>. Jeder Schritt sagt genau, was du drücken musst, was du sehen solltest und was du nicht tun darfst, mit Screenshot. Lies einen Schritt, mach ihn, dann den nächsten. <strong>Etwa 20 Minuten.</strong>",
+    lede: "Diese Anleitung führt dich vom <strong>allerersten Klick</strong> bis zu einem <strong>Hash Node, der läuft und zählt</strong>. Jeder Schritt sagt genau, was du drücken musst, was du sehen solltest und was du nicht tun darfst, mit Screenshot. Lies einen Schritt, mach ihn, dann den nächsten.",
     pdf: "PDF-Anleitung herunterladen", start: "Anleitung starten"
   },
   need: {
@@ -40,9 +40,9 @@ module.exports = {
     btn: "Zu Teil B"
   },
   map: [
-    ["Teil A · Schritte 1–7", "#SECT staken", "Ethereum Mainnet. Nutzt deine echten #SECT und etwas ETH für die Gebühr.", "≈ 5 Minuten"],
-    ["Teil B · Schritte 8–14", "Hash Node einschalten", "Testnetz von Sectora. Gratis-Testcoins: du gibst kein echtes Geld aus.", "≈ 10 Minuten"],
-    ["Teil C · Schritte 15–16", "Airdrop prüfen", "Sieh dein Level, deinen Preis und deinen Zähler wachsen.", "≈ 1 Minute"]
+    ["Teil A · Schritte 1–7", "#SECT staken", "Ethereum Mainnet. Nutzt deine echten #SECT und etwas ETH für die Gebühr."],
+    ["Teil B · Schritte 8–14", "Hash Node einschalten", "Testnetz von Sectora. Gratis-Testcoins: du gibst kein echtes Geld aus."],
+    ["Teil C · Schritte 15–16", "Airdrop prüfen", "Sieh dein Level, deinen Preis und deinen Zähler wachsen."]
   ],
   before: {
     k: "00 · Bevor du startest", h: "Leg diese <b>vier Dinge</b> bereit.",
@@ -55,6 +55,19 @@ module.exports = {
     rulesH: "Drei Sicherheitsregeln. Brich sie nie.",
     rules: "<b>1.</b> Gib niemandem deine geheime Wiederherstellungsphrase (die 12 oder 24 Wörter) oder deinen privaten Schlüssel. Sectora fragt nie danach. <b>2.</b> Nutze nur <b>sectoraorg.com</b>: prüfe jedes Mal die Adressleiste. <b>3.</b> Niemand von Sectora schreibt dir zuerst, um dir zu „helfen“. Wenn das jemand tut, ist es Betrug."
   },
+  devices: { k: "Computer oder Handy", h: "Computer oder Handy? <b>Beides geht.</b>",
+    p: "Nimm, was du hast. Die Schritte sind gleich: Nur wie sich deine Wallet öffnet, ist anders." },
+  computer: {
+    h: "Am Computer? <b>So geht’s.</b>",
+    p: "Am Computer ist deine Wallet eine <b>Browser-Erweiterung</b> (Chrome, Brave oder Edge). Sie öffnet sich als kleines Fenster oben rechts.",
+    steps: [
+      "<b>Installiere deine Wallet</b> in Chrome, Brave oder Edge (zum Beispiel MetaMask, nur von der offiziellen Website). Öffne sie und entsperre sie mit deinem Passwort.",
+      "<b>Staking (Teil A):</b> Öffne <b>sectoraorg.com/staking</b> und klicke auf {en:Connect wallet} (Wallet verbinden). Klicke in der Liste auf deine Wallet <b>(1)</b>. Das Wallet-Fenster öffnet sich oben rechts: Klicke auf <b>Verbinden</b> <b>(2)</b>.",
+      "<b>Node (Teil B):</b> Öffne <b>sectoraorg.com/dashboard</b> im selben Browser, klicke auf {ui:connect} und wähle <b>dieselbe Wallet</b>."
+    ],
+    note: "<b>Du siehst das Wallet-Fenster nicht?</b> Klicke oben rechts im Browser auf das Puzzle-Symbol und dann auf deine Wallet. <b>Keine Erweiterung?</b> Wähle in der Liste {en:Wallet on your phone} (Wallet auf deinem Handy) und scanne den QR-Code mit dem Handy.",
+    cap: "(1) Deine Wallet in der Liste · (2) Verbinden im Wallet-Fenster."
+  },
   phone: {
     k: "Auf dem Handy", h: "Du nutzt ein Handy? <b>Lies das zuerst.</b>",
     p: "Alles in dieser Anleitung funktioniert auf dem Handy. Du brauchst nur die App deiner Wallet (MetaMask, Trust Wallet, Coinbase Wallet …).",
@@ -66,9 +79,9 @@ module.exports = {
     note: "Öffnet sich die Wallet-App nicht, öffne sie selbst, such ihren eingebauten Browser (oft <b>Browser</b>, <b>Entdecken</b> oder <b>Explore</b> genannt) und gib dort die Adresse ein."
   },
   parts: {
-    A: { k: "Teil A · Schritte 1–7 · ≈ 5 Minuten", h: "#SECT staken", sub: "Du legst deine #SECT ins offizielle Staking. Sie bleiben deine, bringen jede Sekunde Belohnungen und zählen für den Airdrop. Du stakest schon? <a href=\"#part-b\">Spring zu Teil B</a>.", tags: ["Ethereum Mainnet · echte #SECT", "Etwas ETH für Gebühren nötig", "Keine Sperrfrist"] },
-    B: { k: "Teil B · Schritte 8–14 · ≈ 10 Minuten", h: "Hash Node einschalten", sub: "Der Hash Node läuft im Testnetz von Sectora (Sepolia). <b>Alles in Teil B ist kostenlos:</b> du nutzt Gratis-Testcoins ohne Wert. Hier gibst du nie echtes Geld aus.", tags: ["Gratis · Testnetz", "Dieselbe Wallet wie beim Staking", "Bleibt von selbst an"] },
-    C: { k: "Teil C · Schritte 15–16 · ≈ 1 Minute", h: "Airdrop prüfen", sub: "Sieh dein Level, deinen Preis und die drei Bedingungen, live aus der Blockchain gelesen. Ansehen ist kostenlos: keine Signatur, keine Transaktion.", tags: ["Nur lesen · gratis", "Jederzeit"] }
+    A: { k: "Teil A · Schritte 1–7", h: "#SECT staken", sub: "Du legst deine #SECT ins offizielle Staking. Sie bleiben deine, bringen jede Sekunde Belohnungen und zählen für den Airdrop. Du stakest schon? <a href=\"#part-b\">Spring zu Teil B</a>.", tags: ["Ethereum Mainnet · echte #SECT", "Etwas ETH für Gebühren nötig", "Keine Sperrfrist"] },
+    B: { k: "Teil B · Schritte 8–14", h: "Hash Node einschalten", sub: "Der Hash Node läuft im Testnetz von Sectora (Sepolia). <b>Alles in Teil B ist kostenlos:</b> du nutzt Gratis-Testcoins ohne Wert. Hier gibst du nie echtes Geld aus.", tags: ["Gratis · Testnetz", "Dieselbe Wallet wie beim Staking", "Bleibt von selbst an"] },
+    C: { k: "Teil C · Schritte 15–16", h: "Airdrop prüfen", sub: "Sieh dein Level, deinen Preis und die drei Bedingungen, live aus der Blockchain gelesen. Ansehen ist kostenlos: keine Signatur, keine Transaktion.", tags: ["Nur lesen · gratis", "Jederzeit"] }
   },
   s: {
     1: { k: "Browser", h: "Öffne die Staking-Seite",

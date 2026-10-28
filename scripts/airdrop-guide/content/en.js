@@ -1,6 +1,6 @@
 /* Guia del Airdrop Genesis · English (texto base; los demas idiomas copian esta misma estructura).
    {ui:clave} = boton de la web con su texto en este idioma (labels.json); {en:Texto} = boton de la pagina
-   de staking, que solo existe en ingles. */
+   de staking, que se abre en ingles. */
 module.exports = {
   name: "English", locale: "en-US", dir: "ltr",
   meta: {
@@ -18,7 +18,7 @@ module.exports = {
     tag: "Official guide · Edition 1.1", kicker: "Airdrop Genesis · Participation guide",
     h1: "How to join<br>the Sectora <b>airdrop.</b>",
     p: "Step by step, with screenshots: from your very first click to a Hash Node that is on and counting. Read one step, do it, then go to the next.",
-    parts: [["Part A", "Stake your #SECT", "Ethereum · steps 1–7"], ["Part B", "Turn on your node", "Free testnet · steps 8–14"], ["Part C", "Check your airdrop", "One minute · steps 15–16"]],
+    parts: [["Part A", "Stake your #SECT", "Ethereum · steps 1–7"], ["Part B", "Turn on your node", "Free testnet · steps 8–14"], ["Part C", "Check your airdrop", "Read-only · steps 15–16"]],
     issued: "Issued by", entity: "Entity", activity: "Activity", activityV: "Cybersecurity company", location: "Location", locationV: "Chicago, Illinois, United States",
     file: "Illinois file", ein: "EIN", contracts: "Official contracts · Ethereum mainnet", token: "#SECT token", staking: "Staking", web: "Website", support: "Support",
     date: "October 2026 · English"
@@ -27,7 +27,7 @@ module.exports = {
   hero: {
     k: "Airdrop Genesis · Step-by-step guide",
     h1: "How to join the Sectora airdrop, <b>step by step.</b>",
-    lede: "This guide takes you from your <strong>very first click</strong> to a <strong>Hash Node that is on and counting</strong>. Every step says exactly what to press, what you should see and what not to do, with a screenshot. Read one step, do it, then go to the next. <strong>About 20 minutes.</strong>",
+    lede: "This guide takes you from your <strong>very first click</strong> to a <strong>Hash Node that is on and counting</strong>. Every step says exactly what to press, what you should see and what not to do, with a screenshot. Read one step, do it, then go to the next.",
     pdf: "Download the PDF guide", start: "Start the guide"
   },
   need: {
@@ -42,9 +42,9 @@ module.exports = {
     btn: "Go to Part B"
   },
   map: [
-    ["Part A · steps 1–7", "Stake your #SECT", "Ethereum mainnet. Uses your real #SECT and a little ETH for the fee.", "≈ 5 minutes"],
-    ["Part B · steps 8–14", "Turn on your Hash Node", "Sectora test network. Free test coins: you spend no real money.", "≈ 10 minutes"],
-    ["Part C · steps 15–16", "Check your airdrop", "See your level, your prize and your count growing.", "≈ 1 minute"]
+    ["Part A · steps 1–7", "Stake your #SECT", "Ethereum mainnet. Uses your real #SECT and a little ETH for the fee."],
+    ["Part B · steps 8–14", "Turn on your Hash Node", "Sectora test network. Free test coins: you spend no real money."],
+    ["Part C · steps 15–16", "Check your airdrop", "See your level, your prize and your count growing."]
   ],
   before: {
     k: "00 · Before you start", h: "Have these <b>four things</b> ready.",
@@ -57,6 +57,19 @@ module.exports = {
     rulesH: "Three safety rules. Never break them.",
     rules: "<b>1.</b> Never give anyone your secret recovery phrase (the 12 or 24 words) or your private key. Sectora will never ask for them. <b>2.</b> Only use <b>sectoraorg.com</b>: check the address bar every time. <b>3.</b> Nobody from Sectora will message you first to “help” you. If someone does, it is a scam."
   },
+  devices: { k: "Computer or phone", h: "Computer or phone? <b>Both work.</b>",
+    p: "Use the one you have. The steps are the same: only the way your wallet opens changes." },
+  computer: {
+    h: "Using a computer? <b>Do it like this.</b>",
+    p: "On a computer your wallet is a <b>browser extension</b> (Chrome, Brave or Edge). It opens as a small window at the top right.",
+    steps: [
+      "<b>Install your wallet</b> in Chrome, Brave or Edge (for example MetaMask, only from its official website). Open it and unlock it with your password.",
+      "<b>Staking (Part A):</b> open <b>sectoraorg.com/staking</b> and press {en:Connect wallet}. Press your wallet in the list <b>(1)</b>. The wallet window opens at the top right: press <b>Connect</b> <b>(2)</b>.",
+      "<b>Node (Part B):</b> open <b>sectoraorg.com/dashboard</b> in the same browser, press {ui:connect} and choose the <b>same wallet</b>."
+    ],
+    note: "<b>Don't see the wallet window?</b> Click the puzzle icon at the top right of the browser, then your wallet. <b>No extension?</b> In the list, choose {en:Wallet on your phone} and scan the QR code with your phone.",
+    cap: "(1) Your wallet in the list · (2) Connect in the wallet window."
+  },
   phone: {
     k: "On a phone", h: "Using a phone? <b>Read this first.</b>",
     p: "Everything in this guide works on a phone. You only need your wallet app installed (MetaMask, Trust Wallet, Coinbase Wallet…).",
@@ -68,9 +81,9 @@ module.exports = {
     note: "If the wallet app doesn't open, open it yourself, find its built-in browser (often called <b>Browser</b>, <b>Explore</b> or <b>Discover</b>) and type the address there."
   },
   parts: {
-    A: { k: "Part A · Steps 1–7 · ≈ 5 minutes", h: "Stake your #SECT", sub: "You put your #SECT in the official staking. They stay yours, earn staking rewards every second and count for the airdrop. Already staking? <a href=\"#part-b\">Skip to Part B</a>.", tags: ["Ethereum mainnet · real #SECT", "Needs a little ETH for fees", "No lock-up"] },
-    B: { k: "Part B · Steps 8–14 · ≈ 10 minutes", h: "Turn on your Hash Node", sub: "The Hash Node runs on Sectora's test network (Sepolia). <b>Everything in Part B is free:</b> you use free test coins that have no value. You never spend real money here.", tags: ["Free · test network", "Same wallet as your staking", "Stays on by itself"] },
-    C: { k: "Part C · Steps 15–16 · ≈ 1 minute", h: "Check your airdrop", sub: "See your level, your prize and the three requirements, read live from the blockchain. Looking is free: no signature, no transaction.", tags: ["Read-only · free", "Any time"] }
+    A: { k: "Part A · Steps 1–7", h: "Stake your #SECT", sub: "You put your #SECT in the official staking. They stay yours, earn staking rewards every second and count for the airdrop. Already staking? <a href=\"#part-b\">Skip to Part B</a>.", tags: ["Ethereum mainnet · real #SECT", "Needs a little ETH for fees", "No lock-up"] },
+    B: { k: "Part B · Steps 8–14", h: "Turn on your Hash Node", sub: "The Hash Node runs on Sectora's test network (Sepolia). <b>Everything in Part B is free:</b> you use free test coins that have no value. You never spend real money here.", tags: ["Free · test network", "Same wallet as your staking", "Stays on by itself"] },
+    C: { k: "Part C · Steps 15–16", h: "Check your airdrop", sub: "See your level, your prize and the three requirements, read live from the blockchain. Looking is free: no signature, no transaction.", tags: ["Read-only · free", "Any time"] }
   },
   s: {
     1: { k: "Browser", h: "Open the staking page",

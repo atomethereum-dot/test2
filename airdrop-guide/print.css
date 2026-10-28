@@ -127,9 +127,19 @@ img{display:block}
 .shot .bar span{margin-inline-start:1.6mm;padding:.5mm 2.4mm;border-radius:9mm;background:#fff;border:.25mm solid var(--line);font-family:var(--mono);font-size:6.6pt;color:var(--ink-2)}
 .shot .bar span b{color:var(--live);font-weight:500}
 .vis figcaption,.wm figcaption{margin-top:1.8mm;font-size:7.8pt;color:var(--ink-3);text-align:center;max-width:120mm}
-.phone{display:inline-block;padding:1.6mm;border-radius:5mm;background:#0b0e14}
-.phone img{border-radius:3.6mm}
+.phone{position:relative;display:inline-block;padding:1.5mm;border:.45mm solid transparent;border-radius:16% / 7.7%;
+  background:linear-gradient(#030405,#030405) padding-box,linear-gradient(150deg,#a7aab0,#45474c 20%,#8c8f96 46%,#33353a 72%,#9a9da4) border-box}
+.phone img{display:block;border-radius:14% / 6.5%}
+.phone::before{content:"";position:absolute;right:-.9mm;top:25%;width:.6mm;height:12%;border-radius:0 .4mm .4mm 0;background:#7d8087}
+.phone::after{content:"";position:absolute;left:-.9mm;top:15%;width:.6mm;height:27%;border-radius:.4mm 0 0 .4mm;
+  background:linear-gradient(#8c8f96 0 11%,transparent 11% 27%,#8c8f96 27% 57%,transparent 57% 66%,#8c8f96 66% 96%,transparent 96%)}
 .vis.phones{gap:12mm}
+.vis figure.laptop{flex:none;align-items:stretch;width:max-content;max-width:100%}
+.lt-scr{position:relative;margin:0 5mm;padding:1.5mm 1.5mm 2.3mm;background:#0b0c0f;border-radius:2.4mm 2.4mm 0 0;text-align:center}
+.lt-scr::before{content:"";position:absolute;left:50%;top:.45mm;width:.9mm;height:.9mm;margin-left:-.45mm;border-radius:50%;background:#2a2e36}
+.lt-scr img{display:block;border-radius:.4mm}
+.lt-base{position:relative;height:2.8mm;background:linear-gradient(#eceef1,#c4c8ce 55%,#9fa3aa);border-radius:.4mm .4mm 3mm 3mm / .4mm .4mm 100% 100%}
+.lt-base::before{content:"";position:absolute;left:50%;top:0;width:15%;height:45%;transform:translateX(-50%);background:#b5b9c0;border-radius:0 0 1.4mm 1.4mm}
 
 /* ventana de wallet (ilustracion) */
 .wm{flex:none}
@@ -196,8 +206,8 @@ img{display:block}
 
 /* indice */
 .toc{list-style:none;border-top:.25mm solid var(--line);margin-top:1mm}
-.toc li{display:flex;justify-content:space-between;align-items:baseline;gap:4mm;padding:1.75mm 0;border-bottom:.25mm solid var(--line-2);font-size:9.6pt;color:var(--ink-2)}
-.toc li.pt{padding-top:3.2mm;font-weight:500;font-size:10.6pt;color:var(--ink)}
+.toc li{display:flex;justify-content:space-between;align-items:baseline;gap:4mm;padding:1.45mm 0;border-bottom:.25mm solid var(--line-2);font-size:9.6pt;color:var(--ink-2)}
+.toc li.pt{padding-top:2.8mm;font-weight:500;font-size:10.6pt;color:var(--ink)}
 .toc li em{font-style:normal;font-family:var(--mono);font-size:8.4pt;color:var(--blue-deep)}
 
 /* problemas y soporte */

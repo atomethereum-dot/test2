@@ -111,6 +111,8 @@ jobs:
           })().catch(e => console.log("NO SE PUDO:", e.message));
           JS
           node shots.cjs || true
+          # las capturas del movil pasan a ser la pantalla completa de un iPhone (barra de estado y Safari)
+          node scripts/airdrop-guide/iphone.js || true
           ls -laR airdrop-guide/img | head -60 || true
       - name: Subir las capturas
         run: |
