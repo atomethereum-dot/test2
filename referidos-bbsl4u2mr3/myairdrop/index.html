@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>My AirDrop - Sectora Foundation</title>
+<meta name="description" content="Everything your wallet has in Sectora: Airdrop Genesis reward, Hash Node, staking and testnet rewards, read live from the blockchain.">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/v2/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/v2/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/icons/v2/apple-touch-icon.png">
+<link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Mi Airdrop: todo lo que una wallet tiene en Sectora en una sola pantalla, leido de la blockchain.
+   Mismo sistema que sectoraorg.com: fondo negro, IBM Plex, etiquetas mono, marcos finos, botones cuadrados. */
+@font-face{font-family:'IBM Plex Sans';src:url("/fonts/IBMPlexSans.woff2") format("woff2");font-weight:200 500;font-style:normal;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url("/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url("/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+:root{
+  color-scheme:dark;
+  --bg:#000;--panel:#07090d;--panel-2:#0b0e14;--ink:#fff;--ink-2:#c6ccd8;--ink-3:#7c8496;--ink-4:#4a5164;
+  --blue:#1569ff;--blue-l:#4d8dff;--hair:rgba(255,255,255,.10);--hair-soft:rgba(255,255,255,.05);
+  --ok:#3ecf8e;--warn:#e0a030;--bad:#ff6b6b;--ease:cubic-bezier(.2,.7,.1,1);--pad:clamp(16px,4vw,48px)
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:clip;min-height:100vh}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.num{font-variant-numeric:tabular-nums}
+.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(var(--hair-soft) 1px,transparent 1px),linear-gradient(90deg,var(--hair-soft) 1px,transparent 1px);
+  background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 80%);mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 80%)}
+
+/* cabecera */
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px var(--pad);border-bottom:1px solid var(--hair);background:rgba(0,0,0,.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;min-width:0}
+.brand svg{display:block;width:34px;height:34px;border-radius:3px;flex:none}
+.brand span{color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand b{color:var(--ink);font-weight:500;margin-right:10px}
+.top-r{display:flex;align-items:center;gap:10px}
+
+main{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:clamp(32px,6vw,72px) var(--pad) 72px}
+.eyebrow{display:flex;align-items:center;gap:14px;margin:0 0 22px;color:var(--ink-3)}
+.eyebrow i{display:block;width:30px;height:1px;background:var(--blue);flex:none}
+h1{margin:0;font-weight:200;font-size:clamp(40px,6.4vw,84px);letter-spacing:-.035em;line-height:1}
+h1 b{font-weight:400}
+.lead{margin:18px 0 0;max-width:620px;color:var(--ink-2);font-size:clamp(15px,1.3vw,18px);line-height:1.6}
+
+/* botones */
+.btn{display:inline-flex;align-items:center;justify-content:space-between;gap:18px;min-height:46px;padding:0 18px;border:1px solid var(--hair);
+  color:var(--ink);text-decoration:none;transition:border-color .2s,background .2s}
+.btn:hover{border-color:rgba(255,255,255,.3)}
+.btn.go{background:var(--blue);border-color:var(--blue)}
+.btn.go:hover{background:#2a78ff}
+.btn.sm{min-height:36px;padding:0 12px;gap:10px}
+
+/* entrada: conectar o revisar una direccion */
+.start{margin-top:40px;max-width:560px;border:1px solid var(--hair);background:var(--panel);padding:clamp(20px,3vw,32px)}
+.start .btn{width:100%}
+.start p{margin:0;color:var(--ink-3);font-size:14px;line-height:1.6}
+.alt{margin-top:22px !important;padding-top:20px;border-top:1px solid var(--hair)}
+.alt a{color:var(--blue-l)}
+.f{display:flex;margin-top:12px}
+.f input{flex:1;min-width:0;height:46px;padding:0 14px;background:#000;border:1px solid var(--hair);border-right:0;color:var(--ink);font:400 13px 'IBM Plex Mono',monospace}
+.f button{padding:0 16px;border:1px solid var(--hair);color:var(--ink)}
+.msg{margin-top:14px !important;color:var(--warn) !important}
+.spin{display:inline-block;width:12px;height:12px;margin-right:10px;border:1.5px solid var(--ink-4);border-top-color:var(--blue);border-radius:50%;animation:sp .8s linear infinite;vertical-align:-1px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.loading{margin-top:40px;color:var(--ink-3)}
+
+/* barra de la wallet */
+.wbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin:36px 0 18px;padding:14px 16px;border:1px solid var(--hair);background:var(--panel)}
+.wbar .who{display:flex;align-items:center;gap:12px;min-width:0}
+.wbar .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(62,207,142,.18);flex:none}
+.wbar .ad{font:400 13px 'IBM Plex Mono',monospace;color:var(--ink);word-break:break-all}
+.wbar .st{color:var(--ink-3)}
+.wbar .acts{display:flex;flex-wrap:wrap;gap:8px}
+
+/* premio del airdrop */
+.hero{position:relative;border:1px solid rgba(21,105,255,.45);background:linear-gradient(180deg,rgba(21,105,255,.10),rgba(21,105,255,.02) 60%),var(--panel);padding:clamp(20px,3.4vw,40px)}
+.hero::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:3px;background:var(--blue)}
+.hero-k{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;color:var(--blue-l)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--hair);color:var(--ink-2);font-size:10px}
+.chip.ok{border-color:rgba(62,207,142,.35);color:var(--ok)}
+.chip.warn{border-color:rgba(224,160,48,.4);color:var(--warn)}
+.big{margin:22px 0 0;font-weight:200;font-size:clamp(44px,8vw,104px);letter-spacing:-.04em;line-height:1}
+.big em{font-style:normal;color:var(--ink)}
+.big small{display:inline-block;margin-inline-start:14px;font-size:clamp(11px,1.1vw,14px);letter-spacing:.14em;color:var(--ink-3);vertical-align:.6em}
+.of{margin:12px 0 0;color:var(--ink-2);font-size:clamp(15px,1.4vw,19px)}
+.bar{height:6px;margin:22px 0 0;background:rgba(255,255,255,.08);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--blue);transition:width .3s linear}
+.days{margin:14px 0 0;color:var(--blue-l)}
+.note{margin:16px 0 0;color:var(--ink-2);font-size:15px;line-height:1.6;max-width:720px}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);margin-top:26px;border:1px solid var(--hair)}
+.trio>div{padding:16px 18px;border-left:1px solid var(--hair)}
+.trio>div:first-child{border-left:0}
+.trio .m{display:block;color:var(--ink-3);font-size:10px}
+.trio b{display:block;margin-top:8px;font-weight:300;font-size:clamp(22px,2.4vw,30px);letter-spacing:-.02em}
+.trio small{display:block;margin-top:4px;color:var(--ink-3);font-size:12px}
+.up{margin:16px 0 0;color:var(--ink-2);font-size:14px;line-height:1.6}
+.up b{color:var(--ink);font-weight:400}
+
+/* requisitos */
+.req{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:18px 0 0;padding:0;border:1px solid var(--hair);background:var(--panel)}
+.req li{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border-left:1px solid var(--hair);list-style:none}
+.req li:first-child{border-left:0}
+.req .ic{flex:none;display:grid;place-items:center;width:22px;height:22px;margin:-1px 0 0;border-radius:50%;background:rgba(255,255,255,.06);line-height:0}
+.req .ic svg{display:block;width:14px;height:14px}
+.req .ic.ok{background:#16a34a}
+.req .ic.wait{background:rgba(224,160,48,.16)}
+.req b{display:block;font-weight:400;font-size:14px}
+.req li>div>span{display:block;margin-top:3px;color:var(--ink-3);font-size:12.5px;line-height:1.5}
+
+/* tarjetas */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+.card{display:flex;flex-direction:column;border:1px solid var(--hair);background:var(--panel);padding:clamp(18px,2.4vw,26px)}
+.card h2{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 18px;color:var(--ink-3);font-weight:400}
+.card .lead2{margin:0 0 6px;font-weight:200;font-size:clamp(30px,3.2vw,40px);letter-spacing:-.03em;line-height:1.05}
+.card .lead2.ok{color:var(--ok)}
+.card .lead2.warn{color:var(--warn)}
+.card .lead2 small{font-size:.42em;color:var(--ink-3);letter-spacing:0;margin-inline-start:.25em}
+.card .cap{margin:0 0 16px;color:var(--ink-3);font-size:13px}
+.kv{margin:0;padding:0;list-style:none;border-top:1px solid var(--hair)}
+.kv li{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--hair-soft);font-size:14px}
+.kv li span{color:var(--ink-3)}
+.kv li b{font-weight:400;text-align:end;font-variant-numeric:tabular-nums;word-break:break-word}
+.kv li b.ok{color:var(--ok)}
+.kv li b.warn{color:var(--warn)}
+.kv li b small{display:block;color:var(--ink-3);font-size:11.5px;font-weight:300}
+.card .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:18px}
+/* referidos: tu link, tus invitados y tu bono */
+.card.rfc{margin-top:18px}
+.rfc .rf-s{margin:0 0 16px;color:var(--ink-2);font-size:14px;line-height:1.55;max-width:70ch}
+.rfc .rf-0{margin:14px 0 0}
+.rfc .rf-l{margin:0 0 8px;color:var(--ink-3);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
+.rfc .rf-c{display:flex;gap:8px;margin-bottom:16px}
+.rfc .rf-c code{flex:1;min-width:0;display:flex;align-items:center;padding:0 12px;min-height:36px;border:1px solid var(--hair);background:var(--bg);font:400 13px/1.3 'IBM Plex Mono',monospace;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rfc .rf-c .btn{flex:none}
+.rfc .rf-list{list-style:none;margin:0;padding:0}
+.rfc .rf-list li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--hair-soft);font:400 12.5px/1.4 'IBM Plex Mono',monospace;color:var(--ink-2)}
+.rfc .rf-list em{font-style:normal}.rfc .rf-list .on{color:var(--ok)}.rfc .rf-list .off{color:var(--warn)}
+.rfc .rf-w{margin:14px 0 0;color:var(--warn);font-size:13px;line-height:1.5}
+.rfc .rf-me{display:flex;align-items:center;gap:10px;margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--hair);font-size:14px;color:var(--ink-2)}
+.rfc .rf-ok{flex:none;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--ok)}.rfc .rf-ok svg{width:11px;height:11px}
+.rfc .rf-p{display:grid;gap:4px;margin:0 0 16px;padding:14px;border:1px solid rgba(224,160,48,.45);background:rgba(224,160,48,.07)}
+.rfc .rf-p b{font-weight:400;font-size:15px}.rfc .rf-p span{color:var(--ink-2);font-size:13.5px}.rfc .rf-p .btn{justify-self:start;margin-top:8px}
+.card .acts .btn{flex:1 1 auto}
+.fine{margin:12px 0 0;color:var(--ink-4);font-size:12px;line-height:1.5}
+
+/* historial */
+.hist{margin-top:18px;border:1px solid var(--hair);background:var(--panel);padding:clamp(18px,2.4vw,26px)}
+.hist h2{margin:0 0 14px;color:var(--ink-3);font-weight:400}
+.hist ol{margin:0;padding:0;list-style:none}
+.hist li{display:grid;grid-template-columns:150px 1fr auto;gap:14px;align-items:baseline;padding:11px 0;border-top:1px solid var(--hair-soft);font-size:14px}
+.hist li .d{color:var(--ink-3);font:400 12px 'IBM Plex Mono',monospace}
+.hist li .x{color:var(--ink-3);font-size:12px;text-decoration:none}
+.hist li .x:hover{color:var(--blue-l)}
+.hist .tag{display:inline-block;width:8px;height:8px;margin-right:10px;border-radius:50%;background:var(--blue)}
+.hist .tag.out{background:var(--warn)}
+.hist .tag.node{background:var(--ok)}
+.hist .tag.off{background:var(--ink-4)}
+.hist .empty{color:var(--ink-3);font-size:14px}
+
+.foot{margin-top:34px;padding-top:20px;border-top:1px solid var(--hair);display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;color:var(--ink-3);font-size:13px;line-height:1.6}
+.foot nav{display:flex;flex-wrap:wrap;gap:16px}
+.foot nav a{color:var(--ink-2);text-decoration:none}
+.foot nav a:hover{color:var(--blue-l)}
+
+@media (max-width:980px){
+  .cards{grid-template-columns:1fr 1fr}
+  .cards .card:last-child{grid-column:1 / -1}
+}
+@media (max-width:720px){
+  .cards{grid-template-columns:1fr}
+  .cards .card:last-child{grid-column:auto}
+  .req{grid-template-columns:1fr}
+  .req li{border-left:0;border-top:1px solid var(--hair)}
+  .req li:first-child{border-top:0}
+  .trio{grid-template-columns:1fr 1fr}
+  .trio>div:nth-child(3){grid-column:1 / -1;border-left:0;border-top:1px solid var(--hair)}
+  .hist li{grid-template-columns:1fr auto}
+  .hist li .d{grid-column:1 / -1}
+  .brand span{display:none}
+  .wbar .acts{width:100%}
+  .wbar .acts .btn{flex:1;justify-content:center;padding:0 6px;font-size:10px;letter-spacing:.06em;white-space:nowrap}
+  .big small{display:block;margin:10px 0 0;vertical-align:baseline}
+}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}.bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="grid-bg" aria-hidden="true"></div>
+<header class="top">
+  <a class="brand" href="https://sectoraorg.com" aria-label="Sectora Foundation">
+    <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" ry="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>
+    <span class="mono"><b>Sectora</b><span data-t="brand">My Airdrop</span></span>
+  </a>
+  <div class="top-r">
+    <div id="langPick"></div>
+  </div>
+</header>
+<main>
+  <p class="eyebrow mono"><i></i><span>Sectora // Airdrop Genesis</span></p>
+  <h1 data-t="h1" data-html>My <b>Airdrop</b></h1>
+  <p class="lead" data-t="lead">Everything your wallet has in Sectora, read live from the blockchain.</p>
+  <div id="app" aria-live="polite"></div>
+  <footer class="foot">
+    <span data-t="foot">Read-only: no signatures, no transactions, nothing leaves your wallet.</span>
+    <nav class="mono">
+      <a href="/airdrop/">Airdrop</a>
+      <a href="/staking/">Staking</a>
+      <a href="/dashboard.html">Hash Node</a>
+    </nav>
+  </footer>
+</main>
+<script src="/referidos-bbsl4u2mr3/airdrop/count.js?v=15"></script>
+<script src="/airdrop/lang-pick.js?v=2"></script>
+<script src="/referidos-bbsl4u2mr3/myairdrop/i18n-more.js?v=4"></script>
+<script src="/myairdrop/myairdrop-wallet.js?v=2"></script>
+<script src="/referidos-bbsl4u2mr3/myairdrop/myairdrop.js?v=11"></script>
+</body>
+</html>
