@@ -826,6 +826,7 @@ svg{display:block}
 .wsel-wc p{padding:8px 8px 4px;color:var(--ink3);font-size:13px;line-height:1.6}
 .wsel-qr{width:min(250px,100%);margin:10px auto 6px;padding:12px;background:#fff;border-radius:10px}
 .wsel-qr svg{display:block;width:100%;height:auto}
+.wsel-err{padding:0 8px 8px!important;font:11px/1.5 'IBM Plex Mono',monospace!important;color:#ff9a9a!important;word-break:break-word}
 .wsel-wait{display:flex;align-items:center;gap:10px;padding:10px 8px;color:var(--ink4);font-size:12px}
 .wsel-wait i{width:12px;height:12px;border:2px solid rgba(255,255,255,.18);border-top-color:var(--blue2);border-radius:50%;animation:wselSp .8s linear infinite}
 @keyframes wselSp{to{transform:rotate(360deg)}}
@@ -1368,7 +1369,7 @@ html.booting,body.booting{overflow:hidden}
 </div>
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="translations.js"></script>
-<script src="dashboard-i18n-extra.js?v=20261028a"></script>
+<script src="dashboard-i18n-extra.js?v=20261028b"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="i18n.js?v=2"></script>
 <script src="dashboard-reticle.js?v=20260820b"></script>
@@ -3365,26 +3366,38 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       .catch(e => { wcPromesa = null; throw e; });
     return wcPromesa;
   }
-  function vistaWC(uri){
+  /* uri null: preparando; error: texto del fallo con reintento */
+  function vistaWC(uri, error){
     wcVista = true;
     lista.innerHTML = '';
     const v = document.createElement('div'); v.className = 'wsel-wc';
-    const txt = document.createElement('p');
+    const txt = document.createElement('p'); v.appendChild(txt);
+    if(error){
+      txt.textContent = t('hashdash.wallet.wcErr','Could not start WalletConnect. Check your connection and try again.');
+      if(error !== true){ const d = document.createElement('p'); d.className = 'wsel-err'; d.textContent = String(error).slice(0, 160); v.appendChild(d); }
+      v.appendChild(fila({ icono: LOGO().walletConnect, nombre: t('hashdash.wallet.wcRetry','Try again'), etiqueta: '', accion: porWalletConnect }));
+      lista.appendChild(v); return;
+    }
+    if(!uri){
+      txt.textContent = t('hashdash.wallet.wcPrep','Preparing the connection…');
+      const w = document.createElement('div'); w.className = 'wsel-wait'; w.innerHTML = '<i></i>'; v.appendChild(w);
+      lista.appendChild(v); return;
+    }
     txt.textContent = movil
       ? t('hashdash.wallet.wcPick','Choose your wallet app. Approve the connection there, then come back to this tab.')
       : t('hashdash.wallet.wcScan','Scan this QR code with your wallet app (MetaMask, Trust Wallet, Rainbow…).');
-    v.appendChild(txt);
     if(movil){
       WC_APPS.forEach(a => v.appendChild(fila({ icono: LOGO()[a.k], nombre: a.n, etiqueta: t('hashdash.wallet.app','App'),
         accion: () => { guardaWC(JSON.stringify({href: a.s, name: a.n})); marcaWC(); location.href = a.s + 'wc?uri=' + encodeURIComponent(uri); } })));
       v.appendChild(fila({ icono: LOGO().walletConnect, nombre: t('hashdash.wallet.wcOther','Other wallet'), etiqueta: '',
         accion: () => { guardaWC(null); marcaWC(); location.href = uri; } }));
-    } else {
-      const q = document.createElement('div'); q.className = 'wsel-qr'; v.appendChild(q);
-      cargaJS(QR_JS, () => !!window.SectoraQR).then(() => {
-        const qr = window.SectoraQR(0, 'M'); qr.addData(uri); qr.make(); q.innerHTML = qr.createSvgTag({cellSize: 4, margin: 2});
-      }).catch(() => { q.remove(); });
+      const t2 = document.createElement('p'); t2.textContent = t('hashdash.wallet.wcScan2','Or scan this QR code with your wallet from another device:'); v.appendChild(t2);
     }
+    /* el QR sale siempre: en el ordenador para el movil, y en el movil para escanear desde otro aparato */
+    const q = document.createElement('div'); q.className = 'wsel-qr'; v.appendChild(q);
+    cargaJS(QR_JS, () => !!window.SectoraQR).then(() => {
+      const qr = window.SectoraQR(0, 'M'); qr.addData(uri); qr.make(); q.innerHTML = qr.createSvgTag({cellSize: 4, margin: 2});
+    }).catch(() => { q.remove(); });
     v.appendChild(fila({ icono: ENLACE, nombre: t('hashdash.wallet.wcCopyUri','Copy connection link'), etiqueta: '',
       accion: () => (navigator.clipboard ? navigator.clipboard.writeText(uri) : Promise.reject())
         .then(() => avisar(t('hashdash.wallet.copied','Link copied')), () => avisar(uri)) }));
@@ -3395,8 +3408,8 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   }
   async function porWalletConnect(){
     let wc = null, alUri = null;
+    vistaWC(null);                                   /* la ventana responde al instante */
     try{
-      avisar(t('hashdash.wallet.wcOpening','Opening WalletConnect…'));
       wc = await proveedorWC();
       alUri = uri => vistaWC(uri);
       wc.on('display_uri', alUri);
@@ -3409,10 +3422,10 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       wc.on('session_delete', () => desconecta(true));
       await conecta(wc);
     }catch(e){
+      console.error('[sectora] WalletConnect', e);
       if(wc && alUri && wc.removeListener) wc.removeListener('display_uri', alUri);
-      wcVista = false; wcPromesa = null;
-      if(caja.classList.contains('on')) pinta();
-      avisar(t('hashdash.wallet.wcFail','WalletConnect failed'));
+      wcPromesa = null;
+      if(caja.classList.contains('on')) vistaWC(null, (e && e.message) || true); else wcVista = false;
     }
   }
 
