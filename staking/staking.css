@@ -313,6 +313,25 @@ html:not(.js) .hw h2{transform:none}
 
 /* lo que staking-chain.js cuelga junto al boton, en un orden fijo */
 .con-actions{display:flex;flex-direction:column}
+/* aviso fijo bajo las acciones: las recompensas del staking se cobran siempre, aparte del airdrop */
+.stk-msg{display:flex;flex-direction:column;justify-content:center;margin-top:18px;padding:16px 18px 18px;border:1px solid rgba(15,143,82,.28);
+  background:linear-gradient(180deg,rgba(15,143,82,.085),rgba(15,143,82,.03))}
+.stk-msg-k{display:flex;align-items:center;gap:8px;margin:0;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#0b7a45}
+.stk-msg-k svg{flex:none;width:16px;height:16px;fill:none;stroke:#0f8f52;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.stk-msg-t{margin:10px 0 0;font-size:17px;line-height:1.3;font-weight:500;color:var(--p-ink)}
+.stk-msg-p{margin:6px 0 0;font-size:13.5px;line-height:1.55;color:var(--p-ink-2)}
+.stk-msg-f{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:16px 0 0;border-top:1px solid rgba(15,143,82,.22)}
+.stk-msg-f div{min-width:0;padding:10px 10px 0 0;overflow-wrap:break-word}
+.stk-msg-f div+div{padding-left:12px;border-left:1px solid rgba(15,143,82,.22)}
+.stk-msg-f dt{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--p-ink-4)}
+.stk-msg-f dd{margin:4px 0 0;font-size:12px;letter-spacing:.04em;color:var(--p-ink)}
+html[lang=ar] .stk-msg :is(.stk-msg-k,dt,dd){letter-spacing:0;font-family:'IBM Plex Mono',system-ui,sans-serif}
+@media (max-width:560px){
+  .stk-msg-f{grid-template-columns:minmax(0,1fr)}
+  .stk-msg-f div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0 0}
+  .stk-msg-f div+div{margin-top:9px;padding-left:0;border-left:0;border-top:1px solid rgba(15,143,82,.16)}
+  .stk-msg-f dd{margin:0;text-align:end}
+}
 #earnLive{order:0}
 #connectBtn{order:1}
 #chainActions{order:2}

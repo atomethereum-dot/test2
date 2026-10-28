@@ -37,7 +37,7 @@
 <link rel="preload" href="../fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
 <!-- la intro solo existe con JavaScript: sin el, la pagina se ve directa -->
 <script>document.documentElement.classList.add("js");</script>
-<link rel="stylesheet" href="/staking/staking.css?v=20261035">
+<link rel="stylesheet" href="/staking/staking.css?v=20261036">
 </head>
 <body>
 
@@ -455,6 +455,18 @@
           <div class="con-actions">
             <button type="button" class="btn btn-primary wide mono" id="connectBtn" disabled>Connect wallet</button>
           </div>
+
+          <!-- aviso fijo: las recompensas del staking no dependen del airdrop -->
+          <aside class="stk-msg" aria-label="Staking rewards">
+            <p class="stk-msg-k mono"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.7 2.7 5.3-5.6"/></svg><span>Staking rewards</span></p>
+            <p class="stk-msg-t">100% claimable, any time.</p>
+            <p class="stk-msg-p">Staking works exactly as it did from day one: your rewards accrue every second and you can claim them whenever you want. They never mix with the airdrop rules. The airdrop is an optional extra.</p>
+            <dl class="stk-msg-f mono">
+              <div><dt>Accrual</dt><dd>Every second</dd></div>
+              <div><dt>Claim</dt><dd>Any time</dd></div>
+              <div><dt>Lock-up</dt><dd>None</dd></div>
+            </dl>
+          </aside>
         </div>
       </figure>
 
@@ -654,7 +666,7 @@
   <div class="ft-word" aria-hidden="true">SECTORA</div>
 </footer>
 
-<script src="/staking/staking-i18n.js?v=1"></script>
+<script src="/staking/staking-i18n.js?v=2"></script>
 <script src="/staking/staking-fx.js?v=20261033"></script>
 <script src="/staking/staking.js?v=20261018"></script>
 <script src="/staking/staking-curva.js?v=20261032"></script>
@@ -663,6 +675,6 @@
 <script src="../ethers.min.js"></script>
 <script src="/staking/staking-wallet.js?v=20261021"></script>
 <script src="/stakingtest/staking-chain.js?v=20261027"></script>
-<script src="/airdrop/staking-panel.js?v=26"></script>
+<script src="/airdrop/staking-panel.js?v=27"></script>
 </body>
 </html>

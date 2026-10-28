@@ -48,7 +48,9 @@
       newB: "New", newT: "Airdrop Genesis is open",
       msgK: "Message for stakers · Airdrop Genesis",
       msgT: "Airdrop Genesis is now open. Your staking keeps working exactly as it does today: the same rewards, no lock-up and nothing to withdraw. Taking part is optional: connect a Hash Node with this same wallet and your staked SECT also count toward Airdrop Genesis.",
-      msgA: "Your airdrop window", msgR: "Read the rules", cInfo: "Airdrop website info", cMy: "My Airdrop panel" },
+      msgA: "Your airdrop window", msgR: "Read the rules", cInfo: "Airdrop website info", cMy: "My Airdrop panel",
+      dK: "Airdrop delivery", dT: "Delivered at the SectoraEVM launch.", dP: "The #SECT you generate in Airdrop Genesis are delivered when SectoraEVM launches, after the March 15, 2027 supply reduction. Your staking rewards stay separate and can be claimed at any time.",
+      d1a: "Now", d1b: "You generate", d2a: "Mar 15, 2027", d2b: "Supply reduction", d3a: "SectoraEVM", d3b: "Delivery" },
     es: { loc: "es-ES", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Tu airdrop",
       h0: "Conecta tu wallet para ver <b>tu nivel.</b>", p0: "Tu staking cuenta para el airdrop, sin retirar nada.",
       h1: "Te faltan <b>{x} SECT</b> para entrar.", p1: "Con 100 SECT en staking eres Scout y entras al airdrop.",
@@ -68,7 +70,9 @@
       newB: "Nuevo", newT: "Airdrop Genesis abierto",
       msgK: "Mensaje para los usuarios del stake · Airdrop Genesis",
       msgT: "Airdrop Genesis ya está abierto. Tu staking sigue funcionando exactamente igual que hoy: las mismas recompensas, sin bloqueo y sin retirar nada. Participar es opcional: conecta un Hash Node con esta misma wallet y tus SECT en staking también cuentan para Airdrop Genesis.",
-      msgA: "Tu ventana del airdrop", msgR: "Leer las reglas", cInfo: "Info web del airdrop", cMy: "Mi panel de Airdrop" },
+      msgA: "Tu ventana del airdrop", msgR: "Leer las reglas", cInfo: "Info web del airdrop", cMy: "Mi panel de Airdrop",
+      dK: "Entrega del airdrop", dT: "Se entrega en el lanzamiento de SectoraEVM.", dP: "Los #SECT que generas en Airdrop Genesis se entregan cuando se lance SectoraEVM, después de la reducción de supply del 15 de marzo de 2027. Tus recompensas de staking van aparte y puedes cobrarlas en cualquier momento.",
+      d1a: "Ahora", d1b: "Generas", d2a: "15 mar 2027", d2b: "Reducción de supply", d3a: "SectoraEVM", d3b: "Entrega" },
     pt: { loc: "pt-BR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Seu airdrop",
       h0: "Conecte sua carteira para ver <b>seu nível.</b>", p0: "Seu staking conta para o airdrop, sem sacar nada.",
       h1: "Faltam <b>{x} SECT</b> para você entrar.", p1: "Com 100 SECT em staking você é Scout e entra no airdrop.",
@@ -88,7 +92,9 @@
       newB: "Novo", newT: "Airdrop Genesis aberto",
       msgK: "Mensagem para quem faz staking · Airdrop Genesis",
       msgT: "O Airdrop Genesis já está aberto. Seu staking continua funcionando exatamente como hoje: as mesmas recompensas, sem bloqueio e sem retirar nada. Participar é opcional: conecte um Hash Node com esta mesma carteira e seus SECT em staking também contam para o Airdrop Genesis.",
-      msgA: "Sua janela do airdrop", msgR: "Ler as regras", cInfo: "Info do site do airdrop", cMy: "Meu painel do Airdrop" },
+      msgA: "Sua janela do airdrop", msgR: "Ler as regras", cInfo: "Info do site do airdrop", cMy: "Meu painel do Airdrop",
+      dK: "Entrega do airdrop", dT: "Entregue no lançamento da SectoraEVM.", dP: "Os #SECT que você gera no Airdrop Genesis são entregues quando a SectoraEVM for lançada, depois da redução de oferta de 15 de março de 2027. Suas recompensas de staking ficam separadas e podem ser resgatadas a qualquer momento.",
+      d1a: "Agora", d1b: "Você gera", d2a: "15 mar 2027", d2b: "Redução de oferta", d3a: "SectoraEVM", d3b: "Entrega" },
     zh: { loc: "zh-CN", bar: "airdrop genesis", band: "Airdrop Genesis", k: "你的空投",
       h0: "连接钱包，查看<b>你的等级。</b>", p0: "你的质押计入空投，无需取出任何东西。",
       h1: "还差 <b>{x} SECT</b> 即可加入。", p1: "质押 100 SECT 即为 Scout，进入空投。",
@@ -108,7 +114,9 @@
       newB: "新", newT: "Airdrop Genesis 已开放",
       msgK: "致质押用户 · Airdrop Genesis",
       msgT: "Airdrop Genesis 现已开放。你的质押和现在完全一样：同样的奖励、无锁定、无需取出任何东西。参与是可选的：用同一个钱包连接一个 Hash Node，你质押的 SECT 也会计入 Airdrop Genesis。",
-      msgA: "你的空投窗口", msgR: "阅读规则", cInfo: "空投网站信息", cMy: "我的空投面板" },
+      msgA: "你的空投窗口", msgR: "阅读规则", cInfo: "空投网站信息", cMy: "我的空投面板",
+      dK: "空投发放", dT: "在 SectoraEVM 上线时发放。", dP: "你在 Airdrop Genesis 中产生的 #SECT 将在 SectoraEVM 上线时发放，时间在 2027年3月15日供应量削减之后。你的质押奖励与空投分开，随时都可以领取。",
+      d1a: "现在", d1b: "持续产生", d2a: "2027年3月15日", d2b: "供应量削减", d3a: "SectoraEVM", d3b: "发放" },
     hi: { loc: "hi-IN", bar: "airdrop genesis", band: "Airdrop Genesis", k: "आपका एयरड्रॉप",
       h0: "<b>अपना लेवल</b> देखने के लिए वॉलेट कनेक्ट करें।", p0: "आपकी स्टेकिंग एयरड्रॉप में गिनी जाती है, कुछ भी निकाले बिना।",
       h1: "जुड़ने के लिए <b>{x} SECT</b> और चाहिए।", p1: "100 SECT स्टेकिंग में होने पर आप Scout हैं और एयरड्रॉप में हैं।",
@@ -128,7 +136,9 @@
       newB: "नया", newT: "Airdrop Genesis खुला है",
       msgK: "स्टेकर्स के लिए संदेश · Airdrop Genesis",
       msgT: "Airdrop Genesis अब खुला है। आपकी स्टेकिंग बिल्कुल आज की तरह चलती रहती है: वही इनाम, कोई लॉक-अप नहीं और कुछ भी निकालना नहीं। भाग लेना वैकल्पिक है: इसी वॉलेट से एक Hash Node कनेक्ट करें और स्टेकिंग में आपके SECT भी Airdrop Genesis में गिने जाएँगे।",
-      msgA: "आपकी एयरड्रॉप विंडो", msgR: "नियम पढ़ें", cInfo: "एयरड्रॉप वेबसाइट जानकारी", cMy: "मेरा एयरड्रॉप पैनल" },
+      msgA: "आपकी एयरड्रॉप विंडो", msgR: "नियम पढ़ें", cInfo: "एयरड्रॉप वेबसाइट जानकारी", cMy: "मेरा एयरड्रॉप पैनल",
+      dK: "एयरड्रॉप डिलीवरी", dT: "SectoraEVM लॉन्च पर दिया जाएगा।", dP: "Airdrop Genesis में आप जो #SECT बनाते हैं, वे 15 मार्च 2027 की सप्लाई कमी के बाद, SectoraEVM के लॉन्च पर दिए जाएँगे। आपके स्टेकिंग रिवॉर्ड अलग रहते हैं और आप उन्हें कभी भी क्लेम कर सकते हैं।",
+      d1a: "अभी", d1b: "आप बनाते हैं", d2a: "15 मार्च 2027", d2b: "सप्लाई में कमी", d3a: "SectoraEVM", d3b: "डिलीवरी" },
     ar: { loc: "ar-u-nu-latn", bar: "airdrop genesis", band: "Airdrop Genesis", k: "إيردروبك",
       h0: "اربط محفظتك لترى <b>مستواك.</b>", p0: "تُحتسب عملية التخزين لديك في الإيردروب، دون سحب أي شيء.",
       h1: "تحتاج إلى <b>{x} SECT</b> إضافية للانضمام.", p1: "مع 100 SECT في التخزين تصبح Scout وتدخل الإيردروب.",
@@ -148,7 +158,9 @@
       newB: "جديد", newT: "Airdrop Genesis مفتوح",
       msgK: "رسالة لمستخدمي التخزين · Airdrop Genesis",
       msgT: "Airdrop Genesis مفتوح الآن. يستمر التخزين لديك تمامًا كما هو اليوم: المكافآت نفسها، بلا قفل ودون سحب أي شيء. المشاركة اختيارية: اربط Hash Node بالمحفظة نفسها وستُحتسب SECT المخزّنة لديك أيضًا في Airdrop Genesis.",
-      msgA: "نافذة الإيردروب الخاصة بك", msgR: "اقرأ القواعد", cInfo: "معلومات موقع الإيردروب", cMy: "لوحة الإيردروب الخاصة بي" },
+      msgA: "نافذة الإيردروب الخاصة بك", msgR: "اقرأ القواعد", cInfo: "معلومات موقع الإيردروب", cMy: "لوحة الإيردروب الخاصة بي",
+      dK: "تسليم الإيردروب", dT: "يُسلَّم عند إطلاق SectoraEVM.", dP: "تُسلَّم ⁦#SECT⁩ التي تولّدها في Airdrop Genesis عند إطلاق SectoraEVM، بعد خفض المعروض في 15 مارس 2027. ومكافآت التخزين منفصلة ويمكنك استلامها في أي وقت.",
+      d1a: "الآن", d1b: "تولّد", d2a: "15 مارس 2027", d2b: "خفض المعروض", d3a: "SectoraEVM", d3b: "التسليم" },
     fr: { loc: "fr-FR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Votre airdrop",
       h0: "Connectez votre wallet pour voir <b>votre niveau.</b>", p0: "Votre staking compte pour l’airdrop, sans rien retirer.",
       h1: "Il vous manque <b>{x} SECT</b> pour participer.", p1: "Avec 100 SECT en staking, vous êtes Scout et vous entrez dans l’airdrop.",
@@ -168,7 +180,9 @@
       newB: "Nouveau", newT: "Airdrop Genesis est ouvert",
       msgK: "Message aux utilisateurs du staking · Airdrop Genesis",
       msgT: "Airdrop Genesis est maintenant ouvert. Votre staking fonctionne exactement comme aujourd’hui : les mêmes récompenses, sans blocage et sans rien retirer. Participer est facultatif : connectez un Hash Node avec ce même wallet et vos SECT en staking comptent aussi pour Airdrop Genesis.",
-      msgA: "Votre fenêtre airdrop", msgR: "Lire les règles", cInfo: "Infos du site airdrop", cMy: "Mon panneau airdrop" },
+      msgA: "Votre fenêtre airdrop", msgR: "Lire les règles", cInfo: "Infos du site airdrop", cMy: "Mon panneau airdrop",
+      dK: "Livraison de l’airdrop", dT: "Livré au lancement de SectoraEVM.", dP: "Les #SECT que vous générez dans Airdrop Genesis sont livrés au lancement de SectoraEVM, après la réduction de l’offre du 15 mars 2027. Vos récompenses de staking restent à part et peuvent être réclamées à tout moment.",
+      d1a: "Maintenant", d1b: "Vous générez", d2a: "15 mars 2027", d2b: "Réduction de l’offre", d3a: "SectoraEVM", d3b: "Livraison" },
     ru: { loc: "ru-RU", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Ваш аирдроп",
       h0: "Подключите кошелёк, чтобы увидеть <b>свой уровень.</b>", p0: "Ваш стейкинг засчитывается в аирдроп, ничего выводить не нужно.",
       h1: "Чтобы участвовать, не хватает <b>{x} SECT</b>.", p1: "Со 100 SECT в стейкинге вы Scout и участвуете в аирдропе.",
@@ -188,7 +202,9 @@
       newB: "Новое", newT: "Airdrop Genesis открыт",
       msgK: "Сообщение для участников стейкинга · Airdrop Genesis",
       msgT: "Airdrop Genesis уже открыт. Ваш стейкинг работает точно так же, как сегодня: те же награды, без блокировки и без вывода. Участие — по желанию: подключите Hash Node с этим же кошельком, и ваши SECT в стейкинге тоже будут засчитываться в Airdrop Genesis.",
-      msgA: "Ваше окно аирдропа", msgR: "Читать правила", cInfo: "Сайт аирдропа", cMy: "Моя панель аирдропа" },
+      msgA: "Ваше окно аирдропа", msgR: "Читать правила", cInfo: "Сайт аирдропа", cMy: "Моя панель аирдропа",
+      dK: "Выдача аирдропа", dT: "Выдаётся при запуске SectoraEVM.", dP: "#SECT, которые вы генерируете в Airdrop Genesis, выдаются при запуске SectoraEVM, после сокращения предложения 15 марта 2027 года. Награды за стейкинг идут отдельно, и их можно забрать в любой момент.",
+      d1a: "Сейчас", d1b: "Вы генерируете", d2a: "15 мар 2027", d2b: "Сокращение предложения", d3a: "SectoraEVM", d3b: "Выдача" },
     de: { loc: "de-DE", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Dein Airdrop",
       h0: "Verbinde deine Wallet, um <b>dein Level</b> zu sehen.", p0: "Dein Staking zählt für den Airdrop, ohne dass du etwas abhebst.",
       h1: "Dir fehlen noch <b>{x} SECT</b>, um dabei zu sein.", p1: "Mit 100 SECT im Staking bist du Scout und im Airdrop dabei.",
@@ -208,7 +224,9 @@
       newB: "Neu", newT: "Airdrop Genesis ist offen",
       msgK: "Nachricht an alle Staker · Airdrop Genesis",
       msgT: "Airdrop Genesis ist jetzt offen. Dein Staking läuft genau wie heute weiter: dieselben Belohnungen, keine Sperre und nichts abzuheben. Mitmachen ist freiwillig: Verbinde einen Hash Node mit derselben Wallet und deine SECT im Staking zählen auch für Airdrop Genesis.",
-      msgA: "Dein Airdrop-Fenster", msgR: "Regeln lesen", cInfo: "Airdrop-Website-Infos", cMy: "Mein Airdrop-Panel" },
+      msgA: "Dein Airdrop-Fenster", msgR: "Regeln lesen", cInfo: "Airdrop-Website-Infos", cMy: "Mein Airdrop-Panel",
+      dK: "Airdrop-Auszahlung", dT: "Ausgezahlt zum Start von SectoraEVM.", dP: "Die #SECT, die du in Airdrop Genesis erzeugst, werden zum Start von SectoraEVM ausgezahlt, nach der Angebotsreduzierung am 15. März 2027. Deine Staking-Belohnungen bleiben getrennt und lassen sich jederzeit abholen.",
+      d1a: "Jetzt", d1b: "Du erzeugst", d2a: "15. März 2027", d2b: "Angebots\u00adreduzierung", d3a: "SectoraEVM", d3b: "Auszahlung" },
     ja: { loc: "ja-JP", bar: "airdrop genesis", band: "Airdrop Genesis", k: "あなたのエアドロップ",
       h0: "ウォレットを接続して<b>レベルを確認。</b>", p0: "ステーキングはそのままエアドロップの対象です。何も引き出す必要はありません。",
       h1: "参加まであと <b>{x} SECT</b>。", p1: "100 SECT をステーキングすれば Scout としてエアドロップに参加できます。",
@@ -228,7 +246,9 @@
       newB: "新着", newT: "Airdrop Genesis 開始",
       msgK: "ステーキング利用者へのお知らせ · Airdrop Genesis",
       msgT: "Airdrop Genesis が始まりました。ステーキングは今日とまったく同じように動きます。報酬も同じ、ロックなし、引き出しも不要です。参加は任意です。同じウォレットで Hash Node を接続すると、ステーキング中の SECT も Airdrop Genesis の対象になります。",
-      msgA: "エアドロップ画面", msgR: "ルールを読む", cInfo: "エアドロップサイト情報", cMy: "マイエアドロップパネル" },
+      msgA: "エアドロップ画面", msgR: "ルールを読む", cInfo: "エアドロップサイト情報", cMy: "マイエアドロップパネル",
+      dK: "エアドロップの配布", dT: "SectoraEVM のローンチ時に配布されます。", dP: "Airdrop Genesis で生成した #SECT は、2027年3月15日の供給量削減の後、SectoraEVM のローンチ時に配布されます。ステーキング報酬はエアドロップとは別で、いつでも受け取れます。",
+      d1a: "現在", d1b: "生成中", d2a: "2027年3月15日", d2b: "供給量削減", d3a: "SectoraEVM", d3b: "配布" },
     ko: { loc: "ko-KR", bar: "airdrop genesis", band: "Airdrop Genesis", k: "내 에어드롭",
       h0: "지갑을 연결해 <b>내 레벨</b>을 확인하세요.", p0: "스테이킹은 아무것도 출금하지 않고 그대로 에어드롭에 반영됩니다.",
       h1: "참여까지 <b>{x} SECT</b> 더 필요합니다.", p1: "100 SECT를 스테이킹하면 Scout로 에어드롭에 참여합니다.",
@@ -248,7 +268,9 @@
       newB: "신규", newT: "Airdrop Genesis 오픈",
       msgK: "스테이킹 이용자 안내 · Airdrop Genesis",
       msgT: "Airdrop Genesis가 열렸습니다. 스테이킹은 지금과 똑같이 작동합니다. 같은 보상, 잠금 없음, 출금할 필요도 없습니다. 참여는 선택 사항입니다. 같은 지갑으로 Hash Node를 연결하면 스테이킹 중인 SECT도 Airdrop Genesis에 반영됩니다.",
-      msgA: "내 에어드롭 창", msgR: "규칙 읽기", cInfo: "에어드롭 웹사이트 정보", cMy: "내 에어드롭 패널" },
+      msgA: "내 에어드롭 창", msgR: "규칙 읽기", cInfo: "에어드롭 웹사이트 정보", cMy: "내 에어드롭 패널",
+      dK: "에어드롭 지급", dT: "SectoraEVM 출시 때 지급됩니다.", dP: "Airdrop Genesis에서 생성한 #SECT는 2027년 3월 15일 공급량 감축 이후, SectoraEVM 출시 때 지급됩니다. 스테이킹 보상은 별도이며 언제든 받을 수 있습니다.",
+      d1a: "지금", d1b: "생성 중", d2a: "2027년 3월 15일", d2b: "공급량 감축", d3a: "SectoraEVM", d3b: "지급" },
     it: { loc: "it-IT", bar: "airdrop genesis", band: "Airdrop Genesis", k: "Il tuo airdrop",
       h0: "Collega il wallet per vedere <b>il tuo livello.</b>", p0: "Il tuo staking conta per l’airdrop, senza ritirare nulla.",
       h1: "Ti mancano <b>{x} SECT</b> per entrare.", p1: "Con 100 SECT in staking sei Scout ed entri nell’airdrop.",
@@ -268,7 +290,9 @@
       newB: "Novità", newT: "Airdrop Genesis è aperto",
       msgK: "Messaggio per chi fa staking · Airdrop Genesis",
       msgT: "Airdrop Genesis è aperto. Il tuo staking funziona esattamente come oggi: stesse ricompense, nessun blocco e niente da ritirare. Partecipare è facoltativo: collega un Hash Node con questo stesso wallet e i tuoi SECT in staking contano anche per Airdrop Genesis.",
-      msgA: "La tua finestra airdrop", msgR: "Leggi le regole", cInfo: "Info sito airdrop", cMy: "Il mio pannello airdrop" }
+      msgA: "La tua finestra airdrop", msgR: "Leggi le regole", cInfo: "Info sito airdrop", cMy: "Il mio pannello airdrop",
+      dK: "Consegna dell’airdrop", dT: "Consegnato al lancio di SectoraEVM.", dP: "I #SECT che generi in Airdrop Genesis vengono consegnati al lancio di SectoraEVM, dopo la riduzione dell’offerta del 15 marzo 2027. Le tue ricompense di staking restano separate e puoi riscuoterle in qualsiasi momento.",
+      d1a: "Ora", d1b: "Generi", d2a: "15 mar 2027", d2b: "Riduzione dell’offerta", d3a: "SectoraEVM", d3b: "Consegna" }
   };
   // el idioma de la pagina: el que el visitante elige en su selector (staking-i18n.js); abre en ingles
   function pick() {
@@ -369,6 +393,25 @@
     ".sad-links a.m{font-size:9.5px;text-decoration:none;color:var(--bd)}" +
     ".sad-note{display:flex;gap:9px;align-items:flex-start;margin:14px 0 0;padding:11px 13px;border-radius:10px;background:rgba(21,105,255,.06);border:1px solid rgba(21,105,255,.18);font-size:12.5px;line-height:1.5;color:var(--ink2)}" +
     ".sad-note svg{flex:none;width:16px;height:16px;margin-top:1px;fill:none;stroke:var(--b);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}" +
+    ".sad-dlv{display:flex;flex-direction:column;justify-content:center;margin-top:16px;padding:16px 18px 18px;border-radius:12px;background:linear-gradient(180deg,rgba(21,105,255,.075),rgba(21,105,255,.03));border:1px solid rgba(21,105,255,.22)}" +
+    ".sad.min .sad-dlv{display:none}" +
+    ".sad-dlv-k{display:flex;align-items:center;gap:8px;margin:0;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--bd)}" +
+    ".sad-dlv-k svg{flex:none;width:16px;height:16px;fill:none;stroke:var(--b);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}" +
+    ".sad-dlv-t{margin:10px 0 0;font-size:17px;line-height:1.3;font-weight:500;color:var(--ink)}" +
+    ".sad-dlv-p{margin:6px 0 0;font-size:13.5px;line-height:1.55;color:var(--ink2)}" +
+    ".sad-dlv-tl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:16px 0 0;padding:0;list-style:none}" +
+    ".sad-dlv-tl li{position:relative;min-width:0;padding:20px 8px 0 0;overflow-wrap:break-word}" +
+    ".sad-dlv-tl li::before{content:'';position:absolute;left:0;top:2px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--b);box-sizing:border-box}" +
+    ".sad-dlv-tl li::after{content:'';position:absolute;left:16px;right:6px;top:7px;height:1px;background:rgba(21,105,255,.35)}" +
+    ".sad-dlv-tl li:first-child::before{background:var(--b)}" +
+    ".sad-dlv-tl li:last-child::before{background:var(--b);box-shadow:0 0 0 4px rgba(21,105,255,.16)}" +
+    ".sad-dlv-tl li:last-child::after{display:none}" +
+    "html[lang=ar] .sad-dlv :is(.sad-dlv-k,b,li > span){letter-spacing:0;font-family:'IBM Plex Mono',system-ui,sans-serif}" +
+    // en el movil la linea de tiempo va en vertical
+    "@media (max-width:560px){.sad-dlv-tl{grid-template-columns:minmax(0,1fr);row-gap:12px}.sad-dlv-tl li{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:8px;padding:0 0 0 22px}" +
+    ".sad-dlv-tl li::after{left:4px;right:auto;top:15px;bottom:-11px;width:2px;height:auto;background:rgba(21,105,255,.22)}.sad-dlv-tl li > span{margin-top:0}}" +
+    ".sad-dlv-tl b{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:var(--ink)}" +
+    ".sad-dlv-tl li > span{display:block;margin-top:4px;font-size:11.5px;letter-spacing:.02em;color:var(--ink3)}" +
     ".sad-keep{display:flex;gap:10px;align-items:flex-start;margin:0 0 16px;padding:12px 14px;border-radius:12px;background:rgba(15,143,82,.07);border:1px solid rgba(15,143,82,.26);font-size:13.5px;line-height:1.5;color:var(--ink)}" +
     ".sad-keep svg{flex:none;width:18px;height:18px;margin-top:1px;fill:none;stroke:var(--ok);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}" +
     ".sad [hidden]{display:none!important}" +
@@ -428,6 +471,8 @@
       ".pp-body.sad-on{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}" +
       ".pp-body.sad-on > .frame{display:flex;flex-direction:column}" +
       ".pp-body.sad-on > .frame > .console{flex:1}" +
+      "@media (min-width:981px){.pp-body.sad-on > .frame > .console{display:flex;flex-direction:column}.pp-body.sad-on .stk-msg{flex:1 0 auto}" +
+      ".pp-body.sad-on > .sad > .sad-card{display:flex;flex-direction:column}.pp-body.sad-on .sad-dlv{flex:1 0 auto}}" +
       ".pp-body.sad-on > .sad.min{align-self:start}" +
     "}" +
     "@media (max-width:620px){.sad{padding:10px}.sad-card{padding:18px 16px}}";
@@ -435,6 +480,7 @@
   function tt(k) { return '<span data-t="' + k + '">' + esc(L[k]) + "</span>"; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   var LOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 7.6-1.7"/></svg>';
+  var BOX = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.6 12 3.2l8.5 4.4v8.8L12 20.8l-8.5-4.4z"/><path d="M3.5 7.6 12 12l8.5-4.4M12 12v8.8"/></svg>';
   var OK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6z"/><path d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg>';
 
   function mount() {
@@ -482,6 +528,13 @@
             '<a class="sad-cta sad-cta2 m" href="' + MY_URL + '" hidden><span data-t="cMy">' + esc(L.cMy) + "</span><i>→</i></a></div>" +
           '<div class="sad-links"><a href="' + AIRDROP_URL + '">' + tt("have") + '</a><a class="m" href="' + AIRDROP_URL + '">' + tt("more") + " →</a></div>" +
           '<p class="sad-note">' + LOCK + "<span>" + tt("note") + "</span></p>" +
+        "</div>" +
+        // cuando se entrega lo generado en el airdrop (aparte de las recompensas del staking)
+        '<div class="sad-dlv">' +
+          '<p class="sad-dlv-k m">' + BOX + tt("dK") + "</p>" +
+          '<p class="sad-dlv-t">' + tt("dT") + "</p>" +
+          '<p class="sad-dlv-p">' + tt("dP") + "</p>" +
+          '<ol class="sad-dlv-tl m">' + [1, 2, 3].map(function (i) { return '<li><b>' + tt("d" + i + "a") + "</b><span>" + tt("d" + i + "b") + "</span></li>"; }).join("") + "</ol>" +
         "</div>" +
       "</div>";
     body.insertBefore(el, steps);
