@@ -8,7 +8,7 @@
    When the page announces the connected address (the "sectora:account" event
    from staking-chain.js), it reads that address's deposit from the staking
    contract (accountView, a public read) and looks it up in the Hash Node registry
-   on Sepolia to mark step 2. The amount the console prints (#earnDep) is only a
+   on Sepolia, or among the nodes activated in the dashboard (count.js), to mark step 2. The amount the console prints (#earnDep) is only a
    fallback and a signal to read again: a translator such as Google Translate
    rewrites "4,000" as "4.000", which would read as 4. It never asks the wallet to
    sign anything: staking works exactly the same with or without it. It also puts a small "Airdrop Genesis is open" tag under the
@@ -20,7 +20,7 @@
   var AIRDROP_URL = "/airdrop/";
   var MY_URL = "/myairdrop/";
   var NODE_URL = "/dashboard.html#guia-nodo";
-  var COUNT_JS = "/airdrop/count.js?v=14";
+  var COUNT_JS = "/airdrop/count.js?v=20";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
   var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.gateway.tenderly.co", "https://ethereum-sepolia.publicnode.com"];
   var STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
@@ -41,9 +41,9 @@
       h3: "You're in the <b>airdrop.</b>", p3: "Staking and Hash Node ready. Keep both until you complete your time to win your prize.",
       p1n: "Your Hash Node is already on. With 100 SECT in staking you're in the airdrop.", poff: "Your Hash Node is off: turn it on so your count keeps going.",
       on: "On", off: "Off", chk: "Checking…", ctaOn: "See my airdrop", ctaOff: "Turn on my Hash Node", both: "2/2 ✓",
-      hw: "How to turn on your Hash Node", hw1: "Get free Sepolia ETH for the gas", hw2: "Buy the 50 TH/s plan", hw3: "Register your node with this same wallet", hwp: "Open the plan", hwn: "Go to your node",
+      hw: "How to turn on your Hash Node", hw1: "Open the dashboard and connect this same wallet", hw2: "Press “Activate my node”: free, one click, no gas", hw3: "Your node turns on right away. With your staking, your airdrop counts", hwp: "Open the dashboard", hwn: "Go to your node",
       acc: "Generated so far", of: "of {n} SECT on completing your time", calc: "Calculating with the network…", pre: "It starts counting the day the airdrop opens.", lock: "From {d} (30 days in) what you generate is yours.", mine: "What you generate is already yours.",
-      who: "Wallet {a}", wNone: "no node registered with this wallet", wOn: "node on", wOff: "node off", wChk: "checking its node…", wErr: "couldn't check the network, retrying…",
+      who: "Wallet {a}", wNone: "no node activated with this wallet yet", wOn: "node on", wOff: "node off", wChk: "checking its node…", wErr: "couldn't check the network, retrying…",
       keep: "Your staking keeps working as usual. Joining our validator network is optional: just connect a Hash Node and you can add Airdrop Genesis rewards on top.",
       newB: "New", newT: "Airdrop Genesis is open",
       msgK: "Message for stakers · Airdrop Genesis",
@@ -63,9 +63,9 @@
       h3: "Ya participas en el <b>airdrop.</b>", p3: "Staking y Hash Node listos. Mantén los dos hasta completar tu tiempo para ganar tu premio.",
       p1n: "Tu Hash Node ya está encendido. Con 100 SECT en staking entras al airdrop.", poff: "Tu Hash Node está apagado: enciéndelo para que tu conteo siga.",
       on: "Encendido", off: "Apagado", chk: "Comprobando…", ctaOn: "Ver mi airdrop", ctaOff: "Encender mi Hash Node", both: "2/2 ✓",
-      hw: "Cómo encender tu Hash Node", hw1: "Consigue ETH de Sepolia gratis para el gas", hw2: "Compra el plan de 50 TH/s", hw3: "Registra tu nodo con esta misma wallet", hwp: "Abrir el plan", hwn: "Ir a tu nodo",
+      hw: "Cómo encender tu Hash Node", hw1: "Abre el panel y conecta esta misma wallet", hw2: "Pulsa «Activar mi nodo»: gratis, un clic y sin gas", hw3: "Tu nodo se enciende al momento. Con tu staking, tu airdrop cuenta", hwp: "Abrir el panel", hwn: "Ir a tu nodo",
       acc: "Llevas generado", of: "de {n} SECT al completar tu tiempo", calc: "Calculando con la red…", pre: "Empieza a contar el día de la apertura del airdrop.", lock: "Desde el {d} (30 días dentro) lo generado es tuyo.", mine: "Lo generado ya es tuyo.",
-      who: "Wallet {a}", wNone: "sin nodo registrado con esta wallet", wOn: "nodo encendido", wOff: "nodo apagado", wChk: "comprobando su nodo…", wErr: "no se pudo consultar la red, reintentando…",
+      who: "Wallet {a}", wNone: "aún sin nodo activado con esta wallet", wOn: "nodo encendido", wOff: "nodo apagado", wChk: "comprobando su nodo…", wErr: "no se pudo consultar la red, reintentando…",
       keep: "Tu staking sigue funcionando con normalidad. Unirte a nuestra red de validadores es opcional: solo conecta un Hash Node y podrás sumar recompensas de Airdrop Genesis.",
       newB: "Nuevo", newT: "Airdrop Genesis abierto",
       msgK: "Mensaje para los usuarios del stake · Airdrop Genesis",
@@ -85,9 +85,9 @@
       h3: "Você já participa do <b>airdrop.</b>", p3: "Staking e Hash Node prontos. Mantenha os dois até completar seu tempo para ganhar seu prêmio.",
       p1n: "Seu Hash Node já está ligado. Com 100 SECT em staking você entra no airdrop.", poff: "Seu Hash Node está desligado: ligue-o para sua contagem continuar.",
       on: "Ligado", off: "Desligado", chk: "Verificando…", ctaOn: "Ver meu airdrop", ctaOff: "Ligar meu Hash Node", both: "2/2 ✓",
-      hw: "Como ligar seu Hash Node", hw1: "Pegue ETH da Sepolia grátis para o gás", hw2: "Compre o plano de 50 TH/s", hw3: "Registre seu nó com esta mesma carteira", hwp: "Abrir o plano", hwn: "Ir ao seu nó",
+      hw: "Como ligar seu Hash Node", hw1: "Abra o painel e conecte esta mesma carteira", hw2: "Toque em “Ativar meu nó”: grátis, um clique e sem gás", hw3: "Seu nó liga na hora. Com seu staking, seu airdrop conta", hwp: "Abrir o painel", hwn: "Ir ao seu nó",
       acc: "Você já gerou", of: "de {n} SECT ao completar seu tempo", calc: "Calculando com a rede…", pre: "Começa a contar no dia da abertura do airdrop.", lock: "A partir de {d} (30 dias dentro) o que você gera é seu.", mine: "O que você gerou já é seu.",
-      who: "Carteira {a}", wNone: "sem nó registrado nesta carteira", wOn: "nó ligado", wOff: "nó desligado", wChk: "verificando o nó…", wErr: "não foi possível consultar a rede, tentando de novo…",
+      who: "Carteira {a}", wNone: "ainda sem nó ativado nesta carteira", wOn: "nó ligado", wOff: "nó desligado", wChk: "verificando o nó…", wErr: "não foi possível consultar a rede, tentando de novo…",
       keep: "Seu staking continua funcionando normalmente. Entrar na nossa rede de validadores é opcional: basta conectar um Hash Node e você pode somar recompensas do Airdrop Genesis.",
       newB: "Novo", newT: "Airdrop Genesis aberto",
       msgK: "Mensagem para quem faz staking · Airdrop Genesis",
@@ -107,9 +107,9 @@
       h3: "你已进入<b>空投。</b>", p3: "质押和 Hash Node 均已就绪。两者都保持到完成时长，即可赢得奖励。",
       p1n: "你的 Hash Node 已开启。质押 100 SECT 即可进入空投。", poff: "你的 Hash Node 已关闭：开启它，计数才会继续。",
       on: "已开启", off: "已关闭", chk: "检查中…", ctaOn: "查看我的空投", ctaOff: "开启我的 Hash Node", both: "2/2 ✓",
-      hw: "如何开启你的 Hash Node", hw1: "领取免费的 Sepolia ETH 作为 Gas", hw2: "购买 50 TH/s 套餐", hw3: "用同一个钱包注册你的节点", hwp: "打开套餐", hwn: "前往你的节点",
+      hw: "如何开启你的 Hash Node", hw1: "打开仪表盘并连接同一个钱包", hw2: "点击「激活我的节点」：免费、一键、无需 gas", hw3: "节点立即开启。加上质押，你的空投开始计算", hwp: "打开仪表盘", hwn: "前往你的节点",
       acc: "目前已产生", of: "完成时长后共 {n} SECT", calc: "正在与网络计算…", pre: "从空投开放当天开始计数。", lock: "自 {d}（满 30 天）起，产生的部分归你所有。", mine: "已产生的部分归你所有。",
-      who: "钱包 {a}", wNone: "此钱包没有注册节点", wOn: "节点已开启", wOff: "节点已关闭", wChk: "正在检查节点…", wErr: "无法查询网络，正在重试…",
+      who: "钱包 {a}", wNone: "此钱包尚未激活节点", wOn: "节点已开启", wOff: "节点已关闭", wChk: "正在检查节点…", wErr: "无法查询网络，正在重试…",
       keep: "你的质押照常运行。加入我们的验证者网络是可选的：只需连接一个 Hash Node，就能额外获得 Airdrop Genesis 奖励。",
       newB: "新", newT: "Airdrop Genesis 已开放",
       msgK: "致质押用户 · Airdrop Genesis",
@@ -129,9 +129,9 @@
       h3: "आप <b>एयरड्रॉप</b> में हैं।", p3: "स्टेकिंग और Hash Node तैयार हैं। इनाम जीतने के लिए समय पूरा होने तक दोनों रखें।",
       p1n: "आपका Hash Node पहले से चालू है। 100 SECT स्टेकिंग में होने पर आप एयरड्रॉप में हैं।", poff: "आपका Hash Node बंद है: उसे चालू करें ताकि गिनती चलती रहे।",
       on: "चालू", off: "बंद", chk: "जाँच हो रही है…", ctaOn: "मेरा एयरड्रॉप देखें", ctaOff: "मेरा Hash Node चालू करें", both: "2/2 ✓",
-      hw: "अपना Hash Node कैसे चालू करें", hw1: "गैस के लिए मुफ़्त Sepolia ETH लें", hw2: "50 TH/s प्लान खरीदें", hw3: "इसी वॉलेट से अपना नोड रजिस्टर करें", hwp: "प्लान खोलें", hwn: "अपने नोड पर जाएँ",
+      hw: "अपना Hash Node कैसे चालू करें", hw1: "डैशबोर्ड खोलें और यही वॉलेट कनेक्ट करें", hw2: "“मेरा नोड चालू करें” दबाएँ: मुफ़्त, एक क्लिक, बिना गैस", hw3: "आपका नोड तुरंत चालू हो जाता है। स्टेकिंग के साथ आपका एयरड्रॉप गिना जाता है", hwp: "डैशबोर्ड खोलें", hwn: "अपने नोड पर जाएँ",
       acc: "अब तक बना", of: "समय पूरा होने पर {n} SECT में से", calc: "नेटवर्क से गणना हो रही है…", pre: "गिनती एयरड्रॉप खुलने के दिन से शुरू होती है।", lock: "{d} से (30 दिन बाद) जो बनता है वह आपका है।", mine: "जो बना है वह अब आपका है।",
-      who: "वॉलेट {a}", wNone: "इस वॉलेट से कोई नोड रजिस्टर नहीं", wOn: "नोड चालू", wOff: "नोड बंद", wChk: "नोड जाँचा जा रहा है…", wErr: "नेटवर्क नहीं जाँच सके, फिर कोशिश हो रही है…",
+      who: "वॉलेट {a}", wNone: "इस वॉलेट से अभी कोई नोड चालू नहीं", wOn: "नोड चालू", wOff: "नोड बंद", wChk: "नोड जाँचा जा रहा है…", wErr: "नेटवर्क नहीं जाँच सके, फिर कोशिश हो रही है…",
       keep: "आपकी स्टेकिंग पहले की तरह चलती रहती है। हमारे वैलिडेटर नेटवर्क से जुड़ना वैकल्पिक है: बस एक Hash Node कनेक्ट करें और आप Airdrop Genesis इनाम भी जोड़ सकते हैं।",
       newB: "नया", newT: "Airdrop Genesis खुला है",
       msgK: "स्टेकर्स के लिए संदेश · Airdrop Genesis",
@@ -151,9 +151,9 @@
       h3: "أنت في <b>الإيردروب.</b>", p3: "التخزين وHash Node جاهزان. حافظ عليهما حتى تكمل مدتك لتربح جائزتك.",
       p1n: "Hash Node لديك يعمل بالفعل. مع 100 SECT في التخزين تدخل الإيردروب.", poff: "Hash Node لديك متوقف: شغّله ليستمر العد.",
       on: "يعمل", off: "متوقف", chk: "جارٍ التحقق…", ctaOn: "عرض إيردروبي", ctaOff: "شغّل Hash Node الخاص بي", both: "2/2 ✓",
-      hw: "كيف تشغّل Hash Node", hw1: "احصل على ETH مجاني على Sepolia للغاز", hw2: "اشترِ خطة 50 TH/s", hw3: "سجّل عقدتك بالمحفظة نفسها", hwp: "افتح الخطة", hwn: "اذهب إلى عقدتك",
+      hw: "كيف تشغّل Hash Node", hw1: "افتح اللوحة واربط المحفظة نفسها", hw2: "اضغط «تفعيل عقدتي»: مجانًا، نقرة واحدة، بلا غاز", hw3: "تعمل عقدتك فورًا. مع تخزينك، يُحتسب الإيردروب", hwp: "فتح اللوحة", hwn: "اذهب إلى عقدتك",
       acc: "ما تولّد حتى الآن", of: "من {n} SECT عند إكمال مدتك", calc: "جارٍ الحساب مع الشبكة…", pre: "يبدأ العد يوم افتتاح الإيردروب.", lock: "اعتبارًا من {d} (بعد 30 يومًا) يصبح ما يتولّد ملكك.", mine: "ما تولّد أصبح ملكك.",
-      who: "المحفظة {a}", wNone: "لا توجد عقدة مسجّلة بهذه المحفظة", wOn: "العقدة تعمل", wOff: "العقدة متوقفة", wChk: "جارٍ التحقق من العقدة…", wErr: "تعذّر الاتصال بالشبكة، جارٍ إعادة المحاولة…",
+      who: "المحفظة {a}", wNone: "لا توجد عقدة مفعّلة بهذه المحفظة بعد", wOn: "العقدة تعمل", wOff: "العقدة متوقفة", wChk: "جارٍ التحقق من العقدة…", wErr: "تعذّر الاتصال بالشبكة، جارٍ إعادة المحاولة…",
       keep: "يستمر التخزين لديك كالمعتاد. الانضمام إلى شبكة المدققين لدينا اختياري: فقط اربط Hash Node ويمكنك إضافة مكافآت Airdrop Genesis.",
       newB: "جديد", newT: "Airdrop Genesis مفتوح",
       msgK: "رسالة لمستخدمي التخزين · Airdrop Genesis",
@@ -173,9 +173,9 @@
       h3: "Vous êtes dans <b>l’airdrop.</b>", p3: "Staking et Hash Node prêts. Gardez les deux jusqu’à la fin de votre durée pour gagner votre prix.",
       p1n: "Votre Hash Node est déjà allumé. Avec 100 SECT en staking, vous entrez dans l’airdrop.", poff: "Votre Hash Node est éteint : allumez-le pour que votre décompte continue.",
       on: "Allumé", off: "Éteint", chk: "Vérification…", ctaOn: "Voir mon airdrop", ctaOff: "Allumer mon Hash Node", both: "2/2 ✓",
-      hw: "Comment allumer votre Hash Node", hw1: "Obtenez de l’ETH Sepolia gratuit pour le gas", hw2: "Achetez le plan de 50 TH/s", hw3: "Enregistrez votre nœud avec ce même wallet", hwp: "Ouvrir le plan", hwn: "Aller à votre nœud",
+      hw: "Comment allumer votre Hash Node", hw1: "Ouvrez le dashboard et connectez ce même wallet", hw2: "Appuyez sur « Activer mon nœud » : gratuit, un clic, sans gas", hw3: "Votre nœud s’allume aussitôt. Avec votre staking, votre airdrop compte", hwp: "Ouvrir le dashboard", hwn: "Aller à votre nœud",
       acc: "Généré jusqu’ici", of: "sur {n} SECT à la fin de votre durée", calc: "Calcul avec le réseau…", pre: "Le décompte commence le jour de l’ouverture de l’airdrop.", lock: "À partir du {d} (30 jours dedans), ce que vous générez vous appartient.", mine: "Ce que vous avez généré vous appartient déjà.",
-      who: "Wallet {a}", wNone: "aucun nœud enregistré avec ce wallet", wOn: "nœud allumé", wOff: "nœud éteint", wChk: "vérification de son nœud…", wErr: "impossible de consulter le réseau, nouvel essai…",
+      who: "Wallet {a}", wNone: "aucun nœud activé avec ce wallet pour l’instant", wOn: "nœud allumé", wOff: "nœud éteint", wChk: "vérification de son nœud…", wErr: "impossible de consulter le réseau, nouvel essai…",
       keep: "Votre staking continue de fonctionner normalement. Rejoindre notre réseau de validateurs est facultatif : connectez simplement un Hash Node et vous pourrez ajouter des récompenses Airdrop Genesis.",
       newB: "Nouveau", newT: "Airdrop Genesis est ouvert",
       msgK: "Message aux utilisateurs du staking · Airdrop Genesis",
@@ -195,9 +195,9 @@
       h3: "Вы участвуете в <b>аирдропе.</b>", p3: "Стейкинг и Hash Node готовы. Сохраняйте оба до конца срока, чтобы получить приз.",
       p1n: "Ваш Hash Node уже включён. Со 100 SECT в стейкинге вы участвуете в аирдропе.", poff: "Ваш Hash Node выключен: включите его, чтобы счёт продолжился.",
       on: "Включён", off: "Выключен", chk: "Проверка…", ctaOn: "Мой аирдроп", ctaOff: "Включить мой Hash Node", both: "2/2 ✓",
-      hw: "Как включить Hash Node", hw1: "Получите бесплатный Sepolia ETH для газа", hw2: "Купите план 50 TH/s", hw3: "Зарегистрируйте узел с этим же кошельком", hwp: "Открыть план", hwn: "К вашему узлу",
+      hw: "Как включить Hash Node", hw1: "Откройте дашборд и подключите этот же кошелёк", hw2: "Нажмите «Активировать мой узел»: бесплатно, один клик, без газа", hw3: "Узел включится сразу. Со стейкингом ваш эйрдроп засчитывается", hwp: "Открыть дашборд", hwn: "К вашему узлу",
       acc: "Уже накоплено", of: "из {n} SECT по завершении срока", calc: "Расчёт по данным сети…", pre: "Счёт начнётся в день открытия аирдропа.", lock: "С {d} (30 дней внутри) накопленное — ваше.", mine: "Накопленное уже ваше.",
-      who: "Кошелёк {a}", wNone: "с этим кошельком не зарегистрирован узел", wOn: "узел включён", wOff: "узел выключен", wChk: "проверяем узел…", wErr: "не удалось проверить сеть, повторяем…",
+      who: "Кошелёк {a}", wNone: "с этим кошельком узел ещё не активирован", wOn: "узел включён", wOff: "узел выключен", wChk: "проверяем узел…", wErr: "не удалось проверить сеть, повторяем…",
       keep: "Ваш стейкинг работает как обычно. Присоединиться к нашей сети валидаторов — по желанию: просто подключите Hash Node, и вы сможете дополнительно получать награды Airdrop Genesis.",
       newB: "Новое", newT: "Airdrop Genesis открыт",
       msgK: "Сообщение для участников стейкинга · Airdrop Genesis",
@@ -217,9 +217,9 @@
       h3: "Du bist im <b>Airdrop.</b>", p3: "Staking und Hash Node bereit. Behalte beides, bis deine Zeit um ist, um deinen Preis zu gewinnen.",
       p1n: "Dein Hash Node ist schon an. Mit 100 SECT im Staking bist du im Airdrop dabei.", poff: "Dein Hash Node ist aus: Schalte ihn ein, damit dein Zähler weiterläuft.",
       on: "An", off: "Aus", chk: "Wird geprüft…", ctaOn: "Mein Airdrop", ctaOff: "Meinen Hash Node einschalten", both: "2/2 ✓",
-      hw: "So schaltest du deinen Hash Node ein", hw1: "Hol dir kostenloses Sepolia-ETH für das Gas", hw2: "Kauf den 50-TH/s-Plan", hw3: "Registriere deinen Node mit derselben Wallet", hwp: "Plan öffnen", hwn: "Zu deinem Node",
+      hw: "So schaltest du deinen Hash Node ein", hw1: "Öffne das Dashboard und verbinde dieselbe Wallet", hw2: "Tippe auf „Meinen Node aktivieren“: kostenlos, ein Klick, kein Gas", hw3: "Dein Node geht sofort an. Mit deinem Staking zählt dein Airdrop", hwp: "Dashboard öffnen", hwn: "Zu deinem Node",
       acc: "Bisher erzeugt", of: "von {n} SECT nach Ablauf deiner Zeit", calc: "Wird mit dem Netzwerk berechnet…", pre: "Die Zählung beginnt am Tag der Airdrop-Eröffnung.", lock: "Ab dem {d} (30 Tage dabei) gehört dir, was du erzeugst.", mine: "Was du erzeugt hast, gehört schon dir.",
-      who: "Wallet {a}", wNone: "kein Node mit dieser Wallet registriert", wOn: "Node an", wOff: "Node aus", wChk: "Node wird geprüft…", wErr: "Netzwerk nicht erreichbar, neuer Versuch…",
+      who: "Wallet {a}", wNone: "noch kein Node mit dieser Wallet aktiviert", wOn: "Node an", wOff: "Node aus", wChk: "Node wird geprüft…", wErr: "Netzwerk nicht erreichbar, neuer Versuch…",
       keep: "Dein Staking läuft ganz normal weiter. Unserem Validator-Netzwerk beizutreten ist freiwillig: Verbinde einfach einen Hash Node und du kannst zusätzlich Airdrop-Genesis-Belohnungen erhalten.",
       newB: "Neu", newT: "Airdrop Genesis ist offen",
       msgK: "Nachricht an alle Staker · Airdrop Genesis",
@@ -239,9 +239,9 @@
       h3: "<b>エアドロップ</b>に参加中です。", p3: "ステーキングと Hash Node の準備完了。期間を満了するまで両方を維持すると賞品を獲得できます。",
       p1n: "Hash Node はすでにオンです。100 SECT をステーキングすればエアドロップに参加できます。", poff: "Hash Node がオフです。カウントを続けるにはオンにしてください。",
       on: "オン", off: "オフ", chk: "確認中…", ctaOn: "マイエアドロップ", ctaOff: "Hash Node をオンにする", both: "2/2 ✓",
-      hw: "Hash Node をオンにする方法", hw1: "ガス用の無料 Sepolia ETH を入手", hw2: "50 TH/s プランを購入", hw3: "同じウォレットでノードを登録", hwp: "プランを開く", hwn: "ノードへ",
+      hw: "Hash Node をオンにする方法", hw1: "ダッシュボードを開き、この同じウォレットを接続", hw2: "「ノードを有効にする」を押す：無料・ワンクリック・ガス不要", hw3: "ノードはすぐにオンに。ステーキングと合わせてエアドロップがカウントされます", hwp: "ダッシュボードを開く", hwn: "ノードへ",
       acc: "これまでの生成量", of: "期間満了で {n} SECT のうち", calc: "ネットワークで計算中…", pre: "エアドロップ開始日からカウントが始まります。", lock: "{d}（30 日経過）以降、生成分はあなたのものです。", mine: "生成分はすでにあなたのものです。",
-      who: "ウォレット {a}", wNone: "このウォレットで登録されたノードはありません", wOn: "ノード オン", wOff: "ノード オフ", wChk: "ノードを確認中…", wErr: "ネットワークを確認できません。再試行中…",
+      who: "ウォレット {a}", wNone: "このウォレットで有効化されたノードはまだありません", wOn: "ノード オン", wOff: "ノード オフ", wChk: "ノードを確認中…", wErr: "ネットワークを確認できません。再試行中…",
       keep: "ステーキングはこれまでどおり動きます。バリデーターネットワークへの参加は任意です。Hash Node を接続するだけで Airdrop Genesis の報酬を上乗せできます。",
       newB: "新着", newT: "Airdrop Genesis 開始",
       msgK: "ステーキング利用者へのお知らせ · Airdrop Genesis",
@@ -261,9 +261,9 @@
       h3: "<b>에어드롭</b>에 참여 중입니다.", p3: "스테이킹과 Hash Node 준비 완료. 보상을 받으려면 기간을 채울 때까지 둘 다 유지하세요.",
       p1n: "Hash Node는 이미 켜져 있습니다. 100 SECT를 스테이킹하면 에어드롭에 참여합니다.", poff: "Hash Node가 꺼져 있습니다. 집계가 계속되도록 켜 주세요.",
       on: "켜짐", off: "꺼짐", chk: "확인 중…", ctaOn: "내 에어드롭 보기", ctaOff: "내 Hash Node 켜기", both: "2/2 ✓",
-      hw: "Hash Node 켜는 방법", hw1: "가스용 무료 Sepolia ETH 받기", hw2: "50 TH/s 플랜 구매", hw3: "같은 지갑으로 노드 등록", hwp: "플랜 열기", hwn: "내 노드로",
+      hw: "Hash Node 켜는 방법", hw1: "대시보드를 열고 이 지갑을 연결하세요", hw2: "‘내 노드 활성화’를 누르세요: 무료, 클릭 한 번, 가스 없음", hw3: "노드가 바로 켜집니다. 스테이킹과 함께 에어드롭이 집계됩니다", hwp: "대시보드 열기", hwn: "내 노드로",
       acc: "지금까지 생성", of: "기간 완료 시 {n} SECT 중", calc: "네트워크로 계산 중…", pre: "에어드롭이 열리는 날부터 집계가 시작됩니다.", lock: "{d}(30일 경과)부터 생성분은 당신의 것입니다.", mine: "생성분은 이미 당신의 것입니다.",
-      who: "지갑 {a}", wNone: "이 지갑으로 등록된 노드 없음", wOn: "노드 켜짐", wOff: "노드 꺼짐", wChk: "노드 확인 중…", wErr: "네트워크를 확인할 수 없어 다시 시도 중…",
+      who: "지갑 {a}", wNone: "이 지갑으로 활성화된 노드가 아직 없음", wOn: "노드 켜짐", wOff: "노드 꺼짐", wChk: "노드 확인 중…", wErr: "네트워크를 확인할 수 없어 다시 시도 중…",
       keep: "스테이킹은 평소대로 작동합니다. 검증자 네트워크 참여는 선택 사항입니다. Hash Node만 연결하면 Airdrop Genesis 보상을 추가로 받을 수 있습니다.",
       newB: "신규", newT: "Airdrop Genesis 오픈",
       msgK: "스테이킹 이용자 안내 · Airdrop Genesis",
@@ -283,9 +283,9 @@
       h3: "Sei nell’<b>airdrop.</b>", p3: "Staking e Hash Node pronti. Mantienili entrambi fino al termine del tuo periodo per vincere il premio.",
       p1n: "Il tuo Hash Node è già acceso. Con 100 SECT in staking entri nell’airdrop.", poff: "Il tuo Hash Node è spento: accendilo perché il conteggio continui.",
       on: "Acceso", off: "Spento", chk: "Verifica…", ctaOn: "Il mio airdrop", ctaOff: "Accendi il mio Hash Node", both: "2/2 ✓",
-      hw: "Come accendere il tuo Hash Node", hw1: "Ottieni ETH Sepolia gratis per il gas", hw2: "Acquista il piano da 50 TH/s", hw3: "Registra il nodo con questo stesso wallet", hwp: "Apri il piano", hwn: "Vai al tuo nodo",
+      hw: "Come accendere il tuo Hash Node", hw1: "Apri la dashboard e collega questo stesso wallet", hw2: "Premi “Attiva il mio nodo”: gratis, un clic, senza gas", hw3: "Il nodo si accende subito. Con il tuo staking, il tuo airdrop conta", hwp: "Apri la dashboard", hwn: "Vai al tuo nodo",
       acc: "Generato finora", of: "su {n} SECT al termine del periodo", calc: "Calcolo con la rete…", pre: "Il conteggio parte il giorno di apertura dell’airdrop.", lock: "Dal {d} (30 giorni dentro) ciò che generi è tuo.", mine: "Ciò che hai generato è già tuo.",
-      who: "Wallet {a}", wNone: "nessun nodo registrato con questo wallet", wOn: "nodo acceso", wOff: "nodo spento", wChk: "verifica del nodo…", wErr: "impossibile consultare la rete, nuovo tentativo…",
+      who: "Wallet {a}", wNone: "nessun nodo ancora attivato con questo wallet", wOn: "nodo acceso", wOff: "nodo spento", wChk: "verifica del nodo…", wErr: "impossibile consultare la rete, nuovo tentativo…",
       keep: "Il tuo staking continua a funzionare come sempre. Unirti alla nostra rete di validatori è facoltativo: collega un Hash Node e potrai aggiungere le ricompense di Airdrop Genesis.",
       newB: "Novità", newT: "Airdrop Genesis è aperto",
       msgK: "Messaggio per chi fa staking · Airdrop Genesis",
@@ -515,9 +515,9 @@
           '<p class="sad-who m" hidden></p>' +
           '<div class="sad-acc" hidden><span class="m">' + tt("acc") + '</span><b><em>0</em> SECT</b><i class="bar"><i></i></i><small></small></div>' +
           '<div class="sad-how" hidden><p class="m">' + tt("hw") + "</p><ol>" +
-            '<li><span>1</span><div>' + tt("hw1") + '<em><a href="https://faucet.quicknode.com/ethereum/sepolia" target="_blank" rel="noopener noreferrer">QuickNode ↗</a><a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer">Google ↗</a></em></div></li>' +
-            '<li><span>2</span><div>' + tt("hw2") + '<em><a href="/dashboard.html#plan">' + tt("hwp") + " ↗</a></em></div></li>" +
-            '<li><span>3</span><div>' + tt("hw3") + '<em><a href="/dashboard.html#node">' + tt("hwn") + " ↗</a></em></div></li></ol></div>" +
+            '<li><span>1</span><div>' + tt("hw1") + '<em><a href="/dashboard.html#plan">' + tt("hwp") + " ↗</a></em></div></li>" +
+            '<li><span>2</span><div>' + tt("hw2") + "</div></li>" +
+            '<li><span>3</span><div>' + tt("hw3") + "</div></li></ol></div>" +
           '<div class="sad-lv" hidden>' +
             '<div class="lv"><span class="m">' + tt("lv") + '</span><b></b><small></small></div>' +
             '<div class="spt"><span class="m">' + tt("sp") + '</span><b></b><small></small></div>' +
@@ -641,7 +641,25 @@
         var n = word(h, 0);
         if (n === 0n) return "none";
         return call(REGISTRY, SEL.validators + pad((n - 1n).toString(16))).then(function (v) { return word(v, 6) === 1n ? "active" : "paused"; });
-      }).catch(function () { return "unknown"; }).then(function (r) { if (a === addr) { node = r; paint(); } });
+      }).catch(function () { return "unknown"; }).then(function (r) {
+        // sin nodo encendido en Sepolia: puede estar activado en el Dashboard (un clic, sin Sepolia)
+        return r === "active" ? r : activated(a).then(function (on) { return on ? "active" : r; });
+      }).then(function (r) { if (a === addr) { node = r; paint(); } });
+    }
+    /* nodo activado en el Dashboard: el de este navegador (recien activado) o el registro publico de activaciones */
+    function localAct(a) {
+      try { var x = JSON.parse(localStorage.getItem("sectora:v2:node:" + a.toLowerCase()) || "null");
+        return x ? { t: x.t || Date.now(), n: x.name || "Sectora Node", c: x.place || "", la: x.lat, lo: x.lon } : null; } catch (e) { return null; }
+    }
+    function activated(a) {
+      if (localAct(a)) return Promise.resolve(true);
+      return new Promise(function (ok) {
+        loadCount(function () {
+          var C = window.SACount;
+          if (!C || !C.activos) return ok(false);
+          C.activos().then(function (m) { ok(!!m[a.toLowerCase()]); }, function () { ok(false); });
+        });
+      });
     }
     /* lo generado en vivo, con la misma regla que el verificador del airdrop (count.js) */
     var accBox = $(".sad-acc"), accN = $(".sad-acc em"), accBar = $(".sad-acc .bar i"), accTxt = $(".sad-acc small");
@@ -658,7 +676,9 @@
         var C = window.SACount;
         if (!C.OPEN || Date.now() < C.OPEN) { histBusy = false; hist = { pre: true }; histFor = a; return; }
         C.wallet(a).then(function (h) {
-          var ev = C.evaluate(h.ev, h.node, C.OPEN, Date.now()), proj = ev.closed;
+          var loc = localAct(a), nd = h.node;
+          if (loc && C.junta && !(nd && nd.act)) nd = C.junta(nd, loc, a.toLowerCase());
+          var ev = C.evaluate(h.ev, nd, C.OPEN, Date.now()), proj = ev.closed;
           ev.items.forEach(function (it) { proj += it.p; });
           if (a === addr) { hist = { items: ev.items, closed: ev.closed, proj: proj, first: ev.start }; histFor = a; }
         }).catch(function () {}).then(function () { histBusy = false; });
