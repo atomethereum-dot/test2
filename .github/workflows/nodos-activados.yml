@@ -1,7 +1,9 @@
 name: Nodos activados
 
-# Cada 10 minutos guarda en nodos/activaciones.json los nodos que se activaron en el Dashboard
-# (avisos en ntfy.sh, que los guarda 12 horas). El conteo del airdrop y el panel leen ese archivo.
+# Guarda en nodos/activaciones.json los nodos que se activaron en el Dashboard (avisos en ntfy.sh, que los
+# guarda 12 horas). El conteo del airdrop y el panel leen ese archivo (y los avisos recientes de ntfy).
+# El horario de GitHub se retrasa mucho, asi que cada vuelta se queda vigilando unas 5 h 40 min (cada
+# 5 minutos) y al terminar lanza la siguiente. El horario queda de respaldo por si la cadena se corta.
 # Con "prueba" se comprueba el circuito con un tema aparte y sin guardar nada.
 on:
   schedule:
@@ -15,6 +17,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: nodos-activados
@@ -23,6 +26,7 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
         with:
@@ -39,20 +43,27 @@ jobs:
           node .github/scripts/nodos-sync.mjs "$T" /tmp/prueba.json
           cat /tmp/prueba.json
 
-      - name: Recoger los avisos
-        if: ${{ !inputs.prueba }}
-        run: node .github/scripts/nodos-sync.mjs
-
-      - name: Guardar en el repositorio
+      - name: Recoger y guardar los avisos (cada 5 minutos)
         if: ${{ !inputs.prueba }}
         run: |
-          if git diff --quiet -- nodos/activaciones.json; then echo "sin cambios"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add nodos/activaciones.json
-          git commit -q -m "Nodos activados: sincronización"
-          for i in 1 2 3 4; do
-            git pull -q --rebase origin "${{ github.ref_name }}" && git push -q origin "HEAD:${{ github.ref_name }}" && exit 0
-            sleep $((i * 5))
+          REF="${{ github.ref_name }}"
+          for n in $(seq 1 68); do
+            node .github/scripts/nodos-sync.mjs || echo "ntfy no respondio, se reintenta en 5 minutos"
+            if ! git diff --quiet -- nodos/activaciones.json; then
+              git add nodos/activaciones.json
+              git commit -q -m "Nodos activados: sincronización"
+              for i in 1 2 3 4; do
+                git pull -q --rebase origin "$REF" && git push -q origin "HEAD:$REF" && break
+                sleep $((i * 5))
+              done
+            fi
+            if [ "$n" -lt 68 ]; then sleep 300; fi
           done
-          exit 1
+
+      - name: Lanzar la siguiente vuelta
+        if: ${{ always() && !inputs.prueba }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run nodos-activados.yml --repo "${{ github.repository }}" --ref "${{ github.ref_name }}" || echo "no se pudo lanzar; el horario hara de respaldo"
