@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nodos activados · Sectora</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+@font-face{font-family:"IBM Plex Sans";src:url("/fonts/IBMPlexSans.woff2") format("woff2");font-weight:100 700;font-display:swap}
+@font-face{font-family:"IBM Plex Mono";src:url("/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-display:swap}
+:root{--bg:#05070b;--card:#0a0d14;--hair:rgba(255,255,255,.09);--ink:#e9eff8;--ink2:#c6ccd8;--ink3:#7c8496;--blue:#1569ff;--blue2:#4d8dff;--live:#3ecf8e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:300 15px/1.55 "IBM Plex Sans",system-ui,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:32px 16px 60px}
+.k{font:400 10px/1.2 "IBM Plex Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3)}
+h1{margin:8px 0 6px;font-weight:300;font-size:clamp(26px,3vw,36px);letter-spacing:-.02em}
+.sub{margin:0;color:var(--ink3);font-size:14px;max-width:70ch}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:24px 0}
+.tile{padding:16px 18px;border:1px solid var(--hair);background:var(--card)}
+.tile b{display:block;margin-top:8px;font-weight:300;font-size:30px;letter-spacing:-.02em}
+.tile b.g{color:var(--live)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 12px}
+.bar input{flex:1;min-width:220px;padding:11px 13px;border:1px solid var(--hair);background:rgba(255,255,255,.02);color:var(--ink);font:400 13px/1.2 "IBM Plex Mono",monospace;outline:none}
+.bar input:focus{border-color:var(--blue)}
+.bar button{padding:11px 14px;border:1px solid var(--hair);background:transparent;color:var(--ink2);cursor:pointer;font:400 10px/1 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+.bar button:hover{border-color:var(--blue);color:var(--ink)}
+.wrap{border:1px solid var(--hair);background:var(--card);overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{position:sticky;top:0;background:#0d1119;text-align:left;padding:11px 14px;font:400 9.5px/1.2 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--hair);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--hair);white-space:nowrap}
+td.m{font-family:"IBM Plex Mono",monospace;font-size:12.5px}
+td a{color:var(--blue2);text-decoration:none}td a:hover{text-decoration:underline}
+.n{color:var(--ink3)}
+.vacio{padding:28px 14px;text-align:center;color:var(--ink3)}
+.pie{margin-top:14px;color:var(--ink3);font-size:12.5px}
+</style>
+</head>
+<body>
+<main>
+  <span class="k">Sectora · prueba /testv2 · privado</span>
+  <h1>Nodos activados</h1>
+  <p class="sub">Cada vez que alguien pulsa «Activar mi nodo» en el Dashboard queda aquí, con la hora del servidor. La lista se guarda en el repositorio (nodos/activaciones.json) cada 10 minutos.</p>
+  <div class="tiles">
+    <div class="tile"><span class="k">Nodos activados</span><b class="g" id="tot">—</b></div>
+    <div class="tile"><span class="k">Últimas 24 horas</span><b id="dia">—</b></div>
+    <div class="tile"><span class="k">Países</span><b id="pai">—</b></div>
+  </div>
+  <div class="bar"><input id="q" placeholder="Buscar wallet, nodo o ciudad" autocomplete="off" spellcheck="false"><button type="button" id="csv">Descargar CSV</button><button type="button" id="rec">Actualizar</button></div>
+  <div class="wrap"><table><thead><tr><th>#</th><th>Fecha</th><th>Wallet</th><th>Nodo</th><th>Ciudad</th></tr></thead><tbody id="rows"><tr><td colspan="5" class="vacio">Leyendo…</td></tr></tbody></table></div>
+  <p class="pie" id="pie"></p>
+</main>
+<script>
+(function () {
+  "use strict";
+  var URL_ACT = "https://raw.githubusercontent.com/atomethereum-dot/test2/refs/heads/claude/website-build-i9rofc/nodos/activaciones.json";
+  var lista = [], $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var fecha = function (t) { return new Date(t).toLocaleString("es", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }); };
+  function pinta() {
+    var q = $("q").value.trim().toLowerCase();
+    var v = lista.filter(function (x) { return !q || (x.w + " " + x.n + " " + x.c).toLowerCase().indexOf(q) >= 0; });
+    $("rows").innerHTML = v.length ? v.map(function (x) {
+      return "<tr><td class='n'>" + x.i + "</td><td>" + esc(fecha(x.t)) + "</td><td class='m'><a href='https://etherscan.io/address/" + x.w + "' target='_blank' rel='noopener'>" + x.w.slice(0, 8) + "…" + x.w.slice(-6) + "</a></td><td>" + esc(x.n) + "</td><td>" + esc(x.c) + "</td></tr>";
+    }).join("") : "<tr><td colspan='5' class='vacio'>" + (lista.length ? "Nada coincide con la búsqueda." : "Aún no hay nodos activados.") + "</td></tr>";
+  }
+  function carga() {
+    $("pie").textContent = "Leyendo…";
+    fetch(URL_ACT + "?m=" + Date.now(), { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (j) {
+      var d = (j && j.nodos) || {};
+      lista = Object.keys(d).map(function (w) { var x = d[w]; return { w: w, t: x.t, n: x.n || "", c: x.c || "", la: x.la, lo: x.lo }; })
+        .sort(function (a, b) { return b.t - a.t; });
+      lista.forEach(function (x, i) { x.i = lista.length - i; });
+      var ahora = Date.now(), paises = {};
+      lista.forEach(function (x) { var p = (x.c.split(",").pop() || "").trim(); if (p) paises[p] = 1; });
+      $("tot").textContent = lista.length.toLocaleString("es");
+      $("dia").textContent = lista.filter(function (x) { return ahora - x.t < 864e5; }).length.toLocaleString("es");
+      $("pai").textContent = Object.keys(paises).length.toLocaleString("es");
+      $("pie").textContent = "Actualizado " + new Date().toLocaleTimeString("es") + ". Se refresca solo cada minuto.";
+      pinta();
+    }).catch(function () { $("pie").textContent = "No se pudo leer la lista. Prueba de nuevo en un momento."; });
+  }
+  $("q").addEventListener("input", pinta);
+  $("rec").addEventListener("click", carga);
+  $("csv").addEventListener("click", function () {
+    var c = "fecha,wallet,nodo,ciudad,lat,lon\n" + lista.slice().reverse().map(function (x) {
+      return [new Date(x.t).toISOString(), x.w, x.n, x.c, x.la, x.lo].map(function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; }).join(",");
+    }).join("\n");
+    var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([c], { type: "text/csv" })); a.download = "nodos-activados.csv"; a.click();
+  });
+  carga(); setInterval(carga, 60000);
+})();
+</script>
+</body>
+</html>

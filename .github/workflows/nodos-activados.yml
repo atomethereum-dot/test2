@@ -1,0 +1,58 @@
+name: Nodos activados
+
+# Cada 10 minutos guarda en nodos/activaciones.json los nodos que se activaron en el Dashboard
+# (avisos en ntfy.sh, que los guarda 12 horas). El conteo del airdrop y el panel leen ese archivo.
+# Con "prueba" se comprueba el circuito con un tema aparte y sin guardar nada.
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+    inputs:
+      prueba:
+        description: "Probar con un aviso de prueba (no guarda nada)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nodos-activados
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Prueba del circuito (tema aparte, sin guardar)
+        if: ${{ inputs.prueba }}
+        run: |
+          T="sectora-hn-1ux29d4rgvyv5l-prueba"
+          curl -sS -d '{"w":"0x00000000000000000000000000000000000000aa","n":"Nodo de prueba","c":"Mérida, VE","la":8.59,"lo":-71.16}' "https://ntfy.sh/$T" >/dev/null
+          curl -sS -d '{"w":"no-es-wallet","n":"x","la":1,"lo":1}' "https://ntfy.sh/$T" >/dev/null
+          sleep 2
+          cp nodos/activaciones.json /tmp/prueba.json
+          node .github/scripts/nodos-sync.mjs "$T" /tmp/prueba.json
+          cat /tmp/prueba.json
+
+      - name: Recoger los avisos
+        if: ${{ !inputs.prueba }}
+        run: node .github/scripts/nodos-sync.mjs
+
+      - name: Guardar en el repositorio
+        if: ${{ !inputs.prueba }}
+        run: |
+          if git diff --quiet -- nodos/activaciones.json; then echo "sin cambios"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add nodos/activaciones.json
+          git commit -q -m "Nodos activados: sincronización"
+          for i in 1 2 3 4; do
+            git pull -q --rebase origin "${{ github.ref_name }}" && git push -q origin "HEAD:${{ github.ref_name }}" && exit 0
+            sleep $((i * 5))
+          done
+          exit 1

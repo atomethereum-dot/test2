@@ -10,6 +10,8 @@
   var t = function (k, f) { var v = window.SECTORA_T && window.SECTORA_T(k); return v && v !== k ? v : f; };
   var LV = ["", "Scout", "Sentinel", "Guardian", "Titan"];
   var DAY = 864e5;
+  // aviso de activacion: lo recoge la tarea "Nodos activados" de GitHub (nodos/activaciones.json)
+  var NTFY = "https://ntfy.sh/sectora-hn-1ux29d4rgvyv5l";
   var est = null;          // { addr, carga } | { addr, r, nd, reg } | { addr, err }
   var turno = 0;
   // lo que el mercado necesita saber (mercado.js): wallet y nivel de staking
@@ -35,7 +37,21 @@
     return c;
   }
 
-  function nodo() { try { return est && est.addr ? JSON.parse(localStorage.getItem("sectora:v2:node:" + est.addr.toLowerCase()) || "null") : null; } catch (e) { return null; } }
+  // el nodo activado: el guardado en este navegador o, si no, el del registro publico de activaciones
+  function nodo() {
+    var n = null;
+    try { n = est && est.addr ? JSON.parse(localStorage.getItem("sectora:v2:node:" + est.addr.toLowerCase()) || "null") : null; } catch (e) {}
+    if (!n && est && est.nd && est.nd.act) { var a = est.nd.act; n = { name: a.n, place: a.c, lat: a.la, lon: a.lo }; }
+    return n;
+  }
+  // deja constancia publica de la activacion (sin firmas ni gas); se repite si a los 20 min aun no esta guardada
+  function envia(addr, n) {
+    var k = "sectora:v2:sent:" + addr.toLowerCase();
+    try { if (Date.now() - (+localStorage.getItem(k) || 0) < 20 * 60000) return; localStorage.setItem(k, String(Date.now())); } catch (e) {}
+    var msg = JSON.stringify({ w: addr.toLowerCase(), n: n.name, c: n.place || "", la: n.lat, lo: n.lon });
+    try { fetch(NTFY, { method: "POST", body: msg, keepalive: true }).catch(function () {}); } catch (e) {}
+  }
+  window.__v2Envia = envia;
   function fila(k, v) { return '<div class="row"><span class="lbl">' + esc(k) + "</span><b>" + v + "</b></div>"; }
   // estado del nodo y del airdrop
   function estado() {
@@ -251,15 +267,26 @@
     if (f !== firma) { firma = f; consola(); }
   }
 
+  function local(addr) { try { return JSON.parse(localStorage.getItem("sectora:v2:node:" + addr.toLowerCase()) || "null"); } catch (e) { return null; } }
+  /* estado del airdrop. Si el nodo se activo en este navegador y la constancia publica aun no esta guardada
+     (la tarea de GitHub tarda hasta 10 minutos), se cuenta desde la hora de activacion de aqui mientras tanto */
+  function calcula(addr, w) {
+    var C = window.SACount, nd = w.node, loc = local(addr);
+    if (loc && !(nd && nd.act) && C.junta) nd = C.junta(nd, { t: loc.t || Date.now(), n: loc.name, c: loc.place, la: loc.lat, lo: loc.lon }, addr.toLowerCase());
+    est = { addr: addr, w: w, r: C.evaluate(w.ev, nd, C.OPEN, Date.now()), nd: nd, reg: !!(w.node && w.node.reg) };
+  }
   function carga(addr) {
     var C = window.SACount, mio = ++turno;
     est = { addr: addr, carga: true }; pinta(); avisa(null);
     if (!C) { est = { addr: addr, err: true }; pinta(); return; }
     C.wallet(addr).then(function (w) {
       if (mio !== turno) return;
-      var r = C.evaluate(w.ev, w.node, C.OPEN, Date.now());
-      est = { addr: addr, r: r, nd: w.node, reg: !!(w.node && w.node.reg) };
-      pinta(); avisa({ addr: addr, lv: r.level, bal: r.bal, reg: est.reg });
+      var act = (w.node && w.node.act) || null;
+      calcula(addr, w);
+      // activado en este navegador pero aun sin constancia publica: se vuelve a enviar
+      var loc = local(addr);
+      if (loc && !act && !est.reg) envia(addr, loc);
+      pinta(); avisa({ addr: addr, lv: est.r.level, bal: est.r.bal, reg: est.reg, act: act });
     }).catch(function () { if (mio === turno) { est = { addr: addr, err: true }; pinta(); } });
   }
 
@@ -314,6 +341,6 @@
     "@keyframes v2p{50%{opacity:.35}}";
   document.head.appendChild(css);
   document.addEventListener("sectora:langchange", function () { firma = ""; pinta(); });
-  document.addEventListener("v2:nodo", pinta);
+  document.addEventListener("v2:nodo", function () { if (est && est.w) calcula(est.addr, est.w); pinta(); });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", engancha); else engancha();
 })();

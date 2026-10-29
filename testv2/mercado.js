@@ -68,7 +68,8 @@
   function activa(manual) {
     var e = est(); if (!e) return false;
     if (e.reg) return true;
-    var n = nodoLeer();
+    // ya activado (en este navegador o en el registro publico de activaciones)
+    var n = nodoLeer() || (e.act ? { name: e.act.n, place: e.act.c, lat: e.act.la, lon: e.act.lo } : null);
     if (!n) {
       var la = parseFloat(($("#nLat") || {}).value), lo = parseFloat(($("#nLon") || {}).value);
       if (!isFinite(la) || !isFinite(lo) || Math.abs(la) > 85 || Math.abs(lo) > 180) {
@@ -76,8 +77,9 @@
         return false;
       }
       var g = $("#nGeo b");
-      n = { name: (($("#nName") || {}).value || "").trim().slice(0, 48) || "Sectora Node", lat: la, lon: lo, place: g ? g.textContent : "" };
+      n = { name: (($("#nName") || {}).value || "").trim().slice(0, 48) || "Sectora Node", lat: la, lon: lo, place: g ? g.textContent : "", t: Date.now() };
       try { localStorage.setItem(nodoKey(), JSON.stringify(n)); } catch (er) {}
+      if (window.__v2Envia) window.__v2Envia(e.addr, n);
       var w = window.__sectoraWallet; if (w && w.aviso) w.aviso(tt("hashdash.v2.reg.toast", "Node “{n}” activated").replace("{n}", n.name));
       document.dispatchEvent(new Event("v2:nodo"));
     }
@@ -92,7 +94,7 @@
     var reg = $(".v2-reg"), sum = $("#v2Sum"); if (!reg || !sum) return;
     reg.hidden = on; sum.hidden = !on;
     if (!on) return;
-    var e = est(), n = nodoLeer(), sp = sum.querySelector("span");
+    var e = est(), n = nodoLeer() || (e && e.act ? { name: e.act.n, place: e.act.c } : null), sp = sum.querySelector("span");
     if (e && e.reg) sp.textContent = tt("hashdash.v2.reg.old", "Your node is already registered on the network map.");
     else if (n) { sp.innerHTML = ""; var b = document.createElement("b"); b.textContent = n.name; sp.appendChild(b); if (n.place) sp.appendChild(document.createTextNode(" · " + n.place)); }
   }

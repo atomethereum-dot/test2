@@ -19,9 +19,10 @@
      nodo apagado no suma, igual que estar fuera del staking: la parte se pausa y sigue al encenderlo.
    Usado por el verificador publico (una wallet) y por el panel privado (todas).
 
-   PRUEBA /testv2 - nodo con el staking: desde AUTO toda wallet tiene el nodo encendido, sin registro en
-   Sepolia. Lo anterior a AUTO no cambia: los nodos registrados conservan su fecha, sus dias y sus apagados;
-   desde AUTO todos estan encendidos (tambien los que estaban apagados). Quien no tenia nodo cuenta desde AUTO. */
+   PRUEBA /testv2 - nodo activado en el Dashboard, sin Sepolia: al pulsar "Activar mi nodo" la web envia un
+   aviso (ntfy.sh) y GitHub lo guarda en nodos/activaciones.json con la hora del servidor. El nodo de una wallet
+   es su registro en Sepolia (igual que siempre) mas su activacion: lo de antes no cambia y desde la activacion
+   queda encendido. El airdrop cuenta con nodo y staking, en el orden que sea. */
 (function (root) {
   "use strict";
   var STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
@@ -44,8 +45,8 @@
   // fecha prevista (interna) del lanzamiento de SectoraEVM, cuando empiezan las entregas; la web no la muestra
   var END = Date.UTC(2027, 2, 25);
   var DAY = 864e5, MIN = 30, BAG = 7e6, DUR = 150 * DAY;
-  // dia del cambio (en la prueba, hoy); al publicar se pone la fecha de publicacion
-  var AUTO = Date.UTC(2026, 9, 29);
+  // nodos activados en el Dashboard (los guarda la tarea "Nodos activados" de GitHub)
+  var ACT_URL = "https://raw.githubusercontent.com/atomethereum-dot/test2/refs/heads/claude/website-build-i9rofc/nodos/activaciones.json";
   var LEVELS = [100, 500, 1000, 4000];
   var RATE = { 0: 0, 1: 0.55, 2: 0.65, 3: 0.75, 4: 0.9 };
 
@@ -166,14 +167,23 @@
     }).then(function (res) { var m = {}; res.forEach(function (v) { if (v) { var x = parseNode(v); m[x.who] = x; } }); return m; });
   }
 
-  // el nodo desde AUTO: los tramos de antes se quedan como estaban y desde AUTO queda encendido
-  function auto(n, who) {
-    if (!n) return { who: who, at: AUTO, active: true, spans: [[AUTO, Infinity]], auto: true };
+  // activaciones: { wallet: { t, n, c, la, lo } }; si no se pueden leer, como si no hubiera ninguna
+  var actP = null;
+  function activos() {
+    if (!actP) actP = fetch(ACT_URL + "?m=" + Math.floor(Date.now() / 60000), { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("act"); return r.json(); })
+      .then(function (j) { return (j && j.nodos) || {}; })
+      .catch(function () { actP = null; return {}; });
+    return actP;
+  }
+  // el nodo de una wallet: su registro en Sepolia (con sus encendidos y apagados) mas su activacion
+  function junta(n, a, who) {
+    if (!a || !isFinite(a.t)) return n;
+    var sp = n ? (n.spans || (n.active ? [[n.at, Infinity]] : [])).map(function (x) { return x.slice(); }) : [];
+    sp.push([a.t, Infinity]); sp.sort(function (x, y) { return x[0] - y[0]; });
     var out = [];
-    (n.spans || (n.active ? [[n.at, Infinity]] : [])).forEach(function (s) { if (s[0] < AUTO) out.push([s[0], Math.min(s[1], AUTO)]); });
-    var last = out[out.length - 1];
-    if (last && last[1] >= AUTO) last[1] = Infinity; else out.push([AUTO, Infinity]);
-    return { who: n.who, at: n.at, active: true, spans: out, reg: true, lat: n.lat, lon: n.lon };
+    sp.forEach(function (x) { var l = out[out.length - 1]; if (l && x[0] <= l[1]) l[1] = Math.max(l[1], x[1]); else out.push(x); });
+    return { who: who, at: n ? Math.min(n.at, a.t) : a.t, active: true, spans: out, reg: !!n, act: a, lat: n ? n.lat : a.la, lon: n ? n.lon : a.lo };
   }
 
   /* ---------- reglas ---------- */
@@ -267,9 +277,9 @@
   function wallet(addr) {
     var nd = node(addr).then(function (n) {
       return n ? history({ x: n }, pad(addr)).then(function () { return n; }) : null;
-    }).catch(function () { return null; }).then(function (n) { return auto(n, addr.toLowerCase()); });
-    return Promise.all([logs(pad(addr)).then(stamp), nd])
-      .then(function (r) { return { ev: r[0], node: r[1] }; });
+    }).catch(function () { return null; });
+    return Promise.all([logs(pad(addr)).then(stamp), nd, activos()])
+      .then(function (r) { var a = addr.toLowerCase(); return { ev: r[0], node: junta(r[1] && Object.assign(r[1], { reg: true }), r[2][a], a) }; });
   }
   function everyone(onStep) {
     onStep && onStep("staking");
@@ -280,8 +290,9 @@
         Object.keys(nd).forEach(function (w) { by[w] = by[w] || []; });
         var list = Object.keys(by);
         onStep && onStep("saldos");
-        return accounts(list).catch(function () { return {}; }).then(function (acc) {
-          return list.map(function (w) { return { who: w, ev: by[w], node: auto(nd[w] || null, w), acc: acc[w] || null }; });
+        return Promise.all([accounts(list).catch(function () { return {}; }), activos()]).then(function (r) {
+          var acc = r[0], act = r[1];
+          return list.map(function (w) { return { who: w, ev: by[w], node: junta(nd[w] ? Object.assign(nd[w], { reg: true }) : null, act[w], w), acc: acc[w] || null }; });
         });
       });
     });
@@ -425,7 +436,7 @@
     });
   }
 
-  root.SACount = { OPEN: root.SA_OPEN !== undefined ? root.SA_OPEN : OPEN, END: END, AUTO: AUTO, DAY: DAY, DUR: DUR, MIN: MIN, BAG: BAG, RATE: RATE, prize: prize,
+  root.SACount = { OPEN: root.SA_OPEN !== undefined ? root.SA_OPEN : OPEN, END: END, activos: activos, junta: junta, DAY: DAY, DUR: DUR, MIN: MIN, BAG: BAG, RATE: RATE, prize: prize,
     level: level, layers: layers, evaluate: evaluate, liveEarned: liveEarned, wallet: wallet, everyone: everyone,
     REF: { TSECT: TSECT, MARK: MARK, TAG: REF_TAG, BONUS: REF_BONUS, WIN: REF_WIN, SINCE: REF_SINCE, POOL: REF_POOL },
     refOf: refOf, refInvitees: refInvitees, referrals: referrals, refBonus: refBonus, refLate: refLate, fundedBy: fundedBy };
