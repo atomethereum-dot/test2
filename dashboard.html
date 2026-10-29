@@ -3417,11 +3417,20 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   });
   dispatchEvent(new Event('eip6963:requestProvider'));
 
+  /* icono de Phantom para cuando la wallet no lo anuncia (y para su enlace en el movil) */
+  const PHANTOM = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#ab9ff2"/><path d="M7 21.5V13a7 7 0 0 1 14 0v8.5l-2.33-1.75-2.34 1.75L14 19.75l-2.33 1.75-2.34-1.75z" fill="#fff"/><ellipse cx="11.6" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/><ellipse cx="16.4" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/></svg>');
   function inyectadas(){
     const l = [...hallados.values()].map(d => ({ nombre: d.info.name || t('hashdash.wallet.browserWallet','Browser wallet'),
       icono: d.info.icon, proveedor: d.provider, rdns: d.info.rdns }));
     /* navegadores antiguos que solo exponen window.ethereum */
-    if(!l.length && window.ethereum) l.push({ nombre: t('hashdash.wallet.browserWallet','Browser wallet'), icono: null, proveedor: window.ethereum, rdns: '1' });
+    const e = window.ethereum;
+    if(!l.length && e) l.push({ nombre: e.isPhantom ? 'Phantom' : t('hashdash.wallet.browserWallet','Browser wallet'),
+      icono: e.isPhantom ? PHANTOM : null, proveedor: e, rdns: '1' });
+    /* Phantom deja su wallet de Ethereum en window.phantom.ethereum; algunas versiones (sobre todo
+       su navegador del movil) no la anuncian por EIP-6963 */
+    const ph = window.phantom && window.phantom.ethereum;
+    if(ph && ph.request && !l.some(w => w.proveedor === ph || w.rdns === 'app.phantom' || (w.proveedor && w.proveedor.isPhantom)))
+      l.push({ nombre: 'Phantom', icono: PHANTOM, proveedor: ph, rdns: 'phantom' });
     return l;
   }
 
@@ -3581,6 +3590,9 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   const APPS = [
     { id:'metamask', nombre:'MetaMask', logo:'metaMask', nativo:'metamask://',
       navegador: () => 'https://metamask.app.link/dapp/' + aqui().replace(/^https?:\/\//, '') },
+    /* Phantom no usa WalletConnect para Ethereum: abre esta pagina en su navegador */
+    { id:'phantom', nombre:'Phantom', icono: PHANTOM,
+      navegador: () => 'https://phantom.app/ul/browse/' + enc(aqui()) + '?ref=' + enc(location.origin) },
     { id:'trust', nombre:'Trust Wallet', logo:'trust', nativo:'trust://',
       navegador: () => 'https://link.trustwallet.com/open_url?coin_id=60&url=' + enc(aqui()) },
     { id:'binance', nombre:'Binance Wallet', logo:'binance', navegador: binance },
@@ -3700,6 +3712,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   /* para el ordenador sin extension: sus paginas oficiales de descarga */
   const INSTALAR = [
     {n:'MetaMask', k:'metaMask', web:'https://metamask.io/download/'},
+    {n:'Phantom', i: PHANTOM, web:'https://phantom.com/download'},
     {n:'Trust Wallet', k:'trust', web:'https://trustwallet.com/download'},
     {n:'Coinbase Wallet', k:'coinbase', web:'https://www.coinbase.com/wallet/downloads'},
     {n:'OKX Wallet', k:'okx', web:'https://www.okx.com/web3'},
@@ -3777,7 +3790,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       sub: t('hashdash.wallet.wDetHere','Detected in this browser'), accion: () => conectaIny(w) })));
     APPS.forEach(a => {
       if(!conWC(a)){
-        lista.appendChild(fila({ logo: a.logo, nombre: a.nombre, app: a.id,
+        lista.appendChild(fila({ icono: a.icono, logo: a.logo, nombre: a.nombre, app: a.id,
           sub: t('hashdash.wallet.wOpensHere','Opens this page in the app'), enlace: a.navegador() }));
         return;
       }
@@ -3844,7 +3857,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       const h = document.createElement('div');
       h.className = 'wsel-sub'; h.textContent = t('hashdash.wallet.others','Other compatible wallets');
       lista.appendChild(h);
-      INSTALAR.forEach(w => lista.appendChild(fila({ logo: w.k, nombre: w.n, etiqueta: t('hashdash.wallet.install','Install'),
+      INSTALAR.forEach(w => lista.appendChild(fila({ icono: w.i, logo: w.k, nombre: w.n, etiqueta: t('hashdash.wallet.install','Install'),
         accion: () => window.open(w.web, '_blank', 'noopener') })));
     }
     nota();
@@ -3987,8 +4000,16 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       return;
     }
     if(!guardado || guardado === 'walletconnect') return;
-    const d = [...hallados.values()].find(x => x.info.rdns === guardado);
-    const p = d ? d.provider : window.ethereum;
+    const busca = () => [...hallados.values()].find(x => x.info.rdns === guardado);
+    let d = busca();
+    /* una extension que tarda en anunciarse: se le pregunta otra vez antes de rendirse */
+    if(!d && guardado !== '1' && guardado !== 'phantom'){
+      dispatchEvent(new Event('eip6963:requestProvider'));
+      await new Promise(r => setTimeout(r, 900));
+      d = busca();
+    }
+    const ph = window.phantom && window.phantom.ethereum;
+    const p = d ? d.provider : /phantom/.test(guardado) && ph ? ph : window.ethereum;
     if(!p) return;
     try{
       const cs = await p.request({method:'eth_accounts'});
