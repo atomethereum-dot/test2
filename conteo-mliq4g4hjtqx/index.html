@@ -181,10 +181,11 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     <div class="tiles">
       <div class="tile hi"><span class="k">Ganado hasta ahora</span><span class="v" id="t-earned">0</span><span class="s" id="t-secured"></span></div>
       <div class="tile"><span class="k">Bolsa reservada</span><span class="v" id="t-res">0</span><div class="bar"><i id="t-resbar"></i></div><span class="s" id="t-resp"></span></div>
-      <div class="tile"><span class="k">Wallets participando</span><span class="v" id="t-part">0</span><span class="s" id="t-parts"></span></div>
+      <div class="tile"><span class="k">Entraron (nodo activado)</span><span class="v" id="t-in">0</span><span class="s" id="t-ins"></span></div>
+      <div class="tile"><span class="k">Tienen todo (participando)</span><span class="v" id="t-part">0</span><span class="s" id="t-parts"></span></div>
       <div class="tile"><span class="k">Wallets Titan</span><span class="v" id="t-titan">0</span><span class="s" id="t-titans"></span></div>
       <div class="tile"><span class="k">Falta encender el nodo</span><span class="v" id="t-nonode">0</span><span class="s">Tienen staking pero el nodo no está activo</span></div>
-      <div class="tile"><span class="k">Registrados fase 2</span><span class="v" id="t-p2">0</span><span class="s">Nodo sin 100 SECT en staking</span></div>
+      <div class="tile"><span class="k">Falta el staking</span><span class="v" id="t-p2">0</span><span class="s">Tienen el nodo activado pero aún no hacen staking</span></div>
     </div>
     <div class="lvls">
       <div class="lv"><span>Scout</span><b id="l1">0</b></div>
@@ -231,7 +232,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       <thead><tr><th>Wallet</th><th>Nivel</th><th class="r">En staking</th><th>Nodo</th><th>Día</th><th class="r">Ganado</th><th class="r">Al completar</th><th>Cobra</th><th>Estado</th></tr></thead>
       <tbody id="rows"></tbody>
     </table></div>
-    <p class="foot">Toca una wallet para ver su detalle. Se calcula en tu navegador con los datos públicos de la blockchain (staking en Ethereum y registro de nodos en la testnet). No se guarda ni se publica nada. Es una estimación: si una wallet apagó el nodo, cuenta como "falta el nodo" hasta que lo encienda.</p>
+    <p class="foot">Toca una wallet para ver su detalle. Se calcula en tu navegador con los datos públicos de la blockchain (staking en Ethereum, registro de nodos en la testnet y nodos activados en el Dashboard). No se guarda ni se publica nada. Es una estimación: si una wallet apagó el nodo, cuenta como "falta el nodo" hasta que lo encienda.</p>
   </section>
 </main>
 
@@ -242,7 +243,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   </div>
 </div>
 
-<script src="/airdrop/count.js?v=18"></script>
+<!-- conteo con los nodos activados en el Dashboard nuevo (registro en Sepolia + activaciones) -->
+<script src="/testv2/count.js?v=4"></script>
 <script>
 (function () {
   "use strict";
@@ -250,18 +252,19 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   var C = window.SACount, $ = function (id) { return document.getElementById(id); };
   var LV = { 0: "—", 1: "Scout", 2: "Sentinel", 3: "Guardian", 4: "Titan" };
   var ST = { pre: ["Listo para la apertura", "blue"], early: ["Antes del día 30", "warn"], run: ["Asegurado", "ok"], full: ["Premio completo", "ok"],
-    nonode: ["Falta el nodo", "bad"], p2: ["Fase 2", "mute"], left: ["Fuera · conserva lo ganado", "mute"], out: ["Fuera", "mute"] };
-  var TABS = [["all", "Todas"], ["count", "Participando"], ["early", "Antes del día 30"], ["nonode", "Falta el nodo"], ["p2", "Fase 2"], ["full", "Completas"]];
+    nonode: ["Falta el nodo", "bad"], p2: ["Falta el staking", "mute"], left: ["Fuera · conserva lo ganado", "mute"], out: ["Fuera", "mute"] };
+  var TABS = [["all", "Todas"], ["count", "Participando"], ["early", "Antes del día 30"], ["nonode", "Falta el nodo"], ["p2", "Falta el staking"], ["full", "Completas"]];
   var nf0 = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 0, useGrouping: "always" });
   var nf2 = new Intl.NumberFormat("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: "always" });
   var df = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
   var data = null, rows = [], tab = "all", q = "", tick = 0;
   // ultimos registros: nodos registrados, entradas al airdrop (staking de 100+ y nodo) y primer deposito
-  var RT = [["node", "Nodos registrados"], ["entry", "Entradas al airdrop"], ["stake", "Primer staking"]];
+  var RT = [["node", "Nodos activados"], ["entry", "Entradas al airdrop"], ["stake", "Primer staking"]];
   var rtab = "node", rshow = 20, recent = {};
   // referidos: lista leida de la red (constancias de 0,0001 tSECT) y SECT que el padrino envio al invitado
   var refs = null, funded = {}, rftab = "inv", rfshow = 20, rfrows = [];
   var dtf = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  function escH(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
 
   /* ---------- PIN ---------- */
@@ -334,16 +337,18 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     if (pre) $("pre").innerHTML = "<b>El airdrop aún no abre.</b> Esto es una simulación con apertura el " + (open ? df.format(open) : "—") + ". Cambia la fecha arriba para ver cómo iría.";
     rows = data.map(function (d) { return { who: d.who, ev: d.ev, node: d.node, acc: d.acc, r: C.evaluate(d.ev, d.node, open, now) }; });
     rows.sort(function (a, b) { return b.r.prize - a.r.prize || b.r.bal - a.r.bal; });
-    var part = 0, titan = 0, titanBal = 0, reserved = 0, nonode = 0, p2 = 0, secured = 0, lv = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    var part = 0, titan = 0, titanBal = 0, reserved = 0, nonode = 0, p2 = 0, secured = 0, lv = { 1: 0, 2: 0, 3: 0, 4: 0 }, ent = 0, entAct = 0;
     rows.forEach(function (x) {
       var r = x.r;
+      if (x.node) { ent++; if (x.node.act && !x.node.reg) entAct++; }
       if (r.status === "p2") p2++;
       if (r.status === "nonode") nonode++;
       if (r.level && r.node === "on") { part++; lv[r.level]++; reserved += r.proj || r.prize; if (r.level === 4) { titan++; titanBal += r.bal; } }
       else reserved += r.closed;  // salio despues del dia 30: conserva lo ganado
       secured += r.secured;
     });
-    $("t-part").textContent = nf0.format(part); $("t-parts").textContent = "Con 100+ SECT en staking y el nodo activo";
+    $("t-in").textContent = nf0.format(ent); $("t-ins").textContent = nf0.format(entAct) + " en el Dashboard nuevo · " + nf0.format(ent - entAct) + " con registro en Sepolia";
+    $("t-part").textContent = nf0.format(part); $("t-parts").textContent = "Nodo activado y staking: su airdrop ya cuenta";
     $("t-titan").textContent = nf0.format(titan); $("t-titans").textContent = nf0.format(titanBal) + " SECT en staking como Titan (90 %)";
     $("t-nonode").textContent = nf0.format(nonode); $("t-p2").textContent = nf0.format(p2);
     $("t-res").innerHTML = nf0.format(reserved) + "<small>SECT</small>";
@@ -586,6 +591,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       kv("Primer depósito", d(first)) + "</div>";
     h += '<div class="box"><h4>Hash Node</h4>' +
       kv("Estado", r.node === "on" ? "Activo" : r.node === "off" ? "Pausado" : "Sin nodo") +
+      kv("Cómo entró", !x.node ? "—" : x.node.act ? "Activado en el Dashboard" + (x.node.reg ? " (y registro en Sepolia)" : "") : "Registro en Sepolia") +
+      (x.node && x.node.act ? kv("Activado el", dtf.format(x.node.act.t)) + kv("Nodo", escH(x.node.act.n) + (x.node.act.c ? " · " + escH(x.node.act.c) : "")) : "") +
       kv("Registrado el", d(r.nodeAt)) +
       kv("Apagado desde la apertura", offTime(x.node)) + "</div>";
     if (r.lay.length) {

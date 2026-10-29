@@ -285,13 +285,15 @@
     onStep && onStep("staking");
     return logs(null).then(function (l) { onStep && onStep("horas"); return stamp(l); }).then(function (ev) {
       onStep && onStep("nodos");
-      return nodes().catch(function () { return {}; }).then(function (nd) { onStep && onStep("historial"); return history(nd); }).then(function (nd) {
+      return Promise.all([nodes().catch(function () { return {}; }).then(function (nd) { onStep && onStep("historial"); return history(nd); }), activos()]).then(function (z) {
+        var nd = z[0], act = z[1];
+        // tambien quien solo activo el nodo en el Dashboard (aun sin staking)
         var by = {}; ev.forEach(function (e) { (by[e.who] = by[e.who] || []).push(e); });
         Object.keys(nd).forEach(function (w) { by[w] = by[w] || []; });
+        Object.keys(act).forEach(function (w) { by[w] = by[w] || []; });
         var list = Object.keys(by);
         onStep && onStep("saldos");
-        return Promise.all([accounts(list).catch(function () { return {}; }), activos()]).then(function (r) {
-          var acc = r[0], act = r[1];
+        return accounts(list).catch(function () { return {}; }).then(function (acc) {
           return list.map(function (w) { return { who: w, ev: by[w], node: junta(nd[w] ? Object.assign(nd[w], { reg: true }) : null, act[w], w), acc: acc[w] || null }; });
         });
       });
