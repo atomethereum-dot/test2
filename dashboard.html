@@ -30,13 +30,13 @@
 <meta name="theme-color" content="#05070b">
 <meta name="msapplication-TileImage" content="/icons/mstile-150.png">
 <meta name="msapplication-TileColor" content="#1569ff">
-<link rel="preload" href="fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-@font-face{font-family:'IBM Plex Sans';src:url("fonts/IBMPlexSans.woff2") format("woff2");font-weight:200 500;font-style:normal;font-display:swap;}
-@font-face{font-family:'IBM Plex Mono';src:url("fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;}
-@font-face{font-family:'IBM Plex Mono';src:url("fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Sans';src:url("/fonts/IBMPlexSans.woff2") format("woff2");font-weight:200 500;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url("/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url("/fonts/IBMPlexMono-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap;}
 :root{
   --bg:#05070b; --surf:#0a0d13; --surf2:#0c1017; --surf3:#0e1219;
   --ink:#f2f5fa; --ink2:#b6c0d1; --ink3:#7b8598; --ink4:#4f5867;
@@ -995,6 +995,12 @@ html.booting,body.booting{overflow:hidden}
 @media (max-width:900px){.plan{grid-template-columns:1fr}}
 </style>
 <script src="/analytics.js" defer></script>
+<style>/* nodo simplificado */.hm,#rewards,#tnGrid,#tnRef,#pBal{display:none!important}@media (min-width:900px){.how-steps{grid-template-columns:repeat(3,minmax(0,1fr))!important}}</style>
+<style>/* red de validadores en el plan */.v2-why{margin-top:24px;padding-top:20px;border-top:1px solid var(--hair);max-width:64ch}
+.v2-why-h{margin:0;font-size:clamp(16px,1.3vw,18px);font-weight:400;line-height:1.4;color:var(--ink)}
+.v2-why-p{margin:9px 0 0;font-size:13.5px;line-height:1.7;color:var(--ink3)}
+.v2-why-l{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;padding:0;list-style:none}
+.v2-why-l li{padding:7px 11px;border:1px solid rgba(21,105,255,.38);background:rgba(21,105,255,.06);color:var(--blue2);font:400 10px/1.2 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase}</style>
 </head>
 <body>
 <div class="reticle" id="reticle" aria-hidden="true"><span class="rx"></span><span class="ry"></span></div>
@@ -1058,56 +1064,43 @@ html.booting,body.booting{overflow:hidden}
 
       <div class="head" id="how">
         <h2 data-i18n="hashdash.how.title">How it works</h2>
-        <span data-i18n="hashdash.how.sub">Testnet guide · 5 easy steps</span>
+        <span data-i18n="hashdash.v2.how.sub">Testnet · 3 easy steps</span>
       </div>
 
       <div class="how">
-        <p class="how-lead rv" data-i18n="hashdash.how.lead">This is the <b>test version</b> of Sectora. You practise with free test tokens, so <b>nothing here costs real money</b>. Follow these 5 steps:</p>
+        <p class="how-lead rv" data-i18n="hashdash.v2.how2.lead" data-i18n-html>Two separate steps, in any order: <b>activate your node</b> and <b>stake #SECT</b>. With both, your airdrop is active. No Sepolia, no faucet and no gas.</p>
         <ol class="how-steps">
           <li class="card how-s rv">
-            <div class="how-top"><span class="how-n">01</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1.5"/><path d="M21 12h-4a2 2 0 0 0 0 4h4a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1Z"/></svg></div>
-            <h3 data-i18n="hashdash.how.s1.t">Connect your wallet</h3>
-            <p data-i18n="hashdash.how.s1.p">Press <b>Connect wallet</b> at the top right and choose MetaMask. The dash moves you to the Sepolia test network on its own.</p>
-            <button class="how-go" type="button" data-go="connect"><span data-i18n="hashdash.top.connect">Connect wallet</span></button>
+            <div class="how-top"><span class="how-n">01</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></div>
+            <h3 data-i18n="hashdash.v2.how2.s1.t">Activate your node</h3>
+            <p data-i18n="hashdash.v2.how2.s1.p" data-i18n-html>Connect your wallet and press <b>Activate my node</b>. It's free and doesn't need staking.</p>
+            <button class="how-go" type="button" data-go="#plan"><span data-i18n="hashdash.v2.plan.btn">Activate my node</span></button>
           </li>
           <li class="card how-s rv">
-            <div class="how-top"><span class="how-n">02</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.7c3 3.6 6.5 7.2 6.5 10.8a6.5 6.5 0 0 1-13 0c0-3.6 3.5-7.2 6.5-10.8Z"/><path d="M9 14.5a3 3 0 0 0 3 3"/></svg></div>
-            <h3 data-i18n="hashdash.how.s2.t">Get free gas</h3>
-            <p data-i18n="hashdash.how.s2.p">Every action needs a tiny amount of <b>Sepolia ETH</b>, a free test coin that pays the network. A little goes a long way.</p>
-            <a class="how-go ext" href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer"><span data-i18n="hashdash.how.s2.go">Get Sepolia ETH</span></a>
+            <div class="how-top"><span class="how-n">02</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></div>
+            <h3 data-i18n="hashdash.v2.how2.s2.t">Stake #SECT</h3>
+            <p data-i18n="hashdash.v2.how2.s2.p" data-i18n-html>Stake #SECT and reach your level: <b>Scout, Sentinel, Guardian or Titan</b>. The higher your level, the bigger your airdrop reward.</p>
+            <a class="how-go ext" href="/staking/"><span data-i18n="hashdash.v2.s1.go">Go to staking</span></a>
           </li>
           <li class="card how-s rv">
-            <div class="how-top"><span class="how-n">03</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></div>
-            <h3 data-i18n="hashdash.how.s3.t">Claim 5,000 tSECT</h3>
-            <p data-i18n="hashdash.how.s3.p">In <b>Faucet &amp; rewards</b>, press <b>Claim 5,000 tSECT</b>. It is free and you can do it again every 24 hours.</p>
-            <button class="how-go" type="button" data-go="#rewards"><span data-i18n="hashdash.how.s3.go">Go to the faucet</span></button>
-          </li>
-          <li class="card how-s rv">
-            <div class="how-top"><span class="how-n">04</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></div>
-            <h3 data-i18n="hashdash.how.s4.t">Buy hash</h3>
-            <p data-i18n="hashdash.how.s4.p">In <b>Hash market</b>, pick a package and press <b>Buy</b>. Your wallet asks twice: first to allow the payment, then to confirm the purchase.</p>
-            <button class="how-go" type="button" data-go="#market"><span data-i18n="hashdash.how.s4.go">Go to the market</span></button>
-          </li>
-          <li class="card how-s rv">
-            <div class="how-top"><span class="how-n">05</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
-            <h3 data-i18n="hashdash.how.s5.t">Earn and claim</h3>
-            <p data-i18n="hashdash.how.s5.p">From then on you earn <b class="tn-apy-v">25%</b> a year on the tSECT you spent, counted every second. Press <b>Claim rewards</b> whenever you want.</p>
-            <button class="how-go" type="button" data-go="#rewards"><span data-i18n="hashdash.how.s5.go">See my rewards</span></button>
+            <div class="how-top"><span class="how-n">03</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <h3 data-i18n="hashdash.v2.how2.s3.t">Airdrop active</h3>
+            <p data-i18n="hashdash.v2.how2.s3.p">With your node on and your staking, in any order, you're in Airdrop Genesis.</p>
+            <button class="how-go" type="button" data-go="#node"><span data-i18n="hashdash.v2.s3.go">See my node</span></button>
           </li>
         </ol>
         <div class="how-facts rv">
           <div class="how-f">
-            <span class="lbl" data-i18n="hashdash.how.f1.t">Where your payment goes</span>
-            <p data-i18n="hashdash.how.f1.p">80% is burned on the spot, like a #SECT buyback. The other 20% stays in the contract and pays the rewards.</p>
+            <span class="lbl" data-i18n="hashdash.v2.f1.t">Nothing to pay</span>
+            <p data-i18n="hashdash.v2.f1.p">Connecting only reads your public address. The dashboard never moves funds.</p>
           </div>
           <div class="how-f">
-            <span class="lbl" data-i18n="hashdash.how.f2.t">Your own node</span>
-            <p data-i18n="hashdash.how.f2.p">With 50 TH/s you can register a security node on the network map. A Node Kit (<b>Physical node</b> tab) gives exactly 50 TH/s for 4,300 tSECT, so your first claim is enough.</p>
-            <button class="how-go" type="button" data-go="#node"><span data-i18n="hashdash.node.register">Register node</span></button>
+            <span class="lbl" data-i18n="hashdash.v2.f2.t">Nodes already registered</span>
+            <p data-i18n="hashdash.v2.f2.p">Nodes registered before keep their date and their days. Nothing changes for them.</p>
           </div>
           <div class="how-f">
-            <span class="lbl" data-i18n="hashdash.how.f3.t">No real money</span>
-            <p data-i18n="hashdash.how.f3.p">tSECT and Sepolia ETH are test coins with no value. This dash never touches your real #SECT.</p>
+            <span class="lbl" data-i18n="hashdash.v2.f3.t">Your staking stays as it is</span>
+            <p data-i18n="hashdash.v2.f3.p">The dashboard only reads your staking. To add or withdraw SECT, use the staking page.</p>
           </div>
         </div>
       </div>
@@ -1117,24 +1110,47 @@ html.booting,body.booting{overflow:hidden}
         <span data-i18n="hashdash.market.sub">Rented online or physical node hardware</span>
       </div>
 
+      <span id="guia-nodo" aria-hidden="true"></span>
       <div class="plan rv" id="plan">
         <div class="plan-l">
           <p class="lbl plan-k" data-i18n="hashdash.plan.k">Airdrop Genesis · the plan</p>
           <h3 data-i18n="hashdash.plan.h" data-i18n-html>The plan to join the airdrop: <b>50 TH/s</b> in one go</h3>
-          <p class="plan-p" data-i18n="hashdash.plan.p">The Node Kit gives exactly 50 TH/s, the minimum to register your Hash Node. It costs 4,300 tSECT: your first faucet claim (5,000 tSECT) covers it.</p>
+          <p class="plan-p" data-i18n="hashdash.v2.plan2.p">The Node Kit gives exactly 50 TH/s, the minimum for your Hash Node. It's free: connect your wallet and activate it. Staking is a separate step: with both, your airdrop is active.</p>
           <ol class="plan-s">
-            <li><span class="num">1</span><span data-i18n="hashdash.plan.s0">Get free Sepolia ETH to pay the gas</span>
-              <a class="plan-gas" href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer" data-i18n="hashdash.tn.gasLink">Get Sepolia ETH ↗</a></li>
-            <li><span class="num">2</span><span data-i18n="hashdash.plan.s1">Claim 5,000 tSECT from the faucet</span></li>
-            <li><span class="num">3</span><span data-i18n="hashdash.plan.s2">Buy the 50 TH/s plan</span></li>
-            <li><span class="num">4</span><span data-i18n="hashdash.plan.s3">Register your node with the same wallet you stake with</span></li>
+            <li><span class="num">1</span><span data-i18n="hashdash.v2.plan2.s0">Connect your wallet and activate your node (free)</span></li>
+            <li><span class="num">2</span><span data-i18n="hashdash.v2.plan2.s1">Stake #SECT and reach your level (Scout → Titan)</span>
+              <a class="plan-gas" href="/staking/" data-i18n="hashdash.v2.s1.go">Go to staking</a></li>
+            <li><span class="num">3</span><span data-i18n="hashdash.v2.plan2.s2">In any order: with both done, your airdrop is active</span></li>
           </ol>
+          <div class="v2-why">
+            <p class="v2-why-h" data-i18n="hashdash.v2.why.h">Be part of the network that secures SectoraEVM.</p>
+            <p class="v2-why-p" data-i18n="hashdash.v2.why.p">Join our network of security validator nodes and help build SectoraEVM: a 100% decentralized network, protected by security analysis from nodes all over the world. Every node makes the network stronger, and with Airdrop Genesis you earn rewards for building it with us as part of the Sectora team.</p>
+            <ul class="v2-why-l"><li data-i18n="hashdash.v2.why.l1">Global validator network</li><li data-i18n="hashdash.v2.why.l2">100% decentralized</li><li data-i18n="hashdash.v2.why.l3">Rewards with Airdrop Genesis</li></ul>
+          </div>
         </div>
         <div class="plan-r">
           <div class="plan-big num">50<em>TH/s</em></div>
-          <div class="plan-pr num">4,300 tSECT</div>
+          <div class="plan-pr" data-i18n="hashdash.v2.plan2.pr">Free · just connect your wallet</div>
+          <div class="v2-reg">
+            <div class="form">
+              <div class="fld">
+                <label class="lbl" for="nName" data-i18n="hashdash.node.name">Node name</label>
+                <input class="inp" id="nName" type="text" maxlength="48" placeholder="Sectora Node MAD-1">
+              </div>
+              <div class="fld">
+                <label class="lbl" for="nLat" data-i18n="hashdash.node.lat">Latitude</label>
+                <input class="inp num" id="nLat" type="number" step="0.0001" placeholder="40.4168">
+              </div>
+              <div class="fld">
+                <label class="lbl" for="nLon" data-i18n="hashdash.node.lon">Longitude</label>
+                <input class="inp num" id="nLon" type="number" step="0.0001" placeholder="-3.7038">
+              </div>
+              <button class="btn key" id="bReg" type="button" hidden>Register node</button>
+            </div>
+          </div>
+          <p class="node-geo v2-sum" id="v2Sum" hidden><i></i><span></span></p>
           <p class="plan-st" id="planSt"><i></i><span></span></p>
-          <button class="btn key" id="bPlan" type="button"><span data-i18n="hashdash.plan.btn">Choose the 50 TH/s plan</span></button>
+          <button class="btn key" id="bPlan" type="button"><span>Activate my node</span></button>
         </div>
       </div>
 
@@ -1149,7 +1165,7 @@ html.booting,body.booting{overflow:hidden}
             </button>
           </div>
           <div class="pks" id="pks"></div>
-          <p class="note" style="margin-top:16px" data-i18n="hashdash.market.note">Prices in tSECT · testnet money, no real value · Claim from the faucet to try the flow</p>
+          <p class="note" style="margin-top:16px" data-i18n="hashdash.v2.market.note">Free on testnet: connect your wallet and activate any package. For the airdrop, only the 50 TH/s plan with your staking counts.</p>
         </div>
 
         <div class="card buy rv">
@@ -1169,7 +1185,7 @@ html.booting,body.booting{overflow:hidden}
             </div>
           </div>
 
-          <button class="btn key" id="bBuy" type="button" disabled style="width:100%;padding:14px" data-i18n="hashdash.top.connectToBuy">
+          <button class="btn key" id="bBuy" type="button" style="width:100%;padding:14px">
             Connect wallet to buy
           </button>
 
@@ -1179,35 +1195,16 @@ html.booting,body.booting{overflow:hidden}
               <span class="prog-n"><b id="pNow">0</b> / 50 TH/s</span>
             </div>
             <div class="prog-bar"><div class="prog-fill" id="pFill"></div></div>
-            <p class="note" style="margin-top:10px" data-i18n="hashdash.buy.progressNote">50 TH/s is the minimum to register a security node. Purchases add up.</p>
+            <p class="note" style="margin-top:10px" data-i18n="hashdash.v2.buy.note">50 TH/s is the minimum for your Hash Node, and your staking gives it to you. Extra packages add up.</p>
           </div>
         </div>
       </div>
 
       <div class="head" id="node">
         <h2 data-i18n="hashdash.node.title">Your node</h2>
-        <span data-i18n="hashdash.node.sub">On-chain registration</span>
+        <span data-i18n="hashdash.v2.node2.sub">Free · separate from staking</span>
       </div>
 
-      <div class="card rv">
-        <p class="node-need" id="nNeed" hidden></p>
-        <div class="form">
-          <div class="fld">
-            <label class="lbl" for="nName" data-i18n="hashdash.node.name">Node name</label>
-            <input class="inp" id="nName" type="text" maxlength="48" placeholder="Sectora Node MAD-1">
-          </div>
-          <div class="fld">
-            <label class="lbl" for="nLat" data-i18n="hashdash.node.lat">Latitude</label>
-            <input class="inp num" id="nLat" type="number" step="0.0001" placeholder="40.4168">
-          </div>
-          <div class="fld">
-            <label class="lbl" for="nLon" data-i18n="hashdash.node.lon">Longitude</label>
-            <input class="inp num" id="nLon" type="number" step="0.0001" placeholder="-3.7038">
-          </div>
-          <button class="btn key" id="bReg" type="button" disabled style="padding:12px 18px" data-i18n="hashdash.node.register">Register node</button>
-        </div>
-        <p class="note" style="margin-top:16px" data-i18n="hashdash.node.note">Validators are paid from network transaction fees, not from hash revenue — 67% of those fees buy #SECT back, 33% pays validators, expansion and the team.</p>
-      </div>
 
       <div class="head" id="engine">
         <h2 data-i18n="hashdash.engine.title">Buyback engine</h2>
@@ -1355,8 +1352,8 @@ html.booting,body.booting{overflow:hidden}
         <span class="ft-links">
           <a href="https://sectoraorg.com" data-i18n="hashdash.footer.main">Main site</a>
           <a href="https://sectoraorg.com/docs" data-i18n="hashdash.footer.whitepaper">Whitepaper</a>
-          <a href="explorer.html">Explorer</a>
-          <a href="security/">Security</a>
+          <a href="/explorer.html">Explorer</a>
+          <a href="/security/">Security</a>
           <a href="https://sectoraorg.com/legal" data-i18n="hashdash.footer.legal">Legal</a>
           <a href="https://x.com/sectora__" target="_blank" rel="noopener noreferrer">X</a>
           <a href="mailto:support@sectoraorg.com" data-i18n="hashdash.footer.support">Support</a>
@@ -1374,7 +1371,7 @@ html.booting,body.booting{overflow:hidden}
       <button class="wsel-x" id="wselX" type="button">Esc</button>
     </div>
     <div class="wsel-list" id="wselList"></div>
-    <div class="wsel-f" data-i18n="hashdash.wsel.foot">Sectora never asks for your seed phrase · Sepolia testnet</div>
+    <div class="wsel-f" data-i18n="hashdash.v2.wsel.foot">Sectora never asks for your seed phrase · Ethereum</div>
   </div>
 </div>
 <div class="cmdk" id="cmdk" role="dialog" aria-modal="true" aria-label="Command menu">
@@ -1384,11 +1381,12 @@ html.booting,body.booting{overflow:hidden}
   </div>
 </div>
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
-<script src="translations.js"></script>
-<script src="dashboard-i18n-extra.js?v=20261029c"></script>
+<script src="/translations.js"></script>
+<script src="/dashboard-i18n-extra.js?v=20261029c"></script>
+<script src="/dashboard-v2-i18n.js?v=1"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
-<script src="i18n.js?v=2"></script>
-<script src="dashboard-reticle.js?v=20260820b"></script>
+<script src="/i18n.js?v=2"></script>
+<script src="/dashboard-reticle.js?v=20260820b"></script>
 <script>
 (function(){
 'use strict';
@@ -1902,6 +1900,173 @@ window.__sectoraMarket = {
   setReg: v => { reg = !!v; progreso(); },
   setValid: n => { VALID = n; }
 };
+/* ---- Hash Market sin Sepolia ---- */
+/* ═══════════ Hash Market sin Sepolia ═══════════
+   Los mismos paquetes de siempre, sin pagos ni red de pruebas:
+   - el plan del airdrop (Node Kit, 50 TH/s) va incluido con el staking: con 100 SECT o mas en staking
+     queda activo solo al conectar la wallet (lo dice nodo.js en window.__v2Estado);
+   - los demas paquetes se activan al conectar, gratis, y se guardan en este navegador. No cuentan
+     para el airdrop: para el airdrop solo cuenta el plan de 50 TH/s con staking.
+   Usa las piezas del mercado del dashboard (PK, kind, sel, mio, reg, conectado) y reemplaza su
+   resumen, sus paquetes y su plan. Los clics de comprar y del plan no llegan a la compra en Sepolia. */
+(function () {
+  "use strict";
+  var tt = function (k, f) { var v = window.SECTORA_T && window.SECTORA_T(k); return v && v !== k ? v : f; };
+  var $ = function (s) { return document.querySelector(s); };
+  var KIT = "1-0";                                    // Node Kit 50 TH/s, el plan del airdrop
+  var est = function () { return window.__v2Estado || null; };
+  var conStake = function () { var e = est(); return !!(e && e.lv > 0); };
+  var clave = function () { var e = est(); return e ? "sectora:v2:pk:" + e.addr.toLowerCase() : ""; };
+  function activos() { try { return JSON.parse(localStorage.getItem(clave()) || "[]"); } catch (e) { return []; } }
+  function guarda(l) { try { localStorage.setItem(clave(), JSON.stringify(l)); } catch (e) {} }
+  var activo = function (id) { return id === KIT ? conStake() : est() ? activos().indexOf(id) >= 0 : false; };
+  var elegido = function () { return sel === null ? null : PK[kind][sel]; };
+
+  // hash en pantalla: el plan con staking + lo activado
+  function suma() {
+    var h = 0;
+    if (conectado && est()) {
+      if (conStake()) h += 50;
+      activos().forEach(function (id) { var p = id.split("-"); var x = PK[+p[0]] && PK[+p[0]][+p[1]]; if (x && id !== KIT) h += x.h; });
+    }
+    mio = h; reg = conStake();
+  }
+
+  pintaPks = function () {
+    var box = $("#pks"); if (!box) return;
+    box.innerHTML = PK[kind].map(function (p, i) {
+      var id = kind + "-" + i, on = activo(id);
+      return '<button class="pk' + (sel === i ? " on" : "") + (on ? " v2-on" : "") + '" data-i="' + i + '" type="button">' +
+        (p.tag ? '<span class="pk-tag">' + t(p.tagk, p.tag) + "</span>" : "") +
+        '<span class="pk-h num">' + p.h + "<em>TH/s</em></span>" +
+        '<span class="pk-p">' + (on ? "✓ " + tt("hashdash.v2.buy.on", "Active") : tt("hashdash.v2.pk.free", "Free on testnet")) + "</span>" +
+        '<span class="pk-n">' + t(p.notak, p.nota) + "</span></button>";
+    }).join("");
+    box.querySelectorAll(".pk").forEach(function (b) { b.onclick = function () { sel = +b.dataset.i; pintaPks(); resumen(); }; });
+  };
+
+  resumen = function () {
+    var p = elegido(); if (!$("#sName")) return;
+    $("#sName").textContent = p ? t(p.nk, p.n) : "—";
+    $("#sHash").textContent = p ? p.h + " TH/s" : "—";
+    $("#sPrice").textContent = p ? (kind + "-" + sel === KIT ? tt("hashdash.v2.plan.pr", "Included with your staking") : tt("hashdash.v2.pk.free", "Free on testnet")) : "—";
+    var b = $("#bBuy"); if (!b) return;
+    var id = p ? kind + "-" + sel : "", leyendo = conectado && !est();
+    b.dataset.v2 = "";
+    if (!conectado) { b.disabled = false; b.dataset.v2 = "connect"; b.textContent = tt("hashdash.v2.buy.connect", "Connect wallet to activate"); }
+    else if (!p) { b.disabled = true; b.textContent = t("hashdash.buy.selectPackage", "Select a package"); }
+    else if (leyendo) { b.disabled = true; b.textContent = tt("hashdash.v2.card.reading", "Reading your staking…"); }
+    else if (id === KIT && !conStake()) { b.disabled = false; b.dataset.v2 = "stake"; b.textContent = tt("hashdash.v2.buy.kitNeed", "Needs your staking"); }
+    else if (activo(id)) { b.disabled = true; b.textContent = id === KIT ? tt("hashdash.v2.buy.kitOn", "Included with your staking ✓") : "✓ " + tt("hashdash.v2.buy.on", "Active"); }
+    else { b.disabled = false; b.dataset.v2 = "act"; b.textContent = tt("hashdash.v2.buy.act", "Activate {h} TH/s").replace("{h}", p.h); }
+  };
+
+  /* nombre y ubicacion del nodo (formulario dentro del recuadro del plan, ubicacion automatica de
+     dashboard-node-geo.js): al activar se guardan en este navegador y el nodo aparece en el mapa.
+     Los nodos ya registrados en la red no necesitan nada: ya estan en el mapa. */
+  var enMapa = {}, esperas = 0;
+  var nodoKey = function () { var e = est(); return e ? "sectora:v2:node:" + e.addr.toLowerCase() : ""; };
+  function nodoLeer() { try { return JSON.parse(localStorage.getItem(nodoKey()) || "null"); } catch (e) { return null; } }
+  // encender el nodo no pide staking: basta la wallet conectada
+  function activa(manual) {
+    var e = est(); if (!e) return false;
+    if (e.reg) return true;
+    // ya activado (en este navegador o en el registro publico de activaciones)
+    var n = nodoLeer() || (e.act ? { name: e.act.n, place: e.act.c, lat: e.act.la, lon: e.act.lo } : null);
+    if (!n) {
+      var la = parseFloat(($("#nLat") || {}).value), lo = parseFloat(($("#nLon") || {}).value);
+      if (!isFinite(la) || !isFinite(lo) || Math.abs(la) > 85 || Math.abs(lo) > 180) {
+        if (manual) { var f = $(".v2-reg .form"); if (f) f.classList.remove("geo-auto"); var x = $("#nLat"); if (x) x.focus(); }
+        return false;
+      }
+      var g = $("#nGeo b");
+      n = { name: (($("#nName") || {}).value || "").trim().slice(0, 48) || "Sectora Node", lat: la, lon: lo, place: g ? g.textContent : "", t: Date.now() };
+      try { localStorage.setItem(nodoKey(), JSON.stringify(n)); } catch (er) {}
+      if (window.__v2Envia) window.__v2Envia(e.addr, n);
+      var w = window.__sectoraWallet; if (w && w.aviso) w.aviso(tt("hashdash.v2.reg.toast", "Node “{n}” activated").replace("{n}", n.name));
+      document.dispatchEvent(new Event("v2:nodo"));
+    }
+    if (!enMapa[nodoKey()]) {
+      enMapa[nodoKey()] = 1;
+      if (typeof window.__sectoraMapAdd === "function") window.__sectoraMapAdd(n.lon, n.lat, n.name);
+      if (typeof window.__sectoraAddNode === "function") window.__sectoraAddNode(n.lon, n.lat);
+    }
+    return true;
+  }
+  function resumenNodo(on) {
+    var reg = $(".v2-reg"), sum = $("#v2Sum"); if (!reg || !sum) return;
+    reg.hidden = on; sum.hidden = !on;
+    if (!on) return;
+    var e = est(), n = nodoLeer() || (e && e.act ? { name: e.act.n, place: e.act.c } : null), sp = sum.querySelector("span");
+    if (e && e.reg) sp.textContent = tt("hashdash.v2.reg.old", "Your node is already registered on the network map.");
+    else if (n) { sp.innerHTML = ""; var b = document.createElement("b"); b.textContent = n.name; sp.appendChild(b); if (n.place) sp.appendChild(document.createTextNode(" · " + n.place)); }
+  }
+
+  /* el recuadro del plan hace todo: "Activar mi nodo" conecta la wallet y deja el nodo activado ahi mismo.
+     El staking va aparte: con el nodo activado y 100 SECT en staking (en cualquier orden) el airdrop queda activo */
+  plan = function () {
+    var st = $("#planSt"), bp = $("#bPlan"); if (!st || !bp) return;
+    var txt, ok = 0, act, lbl;
+    if (!conectado) { txt = tt("hashdash.v2.plan.st0", "Connect your wallet to activate the plan."); act = "connect"; lbl = tt("hashdash.v2.plan.btn", "Activate my node"); }
+    else if (!est()) { txt = tt("hashdash.v2.card.reading", "Reading your staking…"); act = "wait"; lbl = txt; }
+    else if (activa(false) && conStake()) { txt = tt("hashdash.v2.plan2.stBoth", "Node active · Airdrop active."); ok = 2; act = "on"; lbl = tt("hashdash.v2.plan.btnOn", "Node active ✓"); }
+    else if (activa(false)) { txt = tt("hashdash.v2.plan2.stNode", "Node active. Stake #SECT to activate your airdrop: the higher your level, the bigger your rewards."); ok = 2; act = "stake"; lbl = tt("hashdash.v2.card.stake", "Go to staking"); }
+    else {
+      // falta la ubicacion: se espera a que llegue sola o a que se escriba y se pulse el boton
+      txt = tt("hashdash.node.geoWait", "Detecting your node's location…"); act = "save"; lbl = tt("hashdash.v2.plan.btn", "Activate my node");
+      if (esperas++ < 40) setTimeout(function () { plan(); }, 700);
+    }
+    st.querySelector("span").textContent = txt;
+    st.className = "plan-st" + (ok === 2 ? " ok" : "");
+    bp.hidden = false; bp.dataset.act = act;
+    bp.disabled = act === "wait" || act === "on";
+    bp.classList.toggle("v2-ok", act === "on");
+    bp.querySelector("span").textContent = lbl;
+    resumenNodo(ok === 2);
+  };
+
+  function todo() { suma(); pintaPks(); resumen(); progreso(); }
+
+  // los clics de comprar y del plan se quedan aqui: nunca llegan a la compra en Sepolia
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("#bBuy, #bPlan");
+    if (!b) return;
+    e.stopPropagation(); e.preventDefault();
+    var a = b.id === "bPlan" ? b.dataset.act : b.dataset.v2;
+    if (a === "connect") { var bc = $("#bConnect"); if (bc) bc.click(); }
+    else if (a === "stake") location.href = "/staking/";
+    else if (a === "save") { if (activa(true)) todo(); }
+    else if (a === "act") {
+      var p = elegido(); if (!p) return;
+      var l = activos(), id = kind + "-" + sel;
+      if (l.indexOf(id) < 0) { l.push(id); guarda(l); }
+      todo();
+      if (window.__sectoraWallet && window.__sectoraWallet.aviso) window.__sectoraWallet.aviso(tt("hashdash.v2.buy.toast", "{h} TH/s activated").replace("{h}", p.h));
+    }
+  }, true);
+
+  // el hash y el registro salen del staking, no de Sepolia
+  function engancha() {
+    var mk = window.__sectoraMarket;
+    if (!mk) return setTimeout(engancha, 150);
+    mk.setHash = function () { todo(); };
+    mk.setReg = function () { todo(); };
+    var w = window.__sectoraWallet;
+    if (w) { var oc = w.onConnect, od = w.onDisconnect;
+      w.onConnect = function (d, b) { if (oc) oc.call(w, d, b); todo(); };
+      w.onDisconnect = function () { if (od) od.call(w); todo(); }; }
+    todo();
+  }
+  document.addEventListener("v2:estado", todo);
+  document.addEventListener("sectora:langchange", function () { setTimeout(todo, 0); });
+  var css = document.createElement("style");
+  css.textContent = ".plan-r .v2-reg[hidden],.plan-r #bReg{display:none!important}.plan-r .form{display:flex;flex-direction:column;align-items:stretch;gap:10px}.plan-r .v2-sum[hidden]{display:none!important}" +
+    ".plan-r .node-geo{margin:2px 0 0;flex-wrap:nowrap;align-items:flex-start}.plan-r .node-geo i{margin-top:7px}.plan-r .node-geo span{flex:1;min-width:0}.plan-r .node-geo button{flex:none;margin-left:6px;padding:0}.plan-r .node-geo-n{margin:0}.plan-r .node-geo-a{margin:10px 0 0}.plan-r .v2-reg{display:flex;flex-direction:column;gap:10px}.plan-r .v2-sum{margin:2px 0 0}.plan-r .v2-sum b{color:#fff;font-weight:500}" +
+    "#bPlan.v2-ok,#bPlan.v2-ok:disabled{background:rgba(62,207,142,.1)!important;border:1px solid rgba(62,207,142,.55)!important;color:var(--live)!important;opacity:1!important;cursor:default}.pk.v2-on .pk-p{color:var(--live)}.buy .split{display:none!important}.plan-pr{font-size:13px;letter-spacing:.04em;color:var(--live)}";
+  document.head.appendChild(css);
+  engancha();
+})();
+
 
 /* ---------- cifras que cuentan al entrar ---------- */
 function cuenta(el, fin, pre, suf){
@@ -2026,9 +2191,9 @@ spark('#sp2', serie(TPS), '#3ecf8e');
   setTimeout(() => { if(!window.__hniOn && !hecho) window.SECTORA_BOOT(true); }, 9000);
 })();
 </script>
-<script src="three.min.js"></script>
-<script src="dashboard-globe-topology.js" defer></script>
-<script src="hashnode-intro.js?v=2" defer></script>
+<script src="/three.min.js"></script>
+<script src="/dashboard-globe-topology.js" defer></script>
+<script src="/hashnode-intro.js?v=2" defer></script>
 <script>
 /* Contornos de respaldo si Natural Earth no responde */
 const FALLBACK = {"land":[[[-5.6,35.9],[0,36.5],[10,37],[11,33],[19,30.3],[24,32.3],[30,31.5],[33,31],[32.5,29.9],[34,28],[35,24],[37,21],[39,15],[43,12.7],[44,11.5],[48,11.5],[51.4,11.8],[48,5],[44,2],[41,-2],[40,-10],[40.5,-16],[35,-20],[33,-26],[30,-31],[27,-33.5],[22,-34],[18.4,-34.4],[17,-32],[14.5,-22],[11.8,-18],[13,-12],[12,-6],[9,-1],[9.5,4],[5,4],[3,6.4],[-2,5],[-7.5,4.4],[-13,9],[-16.8,12],[-17.5,15],[-16,20],[-13,27],[-9.8,30],[-9,33],[-5.6,35.9]],[[-5.6,36],[-6.3,36.8],[-9,37],[-8.8,41],[-9.5,43],[-8,43.7],[-4,43.4],[-1.8,43.4],[-1.2,46],[-2.5,47.3],[-4.7,48],[-1.5,49.5],[1.5,50.9],[3.2,51.3],[4.7,53],[6.8,53.5],[8.5,53.9],[8.2,55.5],[9.5,57.7],[10.5,57.5],[9.6,55.5],[11,54.5],[12.5,54.4],[14.2,54],[18.5,54.7],[21,55.3],[21,56.5],[24,57.5],[24.5,59.5],[28,59.4],[30.3,60],[29,61.5],[26,64],[22.5,65.7],[21.5,63.5],[18,63],[17.5,61],[18.8,59],[16.5,56.5],[14,55.4],[13,55.4],[11.5,58],[11,59],[10,59.2],[7,58],[5.3,60.4],[5,62],[8,63.5],[11,64],[14,66.5],[18,69],[23,70.5],[28,71],[31,70],[33,68.5],[40,66],[44,68],[52,69],[60,70],[67,69],[73,72],[80,73],[90,75],[100,76],[110,74],[113,73.5],[130,72],[140,72.5],[150,70],[160,69.5],[170,69],[180,68.5],[180,65],[172,63],[170,60],[163,60],[163,57],[158,52],[156,50.5],[155,55],[157,61],[153,59],[148,59],[142,57],[138,55],[141,53],[140.5,49],[137,47],[132,43],[130,42],[127,39],[126,37],[129,35],[126,34],[125,38],[122,39],[119,37],[121,37],[119,34],[121,31],[120,27],[117,24],[114,22.5],[110,21],[108,21.5],[106,18],[109,13],[106,10],[103,8.5],[100,13],[101,6],[103,1.3],[100,6],[98,8],[98,13],[97,16],[94,18],[90,22],[88,21],[86,20],[84,19],[80,16],[80,13],[78,9],[77.5,8.1],[76,11],[75,15],[73,17],[72.7,19],[70,21],[68,23],[67,24],[61,25],[57,25.5],[53,27],[49,30],[48.5,29],[50.8,27.5],[51.5,24.5],[54,24],[56.5,25.3],[59,22.5],[58,20.5],[55,17],[52,17],[48,14],[45,13],[43,12.7],[43,15],[42,17],[39,21],[37,25],[35,28],[34.5,28],[34,29.5],[34.3,31.2],[35,36],[36,36.5],[33,36],[30,36.5],[27,37],[26,38.5],[26.5,40.4],[29,41],[31,41],[35,42],[38,41],[41,41.5],[40,43],[39,44],[37.5,44.7],[36,45.3],[35,45],[33.5,44.4],[33.4,46],[31.5,46.6],[30,46.5],[28.7,45.2],[28.6,44],[27.9,42.7],[28.3,41.7],[29.1,41.1],[28.9,40.9],[27,40.6],[26.3,40.1],[25,40.9],[24,40.5],[23,40.5],[22.6,40],[23,38.5],[24,38],[23.5,37.5],[23,37.6],[22.5,37.5],[21.5,37],[21.3,38.3],[20.8,39],[19.9,39.7],[19.4,40.4],[19.3,41.9],[18.5,42.5],[17,43],[15.2,44.3],[13.6,45.5],[12.3,45.4],[12.5,44.2],[14.2,42.5],[15.4,41.9],[16.5,41.9],[17.9,40.7],[18.5,40.1],[17.2,39.1],[16.6,38.8],[16,37.9],[15.6,38.2],[15.9,40],[14.4,40.6],[13.6,41.2],[11.2,42.4],[10.2,43.9],[9.5,44.4],[8,43.9],[6,43],[4.8,43.4],[3,42.5],[1,41.2],[0,39.9],[-0.7,38],[-2,36.8],[-5.6,36]],[[-168,66],[-166,68.9],[-159,71],[-156,71.3],[-148,70],[-141,69.6],[-133,69.5],[-125,70],[-115,68.5],[-105,68],[-95,68.5],[-85,67],[-81,66],[-84,63],[-87,64.5],[-94,63],[-92,58],[-85,55],[-82,55],[-79,52],[-78,56],[-77,60],[-72,62],[-69,60],[-64,60],[-64,58],[-67,58.5],[-64,54],[-56,53.5],[-55,52],[-58,51],[-64,50],[-66,49],[-64,47],[-61,46],[-64,45],[-67,45],[-70,43],[-71,41.5],[-74,40.5],[-75.5,39],[-76,37],[-75.5,35.2],[-81,31.5],[-80,25.2],[-82,27],[-83,30],[-85,30],[-88,30],[-89,29],[-91,29],[-94,29.5],[-97,28],[-97.5,25.9],[-95,19],[-92,18.6],[-90,21],[-87,21.5],[-88,18.5],[-83,15],[-84,10],[-79,9],[-77.5,8],[-78,9],[-82,8.5],[-86,11],[-92,15],[-95,16],[-99,16.5],[-105,20],[-106,23],[-109,25.5],[-111,28],[-113,31],[-114.6,31.7],[-113.5,30],[-112,28],[-110.5,24.5],[-109.9,22.9],[-112,25],[-114,27],[-115,28],[-116.5,31],[-117.1,32.5],[-120.5,34.5],[-122,37],[-124,40],[-124,46.2],[-123,48.5],[-128,51],[-131,53],[-135,57],[-140,60],[-146,60.5],[-150,59],[-152,58],[-154,56],[-158,55],[-162,55],[-160,58],[-164,60],[-165,63],[-168,66]],[[-45,60],[-52,64],[-53,67],[-55,69],[-58,72],[-56,76],[-64,78],[-68,80],[-60,82],[-45,83],[-30,83],[-22,80],[-20,76],[-24,73],[-30,70],[-38,66],[-42,62],[-45,60]],[[-61,66],[-68,70],[-73,68],[-80,73],[-77,76],[-70,73],[-65,68],[-61,66]],[[-77.5,8],[-75,9],[-71,12],[-66,10.5],[-62,10.5],[-60,8],[-52,5],[-50,0],[-44,-2],[-38,-5],[-35,-6],[-38,-13],[-39,-17],[-41,-22],[-48,-25],[-53,-34],[-57,-38],[-62,-39],[-63,-42],[-65,-45],[-68,-50],[-68,-53],[-72,-54],[-75,-52],[-74,-46],[-73,-42],[-73,-37],[-71,-30],[-70,-23],[-71,-18],[-76,-14],[-79,-8],[-81,-6],[-80,-3],[-78,1],[-77,4],[-77.5,8]],[[142,-10.7],[145,-15],[149,-21],[153,-25],[153,-28],[151,-34],[148,-37.5],[146,-39],[140,-38],[137,-35],[136,-34],[135,-35],[132,-32],[126,-32],[120,-34],[115,-34],[113,-26],[114,-22],[122,-18],[127,-14],[130,-12],[132,-11],[136,-12],[137,-16],[140,-17],[142,-10.7]],[[-180,-72],[-160,-75],[-140,-74],[-120,-73],[-100,-74],[-80,-73],[-70,-68],[-62,-64],[-58,-63],[-60,-66],[-65,-70],[-55,-72],[-40,-75],[-20,-72],[0,-70],[20,-70],[40,-67],[60,-67],[80,-66],[100,-66],[120,-66],[140,-67],[160,-77],[180,-78],[180,-90],[-180,-90],[-180,-72]],[[-5.7,50.1],[-4,50.4],[-3,50.7],[-1,50.7],[0.7,50.8],[1.4,51.4],[0.5,52.9],[0.1,53.6],[-0.2,54.1],[-1.5,54.6],[-3,56.2],[-2.5,57],[-3.5,57.7],[-3,58.6],[-4.5,58.6],[-5,58.2],[-5.5,57.5],[-5.8,56.5],[-5,56],[-4.8,55.4],[-3.5,54.8],[-4.7,54.2],[-3,54.1],[-3.2,53.4],[-4.7,53.3],[-4,52.5],[-5,51.7],[-3.5,51.4],[-4.2,51.2],[-5.7,50.1]],[[-6,52.2],[-6.3,53.4],[-6,54.1],[-7.5,55.2],[-10,54.3],[-9.5,53.5],[-10.2,52.2],[-9.5,51.5],[-8,51.5],[-6,52.2]],[[-22,64],[-24,65],[-22,66.5],[-18,66.5],[-14.5,66.4],[-13.5,65],[-16,63.5],[-20,63.4],[-22,64]],[[11,78],[20,79],[28,80],[20,80.5],[12,80],[10,79],[11,78]],[[52,71],[58,73],[68,76],[69,77],[60,75],[54,73],[51,72],[52,71]],[[12.4,38],[15.2,38.3],[15.6,38.2],[15.1,36.7],[12.4,37.8],[12.4,38]],[[8.2,41.1],[9.5,41.1],[9.7,40.5],[9.5,39.2],[8.4,39],[8.4,40.5],[8.2,41.1]],[[8.6,42.7],[9.5,42.7],[9.4,41.4],[8.7,41.6],[8.6,42.7]],[[23.5,35.3],[26.3,35.3],[26,34.9],[24,35],[23.5,35.3]],[[32.3,35.1],[34.6,35.7],[34,34.6],[32.3,34.6],[32.3,35.1]],[[140.9,40.5],[141.5,39],[140.9,38],[141,36],[139.8,35.7],[137,34.6],[135,33.5],[132.5,34],[131,34.4],[132,35.5],[135,35.7],[137,37],[139,38],[140.5,39.5],[141,41],[140.9,40.5]],[[141,45.5],[145.5,44],[145,43.3],[141.5,42.3],[140,42.6],[140,45],[141,45.5]],[[130,33.6],[131.8,33.6],[132,31.5],[130.2,31],[129.5,32.6],[130,33.6]],[[142,54],[143,52],[143.5,49],[142.5,46],[142,46],[141.6,51],[141.8,54],[142,54]],[[121,25.3],[122,24],[120.8,22],[120,23],[120.8,25],[121,25.3]],[[120.5,18.5],[122,18],[122,16],[121,14],[120.6,14.5],[120,16],[120.5,18.5]],[[124,9.5],[126.5,9],[126,6],[124,6],[122,7],[124,9.5]],[[95.3,5.5],[98,4],[101,2.5],[104,1],[106,-3],[105,-5.9],[103,-5.5],[100,-2],[97,1],[95.3,5.5]],[[105.2,-6],[110,-6.4],[114.5,-8.1],[112,-8.5],[108,-7.8],[105.5,-7],[105.2,-6]],[[109,2],[112,3],[117,4],[119,5.5],[118,4],[117,1],[116,-3.5],[114,-3.5],[110,-3],[109,-1],[109,2]],[[119,-5.5],[120.5,-3],[123,-4.5],[125,-2],[123,-0.5],[121,0],[120,1.5],[119.5,0],[119,-3],[119,-5.5]],[[131,-1],[134,-2],[136,-2],[141,-2.6],[146,-5],[150,-6],[150.8,-10],[147,-8],[143,-8],[138,-8.4],[137,-5],[133,-4],[131,-1]],[[172.7,-34.4],[176,-37],[178.5,-37.5],[177,-39],[174.8,-41.3],[174,-41.5],[173,-39],[174,-36.5],[172.7,-34.4]],[[172.7,-40.5],[174,-41.6],[173,-43.5],[171,-45],[168.5,-46.6],[166.5,-45.8],[170,-43],[172,-40.7],[172.7,-40.5]],[[145,-40.7],[148,-40.8],[148,-43],[146,-43.5],[145,-42],[145,-40.7]],[[79.8,9.3],[81.2,8.5],[81.9,7],[80.4,6],[79.8,7.5],[79.8,9.3]],[[-84.9,21.9],[-81,23.2],[-79,22.4],[-77,20.7],[-74.2,20.3],[-77,20],[-80,22],[-84,22],[-84.9,21.9]],[[-74,20],[-71,19.9],[-68.3,19],[-71,18.2],[-74,18.4],[-74,20]],[[-59,47.6],[-55.5,47.5],[-52.7,47.5],[-53,49],[-56,51.5],[-58,49],[-59,47.6]],[[49.5,-15.5],[50.5,-16],[47.5,-25],[45,-25],[43.2,-22],[43.5,-17],[45,-16],[48,-13.5],[49.5,-15.5]]],"water":[[[47,45],[49,45],[51,45],[53,42],[54,41],[53.5,37],[50,37],[49,38],[49,41],[47.5,42.5],[47,45]],[[58,46.5],[60,46],[60,44.5],[58.5,44.8],[58,46.5]],[[-92,46.7],[-85,47],[-84.5,46.5],[-87,46],[-90.5,46.5],[-92,46.7]],[[-87.8,45.8],[-85,45],[-86,42],[-87.5,42],[-88,44],[-87.8,45.8]],[[-84.5,46],[-82,45],[-80,44],[-83,43],[-84.5,44.5],[-84.5,46]],[[-83.5,42],[-79,42.9],[-80,41.5],[-83,41.4],[-83.5,42]],[[-79.8,43.3],[-76.5,44.2],[-76,43.4],[-79.5,43.2],[-79.8,43.3]],[[104,52],[110,56],[109.5,55],[103.5,51.5],[104,52]]]};
@@ -3290,7 +3455,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   }
 
   function pintaRed(){
-    const mal = cadena && cadena !== CONFIG.chainId;
+    const mal = false;   /* sirve cualquier red, solo se lee la direccion */
     const pl = document.querySelector('.pill.live');
     if(!pl) return;
     pl.classList.toggle('wrong', !!mal);
@@ -3367,11 +3532,13 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       escucha(p);
       await aplica(cs[0]);
       cierra();
-      if(cadena !== CONFIG.chainId) cambiaRed();
     }catch(e){
       console.error('[sectora] wallet', e);
       if(prov === p){ prov = null; cuenta = null; }
-      avisar(e && e.code === 4001 ? t('hashdash.wallet.rejected','Connection rejected') : t('hashdash.wallet.connectFail','Could not connect'));
+      const mm = String((e && e.message) || '').replace(/\s+/g, ' ').slice(0, 90);
+      avisar(e && e.code === 4001 ? t('hashdash.wallet.rejected','Connection rejected')
+        : e && e.code === -32002 ? t('hashdash.v2.wallet.pending','Your wallet already has a connection request open: open it and approve it.')
+        : t('hashdash.wallet.connectFail','Could not connect') + (mm ? ' · ' + mm : ''));
     }
   }
   const conectaIny = w => { cierra(); w.proveedor.__rdns = w.rdns; conecta(w.proveedor); };
@@ -4030,7 +4197,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       const c = window.__sectoraCuenta && window.__sectoraCuenta();
       const bc = document.getElementById('bConnect');
       if(!c && bc){ bc.click(); return; }
-      go = '#rewards';
+      go = '#node';
     }
     const el = document.querySelector(go) || document.getElementById('market');
     if(!el) return;
@@ -4041,9 +4208,9 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   }));
 })();
 </script>
-<script src="dashboard-testnet.js?v=20261029d"></script>
-<script src="dashboard-node-geo.js?v=2" defer></script>
-<script src="dashboard-node-guide.js?v=7" defer></script>
-<script src="dashboard-gas.js?v=2" defer></script>
+<script src="/airdrop/count.js?v=19"></script>
+<script src="/dashboard-testnet.js?v=20261029d"></script>
+<script src="/dashboard-nodo.js?v=1"></script>
+<script src="/dashboard-node-geo.js?v=2" defer></script>
 </body>
 </html>

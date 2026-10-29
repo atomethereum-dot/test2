@@ -2,9 +2,8 @@
    - Premio del Airdrop Genesis: nivel, plazas, premio y lo generado subiendo en vivo (las mismas reglas
      que /airdrop, con count.js).
    - Staking en Ethereum: SECT en staking, recompensas por reclamar y SECT en la wallet (accountView).
-   - Hash Node en la testnet (Sepolia): estado, nombre, fecha de registro, poder de hash y tiempo encendido.
-   - Recompensas de la testnet: tSECT, tSECT gastados en hash, rendimiento por reclamar (sube en vivo),
-     lo ya cobrado, ETH de Sepolia para el gas y el grifo.
+   - Hash Node: activado en el Dashboard (registro publico de activaciones, count.js) o registrado antes en
+     Sepolia: estado, nombre, lugar, desde cuando y tiempo encendido.
    - Historial: depositos y retiros del staking y encendidos y apagados del nodo.
    Solo lectura: no pide firmas ni envia transacciones. */
 (function () {
@@ -12,15 +11,11 @@
   var C = window.SACount;
   var REF_ON = false;   // referidos ocultos por ahora
   var STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
-  var TOKEN_T = "0x189a39081D99bB9D964dfF7FA756978645592Cf3";   // tSECT (Sepolia)
-  var MARKET = "0x8C9984B06281f1CA9416e493c2E602AaB08513db";    // SectoraHashMarket (Sepolia)
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";  // ValidatorRegistry (Sepolia)
   var MAINNET = ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org", "https://1rpc.io/eth"];
   var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.gateway.tenderly.co", "https://ethereum-sepolia.publicnode.com"];
   var SEL = {
-    accountView: "0xf85b90e2", balanceOf: "0x70a08231", lastFaucet: "0x8a877205", cooldown: "0x7d1d5d19",
-    hashPower: "0x9173e163", principal: "0x2ce0f9d6", pending: "0x31d7a262", perDay: "0x1bfff8ac", claimed: "0xc884ef83",
-    minHash: "0xe0b42843", indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44"
+    accountView: "0xf85b90e2", indexPlusOne: "0x7f0b8642", validators: "0x35aa2e44"
   };
   var MM = "https://metamask.app.link/dapp/sectoraorg.com/myairdrop/";
   var LEVELS = [{ min: 100, n: "Scout", r: 0.55 }, { min: 500, n: "Sentinel", r: 0.65 }, { min: 1000, n: "Guardian", r: 0.75 }, { min: 4000, n: "Titan", r: 0.9 }];
@@ -30,7 +25,7 @@
     en: { loc: "en-US", brand: "My Airdrop", h1: "My <b>Airdrop</b>", lead: "Everything your wallet has in Sectora, read live from the blockchain.",
       foot: "Read-only: no signatures, no transactions, nothing leaves your wallet.",
       connect: "Connect wallet", nowallet: "No wallet in this browser?", openmm: "Open in MetaMask", or: "Or check any address", check: "Check",
-      intro: "Connect your wallet to see your airdrop reward, your Hash Node, your staking and your testnet rewards.",
+      intro: "Connect your wallet to see your airdrop reward, your Hash Node and your staking.",
       reading: "Reading the blockchain…", err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.", rej: "The wallet didn't share an address.",
       conn: "Connected", view: "Viewing", change: "Change wallet", refresh: "Refresh", copy: "Copy", copied: "Copied", upd: "Updated {t}",
       ak: "Airdrop Genesis reward", earned: "earned so far", of: "of {n} SECT when you complete your time", win: "Your prize: {n} SECT",
@@ -45,18 +40,15 @@
       rq1: "100+ SECT in staking", rq1s: "You have {n} SECT in staking", rq2: "Hash Node on", rq2on: "On · you can close the tab or turn off your computer", rq2off: "Not on yet",
       rq3: "30 days inside", rq3s: "Day {d} of 30 · then what you earn is secured", rq3ok: "What you earn is secured", rq3w: "Starts when you meet the two above",
       sk: "Staking · Ethereum", stk: "SECT in staking", cl: "Staking rewards to claim", w: "SECT in your wallet", tot: "Total SECT",
-      sgo: "Go to staking", nk: "Hash Node · testnet", nOn: "On", nPaused: "Paused", nNone: "Not registered", nUnk: "Couldn't check",
-      nName: "Name", nSince: "Registered", nHash: "Hash power", nMin: "minimum to validate: {m} TH/s", nTime: "Time on", nReg: "Hash at registration",
-      ngo: "Open the dashboard", nguide: "Guide to connect your node",
-      tk: "Testnet rewards · Sepolia", tPend: "hash rewards to claim", tPer: "{n} tSECT per day", tBal: "tSECT in your wallet", tSpent: "tSECT spent on hash",
-      tCl: "Already claimed", tGas: "Sepolia ETH (gas)", tFau: "Faucet", tNow: "Available now", tIn: "Next in {t}", tNote: "Testnet: tSECT has no monetary value.",
-      hk: "History", hDep: "Staked", hWd: "Withdrawn from staking", hReg: "Node registered and on", hOn: "Node on", hOff: "Node off",
+      sgo: "Go to staking", nk: "Hash Node", nPlace: "Location", nact: "Activate my node", nOn: "On", nPaused: "Paused", nNone: "Not activated", nUnk: "Couldn't check",
+      nName: "Name", nSince: "Active since", nTime: "Time on", ngo: "Open the dashboard",
+      hk: "History", hDep: "Staked", hWd: "Withdrawn from staking", hReg: "Node registered and on", hAct: "Node activated in the dashboard", hOn: "Node on", hOff: "Node off",
       hEmpty: "No movements yet.", hErr: "We couldn't read the history right now. Try Refresh in a moment.",
       rfk: "Invite and earn", rfcap: "your bonus when your invitees complete their time", rfinv: "Invitees", rfst: "Their SECT in staking", rfon: "node on", rfoff: "node off", rfs: "You earn {n} SECT for every 1,000 SECT your invitees keep in staking. It's delivered with your airdrop on SectoraEVM.", rfl: "Your invite link", rfsh: "Share", rf0: "No invitees yet. Their invitation is confirmed automatically when they register their Hash Node through your link.", rfin: "To collect your bonus you must also be in the airdrop: SECT in staking and your Hash Node on.", rfrev: "Every invitation is reviewed before delivery: self-invites and fake wallets don't count.", rfby: "Invited by {a}", rfbys: "recorded on the network", rfp: "{a} invited you", rfps: "It's confirmed automatically when you register your Hash Node in the Dashboard. If you already have one, confirm it there with one click. Free, and you keep your whole airdrop.", rfgo: "Go to the Dashboard", rfpool: "Referral pool: 840,000 SECT, separate from the 7,000,000 SECT of the airdrop. If it runs out, it is shared in proportion.", d: "d", h: "h", m: "min" },
     es: { loc: "es-ES", brand: "Mi Airdrop", h1: "Mi <b>Airdrop</b>", lead: "Todo lo que tiene tu wallet en Sectora, leído en vivo de la blockchain.",
       foot: "Solo lectura: sin firmas ni transacciones, nada sale de tu wallet.",
       connect: "Conectar wallet", nowallet: "¿No tienes wallet en este navegador?", openmm: "Abrir en MetaMask", or: "O revisa cualquier dirección", check: "Revisar",
-      intro: "Conecta tu wallet para ver tu premio del airdrop, tu Hash Node, tu staking y tus recompensas de la testnet.",
+      intro: "Conecta tu wallet para ver tu premio del airdrop, tu Hash Node y tu staking.",
       reading: "Leyendo la blockchain…", err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.", rej: "La wallet no compartió una dirección.",
       conn: "Conectada", view: "Viendo", change: "Cambiar wallet", refresh: "Actualizar", copy: "Copiar", copied: "Copiada", upd: "Actualizado {t}",
       ak: "Premio del Airdrop Genesis", earned: "llevas generado", of: "de {n} SECT al completar tu tiempo", win: "Tu premio: {n} SECT",
@@ -71,18 +63,15 @@
       rq1: "100+ SECT en staking", rq1s: "Tienes {n} SECT en staking", rq2: "Hash Node encendido", rq2on: "Encendido · puedes cerrar la pestaña o apagar tu computadora", rq2off: "Aún no está encendido",
       rq3: "30 días dentro", rq3s: "Día {d} de 30 · después lo ganado queda asegurado", rq3ok: "Lo ganado ya está asegurado", rq3w: "Empieza cuando cumples los dos anteriores",
       sk: "Staking · Ethereum", stk: "SECT en staking", cl: "Recompensas de staking por reclamar", w: "SECT en tu wallet", tot: "SECT en total",
-      sgo: "Ir al staking", nk: "Hash Node · testnet", nOn: "Encendido", nPaused: "Pausado", nNone: "Sin registrar", nUnk: "No se pudo comprobar",
-      nName: "Nombre", nSince: "Registrado", nHash: "Poder de hash", nMin: "mínimo para validar: {m} TH/s", nTime: "Tiempo encendido", nReg: "Hash al registrar",
-      ngo: "Abrir el dashboard", nguide: "Guía para conectar tu nodo",
-      tk: "Recompensas testnet · Sepolia", tPend: "rendimiento del hash por reclamar", tPer: "{n} tSECT al día", tBal: "tSECT en tu wallet", tSpent: "tSECT gastados en hash",
-      tCl: "Ya cobrado", tGas: "ETH de Sepolia (gas)", tFau: "Grifo", tNow: "Disponible ahora", tIn: "Próximo en {t}", tNote: "Testnet: el tSECT no tiene valor monetario.",
-      hk: "Historial", hDep: "Depósito en staking", hWd: "Retiro del staking", hReg: "Nodo registrado y encendido", hOn: "Nodo encendido", hOff: "Nodo apagado",
+      sgo: "Ir al staking", nk: "Hash Node", nPlace: "Ubicación", nact: "Activar mi nodo", nOn: "Encendido", nPaused: "Pausado", nNone: "Sin activar", nUnk: "No se pudo comprobar",
+      nName: "Nombre", nSince: "Activo desde", nTime: "Tiempo encendido", ngo: "Abrir el dashboard",
+      hk: "Historial", hDep: "Depósito en staking", hWd: "Retiro del staking", hReg: "Nodo registrado y encendido", hAct: "Nodo activado en el dashboard", hOn: "Nodo encendido", hOff: "Nodo apagado",
       hEmpty: "Aún no hay movimientos.", hErr: "No pudimos leer el historial ahora. Pulsa Actualizar en un momento.",
       rfk: "Invita y gana", rfcap: "tu bono cuando tus invitados completen su tiempo", rfinv: "Invitados", rfst: "Sus SECT en staking", rfon: "nodo encendido", rfoff: "nodo apagado", rfs: "Ganas {n} SECT por cada 1.000 SECT que tus invitados mantengan en staking. Se entrega con tu airdrop en SectoraEVM.", rfl: "Tu link de invitación", rfsh: "Compartir", rf0: "Aún no tienes invitados. Su invitación se confirma sola cuando registran su Hash Node con tu link.", rfin: "Para cobrar tu bono tú también tienes que estar en el airdrop: SECT en staking y tu Hash Node encendido.", rfrev: "Cada invitación se revisa antes de la entrega: las autoinvitaciones y las wallets falsas no cuentan.", rfby: "Te invitó {a}", rfbys: "registrado en la red", rfp: "{a} te invitó", rfps: "Se confirma sola al registrar tu Hash Node en el Dashboard. Si ya lo tenías, confírmala allí con un clic. Es gratis y conservas todo tu airdrop.", rfgo: "Ir al Dashboard", rfpool: "Bolsa de referidos: 840.000 SECT, aparte de los 7.000.000 SECT del airdrop. Si se agota, se reparte en proporción.", d: "d", h: "h", m: "min" },
     pt: { loc: "pt-BR", brand: "Meu Airdrop", h1: "Meu <b>Airdrop</b>", lead: "Tudo o que sua carteira tem na Sectora, lido ao vivo da blockchain.",
       foot: "Só leitura: sem assinaturas nem transações, nada sai da sua carteira.",
       connect: "Conectar carteira", nowallet: "Sem carteira neste navegador?", openmm: "Abrir no MetaMask", or: "Ou verifique qualquer endereço", check: "Verificar",
-      intro: "Conecte sua carteira para ver seu prêmio do airdrop, seu Hash Node, seu staking e suas recompensas da testnet.",
+      intro: "Conecte sua carteira para ver seu prêmio do airdrop, seu Hash Node e seu staking.",
       reading: "Lendo a blockchain…", err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.", rej: "A carteira não compartilhou um endereço.",
       conn: "Conectada", view: "Visualizando", change: "Trocar carteira", refresh: "Atualizar", copy: "Copiar", copied: "Copiado", upd: "Atualizado {t}",
       ak: "Prêmio do Airdrop Genesis", earned: "você já gerou", of: "de {n} SECT ao completar seu tempo", win: "Seu prêmio: {n} SECT",
@@ -97,12 +86,9 @@
       rq1: "100+ SECT em staking", rq1s: "Você tem {n} SECT em staking", rq2: "Hash Node ligado", rq2on: "Ligado · você pode fechar a aba ou desligar o computador", rq2off: "Ainda não está ligado",
       rq3: "30 dias dentro", rq3s: "Dia {d} de 30 · depois o que você ganhou fica garantido", rq3ok: "O que você ganhou já está garantido", rq3w: "Começa quando você cumpre os dois anteriores",
       sk: "Staking · Ethereum", stk: "SECT em staking", cl: "Recompensas de staking a resgatar", w: "SECT na sua carteira", tot: "SECT no total",
-      sgo: "Ir ao staking", nk: "Hash Node · testnet", nOn: "Ligado", nPaused: "Pausado", nNone: "Não registrado", nUnk: "Não foi possível verificar",
-      nName: "Nome", nSince: "Registrado", nHash: "Poder de hash", nMin: "mínimo para validar: {m} TH/s", nTime: "Tempo ligado", nReg: "Hash ao registrar",
-      ngo: "Abrir o dashboard", nguide: "Guia para conectar seu nó",
-      tk: "Recompensas testnet · Sepolia", tPend: "rendimento do hash a resgatar", tPer: "{n} tSECT por dia", tBal: "tSECT na sua carteira", tSpent: "tSECT gastos em hash",
-      tCl: "Já resgatado", tGas: "ETH da Sepolia (gás)", tFau: "Faucet", tNow: "Disponível agora", tIn: "Próximo em {t}", tNote: "Testnet: o tSECT não tem valor monetário.",
-      hk: "Histórico", hDep: "Depósito em staking", hWd: "Saque do staking", hReg: "Nó registrado e ligado", hOn: "Nó ligado", hOff: "Nó desligado",
+      sgo: "Ir ao staking", nk: "Hash Node", nPlace: "Localização", nact: "Ativar meu nó", nOn: "Ligado", nPaused: "Pausado", nNone: "Não ativado", nUnk: "Não foi possível verificar",
+      nName: "Nome", nSince: "Ativo desde", nTime: "Tempo ligado", ngo: "Abrir o dashboard",
+      hk: "Histórico", hDep: "Depósito em staking", hWd: "Saque do staking", hReg: "Nó registrado e ligado", hAct: "Nó ativado no dashboard", hOn: "Nó ligado", hOff: "Nó desligado",
       hEmpty: "Ainda não há movimentos.", hErr: "Não conseguimos ler o histórico agora. Toque em Atualizar em um instante.",
       rfk: "Convide e ganhe", rfcap: "seu bônus quando seus convidados completarem o tempo", rfinv: "Convidados", rfst: "SECT deles em staking", rfon: "nó ligado", rfoff: "nó desligado", rfs: "Você ganha {n} SECT a cada 1.000 SECT que seus convidados mantiverem em staking. É entregue com seu airdrop na SectoraEVM.", rfl: "Seu link de convite", rfsh: "Compartilhar", rf0: "Você ainda não tem convidados. O convite é confirmado automaticamente quando eles registram o Hash Node pelo seu link.", rfin: "Para receber seu bônus você também precisa estar no airdrop: SECT em staking e seu Hash Node ligado.", rfrev: "Cada convite é revisado antes da entrega: autoconvites e carteiras falsas não contam.", rfby: "Convidado por {a}", rfbys: "registrado na rede", rfp: "{a} convidou você", rfps: "É confirmado automaticamente quando você registra seu Hash Node no Dashboard. Se você já tinha um, confirme lá com um clique. É grátis e você mantém todo o seu airdrop.", rfgo: "Ir ao Dashboard", rfpool: "Bolsa de indicações: 840.000 SECT, separada dos 7.000.000 SECT do airdrop. Se acabar, é dividida proporcionalmente.", d: "d", h: "h", m: "min" }
   };
@@ -142,7 +128,6 @@
   function call(urls, to, data) { return rpc(urls, "eth_call", [{ to: to, data: data }, "latest"]); }
   function word(h, n) { return BigInt("0x" + (h.slice(2 + 64 * n, 2 + 64 * (n + 1)) || "0")); }
   function units(b) { return Number(b / 10n ** 12n) / 1e6; }            // 18 decimales a numero (6 decimales)
-  function u256(h) { return units(word(h, 0)); }
   function soft(p) { return p.then(function (v) { return v; }, function () { return null; }); }
 
   function readNode(addr) {
@@ -161,22 +146,23 @@
   function read(addr) {
     var a = pad(addr);
     var stake = call(MAINNET, STAKING, SEL.accountView + a).then(function (h) { return { staked: units(word(h, 0)), claim: units(word(h, 1)), wallet: units(word(h, 2)) }; });
-    var tn = Promise.all([
-      soft(call(SEPOLIA, TOKEN_T, SEL.balanceOf + a).then(u256)),
-      soft(call(SEPOLIA, MARKET, SEL.hashPower + a).then(function (h) { return Number(word(h, 0)); })),
-      soft(call(SEPOLIA, MARKET, SEL.principal + a).then(u256)),
-      soft(call(SEPOLIA, MARKET, SEL.pending + a).then(u256)),
-      soft(call(SEPOLIA, MARKET, SEL.perDay + a).then(u256)),
-      soft(call(SEPOLIA, MARKET, SEL.claimed + a).then(u256)),
-      soft(call(SEPOLIA, TOKEN_T, SEL.lastFaucet + a).then(function (h) { return Number(word(h, 0)) * 1000; })),
-      soft(call(SEPOLIA, TOKEN_T, SEL.cooldown).then(function (h) { return Number(word(h, 0)) * 1000; })),
-      soft(call(SEPOLIA, REGISTRY, SEL.minHash).then(function (h) { return Number(word(h, 0)); })),
-      soft(rpc(SEPOLIA, "eth_getBalance", [addr, "latest"]).then(function (h) { return units(BigInt(h)); }))
-    ]).then(function (r) { return { bal: r[0], hash: r[1], spent: r[2], pend: r[3], perDay: r[4], claimed: r[5], lastFau: r[6], cool: r[7], minHash: r[8], gas: r[9] }; });
     var hist = C && C.wallet ? C.wallet(addr).catch(function () { return null; }) : Promise.resolve(null);
-    return Promise.all([stake, readNode(addr), tn, hist]).then(function (r) {
-      return { addr: addr, stake: r[0], node: r[1], tn: r[2], hist: r[3], at: Date.now() };
+    // nodo activado en el Dashboard: el registro publico de activaciones o, recien activado, el de este navegador
+    var me = addr.toLowerCase();
+    var act = C && C.activos ? C.activos().then(function (m) { return m[me] || null; }, function () { return null; }) : Promise.resolve(null);
+    return Promise.all([stake, readNode(addr), hist, act]).then(function (r) {
+      var n = r[1], h = r[2], ac = r[3], loc = ac ? null : local(me);
+      // la constancia publica tarda hasta 10 minutos: mientras tanto cuenta la de este navegador, como en el Dashboard
+      if (loc && h && C.junta && !(h.node && h.node.act)) h.node = C.junta(h.node, loc, me);
+      ac = ac || loc;
+      if (ac) n = { st: "on", name: n.st === "on" && n.name ? n.name : ac.n, place: ac.c || "",
+        at: n.at && (n.st === "on" || n.st === "paused") ? Math.min(n.at, ac.t) : ac.t };
+      return { addr: addr, stake: r[0], node: n, hist: h, at: Date.now() };
     });
+  }
+  function local(me) {
+    try { var x = JSON.parse(localStorage.getItem("sectora:v2:node:" + me) || "null");
+      return x ? { t: x.t || Date.now(), n: x.name || "Sectora Node", c: x.place || "", la: x.lat, lo: x.lon } : null; } catch (e) { return null; }
   }
 
   /* ---------- estado del airdrop (mismas reglas que /airdrop) ---------- */
@@ -246,7 +232,7 @@
 
   function render() {
     stop();
-    var d = data, a = airdrop(d), s = d.stake, n = d.node, tn = d.tn, now = Date.now();
+    var d = data, a = airdrop(d), s = d.stake, n = d.node, now = Date.now();
     var lvName = a.lv >= 0 ? LEVELS[a.lv].n : t("nolv");
 
     /* barra de la wallet */
@@ -285,23 +271,16 @@
     var onMs = 0, spans = d.hist && d.hist.node && d.hist.node.spans;
     if (spans) spans.forEach(function (sp) { onMs += Math.min(sp[1], now) - sp[0]; });
     else if (n.st === "on" && n.at) onMs = now - n.at;
-    var fauNext = tn.lastFau != null && tn.cool != null ? tn.lastFau + tn.cool : null;
     html += '<div class="cards">' +
       card(t("sk"), fmt(s.staked, 2), "SECT", t("stk"), [
         [t("cl"), fmt(s.claim, 4) + " SECT"], [t("w"), fmt(s.wallet, 2) + " SECT"], [t("tot"), fmt(s.staked + s.wallet + s.claim, 2) + " SECT"]
       ], '<a class="btn go mono" href="/staking/"><span>' + esc(t("sgo")) + "</span><span>↗</span></a>") +
-      card(t("nk"), esc(n.st === "on" ? t("nOn") : n.st === "paused" ? t("nPaused") : n.st === "unknown" ? t("nUnk") : t("nNone")), "", n.name ? esc(n.name) : "Hash Node", [
-        [t("nHash"), tn.hash != null ? fmt(tn.hash) + " TH/s" + (tn.minHash ? "<small>" + esc(t("nMin", { m: fmt(tn.minHash) })) + "</small>" : "") : "—", tn.hash != null && tn.minHash && tn.hash >= tn.minHash ? "ok" : "warn"],
+      card(t("nk"), esc(n.st === "on" ? t("nOn") : n.st === "paused" ? t("nPaused") : n.st === "unknown" ? t("nUnk") : t("nNone")), "", n.name ? esc(n.name) : "Hash Node",
+        (n.place ? [[t("nPlace"), esc(n.place)]] : []).concat([
         [t("nSince"), n.at ? esc(dtime(n.at)) : "—"],
-        [t("nTime"), onMs > 0 ? esc(dur(onMs)) : "—"],
-        [t("nReg"), n.hashAtReg != null && n.st !== "none" && n.st !== "unknown" ? fmt(n.hashAtReg) + " TH/s" : "—"]
-      ], '<a class="btn mono" href="/dashboard.html#guia-nodo"><span>' + esc(t("nguide")) + '</span><span>↗</span></a><a class="btn go mono" href="/dashboard.html"><span>' + esc(t("ngo")) + "</span><span>↗</span></a>",
+        [t("nTime"), onMs > 0 ? esc(dur(onMs)) : "—"]
+      ]), '<a class="btn go mono" href="/dashboard.html#plan"><span>' + esc(n.st === "on" ? t("ngo") : t("nact")) + "</span><span>↗</span></a>",
         n.st === "on" ? "ok" : "warn") +
-      card(t("tk"), '<span data-pend>' + (tn.pend != null ? fmt(tn.pend, 4) : "—") + "</span>", "tSECT", t("tPend") + (tn.perDay ? " · " + t("tPer", { n: fmt(tn.perDay, 2) }) : ""), [
-        [t("tBal"), tn.bal != null ? fmt(tn.bal, 2) + " tSECT" : "—"], [t("tSpent"), tn.spent != null ? fmt(tn.spent, 2) + " tSECT" : "—"],
-        [t("tCl"), tn.claimed != null ? fmt(tn.claimed, 4) + " tSECT" : "—"], [t("tGas"), tn.gas != null ? fmt(tn.gas, 4) + " ETH" : "—", tn.gas != null && tn.gas > 0 ? "" : "warn"],
-        [t("tFau"), fauNext == null ? "—" : now >= fauNext ? esc(t("tNow")) : esc(t("tIn", { t: dur(fauNext - now) })), fauNext != null && now >= fauNext ? "ok" : ""]
-      ], '<a class="btn go mono" href="/dashboard.html"><span>' + esc(t("ngo")) + '</span><span>↗</span></a>', "", t("tNote")) +
       "</div>";
 
     /* referidos: tu link, tus invitados y tu bono */
@@ -321,7 +300,7 @@
     app.querySelector('[data-a="copy"]').addEventListener("click", function () {
       var b = this; try { navigator.clipboard.writeText(d.addr).then(function () { b.textContent = t("copied"); setTimeout(function () { b.textContent = t("copy"); }, 1400); }); } catch (e) {}
     });
-    live(a, tn);
+    live(a);
     if (REF_ON) refFill(d, a.lv >= 0 && a.on);
   }
 
@@ -403,9 +382,11 @@
       rows.push({ t: e.t, tag: e.dep ? "" : "out", txt: (e.dep ? t("hDep") : t("hWd")) + " · " + fmt(e.amt, e.amt % 1 ? 2 : 0) + " SECT",
         link: e.tx ? "https://etherscan.io/tx/" + e.tx : "" });
     });
-    var nd = d.hist.node;
+    var nd = d.hist.node, ac = nd && nd.act;
     if (nd && nd.spans) nd.spans.forEach(function (sp, i) {
-      rows.push({ t: sp[0], tag: "node", txt: i === 0 && Math.abs(sp[0] - nd.at) < 6e4 ? t("hReg") : t("hOn"), link: "https://sepolia.etherscan.io/address/" + d.addr });
+      // activado en el Dashboard: no hay transaccion que enlazar
+      if (ac && Math.abs(sp[0] - ac.t) < 6e4) rows.push({ t: sp[0], tag: "node", txt: t("hAct"), link: "" });
+      else rows.push({ t: sp[0], tag: "node", txt: i === 0 && Math.abs(sp[0] - nd.at) < 6e4 ? t("hReg") : t("hOn"), link: "https://sepolia.etherscan.io/address/" + d.addr });
       if (sp[1] !== Infinity) rows.push({ t: sp[1], tag: "off", txt: t("hOff"), link: "https://sepolia.etherscan.io/address/" + d.addr });
     });
     else if (nd && nd.at) rows.push({ t: nd.at, tag: "node", txt: t("hReg"), link: "https://sepolia.etherscan.io/address/" + d.addr });
@@ -417,10 +398,10 @@
     }).join("") + "</ol>";
   }
 
-  /* lo generado sube en vivo (como en /airdrop) y el rendimiento de la testnet tambien */
-  function live(a, tn) {
-    var acc = app.querySelector("[data-acc]"), bar = app.querySelector("[data-bar]"), days = app.querySelector("[data-days]"), pend = app.querySelector("[data-pend]");
-    var n4 = nf(4), t0 = Date.now();
+  /* lo generado sube en vivo (como en /airdrop) */
+  function live(a) {
+    var acc = app.querySelector("[data-acc]"), bar = app.querySelector("[data-bar]"), days = app.querySelector("[data-days]");
+    var n4 = nf(4);
     var items = a.items || [], fin = items.map(function (it) { return it.s + it.sp; }), done = fin.length ? Math.max.apply(null, fin) : 0;
     var late = fin.filter(function (x) { return x > END; });
     var many = late.length && (late.length < fin.length || late.some(function (x) { return x !== late[0]; }));
@@ -434,7 +415,6 @@
         days.textContent = now >= done ? t("full") : now - a.first < MIN * DAY ? t("lock", { d: date(a.first + MIN * DAY) }) :
           done <= END ? t("day") : many ? t("day3", { d: date(next) }) : t("day2", { d: date(done) });
       }
-      if (pend && tn.pend != null && tn.perDay) pend.textContent = n4.format(tn.pend + tn.perDay * (now - t0) / DAY);
     }
     tick(); timer = setInterval(tick, 100);
   }
