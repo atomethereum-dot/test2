@@ -52,6 +52,7 @@ button,input{font:inherit;color:inherit}
 .chip.bad{color:var(--bad);border-color:rgba(255,122,122,.35)}
 .chip.blue{color:var(--blue-l);border-color:rgba(90,149,255,.4)}
 .chip.mute{color:var(--ink-3)}
+.chip.lv0{color:var(--ink-3)}.chip.lv1{color:#9fb3c8}.chip.lv2{color:#7fd1c7;border-color:rgba(127,209,199,.35)}.chip.lv3{color:var(--blue-l);border-color:rgba(90,149,255,.4)}.chip.lv4{color:#f5c84c;border-color:rgba(245,200,76,.45)}
 .ctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 .ctl label{display:flex;align-items:center;gap:8px}
 .ctl input[type=date]{padding:9px 10px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel);font:400 13px var(--mono)}
@@ -66,6 +67,7 @@ button,input{font:inherit;color:inherit}
 .tile .v{font:300 30px/1.05 var(--sans);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .tile .v small{font:400 12px var(--mono);color:var(--ink-3);letter-spacing:.06em;margin-left:4px}
 .tile .s{font-size:13px;color:var(--ink-2)}
+.tile .lvs{display:flex;flex-wrap:wrap;gap:6px}.tile .lvs:empty{display:none}
 .tile.hi{border-color:rgba(21,105,255,.45);background:linear-gradient(160deg,rgba(21,105,255,.16),var(--panel) 60%)}
 .bar{height:7px;border-radius:99px;background:var(--line);overflow:hidden}
 .bar i{display:block;height:100%;width:0;background:var(--blue);border-radius:inherit;transition:width .4s}
@@ -191,8 +193,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     <div class="tiles">
       <div class="tile hi"><span class="k">Ganado hasta ahora</span><span class="v" id="t-earned">0</span><span class="s" id="t-secured"></span></div>
       <div class="tile"><span class="k">Bolsa reservada</span><span class="v" id="t-res">0</span><div class="bar"><i id="t-resbar"></i></div><span class="s" id="t-resp"></span></div>
-      <div class="tile"><span class="k">Entradas al airdrop hoy</span><span class="v" id="t-today">0</span><span class="s" id="t-todays"></span></div>
-      <div class="tile"><span class="k">Salidas del airdrop hoy</span><span class="v" id="t-out">0</span><span class="s" id="t-outs"></span></div>
+      <div class="tile"><span class="k">Entradas al airdrop hoy</span><span class="v" id="t-today">0</span><span class="s" id="t-todays"></span><span class="lvs" id="t-todayl"></span></div>
+      <div class="tile"><span class="k">Salidas del airdrop hoy</span><span class="v" id="t-out">0</span><span class="s" id="t-outs"></span><span class="lvs" id="t-outl"></span></div>
       <div class="tile"><span class="k">Entraron (nodo activado)</span><span class="v" id="t-in">0</span><span class="s" id="t-ins"></span></div>
       <div class="tile"><span class="k">Tienen todo (participando)</span><span class="v" id="t-part">0</span><span class="s" id="t-parts"></span></div>
       <div class="tile"><span class="k">Wallets Titan</span><span class="v" id="t-titan">0</span><span class="s" id="t-titans"></span></div>
@@ -536,8 +538,17 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       if (s < e) out.push({ s: s, e: e, why: e === Infinity ? "" : e === a[1] ? "stake" : "node", left: a[2] });
     }); });
     out.sort(function (p, q) { return p.s - q.s; });
-    return out.filter(function (z, k) { var p = out[k - 1]; if (p && z.s <= p.e) { if (z.e > p.e) { p.e = z.e; p.why = z.why; p.left = z.left; } return false; } return true; });
+    out = out.filter(function (z, k) { var p = out[k - 1]; if (p && z.s <= p.e) { if (z.e > p.e) { p.e = z.e; p.why = z.why; p.left = z.left; } return false; } return true; });
+    // saldo y nivel al entrar y el que tenia justo antes de salir
+    var balAt = function (t, antes) { var b = 0; x.ev.forEach(function (e) { if (antes ? e.t < t : e.t <= t) b = Math.max(0, b + (e.dep ? e.amt : -e.amt)); }); return b; };
+    out.forEach(function (z) {
+      z.bIn = balAt(z.s, false); z.lvIn = C.level(z.bIn);
+      if (z.e !== Infinity) { z.bOut = balAt(z.e, true); z.lvOut = C.level(z.bOut); }
+    });
+    return out;
   }
+  // "Titan · 4.000 SECT"
+  function nivel(lv, b) { return (LV[lv] && lv ? LV[lv] : "Sin nivel") + " · " + nf0.format(b) + " SECT"; }
   function dia(t) { var d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); }
   function sigDia(t) { var d = new Date(t); d.setDate(d.getDate() + 1); return d.getTime(); }
   var hf = new Intl.DateTimeFormat("es-ES", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
@@ -567,8 +578,10 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
         var ev = a.map(function (o) { return { o: o, k: "in" }; }).concat(b.map(function (o) { return { o: o, k: "out" }; })).sort(function (p, q) { return q.o.t - p.o.t; });
         html += '<tr class="hx"><td colspan="5"><ul>' + ev.map(function (v) {
           var x = rows[v.o.i], r = x.r, w = x.who.slice(0, 8) + "…" + x.who.slice(-6), chip, why;
-          if (v.k === "in") { chip = v.o.re ? '<span class="chip blue">Volvió</span>' : '<span class="chip ok">Entró</span>'; why = r.level ? LV[r.level] + " · " + nf0.format(r.bal) + " SECT ahora" : "Ahora fuera"; }
-          else { chip = '<span class="chip bad">Salió</span>'; why = v.o.why === "stake" ? "Retiró el staking · quedó con " + nf0.format(v.o.left) + " SECT" : "Apagó el nodo"; }
+          var lvc = '<span class="chip lv' + (v.o.lv || 0) + '">' + (v.o.lv ? LV[v.o.lv] : "Sin nivel") + "</span>";
+          if (v.k === "in") { chip = v.o.re ? '<span class="chip blue">Volvió</span>' : '<span class="chip ok">Entró</span>'; why = "Entró como " + nivel(v.o.lv, v.o.b) + (r.level !== v.o.lv || Math.round(r.bal) !== Math.round(v.o.b) ? " · ahora " + (r.level ? nivel(r.level, r.bal) : "fuera") : ""); }
+          else { chip = '<span class="chip bad">Salió</span>'; why = "Era " + nivel(v.o.lv, v.o.b) + " · " + (v.o.why === "stake" ? "retiró el staking, quedó con " + nf0.format(v.o.left) + " SECT" : "apagó el nodo"); }
+          chip += lvc;
           return '<li><span class="t">' + tf.format(v.o.t) + "</span>" + chip + '<button class="w" type="button" data-r="' + v.o.i + '">' + w + "</button><span>" + escH(why) + "</span></li>";
         }).join("") + "</ul></td></tr>";
       }
@@ -589,8 +602,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       if (f.first) L.stake.push({ t: f.first, i: i });
       x.tr = tramos(x);
       x.tr.forEach(function (z, k) {
-        L.entry.push({ t: z.s, i: i, re: k > 0 });
-        if (z.e !== Infinity) L.exit.push({ t: z.e, i: i, why: z.why, left: z.left });
+        L.entry.push({ t: z.s, i: i, re: k > 0, lv: z.lvIn, b: z.bIn });
+        if (z.e !== Infinity) L.exit.push({ t: z.e, i: i, why: z.why, left: z.left, lv: z.lvOut, b: z.bOut });
       });
     });
     // n.º de orden: 1 es el primero que se registro; la lista se muestra de la mas reciente a la mas antigua
@@ -610,6 +623,10 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     $("t-out").textContent = nf0.format(outH.length);
     $("t-outs").textContent = outH.length ? nf0.format(ret) + (ret === 1 ? " retiró staking · " : " retiraron staking · ") + nf0.format(outH.length - ret) + (outH.length - ret === 1 ? " apagó el nodo · ayer " : " apagaron el nodo · ayer ") + nf0.format(en(L.exit, ayer, hoy).length)
       : "Ninguna hoy · ayer " + nf0.format(en(L.exit, ayer, hoy).length);
+    // niveles de los que entraron y salieron hoy
+    var porNivel = function (l) { var c = {}; l.forEach(function (o) { c[o.lv || 0] = (c[o.lv || 0] || 0) + 1; });
+      return [4, 3, 2, 1, 0].filter(function (k) { return c[k]; }).map(function (k) { return '<span class="chip lv' + k + '">' + (k ? LV[k] : "Sin nivel") + " " + c[k] + "</span>"; }).join(" "); };
+    $("t-todayl").innerHTML = porNivel(inH); $("t-outl").innerHTML = porNivel(outH);
     histDraw();
   }
   function ago(t) {
@@ -631,7 +648,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       var x = rows[o.i], r = x.r, st = ST[r.status] || ["—", "mute"];
       var node = r.node === "on" ? '<span class="chip ok">Activo</span>' : r.node === "off" ? '<span class="chip warn">Pausado</span>' : '<span class="chip mute">Sin nodo</span>';
       var note = ago(o.t) + (rtab !== "stake" && open && o.t < open ? " · antes de la apertura" : "") + (o.re ? " · volvió" : "") +
-        (rtab === "exit" ? (o.why === "stake" ? " · retiró el staking (quedó con " + nf0.format(o.left) + " SECT)" : " · apagó el nodo") : "");
+        (rtab === "exit" ? " · era " + nivel(o.lv, o.b) + (o.why === "stake" ? " · retiró el staking (quedó con " + nf0.format(o.left) + " SECT)" : " · apagó el nodo") :
+         rtab === "entry" ? " · entró como " + nivel(o.lv, o.b) : "");
       html += '<tr data-r="' + o.i + '"><td class="r n">' + nf0.format(o.n) + '</td><td><span class="when">' + dtf.format(o.t) + (now - o.t < C.DAY ? '<span class="chip blue">Nuevo</span>' : "") + '</span><span class="sub">' + note + '</span><span class="m-only">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + " · " + (r.level ? LV[r.level] : nf0.format(r.bal) + " SECT") + "</span></td>" +
         '<td><button class="w" type="button">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + "</button></td><td>" + node + '</td><td class="r">' + nf0.format(r.bal) + "</td>" +
         "<td>" + (r.level ? LV[r.level] : "—") + '</td><td><span class="chip ' + st[1] + '">' + st[0] + "</span></td></tr>";
