@@ -1,3 +1,18 @@
 {
-  "nodos": {}
+  "nodos": {
+    "0x21249fcb2968ad6ff17f01612f6691418c6e1e85": {
+      "t": 1793295454000,
+      "n": "Sectora Node Madrid",
+      "c": "Madrid, ES",
+      "la": 40.4,
+      "lo": -3.7
+    },
+    "0x575e2912bb51f99d6126296dd26bac6e4c9c25e0": {
+      "t": 1793298213000,
+      "n": "Sectora Node Mérida",
+      "c": "Mérida, VE",
+      "la": 8.6,
+      "lo": -71.2
+    }
+  }
 }
