@@ -356,6 +356,25 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   }
 
   /* ---------- referidos ---------- */
+  // en el detalle de una wallet: quien la invito y a quien invito ella
+  function refBox(who) {
+    if (!refs) return '<div class="box"><h4>Referidos</h4><p class="hint">Leyendo las invitaciones…</p></div>';
+    var mine = rfrows.filter(function (x) { return x.f.referrer === who; }), by = rfrows.filter(function (x) { return x.f.invitee === who; })[0];
+    var ok = mine.filter(function (x) { return x.st === "ok"; }), got = 0, proj = 0, stk = 0;
+    ok.forEach(function (x) { got += x.b.got; proj += x.b.proj; stk += x.stake; });
+    var sh = function (a) { return a.slice(0, 6) + "…" + a.slice(-4); };
+    var h = '<div class="box"><h4>Referidos</h4>' +
+      kv("Lo invitó", by ? sh(by.f.referrer) + ' <span class="chip ' + RS[by.st][1] + '">' + RS[by.st][0] + "</span>" : "Nadie") +
+      kv("Sus invitados", nf0.format(mine.length) + (mine.length ? " · " + nf0.format(ok.length) + " cuentan" : "")) +
+      kv("Staking de los que cuentan", nf0.format(stk) + " SECT") +
+      kv("Bono ganado hasta ahora", nf2.format(got) + " SECT") +
+      kv("Bono al completar su tiempo", nf0.format(proj) + " SECT");
+    if (mine.length) h += '<table class="mini"><thead><tr><th>Invitado</th><th>Fecha</th><th class="r">Staking</th><th class="r">Bono</th><th>Estado</th></tr></thead><tbody>' +
+      mine.slice().reverse().map(function (x) { return "<tr><td>" + sh(x.f.invitee) + "</td><td>" + df.format(x.f.t) + '</td><td class="r">' + nf0.format(x.stake) + '</td><td class="r">' + nf0.format(x.st === "ok" ? x.b.proj : 0) +
+        '</td><td><span class="chip ' + RS[x.st][1] + '">' + RS[x.st][0] + "</span></td></tr>"; }).join("") + "</tbody></table>";
+    return h + "</div>";
+  }
+  function openWho(a) { for (var i = 0; i < rows.length; i++) if (rows[i].who === a) { show(i); return; } }
   var RS = { ok: ["Cuenta", "ok"], wait: ["Invitado aún sin entrar", "mute"], out: ["Padrino fuera del airdrop", "warn"],
     mutual: ["Invitación mutua", "bad"], late: ["Hecha tarde (+7 días)", "bad"], fund: ["SECT del padrino", "bad"] };
   function inside(r) { return r && r.level > 0 && r.node === "on" && ["run", "early", "full", "pre"].indexOf(r.status) >= 0; }
@@ -382,6 +401,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       : nf2.format(pc) + " % de la bolsa de referidos (" + nf0.format(pool) + " SECT, aparte del airdrop)";
     $("rf-bad").textContent = nf0.format(bad); $("rf-bads").textContent = "Mutuas, tardías o con SECT del padrino";
     refDraw();
+    if (typeof cur === "number" && cur >= 0 && !$("dr").hidden) show(cur);
   }
   function refDraw() {
     var T2 = [["inv", "Invitaciones"], ["sp", "Padrinos"]];
@@ -397,7 +417,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       if (q) list = list.filter(function (x) { return x.f.invitee.indexOf(q) >= 0 || x.f.referrer.indexOf(q) >= 0; });
       html = list.slice(0, rfshow).map(function (x) {
         var s2 = RS[x.st], k = rfrows.indexOf(x) + 1;
-        return '<tr><td class="n r">' + k + "</td><td>" + '<a href="https://sepolia.etherscan.io/tx/' + x.f.tx + '" target="_blank" rel="noopener">' + dtf.format(x.f.t) + "</a></td><td>" + w(x.f.invitee) + "</td><td>" + w(x.f.referrer) +
+        return '<tr data-w="' + x.f.referrer + '"><td class="n r">' + k + "</td><td>" + '<a href="https://sepolia.etherscan.io/tx/' + x.f.tx + '" target="_blank" rel="noopener">' + dtf.format(x.f.t) + "</a></td><td>" + w(x.f.invitee) + "</td><td>" + w(x.f.referrer) +
           '</td><td class="r">' + nf0.format(x.stake) + '</td><td class="r">' + nf2.format(x.st === "ok" ? x.b.got : 0) + '</td><td class="r">' + nf0.format(x.st === "ok" ? x.b.proj : 0) +
           '</td><td><span class="chip ' + s2[1] + '">' + s2[0] + "</span>" + (x.st === "fund" ? '<span class="why">Le envió ' + nf0.format(funded[x.f.invitee]) + " SECT</span>" : "") + "</td></tr>";
       }).join("");
@@ -412,11 +432,12 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       if (q) list = list.filter(function (x) { return x.a.indexOf(q) >= 0; });
       html = list.slice(0, rfshow).map(function (x) {
         var inn = inside(x.sp && x.sp.r);
-        return "<tr><td>" + w(x.a) + '</td><td class="r">' + nf0.format(x.n) + '</td><td class="r">' + nf0.format(x.ok) + '</td><td class="r">' + nf0.format(x.st) + '</td><td class="r">' + nf2.format(x.got) +
+        return '<tr data-w="' + x.a + '"><td>' + w(x.a) + '</td><td class="r">' + nf0.format(x.n) + '</td><td class="r">' + nf0.format(x.ok) + '</td><td class="r">' + nf0.format(x.st) + '</td><td class="r">' + nf2.format(x.got) +
           '</td><td class="r">' + nf0.format(x.proj) + '</td><td class="r">' + nf0.format(x.bad) + '</td><td><span class="chip ' + (inn ? "ok" : "warn") + '">' + (inn ? "Dentro" : "Fuera") + "</span></td></tr>";
       }).join("");
     }
     $("rf-rows").innerHTML = html || '<tr><td class="empty">Sin resultados.</td></tr>';
+    $("rf-rows").querySelectorAll("tr[data-w]").forEach(function (tr) { tr.addEventListener("click", function (e) { if (e.target.closest("a")) return; openWho(tr.dataset.w); }); });
     $("rf-more").hidden = list.length <= rfshow; $("rf-more").textContent = "Ver " + Math.min(20, list.length - rfshow) + " más";
   }
   // avance hacia lo que tendra al completar su tiempo
@@ -556,6 +577,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       kv("Completa la última parte", r.end ? d(r.end) : "—") +
       kv("Cobra", r.pays.length ? r.pays.map(function (p) { return d(p.t) + " · " + nf0.format(p.p) + " SECT"; }).join("<br>") : "—") +
       '<p class="hint">' + nextLv(r.bal) + "</p></div>";
+    h += refBox(x.who);
     h += '<div class="box"><h4>Staking</h4>' +
       kv("SECT en staking", nf0.format(a ? a.staked : r.bal)) +
       kv("SECT en la wallet (sin staking)", a ? nf0.format(a.wallet) : "—") +
