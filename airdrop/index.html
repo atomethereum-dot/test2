@@ -1720,7 +1720,7 @@ function pack(c, cb){
   var use = function(){ var P = window.SA_LANG_PACK && window.SA_LANG_PACK[c]; if(P && !T[c]){ T[c] = P.t; D[c] = P.d; } cb(); };
   if(c === "en" || T[c] || MORE.indexOf(c) < 0) return cb();
   if(window.SA_LANG_PACK && window.SA_LANG_PACK[c]) return use();
-  var sc = document.createElement("script"); sc.src = "/airdrop/i18n/" + c + ".js?v=16";
+  var sc = document.createElement("script"); sc.src = "/airdrop/i18n/" + c + ".js?v=17";
   sc.onload = use; sc.onerror = function(){ cb(); };
   document.head.appendChild(sc);
 }
@@ -1773,7 +1773,7 @@ $$("canvas.grid").forEach(gridFx);
 })();
 </script>
 <script src="/airdrop/airdrop-intro.js?v=3" defer></script>
-<script src="/airdrop/count.js?v=21" defer></script>
-<script src="/airdrop/eligibility.js?v=53" defer></script>
+<script src="/airdrop/count.js?v=22" defer></script>
+<script src="/airdrop/eligibility.js?v=54" defer></script>
 </body>
 </html>

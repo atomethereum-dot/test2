@@ -20,7 +20,7 @@
   var AIRDROP_URL = "/airdrop/";
   var MY_URL = "/myairdrop/";
   var NODE_URL = "/dashboard.html#guia-nodo";
-  var COUNT_JS = "/airdrop/count.js?v=21";
+  var COUNT_JS = "/airdrop/count.js?v=22";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
   var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.gateway.tenderly.co", "https://ethereum-sepolia.publicnode.com"];
   var STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
@@ -43,7 +43,7 @@
       on: "On", off: "Off", chk: "Checking…", ctaOn: "See my airdrop", ctaOff: "Turn on my Hash Node", both: "2/2 ✓",
       hw: "How to turn on your Hash Node", hw1: "Open the dashboard and connect this same wallet", hw2: "Press “Activate my node”: free, one click, no gas", hw3: "Your node turns on right away. With your staking, your airdrop counts", hwp: "Open the dashboard", hwn: "Go to your node",
       acc: "Generated so far", of: "of {n} SECT on completing your time", calc: "Calculating with the network…", pre: "It starts counting the day the airdrop opens.", lock: "From {d} (30 days in) what you generate is yours.", mine: "What you generate is already yours.",
-      who: "Wallet {a}", wNone: "no node activated with this wallet yet", wOn: "node on", wOff: "node off", wChk: "checking its node…", wErr: "couldn't check the network, retrying…",
+      who: "Wallet {a}", pzW: "At {l} level you had {g} SECT generated. Deposit your previous balance ({b} SECT in staking) and it runs again.", pzN: "Now: {l} level with {s} SECT in staking · prize {p} SECT.", wNone: "no node activated with this wallet yet", wOn: "node on", wOff: "node off", wChk: "checking its node…", wErr: "couldn't check the network, retrying…",
       keep: "Your staking keeps working as usual. Joining our validator network is optional: just connect a Hash Node and you can add Airdrop Genesis rewards on top.",
       newB: "New", newT: "Airdrop Genesis is open",
       msgK: "Message for stakers · Airdrop Genesis",
@@ -65,7 +65,7 @@
       on: "Encendido", off: "Apagado", chk: "Comprobando…", ctaOn: "Ver mi airdrop", ctaOff: "Encender mi Hash Node", both: "2/2 ✓",
       hw: "Cómo encender tu Hash Node", hw1: "Abre el panel y conecta esta misma wallet", hw2: "Pulsa «Activar mi nodo»: gratis, un clic y sin gas", hw3: "Tu nodo se enciende al momento. Con tu staking, tu airdrop cuenta", hwp: "Abrir el panel", hwn: "Ir a tu nodo",
       acc: "Llevas generado", of: "de {n} SECT al completar tu tiempo", calc: "Calculando con la red…", pre: "Empieza a contar el día de la apertura del airdrop.", lock: "Desde el {d} (30 días dentro) lo generado es tuyo.", mine: "Lo generado ya es tuyo.",
-      who: "Wallet {a}", wNone: "aún sin nodo activado con esta wallet", wOn: "nodo encendido", wOff: "nodo apagado", wChk: "comprobando su nodo…", wErr: "no se pudo consultar la red, reintentando…",
+      who: "Wallet {a}", pzW: "En nivel {l} tenías {g} SECT generados. Deposita tu saldo anterior ({b} SECT en staking) y vuelve a correr.", pzN: "Ahora: nivel {l} con {s} SECT en staking · premio {p} SECT.", wNone: "aún sin nodo activado con esta wallet", wOn: "nodo encendido", wOff: "nodo apagado", wChk: "comprobando su nodo…", wErr: "no se pudo consultar la red, reintentando…",
       keep: "Tu staking sigue funcionando con normalidad. Unirte a nuestra red de validadores es opcional: solo conecta un Hash Node y podrás sumar recompensas de Airdrop Genesis.",
       newB: "Nuevo", newT: "Airdrop Genesis abierto",
       msgK: "Mensaje para los usuarios del stake · Airdrop Genesis",
@@ -87,7 +87,7 @@
       on: "Ligado", off: "Desligado", chk: "Verificando…", ctaOn: "Ver meu airdrop", ctaOff: "Ligar meu Hash Node", both: "2/2 ✓",
       hw: "Como ligar seu Hash Node", hw1: "Abra o painel e conecte esta mesma carteira", hw2: "Toque em “Ativar meu nó”: grátis, um clique e sem gás", hw3: "Seu nó liga na hora. Com seu staking, seu airdrop conta", hwp: "Abrir o painel", hwn: "Ir ao seu nó",
       acc: "Você já gerou", of: "de {n} SECT ao completar seu tempo", calc: "Calculando com a rede…", pre: "Começa a contar no dia da abertura do airdrop.", lock: "A partir de {d} (30 dias dentro) o que você gera é seu.", mine: "O que você gerou já é seu.",
-      who: "Carteira {a}", wNone: "ainda sem nó ativado nesta carteira", wOn: "nó ligado", wOff: "nó desligado", wChk: "verificando o nó…", wErr: "não foi possível consultar a rede, tentando de novo…",
+      who: "Carteira {a}", pzW: "No nível {l} você tinha {g} SECT gerados. Deposite seu saldo anterior ({b} SECT em staking) e volta a correr.", pzN: "Agora: nível {l} com {s} SECT em staking · prêmio {p} SECT.", wNone: "ainda sem nó ativado nesta carteira", wOn: "nó ligado", wOff: "nó desligado", wChk: "verificando o nó…", wErr: "não foi possível consultar a rede, tentando de novo…",
       keep: "Seu staking continua funcionando normalmente. Entrar na nossa rede de validadores é opcional: basta conectar um Hash Node e você pode somar recompensas do Airdrop Genesis.",
       newB: "Novo", newT: "Airdrop Genesis aberto",
       msgK: "Mensagem para quem faz staking · Airdrop Genesis",
@@ -109,7 +109,7 @@
       on: "已开启", off: "已关闭", chk: "检查中…", ctaOn: "查看我的空投", ctaOff: "开启我的 Hash Node", both: "2/2 ✓",
       hw: "如何开启你的 Hash Node", hw1: "打开仪表盘并连接同一个钱包", hw2: "点击「激活我的节点」：免费、一键、无需 gas", hw3: "节点立即开启。加上质押，你的空投开始计算", hwp: "打开仪表盘", hwn: "前往你的节点",
       acc: "目前已产生", of: "完成时长后共 {n} SECT", calc: "正在与网络计算…", pre: "从空投开放当天开始计数。", lock: "自 {d}（满 30 天）起，产生的部分归你所有。", mine: "已产生的部分归你所有。",
-      who: "钱包 {a}", wNone: "此钱包尚未激活节点", wOn: "节点已开启", wOff: "节点已关闭", wChk: "正在检查节点…", wErr: "无法查询网络，正在重试…",
+      who: "钱包 {a}", pzW: "在 {l} 等级时你已产生 {g} SECT。重新存入之前的余额（质押 {b} SECT）即可继续累计。", pzN: "现在：{l} 等级，质押 {s} SECT · 奖励 {p} SECT。", wNone: "此钱包尚未激活节点", wOn: "节点已开启", wOff: "节点已关闭", wChk: "正在检查节点…", wErr: "无法查询网络，正在重试…",
       keep: "你的质押照常运行。加入我们的验证者网络是可选的：只需连接一个 Hash Node，就能额外获得 Airdrop Genesis 奖励。",
       newB: "新", newT: "Airdrop Genesis 已开放",
       msgK: "致质押用户 · Airdrop Genesis",
@@ -131,7 +131,7 @@
       on: "चालू", off: "बंद", chk: "जाँच हो रही है…", ctaOn: "मेरा एयरड्रॉप देखें", ctaOff: "मेरा Hash Node चालू करें", both: "2/2 ✓",
       hw: "अपना Hash Node कैसे चालू करें", hw1: "डैशबोर्ड खोलें और यही वॉलेट कनेक्ट करें", hw2: "“मेरा नोड चालू करें” दबाएँ: मुफ़्त, एक क्लिक, बिना गैस", hw3: "आपका नोड तुरंत चालू हो जाता है। स्टेकिंग के साथ आपका एयरड्रॉप गिना जाता है", hwp: "डैशबोर्ड खोलें", hwn: "अपने नोड पर जाएँ",
       acc: "अब तक बना", of: "समय पूरा होने पर {n} SECT में से", calc: "नेटवर्क से गणना हो रही है…", pre: "गिनती एयरड्रॉप खुलने के दिन से शुरू होती है।", lock: "{d} से (30 दिन बाद) जो बनता है वह आपका है।", mine: "जो बना है वह अब आपका है।",
-      who: "वॉलेट {a}", wNone: "इस वॉलेट से अभी कोई नोड चालू नहीं", wOn: "नोड चालू", wOff: "नोड बंद", wChk: "नोड जाँचा जा रहा है…", wErr: "नेटवर्क नहीं जाँच सके, फिर कोशिश हो रही है…",
+      who: "वॉलेट {a}", pzW: "{l} स्तर पर आपके {g} SECT बने थे। अपना पिछला बैलेंस ({b} SECT स्टेकिंग में) फिर से जमा करें और यह फिर चलने लगेगा।", pzN: "अब: {l} स्तर, स्टेकिंग में {s} SECT · इनाम {p} SECT।", wNone: "इस वॉलेट से अभी कोई नोड चालू नहीं", wOn: "नोड चालू", wOff: "नोड बंद", wChk: "नोड जाँचा जा रहा है…", wErr: "नेटवर्क नहीं जाँच सके, फिर कोशिश हो रही है…",
       keep: "आपकी स्टेकिंग पहले की तरह चलती रहती है। हमारे वैलिडेटर नेटवर्क से जुड़ना वैकल्पिक है: बस एक Hash Node कनेक्ट करें और आप Airdrop Genesis इनाम भी जोड़ सकते हैं।",
       newB: "नया", newT: "Airdrop Genesis खुला है",
       msgK: "स्टेकर्स के लिए संदेश · Airdrop Genesis",
@@ -153,7 +153,7 @@
       on: "يعمل", off: "متوقف", chk: "جارٍ التحقق…", ctaOn: "عرض إيردروبي", ctaOff: "شغّل Hash Node الخاص بي", both: "2/2 ✓",
       hw: "كيف تشغّل Hash Node", hw1: "افتح اللوحة واربط المحفظة نفسها", hw2: "اضغط «تفعيل عقدتي»: مجانًا، نقرة واحدة، بلا غاز", hw3: "تعمل عقدتك فورًا. مع تخزينك، يُحتسب الإيردروب", hwp: "فتح اللوحة", hwn: "اذهب إلى عقدتك",
       acc: "ما تولّد حتى الآن", of: "من {n} SECT عند إكمال مدتك", calc: "جارٍ الحساب مع الشبكة…", pre: "يبدأ العد يوم افتتاح الإيردروب.", lock: "اعتبارًا من {d} (بعد 30 يومًا) يصبح ما يتولّد ملكك.", mine: "ما تولّد أصبح ملكك.",
-      who: "المحفظة {a}", wNone: "لا توجد عقدة مفعّلة بهذه المحفظة بعد", wOn: "العقدة تعمل", wOff: "العقدة متوقفة", wChk: "جارٍ التحقق من العقدة…", wErr: "تعذّر الاتصال بالشبكة، جارٍ إعادة المحاولة…",
+      who: "المحفظة {a}", pzW: "في مستوى {l} كان لديك {g} SECT. أودِع رصيدك السابق ({b} SECT في التخزين) ليعود العدّاد إلى العمل.", pzN: "الآن: مستوى {l} مع {s} SECT في التخزين · الجائزة {p} SECT.", wNone: "لا توجد عقدة مفعّلة بهذه المحفظة بعد", wOn: "العقدة تعمل", wOff: "العقدة متوقفة", wChk: "جارٍ التحقق من العقدة…", wErr: "تعذّر الاتصال بالشبكة، جارٍ إعادة المحاولة…",
       keep: "يستمر التخزين لديك كالمعتاد. الانضمام إلى شبكة المدققين لدينا اختياري: فقط اربط Hash Node ويمكنك إضافة مكافآت Airdrop Genesis.",
       newB: "جديد", newT: "Airdrop Genesis مفتوح",
       msgK: "رسالة لمستخدمي التخزين · Airdrop Genesis",
@@ -175,7 +175,7 @@
       on: "Allumé", off: "Éteint", chk: "Vérification…", ctaOn: "Voir mon airdrop", ctaOff: "Allumer mon Hash Node", both: "2/2 ✓",
       hw: "Comment allumer votre Hash Node", hw1: "Ouvrez le dashboard et connectez ce même wallet", hw2: "Appuyez sur « Activer mon nœud » : gratuit, un clic, sans gas", hw3: "Votre nœud s’allume aussitôt. Avec votre staking, votre airdrop compte", hwp: "Ouvrir le dashboard", hwn: "Aller à votre nœud",
       acc: "Généré jusqu’ici", of: "sur {n} SECT à la fin de votre durée", calc: "Calcul avec le réseau…", pre: "Le décompte commence le jour de l’ouverture de l’airdrop.", lock: "À partir du {d} (30 jours dedans), ce que vous générez vous appartient.", mine: "Ce que vous avez généré vous appartient déjà.",
-      who: "Wallet {a}", wNone: "aucun nœud activé avec ce wallet pour l’instant", wOn: "nœud allumé", wOff: "nœud éteint", wChk: "vérification de son nœud…", wErr: "impossible de consulter le réseau, nouvel essai…",
+      who: "Wallet {a}", pzW: "Au niveau {l}, vous aviez {g} SECT générés. Redéposez votre solde précédent ({b} SECT en staking) et le compteur repart.", pzN: "Maintenant : niveau {l} avec {s} SECT en staking · prix {p} SECT.", wNone: "aucun nœud activé avec ce wallet pour l’instant", wOn: "nœud allumé", wOff: "nœud éteint", wChk: "vérification de son nœud…", wErr: "impossible de consulter le réseau, nouvel essai…",
       keep: "Votre staking continue de fonctionner normalement. Rejoindre notre réseau de validateurs est facultatif : connectez simplement un Hash Node et vous pourrez ajouter des récompenses Airdrop Genesis.",
       newB: "Nouveau", newT: "Airdrop Genesis est ouvert",
       msgK: "Message aux utilisateurs du staking · Airdrop Genesis",
@@ -197,7 +197,7 @@
       on: "Включён", off: "Выключен", chk: "Проверка…", ctaOn: "Мой аирдроп", ctaOff: "Включить мой Hash Node", both: "2/2 ✓",
       hw: "Как включить Hash Node", hw1: "Откройте дашборд и подключите этот же кошелёк", hw2: "Нажмите «Активировать мой узел»: бесплатно, один клик, без газа", hw3: "Узел включится сразу. Со стейкингом ваш эйрдроп засчитывается", hwp: "Открыть дашборд", hwn: "К вашему узлу",
       acc: "Уже накоплено", of: "из {n} SECT по завершении срока", calc: "Расчёт по данным сети…", pre: "Счёт начнётся в день открытия аирдропа.", lock: "С {d} (30 дней внутри) накопленное — ваше.", mine: "Накопленное уже ваше.",
-      who: "Кошелёк {a}", wNone: "с этим кошельком узел ещё не активирован", wOn: "узел включён", wOff: "узел выключен", wChk: "проверяем узел…", wErr: "не удалось проверить сеть, повторяем…",
+      who: "Кошелёк {a}", pzW: "На уровне {l} у вас было {g} SECT. Внесите прежний баланс ({b} SECT в стейкинге), и счёт продолжится.", pzN: "Сейчас: уровень {l}, {s} SECT в стейкинге · награда {p} SECT.", wNone: "с этим кошельком узел ещё не активирован", wOn: "узел включён", wOff: "узел выключен", wChk: "проверяем узел…", wErr: "не удалось проверить сеть, повторяем…",
       keep: "Ваш стейкинг работает как обычно. Присоединиться к нашей сети валидаторов — по желанию: просто подключите Hash Node, и вы сможете дополнительно получать награды Airdrop Genesis.",
       newB: "Новое", newT: "Airdrop Genesis открыт",
       msgK: "Сообщение для участников стейкинга · Airdrop Genesis",
@@ -219,7 +219,7 @@
       on: "An", off: "Aus", chk: "Wird geprüft…", ctaOn: "Mein Airdrop", ctaOff: "Meinen Hash Node einschalten", both: "2/2 ✓",
       hw: "So schaltest du deinen Hash Node ein", hw1: "Öffne das Dashboard und verbinde dieselbe Wallet", hw2: "Tippe auf „Meinen Node aktivieren“: kostenlos, ein Klick, kein Gas", hw3: "Dein Node geht sofort an. Mit deinem Staking zählt dein Airdrop", hwp: "Dashboard öffnen", hwn: "Zu deinem Node",
       acc: "Bisher erzeugt", of: "von {n} SECT nach Ablauf deiner Zeit", calc: "Wird mit dem Netzwerk berechnet…", pre: "Die Zählung beginnt am Tag der Airdrop-Eröffnung.", lock: "Ab dem {d} (30 Tage dabei) gehört dir, was du erzeugst.", mine: "Was du erzeugt hast, gehört schon dir.",
-      who: "Wallet {a}", wNone: "noch kein Node mit dieser Wallet aktiviert", wOn: "Node an", wOff: "Node aus", wChk: "Node wird geprüft…", wErr: "Netzwerk nicht erreichbar, neuer Versuch…",
+      who: "Wallet {a}", pzW: "Auf Stufe {l} hattest du {g} SECT erzielt. Zahle deinen vorherigen Betrag ({b} SECT im Staking) wieder ein, dann läuft es weiter.", pzN: "Jetzt: Stufe {l} mit {s} SECT im Staking · Belohnung {p} SECT.", wNone: "noch kein Node mit dieser Wallet aktiviert", wOn: "Node an", wOff: "Node aus", wChk: "Node wird geprüft…", wErr: "Netzwerk nicht erreichbar, neuer Versuch…",
       keep: "Dein Staking läuft ganz normal weiter. Unserem Validator-Netzwerk beizutreten ist freiwillig: Verbinde einfach einen Hash Node und du kannst zusätzlich Airdrop-Genesis-Belohnungen erhalten.",
       newB: "Neu", newT: "Airdrop Genesis ist offen",
       msgK: "Nachricht an alle Staker · Airdrop Genesis",
@@ -241,7 +241,7 @@
       on: "オン", off: "オフ", chk: "確認中…", ctaOn: "マイエアドロップ", ctaOff: "Hash Node をオンにする", both: "2/2 ✓",
       hw: "Hash Node をオンにする方法", hw1: "ダッシュボードを開き、この同じウォレットを接続", hw2: "「ノードを有効にする」を押す：無料・ワンクリック・ガス不要", hw3: "ノードはすぐにオンに。ステーキングと合わせてエアドロップがカウントされます", hwp: "ダッシュボードを開く", hwn: "ノードへ",
       acc: "これまでの生成量", of: "期間満了で {n} SECT のうち", calc: "ネットワークで計算中…", pre: "エアドロップ開始日からカウントが始まります。", lock: "{d}（30 日経過）以降、生成分はあなたのものです。", mine: "生成分はすでにあなたのものです。",
-      who: "ウォレット {a}", wNone: "このウォレットで有効化されたノードはまだありません", wOn: "ノード オン", wOff: "ノード オフ", wChk: "ノードを確認中…", wErr: "ネットワークを確認できません。再試行中…",
+      who: "ウォレット {a}", pzW: "{l} レベルでは {g} SECT を生み出していました。以前の残高（ステーキング {b} SECT）を再び預けると、また進みます。", pzN: "現在：{l} レベル、ステーキング {s} SECT · 報酬 {p} SECT。", wNone: "このウォレットで有効化されたノードはまだありません", wOn: "ノード オン", wOff: "ノード オフ", wChk: "ノードを確認中…", wErr: "ネットワークを確認できません。再試行中…",
       keep: "ステーキングはこれまでどおり動きます。バリデーターネットワークへの参加は任意です。Hash Node を接続するだけで Airdrop Genesis の報酬を上乗せできます。",
       newB: "新着", newT: "Airdrop Genesis 開始",
       msgK: "ステーキング利用者へのお知らせ · Airdrop Genesis",
@@ -263,7 +263,7 @@
       on: "켜짐", off: "꺼짐", chk: "확인 중…", ctaOn: "내 에어드롭 보기", ctaOff: "내 Hash Node 켜기", both: "2/2 ✓",
       hw: "Hash Node 켜는 방법", hw1: "대시보드를 열고 이 지갑을 연결하세요", hw2: "‘내 노드 활성화’를 누르세요: 무료, 클릭 한 번, 가스 없음", hw3: "노드가 바로 켜집니다. 스테이킹과 함께 에어드롭이 집계됩니다", hwp: "대시보드 열기", hwn: "내 노드로",
       acc: "지금까지 생성", of: "기간 완료 시 {n} SECT 중", calc: "네트워크로 계산 중…", pre: "에어드롭이 열리는 날부터 집계가 시작됩니다.", lock: "{d}(30일 경과)부터 생성분은 당신의 것입니다.", mine: "생성분은 이미 당신의 것입니다.",
-      who: "지갑 {a}", wNone: "이 지갑으로 활성화된 노드가 아직 없음", wOn: "노드 켜짐", wOff: "노드 꺼짐", wChk: "노드 확인 중…", wErr: "네트워크를 확인할 수 없어 다시 시도 중…",
+      who: "지갑 {a}", pzW: "{l} 레벨에서 {g} SECT를 적립했습니다. 이전 잔액(스테이킹 {b} SECT)을 다시 예치하면 다시 쌓입니다.", pzN: "현재: {l} 레벨, 스테이킹 {s} SECT · 보상 {p} SECT.", wNone: "이 지갑으로 활성화된 노드가 아직 없음", wOn: "노드 켜짐", wOff: "노드 꺼짐", wChk: "노드 확인 중…", wErr: "네트워크를 확인할 수 없어 다시 시도 중…",
       keep: "스테이킹은 평소대로 작동합니다. 검증자 네트워크 참여는 선택 사항입니다. Hash Node만 연결하면 Airdrop Genesis 보상을 추가로 받을 수 있습니다.",
       newB: "신규", newT: "Airdrop Genesis 오픈",
       msgK: "스테이킹 이용자 안내 · Airdrop Genesis",
@@ -285,7 +285,7 @@
       on: "Acceso", off: "Spento", chk: "Verifica…", ctaOn: "Il mio airdrop", ctaOff: "Accendi il mio Hash Node", both: "2/2 ✓",
       hw: "Come accendere il tuo Hash Node", hw1: "Apri la dashboard e collega questo stesso wallet", hw2: "Premi “Attiva il mio nodo”: gratis, un clic, senza gas", hw3: "Il nodo si accende subito. Con il tuo staking, il tuo airdrop conta", hwp: "Apri la dashboard", hwn: "Vai al tuo nodo",
       acc: "Generato finora", of: "su {n} SECT al termine del periodo", calc: "Calcolo con la rete…", pre: "Il conteggio parte il giorno di apertura dell’airdrop.", lock: "Dal {d} (30 giorni dentro) ciò che generi è tuo.", mine: "Ciò che hai generato è già tuo.",
-      who: "Wallet {a}", wNone: "nessun nodo ancora attivato con questo wallet", wOn: "nodo acceso", wOff: "nodo spento", wChk: "verifica del nodo…", wErr: "impossibile consultare la rete, nuovo tentativo…",
+      who: "Wallet {a}", pzW: "Al livello {l} avevi {g} SECT generati. Deposita di nuovo il saldo precedente ({b} SECT in staking) e il conteggio riparte.", pzN: "Ora: livello {l} con {s} SECT in staking · premio {p} SECT.", wNone: "nessun nodo ancora attivato con questo wallet", wOn: "nodo acceso", wOff: "nodo spento", wChk: "verifica del nodo…", wErr: "impossibile consultare la rete, nuovo tentativo…",
       keep: "Il tuo staking continua a funzionare come sempre. Unirti alla nostra rete di validatori è facoltativo: collega un Hash Node e potrai aggiungere le ricompense di Airdrop Genesis.",
       newB: "Novità", newT: "Airdrop Genesis è aperto",
       msgK: "Messaggio per chi fa staking · Airdrop Genesis",
@@ -373,6 +373,8 @@
     ".sad-lv b{display:block;margin-top:8px;font-size:clamp(20px,1.8vw,25px);font-weight:300;letter-spacing:-.02em;line-height:1.05;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}" +
     ".sad-lv .lv b{color:var(--bd);font-weight:400}" +
     ".sad-lv small{display:block;margin-top:5px;font-size:12px;line-height:1.35;color:var(--ink3)}" +
+    ".sad-pz{margin:12px 0 0;padding:12px 14px;border-radius:12px;border:1px solid rgba(168,100,0,.32);background:rgba(168,100,0,.06);font-size:13px;line-height:1.55;color:var(--ink2)}.sad-pz[hidden]{display:none}" +
+    ".sad-pz b{display:block;font-weight:500;color:var(--ink)}.sad-pz span{display:block;margin-top:4px;color:var(--ink3)}" +
     ".sad-up{margin:12px 0 0;font-size:13.5px;line-height:1.55;color:var(--ink2)}" +
     ".sad-up b{font-weight:500;color:var(--ink)}" +
     /* buttons and notes */
@@ -514,6 +516,7 @@
           "</ul>" +
           '<p class="sad-who m" hidden></p>' +
           '<div class="sad-acc" hidden><span class="m">' + tt("acc") + '</span><b><em>0</em> SECT</b><i class="bar"><i></i></i><small></small></div>' +
+          '<p class="sad-pz" hidden></p>' +
           '<div class="sad-how" hidden><p class="m">' + tt("hw") + "</p><ol>" +
             '<li><span>1</span><div>' + tt("hw1") + '<em><a href="/dashboard.html#plan">' + tt("hwp") + " ↗</a></em></div></li>" +
             '<li><span>2</span><div>' + tt("hw2") + "</div></li>" +
@@ -680,14 +683,28 @@
           if (loc && C.junta && !(nd && nd.act)) nd = C.junta(nd, loc, a.toLowerCase());
           var ev = C.evaluate(h.ev, nd, C.OPEN, Date.now()), proj = ev.closed;
           ev.items.forEach(function (it) { proj += it.p; });
-          if (a === addr) { hist = { items: ev.items, closed: ev.closed, proj: proj, first: ev.start }; histFor = a; }
+          if (a === addr) { hist = { items: ev.items, closed: ev.closed, proj: proj, first: ev.start, paused: ev.outGot || 0, top: ev.outTop || 0 }; histFor = a; }
         }).catch(function () {}).then(function () { histBusy = false; });
       });
     }
+    /* retiro y volvio con menos: lo de su nivel anterior queda en pausa hasta que vuelva su saldo */
+    function paintPz() {
+      var pz = $(".sad-pz"); if (!pz) return;
+      var on = !!addr && !!hist && histFor === addr && hist.paused > 0.00005;
+      pz.hidden = !on; if (!on) return;
+      var dep = deposited(), now = -1, was = 0, i;
+      if (dep !== null) for (i = 0; i < LV.length; i++) if (dep >= LV[i].min) now = i;
+      for (i = 0; i < LV.length; i++) if (hist.top >= LV[i].min) was = i;
+      var key = [hist.paused.toFixed(4), hist.top, dep, L.loc].join("|"); if (pz.dataset.k === key) return; pz.dataset.k = key;
+      pz.innerHTML = "<b>" + esc(tpl(L.pzW, { l: LV[was].n, g: fmt(hist.paused, 4), b: fmt(hist.top) })) + "</b>" +
+        (now >= 0 && now < was ? "<span>" + esc(tpl(L.pzN, { l: LV[now].n, s: fmt(dep), p: fmt(Math.floor(dep * LV[now].rate * 100) / 100) })) + "</span>" : "");
+    }
     function tickCount() {
       var show = !!addr && node === "active" && accBox.dataset.lv === "1";
-      accBox.hidden = !show; if (!show) return;
-      if (histFor !== addr || Date.now() - histT > 3e5) readCount();
+      accBox.hidden = !show;
+      if (addr && node === "active" && (histFor !== addr || Date.now() - histT > 3e5)) readCount();
+      paintPz();
+      if (!show) return;
       if (!hist || histFor !== addr) { accN.textContent = nf4.format(0); accTxt.textContent = L.calc; return; }
       if (hist.pre) { accN.textContent = nf4.format(0); accBar.style.width = "0%"; accTxt.textContent = L.pre; return; }
       var now = Date.now(), e = hist.closed;

@@ -9,6 +9,8 @@
   "use strict";
   var t = function (k, f) { var v = window.SECTORA_T && window.SECTORA_T(k); return v && v !== k ? v : f; };
   var LV = ["", "Scout", "Sentinel", "Guardian", "Titan"];
+  var W0 = "At {l} level you had {g} SECT generated. Deposit your previous balance ({b} SECT in staking) and it runs again.", N0 = "Now: {l} level with {s} SECT in staking · prize {p} SECT.";
+  var C0 = function () { return window.SACount; };
   var DAY = 864e5;
   // aviso de activacion: lo recoge la tarea "Nodos activados" de GitHub (nodos/activaciones.json)
   var NTFY = "https://ntfy.sh/sectora-hn-1ux29d4rgvyv5l";
@@ -105,7 +107,8 @@
         (ad ? '<div class="v2-ad"><span class="lbl">' + esc(t("hashdash.v2.box.k", "Airdrop of this node")) + "</span>" +
           '<div class="v2-ad-g"><div><span>' + esc(t("hashdash.v2.box.earned", "Released so far")) + '</span><b id="v2Rel">' + num(vivo(), 6, 6) + " SECT</b></div>" +
           "<div><span>" + esc(t("hashdash.v2.box.total", "This node will generate")) + "</span><b>" + num(r.proj || r.prize) + " SECT</b><small>" + esc(t("hashdash.v2.box.totalS", "on completing your time")) + "</small></div></div>" +
-          (r.paused > 0.00005 ? '<p class="v2-ad-p">' + esc(t("hashdash.v2.box.paused", "{n} SECT paused: they continue when your SECT return to staking. To collect them, complete 30 days inside.").replace("{n}", num(r.paused, 4, 4))) + "</p>" : "") +
+          (r.outGot > 0.00005 ? '<p class="v2-ad-p"><b>' + esc(t("hashdash.v2.box.was", W0).replace("{l}", LV[C0().level(r.outTop)] || "").replace("{g}", num(r.outGot, 4, 4)).replace("{b}", num(r.outTop))) + "</b>" +
+            (r.level > 0 && r.level < C0().level(r.outTop) ? "<br>" + esc(t("hashdash.v2.box.now", N0).replace("{l}", LV[r.level]).replace("{s}", num(r.bal, 2)).replace("{p}", num(r.prize))) : "") + "</p>" : "") +
           '<p class="v2-ad-d"><i></i>' + esc(t("hashdash.v2.box.deliv", "Delivered at the launch of SectoraEVM")) + "</p>" +
           '<div class="v2-a"><a class="btn key" href="/myairdrop/?a=' + est.addr + '">' + esc(t("hashdash.v2.box.btn", "Airdrop panel")) + " ↗</a></div></div>" : "") +
         (stk ? "" : '<div class="v2-lv"><span class="lbl">' + esc(t("hashdash.v2.lv.k", "Airdrop levels: the higher, the bigger your reward")) + "</span><div>" +

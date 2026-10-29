@@ -28,7 +28,7 @@
       intro: "Connect your wallet to see your airdrop reward, your Hash Node and your staking.",
       reading: "Reading the blockchain…", err: "We couldn't read the network. Try again in a moment.", bad: "That address doesn't look right.", rej: "The wallet didn't share an address.",
       conn: "Connected", view: "Viewing", change: "Change wallet", refresh: "Refresh", copy: "Copy", copied: "Copied", upd: "Updated {t}",
-      ak: "Airdrop Genesis reward", earned: "earned so far", pz2: "{n} SECT paused: they continue when your SECT return to staking. To collect them, complete 30 days inside.", of: "of {n} SECT when you complete your time", win: "Your prize: {n} SECT",
+      ak: "Airdrop Genesis reward", earned: "earned so far", pz2: "At {l} level you had {g} SECT generated. Deposit your previous balance ({b} SECT in staking) and it runs again.", pz3: "Now: {l} level with {s} SECT in staking · prize {p} SECT.", of: "of {n} SECT when you complete your time", win: "Your prize: {n} SECT",
       pre: "Starts adding up on opening day. Everyone has the same time to complete the prize, counted from the day they join. Deliveries start at the launch of SectoraEVM.",
       wait: "Your count will show as soon as the network confirms your staking.", off: "With your staking you're already in: just turn on your Hash Node with this same wallet and you start taking part.",
       none: "You need at least 100 SECT in staking and your Hash Node on to take part.",
@@ -51,7 +51,7 @@
       intro: "Conecta tu wallet para ver tu premio del airdrop, tu Hash Node y tu staking.",
       reading: "Leyendo la blockchain…", err: "No pudimos leer la red. Prueba de nuevo en un momento.", bad: "Esa dirección no es válida.", rej: "La wallet no compartió una dirección.",
       conn: "Conectada", view: "Viendo", change: "Cambiar wallet", refresh: "Actualizar", copy: "Copiar", copied: "Copiada", upd: "Actualizado {t}",
-      ak: "Premio del Airdrop Genesis", earned: "llevas generado", pz2: "{n} SECT en pausa: siguen sumando cuando vuelvas a depositar. Para cobrarlos, completa 30 días dentro.", of: "de {n} SECT al completar tu tiempo", win: "Tu premio: {n} SECT",
+      ak: "Premio del Airdrop Genesis", earned: "llevas generado", pz2: "En nivel {l} tenías {g} SECT generados. Deposita tu saldo anterior ({b} SECT en staking) y vuelve a correr.", pz3: "Ahora: nivel {l} con {s} SECT en staking · premio {p} SECT.", of: "de {n} SECT al completar tu tiempo", win: "Tu premio: {n} SECT",
       pre: "Empieza a sumar el día de la apertura. Todos tienen el mismo tiempo para completar el premio, contado desde que entran. Las entregas empiezan en el lanzamiento de SectoraEVM.",
       wait: "Tu conteo aparecerá en cuanto la red confirme tu staking.", off: "Con tu staking ya estás dentro: solo enciende tu Hash Node con esta misma wallet y empiezas a participar.",
       none: "Necesitas al menos 100 SECT en staking y tu Hash Node encendido para participar.",
@@ -74,7 +74,7 @@
       intro: "Conecte sua carteira para ver seu prêmio do airdrop, seu Hash Node e seu staking.",
       reading: "Lendo a blockchain…", err: "Não conseguimos ler a rede. Tente de novo em um instante.", bad: "Esse endereço não é válido.", rej: "A carteira não compartilhou um endereço.",
       conn: "Conectada", view: "Visualizando", change: "Trocar carteira", refresh: "Atualizar", copy: "Copiar", copied: "Copiado", upd: "Atualizado {t}",
-      ak: "Prêmio do Airdrop Genesis", earned: "você já gerou", pz2: "{n} SECT em pausa: voltam a somar quando você depositar de novo. Para recebê-los, complete 30 dias dentro.", of: "de {n} SECT ao completar seu tempo", win: "Seu prêmio: {n} SECT",
+      ak: "Prêmio do Airdrop Genesis", earned: "você já gerou", pz2: "No nível {l} você tinha {g} SECT gerados. Deposite seu saldo anterior ({b} SECT em staking) e volta a correr.", pz3: "Agora: nível {l} com {s} SECT em staking · prêmio {p} SECT.", of: "de {n} SECT ao completar seu tempo", win: "Seu prêmio: {n} SECT",
       pre: "Começa a somar no dia da abertura. Todos têm o mesmo tempo para completar o prêmio, contado desde que entram. As entregas começam no lançamento da SectoraEVM.",
       wait: "Sua contagem vai aparecer assim que a rede confirmar seu staking.", off: "Com seu staking você já está dentro: só ligue seu Hash Node com esta mesma carteira e você começa a participar.",
       none: "Você precisa de pelo menos 100 SECT em staking e do seu Hash Node ligado para participar.",
@@ -172,7 +172,8 @@
     var a = { lv: lv, prize: lv >= 0 ? staked * LEVELS[lv].r : 0, on: on, state: "", items: null, closed: 0, proj: 0, first: 0 };
     var open = C && C.OPEN && now >= C.OPEN;
     // lo generado por SECT que salieron antes de 30 dias: congelado, sigue si vuelven
-    a.paused = d.hist && C && open ? C.evaluate(d.hist.ev, d.hist.node, C.OPEN, now).paused || 0 : 0;
+    var evp = d.hist && C && open ? C.evaluate(d.hist.ev, d.hist.node, C.OPEN, now) : null;
+    a.paused = evp ? evp.outGot || 0 : 0; a.top = evp ? evp.outTop || 0 : 0;
     if (lv < 0) a.state = "none";
     else if (!on) a.state = "off";
     else if (!open) a.state = "pre";
@@ -253,7 +254,9 @@
       html += '<p class="big num"><em>' + fmt(a.prize) + '</em><small class="mono">SECT</small></p>' +
         '<p class="note">' + esc(a.state === "none" ? t("none") : a.state === "off" ? t("off") : a.state === "pre" ? t("pre") : t("wait")) + "</p>";
     }
-    if (a.paused > 0.00005) html += '<p class="note">' + esc(t("pz2", { n: fmt(a.paused, 4) })) + "</p>";
+    if (a.paused > 0.00005) { var was = levelOf(a.top);
+      html += '<p class="note"><b>' + esc(t("pz2", { l: LEVELS[Math.max(0, was)].n, g: fmt(a.paused, 4), b: fmt(a.top) })) + "</b>" +
+        (a.lv >= 0 && a.lv < was ? "<br>" + esc(t("pz3", { l: lvName, s: fmt(s.staked, s.staked % 1 ? 2 : 0), p: fmt(Math.floor(a.prize * 100) / 100) })) : "") + "</p>"; }
     var spots = a.lv >= 0 ? Math.floor(s.staked / LEVELS[a.lv].min * 10) / 10 : 0;
     html += '<div class="trio"><div><span class="m mono">' + esc(t("lvl")) + "</span><b>" + esc(lvName) + "</b><small>" + esc(a.lv >= 0 ? t("lvn", { n: a.lv + 1 }) : "—") + "</small></div>" +
       '<div><span class="m mono">' + esc(t("spots")) + '</span><b class="num">' + (a.lv >= 0 ? fmt(spots, 1) : "0") + "</b><small>" + esc(a.lv >= 0 ? t("spf", { l: lvName }) : "—") + "</small></div>" +

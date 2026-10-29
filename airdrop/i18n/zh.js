@@ -161,7 +161,7 @@ elig: { loc: "zh-CN", k: "Sectora // Airdrop Genesis", pv: "预览", h: "你的�
   stk: "检测到质押者", stks: "你已经在其中：不需要再做任何事。只需用这个钱包开启 Hash Node，就开始参与了。",
   todo: "启用你的 Hash Node", hw: "如何开启你的 Hash Node", hw1: "打开仪表盘并连接同一个钱包", hw2: "点击「激活我的节点」：免费、一键、无需 gas", hw3: "节点立即开启。加上质押，你的空投开始计算", hwp: "打开仪表盘", hwn: "前往你的节点",
   todos: "用这个钱包在仪表盘激活你的节点。没有节点就没有奖励。",
-  nu: "无法查询你的 Hash Node", nus: "网络没有响应。几秒后再查一次。",
+  nu: "无法查询你的 Hash Node", nus: "网络没有响应。几秒后再查一次。", pzW: "在 {l} 等级时你已产生 {g} SECT。重新存入之前的余额（质押 {b} SECT）即可继续累计。", pzN: "现在：{l} 等级，质押 {s} SECT · 奖励 {p} SECT。",
   node: "启用我的 Hash Node", done: "Hash Node 已启用", dones: "此钱包的节点已开启。你可以关闭标签页或关掉电脑：它会保持开启。只是不要停用它。",
   paused: "Hash Node 已暂停", pauseds: "你的节点已注册但处于暂停状态。暂停期间计数不会增加：重新开启后从中断处继续。", stake: "质押我的 SECT", reopen: "打开控制台",
   rule: "质押 100 → 55 SECT (Scout) · 500 → 325 (Sentinel) · 1,000 → 750 (Guardian) · 4,000 → 3,600 (Titan) · 更多则按比例，无上限",

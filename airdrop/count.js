@@ -240,7 +240,7 @@
   function evaluate(ev, nd, open, now) {
     var h = layers(ev), lv = level(h.bal);
     var r = { bal: h.bal, level: lv, rate: RATE[lv], prize: prize(h.bal), node: nd ? (nd.active ? "on" : "off") : "none",
-      earned: 0, secured: 0, closed: 0, paused: 0, proj: 0, items: [], lay: [], pays: [], day: 0, left: 0, status: "", start: 0, end: 0, deliver: 0, nodeAt: nd ? nd.at : 0 };
+      earned: 0, secured: 0, closed: 0, paused: 0, outGot: 0, outTop: 0, proj: 0, items: [], lay: [], pays: [], day: 0, left: 0, status: "", start: 0, end: 0, deliver: 0, nodeAt: nd ? nd.at : 0 };
     if (!open || now < open) { r.status = lv ? (nd && nd.active ? "pre" : "nonode") : (nd ? "p2" : "out"); return r; }
     if (!nd) { r.status = lv ? "nonode" : "out"; return r; }
     var on = nd.spans || (nd.active ? [[nd.at, Infinity]] : []);
@@ -273,7 +273,7 @@
       row.end = z.end; row.d = d; r.lay.push(row);
       // fuera con menos de 30 dias: lo generado no se borra, queda congelado (en pausa) y sigue si vuelve.
       // Para cobrarlo tiene que volver y completar sus 30 dias dentro, asi que no entra en los pagos
-      if (!inNow && d < MIN) { row.state = "lost"; row.got = got; r.earned += got; r.closed += got; r.proj += got; r.paused += got; return; }
+      if (!inNow && d < MIN) { row.state = "lost"; row.got = got; r.earned += got; r.closed += got; r.proj += got; r.paused += got; r.outGot += got; r.outTop = Math.max(r.outTop, at); return; }
       row.got = got; r.earned += got; if (d >= MIN) r.secured += got;
       // cada parte se paga por separado: al completar su tiempo, nunca antes del 25 de marzo
       if (inNow) {
@@ -286,6 +286,7 @@
       } else {
         row.state = got >= P - 1e-9 ? "full" : "closed"; row.due = Math.max(END, z.e - Math.max(0, acc - DUR));
         r.closed += got; r.proj += got;
+        r.outGot += got; r.outTop = Math.max(r.outTop, at);   // fuera del staking: deja de sumar hasta que vuelva su saldo
         if (got - paid > 0) pays[row.due] = (pays[row.due] || 0) + got - paid;
       }
     });

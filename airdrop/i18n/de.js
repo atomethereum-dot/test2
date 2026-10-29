@@ -161,7 +161,7 @@ elig: { loc: "de-DE", k: "Sectora // Airdrop Genesis", pv: "Vorschau", h: "Dein 
   stk: "Staker erkannt", stks: "Du bist schon dabei: Du musst nichts weiter tun. Schalte einfach deinen Hash Node mit derselben Wallet ein und du nimmst teil.",
   todo: "Aktiviere deinen Hash Node", hw: "So schaltest du deinen Hash Node ein", hw1: "Öffne das Dashboard und verbinde dieselbe Wallet", hw2: "Tippe auf „Meinen Node aktivieren“: kostenlos, ein Klick, kein Gas", hw3: "Dein Node geht sofort an. Mit deinem Staking zählt dein Airdrop", hwp: "Dashboard öffnen", hwn: "Zu deinem Node",
   todos: "Aktiviere deinen Node im Dashboard mit derselben Wallet. Kein Node, keine Belohnung.",
-  nu: "Wir konnten deinen Hash Node nicht prüfen", nus: "Das Netzwerk hat nicht geantwortet. Prüfe es in ein paar Sekunden erneut.",
+  nu: "Wir konnten deinen Hash Node nicht prüfen", nus: "Das Netzwerk hat nicht geantwortet. Prüfe es in ein paar Sekunden erneut.", pzW: "Auf Stufe {l} hattest du {g} SECT erzielt. Zahle deinen vorherigen Betrag ({b} SECT im Staking) wieder ein, dann läuft es weiter.", pzN: "Jetzt: Stufe {l} mit {s} SECT im Staking · Belohnung {p} SECT.",
   node: "Meinen Hash Node aktivieren", done: "Hash Node aktiv", dones: "Der Node dieser Wallet ist an. Du kannst den Tab schließen oder den Computer ausschalten: Er bleibt an. Deaktiviere ihn nur nicht.",
   paused: "Hash Node pausiert", pauseds: "Dein Node ist registriert, aber pausiert. Solange er pausiert, zählt dein Zähler nicht: Schalte ihn wieder ein und er läuft dort weiter, wo er stand.", stake: "Meine SECT staken", reopen: "Dashboard öffnen",
   rule: "100 im Staking → 55 SECT (Scout) · 500 → 325 (Sentinel) · 1.000 → 750 (Guardian) · 4.000 → 3.600 (Titan) · mehr anteilig, ohne Obergrenze",

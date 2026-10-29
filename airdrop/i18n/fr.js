@@ -161,7 +161,7 @@ elig: { loc: "fr-FR", k: "Sectora // Airdrop Genesis", pv: "Aperçu", h: "Votre 
   stk: "Staker détecté", stks: "Vous êtes déjà dedans : vous n’avez rien d’autre à faire. Allumez simplement votre Hash Node avec ce même wallet et vous commencez à participer.",
   todo: "Activez votre Hash Node", hw: "Comment allumer votre Hash Node", hw1: "Ouvrez le dashboard et connectez ce même wallet", hw2: "Appuyez sur « Activer mon nœud » : gratuit, un clic, sans gas", hw3: "Votre nœud s’allume aussitôt. Avec votre staking, votre airdrop compte", hwp: "Ouvrir le dashboard", hwn: "Aller à votre nœud",
   todos: "Activez votre nœud dans le dashboard avec ce même wallet. Pas de nœud, pas de récompense.",
-  nu: "Impossible de vérifier votre Hash Node", nus: "Le réseau n’a pas répondu. Vérifiez à nouveau dans quelques secondes.",
+  nu: "Impossible de vérifier votre Hash Node", nus: "Le réseau n’a pas répondu. Vérifiez à nouveau dans quelques secondes.", pzW: "Au niveau {l}, vous aviez {g} SECT générés. Redéposez votre solde précédent ({b} SECT en staking) et le compteur repart.", pzN: "Maintenant : niveau {l} avec {s} SECT en staking · prix {p} SECT.",
   node: "Activer mon Hash Node", done: "Hash Node actif", dones: "Le nœud de ce wallet est allumé. Vous pouvez fermer l’onglet ou éteindre votre ordinateur : il reste allumé. Ne le désactivez simplement pas.",
   paused: "Hash Node en pause", pauseds: "Votre nœud est enregistré mais en pause. Tant qu’il est en pause, votre compteur n’avance pas : rallumez-le et il reprend là où il s’était arrêté.", stake: "Staker mes SECT", reopen: "Ouvrir le tableau de bord",
   rule: "100 en staking → 55 SECT (Scout) · 500 → 325 (Sentinel) · 1 000 → 750 (Guardian) · 4 000 → 3 600 (Titan) · plus, en proportion, sans maximum",
