@@ -142,6 +142,23 @@
       '</div>';
     nodo.parentNode.insertBefore(head, nodo);
     nodo.parentNode.insertBefore(grid, nodo);
+    /* invitacion del airdrop: el invitado confirma quien lo invito (ver "referidos" mas abajo) */
+    const rf = document.createElement('div');
+    rf.className = 'card tn-ref'; rf.id = 'tnRef'; rf.hidden = true;
+    rf.innerHTML = '<span class="lbl" data-i18n="hashdash.ref.title">Airdrop invitation</span><div id="tnRefB"></div>';
+    nodo.parentNode.insertBefore(rf, nodo);
+    if(!document.getElementById('tnRefCss')){
+      const st = document.createElement('style'); st.id = 'tnRefCss';
+      st.textContent = '.tn-ref{margin:18px 0 0}.tn-ref .rf-h{display:block;margin-top:10px;font-size:17px;line-height:1.4;color:var(--ink)}' +
+        '.tn-ref .rf-n{margin:6px 0 0;color:var(--ink3);font-size:13.5px;line-height:1.6;max-width:72ch}' +
+        '.tn-ref .rf-a{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px}' +
+        '.tn-ref .rf-a .btn{padding:12px 18px}.tn-ref .rf-ok{color:var(--live)}' +
+        '.tn-ref form{display:flex;gap:8px;margin-top:12px;max-width:620px}' +
+        '.tn-ref input{flex:1;min-width:0;padding:11px 12px;background:transparent;border:1px solid var(--rule);color:var(--ink);font:400 13px/1.2 "IBM Plex Mono",monospace;outline:none}' +
+        '.tn-ref input:focus{border-color:var(--blue)}.tn-ref .rf-e{margin-top:8px;color:var(--amber);font-size:12.5px}' +
+        '.tn-ref .rf-m{display:inline-block;margin-top:12px;color:var(--blue2);font-size:12.5px;text-decoration:underline;text-underline-offset:3px}';
+      document.head.appendChild(st);
+    }
 
     /* la tarjeta de APY de la red pasa a mostrar la tasa real de testnet */
     const apy = [...document.querySelectorAll('#network ~ .g3 .card')].find(c => c.querySelector('[data-i18n="hashdash.network.apy"]'));
@@ -347,10 +364,10 @@
 
   async function conBloqueo(fn){
     if(ocupado) return;
-    ocupado = true; pintaCuenta();
+    ocupado = true; pintaCuenta(); pintaRef();
     try{ await fn(); }
     catch(e){ toast(errorLegible(e)); }
-    finally{ ocupado = false; await leeCuenta(); leeRed(); }
+    finally{ ocupado = false; await leeCuenta(); leeRed(); pintaRef(); }
   }
 
   function reclamaFaucet(){
@@ -432,6 +449,99 @@
     });
   }
 
+  /* ----------------------------------------------------------- referidos
+     El link de invitacion (/airdrop/?ref=0x… o /dashboard.html?ref=0x…) deja al padrino guardado en este
+     navegador. Aqui el invitado lo confirma enviando 0,0001 tSECT (de prueba) a su padrino: queda en la red,
+     solo el propio invitado puede hacerlo y vale la primera. Las reglas del bono estan en airdrop/count.js. */
+  const REF_KEY = 'sectora:ref', REF_MARK = 10n ** 14n, REF_SINCE = Date.UTC(2026, 9, 28) / 1000;
+  const T_TR = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+  const refDir = v => { const m = /0x[0-9a-fA-F]{40}/.exec(String(v || '')); return m ? m[0].toLowerCase() : ''; };
+  const refLee = () => { try{ return refDir(localStorage.getItem(REF_KEY)); }catch(e){ return ''; } };
+  const refGuarda = a => { try{ localStorage.setItem(REF_KEY, a); }catch(e){} };
+  const corto = a => a.slice(0, 6) + '…' + a.slice(-4);
+  /* el link puede traer ?ref=; y si ya habia uno guardado, se pone en la direccion para que viaje
+     al abrir el dashboard dentro de la app de una wallet (otro navegador, otra memoria) */
+  (() => {
+    try{
+      const u = new URL(location.href), r = refDir(u.searchParams.get('ref'));
+      if(r) refGuarda(r);
+      else if(refLee()){ u.searchParams.set('ref', refLee()); history.replaceState(history.state, '', u.toString()); }
+    }catch(e){}
+  })();
+  let refEst = { cuenta: '', hecho: null, leido: false };
+  /* la primera constancia que esta wallet envio (transferencia de 0,0001 tSECT a otra wallet) */
+  async function refBusca(a){
+    const fin = await ro.getBlockNumber();
+    const ini = Math.max(0, fin - Math.ceil((Date.now() / 1000 - REF_SINCE) / 12) - 2000);
+    const tema = window.ethers.zeroPadValue(a, 32);
+    for(let x = ini; x <= fin; x += 45000){
+      const l = await ro.getLogs({ address: cfg.token, topics: [T_TR, tema], fromBlock: x, toBlock: Math.min(fin, x + 44999) });
+      for(const g of l){
+        if(g.topics.length !== 3 || !g.data || g.data === '0x' || BigInt(g.data) !== REF_MARK) continue;
+        const to = '0x' + g.topics[2].slice(26).toLowerCase();
+        if(to !== a.toLowerCase() && !/^0x0{40}$/.test(to)) return { to, tx: g.transactionHash };
+      }
+    }
+    return null;
+  }
+  async function refCarga(){
+    const a = acct; if(!a) return;
+    refEst = { cuenta: a.toLowerCase(), hecho: null, leido: false }; pintaRef();
+    let h = null; try{ h = await refBusca(a); }catch(e){ h = null; }
+    if(!acct || acct.toLowerCase() !== a.toLowerCase()) return;
+    refEst = { cuenta: a.toLowerCase(), hecho: h, leido: true }; pintaRef();
+  }
+  function pintaRef(){
+    const c = q('#tnRef'), b = q('#tnRefB');
+    if(!c || !b) return;
+    if(!acct){ c.hidden = true; return; }
+    c.hidden = false;
+    const me = acct.toLowerCase(), pend = refLee();
+    const mio = '<a class="rf-m" href="/airdrop/#my">' + tr('hashdash.ref.mine','Invite friends and earn: get your link in My airdrop ↗') + '</a>';
+    if(refEst.cuenta !== me || !refEst.leido){ b.innerHTML = '<p class="rf-n">' + tr('hashdash.tn.waiting','Waiting for the network…') + '</p>'; return; }
+    if(refEst.hecho){
+      b.innerHTML = '<span class="rf-h rf-ok"></span><p class="rf-n"></p>' + mio;
+      b.querySelector('.rf-h').textContent = '✓ ' + tr('hashdash.ref.done','Invitation recorded · invited by {a}').replace('{a}', corto(refEst.hecho.to));
+      b.querySelector('.rf-n').textContent = tr('hashdash.ref.doneSub','Saved on the network. It can\'t be changed.');
+      return;
+    }
+    if(pend && pend !== me){
+      b.innerHTML = '<span class="rf-h"></span><p class="rf-n"></p><div class="rf-a"><button class="btn key" type="button" id="tnRefGo"></button></div>' + mio;
+      b.querySelector('.rf-h').textContent = tr('hashdash.ref.by','{a} invited you to Airdrop Genesis').replace('{a}', corto(pend));
+      b.querySelector('.rf-n').textContent = tr('hashdash.ref.note','Confirm it so your sponsor gets their bonus. It\'s free: you send 0.0001 tSECT (test token) and you keep your whole airdrop.');
+      const g = q('#tnRefGo'); g.textContent = tr('hashdash.ref.btn','Confirm invitation'); g.disabled = ocupado; g.onclick = refConfirma;
+      return;
+    }
+    b.innerHTML = '<span class="rf-h"></span><form><input name="r" placeholder="sectoraorg.com/airdrop/?ref=0x…" autocomplete="off" spellcheck="false"><button class="btn" type="submit"></button></form><p class="rf-e" hidden></p>' + mio;
+    b.querySelector('.rf-h').textContent = tr('hashdash.ref.ask','Did someone invite you? Paste their invite link');
+    b.querySelector('button').textContent = tr('hashdash.ref.save','Save');
+    const e = b.querySelector('.rf-e');
+    if(pend === me){ e.hidden = false; e.textContent = tr('hashdash.ref.self','You can\'t invite yourself'); }
+    b.querySelector('form').onsubmit = ev => {
+      ev.preventDefault();
+      const r = refDir(ev.target.r.value);
+      if(!r){ e.hidden = false; e.textContent = tr('hashdash.ref.bad','That link or address isn\'t valid'); return; }
+      if(r === me){ e.hidden = false; e.textContent = tr('hashdash.ref.self','You can\'t invite yourself'); return; }
+      refGuarda(r); pintaRef();
+    };
+  }
+  function refConfirma(){
+    const to = refLee();
+    if(!to || !acct || to === acct.toLowerCase()) return;
+    return conBloqueo(async () => {
+      if(me && me.bal < REF_MARK){ toast(tr('hashdash.ref.needT','First claim tSECT from the faucet')); return; }
+      const s = await firmante();
+      const tk = new window.ethers.Contract(cfg.token, ['function transfer(address,uint256) returns (bool)'], s);
+      toast(tr('hashdash.tn.confirm','Confirm in your wallet…'));
+      const tx = await tk.transfer(window.ethers.getAddress(to), REF_MARK);
+      toast(tr('hashdash.tn.waiting','Waiting for the network…'));
+      await tx.wait();
+      refEst = { cuenta: acct.toLowerCase(), hecho: { to, tx: tx.hash }, leido: true };
+      toast(tr('hashdash.ref.ok','Invitation confirmed'));
+      pintaRef();
+    });
+  }
+
   /* ------------------------------------------------------------ arranque */
   async function arranca(){
     const demo = () => document.dispatchEvent(new CustomEvent('sectora:demo'));
@@ -469,9 +579,9 @@
     const w = window.__sectoraWallet;
     if(w){
       const oc = w.onConnect, od = w.onDisconnect;
-      w.onConnect = (dir, bal) => { oc && oc(dir, bal); acct = dir; leeCuenta(); };
-      w.onDisconnect = () => { od && od(); acct = null; me = null; pintaCuenta(); };
-      const get = window.__sectoraCuenta; if(get && get()){ acct = get(); }
+      w.onConnect = (dir, bal) => { oc && oc(dir, bal); const otra = !acct || acct.toLowerCase() !== dir.toLowerCase(); acct = dir; leeCuenta(); if(otra) refCarga(); };
+      w.onDisconnect = () => { od && od(); acct = null; me = null; pintaCuenta(); pintaRef(); };
+      const get = window.__sectoraCuenta; if(get && get()){ acct = get(); refCarga(); }
     }
 
     leeRed(); pintaNodos(); leeCuenta();
@@ -479,7 +589,7 @@
     setInterval(() => { if(acct && !ocupado) leeCuenta(); }, 20000);
     setInterval(pintaFaucet, 30000);
     pintaPreview();
-    document.addEventListener('sectora:langchange', () => { pintaCuenta(); pintaApy(); pintaPreview(); });
+    document.addEventListener('sectora:langchange', () => { pintaCuenta(); pintaApy(); pintaPreview(); pintaRef(); });
     requestAnimationFrame(tic);
   }
 

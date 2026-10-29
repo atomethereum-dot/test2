@@ -170,5 +170,6 @@ elig: { loc: "zh-CN", k: "Sectora // Airdrop Genesis", pv: "预览", h: "你的�
   rej: "钱包没有提供地址。", close: "关闭", other: "查询另一个钱包",
   acc: "你已累计 {n} SECT", of: "完成你的时间后共 {n} SECT", day: "在 SectoraEVM 上线时发放", day2: "你将于 {d} 完成你的时间 · 在 SectoraEVM 发放", day3: "每一部分在完成其时间后于 SectoraEVM 发放 · 下一部分于 {d} 完成", lock: "已累计的奖励将于 {d} 锁定归你", full: "奖励已全部完成 · 在 SectoraEVM 发放",
   pre: "从开放日起开始累计。每个人完成奖励的时间都相同，从加入当天算起。发放从 SectoraEVM 上线时开始。", wait: "网络确认你的质押后，你的计数就会显示。",
-  demo: "示例视图", demos: "质押 {n} SECT · 节点开启 · 计数第 {d} 天" }
+  demo: "示例视图", demos: "质押 {n} SECT · 节点开启 · 计数第 {d} 天",
+      rf: "邀请赚奖励", rfs: "你邀请的人在质押中每保持 1,000 SECT，你就获得 {n} SECT。随你的空投在 SectoraEVM 上发放。", rfl: "你的邀请链接", rfc: "复制", rfok: "已复制", rfsh: "分享", rfn: "已邀请 {n} 人 · 质押中 {s} SECT", rfb: "你的奖励：他们完成期限时获得 {n} SECT", rf0: "还没有受邀者。他们可以在 Dashboard 中免费确认你的邀请。", rfin: "要领取奖励，你自己也必须参与空投：质押 SECT 并开启 Hash Node。", rfrev: "每个邀请在发放前都会审核：自我邀请和虚假钱包不计入。", rfby: "邀请人：{a}", rfbys: "已记录在网络上", rfp: "{a} 邀请了你", rfps: "在 Dashboard 中确认。免费，且你的空投完全保留。", rfgo: "确认邀请", rfban: "{a} 邀请你参加 Airdrop Genesis", rfbanb: "查看参与方式", rfpool: "推荐奖励池：840,000 SECT，独立于空投的 7,000,000 SECT。若用完，将按比例分配。" }
 };

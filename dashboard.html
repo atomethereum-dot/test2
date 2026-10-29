@@ -1385,7 +1385,7 @@ html.booting,body.booting{overflow:hidden}
 </div>
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="translations.js"></script>
-<script src="dashboard-i18n-extra.js?v=20261029a"></script>
+<script src="dashboard-i18n-extra.js?v=20261029b"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="i18n.js?v=2"></script>
 <script src="dashboard-reticle.js?v=20260820b"></script>
@@ -3391,7 +3391,8 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   const ua = navigator.userAgent || '';
   const MOVIL = /Android|iPhone|iPad|iPod/i.test(ua) ||
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);   /* iPadOS se presenta como Mac */
-  const AQUI = location.origin + location.pathname;
+  /* esta misma pagina con su ?ref= de invitacion, para abrirla dentro del navegador de una wallet */
+  const aqui = () => location.href.split('#')[0];
   const enc = encodeURIComponent;
   const leer = k => { try{ return localStorage.getItem(k); }catch(e){ return null; } };
   const guardar = (k, v) => { try{ v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); }catch(e){} };
@@ -3410,14 +3411,14 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
      navegador: abre esta pagina dentro de la app, con la wallet inyectada */
   const APPS = [
     { id:'metamask', nombre:'MetaMask', logo:'metaMask', nativo:'metamask://',
-      navegador: () => 'https://metamask.app.link/dapp/' + AQUI.replace(/^https?:\/\//, '') },
+      navegador: () => 'https://metamask.app.link/dapp/' + aqui().replace(/^https?:\/\//, '') },
     { id:'trust', nombre:'Trust Wallet', logo:'trust', nativo:'trust://',
-      navegador: () => 'https://link.trustwallet.com/open_url?coin_id=60&url=' + enc(AQUI) },
+      navegador: () => 'https://link.trustwallet.com/open_url?coin_id=60&url=' + enc(aqui()) },
     { id:'binance', nombre:'Binance Wallet', logo:'binance', navegador: binance },
     { id:'coinbase', nombre:'Coinbase Wallet', logo:'coinbase',
-      navegador: () => 'https://go.cb-w.com/dapp?cb_url=' + enc(AQUI) },
+      navegador: () => 'https://go.cb-w.com/dapp?cb_url=' + enc(aqui()) },
     { id:'okx', nombre:'OKX Wallet', logo:'okx',
-      navegador: () => 'https://www.okx.com/download?deeplink=' + enc('okx://wallet/dapp/url?dappUrl=' + enc(AQUI)) },
+      navegador: () => 'https://www.okx.com/download?deeplink=' + enc('okx://wallet/dapp/url?dappUrl=' + enc(aqui())) },
     { id:'rainbow', nombre:'Rainbow', logo:'rainbow', nativo:'rainbow://' }
   ];
   const conWC = a => !!a.nativo;
@@ -4040,7 +4041,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   }));
 })();
 </script>
-<script src="dashboard-testnet.js?v=20261029a"></script>
+<script src="dashboard-testnet.js?v=20261029b"></script>
 <script src="dashboard-node-geo.js?v=2" defer></script>
 <script src="dashboard-node-guide.js?v=7" defer></script>
 <script src="dashboard-gas.js?v=2" defer></script>

@@ -170,5 +170,6 @@ elig: { loc: "ko-KR", k: "Sectora // Airdrop Genesis", pv: "미리보기", h: "�
   rej: "지갑이 주소를 공유하지 않았습니다.", close: "닫기", other: "다른 지갑 확인",
   acc: "{n} SECT 적립", of: "기간 완료 시 {n} SECT", day: "SectoraEVM 출시 시 지급", day2: "{d}에 기간 완료 · SectoraEVM에서 지급", day3: "각 부분은 기간을 완료하면 SectoraEVM에서 지급 · 다음 부분은 {d}에 완료", lock: "적립한 보상은 {d}에 확정됩니다", full: "보상 전액 적립 완료 · SectoraEVM에서 지급",
   pre: "오픈일부터 적립이 시작됩니다. 보상을 완료하는 기간은 모두 같으며, 참여한 날부터 계산됩니다. 지급은 SectoraEVM 출시 시 시작됩니다.", wait: "네트워크가 스테이킹을 확인하면 카운트가 표시됩니다.",
-  demo: "예시 화면", demos: "스테이킹 {n} SECT · 노드 켜짐 · 카운트 {d}일째" }
+  demo: "예시 화면", demos: "스테이킹 {n} SECT · 노드 켜짐 · 카운트 {d}일째",
+      rf: "초대하고 보상받기", rfs: "초대한 사람이 스테이킹한 1,000 SECT마다 {n} SECT를 받습니다. SectoraEVM에서 에어드롭과 함께 지급됩니다.", rfl: "내 초대 링크", rfc: "복사", rfok: "복사됨", rfsh: "공유", rfn: "초대 {n}명 · 스테이킹 {s} SECT", rfb: "내 보너스: 기간 완료 시 {n} SECT", rf0: "아직 초대한 사람이 없습니다. 초대받은 사람은 Dashboard에서 무료로 초대를 확인합니다.", rfin: "보너스를 받으려면 본인도 에어드롭에 참여해야 합니다: SECT 스테이킹과 Hash Node 켜기.", rfrev: "모든 초대는 지급 전에 검토됩니다. 자기 초대와 가짜 지갑은 인정되지 않습니다.", rfby: "초대한 사람: {a}", rfbys: "네트워크에 기록됨", rfp: "{a}님이 초대했습니다", rfps: "Dashboard에서 확인하세요. 무료이며 에어드롭은 그대로 유지됩니다.", rfgo: "초대 확인", rfban: "{a}님이 Airdrop Genesis에 초대했습니다", rfbanb: "참여 방법 보기", rfpool: "추천 보상 풀: 840,000 SECT (에어드롭 7,000,000 SECT와 별도). 소진되면 비율에 따라 분배합니다." }
 };

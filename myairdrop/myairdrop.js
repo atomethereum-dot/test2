@@ -50,7 +50,8 @@
       tk: "Testnet rewards · Sepolia", tPend: "hash rewards to claim", tPer: "{n} tSECT per day", tBal: "tSECT in your wallet", tSpent: "tSECT spent on hash",
       tCl: "Already claimed", tGas: "Sepolia ETH (gas)", tFau: "Faucet", tNow: "Available now", tIn: "Next in {t}", tNote: "Testnet: tSECT has no monetary value.",
       hk: "History", hDep: "Staked", hWd: "Withdrawn from staking", hReg: "Node registered and on", hOn: "Node on", hOff: "Node off",
-      hEmpty: "No movements yet.", hErr: "We couldn't read the history right now. Try Refresh in a moment.", d: "d", h: "h", m: "min" },
+      hEmpty: "No movements yet.", hErr: "We couldn't read the history right now. Try Refresh in a moment.",
+      rfk: "Invite and earn", rfcap: "your bonus when your invitees complete their time", rfinv: "Invitees", rfst: "Their SECT in staking", rfon: "node on", rfoff: "node off", rfs: "You earn {n} SECT for every 1,000 SECT your invitees keep in staking. It's delivered with your airdrop on SectoraEVM.", rfl: "Your invite link", rfsh: "Share", rf0: "No invitees yet. They confirm your invitation for free in the Dashboard.", rfin: "To collect your bonus you must also be in the airdrop: SECT in staking and your Hash Node on.", rfrev: "Every invitation is reviewed before delivery: self-invites and fake wallets don't count.", rfby: "Invited by {a}", rfbys: "recorded on the network", rfp: "{a} invited you", rfps: "Confirm it in the Dashboard. It's free and you keep your whole airdrop.", rfgo: "Confirm invitation", rfpool: "Referral pool: 840,000 SECT, separate from the 7,000,000 SECT of the airdrop. If it runs out, it is shared in proportion.", d: "d", h: "h", m: "min" },
     es: { loc: "es-ES", brand: "Mi Airdrop", h1: "Mi <b>Airdrop</b>", lead: "Todo lo que tiene tu wallet en Sectora, leído en vivo de la blockchain.",
       foot: "Solo lectura: sin firmas ni transacciones, nada sale de tu wallet.",
       connect: "Conectar wallet", nowallet: "¿No tienes wallet en este navegador?", openmm: "Abrir en MetaMask", or: "O revisa cualquier dirección", check: "Revisar",
@@ -75,7 +76,8 @@
       tk: "Recompensas testnet · Sepolia", tPend: "rendimiento del hash por reclamar", tPer: "{n} tSECT al día", tBal: "tSECT en tu wallet", tSpent: "tSECT gastados en hash",
       tCl: "Ya cobrado", tGas: "ETH de Sepolia (gas)", tFau: "Grifo", tNow: "Disponible ahora", tIn: "Próximo en {t}", tNote: "Testnet: el tSECT no tiene valor monetario.",
       hk: "Historial", hDep: "Depósito en staking", hWd: "Retiro del staking", hReg: "Nodo registrado y encendido", hOn: "Nodo encendido", hOff: "Nodo apagado",
-      hEmpty: "Aún no hay movimientos.", hErr: "No pudimos leer el historial ahora. Pulsa Actualizar en un momento.", d: "d", h: "h", m: "min" },
+      hEmpty: "Aún no hay movimientos.", hErr: "No pudimos leer el historial ahora. Pulsa Actualizar en un momento.",
+      rfk: "Invita y gana", rfcap: "tu bono cuando tus invitados completen su tiempo", rfinv: "Invitados", rfst: "Sus SECT en staking", rfon: "nodo encendido", rfoff: "nodo apagado", rfs: "Ganas {n} SECT por cada 1.000 SECT que tus invitados mantengan en staking. Se entrega con tu airdrop en SectoraEVM.", rfl: "Tu link de invitación", rfsh: "Compartir", rf0: "Aún no tienes invitados. Ellos confirman tu invitación gratis en el Dashboard.", rfin: "Para cobrar tu bono tú también tienes que estar en el airdrop: SECT en staking y tu Hash Node encendido.", rfrev: "Cada invitación se revisa antes de la entrega: las autoinvitaciones y las wallets falsas no cuentan.", rfby: "Te invitó {a}", rfbys: "registrado en la red", rfp: "{a} te invitó", rfps: "Confírmalo en el Dashboard. Es gratis y conservas todo tu airdrop.", rfgo: "Confirmar invitación", rfpool: "Bolsa de referidos: 840.000 SECT, aparte de los 7.000.000 SECT del airdrop. Si se agota, se reparte en proporción.", d: "d", h: "h", m: "min" },
     pt: { loc: "pt-BR", brand: "Meu Airdrop", h1: "Meu <b>Airdrop</b>", lead: "Tudo o que sua carteira tem na Sectora, lido ao vivo da blockchain.",
       foot: "Só leitura: sem assinaturas nem transações, nada sai da sua carteira.",
       connect: "Conectar carteira", nowallet: "Sem carteira neste navegador?", openmm: "Abrir no MetaMask", or: "Ou verifique qualquer endereço", check: "Verificar",
@@ -100,7 +102,8 @@
       tk: "Recompensas testnet · Sepolia", tPend: "rendimento do hash a resgatar", tPer: "{n} tSECT por dia", tBal: "tSECT na sua carteira", tSpent: "tSECT gastos em hash",
       tCl: "Já resgatado", tGas: "ETH da Sepolia (gás)", tFau: "Faucet", tNow: "Disponível agora", tIn: "Próximo em {t}", tNote: "Testnet: o tSECT não tem valor monetário.",
       hk: "Histórico", hDep: "Depósito em staking", hWd: "Saque do staking", hReg: "Nó registrado e ligado", hOn: "Nó ligado", hOff: "Nó desligado",
-      hEmpty: "Ainda não há movimentos.", hErr: "Não conseguimos ler o histórico agora. Toque em Atualizar em um instante.", d: "d", h: "h", m: "min" }
+      hEmpty: "Ainda não há movimentos.", hErr: "Não conseguimos ler o histórico agora. Toque em Atualizar em um instante.",
+      rfk: "Convide e ganhe", rfcap: "seu bônus quando seus convidados completarem o tempo", rfinv: "Convidados", rfst: "SECT deles em staking", rfon: "nó ligado", rfoff: "nó desligado", rfs: "Você ganha {n} SECT a cada 1.000 SECT que seus convidados mantiverem em staking. É entregue com seu airdrop na SectoraEVM.", rfl: "Seu link de convite", rfsh: "Compartilhar", rf0: "Você ainda não tem convidados. Eles confirmam seu convite de graça no Dashboard.", rfin: "Para receber seu bônus você também precisa estar no airdrop: SECT em staking e seu Hash Node ligado.", rfrev: "Cada convite é revisado antes da entrega: autoconvites e carteiras falsas não contam.", rfby: "Convidado por {a}", rfbys: "registrado na rede", rfp: "{a} convidou você", rfps: "Confirme no Dashboard. É grátis e você mantém todo o seu airdrop.", rfgo: "Confirmar convite", rfpool: "Bolsa de indicações: 840.000 SECT, separada dos 7.000.000 SECT do airdrop. Se acabar, é dividida proporcionalmente.", d: "d", h: "h", m: "min" }
   };
 
   /* idioma: abre siempre en ingles; el que se elija arriba se mantiene solo durante esa visita */
@@ -300,6 +303,9 @@
       ], '<a class="btn go mono" href="/dashboard.html"><span>' + esc(t("ngo")) + '</span><span>↗</span></a>', "", t("tNote")) +
       "</div>";
 
+    /* referidos: tu link, tus invitados y tu bono */
+    html += '<section class="card rfc" data-rf></section>';
+
     /* historial */
     html += '<section class="hist"><h2 class="mono">' + esc(t("hk")) + "</h2>" + history(d) + "</section>";
     html += '<p class="fine mono">' + esc(t("upd", { t: dtime(d.at) })) + "</p>";
@@ -315,6 +321,70 @@
       var b = this; try { navigator.clipboard.writeText(d.addr).then(function () { b.textContent = t("copied"); setTimeout(function () { b.textContent = t("copy"); }, 1400); }); } catch (e) {}
     });
     live(a, tn);
+    refFill(d, a.lv >= 0 && a.on);
+  }
+
+  /* ---------- referidos ----------
+     Tu link (/airdrop/?ref=0x…), tus invitados con su staking y su nodo, tu bono y quien te invito. El bono es el 12 %
+     de los SECT en staking de tus invitados que estan dentro, al completar su tiempo, y se entrega con el airdrop.
+     Solo lectura: el invitado confirma la invitacion en el Dashboard; las reglas estan en count.js y en el panel. */
+  var OKI = '<i class="rf-ok"><svg viewBox="0 0 16 16"><path d="M4 8.4l2.8 2.7 5.4-5.9" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i>';
+  function refFill(d, inside) {
+    var box = app.querySelector("[data-rf]");
+    if (!box || !C || !C.refInvitees) { if (box) box.remove(); return; }
+    var addr = d.addr, me = addr.toLowerCase(), link = location.origin + "/airdrop/?ref=" + me;
+    box.innerHTML = '<h2 class="mono"><span>' + esc(t("rfk")) + "</span></h2><div data-rfme></div>" +
+      '<p class="lead2 num"><em data-rfb>—</em><small class="mono">SECT</small></p><p class="cap">' + esc(t("rfcap")) + "</p>" +
+      '<p class="rf-s">' + esc(t("rfs", { n: fmt(C.REF.BONUS * 1000) })) + "</p>" +
+      '<p class="rf-l mono">' + esc(t("rfl")) + '</p><div class="rf-c"><code>' + esc(link.replace(/^https?:\/\//, "")) + "</code>" +
+      '<button class="btn sm go mono" type="button" data-c>' + esc(t("copy")) + "</button>" +
+      (navigator.share ? '<button class="btn sm mono" type="button" data-s>' + esc(t("rfsh")) + "</button>" : "") + "</div>" +
+      '<ul class="kv"><li><span>' + esc(t("rfinv")) + '</span><b data-rfn><span class="spin"></span></b></li><li><span>' + esc(t("rfst")) + '</span><b data-rfs>—</b></li></ul>' +
+      '<ul class="rf-list" data-rfl></ul>' + (inside ? "" : '<p class="rf-w">' + esc(t("rfin")) + "</p>") +
+      '<p class="fine">' + esc(t("rfpool")) + "<br>" + esc(t("rfrev")) + "</p>";
+    var cb = box.querySelector("[data-c]");
+    cb.addEventListener("click", function () {
+      (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () {
+        cb.textContent = t("copied"); setTimeout(function () { cb.textContent = t("copy"); }, 1600);
+      }, function () { window.prompt(t("rfl"), link); });
+    });
+    var sb = box.querySelector("[data-s]");
+    if (sb) sb.addEventListener("click", function () { navigator.share({ title: "Sectora Airdrop Genesis", url: link }).catch(function () {}); });
+    C.refInvitees(me).then(function (all) {
+      all = all.filter(function (x) { return !x.bad; });
+      return C.refLate(all).then(function (late) { return all.filter(function (x) { return !late[x.invitee]; }); });
+    }).then(function (list) {
+      if (cur !== addr) return;
+      var nEl = box.querySelector("[data-rfn]");
+      if (!list.length) {
+        nEl.textContent = "0"; box.querySelector("[data-rfb]").textContent = "0";
+        box.querySelector("[data-rfl]").outerHTML = '<p class="rf-s rf-0">' + esc(t("rf0")) + "</p>"; return;
+      }
+      return Promise.all(list.slice(0, 60).map(function (x) {
+        return Promise.all([soft(call(MAINNET, STAKING, SEL.accountView + pad(x.invitee)).then(function (h) { return units(word(h, 0)); })), readNode(x.invitee)])
+          .then(function (r) { return { a: x.invitee, st: r[0] || 0, on: r[1].st === "on" }; });
+      })).then(function (rows) {
+        if (cur !== addr) return;
+        var tot = 0, ok = 0;
+        rows.forEach(function (r) { tot += r.st; if (r.on && r.st >= 100) ok += r.st; });
+        var bonus = ok * C.REF.BONUS;
+        nEl.textContent = fmt(list.length);
+        box.querySelector("[data-rfs]").textContent = fmt(tot, tot % 1 ? 2 : 0) + " SECT";
+        box.querySelector("[data-rfb]").textContent = fmt(bonus, bonus % 1 ? 2 : 0);
+        rows.sort(function (x, y) { return y.st - x.st; });
+        box.querySelector("[data-rfl]").innerHTML = rows.slice(0, 20).map(function (r) {
+          return "<li><span>" + esc(short(r.a)) + "</span><span>" + fmt(r.st, r.st % 1 ? 2 : 0) + ' SECT · <em class="' + (r.on ? "on" : "off") + '">' + esc(r.on ? t("rfon") : t("rfoff")) + "</em></span></li>";
+        }).join("");
+      });
+    }).catch(function () { var n = box.querySelector("[data-rfn]"); if (n) n.textContent = "—"; });
+    C.refOf(me).then(function (x) {
+      if (cur !== addr) return;
+      var top = box.querySelector("[data-rfme]"), pend = "";
+      try { pend = (localStorage.getItem("sectora:ref") || "").toLowerCase(); } catch (e) {}
+      if (x) top.innerHTML = '<p class="rf-me">' + OKI + "<span>" + esc(t("rfby", { a: short(x.referrer) })) + " · " + esc(t("rfbys")) + "</span></p>";
+      else if (/^0x[0-9a-f]{40}$/.test(pend) && pend !== me)
+        top.innerHTML = '<div class="rf-p"><b>' + esc(t("rfp", { a: short(pend) })) + "</b><span>" + esc(t("rfps")) + '</span><a class="btn sm go mono" href="/dashboard.html?ref=' + pend + '#tnRef"><span>' + esc(t("rfgo")) + "</span><span>↗</span></a></div>";
+    }).catch(function () {});
   }
   function li(ok, title, sub) {
     return '<li><span class="ic ' + (ok ? "ok" : "wait") + '">' + (ok ? ICON.ok : ICON.wait) + "</span><div><b>" + esc(title) + "</b><span>" + esc(sub) + "</span></div></li>";

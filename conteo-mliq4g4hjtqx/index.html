@@ -143,6 +143,11 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   .rc .when{flex-wrap:wrap}
   .rc .m-only{display:block;margin-top:5px;font:400 12.5px var(--mono);color:var(--ink-2)}
 }
+/* referidos */
+.rf{min-width:900px}
+.rf td.n{font:500 13px var(--mono);color:var(--ink-3)}
+.rf .why{display:block;margin-top:4px;font-size:12px;color:var(--ink-3);white-space:normal;max-width:260px}
+@media (max-width:640px){.rf{min-width:720px}}
 @media (max-width:760px){.lvls{grid-template-columns:repeat(2,minmax(0,1fr))}.tile .v{font-size:26px}}
 @media (prefers-reduced-motion:reduce){.spin{animation:none}.bar i{transition:none}}
 </style>
@@ -189,6 +194,24 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     </div>
 
     <div class="bar2">
+      <h2>Referidos</h2>
+      <span class="upd" id="rf-sum"></span>
+    </div>
+    <div class="tiles" id="rf-tiles">
+      <div class="tile"><span class="k">Invitaciones registradas</span><span class="v" id="rf-n">—</span><span class="s" id="rf-ns"></span></div>
+      <div class="tile"><span class="k">Bono ganado hasta ahora</span><span class="v" id="rf-got">—</span><span class="s">12 % del staking de los invitados, a su ritmo</span></div>
+      <div class="tile"><span class="k">Bono comprometido</span><span class="v" id="rf-proj">—</span><div class="bar"><i id="rf-bar"></i></div><span class="s" id="rf-projs"></span></div>
+      <div class="tile"><span class="k">No cuentan</span><span class="v" id="rf-bad">—</span><span class="s" id="rf-bads"></span></div>
+    </div>
+    <div class="tabs" id="rf-tabs" role="group" aria-label="Vista de referidos"></div>
+    <div class="tbl"><table class="rf">
+      <thead id="rf-head"></thead>
+      <tbody id="rf-rows"></tbody>
+    </table></div>
+    <div class="more"><button class="btn ghost" id="rf-more" type="button" hidden>Ver 20 más</button></div>
+    <p class="foot">Cada invitación es una transferencia de 0,0001 tSECT del invitado a su padrino en Sepolia: solo la puede hacer el invitado. Cuenta la primera de cada wallet. No cuentan: invitarse a sí mismo, invitaciones mutuas (vale la primera), las hechas más de 7 días después de entrar el invitado, y si los SECT del invitado salieron de la wallet del padrino. El padrino también tiene que estar dentro (staking y nodo) para cobrar.</p>
+
+    <div class="bar2">
       <h2>Últimos registros</h2>
       <span class="upd" id="rc-sum"></span>
     </div>
@@ -219,7 +242,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   </div>
 </div>
 
-<script src="/airdrop/count.js?v=14"></script>
+<script src="/airdrop/count.js?v=17"></script>
 <script>
 (function () {
   "use strict";
@@ -236,6 +259,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   // ultimos registros: nodos registrados, entradas al airdrop (staking de 100+ y nodo) y primer deposito
   var RT = [["node", "Nodos registrados"], ["entry", "Entradas al airdrop"], ["stake", "Primer staking"]];
   var rtab = "node", rshow = 20, recent = {};
+  // referidos: lista leida de la red (constancias de 0,0001 tSECT) y SECT que el padrino envio al invitado
+  var refs = null, funded = {}, rftab = "inv", rfshow = 20, rfrows = [];
   var dtf = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
 
@@ -267,8 +292,9 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     if (C.OPEN) $("open").disabled = true;
     $("open").addEventListener("change", function () { store("sa-panel-open", $("open").value); compute(); });
     $("refresh").addEventListener("click", load);
-    $("find").addEventListener("input", function () { q = this.value.trim().toLowerCase(); draw(); recentDraw(); });
+    $("find").addEventListener("input", function () { q = this.value.trim().toLowerCase(); draw(); recentDraw(); refDraw(); });
     $("rmore").addEventListener("click", function () { rshow += 20; recentDraw(); });
+    $("rf-more").addEventListener("click", function () { rfshow += 20; refDraw(); });
     $("csv").addEventListener("click", csv);
     load();
   }
@@ -281,11 +307,22 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       data = d; $("load").hidden = true; $("sum").hidden = false; $("refresh").disabled = false;
       $("upd").textContent = "Actualizado " + new Date().toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
       compute();
+      loadRefs();
     }).catch(function () {
       $("refresh").disabled = false;
       $("step").textContent = "No se pudo leer la red. Revisa tu conexión y toca Actualizar.";
       $("load").querySelector(".spin").hidden = true;
     });
+  }
+
+  function loadRefs() {
+    refs = null; funded = {}; $("rf-sum").textContent = "Leyendo las invitaciones…"; refDraw();
+    C.referrals().then(function (l) {
+      refs = l; $("rf-sum").textContent = ""; refCompute();
+      // el control de origen de los SECT tarda mas: llega despues y se repinta
+      $("rf-sum").textContent = "Revisando de dónde salieron los SECT de cada invitado…";
+      return C.fundedBy(l).then(function (f) { funded = f; $("rf-sum").textContent = ""; refCompute(); });
+    }).catch(function () { $("rf-sum").textContent = refs ? "No se pudo revisar el origen de los SECT; toca Actualizar." : "No se pudieron leer las invitaciones; toca Actualizar."; if (refs) refCompute(); else refDraw(); });
   }
 
   /* ---------- calculo y resumen ---------- */
@@ -314,8 +351,73 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     $("t-resbar").style.width = pct + "%"; $("t-resp").textContent = nf2.format(pct) + " % de 7.000.000" + (reserved >= C.BAG ? " · bolsa completa" : "");
     $("t-secured").textContent = nf0.format(secured) + " SECT ya asegurados (día 30 o más)";
     [1, 2, 3, 4].forEach(function (k) { $("l" + k).textContent = nf0.format(lv[k]); });
-    tabsDraw(); draw(); recentBuild(); recentDraw();
+    tabsDraw(); draw(); recentBuild(); recentDraw(); refCompute();
     clearInterval(tick); tick = setInterval(live, 250); live();
+  }
+
+  /* ---------- referidos ---------- */
+  var RS = { ok: ["Cuenta", "ok"], wait: ["Invitado aún sin entrar", "mute"], out: ["Padrino fuera del airdrop", "warn"],
+    mutual: ["Invitación mutua", "bad"], late: ["Hecha tarde (+7 días)", "bad"], fund: ["SECT del padrino", "bad"] };
+  function inside(r) { return r && r.level > 0 && r.node === "on" && ["run", "early", "full", "pre"].indexOf(r.status) >= 0; }
+  function refCompute() {
+    if (!refs || !rows.length) { refDraw(); return; }
+    var by = {}; rows.forEach(function (x) { by[x.who] = x; });
+    rfrows = refs.map(function (f) {
+      var inv = by[f.invitee], sp = by[f.referrer], r = inv ? inv.r : null, b = r ? C.refBonus(r) : { got: 0, proj: 0, entry: 0 };
+      var st = f.bad === "mutual" ? "mutual" : funded[f.invitee] ? "fund" : b.entry && f.t > b.entry + C.REF.WIN ? "late" :
+        !b.entry ? "wait" : !inside(sp && sp.r) ? "out" : "ok";
+      return { f: f, inv: inv, sp: sp, b: b, st: st, stake: r ? r.bal : 0 };
+    });
+    var n = rfrows.length, ok = 0, got = 0, proj = 0, bad = 0, wait = 0;
+    rfrows.forEach(function (x) {
+      if (x.st === "ok") { ok++; got += x.b.got; proj += x.b.proj; }
+      else if (x.st === "mutual" || x.st === "late" || x.st === "fund") bad++;
+      else wait++;
+    });
+    $("rf-n").textContent = nf0.format(n); $("rf-ns").textContent = nf0.format(ok) + " cuentan · " + nf0.format(wait) + " en espera";
+    $("rf-got").innerHTML = nf2.format(got) + "<small>SECT</small>";
+    $("rf-proj").innerHTML = nf0.format(proj) + "<small>SECT</small>";
+    var pool = C.REF.POOL, pc = Math.min(100, proj / pool * 100); $("rf-bar").style.width = pc + "%";
+    $("rf-projs").textContent = proj > pool ? "Supera la bolsa de " + nf0.format(pool) + ": se paga en proporción (×" + (pool / proj).toFixed(3).replace(".", ",") + ")"
+      : nf2.format(pc) + " % de la bolsa de referidos (" + nf0.format(pool) + " SECT, aparte del airdrop)";
+    $("rf-bad").textContent = nf0.format(bad); $("rf-bads").textContent = "Mutuas, tardías o con SECT del padrino";
+    refDraw();
+  }
+  function refDraw() {
+    var T2 = [["inv", "Invitaciones"], ["sp", "Padrinos"]];
+    $("rf-tabs").innerHTML = T2.map(function (t) { return '<button type="button" data-t="' + t[0] + '" aria-pressed="' + (rftab === t[0]) + '">' + t[1] + "</button>"; }).join("");
+    $("rf-tabs").querySelectorAll("button").forEach(function (b) { b.addEventListener("click", function () { rftab = b.dataset.t; rfshow = 20; refDraw(); }); });
+    var w = function (a) { return '<a href="https://sepolia.etherscan.io/address/' + a + '" target="_blank" rel="noopener">' + a.slice(0, 6) + "…" + a.slice(-4) + "</a>"; };
+    if (!refs) { $("rf-head").innerHTML = ""; $("rf-rows").innerHTML = '<tr><td class="empty">' + ($("rf-sum").textContent || "Leyendo…") + "</td></tr>"; $("rf-more").hidden = true; return; }
+    if (!rfrows.length) { $("rf-head").innerHTML = ""; $("rf-rows").innerHTML = '<tr><td class="empty">Aún no hay invitaciones registradas.</td></tr>'; $("rf-more").hidden = true; return; }
+    var list, html;
+    if (rftab === "inv") {
+      $("rf-head").innerHTML = '<tr><th class="r">N.º</th><th>Fecha</th><th>Invitado</th><th>Padrino</th><th class="r">Staking invitado</th><th class="r">Bono ganado</th><th class="r">Al completar</th><th>Estado</th></tr>';
+      list = rfrows.slice().reverse();
+      if (q) list = list.filter(function (x) { return x.f.invitee.indexOf(q) >= 0 || x.f.referrer.indexOf(q) >= 0; });
+      html = list.slice(0, rfshow).map(function (x) {
+        var s2 = RS[x.st], k = rfrows.indexOf(x) + 1;
+        return '<tr><td class="n r">' + k + "</td><td>" + '<a href="https://sepolia.etherscan.io/tx/' + x.f.tx + '" target="_blank" rel="noopener">' + dtf.format(x.f.t) + "</a></td><td>" + w(x.f.invitee) + "</td><td>" + w(x.f.referrer) +
+          '</td><td class="r">' + nf0.format(x.stake) + '</td><td class="r">' + nf2.format(x.st === "ok" ? x.b.got : 0) + '</td><td class="r">' + nf0.format(x.st === "ok" ? x.b.proj : 0) +
+          '</td><td><span class="chip ' + s2[1] + '">' + s2[0] + "</span>" + (x.st === "fund" ? '<span class="why">Le envió ' + nf0.format(funded[x.f.invitee]) + " SECT</span>" : "") + "</td></tr>";
+      }).join("");
+    } else {
+      var g = {};
+      rfrows.forEach(function (x) {
+        var a = g[x.f.referrer] = g[x.f.referrer] || { a: x.f.referrer, n: 0, ok: 0, st: 0, got: 0, proj: 0, bad: 0, sp: x.sp };
+        a.n++; if (x.st === "ok") { a.ok++; a.st += x.stake; a.got += x.b.got; a.proj += x.b.proj; } else if (RS[x.st][1] === "bad") a.bad++;
+      });
+      $("rf-head").innerHTML = '<tr><th>Padrino</th><th class="r">Invitados</th><th class="r">Cuentan</th><th class="r">Staking de los que cuentan</th><th class="r">Bono ganado</th><th class="r">Al completar</th><th class="r">No cuentan</th><th>Padrino</th></tr>';
+      list = Object.keys(g).map(function (k) { return g[k]; }).sort(function (a, b) { return b.proj - a.proj || b.n - a.n; });
+      if (q) list = list.filter(function (x) { return x.a.indexOf(q) >= 0; });
+      html = list.slice(0, rfshow).map(function (x) {
+        var inn = inside(x.sp && x.sp.r);
+        return "<tr><td>" + w(x.a) + '</td><td class="r">' + nf0.format(x.n) + '</td><td class="r">' + nf0.format(x.ok) + '</td><td class="r">' + nf0.format(x.st) + '</td><td class="r">' + nf2.format(x.got) +
+          '</td><td class="r">' + nf0.format(x.proj) + '</td><td class="r">' + nf0.format(x.bad) + '</td><td><span class="chip ' + (inn ? "ok" : "warn") + '">' + (inn ? "Dentro" : "Fuera") + "</span></td></tr>";
+      }).join("");
+    }
+    $("rf-rows").innerHTML = html || '<tr><td class="empty">Sin resultados.</td></tr>';
+    $("rf-more").hidden = list.length <= rfshow; $("rf-more").textContent = "Ver " + Math.min(20, list.length - rfshow) + " más";
   }
   // avance hacia lo que tendra al completar su tiempo
   function pct(r) { return r.proj ? Math.min(100, earnedNow(r) / r.proj * 100) : 0; }

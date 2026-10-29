@@ -51,7 +51,8 @@
       rej: "The wallet didn't share an address.", close: "Close", other: "Check another wallet",
       acc: "You've earned {n} SECT", of: "{n} SECT when you complete your time", day: "Delivered at the launch of SectoraEVM", day2: "You complete your time on {d} · delivered on SectoraEVM", day3: "Each part is delivered on SectoraEVM when it completes its time · the next one completes on {d}", lock: "What you earn is secured on {d}", full: "Full prize complete · delivered on SectoraEVM",
       pre: "Starts adding up on opening day. Everyone has the same time to complete the prize, counted from the day they join. Deliveries start at the launch of SectoraEVM.", wait: "Your count will show as soon as the network confirms your staking.",
-      demo: "Sample view", demos: "{n} SECT in staking · node on · day {d} of the count" },
+      demo: "Sample view", demos: "{n} SECT in staking · node on · day {d} of the count",
+      rf: "Invite and earn", rfs: "You earn {n} SECT for every 1,000 SECT your invitees keep in staking. It's delivered with your airdrop on SectoraEVM.", rfl: "Your invite link", rfc: "Copy", rfok: "Copied", rfsh: "Share", rfn: "Invitees: {n} · {s} SECT in staking", rfb: "Your bonus: {n} SECT when they complete their time", rf0: "No invitees yet. They confirm your invitation for free in the Dashboard.", rfin: "To collect your bonus you must also be in the airdrop: SECT in staking and your Hash Node on.", rfrev: "Every invitation is reviewed before delivery: self-invites and fake wallets don't count.", rfby: "Invited by {a}", rfbys: "recorded on the network", rfp: "{a} invited you", rfps: "Confirm it in the Dashboard. It's free and you keep your whole airdrop.", rfgo: "Confirm invitation", rfban: "{a} invited you to Airdrop Genesis", rfbanb: "See how to join", rfpool: "Referral pool: 840,000 SECT, separate from the 7,000,000 SECT of the airdrop. If it runs out, it is shared in proportion." },
     es: { loc: "es-ES", k: "Sectora // Airdrop Genesis", pv: "Vista previa", h: "Tu airdrop",
       intro: "Conecta tu wallet para ver cuánto ganas en el airdrop.",
       connect: "Conectar wallet", nowallet: "¿No tienes wallet en este navegador?", openmm: "Abrir en MetaMask",
@@ -70,7 +71,8 @@
       rej: "La wallet no compartió una dirección.", close: "Cerrar", other: "Revisar otra wallet",
       acc: "Llevas {n} SECT", of: "{n} SECT al completar tu tiempo", day: "Se entrega en el lanzamiento de SectoraEVM", day2: "Completas tu tiempo el {d} · se entrega en SectoraEVM", day3: "Cada parte se entrega en SectoraEVM al completar su tiempo · la próxima se completa el {d}", lock: "Lo ganado queda asegurado el {d}", full: "Premio completo · se entrega en SectoraEVM",
       pre: "Empieza a sumar el día de la apertura. Todos tienen el mismo tiempo para completar el premio, contado desde que entran. Las entregas empiezan en el lanzamiento de SectoraEVM.", wait: "Tu conteo aparecerá en cuanto la red confirme tu staking.",
-      demo: "Vista de ejemplo", demos: "{n} SECT en staking · nodo encendido · día {d} del conteo" },
+      demo: "Vista de ejemplo", demos: "{n} SECT en staking · nodo encendido · día {d} del conteo",
+      rf: "Invita y gana", rfs: "Ganas {n} SECT por cada 1.000 SECT que tus invitados mantengan en staking. Se entrega con tu airdrop en SectoraEVM.", rfl: "Tu link de invitación", rfc: "Copiar", rfok: "Copiado", rfsh: "Compartir", rfn: "Invitados: {n} · {s} SECT en staking", rfb: "Tu bono: {n} SECT cuando completen su tiempo", rf0: "Aún no tienes invitados. Ellos confirman tu invitación gratis en el Dashboard.", rfin: "Para cobrar tu bono tú también tienes que estar en el airdrop: SECT en staking y tu Hash Node encendido.", rfrev: "Cada invitación se revisa antes de la entrega: las autoinvitaciones y las wallets falsas no cuentan.", rfby: "Te invitó {a}", rfbys: "registrado en la red", rfp: "{a} te invitó", rfps: "Confírmalo en el Dashboard. Es gratis y conservas todo tu airdrop.", rfgo: "Confirmar invitación", rfban: "{a} te invitó al Airdrop Genesis", rfbanb: "Ver cómo participar", rfpool: "Bolsa de referidos: 840.000 SECT, aparte de los 7.000.000 SECT del airdrop. Si se agota, se reparte en proporción." },
     pt: { loc: "pt-BR", k: "Sectora // Airdrop Genesis", pv: "Prévia", h: "Seu airdrop",
       intro: "Conecte sua carteira para ver quanto você ganha no airdrop.",
       connect: "Conectar carteira", nowallet: "Sem carteira neste navegador?", openmm: "Abrir no MetaMask",
@@ -89,7 +91,8 @@
       rej: "A carteira não compartilhou um endereço.", close: "Fechar", other: "Verificar outra carteira",
       acc: "Você já tem {n} SECT", of: "{n} SECT ao completar seu tempo", day: "Entregue no lançamento da SectoraEVM", day2: "Você completa seu tempo em {d} · entregue na SectoraEVM", day3: "Cada parte é entregue na SectoraEVM ao completar seu tempo · a próxima se completa em {d}", lock: "O que você ganha fica garantido em {d}", full: "Prêmio completo · entregue na SectoraEVM",
       pre: "Começa a somar no dia da abertura. Todos têm o mesmo tempo para completar o prêmio, contado desde que entram. As entregas começam no lançamento da SectoraEVM.", wait: "Sua contagem vai aparecer assim que a rede confirmar seu staking.",
-      demo: "Visualização de exemplo", demos: "{n} SECT em staking · nó ligado · dia {d} da contagem" }
+      demo: "Visualização de exemplo", demos: "{n} SECT em staking · nó ligado · dia {d} da contagem",
+      rf: "Convide e ganhe", rfs: "Você ganha {n} SECT a cada 1.000 SECT que seus convidados mantiverem em staking. É entregue com seu airdrop na SectoraEVM.", rfl: "Seu link de convite", rfc: "Copiar", rfok: "Copiado", rfsh: "Compartilhar", rfn: "Convidados: {n} · {s} SECT em staking", rfb: "Seu bônus: {n} SECT quando completarem o tempo", rf0: "Você ainda não tem convidados. Eles confirmam seu convite de graça no Dashboard.", rfin: "Para receber seu bônus você também precisa estar no airdrop: SECT em staking e seu Hash Node ligado.", rfrev: "Cada convite é revisado antes da entrega: autoconvites e carteiras falsas não contam.", rfby: "Convidado por {a}", rfbys: "registrado na rede", rfp: "{a} convidou você", rfps: "Confirme no Dashboard. É grátis e você mantém todo o seu airdrop.", rfgo: "Confirmar convite", rfban: "{a} convidou você para o Airdrop Genesis", rfbanb: "Ver como participar", rfpool: "Bolsa de indicações: 840.000 SECT, separada dos 7.000.000 SECT do airdrop. Se acabar, é dividida proporcionalmente." }
   };
   function lang() {
     var l = (document.documentElement.lang || "en").slice(0, 2), P = window.SA_LANG_PACK && window.SA_LANG_PACK[l];
@@ -187,7 +190,33 @@
     ".el-how a{padding:3px 9px;border-radius:999px;border:1px solid rgba(21,105,255,.35);background:#fff;color:#0d4fd8;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;line-height:18px}",
     ".el-how a:hover{background:rgba(21,105,255,.08)}",
     "@media (max-width:520px){.el-pv{display:none}.el h3{font-size:22px}.el-bd{padding:16px 18px 18px}.el-rows li{padding:11px 0}.el-rows b .el-big{font-size:25px}}",
-    "@media (max-height:720px){.el-rows li{padding:9px 0}.el-rows b .el-big{font-size:23px}}"
+    "@media (max-height:720px){.el-rows li{padding:9px 0}.el-rows b .el-big{font-size:23px}}",
+    /* referidos: tu link de invitacion, tus invitados y quien te invito */
+    ".el-rf{margin-top:14px;padding:14px;border-radius:12px;border:1px solid rgba(21,105,255,.25);background:linear-gradient(180deg,rgba(21,105,255,.07),rgba(21,105,255,.02))}",
+    ".el-rf > p{color:#0d4fd8}",
+    ".el-rf-s,.el-rf-l,.el-rf-n,.el-rf-w,.el-rf-r{display:block}",
+    ".el-rf-s{margin-top:6px;font-size:13.5px;line-height:1.5;color:#3c414c}",
+    ".el-rf-l{margin-top:12px;font:500 10px/1.3 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#6b7280}",
+    ".el-rf-c{display:flex;gap:6px;margin-top:6px}",
+    ".el-rf-c code{flex:1;min-width:0;padding:10px 12px;border-radius:9px;background:#fff;border:1px solid rgba(7,8,10,.12);font:400 12.5px/1.3 'IBM Plex Mono',monospace;color:#07080a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}",
+    ".el-rf-c button{flex:none;padding:0 12px;border-radius:9px;border:1px solid #1569ff;background:#1569ff;color:#fff;cursor:pointer;font-size:10px;letter-spacing:.1em}",
+    ".el-rf-c button[data-s]{background:#fff;color:#0d4fd8}",
+    ".el-rf-n{margin-top:10px;font-size:13.5px;line-height:1.5;color:#07080a}",
+    ".el-rf-n b{font-weight:500;color:#1569ff}",
+    ".el-rf-w{margin-top:8px;font-size:12.5px;line-height:1.5;color:#b26b00}",
+    ".el-rf-r{margin-top:8px;font-size:12px;line-height:1.5;color:#6b7280}",
+    ".el-rf-me{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(7,8,10,.08);font-size:13.5px;color:#07080a}",
+    ".el-rf-me i{flex:none;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#16a34a}.el-rf-me i svg{width:11px;height:11px}",
+    ".el-rf-me small{color:#6b7280;font-size:12px}",
+    ".el-rf-p{margin-bottom:12px;padding:12px;border-radius:10px;background:#fff8ec;border:1px solid rgba(224,160,48,.45)}",
+    ".el-rf-p b{display:block;font-size:14.5px;font-weight:500;color:#07080a}.el-rf-p span{display:block;margin-top:3px;font-size:13px;line-height:1.5;color:#3c414c}",
+    ".el-rf-p a{display:inline-flex;margin-top:9px;padding:9px 13px;border-radius:9px;background:#07080a;color:#fff;text-decoration:none;font:500 10px/1.2 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase}",
+    /* aviso al llegar con un link de invitacion */
+    ".el-ban{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:150;display:flex;align-items:center;gap:10px;width:max-content;max-width:calc(100% - 24px);padding:9px 9px 9px 16px;border-radius:999px;background:#07080a;color:#fff;box-shadow:0 18px 40px -12px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08);font:400 13.5px/1.35 'IBM Plex Sans',system-ui,sans-serif}",
+    ".el-ban span{min-width:0}",
+    ".el-ban button[data-go]{flex:none;padding:9px 13px;border:0;border-radius:999px;background:#1569ff;color:#fff;cursor:pointer;font:500 10px/1.2 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase}",
+    ".el-ban-x{flex:none;width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;font-size:16px;line-height:1}",
+    "@media (max-width:520px){.el-ban{left:12px;right:12px;width:auto;transform:none;max-width:none;border-radius:16px}}"
   ].join("\n");
   var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
 
@@ -332,10 +361,12 @@
         '<li><span>2</span><div>' + t("hw2") + '<em><a href="/dashboard.html#plan">' + t("hwp") + " ↗</a></em></div></li>" +
         '<li><span>3</span><div>' + t("hw3") + '<em><a href="/dashboard.html#node">' + t("hwn") + " ↗</a></em></div></li></ol></div>";
       bd.innerHTML = '<h3>' + t("h") + '</h3>' + stk + '<ul class="el-rows">' + rows.join("") + "</ul>" + how + btn +
+        (r.demo ? "" : '<div class="el-rf" data-rf></div>') +
         '<p class="mono el-rule">' + t("rule") + '</p><p class="el-ft">' + t("foot") + '</p>' +
         '<button class="el-lnk" type="button" data-a="other">' + t("other") + "</button>";
       bd.querySelector('[data-a="other"]').addEventListener("click", function () { start(); });
       if (state === "run") live(items, closed, proj);
+      if (!r.demo) refFill(addr, lv > 0 && on);
     }).catch(function () { if (cur === addr) start(t("err")); });
   }
   /* lo ganado sube como en el staking: premio de la plaza x tiempo dentro / tiempo completo, desde el inicio de cada plaza */
@@ -374,11 +405,82 @@
       (chip ? '<span class="chip mono">' + chip + "</span>" : "") + "</div></li>";
   }
 
+  /* ---------- referidos ----------
+     Cada wallet tiene su link (/airdrop/?ref=0x…). Quien llega con el queda guardado en este navegador y confirma la
+     invitacion en el Dashboard (0,0001 tSECT de prueba a su padrino, en Sepolia). Aqui solo se lee: tu link, tus
+     invitados con su staking y quien te invito. Las reglas y el control de trampas estan en count.js y en el panel. */
+  var REF_KEY = "sectora:ref";
+  function refGet() { try { return (localStorage.getItem(REF_KEY) || "").toLowerCase(); } catch (e) { return ""; } }
+  var OK = '<i><svg viewBox="0 0 16 16"><path d="M4 8.4l2.8 2.7 5.4-5.9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i>';
+  function refFill(addr, inside) {
+    var box = bd.querySelector("[data-rf]"), C = window.SACount;
+    if (!box || !C || !C.refInvitees) { if (box) box.remove(); return; }
+    var me = addr.toLowerCase(), link = location.origin + "/airdrop/?ref=" + me;
+    box.innerHTML = '<div data-rfme></div><p class="mono">' + t("rf") + '</p><span class="el-rf-s">' + t("rfs", { n: fmt(C.REF.BONUS * 1000) }) + "</span>" +
+      '<span class="el-rf-l">' + t("rfl") + '</span><div class="el-rf-c"><code>' + esc(link.replace(/^https?:\/\//, "")) + "</code>" +
+      '<button type="button" class="mono" data-c>' + t("rfc") + "</button>" + (navigator.share ? '<button type="button" class="mono" data-s>' + t("rfsh") + "</button>" : "") + "</div>" +
+      '<span class="el-rf-n" data-n><span class="el-sp"></span></span>' + (inside ? "" : '<span class="el-rf-w">' + t("rfin") + "</span>") +
+      '<span class="el-rf-r">' + t("rfpool") + "<br>" + t("rfrev") + "</span>";
+    var cb = box.querySelector("[data-c]");
+    cb.addEventListener("click", function () {
+      (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () {
+        cb.textContent = t("rfok"); setTimeout(function () { cb.textContent = t("rfc"); }, 1600);
+      }, function () { window.prompt(t("rfl"), link); });
+    });
+    var sb = box.querySelector("[data-s]");
+    if (sb) sb.addEventListener("click", function () { navigator.share({ title: "Sectora Airdrop Genesis", url: link }).catch(function () {}); });
+    // tus invitados: su staking y su nodo; el bono es el 12 % del staking de los que estan dentro, al completar su tiempo
+    C.refInvitees(me).then(function (all) {
+      all = all.filter(function (x) { return !x.bad; });
+      return C.refLate(all).then(function (late) { return all.filter(function (x) { return !late[x.invitee]; }); });
+    }).then(function (list) {
+      if (cur !== addr) return;
+      var n = box.querySelector("[data-n]");
+      if (!list.length) { n.textContent = t("rf0"); return; }
+      return Promise.all(list.slice(0, 60).map(function (x) {
+        var a = call(MAINNET, STAKING, SEL.accountView + pad(x.invitee)).then(function (h) { return word(h, 0) / WEI; }).catch(function () { return 0n; });
+        var b = call(SEPOLIA, REGISTRY, SEL.indexPlusOne + pad(x.invitee)).then(function (h) {
+          var k = word(h, 0); if (k === 0n) return false;
+          return call(SEPOLIA, REGISTRY, SEL.validators + pad((k - 1n).toString(16))).then(function (v) { return word(v, 6) === 1n; });
+        }).catch(function () { return false; });
+        return Promise.all([a, b]);
+      })).then(function (res) {
+        if (cur !== addr) return;
+        var tot = 0n, ok = 0n;
+        res.forEach(function (x) { tot += x[0]; if (x[1] && x[0] >= 100n) ok += x[0]; });
+        n.innerHTML = t("rfn", { n: fmt(list.length), s: fmt(tot) }) + (ok > 0n ? "<br><b>" + t("rfb", { n: fmt(Number(ok) * C.REF.BONUS) }) + "</b>" : "");
+      });
+    }).catch(function () { var n = box.querySelector("[data-n]"); if (n) n.textContent = ""; });
+    // quien te invito: registrado en la red, o pendiente de confirmar en el Dashboard
+    C.refOf(me).then(function (x) {
+      if (cur !== addr) return;
+      var top = box.querySelector("[data-rfme]"), pend = refGet();
+      if (x) top.innerHTML = '<div class="el-rf-me">' + OK + "<span>" + t("rfby", { a: short(x.referrer) }) + " <small>· " + t("rfbys") + "</small></span></div>";
+      else if (/^0x[0-9a-f]{40}$/.test(pend) && pend !== me)
+        top.innerHTML = '<div class="el-rf-p"><b>' + t("rfp", { a: short(pend) }) + "</b><span>" + t("rfps") + '</span><a href="/dashboard.html?ref=' + pend + '#tnRef">' + t("rfgo") + " ↗</a></div>";
+    }).catch(function () {});
+  }
+  // aviso al llegar con un link de invitacion
+  function refBanner(a) {
+    var b = document.createElement("div"); b.className = "el-ban"; b.setAttribute("role", "status");
+    b.innerHTML = '<span></span><button type="button" data-go></button><button type="button" class="el-ban-x" aria-label="×">×</button>';
+    function txt() { b.querySelector("span").textContent = t("rfban", { a: short(a) }); b.querySelector("[data-go]").textContent = t("rfbanb"); }
+    txt(); document.addEventListener("sa:lang", txt);
+    b.querySelector("[data-go]").addEventListener("click", function () { b.remove(); open(); });
+    b.querySelector(".el-ban-x").addEventListener("click", function () { b.remove(); });
+    document.body.appendChild(b);
+  }
+  (function () {
+    var m = /[?&]ref=(0x[0-9a-fA-F]{40})(?![0-9a-fA-F])/.exec(location.search);
+    if (m) { try { localStorage.setItem(REF_KEY, m[1].toLowerCase()); } catch (e) {} refBanner(m[1].toLowerCase()); }
+  })();
+
   function open() { ov.classList.add("on"); document.documentElement.style.overflow = "hidden"; if (cur) show(cur, curConn); else start(); }
   function close() { stop(); ov.classList.remove("on"); document.documentElement.style.overflow = ""; }
   if (window.ethereum && window.ethereum.on) window.ethereum.on("accountsChanged", function (a) { if (ov.classList.contains("on") && a && a[0]) show(a[0], true); });
 
   document.addEventListener("sa:lang", function () { if (ov.classList.contains("on")) { if (cur) show(cur, curConn); else start(); } });
   window.SAElig = { open: open, close: close };
+  if (location.hash === "#my" && !DEMO) { if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", open); else open(); }
   if (DEMO) { cur = DEMO_A; if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", open); else open(); }
 })();
