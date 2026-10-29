@@ -464,6 +464,9 @@
      El link de invitacion (/airdrop/?ref=0x… o /dashboard.html?ref=0x…) deja al padrino guardado en este
      navegador. Aqui el invitado lo confirma enviando 0,0001 tSECT (de prueba) a su padrino: queda en la red,
      solo el propio invitado puede hacerlo y vale la primera. Las reglas del bono estan en airdrop/count.js. */
+  /* referidos ocultos por ahora: la tarjeta no se muestra y el ?ref no se pone en la direccion.
+     El link se sigue guardando y, si lo hay, viaja al registrar el nodo, como antes */
+  const REF_ON = false;
   const REF_KEY = 'sectora:ref', REF_MARK = 10n ** 14n, REF_SINCE = Date.UTC(2026, 9, 28) / 1000, REF_TAG = '5ec7a4ef';
   const T_TR = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
   const T_REG = '0xa99a387835fe9175c623942eef94297ff971af8cb2893a2f6bfdd49ecb828aaf';   // ValidatorRegistered
@@ -478,7 +481,7 @@
     try{
       const u = new URL(location.href), r = refDir(u.searchParams.get('ref'));
       if(r) refGuarda(r);
-      else if(refLee()){ u.searchParams.set('ref', refLee()); history.replaceState(history.state, '', u.toString()); }
+      else if(REF_ON && refLee()){ u.searchParams.set('ref', refLee()); history.replaceState(history.state, '', u.toString()); }
     }catch(e){}
   })();
   let refEst = { cuenta: '', hecho: null, leido: false };
@@ -525,6 +528,7 @@
   const conNodo = () => !!(me && me.reg);
   function pintaRef(){
     const c = q('#tnRef'), b = q('#tnRefB');
+    if(!REF_ON){ if(c) c.hidden = true; return; }
     if(!c || !b) return;
     if(!acct){ c.hidden = true; return; }
     c.hidden = false;

@@ -10,6 +10,7 @@
 (function () {
   "use strict";
   var C = window.SACount;
+  var REF_ON = false;   // referidos ocultos por ahora
   var STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";
   var TOKEN_T = "0x189a39081D99bB9D964dfF7FA756978645592Cf3";   // tSECT (Sepolia)
   var MARKET = "0x8C9984B06281f1CA9416e493c2E602AaB08513db";    // SectoraHashMarket (Sepolia)
@@ -304,7 +305,7 @@
       "</div>";
 
     /* referidos: tu link, tus invitados y tu bono */
-    html += '<section class="card rfc" data-rf></section>';
+    if (REF_ON) html += '<section class="card rfc" data-rf></section>';
 
     /* historial */
     html += '<section class="hist"><h2 class="mono">' + esc(t("hk")) + "</h2>" + history(d) + "</section>";
@@ -321,7 +322,7 @@
       var b = this; try { navigator.clipboard.writeText(d.addr).then(function () { b.textContent = t("copied"); setTimeout(function () { b.textContent = t("copy"); }, 1400); }); } catch (e) {}
     });
     live(a, tn);
-    refFill(d, a.lv >= 0 && a.on);
+    if (REF_ON) refFill(d, a.lv >= 0 && a.on);
   }
 
   /* ---------- referidos ----------

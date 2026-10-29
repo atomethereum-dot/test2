@@ -361,12 +361,12 @@
         '<li><span>2</span><div>' + t("hw2") + '<em><a href="/dashboard.html#plan">' + t("hwp") + " ↗</a></em></div></li>" +
         '<li><span>3</span><div>' + t("hw3") + '<em><a href="/dashboard.html#node">' + t("hwn") + " ↗</a></em></div></li></ol></div>";
       bd.innerHTML = '<h3>' + t("h") + '</h3>' + stk + '<ul class="el-rows">' + rows.join("") + "</ul>" + how + btn +
-        (r.demo ? "" : '<div class="el-rf" data-rf></div>') +
+        (r.demo || !REF_ON ? "" : '<div class="el-rf" data-rf></div>') +
         '<p class="mono el-rule">' + t("rule") + '</p><p class="el-ft">' + t("foot") + '</p>' +
         '<button class="el-lnk" type="button" data-a="other">' + t("other") + "</button>";
       bd.querySelector('[data-a="other"]').addEventListener("click", function () { start(); });
       if (state === "run") live(items, closed, proj);
-      if (!r.demo) refFill(addr, lv > 0 && on);
+      if (!r.demo && REF_ON) refFill(addr, lv > 0 && on);
     }).catch(function () { if (cur === addr) start(t("err")); });
   }
   /* lo ganado sube como en el staking: premio de la plaza x tiempo dentro / tiempo completo, desde el inicio de cada plaza */
@@ -410,6 +410,8 @@
      invitacion en el Dashboard (0,0001 tSECT de prueba a su padrino, en Sepolia). Aqui solo se lee: tu link, tus
      invitados con su staking y quien te invito. Las reglas y el control de trampas estan en count.js y en el panel. */
   var REF_KEY = "sectora:ref";
+  // referidos ocultos por ahora: no se muestran ni el bloque, ni el aviso del link, ni el ?ref en los links (el link se sigue guardando)
+  var REF_ON = false;
   function refGet() { try { return (localStorage.getItem(REF_KEY) || "").toLowerCase(); } catch (e) { return ""; } }
   var OK = '<i><svg viewBox="0 0 16 16"><path d="M4 8.4l2.8 2.7 5.4-5.9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i>';
   function refFill(addr, inside) {
@@ -472,12 +474,12 @@
   }
   (function () {
     var m = /[?&]ref=(0x[0-9a-fA-F]{40})(?![0-9a-fA-F])/.exec(location.search);
-    if (m) { try { localStorage.setItem(REF_KEY, m[1].toLowerCase()); } catch (e) {} refBanner(m[1].toLowerCase()); }
+    if (m) { try { localStorage.setItem(REF_KEY, m[1].toLowerCase()); } catch (e) {} if (REF_ON) refBanner(m[1].toLowerCase()); }
   })();
   // los links al Dashboard llevan al padrino: asi viaja aunque se abran en la app de una wallet (otra memoria)
   document.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest('a[href*="dashboard.html"], a[href^="/dash/"]'), r = refGet();
-    if (!a || !/^0x[0-9a-f]{40}$/.test(r) || /[?&]ref=/.test(a.getAttribute("href"))) return;
+    if (!REF_ON || !a || !/^0x[0-9a-f]{40}$/.test(r) || /[?&]ref=/.test(a.getAttribute("href"))) return;
     var u = new URL(a.getAttribute("href").replace(/^\/dash\/$/, "/dashboard.html"), location.href);
     u.searchParams.set("ref", r); a.href = u.toString();
   }, true);
