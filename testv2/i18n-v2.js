@@ -486,3 +486,14 @@
   var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
   Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; Object.keys(V[l]).forEach(function (k) { d[k] = V[l][k]; }); });
 })();
+/* boton del plan: activar el nodo desde el mismo recuadro */
+(function () {
+  var V = {
+    en: ["Activate my node", "Node active ✓"], es: ["Activar mi nodo", "Nodo activado ✓"], pt: ["Ativar meu nó", "Nó ativado ✓"],
+    fr: ["Activer mon nœud", "Nœud activé ✓"], de: ["Meinen Node aktivieren", "Node aktiviert ✓"], ru: ["Активировать мой узел", "Узел активирован ✓"],
+    zh: ["激活我的节点", "节点已激活 ✓"], ja: ["ノードを有効にする", "ノード有効 ✓"], ko: ["내 노드 활성화", "노드 활성화됨 ✓"],
+    ar: ["تفعيل عقدتي", "تم تفعيل العقدة ✓"], hi: ["मेरा नोड चालू करें", "नोड चालू ✓"]
+  };
+  var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
+  Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.v2.plan.btn"] = V[l][0]; d["hashdash.v2.plan.btnOn"] = V[l][1]; });
+})();

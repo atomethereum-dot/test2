@@ -58,18 +58,21 @@
     else { b.disabled = false; b.dataset.v2 = "act"; b.textContent = tt("hashdash.v2.buy.act", "Activate {h} TH/s").replace("{h}", p.h); }
   };
 
+  /* el recuadro del plan hace todo: "Activar mi nodo" conecta la wallet y, al leer el staking, queda
+     "Nodo activado" ahi mismo (o pide los 100 SECT). No lleva a ninguna otra parte de la pagina */
   plan = function () {
     var st = $("#planSt"), bp = $("#bPlan"); if (!st || !bp) return;
-    var txt, ok = 0, act;
-    if (!conectado) { txt = tt("hashdash.v2.plan.st0", "Connect your wallet to activate the plan."); act = "connect"; }
-    else if (!est()) { txt = tt("hashdash.v2.card.reading", "Reading your staking…"); act = "none"; }
-    else if (conStake()) { txt = tt("hashdash.v2.plan.stOk", "Plan active · your node is on."); ok = 2; act = "node"; }
-    else { txt = tt("hashdash.v2.plan.stNeed", "You need 100 SECT in staking to activate the plan."); act = "stake"; }
+    var txt, ok = 0, act, lbl;
+    if (!conectado) { txt = tt("hashdash.v2.plan.st0", "Connect your wallet to activate the plan."); act = "connect"; lbl = tt("hashdash.v2.plan.btn", "Activate my node"); }
+    else if (!est()) { txt = tt("hashdash.v2.card.reading", "Reading your staking…"); act = "wait"; lbl = txt; }
+    else if (conStake()) { txt = tt("hashdash.v2.plan.stOk", "Plan active · your node is on."); ok = 2; act = "on"; lbl = tt("hashdash.v2.plan.btnOn", "Node active ✓"); }
+    else { txt = tt("hashdash.v2.plan.stNeed", "You need 100 SECT in staking to activate the plan."); act = "stake"; lbl = tt("hashdash.v2.card.stake", "Go to staking"); }
     st.querySelector("span").textContent = txt;
     st.className = "plan-st" + (ok === 2 ? " ok" : "");
-    bp.hidden = act === "none"; bp.dataset.act = act;
-    bp.querySelector("span").textContent = act === "connect" ? t("hashdash.top.connect", "Connect wallet") :
-      act === "stake" ? tt("hashdash.v2.card.stake", "Go to staking") : tt("hashdash.v2.s3.go", "See my node");
+    bp.hidden = false; bp.dataset.act = act;
+    bp.disabled = act === "wait" || act === "on";
+    bp.classList.toggle("v2-ok", act === "on");
+    bp.querySelector("span").textContent = lbl;
   };
 
   function todo() { suma(); pintaPks(); resumen(); progreso(); }
@@ -82,7 +85,6 @@
     var a = b.id === "bPlan" ? b.dataset.act : b.dataset.v2;
     if (a === "connect") { var bc = $("#bConnect"); if (bc) bc.click(); }
     else if (a === "stake") location.href = "/staking/";
-    else if (a === "node") { var n = $("#node"); if (n) n.scrollIntoView({ behavior: "smooth", block: "start" }); }
     else if (a === "act") {
       var p = elegido(); if (!p) return;
       var l = activos(), id = kind + "-" + sel;
@@ -107,7 +109,7 @@
   document.addEventListener("v2:estado", todo);
   document.addEventListener("sectora:langchange", function () { setTimeout(todo, 0); });
   var css = document.createElement("style");
-  css.textContent = ".pk.v2-on .pk-p{color:var(--live)}.buy .split{display:none!important}.plan-pr{font-size:13px;letter-spacing:.04em;color:var(--live)}";
+  css.textContent = "#bPlan.v2-ok,#bPlan.v2-ok:disabled{background:rgba(62,207,142,.1)!important;border:1px solid rgba(62,207,142,.55)!important;color:var(--live)!important;opacity:1!important;cursor:default}.pk.v2-on .pk-p{color:var(--live)}.buy .split{display:none!important}.plan-pr{font-size:13px;letter-spacing:.04em;color:var(--live)}";
   document.head.appendChild(css);
   engancha();
 })();
