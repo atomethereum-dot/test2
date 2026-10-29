@@ -64,8 +64,9 @@
   var enMapa = {}, esperas = 0;
   var nodoKey = function () { var e = est(); return e ? "sectora:v2:node:" + e.addr.toLowerCase() : ""; };
   function nodoLeer() { try { return JSON.parse(localStorage.getItem(nodoKey()) || "null"); } catch (e) { return null; } }
+  // encender el nodo no pide staking: basta la wallet conectada
   function activa(manual) {
-    var e = est(); if (!e || !conStake()) return false;
+    var e = est(); if (!e) return false;
     if (e.reg) return true;
     var n = nodoLeer();
     if (!n) {
@@ -96,27 +97,27 @@
     else if (n) { sp.innerHTML = ""; var b = document.createElement("b"); b.textContent = n.name; sp.appendChild(b); if (n.place) sp.appendChild(document.createTextNode(" · " + n.place)); }
   }
 
-  /* el recuadro del plan hace todo: "Activar mi nodo" conecta la wallet y, al leer el staking, queda
-     "Nodo activado" ahi mismo (o pide los 100 SECT). No lleva a ninguna otra parte de la pagina */
+  /* el recuadro del plan hace todo: "Activar mi nodo" conecta la wallet y deja el nodo activado ahi mismo.
+     El staking va aparte: con el nodo activado y 100 SECT en staking (en cualquier orden) el airdrop queda activo */
   plan = function () {
     var st = $("#planSt"), bp = $("#bPlan"); if (!st || !bp) return;
     var txt, ok = 0, act, lbl;
     if (!conectado) { txt = tt("hashdash.v2.plan.st0", "Connect your wallet to activate the plan."); act = "connect"; lbl = tt("hashdash.v2.plan.btn", "Activate my node"); }
     else if (!est()) { txt = tt("hashdash.v2.card.reading", "Reading your staking…"); act = "wait"; lbl = txt; }
-    else if (conStake() && activa(false)) { txt = tt("hashdash.v2.plan.stOk", "Plan active · your node is on."); ok = 2; act = "on"; lbl = tt("hashdash.v2.plan.btnOn", "Node active ✓"); }
-    else if (conStake()) {
+    else if (activa(false) && conStake()) { txt = tt("hashdash.v2.plan2.stBoth", "Node active · Airdrop active."); ok = 2; act = "on"; lbl = tt("hashdash.v2.plan.btnOn", "Node active ✓"); }
+    else if (activa(false)) { txt = tt("hashdash.v2.plan2.stNode", "Node active. To activate your airdrop, put 100 SECT in staking."); ok = 2; act = "stake"; lbl = tt("hashdash.v2.card.stake", "Go to staking"); }
+    else {
       // falta la ubicacion: se espera a que llegue sola o a que se escriba y se pulse el boton
       txt = tt("hashdash.node.geoWait", "Detecting your node's location…"); act = "save"; lbl = tt("hashdash.v2.plan.btn", "Activate my node");
       if (esperas++ < 40) setTimeout(function () { plan(); }, 700);
     }
-    else { txt = tt("hashdash.v2.plan.stNeed", "You need 100 SECT in staking to activate the plan."); act = "stake"; lbl = tt("hashdash.v2.card.stake", "Go to staking"); }
     st.querySelector("span").textContent = txt;
     st.className = "plan-st" + (ok === 2 ? " ok" : "");
     bp.hidden = false; bp.dataset.act = act;
     bp.disabled = act === "wait" || act === "on";
     bp.classList.toggle("v2-ok", act === "on");
     bp.querySelector("span").textContent = lbl;
-    resumenNodo(act === "on");
+    resumenNodo(ok === 2);
   };
 
   function todo() { suma(); pintaPks(); resumen(); progreso(); }

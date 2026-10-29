@@ -44,24 +44,32 @@
       h += '<p class="v2-h">' + esc(t("hashdash.v2.card.err", "Couldn't read the network. Try again in a moment.")) + "</p>" +
         '<div class="v2-a"><button class="btn" type="button" data-v2="retry">' + esc(t("hashdash.v2.card.retry", "Retry")) + "</button></div>";
     } else {
-      var r = est.r, on = r.level > 0;
+      // nodo y staking van por separado; el airdrop se activa con los dos, en cualquier orden
+      var r = est.r, on = est.reg || !!nodo(), stk = r.level > 0, ad = on && stk;
+      var sub = !on ? t("hashdash.v2.card2.offSub", "Press “Activate my node” in the plan above. It's free.")
+        : ad ? t("hashdash.v2.card2.bothSub", "Your node is on and your airdrop is active.")
+        : t("hashdash.v2.card2.onSub", "Your node is on. To activate your airdrop, put 100 SECT in staking.");
       h += '<div class="v2-st ' + (on ? "on" : "off") + '"><i></i><b>' + esc(on ? t("hashdash.v2.card.on", "Node on") : t("hashdash.v2.card.off", "Node off")) + "</b></div>" +
-        '<p class="note v2-n">' + esc(on ? t("hashdash.v2.card.onSub", "Your node is on thanks to your staking. You're in Airdrop Genesis.") : t("hashdash.v2.card.offSub", "Your node turns on with 100 SECT in staking.")) + "</p>" +
+        '<p class="note v2-n">' + esc(sub) + "</p>" +
         '<div class="v2-rows">' +
         fila(t("hashdash.v2.card.wallet", "Wallet"), esc(corta(est.addr))) +
-        (on && nodo() ? fila(t("hashdash.node.name", "Node name"), esc(nodo().name) + (nodo().place ? " · " + esc(nodo().place) : "")) : "") +
+        (nodo() ? fila(t("hashdash.node.name", "Node name"), esc(nodo().name) + (nodo().place ? " · " + esc(nodo().place) : "")) : "") +
         fila(t("hashdash.v2.card.staked", "SECT in staking"), num(r.bal, 2) + " SECT") +
-        (on ? fila(t("hashdash.v2.card.level", "Level"), LV[r.level]) +
-          fila(t("hashdash.v2.card.since", "On since"), esc(fecha(est.desde))) +
+        fila(t("hashdash.v2.card2.airdrop", "Airdrop"), ad ? '<span class="v2-ok">' + esc(t("hashdash.v2.card2.adOn", "Active ✓")) + "</span>"
+          : esc(!on && !stk ? t("hashdash.v2.card2.adBoth", "Needs your node and 100 SECT in staking") : !on ? t("hashdash.v2.card2.adNode", "Needs your node on") : t("hashdash.v2.card2.adStake", "Needs 100 SECT in staking"))) +
+        (ad ? fila(t("hashdash.v2.card.level", "Level"), LV[r.level]) +
           fila(t("hashdash.v2.card.prize", "Your airdrop prize"), num(r.prize) + " SECT") +
           fila(t("hashdash.v2.card.earned", "Earned so far"), num(r.earned, 2) + " SECT") : "") +
         "</div>" +
-        (on ? "" : '<div class="v2-a"><a class="btn key" href="/staking/">' + esc(t("hashdash.v2.card.stake", "Go to staking")) + " ↗</a></div>");
+        (!on ? '<div class="v2-a"><button class="btn key" type="button" data-v2="plan">' + esc(t("hashdash.v2.plan.btn", "Activate my node")) + "</button></div>"
+          : !stk ? '<div class="v2-a"><a class="btn key" href="/staking/">' + esc(t("hashdash.v2.card.stake", "Go to staking")) + " ↗</a></div>" : "");
     }
     c.innerHTML = h;
     var b = c.querySelector("[data-v2]");
     if (b) b.addEventListener("click", function () {
       if (b.getAttribute("data-v2") === "retry" && est) return carga(est.addr);
+      if (b.getAttribute("data-v2") === "plan") { var bp = document.getElementById("bPlan"), pl = document.getElementById("plan");
+        if (pl) pl.scrollIntoView({ behavior: "smooth", block: "center" }); if (bp && !bp.disabled) bp.click(); return; }
       var bc = document.getElementById("bConnect"); if (bc) bc.click();
     });
   }
@@ -74,7 +82,7 @@
       if (mio !== turno) return;
       var r = C.evaluate(w.ev, w.node, C.OPEN, Date.now());
       var sp = (w.node && w.node.spans) || [], ult = sp[sp.length - 1];
-      est = { addr: addr, r: r, desde: ult ? Math.max(ult[0], C.OPEN) : C.AUTO };
+      est = { addr: addr, r: r, reg: !!(w.node && w.node.reg), desde: ult ? Math.max(ult[0], C.OPEN) : C.AUTO };
       pinta(); avisa({ addr: addr, lv: r.level, bal: r.bal, reg: !!(w.node && w.node.reg) });
     }).catch(function () { if (mio === turno) { est = { addr: addr, err: true }; pinta(); } });
   }
@@ -101,7 +109,7 @@
     ".v2-node .v2-st.on i{background:var(--live);box-shadow:0 0 0 5px rgba(62,207,142,.16),0 0 18px rgba(62,207,142,.55);animation:v2p 2.4s ease-in-out infinite}" +
     ".v2-node .v2-st.on b{color:var(--live)}" +
     ".v2-node .v2-st.off i{background:transparent;border:1.5px solid var(--ink4)}" +
-    ".v2-node .v2-rows{margin-top:16px;max-width:560px}" +
+    ".v2-node .v2-rows{margin-top:16px;max-width:560px}.v2-node .v2-ok{color:var(--live)}" +
     ".v2-node .v2-wait i{display:inline-block;width:9px;height:9px;margin-right:10px;border-radius:50%;background:var(--blue);animation:v2p 1.2s ease-in-out infinite}" +
     "@keyframes v2p{50%{opacity:.35}}";
   document.head.appendChild(css);
