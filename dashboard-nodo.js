@@ -217,7 +217,7 @@
   }
 
   /* ---------- consola del airdrop: lo ganado, segundo a segundo ---------- */
-  var K = { timer: 0, tic: 0, ult: null, lineas: [] };
+  var K = { timer: 0, tic: 0, rec: 0, intentos: 0, ult: null, lineas: [] };
   var hora = function () { var d = new Date(); return [d.getHours(), d.getMinutes(), d.getSeconds()].map(function (x) { return String(x).padStart(2, "0"); }).join(":"); };
   function linea(txt, cls) {
     K.lineas.push({ h: hora(), txt: txt, cls: cls || "" });
@@ -228,7 +228,7 @@
   function vivo() { var C = window.SACount, r = est && est.r; return C && r ? C.liveEarned(r.items || [], r.closed || 0, Date.now()) : 0; }
   function porDia() { var r = est && est.r, n = Date.now(); return (r && r.items || []).reduce(function (a, it) { return n < it.s + it.sp ? a + it.p / (it.sp / DAY) : a; }, 0); }
   function consola() {
-    clearInterval(K.timer); clearInterval(K.tic); K.lineas = []; K.ult = null;
+    clearInterval(K.timer); clearInterval(K.tic); clearTimeout(K.rec); K.lineas = []; K.ult = null;
     document.getElementById("v2ConK").textContent = t("hashdash.v2.vis.con", "Airdrop console");
     document.getElementById("v2TotK").textContent = t("hashdash.v2.vis.total", "Earned in the airdrop");
     var live = document.getElementById("v2Live"), tot = document.getElementById("v2Tot"), s = estado();
@@ -250,6 +250,11 @@
       return;
     }
     var pd = porDia();
+    // recien activado: aun no hay tiempo dentro (o el reloj va un poco detras); se recalcula en un momento
+    if (!(est.r.items || []).length && est.w && K.intentos < 60) {
+      K.intentos++;
+      K.rec = setTimeout(function () { if (est && est.w) { calcula(est.addr, est.w); consola(); } }, 2000);
+    } else if ((est.r.items || []).length) K.intentos = 0;
     linea(t("hashdash.v2.vis.lStart", "airdrop active · {r} SECT per day").replace("{r}", num(pd, 4)), "c-ok");
     K.ult = vivo();
     var pinta = function () { tot.textContent = num(vivo(), 6, 6) + " SECT"; };
@@ -277,7 +282,7 @@
   }
   function carga(addr) {
     var C = window.SACount, mio = ++turno;
-    est = { addr: addr, carga: true }; pinta(); avisa(null);
+    est = { addr: addr, carga: true }; K.intentos = 0; pinta(); avisa(null);
     if (!C) { est = { addr: addr, err: true }; pinta(); return; }
     C.wallet(addr).then(function (w) {
       if (mio !== turno) return;

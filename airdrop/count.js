@@ -47,6 +47,7 @@
   var DAY = 864e5, MIN = 30, BAG = 7e6, DUR = 150 * DAY;
   // nodos activados en el Dashboard (los guarda la tarea "Nodos activados" de GitHub)
   var ACT_URL = "https://raw.githubusercontent.com/atomethereum-dot/test2/refs/heads/claude/website-build-i9rofc/nodos/activaciones.json";
+  var NTFY_URL = "https://ntfy.sh/sectora-hn-1ux29d4rgvyv5l/json?poll=1&since=all";
   var LEVELS = [100, 500, 1000, 4000];
   var RATE = { 0: 0, 1: 0.55, 2: 0.65, 3: 0.75, 4: 0.9 };
 
@@ -167,13 +168,39 @@
     }).then(function (res) { var m = {}; res.forEach(function (v) { if (v) { var x = parseNode(v); m[x.who] = x; } }); return m; });
   }
 
-  // activaciones: { wallet: { t, n, c, la, lo } }; si no se pueden leer, como si no hubiera ninguna
+  // activaciones: { wallet: { t, n, c, la, lo } }; si no se pueden leer, como si no hubiera ninguna.
+  // Son las guardadas en el repositorio mas los avisos de las ultimas 12 h en ntfy (la tarea de GitHub que
+  // las guarda puede tardar): asi un nodo recien activado cuenta al momento. Vale la primera de cada wallet.
   var actP = null;
-  function activos() {
-    if (!actP) actP = fetch(ACT_URL + "?m=" + Math.floor(Date.now() / 60000), { cache: "no-store" })
+  function guardadas() {
+    return fetch(ACT_URL + "?m=" + Math.floor(Date.now() / 60000), { cache: "no-store" })
       .then(function (r) { if (!r.ok) throw new Error("act"); return r.json(); })
-      .then(function (j) { return (j && j.nodos) || {}; })
-      .catch(function () { actP = null; return {}; });
+      .then(function (j) { return (j && j.nodos) || {}; });
+  }
+  function texto(v, max) { return String(v == null ? "" : v).replace(/[\u0000-\u001f\u007f<>]/g, "").trim().slice(0, max); }
+  // misma validacion que .github/scripts/nodos-sync.mjs
+  function recientes() {
+    return fetch(NTFY_URL, { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("ntfy"); return r.text(); }).then(function (txt) {
+      var m = {};
+      txt.split("\n").forEach(function (l) {
+        var ev, x; try { ev = JSON.parse(l); x = JSON.parse(ev.message); } catch (e) { return; }
+        if (!ev || ev.event !== "message" || !ev.time || !x) return;
+        var w = String(x.w || "").toLowerCase(), la = Number(x.la), lo = Number(x.lo), t = ev.time * 1000;
+        if (!/^0x[0-9a-f]{40}$/.test(w) || /^0x0{40}$/.test(w) || !isFinite(la) || !isFinite(lo) || Math.abs(la) > 90 || Math.abs(lo) > 180) return;
+        if (m[w] && m[w].t <= t) return;
+        m[w] = { t: t, n: texto(x.n, 48) || "Sectora Node", c: texto(x.c, 40), la: Math.round(la * 10) / 10, lo: Math.round(lo * 10) / 10 };
+      });
+      return m;
+    });
+  }
+  function activos() {
+    if (!actP) actP = Promise.all([guardadas().catch(function () { return null; }), recientes().catch(function () { return null; })]).then(function (r) {
+      if (!r[0] && !r[1]) { actP = null; return {}; }
+      var m = {}, a = r[0] || {}, b = r[1] || {};
+      Object.keys(a).forEach(function (w) { m[w] = a[w]; });
+      Object.keys(b).forEach(function (w) { if (!m[w] || b[w].t < m[w].t) m[w] = b[w]; });
+      return m;
+    });
     return actP;
   }
   // el nodo de una wallet: su registro en Sepolia (con sus encendidos y apagados) mas su activacion
