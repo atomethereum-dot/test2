@@ -275,13 +275,13 @@
      hace falta ningun contrato nuevo ni servidor. Reglas:
      - cuenta la primera constancia de cada wallet; no vale invitarse a si mismo; en una invitacion mutua vale la primera;
      - tiene que quedar hecha antes de entrar en el airdrop o hasta 7 dias despues (REF_WIN);
-     - el padrino gana el 15 % de los SECT que su invitado tiene en staking, al mismo ritmo que el premio del invitado
+     - el padrino gana el 12 % de los SECT que su invitado tiene en staking, al mismo ritmo que el premio del invitado
        (si el invitado sale antes de 30 dias, nada), y se entrega con el airdrop. El padrino tambien tiene que estar dentro.
      - el panel marca ademas si los SECT del invitado salieron de la wallet del padrino (no cuenta). */
   var TSECT = "0x189a39081D99bB9D964dfF7FA756978645592Cf3";
   var SECT = "0x8C9984B06281f1CA9416e493c2E602AaB08513db";
   var T_TR = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"; // Transfer(address,address,uint256)
-  var MARK = 10n ** 14n, REF_BONUS = 0.15, REF_WIN = 7 * DAY;
+  var MARK = 10n ** 14n, REF_BONUS = 0.12, REF_WIN = 7 * DAY;
   var REF_SINCE = Date.UTC(2026, 9, 28);   // el programa empieza el 28 oct 2026
   var ZERO = /^0x0{40}$/;
   function addr(topic) { return "0x" + topic.slice(26).toLowerCase(); }
@@ -346,7 +346,7 @@
     });
   }
   function referrals() { return marks(null, null).then(resolve); }
-  // bono del padrino a partir del estado del invitado (evaluate): el 15 % del staking de cada capa, al ritmo de su premio
+  // bono del padrino a partir del estado del invitado (evaluate): el 12 % del staking de cada capa, al ritmo de su premio
   function refBonus(r) {
     var got = 0, proj = 0, entry = 0;
     (r.lay || []).forEach(function (row) {

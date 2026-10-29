@@ -325,7 +325,7 @@
   }
 
   /* ---------- referidos ----------
-     Tu link (/airdrop/?ref=0x…), tus invitados con su staking y su nodo, tu bono y quien te invito. El bono es el 15 %
+     Tu link (/airdrop/?ref=0x…), tus invitados con su staking y su nodo, tu bono y quien te invito. El bono es el 12 %
      de los SECT en staking de tus invitados que estan dentro, al completar su tiempo, y se entrega con el airdrop.
      Solo lectura: el invitado confirma la invitacion en el Dashboard; las reglas estan en count.js y en el panel. */
   var OKI = '<i class="rf-ok"><svg viewBox="0 0 16 16"><path d="M4 8.4l2.8 2.7 5.4-5.9" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></i>';

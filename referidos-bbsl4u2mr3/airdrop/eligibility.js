@@ -429,7 +429,7 @@
     });
     var sb = box.querySelector("[data-s]");
     if (sb) sb.addEventListener("click", function () { navigator.share({ title: "Sectora Airdrop Genesis", url: link }).catch(function () {}); });
-    // tus invitados: su staking y su nodo; el bono es el 15 % del staking de los que estan dentro, al completar su tiempo
+    // tus invitados: su staking y su nodo; el bono es el 12 % del staking de los que estan dentro, al completar su tiempo
     C.refInvitees(me).then(function (all) {
       all = all.filter(function (x) { return !x.bad; });
       return C.refLate(all).then(function (late) { return all.filter(function (x) { return !late[x.invitee]; }); });
