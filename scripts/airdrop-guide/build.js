@@ -36,7 +36,7 @@ function jpg(file) {
 function img(l, name) {
   for (const rel of [l + "/" + name + ".jpg", "en/" + name + ".jpg", name + ".jpg"]) {
     const f = path.join(OUT, "img", rel);
-    if (fs.existsSync(f)) { const s = jpg(f); return { src: "/airdrop-guide/img/" + rel + "?v=3", w: s.w, h: s.h }; }
+    if (fs.existsSync(f)) { const s = jpg(f); return { src: "/airdrop-guide/img/" + rel + "?v=4", w: s.w, h: s.h }; }
   }
   return null;
 }
@@ -103,17 +103,14 @@ function build(l) {
     6: [["do"], ["vis", [shot("stk-3b-deposit", { light: true, bar: "staking" }), wallet("approve")], "w2"], ["check", S[6].checkH, S[6].check]],
     7: [["do"], ["vis", [shot("stk-4-done", { light: true, bar: "staking", cap: S[7].cap }), wallet("deposit")], "w2"], ["warn"], ["done", S[7].done]],
     8: [["do"], ["lang"], ["vis", [shot("dsh-1-connect", { bar: "dashboard" })]], ["vis", [shot("dsh-phone-1", { phone: true, cap: S[8].capPhone }), shot("dsh-phone-2", { phone: true, cap: S[8].capPhone2 })], "phones"], ["warn"]],
-    9: [["do"], ["vis", [shot("dsh-2-wallet", { size: "narrow" }), wallet("sw")], "w2"], ["tip"]],
-    10: [["do"], ["vis", [shot("dsh-3-how", { bar: "dashboard", cap: S[10].capHow })]], ["tipx", S[10].copy], ["vis", [shot("fct", { cap: S[10].capGoogle }), shot("dsh-3-gas", { cap: S[10].capDash })], "two"], ["warn"]],
-    11: [["do"], ["vis", [shot("dsh-4-faucet", { size: "mid" })]], ["tip"]],
-    12: [["do"], ["vis", [shot("dsh-5-kit", { cap: S[12].cap1 }), shot("dsh-6-buy", { cap: S[12].cap2 })], "two"], ["see"]],
-    13: [["do"], ["vis", [shot("dsh-7-register", { cap: S[13].cap })]], ["tip"], ["break"], ["check", S[13].planH, S[13].plan, "manual"], ["vis", [shot("dsh-7b-manual", { cap: S[13].planCap })]]],
-    14: [["do"], ["vis", [shot("dsh-8-done")]], ["onoff"], ["done", S[14].done]],
-    15: [["do"], ["vis", [shot("my-1-panel", { bar: "myairdrop", cap: S[15].cap })]], ["check", S[15].checkH, S[15].check]],
-    16: [["do"], ["vis", [shot("air-1-page", { cap: S[16].cap1 }), shot("air-2-status", { size: "narrow", cap: S[16].cap2 })], "two"], ["see"]]
+    9: [["do"], ["vis", [shot("dsh-2-wallet", { size: "narrow" }), wallet("connect")], "w2"], ["tip"]],
+    10: [["do"], ["vis", [shot("dsh-3-active", { size: "mid", cap: S[10].cap })]], ["tip"], ["break"], ["check", S[10].planH, S[10].plan, "manual"], ["vis", [shot("dsh-3b-manual", { size: "narrow", cap: S[10].planCap })]]],
+    11: [["do"], ["vis", [shot("dsh-4-node", { bar: "dashboard" })]], ["onoff"], ["done", S[11].done]],
+    12: [["do"], ["vis", [shot("my-1-panel", { bar: "myairdrop", cap: S[12].cap })]], ["check", S[12].checkH, S[12].check]],
+    13: [["do"], ["vis", [shot("air-1-page", { cap: S[13].cap1 }), shot("air-2-status", { size: "narrow", cap: S[13].cap2 })], "two"], ["see"]]
   };
-  const PART = { 1: "A", 8: "B", 15: "C" };
-  const partOf = (n) => (n <= 7 ? "A" : n <= 14 ? "B" : "C");
+  const PART = { 1: "A", 8: "B", 12: "C" };
+  const partOf = (n) => (n <= 7 ? "A" : n <= 11 ? "B" : "C");
   function block(n, b, print) {
     const c = S[n];
     switch (b[0]) {
@@ -260,8 +257,8 @@ ${alt}
   </div>
 </section>
 ${partWeb("A", 1, 7)}
-${partWeb("B", 8, 14)}
-${partWeb("C", 15, 16)}
+${partWeb("B", 8, 11)}
+${partWeb("C", 12, 13)}
 <section class="sec part" id="help">
   <div class="wrap">
     <p class="eyebrow m"><i></i>${C.faq.k}</p>
@@ -315,11 +312,11 @@ ${partWeb("C", 15, 16)}
   // indice
   const tocRows = [["start", C.toc.start, ""], ["before", C.toc.before, ""], ["computer", C.common.computer, ""], ["phone", C.common.phone, ""]]
     .concat([["A", partName("A"), "pt"]]).concat([1, 2, 3, 4, 5, 6, 7].map((n) => ["s" + n, String(n).padStart(2, "0") + " · " + plain(S[n].h), ""]))
-    .concat([["B", partName("B"), "pt"]]).concat([8, 9, 10, 11, 12, 13, 14].map((n) => ["s" + n, String(n).padStart(2, "0") + " · " + plain(S[n].h), ""]))
-    .concat([["C", partName("C"), "pt"]]).concat([15, 16].map((n) => ["s" + n, String(n).padStart(2, "0") + " · " + plain(S[n].h), ""]))
+    .concat([["B", partName("B"), "pt"]]).concat([8, 9, 10, 11].map((n) => ["s" + n, String(n).padStart(2, "0") + " · " + plain(S[n].h), ""]))
+    .concat([["C", partName("C"), "pt"]]).concat([12, 13].map((n) => ["s" + n, String(n).padStart(2, "0") + " · " + plain(S[n].h), ""]))
     .concat([["faq", C.toc.problems, "pt"]]);
   pg("toc", C.toc.k, '<p class="kick">' + C.toc.k + "</p><h1 class=\"pt-h\">" + C.toc.h + '</h1><p class="note">' + C.common.example + '</p><ol class="toc">' +
-    tocRows.map((r) => '<li class="' + r[2] + '" data-to="' + (r[0].length === 1 ? "s" + { A: 1, B: 8, C: 15 }[r[0]] : r[0]) + '"><span>' + r[1] + "</span><em></em></li>").join("") + "</ol>");
+    tocRows.map((r) => '<li class="' + r[2] + '" data-to="' + (r[0].length === 1 ? "s" + { A: 1, B: 8, C: 12 }[r[0]] : r[0]) + '"><span>' + r[1] + "</span><em></em></li>").join("") + "</ol>");
   // empieza aqui
   pg("start", C.toc.start, '<p class="kick">' + C.hero.k + '</p><h1 class="pt-h big">' + C.hero.h1 + '</h1><p class="lede">' + C.hero.lede + "</p>" +
     '<div class="need"><p class="kick">' + C.need.k + "</p><h2>" + C.need.h + '</h2><div class="req2"><div><span>1</span><b>' + C.need.r1[0] + "</b><small>" + C.need.r1[1] + '</small></div><div><span>2</span><b>' + C.need.r2[0] + "</b><small>" + C.need.r2[1] + '</small></div></div><p class="foot">' + C.need.foot + "</p></div>" +
@@ -336,7 +333,7 @@ ${partWeb("C", 15, 16)}
   pg("phone", C.phone.k, '<p class="kick">' + C.phone.k + '</p><h1 class="pt-h">' + C.phone.h + '</h1><p class="lede">' + C.phone.p + "</p>" + dos(C.phone.steps) +
     '<div class="vis phones">' + [["stk-phone-2", "sectoraorg.com/staking"], ["dsh-phone-2", "sectoraorg.com/dashboard"]].map((x) => { const I = img(l, x[0]); return I ? '<figure><div class="phone"><img src="' + I.src + '" alt=""></div><figcaption>' + x[1] + "</figcaption></figure>" : ""; }).join("") + "</div>" + box("tip", C.phone.note));
   // pasos
-  for (let n = 1; n <= 16; n++) {
+  for (let n = 1; n <= 13; n++) {
     const c = S[n], P = partOf(n);
     let top = "";
     if (PART[n]) { const p = C.parts[P]; top = '<div class="pband"><span class="pl">' + P + '</span><div><p class="kick">' + p.k + "</p><h2>" + p.h + "</h2><p>" + p.sub + "</p>" + (P === "A" && C.common.stakingEnglish ? '<p class="en-note">' + C.common.stakingEnglish + "</p>" : "") + "</div></div>"; }

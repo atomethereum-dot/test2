@@ -9,7 +9,7 @@ const rd = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 function run(files) { const w = { window: {} }; w.window.window = w.window; vm.createContext(w); files.forEach((f) => vm.runInContext(rd(f), w)); return w.window; }
 
 // dashboard
-const dw = run(["translations.js", "dashboard-i18n-extra.js"]);
+const dw = run(["translations.js", "dashboard-i18n-extra.js", "dashboard-v2-i18n.js"]);
 const DASH = {
   connect: "hashdash.top.connect", wselTitle: "hashdash.wsel.title", detected: "hashdash.wallet.detected",
   tnTitle: "hashdash.tn.title", faucetCard: "hashdash.tn.faucet", faucetBtn: "hashdash.tn.faucetBtn", gasLink: "hashdash.tn.gasLink", balance: "hashdash.tn.balance",
@@ -17,7 +17,9 @@ const DASH = {
   node: "hashdash.node.title", register: "hashdash.node.register", registered: "hashdash.node.registered", change: "hashdash.node.geoEdit",
   geoFail: "hashdash.node.geoFail", lat: "hashdash.node.lat", lon: "hashdash.node.lon", nodeName: "hashdash.node.name",
   openIn: "hashdash.wallet.openIn",
-  howTitle: "hashdash.how.title", howGas: "hashdash.how.s2.t", howGasBtn: "hashdash.how.s2.go"
+  howTitle: "hashdash.how.title", howGas: "hashdash.how.s2.t", howGasBtn: "hashdash.how.s2.go",
+  // nodo simplificado (dashboard-v2-i18n.js)
+  activate: "hashdash.v2.plan.btn", nodeActive: "hashdash.v2.plan.btnOn", nodeOn: "hashdash.v2.card.on", yourNode: "hashdash.v2.card.k", adBox: "hashdash.v2.box.k"
 };
 const dashHtml = rd("dashboard.html") + rd("dashboard-testnet.js");
 function dashEn(key) { const m = dashHtml.match(new RegExp('data-i18n="' + key.replace(/\./g, "\\.") + '"[^>]*>([^<]*)<')); return m ? m[1] : null; }
