@@ -8,6 +8,8 @@
   var LV = ["", "Scout", "Sentinel", "Guardian", "Titan"];
   var est = null;          // { addr, carga } | { addr, r, desde } | { addr, err }
   var turno = 0;
+  // lo que el mercado necesita saber (mercado.js): wallet y nivel de staking
+  function avisa(e) { window.__v2Estado = e; document.dispatchEvent(new Event("v2:estado")); }
 
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
   var idioma = function () { return window.SECTORA_CURRENT_LANG || "en"; };
@@ -65,14 +67,14 @@
 
   function carga(addr) {
     var C = window.SACount, mio = ++turno;
-    est = { addr: addr, carga: true }; pinta();
+    est = { addr: addr, carga: true }; pinta(); avisa(null);
     if (!C) { est = { addr: addr, err: true }; pinta(); return; }
     C.wallet(addr).then(function (w) {
       if (mio !== turno) return;
       var r = C.evaluate(w.ev, w.node, C.OPEN, Date.now());
       var sp = (w.node && w.node.spans) || [], ult = sp[sp.length - 1];
       est = { addr: addr, r: r, desde: ult ? Math.max(ult[0], C.OPEN) : C.AUTO };
-      pinta();
+      pinta(); avisa({ addr: addr, lv: r.level, bal: r.bal });
     }).catch(function () { if (mio === turno) { est = { addr: addr, err: true }; pinta(); } });
   }
 
@@ -81,7 +83,7 @@
     if (!w) return setTimeout(engancha, 200);
     var oc = w.onConnect, od = w.onDisconnect;
     w.onConnect = function (dir, bal) { if (oc) oc.call(w, dir, bal); if (!est || est.addr.toLowerCase() !== dir.toLowerCase()) carga(dir); };
-    w.onDisconnect = function () { if (od) od.call(w); turno++; est = null; pinta(); };
+    w.onDisconnect = function () { if (od) od.call(w); turno++; est = null; pinta(); avisa(null); };
     var ya = window.__sectoraCuenta && window.__sectoraCuenta();
     if (ya) carga(ya); else pinta();
   }

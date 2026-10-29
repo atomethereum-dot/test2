@@ -995,7 +995,7 @@ html.booting,body.booting{overflow:hidden}
 @media (max-width:900px){.plan{grid-template-columns:1fr}}
 </style>
 <script src="/analytics.js" defer></script>
-<style>/* /testv2 */#market,#plan,.hm,#node + .card,#rewards,#tnGrid,#tnRef,#pBal{display:none!important}@media (min-width:900px){.how-steps{grid-template-columns:repeat(3,minmax(0,1fr))!important}}</style>
+<style>/* /testv2 */#node + .card,#rewards,#tnGrid,#tnRef,#pBal{display:none!important}@media (min-width:900px){.how-steps{grid-template-columns:repeat(3,minmax(0,1fr))!important}}</style>
 </head>
 <body>
 <div class="reticle" id="reticle" aria-hidden="true"><span class="rx"></span><span class="ry"></span></div>
@@ -1109,18 +1109,18 @@ html.booting,body.booting{overflow:hidden}
         <div class="plan-l">
           <p class="lbl plan-k" data-i18n="hashdash.plan.k">Airdrop Genesis · the plan</p>
           <h3 data-i18n="hashdash.plan.h" data-i18n-html>The plan to join the airdrop: <b>50 TH/s</b> in one go</h3>
-          <p class="plan-p" data-i18n="hashdash.plan.p">The Node Kit gives exactly 50 TH/s, the minimum to register your Hash Node. It costs 4,300 tSECT: your first faucet claim (5,000 tSECT) covers it.</p>
+          <p class="plan-p" data-i18n="hashdash.v2.plan.p">The Node Kit gives exactly 50 TH/s, the minimum for your Hash Node. It comes with your staking: connect your wallet and it turns on by itself.</p>
           <ol class="plan-s">
-            <li><span class="num">1</span><span data-i18n="hashdash.plan.s0">Get free Sepolia ETH to pay the gas</span>
-              <a class="plan-gas" href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank" rel="noopener noreferrer" data-i18n="hashdash.tn.gasLink">Get Sepolia ETH ↗</a></li>
-            <li><span class="num">2</span><span data-i18n="hashdash.plan.s1">Claim 5,000 tSECT from the faucet</span></li>
-            <li><span class="num">3</span><span data-i18n="hashdash.plan.s2">Buy the 50 TH/s plan</span></li>
-            <li><span class="num">4</span><span data-i18n="hashdash.plan.s3">Register your node with the same wallet you stake with</span></li>
+            <li><span class="num">1</span><span data-i18n="hashdash.v2.plan.s0">Stake at least 100 SECT</span>
+              <a class="plan-gas" href="/staking/" data-i18n="hashdash.v2.s1.go">Go to staking</a></li>
+            <li><span class="num">2</span><span data-i18n="hashdash.v2.plan.s1">Connect your wallet (the same one you stake with)</span></li>
+            <li><span class="num">3</span><span data-i18n="hashdash.v2.plan.s2">Your 50 TH/s plan turns on by itself</span></li>
+            <li><span class="num">4</span><span data-i18n="hashdash.v2.plan.s3">Your Hash Node is on: you're in the airdrop</span></li>
           </ol>
         </div>
         <div class="plan-r">
           <div class="plan-big num">50<em>TH/s</em></div>
-          <div class="plan-pr num">4,300 tSECT</div>
+          <div class="plan-pr" data-i18n="hashdash.v2.plan.pr">Included with your staking</div>
           <p class="plan-st" id="planSt"><i></i><span></span></p>
           <button class="btn key" id="bPlan" type="button"><span data-i18n="hashdash.plan.btn">Choose the 50 TH/s plan</span></button>
         </div>
@@ -1137,7 +1137,7 @@ html.booting,body.booting{overflow:hidden}
             </button>
           </div>
           <div class="pks" id="pks"></div>
-          <p class="note" style="margin-top:16px" data-i18n="hashdash.market.note">Prices in tSECT · testnet money, no real value · Claim from the faucet to try the flow</p>
+          <p class="note" style="margin-top:16px" data-i18n="hashdash.v2.market.note">Free on testnet: connect your wallet and activate any package. For the airdrop, only the 50 TH/s plan with your staking counts.</p>
         </div>
 
         <div class="card buy rv">
@@ -1157,7 +1157,7 @@ html.booting,body.booting{overflow:hidden}
             </div>
           </div>
 
-          <button class="btn key" id="bBuy" type="button" disabled style="width:100%;padding:14px" data-i18n="hashdash.top.connectToBuy">
+          <button class="btn key" id="bBuy" type="button" style="width:100%;padding:14px">
             Connect wallet to buy
           </button>
 
@@ -1167,7 +1167,7 @@ html.booting,body.booting{overflow:hidden}
               <span class="prog-n"><b id="pNow">0</b> / 50 TH/s</span>
             </div>
             <div class="prog-bar"><div class="prog-fill" id="pFill"></div></div>
-            <p class="note" style="margin-top:10px" data-i18n="hashdash.buy.progressNote">50 TH/s is the minimum to register a security node. Purchases add up.</p>
+            <p class="note" style="margin-top:10px" data-i18n="hashdash.v2.buy.note">50 TH/s is the minimum for your Hash Node, and your staking gives it to you. Extra packages add up.</p>
           </div>
         </div>
       </div>
@@ -1374,7 +1374,7 @@ html.booting,body.booting{overflow:hidden}
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="/translations.js"></script>
 <script src="/dashboard-i18n-extra.js?v=20261029c"></script>
-<script src="/testv2/i18n-v2.js?v=1"></script>
+<script src="/testv2/i18n-v2.js?v=2"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="/i18n.js?v=2"></script>
 <script src="/dashboard-reticle.js?v=20260820b"></script>
@@ -1891,6 +1891,121 @@ window.__sectoraMarket = {
   setReg: v => { reg = !!v; progreso(); },
   setValid: n => { VALID = n; }
 };
+/* ---- /testv2: Hash Market sin Sepolia (testv2/mercado.js) ---- */
+/* ═══════════ /testv2: Hash Market sin Sepolia ═══════════
+   Los mismos paquetes de siempre, sin pagos ni red de pruebas:
+   - el plan del airdrop (Node Kit, 50 TH/s) va incluido con el staking: con 100 SECT o mas en staking
+     queda activo solo al conectar la wallet (lo dice nodo.js en window.__v2Estado);
+   - los demas paquetes se activan al conectar, gratis, y se guardan en este navegador. No cuentan
+     para el airdrop: para el airdrop solo cuenta el plan de 50 TH/s con staking.
+   Usa las piezas del mercado del dashboard (PK, kind, sel, mio, reg, conectado) y reemplaza su
+   resumen, sus paquetes y su plan. Los clics de comprar y del plan no llegan a la compra en Sepolia. */
+(function () {
+  "use strict";
+  var tt = function (k, f) { var v = window.SECTORA_T && window.SECTORA_T(k); return v && v !== k ? v : f; };
+  var $ = function (s) { return document.querySelector(s); };
+  var KIT = "1-0";                                    // Node Kit 50 TH/s, el plan del airdrop
+  var est = function () { return window.__v2Estado || null; };
+  var conStake = function () { var e = est(); return !!(e && e.lv > 0); };
+  var clave = function () { var e = est(); return e ? "sectora:v2:pk:" + e.addr.toLowerCase() : ""; };
+  function activos() { try { return JSON.parse(localStorage.getItem(clave()) || "[]"); } catch (e) { return []; } }
+  function guarda(l) { try { localStorage.setItem(clave(), JSON.stringify(l)); } catch (e) {} }
+  var activo = function (id) { return id === KIT ? conStake() : est() ? activos().indexOf(id) >= 0 : false; };
+  var elegido = function () { return sel === null ? null : PK[kind][sel]; };
+
+  // hash en pantalla: el plan con staking + lo activado
+  function suma() {
+    var h = 0;
+    if (conectado && est()) {
+      if (conStake()) h += 50;
+      activos().forEach(function (id) { var p = id.split("-"); var x = PK[+p[0]] && PK[+p[0]][+p[1]]; if (x && id !== KIT) h += x.h; });
+    }
+    mio = h; reg = conStake();
+  }
+
+  pintaPks = function () {
+    var box = $("#pks"); if (!box) return;
+    box.innerHTML = PK[kind].map(function (p, i) {
+      var id = kind + "-" + i, on = activo(id);
+      return '<button class="pk' + (sel === i ? " on" : "") + (on ? " v2-on" : "") + '" data-i="' + i + '" type="button">' +
+        (p.tag ? '<span class="pk-tag">' + t(p.tagk, p.tag) + "</span>" : "") +
+        '<span class="pk-h num">' + p.h + "<em>TH/s</em></span>" +
+        '<span class="pk-p">' + (on ? "✓ " + tt("hashdash.v2.buy.on", "Active") : tt("hashdash.v2.pk.free", "Free on testnet")) + "</span>" +
+        '<span class="pk-n">' + t(p.notak, p.nota) + "</span></button>";
+    }).join("");
+    box.querySelectorAll(".pk").forEach(function (b) { b.onclick = function () { sel = +b.dataset.i; pintaPks(); resumen(); }; });
+  };
+
+  resumen = function () {
+    var p = elegido(); if (!$("#sName")) return;
+    $("#sName").textContent = p ? t(p.nk, p.n) : "—";
+    $("#sHash").textContent = p ? p.h + " TH/s" : "—";
+    $("#sPrice").textContent = p ? (kind + "-" + sel === KIT ? tt("hashdash.v2.plan.pr", "Included with your staking") : tt("hashdash.v2.pk.free", "Free on testnet")) : "—";
+    var b = $("#bBuy"); if (!b) return;
+    var id = p ? kind + "-" + sel : "", leyendo = conectado && !est();
+    b.dataset.v2 = "";
+    if (!conectado) { b.disabled = false; b.dataset.v2 = "connect"; b.textContent = tt("hashdash.v2.buy.connect", "Connect wallet to activate"); }
+    else if (!p) { b.disabled = true; b.textContent = t("hashdash.buy.selectPackage", "Select a package"); }
+    else if (leyendo) { b.disabled = true; b.textContent = tt("hashdash.v2.card.reading", "Reading your staking…"); }
+    else if (id === KIT && !conStake()) { b.disabled = false; b.dataset.v2 = "stake"; b.textContent = tt("hashdash.v2.buy.kitNeed", "Needs 100 SECT in staking"); }
+    else if (activo(id)) { b.disabled = true; b.textContent = id === KIT ? tt("hashdash.v2.buy.kitOn", "Included with your staking ✓") : "✓ " + tt("hashdash.v2.buy.on", "Active"); }
+    else { b.disabled = false; b.dataset.v2 = "act"; b.textContent = tt("hashdash.v2.buy.act", "Activate {h} TH/s").replace("{h}", p.h); }
+  };
+
+  plan = function () {
+    var st = $("#planSt"), bp = $("#bPlan"); if (!st || !bp) return;
+    var txt, ok = 0, act;
+    if (!conectado) { txt = tt("hashdash.v2.plan.st0", "Connect your wallet to activate the plan."); act = "connect"; }
+    else if (!est()) { txt = tt("hashdash.v2.card.reading", "Reading your staking…"); act = "none"; }
+    else if (conStake()) { txt = tt("hashdash.v2.plan.stOk", "Plan active · your node is on."); ok = 2; act = "node"; }
+    else { txt = tt("hashdash.v2.plan.stNeed", "You need 100 SECT in staking to activate the plan."); act = "stake"; }
+    st.querySelector("span").textContent = txt;
+    st.className = "plan-st" + (ok === 2 ? " ok" : "");
+    bp.hidden = act === "none"; bp.dataset.act = act;
+    bp.querySelector("span").textContent = act === "connect" ? t("hashdash.top.connect", "Connect wallet") :
+      act === "stake" ? tt("hashdash.v2.card.stake", "Go to staking") : tt("hashdash.v2.s3.go", "See my node");
+  };
+
+  function todo() { suma(); pintaPks(); resumen(); progreso(); }
+
+  // los clics de comprar y del plan se quedan aqui: nunca llegan a la compra en Sepolia
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("#bBuy, #bPlan");
+    if (!b) return;
+    e.stopPropagation(); e.preventDefault();
+    var a = b.id === "bPlan" ? b.dataset.act : b.dataset.v2;
+    if (a === "connect") { var bc = $("#bConnect"); if (bc) bc.click(); }
+    else if (a === "stake") location.href = "/staking/";
+    else if (a === "node") { var n = $("#node"); if (n) n.scrollIntoView({ behavior: "smooth", block: "start" }); }
+    else if (a === "act") {
+      var p = elegido(); if (!p) return;
+      var l = activos(), id = kind + "-" + sel;
+      if (l.indexOf(id) < 0) { l.push(id); guarda(l); }
+      todo();
+      if (window.__sectoraWallet && window.__sectoraWallet.aviso) window.__sectoraWallet.aviso(tt("hashdash.v2.buy.toast", "{h} TH/s activated").replace("{h}", p.h));
+    }
+  }, true);
+
+  // el hash y el registro salen del staking, no de Sepolia
+  function engancha() {
+    var mk = window.__sectoraMarket;
+    if (!mk) return setTimeout(engancha, 150);
+    mk.setHash = function () { todo(); };
+    mk.setReg = function () { todo(); };
+    var w = window.__sectoraWallet;
+    if (w) { var oc = w.onConnect, od = w.onDisconnect;
+      w.onConnect = function (d, b) { if (oc) oc.call(w, d, b); todo(); };
+      w.onDisconnect = function () { if (od) od.call(w); todo(); }; }
+    todo();
+  }
+  document.addEventListener("v2:estado", todo);
+  document.addEventListener("sectora:langchange", function () { setTimeout(todo, 0); });
+  var css = document.createElement("style");
+  css.textContent = ".pk.v2-on .pk-p{color:var(--live)}.buy .split{display:none!important}.plan-pr{font-size:13px;letter-spacing:.04em;color:var(--live)}";
+  document.head.appendChild(css);
+  engancha();
+})();
+
 
 /* ---------- cifras que cuentan al entrar ---------- */
 function cuenta(el, fin, pre, suf){
@@ -4031,6 +4146,6 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 </script>
 <script src="/testv2/count.js?v=1"></script>
 <script src="/dashboard-testnet.js?v=20261029d"></script>
-<script src="/testv2/nodo.js?v=1"></script>
+<script src="/testv2/nodo.js?v=2"></script>
 </body>
 </html>
