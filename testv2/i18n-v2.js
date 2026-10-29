@@ -516,3 +516,16 @@
   Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {};
     d["hashdash.node.geoAuto"] = V[l][0]; d["hashdash.node.geoNote"] = V[l][1]; d["hashdash.v2.reg.old"] = V[l][2]; d["hashdash.v2.reg.toast"] = V[l][3]; });
 })();
+/* la wallet ya tiene una peticion de conexion abierta (MetaMask -32002) */
+(function () {
+  var V = {
+    en: "Your wallet already has a connection request open: open it and approve it.", es: "Tu wallet ya tiene una solicitud de conexión abierta: ábrela y apruébala.",
+    pt: "Sua carteira já tem um pedido de conexão aberto: abra-a e aprove.", fr: "Votre wallet a déjà une demande de connexion en attente : ouvrez-le et approuvez-la.",
+    de: "Deine Wallet hat bereits eine offene Verbindungsanfrage: Öffne sie und bestätige sie.", ru: "В кошельке уже есть открытый запрос на подключение: откройте его и подтвердите.",
+    zh: "你的钱包已有一个待处理的连接请求：请打开钱包并批准。", ja: "ウォレットに接続リクエストが保留中です。ウォレットを開いて承認してください。",
+    ko: "지갑에 이미 열린 연결 요청이 있습니다. 지갑을 열어 승인하세요.", ar: "لدى محفظتك طلب اتصال مفتوح بالفعل: افتحها ووافق عليه.",
+    hi: "आपके वॉलेट में पहले से एक कनेक्शन अनुरोध खुला है: वॉलेट खोलें और उसे मंज़ूर करें।"
+  };
+  var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
+  Object.keys(V).forEach(function (l) { (X[l] = X[l] || {})["hashdash.v2.wallet.pending"] = V[l]; });
+})();
