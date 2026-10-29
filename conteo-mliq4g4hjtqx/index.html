@@ -134,6 +134,16 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
 .rc tr:first-child td.n{color:var(--blue-l)}
 .rc .when{display:flex;align-items:center;gap:8px}
 .more{display:flex;justify-content:center;margin-top:12px}
+.hd{min-width:0}
+.hd td.up{color:var(--ok)}.hd td.dn{color:var(--bad)}.hd td.z{color:var(--ink-3)}
+.hd tr.op td{background:rgba(90,149,255,.06)}
+.hd .dd::before{content:'›';display:inline-block;margin-right:8px;color:var(--ink-3);transition:transform .15s}.hd tr.op .dd::before{transform:rotate(90deg)}
+.hd tr.hx{cursor:default}.hd tr.hx:hover td{background:rgba(255,255,255,.015)}.hd tr.hx td{background:rgba(255,255,255,.015);padding:10px 14px 14px;white-space:normal}
+.hx ul{list-style:none;display:grid;gap:8px}
+.hx li{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font-size:13px;color:var(--ink-2)}
+.hx li .t{font:500 12.5px var(--mono);color:var(--ink-3);min-width:44px}
+.hx li .w{font-size:12.5px}
+@media (max-width:760px){.hd th,.hd td{padding:11px 9px}.hd th:nth-child(5),.hd td:nth-child(5){display:none}}
 .rc .m-only{display:none}
 /* en el telefono: n.º, fecha con la wallet debajo y el nodo; el resto, en el detalle */
 @media (max-width:640px){
@@ -181,12 +191,13 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     <div class="tiles">
       <div class="tile hi"><span class="k">Ganado hasta ahora</span><span class="v" id="t-earned">0</span><span class="s" id="t-secured"></span></div>
       <div class="tile"><span class="k">Bolsa reservada</span><span class="v" id="t-res">0</span><div class="bar"><i id="t-resbar"></i></div><span class="s" id="t-resp"></span></div>
+      <div class="tile"><span class="k">Entradas al airdrop hoy</span><span class="v" id="t-today">0</span><span class="s" id="t-todays"></span></div>
+      <div class="tile"><span class="k">Salidas del airdrop hoy</span><span class="v" id="t-out">0</span><span class="s" id="t-outs"></span></div>
       <div class="tile"><span class="k">Entraron (nodo activado)</span><span class="v" id="t-in">0</span><span class="s" id="t-ins"></span></div>
       <div class="tile"><span class="k">Tienen todo (participando)</span><span class="v" id="t-part">0</span><span class="s" id="t-parts"></span></div>
       <div class="tile"><span class="k">Wallets Titan</span><span class="v" id="t-titan">0</span><span class="s" id="t-titans"></span></div>
       <div class="tile"><span class="k">Falta encender el nodo</span><span class="v" id="t-nonode">0</span><span class="s">Tienen staking pero el nodo no está activo</span></div>
       <div class="tile"><span class="k">Falta el staking</span><span class="v" id="t-p2">0</span><span class="s">Tienen el nodo activado pero aún no hacen staking</span></div>
-      <div class="tile"><span class="k">Entradas al airdrop hoy</span><span class="v" id="t-today">0</span><span class="s" id="t-todays"></span></div>
     </div>
     <div class="lvls">
       <div class="lv"><span>Scout</span><b id="l1">0</b></div>
@@ -194,6 +205,17 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       <div class="lv"><span>Guardian</span><b id="l3">0</b></div>
       <div class="lv"><span>Titan</span><b id="l4">0</b></div>
     </div>
+
+    <div class="bar2">
+      <h2>Entradas y salidas por día</h2>
+      <span class="upd" id="hd-sum"></span>
+    </div>
+    <div class="tbl"><table class="hd">
+      <thead><tr><th>Día</th><th class="r">Entraron</th><th class="r">Salieron</th><th class="r">Neto</th><th class="r">Dentro al cierre</th></tr></thead>
+      <tbody id="hrows"></tbody>
+    </table></div>
+    <div class="more"><button class="btn ghost" id="hmore" type="button" hidden>Ver 14 más</button></div>
+    <p class="foot">Dentro = nodo activado y 100+ SECT en staking a la vez. Sale quien retira el staking por debajo de 100 SECT o apaga el nodo (conserva lo ganado, congelado). Si vuelve, cuenta como nueva entrada («Volvió»). Toca un día para ver las wallets con la hora; los días van con la hora de este aparato.</p>
 
     <div class="bar2">
       <h2>Referidos</h2>
@@ -260,7 +282,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   var df = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
   var data = null, rows = [], tab = "all", q = "", tick = 0;
   // ultimos registros: nodos registrados, entradas al airdrop (staking de 100+ y nodo) y primer deposito
-  var RT = [["node", "Nodos activados"], ["entry", "Entradas al airdrop"], ["stake", "Primer staking"]];
+  var RT = [["node", "Nodos activados"], ["entry", "Entradas al airdrop"], ["exit", "Salidas"], ["stake", "Primer staking"]];
+  var hshow = 14, hopen = {};
   var rtab = "node", rshow = 20, recent = {};
   // referidos: lista leida de la red (constancias de 0,0001 tSECT) y SECT que el padrino envio al invitado
   var refs = null, funded = {}, rftab = "inv", rfshow = 20, rfrows = [];
@@ -299,6 +322,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     $("find").addEventListener("input", function () { q = this.value.trim().toLowerCase(); draw(); recentDraw(); refDraw(); });
     $("rmore").addEventListener("click", function () { rshow += 20; recentDraw(); });
     $("rf-more").addEventListener("click", function () { rfshow += 20; refDraw(); });
+    $("hmore").addEventListener("click", function () { hshow += 14; histDraw(); });
+    hopen[dia(Date.now())] = true;
     $("csv").addEventListener("click", csv);
     load();
   }
@@ -495,13 +520,78 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     ev.forEach(function (e) { bal = Math.max(0, bal + (e.dep ? e.amt : -e.amt)); if (e.dep && !first) first = e.t; if (!t100 && bal >= 100) t100 = e.t; });
     return { first: first, t100: t100 };
   }
+  // tramos "dentro del airdrop": nodo encendido y 100+ SECT en staking a la vez. Cada tramo es una entrada y,
+  // si termina, una salida: por retirar el staking (left = lo que quedo) o por apagar el nodo
+  function tramos(x) {
+    var n = x.node; if (!n) return [];
+    var on = n.spans || (n.active ? [[n.at, Infinity]] : []), bal = 0, s0 = null, st = [], out = [];
+    x.ev.forEach(function (e) {
+      bal = Math.max(0, bal + (e.dep ? e.amt : -e.amt));
+      if (bal >= 100 && s0 == null) s0 = e.t;
+      else if (bal < 100 && s0 != null) { st.push([s0, e.t, bal]); s0 = null; }
+    });
+    if (s0 != null) st.push([s0, Infinity, bal]);
+    st.forEach(function (a) { on.forEach(function (b) {
+      var s = Math.max(a[0], b[0]), e = Math.min(a[1], b[1]);
+      if (s < e) out.push({ s: s, e: e, why: e === Infinity ? "" : e === a[1] ? "stake" : "node", left: a[2] });
+    }); });
+    out.sort(function (p, q) { return p.s - q.s; });
+    return out.filter(function (z, k) { var p = out[k - 1]; if (p && z.s <= p.e) { if (z.e > p.e) { p.e = z.e; p.why = z.why; p.left = z.left; } return false; } return true; });
+  }
+  function dia(t) { var d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); }
+  function sigDia(t) { var d = new Date(t); d.setDate(d.getDate() + 1); return d.getTime(); }
+  var hf = new Intl.DateTimeFormat("es-ES", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+  var tf = new Intl.DateTimeFormat("es-ES", { hour: "2-digit", minute: "2-digit" });
+  // historial por dias: entraron, salieron, neto y cuantas wallets quedaban dentro al cerrar cada dia
+  function histDraw() {
+    var ins = recent.entry || [], outs = recent.exit || [], now = Date.now(), hoy = dia(now);
+    var all = ins.concat(outs);
+    if (!all.length) { $("hrows").innerHTML = '<tr><td colspan="5" class="empty">Todavía no hay entradas.</td></tr>'; $("hd-sum").textContent = ""; $("hmore").hidden = true; return; }
+    var d0 = dia(Math.min.apply(null, all.map(function (o) { return o.t; }))), days = [];
+    // solo los dias con movimiento (y hoy siempre)
+    for (var d = d0; d <= hoy; d = sigDia(d)) { var e1 = sigDia(d); if (d === hoy || all.some(function (o) { return o.t >= d && o.t < e1; })) days.push(d); }
+    days.reverse();
+    var tr = []; rows.forEach(function (x) { (x.tr || []).forEach(function (z) { tr.push(z); }); });
+    var dentro = function (t) { return tr.filter(function (z) { return z.s <= t && z.e > t; }).length; };
+    var html = "";
+    days.slice(0, hshow).forEach(function (d) {
+      var e = sigDia(d), a = ins.filter(function (o) { return o.t >= d && o.t < e; }), b = outs.filter(function (o) { return o.t >= d && o.t < e; });
+      var net = a.length - b.length, lbl = d === hoy ? "Hoy" : d === dia(hoy - 1) ? "Ayer" : "";
+      var op = !!hopen[d] && (a.length || b.length);
+      html += '<tr class="' + (op ? "op" : "") + '" data-d="' + d + '"><td><span class="dd">' + (lbl ? "<b>" + lbl + "</b> · " : "") + hf.format(d) + "</span></td>" +
+        '<td class="r ' + (a.length ? "up" : "z") + '">' + (a.length ? "+" + nf0.format(a.length) : "0") + "</td>" +
+        '<td class="r ' + (b.length ? "dn" : "z") + '">' + (b.length ? "−" + nf0.format(b.length) : "0") + "</td>" +
+        '<td class="r' + (net ? "" : " z") + '">' + (net > 0 ? "+" : net < 0 ? "−" : "") + nf0.format(Math.abs(net)) + "</td>" +
+        '<td class="r">' + nf0.format(dentro(d === hoy ? now : e - 1)) + "</td></tr>";
+      if (op) {
+        var ev = a.map(function (o) { return { o: o, k: "in" }; }).concat(b.map(function (o) { return { o: o, k: "out" }; })).sort(function (p, q) { return q.o.t - p.o.t; });
+        html += '<tr class="hx"><td colspan="5"><ul>' + ev.map(function (v) {
+          var x = rows[v.o.i], r = x.r, w = x.who.slice(0, 8) + "…" + x.who.slice(-6), chip, why;
+          if (v.k === "in") { chip = v.o.re ? '<span class="chip blue">Volvió</span>' : '<span class="chip ok">Entró</span>'; why = r.level ? LV[r.level] + " · " + nf0.format(r.bal) + " SECT ahora" : "Ahora fuera"; }
+          else { chip = '<span class="chip bad">Salió</span>'; why = v.o.why === "stake" ? "Retiró el staking · quedó con " + nf0.format(v.o.left) + " SECT" : "Apagó el nodo"; }
+          return '<li><span class="t">' + tf.format(v.o.t) + "</span>" + chip + '<button class="w" type="button" data-r="' + v.o.i + '">' + w + "</button><span>" + escH(why) + "</span></li>";
+        }).join("") + "</ul></td></tr>";
+      }
+    });
+    $("hrows").innerHTML = html;
+    $("hrows").querySelectorAll("tr[data-d]").forEach(function (t) { t.addEventListener("click", function () { var k = +t.dataset.d; hopen[k] = !hopen[k]; histDraw(); }); });
+    $("hrows").querySelectorAll(".hx button[data-r]").forEach(function (b) { b.addEventListener("click", function (ev) { ev.stopPropagation(); show(+b.dataset.r); }); });
+    var w7 = sigDia(hoy) - 7 * C.DAY, i7 = ins.filter(function (o) { return o.t >= w7; }).length, o7 = outs.filter(function (o) { return o.t >= w7; }).length;
+    $("hd-sum").textContent = "Últimos 7 días: +" + nf0.format(i7) + " / −" + nf0.format(o7) + " · dentro ahora " + nf0.format(dentro(now));
+    var rest = days.length - hshow;
+    $("hmore").hidden = rest <= 0; if (rest > 0) $("hmore").textContent = "Ver " + Math.min(14, rest) + " más";
+  }
   function recentBuild() {
-    var L = { node: [], entry: [], stake: [] };
+    var L = { node: [], entry: [], exit: [], stake: [] };
     rows.forEach(function (x, i) {
       var f = firstTimes(x.ev), n = x.node;
       if (n && n.at) L.node.push({ t: n.at, i: i });
       if (f.first) L.stake.push({ t: f.first, i: i });
-      if (n && n.at && f.t100) L.entry.push({ t: Math.max(n.at, f.t100), i: i });
+      x.tr = tramos(x);
+      x.tr.forEach(function (z, k) {
+        L.entry.push({ t: z.s, i: i, re: k > 0 });
+        if (z.e !== Infinity) L.exit.push({ t: z.e, i: i, why: z.why, left: z.left });
+      });
     });
     // n.º de orden: 1 es el primero que se registro; la lista se muestra de la mas reciente a la mas antigua
     Object.keys(L).forEach(function (k) {
@@ -510,11 +600,17 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       L[k].reverse();
     });
     recent = L;
-    // entradas de hoy (desde las 00:00 de este aparato) y de ayer para comparar
-    var d0 = new Date(); d0.setHours(0, 0, 0, 0); var hoy = d0.getTime(); d0.setDate(d0.getDate() - 1); var ayer = d0.getTime();
-    var cuenta = function (l, a, b) { return l.filter(function (o) { return o.t >= a && o.t < b; }).length; };
-    $("t-today").textContent = nf0.format(cuenta(L.entry, hoy, Infinity));
-    $("t-todays").textContent = "Desde las 00:00 · ayer " + nf0.format(cuenta(L.entry, ayer, hoy)) + " · nodos activados hoy " + nf0.format(cuenta(L.node, hoy, Infinity));
+    // hoy y ayer con la hora de este aparato
+    var hoy = dia(Date.now()), ayer = dia(hoy - 1);
+    var en = function (l, a, b) { return l.filter(function (o) { return o.t >= a && o.t < b; }); };
+    var inH = en(L.entry, hoy, Infinity), outH = en(L.exit, hoy, Infinity);
+    var re = inH.filter(function (o) { return o.re; }).length, ret = outH.filter(function (o) { return o.why === "stake"; }).length;
+    $("t-today").textContent = nf0.format(inH.length);
+    $("t-todays").textContent = nf0.format(inH.length - re) + (inH.length - re === 1 ? " nueva · " : " nuevas · ") + nf0.format(re) + (re === 1 ? " volvió · ayer " : " volvieron · ayer ") + nf0.format(en(L.entry, ayer, hoy).length);
+    $("t-out").textContent = nf0.format(outH.length);
+    $("t-outs").textContent = outH.length ? nf0.format(ret) + (ret === 1 ? " retiró staking · " : " retiraron staking · ") + nf0.format(outH.length - ret) + (outH.length - ret === 1 ? " apagó el nodo · ayer " : " apagaron el nodo · ayer ") + nf0.format(en(L.exit, ayer, hoy).length)
+      : "Ninguna hoy · ayer " + nf0.format(en(L.exit, ayer, hoy).length);
+    histDraw();
   }
   function ago(t) {
     var s = (Date.now() - t) / 1000;
@@ -534,7 +630,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     list.slice(0, rshow).forEach(function (o) {
       var x = rows[o.i], r = x.r, st = ST[r.status] || ["—", "mute"];
       var node = r.node === "on" ? '<span class="chip ok">Activo</span>' : r.node === "off" ? '<span class="chip warn">Pausado</span>' : '<span class="chip mute">Sin nodo</span>';
-      var note = ago(o.t) + (rtab !== "stake" && open && o.t < open ? " · antes de la apertura" : "");
+      var note = ago(o.t) + (rtab !== "stake" && open && o.t < open ? " · antes de la apertura" : "") + (o.re ? " · volvió" : "") +
+        (rtab === "exit" ? (o.why === "stake" ? " · retiró el staking (quedó con " + nf0.format(o.left) + " SECT)" : " · apagó el nodo") : "");
       html += '<tr data-r="' + o.i + '"><td class="r n">' + nf0.format(o.n) + '</td><td><span class="when">' + dtf.format(o.t) + (now - o.t < C.DAY ? '<span class="chip blue">Nuevo</span>' : "") + '</span><span class="sub">' + note + '</span><span class="m-only">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + " · " + (r.level ? LV[r.level] : nf0.format(r.bal) + " SECT") + "</span></td>" +
         '<td><button class="w" type="button">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + "</button></td><td>" + node + '</td><td class="r">' + nf0.format(r.bal) + "</td>" +
         "<td>" + (r.level ? LV[r.level] : "—") + '</td><td><span class="chip ' + st[1] + '">' + st[0] + "</span></td></tr>";
