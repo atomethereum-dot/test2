@@ -497,3 +497,22 @@
   var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
   Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.v2.plan.btn"] = V[l][0]; d["hashdash.v2.plan.btnOn"] = V[l][1]; });
 })();
+/* ubicacion y nombre del nodo dentro del recuadro del plan (sustituye los textos del registro en Sepolia) */
+(function () {
+  var V = {
+    en: ["Our systems detect your node's location automatically, so no coordinates are needed. Just press “Activate my node” and connect your wallet: your node turns on with your staking.", "Only an approximate location (city level) is used, never your address.", "Your node is already registered on the network map.", "Node “{n}” activated"],
+    es: ["Nuestros sistemas detectan la ubicación de tu nodo automáticamente, no necesitas coordenadas. Solo pulsa «Activar mi nodo» y conecta tu wallet: tu nodo se enciende con tu staking.", "Solo se usa una ubicación aproximada (a nivel de ciudad), nunca tu dirección.", "Tu nodo ya está registrado en el mapa de la red.", "Nodo «{n}» activado"],
+    pt: ["Nossos sistemas detectam a localização do seu nó automaticamente, sem coordenadas. Basta tocar em “Ativar meu nó” e conectar sua carteira: seu nó liga com o seu staking.", "Só é usada uma localização aproximada (nível de cidade), nunca o seu endereço.", "Seu nó já está registrado no mapa da rede.", "Nó “{n}” ativado"],
+    fr: ["Nos systèmes détectent automatiquement l’emplacement de votre nœud, aucune coordonnée à saisir. Appuyez simplement sur « Activer mon nœud » et connectez votre wallet : votre nœud s’allume avec votre staking.", "Seul un emplacement approximatif (à l’échelle de la ville) est utilisé, jamais votre adresse.", "Votre nœud est déjà enregistré sur la carte du réseau.", "Nœud « {n} » activé"],
+    de: ["Unsere Systeme erkennen den Standort deines Nodes automatisch, du brauchst keine Koordinaten. Tippe einfach auf „Meinen Node aktivieren“ und verbinde deine Wallet: Dein Node geht mit deinem Staking an.", "Es wird nur ein ungefährer Standort (Stadtebene) verwendet, nie deine Adresse.", "Dein Node ist bereits auf der Netzwerkkarte registriert.", "Node „{n}“ aktiviert"],
+    ru: ["Наши системы определяют местоположение узла автоматически, координаты не нужны. Просто нажмите «Активировать мой узел» и подключите кошелёк: узел включится вашим стейкингом.", "Используется только примерное местоположение (на уровне города), никогда ваш адрес.", "Ваш узел уже зарегистрирован на карте сети.", "Узел «{n}» активирован"],
+    zh: ["我们的系统会自动检测你的节点位置，无需填写坐标。只需点击「激活我的节点」并连接钱包：你的节点会随质押开启。", "只使用大致位置（城市级别），绝不使用你的地址。", "你的节点已在网络地图上注册。", "节点「{n}」已激活"],
+    ja: ["ノードの位置は自動で検出されるため、座標の入力は不要です。「ノードを有効にする」を押してウォレットを接続するだけで、ステーキングによりノードがオンになります。", "使うのはおおよその位置（市区町村レベル）だけで、住所は使いません。", "あなたのノードはすでにネットワークマップに登録されています。", "ノード「{n}」を有効にしました"],
+    ko: ["노드 위치는 자동으로 감지되므로 좌표가 필요 없습니다. ‘내 노드 활성화’를 누르고 지갑을 연결하세요. 스테이킹으로 노드가 켜집니다.", "대략적인 위치(도시 수준)만 사용하며 주소는 절대 사용하지 않습니다.", "내 노드는 이미 네트워크 지도에 등록되어 있습니다.", "노드 ‘{n}’ 활성화됨"],
+    ar: ["تكتشف أنظمتنا موقع عقدتك تلقائيًا، فلا حاجة للإحداثيات. ما عليك سوى الضغط على «تفعيل عقدتي» وربط محفظتك: تعمل عقدتك بتخزينك.", "يُستخدم موقع تقريبي فقط (على مستوى المدينة)، وليس عنوانك أبدًا.", "عقدتك مسجّلة بالفعل على خريطة الشبكة.", "تم تفعيل العقدة «{n}»"],
+    hi: ["हमारे सिस्टम आपके नोड की लोकेशन अपने-आप पहचान लेते हैं, निर्देशांक की ज़रूरत नहीं। बस “मेरा नोड चालू करें” दबाएँ और वॉलेट कनेक्ट करें: आपका नोड आपकी स्टेकिंग से चालू हो जाता है।", "सिर्फ़ अनुमानित लोकेशन (शहर स्तर) इस्तेमाल होती है, कभी आपका पता नहीं।", "आपका नोड पहले से नेटवर्क मैप पर रजिस्टर्ड है।", "नोड “{n}” चालू हुआ"]
+  };
+  var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
+  Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {};
+    d["hashdash.node.geoAuto"] = V[l][0]; d["hashdash.node.geoNote"] = V[l][1]; d["hashdash.v2.reg.old"] = V[l][2]; d["hashdash.v2.reg.toast"] = V[l][3]; });
+})();

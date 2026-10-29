@@ -58,6 +58,44 @@
     else { b.disabled = false; b.dataset.v2 = "act"; b.textContent = tt("hashdash.v2.buy.act", "Activate {h} TH/s").replace("{h}", p.h); }
   };
 
+  /* nombre y ubicacion del nodo (formulario dentro del recuadro del plan, ubicacion automatica de
+     dashboard-node-geo.js): al activar se guardan en este navegador y el nodo aparece en el mapa.
+     Los nodos ya registrados en la red no necesitan nada: ya estan en el mapa. */
+  var enMapa = {}, esperas = 0;
+  var nodoKey = function () { var e = est(); return e ? "sectora:v2:node:" + e.addr.toLowerCase() : ""; };
+  function nodoLeer() { try { return JSON.parse(localStorage.getItem(nodoKey()) || "null"); } catch (e) { return null; } }
+  function activa(manual) {
+    var e = est(); if (!e || !conStake()) return false;
+    if (e.reg) return true;
+    var n = nodoLeer();
+    if (!n) {
+      var la = parseFloat(($("#nLat") || {}).value), lo = parseFloat(($("#nLon") || {}).value);
+      if (!isFinite(la) || !isFinite(lo) || Math.abs(la) > 85 || Math.abs(lo) > 180) {
+        if (manual) { var f = $(".v2-reg .form"); if (f) f.classList.remove("geo-auto"); var x = $("#nLat"); if (x) x.focus(); }
+        return false;
+      }
+      var g = $("#nGeo b");
+      n = { name: (($("#nName") || {}).value || "").trim().slice(0, 48) || "Sectora Node", lat: la, lon: lo, place: g ? g.textContent : "" };
+      try { localStorage.setItem(nodoKey(), JSON.stringify(n)); } catch (er) {}
+      var w = window.__sectoraWallet; if (w && w.aviso) w.aviso(tt("hashdash.v2.reg.toast", "Node “{n}” activated").replace("{n}", n.name));
+      document.dispatchEvent(new Event("v2:nodo"));
+    }
+    if (!enMapa[nodoKey()]) {
+      enMapa[nodoKey()] = 1;
+      if (typeof window.__sectoraMapAdd === "function") window.__sectoraMapAdd(n.lon, n.lat, n.name);
+      if (typeof window.__sectoraAddNode === "function") window.__sectoraAddNode(n.lon, n.lat);
+    }
+    return true;
+  }
+  function resumenNodo(on) {
+    var reg = $(".v2-reg"), sum = $("#v2Sum"); if (!reg || !sum) return;
+    reg.hidden = on; sum.hidden = !on;
+    if (!on) return;
+    var e = est(), n = nodoLeer(), sp = sum.querySelector("span");
+    if (e && e.reg) sp.textContent = tt("hashdash.v2.reg.old", "Your node is already registered on the network map.");
+    else if (n) { sp.innerHTML = ""; var b = document.createElement("b"); b.textContent = n.name; sp.appendChild(b); if (n.place) sp.appendChild(document.createTextNode(" · " + n.place)); }
+  }
+
   /* el recuadro del plan hace todo: "Activar mi nodo" conecta la wallet y, al leer el staking, queda
      "Nodo activado" ahi mismo (o pide los 100 SECT). No lleva a ninguna otra parte de la pagina */
   plan = function () {
@@ -65,7 +103,12 @@
     var txt, ok = 0, act, lbl;
     if (!conectado) { txt = tt("hashdash.v2.plan.st0", "Connect your wallet to activate the plan."); act = "connect"; lbl = tt("hashdash.v2.plan.btn", "Activate my node"); }
     else if (!est()) { txt = tt("hashdash.v2.card.reading", "Reading your staking…"); act = "wait"; lbl = txt; }
-    else if (conStake()) { txt = tt("hashdash.v2.plan.stOk", "Plan active · your node is on."); ok = 2; act = "on"; lbl = tt("hashdash.v2.plan.btnOn", "Node active ✓"); }
+    else if (conStake() && activa(false)) { txt = tt("hashdash.v2.plan.stOk", "Plan active · your node is on."); ok = 2; act = "on"; lbl = tt("hashdash.v2.plan.btnOn", "Node active ✓"); }
+    else if (conStake()) {
+      // falta la ubicacion: se espera a que llegue sola o a que se escriba y se pulse el boton
+      txt = tt("hashdash.node.geoWait", "Detecting your node's location…"); act = "save"; lbl = tt("hashdash.v2.plan.btn", "Activate my node");
+      if (esperas++ < 40) setTimeout(function () { plan(); }, 700);
+    }
     else { txt = tt("hashdash.v2.plan.stNeed", "You need 100 SECT in staking to activate the plan."); act = "stake"; lbl = tt("hashdash.v2.card.stake", "Go to staking"); }
     st.querySelector("span").textContent = txt;
     st.className = "plan-st" + (ok === 2 ? " ok" : "");
@@ -73,6 +116,7 @@
     bp.disabled = act === "wait" || act === "on";
     bp.classList.toggle("v2-ok", act === "on");
     bp.querySelector("span").textContent = lbl;
+    resumenNodo(act === "on");
   };
 
   function todo() { suma(); pintaPks(); resumen(); progreso(); }
@@ -85,6 +129,7 @@
     var a = b.id === "bPlan" ? b.dataset.act : b.dataset.v2;
     if (a === "connect") { var bc = $("#bConnect"); if (bc) bc.click(); }
     else if (a === "stake") location.href = "/staking/";
+    else if (a === "save") { if (activa(true)) todo(); }
     else if (a === "act") {
       var p = elegido(); if (!p) return;
       var l = activos(), id = kind + "-" + sel;
@@ -109,7 +154,9 @@
   document.addEventListener("v2:estado", todo);
   document.addEventListener("sectora:langchange", function () { setTimeout(todo, 0); });
   var css = document.createElement("style");
-  css.textContent = "#bPlan.v2-ok,#bPlan.v2-ok:disabled{background:rgba(62,207,142,.1)!important;border:1px solid rgba(62,207,142,.55)!important;color:var(--live)!important;opacity:1!important;cursor:default}.pk.v2-on .pk-p{color:var(--live)}.buy .split{display:none!important}.plan-pr{font-size:13px;letter-spacing:.04em;color:var(--live)}";
+  css.textContent = ".plan-r .v2-reg[hidden],.plan-r #bReg{display:none!important}.plan-r .form{display:flex;flex-direction:column;align-items:stretch;gap:10px}.plan-r .v2-sum[hidden]{display:none!important}" +
+    ".plan-r .node-geo{margin:2px 0 0;flex-wrap:nowrap;align-items:flex-start}.plan-r .node-geo i{margin-top:7px}.plan-r .node-geo span{flex:1;min-width:0}.plan-r .node-geo button{flex:none;margin-left:6px;padding:0}.plan-r .node-geo-n{margin:0}.plan-r .node-geo-a{margin:10px 0 0}.plan-r .v2-reg{display:flex;flex-direction:column;gap:10px}.plan-r .v2-sum{margin:2px 0 0}.plan-r .v2-sum b{color:#fff;font-weight:500}" +
+    "#bPlan.v2-ok,#bPlan.v2-ok:disabled{background:rgba(62,207,142,.1)!important;border:1px solid rgba(62,207,142,.55)!important;color:var(--live)!important;opacity:1!important;cursor:default}.pk.v2-on .pk-p{color:var(--live)}.buy .split{display:none!important}.plan-pr{font-size:13px;letter-spacing:.04em;color:var(--live)}";
   document.head.appendChild(css);
   engancha();
 })();

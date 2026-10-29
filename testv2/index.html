@@ -995,7 +995,7 @@ html.booting,body.booting{overflow:hidden}
 @media (max-width:900px){.plan{grid-template-columns:1fr}}
 </style>
 <script src="/analytics.js" defer></script>
-<style>/* /testv2 */#node + .card,#rewards,#tnGrid,#tnRef,#pBal{display:none!important}@media (min-width:900px){.how-steps{grid-template-columns:repeat(3,minmax(0,1fr))!important}}</style>
+<style>/* /testv2 */#rewards,#tnGrid,#tnRef,#pBal{display:none!important}@media (min-width:900px){.how-steps{grid-template-columns:repeat(3,minmax(0,1fr))!important}}</style>
 </head>
 <body>
 <div class="reticle" id="reticle" aria-hidden="true"><span class="rx"></span><span class="ry"></span></div>
@@ -1121,6 +1121,24 @@ html.booting,body.booting{overflow:hidden}
         <div class="plan-r">
           <div class="plan-big num">50<em>TH/s</em></div>
           <div class="plan-pr" data-i18n="hashdash.v2.plan.pr">Included with your staking</div>
+          <div class="v2-reg">
+            <div class="form">
+              <div class="fld">
+                <label class="lbl" for="nName" data-i18n="hashdash.node.name">Node name</label>
+                <input class="inp" id="nName" type="text" maxlength="48" placeholder="Sectora Node MAD-1">
+              </div>
+              <div class="fld">
+                <label class="lbl" for="nLat" data-i18n="hashdash.node.lat">Latitude</label>
+                <input class="inp num" id="nLat" type="number" step="0.0001" placeholder="40.4168">
+              </div>
+              <div class="fld">
+                <label class="lbl" for="nLon" data-i18n="hashdash.node.lon">Longitude</label>
+                <input class="inp num" id="nLon" type="number" step="0.0001" placeholder="-3.7038">
+              </div>
+              <button class="btn key" id="bReg" type="button" hidden>Register node</button>
+            </div>
+          </div>
+          <p class="node-geo v2-sum" id="v2Sum" hidden><i></i><span></span></p>
           <p class="plan-st" id="planSt"><i></i><span></span></p>
           <button class="btn key" id="bPlan" type="button"><span>Activate my node</span></button>
         </div>
@@ -1177,25 +1195,6 @@ html.booting,body.booting{overflow:hidden}
         <span data-i18n="hashdash.v2.node.sub">Turns on with your staking</span>
       </div>
 
-      <div class="card rv">
-        <p class="node-need" id="nNeed" hidden></p>
-        <div class="form">
-          <div class="fld">
-            <label class="lbl" for="nName" data-i18n="hashdash.node.name">Node name</label>
-            <input class="inp" id="nName" type="text" maxlength="48" placeholder="Sectora Node MAD-1">
-          </div>
-          <div class="fld">
-            <label class="lbl" for="nLat" data-i18n="hashdash.node.lat">Latitude</label>
-            <input class="inp num" id="nLat" type="number" step="0.0001" placeholder="40.4168">
-          </div>
-          <div class="fld">
-            <label class="lbl" for="nLon" data-i18n="hashdash.node.lon">Longitude</label>
-            <input class="inp num" id="nLon" type="number" step="0.0001" placeholder="-3.7038">
-          </div>
-          <button class="btn key" id="bReg" type="button" disabled style="padding:12px 18px" data-i18n="hashdash.node.register">Register node</button>
-        </div>
-        <p class="note" style="margin-top:16px" data-i18n="hashdash.node.note">Validators are paid from network transaction fees, not from hash revenue — 67% of those fees buy #SECT back, 33% pays validators, expansion and the team.</p>
-      </div>
 
       <div class="head" id="engine">
         <h2 data-i18n="hashdash.engine.title">Buyback engine</h2>
@@ -1374,7 +1373,7 @@ html.booting,body.booting{overflow:hidden}
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="/translations.js"></script>
 <script src="/dashboard-i18n-extra.js?v=20261029c"></script>
-<script src="/testv2/i18n-v2.js?v=3"></script>
+<script src="/testv2/i18n-v2.js?v=4"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="/i18n.js?v=2"></script>
 <script src="/dashboard-reticle.js?v=20260820b"></script>
@@ -1952,6 +1951,44 @@ window.__sectoraMarket = {
     else { b.disabled = false; b.dataset.v2 = "act"; b.textContent = tt("hashdash.v2.buy.act", "Activate {h} TH/s").replace("{h}", p.h); }
   };
 
+  /* nombre y ubicacion del nodo (formulario dentro del recuadro del plan, ubicacion automatica de
+     dashboard-node-geo.js): al activar se guardan en este navegador y el nodo aparece en el mapa.
+     Los nodos ya registrados en la red no necesitan nada: ya estan en el mapa. */
+  var enMapa = {}, esperas = 0;
+  var nodoKey = function () { var e = est(); return e ? "sectora:v2:node:" + e.addr.toLowerCase() : ""; };
+  function nodoLeer() { try { return JSON.parse(localStorage.getItem(nodoKey()) || "null"); } catch (e) { return null; } }
+  function activa(manual) {
+    var e = est(); if (!e || !conStake()) return false;
+    if (e.reg) return true;
+    var n = nodoLeer();
+    if (!n) {
+      var la = parseFloat(($("#nLat") || {}).value), lo = parseFloat(($("#nLon") || {}).value);
+      if (!isFinite(la) || !isFinite(lo) || Math.abs(la) > 85 || Math.abs(lo) > 180) {
+        if (manual) { var f = $(".v2-reg .form"); if (f) f.classList.remove("geo-auto"); var x = $("#nLat"); if (x) x.focus(); }
+        return false;
+      }
+      var g = $("#nGeo b");
+      n = { name: (($("#nName") || {}).value || "").trim().slice(0, 48) || "Sectora Node", lat: la, lon: lo, place: g ? g.textContent : "" };
+      try { localStorage.setItem(nodoKey(), JSON.stringify(n)); } catch (er) {}
+      var w = window.__sectoraWallet; if (w && w.aviso) w.aviso(tt("hashdash.v2.reg.toast", "Node “{n}” activated").replace("{n}", n.name));
+      document.dispatchEvent(new Event("v2:nodo"));
+    }
+    if (!enMapa[nodoKey()]) {
+      enMapa[nodoKey()] = 1;
+      if (typeof window.__sectoraMapAdd === "function") window.__sectoraMapAdd(n.lon, n.lat, n.name);
+      if (typeof window.__sectoraAddNode === "function") window.__sectoraAddNode(n.lon, n.lat);
+    }
+    return true;
+  }
+  function resumenNodo(on) {
+    var reg = $(".v2-reg"), sum = $("#v2Sum"); if (!reg || !sum) return;
+    reg.hidden = on; sum.hidden = !on;
+    if (!on) return;
+    var e = est(), n = nodoLeer(), sp = sum.querySelector("span");
+    if (e && e.reg) sp.textContent = tt("hashdash.v2.reg.old", "Your node is already registered on the network map.");
+    else if (n) { sp.innerHTML = ""; var b = document.createElement("b"); b.textContent = n.name; sp.appendChild(b); if (n.place) sp.appendChild(document.createTextNode(" · " + n.place)); }
+  }
+
   /* el recuadro del plan hace todo: "Activar mi nodo" conecta la wallet y, al leer el staking, queda
      "Nodo activado" ahi mismo (o pide los 100 SECT). No lleva a ninguna otra parte de la pagina */
   plan = function () {
@@ -1959,7 +1996,12 @@ window.__sectoraMarket = {
     var txt, ok = 0, act, lbl;
     if (!conectado) { txt = tt("hashdash.v2.plan.st0", "Connect your wallet to activate the plan."); act = "connect"; lbl = tt("hashdash.v2.plan.btn", "Activate my node"); }
     else if (!est()) { txt = tt("hashdash.v2.card.reading", "Reading your staking…"); act = "wait"; lbl = txt; }
-    else if (conStake()) { txt = tt("hashdash.v2.plan.stOk", "Plan active · your node is on."); ok = 2; act = "on"; lbl = tt("hashdash.v2.plan.btnOn", "Node active ✓"); }
+    else if (conStake() && activa(false)) { txt = tt("hashdash.v2.plan.stOk", "Plan active · your node is on."); ok = 2; act = "on"; lbl = tt("hashdash.v2.plan.btnOn", "Node active ✓"); }
+    else if (conStake()) {
+      // falta la ubicacion: se espera a que llegue sola o a que se escriba y se pulse el boton
+      txt = tt("hashdash.node.geoWait", "Detecting your node's location…"); act = "save"; lbl = tt("hashdash.v2.plan.btn", "Activate my node");
+      if (esperas++ < 40) setTimeout(function () { plan(); }, 700);
+    }
     else { txt = tt("hashdash.v2.plan.stNeed", "You need 100 SECT in staking to activate the plan."); act = "stake"; lbl = tt("hashdash.v2.card.stake", "Go to staking"); }
     st.querySelector("span").textContent = txt;
     st.className = "plan-st" + (ok === 2 ? " ok" : "");
@@ -1967,6 +2009,7 @@ window.__sectoraMarket = {
     bp.disabled = act === "wait" || act === "on";
     bp.classList.toggle("v2-ok", act === "on");
     bp.querySelector("span").textContent = lbl;
+    resumenNodo(act === "on");
   };
 
   function todo() { suma(); pintaPks(); resumen(); progreso(); }
@@ -1979,6 +2022,7 @@ window.__sectoraMarket = {
     var a = b.id === "bPlan" ? b.dataset.act : b.dataset.v2;
     if (a === "connect") { var bc = $("#bConnect"); if (bc) bc.click(); }
     else if (a === "stake") location.href = "/staking/";
+    else if (a === "save") { if (activa(true)) todo(); }
     else if (a === "act") {
       var p = elegido(); if (!p) return;
       var l = activos(), id = kind + "-" + sel;
@@ -2003,7 +2047,9 @@ window.__sectoraMarket = {
   document.addEventListener("v2:estado", todo);
   document.addEventListener("sectora:langchange", function () { setTimeout(todo, 0); });
   var css = document.createElement("style");
-  css.textContent = "#bPlan.v2-ok,#bPlan.v2-ok:disabled{background:rgba(62,207,142,.1)!important;border:1px solid rgba(62,207,142,.55)!important;color:var(--live)!important;opacity:1!important;cursor:default}.pk.v2-on .pk-p{color:var(--live)}.buy .split{display:none!important}.plan-pr{font-size:13px;letter-spacing:.04em;color:var(--live)}";
+  css.textContent = ".plan-r .v2-reg[hidden],.plan-r #bReg{display:none!important}.plan-r .form{display:flex;flex-direction:column;align-items:stretch;gap:10px}.plan-r .v2-sum[hidden]{display:none!important}" +
+    ".plan-r .node-geo{margin:2px 0 0;flex-wrap:nowrap;align-items:flex-start}.plan-r .node-geo i{margin-top:7px}.plan-r .node-geo span{flex:1;min-width:0}.plan-r .node-geo button{flex:none;margin-left:6px;padding:0}.plan-r .node-geo-n{margin:0}.plan-r .node-geo-a{margin:10px 0 0}.plan-r .v2-reg{display:flex;flex-direction:column;gap:10px}.plan-r .v2-sum{margin:2px 0 0}.plan-r .v2-sum b{color:#fff;font-weight:500}" +
+    "#bPlan.v2-ok,#bPlan.v2-ok:disabled{background:rgba(62,207,142,.1)!important;border:1px solid rgba(62,207,142,.55)!important;color:var(--live)!important;opacity:1!important;cursor:default}.pk.v2-on .pk-p{color:var(--live)}.buy .split{display:none!important}.plan-pr{font-size:13px;letter-spacing:.04em;color:var(--live)}";
   document.head.appendChild(css);
   engancha();
 })();
@@ -4148,6 +4194,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 </script>
 <script src="/testv2/count.js?v=1"></script>
 <script src="/dashboard-testnet.js?v=20261029d"></script>
-<script src="/testv2/nodo.js?v=2"></script>
+<script src="/testv2/nodo.js?v=3"></script>
+<script src="/dashboard-node-geo.js?v=2" defer></script>
 </body>
 </html>

@@ -24,11 +24,11 @@
     if (!head) return null;
     c = document.createElement("div");
     c.className = "card rv on v2-node"; c.id = "v2Node";
-    var antes = head.nextElementSibling;   // la tarjeta vieja del registro (oculta en esta prueba)
-    head.parentNode.insertBefore(c, antes ? antes.nextSibling : head.nextSibling);
+    head.parentNode.insertBefore(c, head.nextSibling);
     return c;
   }
 
+  function nodo() { try { return est && est.addr ? JSON.parse(localStorage.getItem("sectora:v2:node:" + est.addr.toLowerCase()) || "null") : null; } catch (e) { return null; } }
   function fila(k, v) { return '<div class="row"><span class="lbl">' + esc(k) + "</span><b>" + v + "</b></div>"; }
 
   function pinta() {
@@ -49,6 +49,7 @@
         '<p class="note v2-n">' + esc(on ? t("hashdash.v2.card.onSub", "Your node is on thanks to your staking. You're in Airdrop Genesis.") : t("hashdash.v2.card.offSub", "Your node turns on with 100 SECT in staking.")) + "</p>" +
         '<div class="v2-rows">' +
         fila(t("hashdash.v2.card.wallet", "Wallet"), esc(corta(est.addr))) +
+        (on && nodo() ? fila(t("hashdash.node.name", "Node name"), esc(nodo().name) + (nodo().place ? " · " + esc(nodo().place) : "")) : "") +
         fila(t("hashdash.v2.card.staked", "SECT in staking"), num(r.bal, 2) + " SECT") +
         (on ? fila(t("hashdash.v2.card.level", "Level"), LV[r.level]) +
           fila(t("hashdash.v2.card.since", "On since"), esc(fecha(est.desde))) +
@@ -74,7 +75,7 @@
       var r = C.evaluate(w.ev, w.node, C.OPEN, Date.now());
       var sp = (w.node && w.node.spans) || [], ult = sp[sp.length - 1];
       est = { addr: addr, r: r, desde: ult ? Math.max(ult[0], C.OPEN) : C.AUTO };
-      pinta(); avisa({ addr: addr, lv: r.level, bal: r.bal });
+      pinta(); avisa({ addr: addr, lv: r.level, bal: r.bal, reg: !!(w.node && w.node.reg) });
     }).catch(function () { if (mio === turno) { est = { addr: addr, err: true }; pinta(); } });
   }
 
@@ -105,5 +106,6 @@
     "@keyframes v2p{50%{opacity:.35}}";
   document.head.appendChild(css);
   document.addEventListener("sectora:langchange", pinta);
+  document.addEventListener("v2:nodo", pinta);
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", engancha); else engancha();
 })();
