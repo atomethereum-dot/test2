@@ -279,7 +279,7 @@
       if(w && w.onBalance) w.onBalance(Number(window.ethers.formatEther(bal)));
       const mk = window.__sectoraMarket; if(mk) mk.setHash(me.hash);
     }catch(e){ if(mio !== turno) return; }
-    pintaCuenta();
+    pintaCuenta(); pintaRef();
   }
 
   function pintaCuenta(){
@@ -440,9 +440,20 @@
       const s = await firmante();
       const rg = new window.ethers.Contract(cfg.registry, REGISTRY_ABI, s);
       toast(tr('hashdash.tn.confirm','Confirm in your wallet…'));
-      const tx = await rg.register(n.slice(0, 64), Math.round(la * 1e6), Math.round(lo * 1e6));
+      /* si llego con un link de invitacion, el padrino viaja al final de este mismo registro (el contrato
+         ignora esos bytes): queda confirmado sin firmar nada mas */
+      const yo = (await s.getAddress()).toLowerCase(), pad = refLee();
+      const conRef = !!pad && pad !== yo && !(refEst.cuenta === yo && refEst.hecho);
+      const args = [n.slice(0, 64), Math.round(la * 1e6), Math.round(lo * 1e6)];
+      let tx;
+      if(conRef){
+        const p = await rg.register.populateTransaction(...args);
+        p.data += REF_TAG + pad.slice(2);
+        tx = await s.sendTransaction(p);
+      } else tx = await rg.register(...args);
       toast(tr('hashdash.tn.waiting','Waiting for the network…'));
       await tx.wait();
+      if(conRef){ refEst = { cuenta: yo, hecho: { to: pad, tx: tx.hash }, leido: true }; pintaRef(); }
       if(typeof window.__sectoraMapAdd === 'function') window.__sectoraMapAdd(lo, la, n);
       if(typeof window.__sectoraAddNode === 'function') window.__sectoraAddNode(lo, la);
       toast(tr('hashdash.toast.registered','Node "{n}" registered · live on the network map').replace('{n}', n));
@@ -453,8 +464,10 @@
      El link de invitacion (/airdrop/?ref=0x… o /dashboard.html?ref=0x…) deja al padrino guardado en este
      navegador. Aqui el invitado lo confirma enviando 0,0001 tSECT (de prueba) a su padrino: queda en la red,
      solo el propio invitado puede hacerlo y vale la primera. Las reglas del bono estan en airdrop/count.js. */
-  const REF_KEY = 'sectora:ref', REF_MARK = 10n ** 14n, REF_SINCE = Date.UTC(2026, 9, 28) / 1000;
+  const REF_KEY = 'sectora:ref', REF_MARK = 10n ** 14n, REF_SINCE = Date.UTC(2026, 9, 28) / 1000, REF_TAG = '5ec7a4ef';
   const T_TR = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+  const T_REG = '0xa99a387835fe9175c623942eef94297ff971af8cb2893a2f6bfdd49ecb828aaf';   // ValidatorRegistered
+  const T_UPD = '0xc2d41a2c5080290dc5fce01cd3232300d606ae866d8685d46b8ba3814adc5823';   // ValidatorUpdated
   const refDir = v => { const m = /0x[0-9a-fA-F]{40}/.exec(String(v || '')); return m ? m[0].toLowerCase() : ''; };
   const refLee = () => { try{ return refDir(localStorage.getItem(REF_KEY)); }catch(e){ return ''; } };
   const refGuarda = a => { try{ localStorage.setItem(REF_KEY, a); }catch(e){} };
@@ -469,20 +482,38 @@
     }catch(e){}
   })();
   let refEst = { cuenta: '', hecho: null, leido: false };
-  /* la primera constancia que esta wallet envio (transferencia de 0,0001 tSECT a otra wallet) */
+  /* la primera constancia de esta wallet: su registro de nodo con el padrino al final, o una transferencia
+     de 0,0001 tSECT a otra wallet (la que llego antes a la red) */
   async function refBusca(a){
-    const fin = await ro.getBlockNumber();
+    const fin = await ro.getBlockNumber(), yo = a.toLowerCase();
     const ini = Math.max(0, fin - Math.ceil((Date.now() / 1000 - REF_SINCE) / 12) - 2000);
-    const tema = window.ethers.zeroPadValue(a, 32);
-    for(let x = ini; x <= fin; x += 45000){
-      const l = await ro.getLogs({ address: cfg.token, topics: [T_TR, tema], fromBlock: x, toBlock: Math.min(fin, x + 44999) });
-      for(const g of l){
-        if(g.topics.length !== 3 || !g.data || g.data === '0x' || BigInt(g.data) !== REF_MARK) continue;
-        const to = '0x' + g.topics[2].slice(26).toLowerCase();
-        if(to !== a.toLowerCase() && !/^0x0{40}$/.test(to)) return { to, tx: g.transactionHash };
+    const tema = window.ethers.zeroPadValue(a, 32), ok = to => to !== yo && !/^0x0{40}$/.test(to);
+    const antes = (x, y) => !y || x.bn < y.bn || (x.bn === y.bn && x.li < y.li);
+    let tr1 = null, rg1 = null;
+    for(let x = ini; x <= fin && !tr1 && !rg1; x += 45000){
+      const hasta = Math.min(fin, x + 44999);
+      if(!tr1){
+        const l = await ro.getLogs({ address: cfg.token, topics: [T_TR, tema], fromBlock: x, toBlock: hasta });
+        for(const g of l){
+          if(g.topics.length !== 3 || !g.data || g.data === '0x' || BigInt(g.data) !== REF_MARK) continue;
+          const to = '0x' + g.topics[2].slice(26).toLowerCase();
+          if(ok(to)){ tr1 = { to, tx: g.transactionHash, bn: g.blockNumber, li: g.index }; break; }
+        }
+      }
+      if(!rg1){
+        const l = await ro.getLogs({ address: cfg.registry, topics: [[T_REG, T_UPD], tema], fromBlock: x, toBlock: hasta });
+        for(const g of l){
+          const t = await ro.getTransaction(g.transactionHash);
+          const d = t && t.data ? t.data.toLowerCase() : '', k = d.length - 48;
+          if(!t || (t.from || '').toLowerCase() !== yo || (t.to || '').toLowerCase() !== cfg.registry.toLowerCase()) continue;
+          if(k < 10 || (k - 10) % 64 || d.slice(k, k + 8) !== REF_TAG) continue;
+          const to = '0x' + d.slice(k + 8);
+          if(ok(to)){ rg1 = { to, tx: g.transactionHash, bn: g.blockNumber, li: g.index }; break; }
+        }
       }
     }
-    return null;
+    if(tr1 && rg1) return antes(tr1, rg1) ? tr1 : rg1;
+    return tr1 || rg1;
   }
   async function refCarga(){
     const a = acct; if(!a) return;
@@ -491,6 +522,7 @@
     if(!acct || acct.toLowerCase() !== a.toLowerCase()) return;
     refEst = { cuenta: a.toLowerCase(), hecho: h, leido: true }; pintaRef();
   }
+  const conNodo = () => !!(me && me.reg);
   function pintaRef(){
     const c = q('#tnRef'), b = q('#tnRefB');
     if(!c || !b) return;
@@ -503,6 +535,13 @@
       b.innerHTML = '<span class="rf-h rf-ok"></span><p class="rf-n"></p>' + mio;
       b.querySelector('.rf-h').textContent = '✓ ' + tr('hashdash.ref.done','Invitation recorded · invited by {a}').replace('{a}', corto(refEst.hecho.to));
       b.querySelector('.rf-n').textContent = tr('hashdash.ref.doneSub','Saved on the network. It can\'t be changed.');
+      return;
+    }
+    /* sin nodo todavia: el padrino viaja solo al registrarlo, sin firmar nada mas */
+    if(pend && pend !== me && !conNodo()){
+      b.innerHTML = '<span class="rf-h"></span><p class="rf-n"></p>' + mio;
+      b.querySelector('.rf-h').textContent = tr('hashdash.ref.by','{a} invited you to Airdrop Genesis').replace('{a}', corto(pend));
+      b.querySelector('.rf-n').textContent = tr('hashdash.ref.auto','It\'s confirmed automatically when you register your Hash Node. Nothing else to do, and you keep your whole airdrop.');
       return;
     }
     if(pend && pend !== me){

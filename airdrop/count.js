@@ -270,9 +270,11 @@
   }
 
   /* ---------- referidos ----------
-     El invitado deja constancia de quien lo invito enviando 0,0001 tSECT (la moneda de pruebas, sin valor) a su
-     padrino en Sepolia. Solo el invitado puede hacer esa transferencia: nadie puede apuntarse invitados ajenos, y no
-     hace falta ningun contrato nuevo ni servidor. Reglas:
+     El padrino queda en la red sin pasos extra: al registrar su nodo desde el link de invitacion, el Dashboard
+     anade al final de esa misma transaccion la marca REF_TAG + la wallet del padrino (el contrato ignora esos bytes).
+     Quien ya tenia el nodo puede dejarlo enviando 0,0001 tSECT (la moneda de pruebas, sin valor) a su padrino.
+     Las dos cosas solo las puede firmar el invitado: nadie puede apuntarse invitados ajenos, y no hace falta
+     ningun contrato nuevo ni servidor. Reglas:
      - cuenta la primera constancia de cada wallet; no vale invitarse a si mismo; en una invitacion mutua vale la primera;
      - tiene que quedar hecha antes de entrar en el airdrop o hasta 7 dias despues (REF_WIN);
      - el padrino gana el 12 % de los SECT que su invitado tiene en staking, al mismo ritmo que el premio del invitado
@@ -282,13 +284,15 @@
   var TSECT = "0x189a39081D99bB9D964dfF7FA756978645592Cf3";
   var SECT = "0x8C9984B06281f1CA9416e493c2E602AaB08513db";
   var T_TR = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"; // Transfer(address,address,uint256)
+  var T_REG = "0xa99a387835fe9175c623942eef94297ff971af8cb2893a2f6bfdd49ecb828aaf"; // ValidatorRegistered(address,string,int32,int32,uint256,uint256)
+  var REF_TAG = "5ec7a4ef";   // 4 bytes antes de la wallet del padrino, al final del registro del nodo
   var MARK = 10n ** 14n, REF_BONUS = 0.12, REF_WIN = 7 * DAY, REF_POOL = 840000;
   var REF_SINCE = Date.UTC(2026, 9, 28);   // el programa empieza el 28 oct 2026
   var ZERO = /^0x0{40}$/;
   function addr(topic) { return "0x" + topic.slice(26).toLowerCase(); }
   function chunks(list, n) { var out = []; for (var i = 0; i < list.length; i += n) out.push(list.slice(i, i + n)); return out; }
   // constancias (transferencias de 0,0001 tSECT) que casan con los filtros; las listas largas van por tandas
-  function marks(from, to) {
+  function transfers(from, to) {
     var tf = from ? chunks(from.map(pad), 40) : [null], tt = to ? chunks(to.map(pad), 40) : [null], jobs = [];
     tf.forEach(function (a) { tt.forEach(function (b) { jobs.push([T_TR, a, b]); }); });
     return jobs.reduce(function (p, topics) {
@@ -298,6 +302,36 @@
       return times(SEPOLIA, l);
     }).then(function (x) {
       return x.map(function (o) { return { from: addr(o.l.topics[1]), to: addr(o.l.topics[2]), t: o.t, bn: o.bn, li: o.li, tx: o.l.transactionHash || "" }; });
+    });
+  }
+  // padrino que el Dashboard dejo al final del registro del nodo (solo si la firmo la propia wallet, directo al registro)
+  function tagOf(tx, who) {
+    if (!tx || !tx.input || (tx.from || "").toLowerCase() !== who || (tx.to || "").toLowerCase() !== REGISTRY.toLowerCase()) return "";
+    var d = tx.input.toLowerCase(), k = d.length - 48;
+    if (k < 10 || (k - 10) % 64 || d.slice(k, k + 8) !== REF_TAG) return "";
+    var a = "0x" + d.slice(k + 8);
+    return ZERO.test(a) ? "" : a;
+  }
+  var regAll = null;
+  function regs(from) {
+    if (!from && regAll) return regAll;
+    var p = (from ? chunks(from.map(pad), 40) : [null]).reduce(function (q, a) {
+      return q.then(function (all) { return scan(SEPOLIA, REGISTRY, [[T_REG, T_UPD], a], REF_SINCE).then(function (l) { return all.concat(l); }); });
+    }, Promise.resolve([])).then(function (l) { return times(SEPOLIA, l); }).then(function (x) {
+      return batch(SEPOLIA, x.map(function (o) { return ["eth_getTransactionByHash", [o.l.transactionHash]]; })).then(function (txs) {
+        var out = [];
+        x.forEach(function (o, i) { var w = addr(o.l.topics[1]), r = tagOf(txs[i], w); if (r) out.push({ from: w, to: r, t: o.t, bn: o.bn, li: o.li, tx: o.l.transactionHash || "" }); });
+        return out;
+      });
+    });
+    if (!from) regAll = p.catch(function (e) { regAll = null; throw e; });
+    return p;
+  }
+  // todas las constancias (registro del nodo y transferencias), en el orden de la cadena
+  function marks(from, to) {
+    return Promise.all([transfers(from, to), regs(from)]).then(function (r) {
+      return r[0].concat(r[1].filter(function (m) { return !to || to.indexOf(m.to) >= 0; }))
+        .sort(function (a, b) { return a.bn - b.bn || a.li - b.li; });
     });
   }
   // la primera constancia valida de cada wallet; una invitacion mutua solo vale la primera
@@ -375,6 +409,6 @@
 
   root.SACount = { OPEN: root.SA_OPEN !== undefined ? root.SA_OPEN : OPEN, END: END, DAY: DAY, DUR: DUR, MIN: MIN, BAG: BAG, RATE: RATE, prize: prize,
     level: level, layers: layers, evaluate: evaluate, liveEarned: liveEarned, wallet: wallet, everyone: everyone,
-    REF: { TSECT: TSECT, MARK: MARK, BONUS: REF_BONUS, WIN: REF_WIN, SINCE: REF_SINCE, POOL: REF_POOL },
+    REF: { TSECT: TSECT, MARK: MARK, TAG: REF_TAG, BONUS: REF_BONUS, WIN: REF_WIN, SINCE: REF_SINCE, POOL: REF_POOL },
     refOf: refOf, refInvitees: refInvitees, referrals: referrals, refBonus: refBonus, refLate: refLate, fundedBy: fundedBy };
 })(window);
