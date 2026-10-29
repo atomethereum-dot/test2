@@ -53,7 +53,7 @@
     if (!conectado) { b.disabled = false; b.dataset.v2 = "connect"; b.textContent = tt("hashdash.v2.buy.connect", "Connect wallet to activate"); }
     else if (!p) { b.disabled = true; b.textContent = t("hashdash.buy.selectPackage", "Select a package"); }
     else if (leyendo) { b.disabled = true; b.textContent = tt("hashdash.v2.card.reading", "Reading your staking…"); }
-    else if (id === KIT && !conStake()) { b.disabled = false; b.dataset.v2 = "stake"; b.textContent = tt("hashdash.v2.buy.kitNeed", "Needs 100 SECT in staking"); }
+    else if (id === KIT && !conStake()) { b.disabled = false; b.dataset.v2 = "stake"; b.textContent = tt("hashdash.v2.buy.kitNeed", "Needs your staking"); }
     else if (activo(id)) { b.disabled = true; b.textContent = id === KIT ? tt("hashdash.v2.buy.kitOn", "Included with your staking ✓") : "✓ " + tt("hashdash.v2.buy.on", "Active"); }
     else { b.disabled = false; b.dataset.v2 = "act"; b.textContent = tt("hashdash.v2.buy.act", "Activate {h} TH/s").replace("{h}", p.h); }
   };
@@ -105,7 +105,7 @@
     if (!conectado) { txt = tt("hashdash.v2.plan.st0", "Connect your wallet to activate the plan."); act = "connect"; lbl = tt("hashdash.v2.plan.btn", "Activate my node"); }
     else if (!est()) { txt = tt("hashdash.v2.card.reading", "Reading your staking…"); act = "wait"; lbl = txt; }
     else if (activa(false) && conStake()) { txt = tt("hashdash.v2.plan2.stBoth", "Node active · Airdrop active."); ok = 2; act = "on"; lbl = tt("hashdash.v2.plan.btnOn", "Node active ✓"); }
-    else if (activa(false)) { txt = tt("hashdash.v2.plan2.stNode", "Node active. To activate your airdrop, put 100 SECT in staking."); ok = 2; act = "stake"; lbl = tt("hashdash.v2.card.stake", "Go to staking"); }
+    else if (activa(false)) { txt = tt("hashdash.v2.plan2.stNode", "Node active. Stake #SECT to activate your airdrop: the higher your level, the bigger your rewards."); ok = 2; act = "stake"; lbl = tt("hashdash.v2.card.stake", "Go to staking"); }
     else {
       // falta la ubicacion: se espera a que llegue sola o a que se escriba y se pulse el boton
       txt = tt("hashdash.node.geoWait", "Detecting your node's location…"); act = "save"; lbl = tt("hashdash.v2.plan.btn", "Activate my node");

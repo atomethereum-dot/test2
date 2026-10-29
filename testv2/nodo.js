@@ -80,6 +80,8 @@
         (ad ? fila(t("hashdash.v2.card.level", "Level"), LV[r.level]) +
           fila(t("hashdash.v2.card.prize", "Your airdrop prize"), num(r.prize) + " SECT") : "") +
         "</div>" +
+        (stk ? "" : '<div class="v2-lv"><span class="lbl">' + esc(t("hashdash.v2.lv.k", "Airdrop levels: the higher, the bigger your reward")) + "</span><div>" +
+          LV.slice(1).map(function (n, i) { return "<i><em>" + (i + 1) + "</em>" + n + "</i>"; }).join("") + "</div></div>") +
         (!on ? '<div class="v2-a"><button class="btn key" type="button" data-v2="plan">' + esc(t("hashdash.v2.plan.btn", "Activate my node")) + "</button></div>"
           : !stk ? '<div class="v2-a"><a class="btn key" href="/staking/">' + esc(t("hashdash.v2.card.stake", "Go to staking")) + " ↗</a></div>" : "");
     }
@@ -218,26 +220,27 @@
     live.hidden = !(s && s.ad);
     if (!est || est.carga || est.err || !s) {
       tot.textContent = "—";
-      linea(est && est.carga ? t("hashdash.v2.card.reading", "Reading your staking…") : t("hashdash.v2.vis.lConn", "waiting for your wallet…"), "dim");
+      linea(est && est.carga ? t("hashdash.v2.card.reading", "Reading your staking…") : t("hashdash.v2.vis.lConn", "waiting for your wallet…"), "c-dim");
       return;
     }
     var n = nodo(), p = lugar();
-    if (s.on) linea(t("hashdash.v2.vis.lNode", "node “{n}” online").replace("{n}", n && n.name ? n.name : "Hash Node") + (p && p.place ? " · " + p.place : ""), "ok");
-    else linea(t("hashdash.v2.vis.lOff", "node off: press “Activate my node”"), "warn");
-    linea(t("hashdash.v2.vis.lStake", "staking: {s} SECT").replace("{s}", num(est.r.bal, 2)) + (s.stk ? " · " + LV[est.r.level] : ""), s.stk ? "" : "warn");
+    if (s.on) linea(t("hashdash.v2.vis.lNode", "node “{n}” online").replace("{n}", n && n.name ? n.name : "Hash Node") + (p && p.place ? " · " + p.place : ""), "c-ok");
+    else linea(t("hashdash.v2.vis.lOff", "node off: press “Activate my node”"), "c-warn");
+    linea(t("hashdash.v2.vis.lStake", "staking: {s} SECT").replace("{s}", num(est.r.bal, 2)), s.stk ? "" : "c-warn");
+    if (s.stk) linea(t("hashdash.v2.vis.lLevel", "level {l} · reward {p} SECT").replace("{l}", LV[est.r.level]).replace("{p}", num(est.r.prize)), "c-up");
     if (!s.ad) {
       tot.textContent = num(est.r.earned, 4, 4) + " SECT";
-      linea(!s.stk ? t("hashdash.v2.vis.lWait", "airdrop on hold: 100 SECT in staking needed") : t("hashdash.v2.vis.lWaitNode", "airdrop on hold: activate your node"), "dim");
+      linea(!s.stk ? t("hashdash.v2.vis.lWait", "airdrop on hold: 100 SECT in staking needed") : t("hashdash.v2.vis.lWaitNode", "airdrop on hold: activate your node"), "c-dim");
       return;
     }
     var pd = porDia();
-    linea(t("hashdash.v2.vis.lStart", "airdrop active · {r} SECT per day").replace("{r}", num(pd, 4)), "ok");
+    linea(t("hashdash.v2.vis.lStart", "airdrop active · {r} SECT per day").replace("{r}", num(pd, 4)), "c-ok");
     K.ult = vivo();
     var pinta = function () { tot.textContent = num(vivo(), 6, 6) + " SECT"; };
     pinta(); K.tic = setInterval(pinta, 250);
     K.timer = setInterval(function () {
       var v = vivo(), d = v - K.ult; K.ult = v;
-      if (d > 0) linea("+" + num(d, 6, 6) + " SECT · " + t("hashdash.v2.vis.lTot", "total") + " " + num(v, 6, 6) + " SECT", "up");
+      if (d > 0) linea("+" + num(d, 6, 6) + " SECT · " + t("hashdash.v2.vis.lTot", "total") + " " + num(v, 6, 6) + " SECT", "c-up");
     }, 3000);
   }
 
@@ -289,6 +292,9 @@
     ".v2-node .v2-st.off i{background:transparent;border:1.5px solid var(--ink4)}" +
     ".v2-node .v2-rows{margin-top:16px}.v2-node .v2-ok{color:var(--live)}" +
     ".v2-node .v2-wait i{display:inline-block;width:9px;height:9px;margin-right:10px;border-radius:50%;background:var(--blue);animation:v2p 1.2s ease-in-out infinite}" +
+    ".v2-lv{margin-top:18px}.v2-lv > div{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}" +
+    ".v2-lv i{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(21,105,255,.38);background:rgba(21,105,255,.06);font:400 11px/1 'IBM Plex Mono',monospace;font-style:normal;letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}" +
+    ".v2-lv i em{font-style:normal;color:var(--blue2);font-size:10px}" +
     ".v2-vis{display:flex;flex-direction:column;gap:12px;min-width:0}" +
     ".v2-map{position:relative;aspect-ratio:2/1;border:1px solid var(--hair);background:#04070d;overflow:hidden}" +
     ".v2-map canvas{position:absolute;inset:0;width:100%;height:100%;display:block}" +
@@ -302,8 +308,8 @@
     ".v2-tot{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 12px 4px}" +
     ".v2-tot span{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink4)}.v2-tot b{font-weight:400;font-size:clamp(17px,1.6vw,21px);color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.01em}" +
     ".v2-log{padding:6px 12px 12px;min-height:150px;font-size:11.5px;line-height:1.75;color:var(--ink2);overflow:hidden}" +
-    ".v2-log p{margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v2-log time{margin-right:10px;color:var(--ink4)}" +
-    ".v2-log .ok{color:var(--live)}.v2-log .up{color:#9fd0ff}.v2-log .warn{color:var(--amber)}.v2-log .dim{color:var(--ink3)}" +
+    ".v2-log p{margin:0;padding-left:72px;text-indent:-72px;overflow-wrap:anywhere}.v2-log time{margin-right:10px;color:var(--ink4)}" +
+    ".v2-log .c-ok{color:var(--live)}.v2-log .c-up{color:#9fd0ff}.v2-log .c-warn{color:var(--amber)}.v2-log .c-dim{color:var(--ink3)}" +
     ".v2-log .v2-cur i{display:inline-block;width:7px;height:12px;vertical-align:-2px;background:var(--live);animation:v2p 1s steps(1) infinite}" +
     "@keyframes v2p{50%{opacity:.35}}";
   document.head.appendChild(css);
