@@ -13,6 +13,13 @@
       "c": "Mérida, VE",
       "la": 8.6,
       "lo": -71.2
+    },
+    "0x406ff53aa22cc6a0dbdbfedb9e2ceaff073146b6": {
+      "t": 1793300354000,
+      "n": "Sectora Node Arraiolos",
+      "c": "Arraiolos, PT",
+      "la": 38.7,
+      "lo": -8
     }
   }
 }
