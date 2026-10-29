@@ -737,3 +737,39 @@
   var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
   Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; K.forEach(function (k, i) { d[k] = V[l][i]; }); });
 })();
+/* sin ubicacion detectada: se escribe a mano */
+(function () {
+  var V = {
+    en: "Type your city's latitude and longitude above, then press “Activate my node”.",
+    es: "Escribe arriba la latitud y la longitud de tu ciudad y pulsa «Activar mi nodo».",
+    pt: "Digite acima a latitude e a longitude da sua cidade e toque em “Ativar meu nó”.",
+    fr: "Saisissez ci-dessus la latitude et la longitude de votre ville, puis appuyez sur « Activer mon nœud ».",
+    de: "Gib oben Breiten- und Längengrad deiner Stadt ein und tippe auf „Meinen Node aktivieren“.",
+    ru: "Введите выше широту и долготу вашего города и нажмите «Активировать мой узел».",
+    zh: "在上方输入你所在城市的纬度和经度，然后点击「激活我的节点」。",
+    ja: "上に都市の緯度と経度を入力し、「ノードを有効にする」を押してください。",
+    ko: "위에 도시의 위도와 경도를 입력한 뒤 ‘내 노드 활성화’를 누르세요.",
+    ar: "اكتب في الأعلى خط العرض وخط الطول لمدينتك، ثم اضغط «تفعيل عقدتي».",
+    hi: "ऊपर अपने शहर का अक्षांश और देशांतर लिखें, फिर “मेरा नोड चालू करें” दबाएँ।"
+  };
+  var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
+  Object.keys(V).forEach(function (l) { (X[l] = X[l] || {})["hashdash.v2.plan.stManual"] = V[l]; });
+})();
+/* lo generado por SECT que salieron antes de 30 dias: queda en pausa, no se borra */
+(function () {
+  var V = {
+    "en": "{n} SECT paused: they continue when your SECT return to staking. To collect them, complete 30 days inside.",
+    "es": "{n} SECT en pausa: siguen sumando cuando vuelvas a depositar. Para cobrarlos, completa 30 días dentro.",
+    "pt": "{n} SECT em pausa: voltam a somar quando você depositar de novo. Para recebê-los, complete 30 dias dentro.",
+    "fr": "{n} SECT en pause : ils reprennent quand vos SECT reviennent en staking. Pour les recevoir, complétez 30 jours.",
+    "de": "{n} SECT pausiert: Sie laufen weiter, sobald deine SECT zurück im Staking sind. Für die Auszahlung 30 Tage dabei bleiben.",
+    "ru": "{n} SECT на паузе: они продолжат расти, когда SECT вернутся в стейкинг. Чтобы получить их, пробудьте внутри 30 дней.",
+    "zh": "{n} SECT 已暂停：SECT 重新质押后继续累计。完成 30 天即可领取。",
+    "ja": "{n} SECT は一時停止中：SECT をステーキングに戻すと再開します。受け取るには 30 日間参加してください。",
+    "ko": "{n} SECT 일시 중지: SECT를 다시 스테이킹하면 이어서 쌓입니다. 받으려면 30일을 채우세요.",
+    "ar": "{n} SECT متوقفة مؤقتًا: تستمر عند إعادة SECT إلى التخزين. لاستلامها، أكمل 30 يومًا.",
+    "hi": "{n} SECT रुके हुए हैं: SECT वापस स्टेक करने पर ये फिर जुड़ने लगेंगे। पाने के लिए 30 दिन पूरे करें।"
+  };
+  var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
+  Object.keys(V).forEach(function (l) { (X[l] = X[l] || {})["hashdash.v2.box.paused"] = V[l]; });
+})();

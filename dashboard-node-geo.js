@@ -91,6 +91,9 @@
     if (!lon.value) lon.value = String(r1(g.lon));
     if (nm && !nm.value.trim()) nm.value = ("Sectora Node " + (city || country || "")).trim().slice(0, 48);
     state = "ok"; paint();
+    // la tarjeta del nodo la usa si las coordenadas guardadas no sirven
+    window.__sectoraGeo = { lat: r1(g.lat), lon: r1(g.lon), place: place };
+    document.dispatchEvent(new Event("sectora:geo"));
   }).catch(function () {
     // sin ubicacion: se muestran los campos para escribirla a mano
     state = "fail"; form.classList.remove("geo-auto"); paint();

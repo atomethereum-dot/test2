@@ -20,7 +20,7 @@
   var AIRDROP_URL = "/airdrop/";
   var MY_URL = "/myairdrop/";
   var NODE_URL = "/dashboard.html#guia-nodo";
-  var COUNT_JS = "/airdrop/count.js?v=20";
+  var COUNT_JS = "/airdrop/count.js?v=21";
   var REGISTRY = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
   var SEPOLIA = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.gateway.tenderly.co", "https://ethereum-sepolia.publicnode.com"];
   var STAKING = "0x79Cb8B3B3e81a2B25C6d7250c3C5a742aa8320E0";

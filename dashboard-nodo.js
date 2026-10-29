@@ -60,10 +60,15 @@
     return { on: on, stk: stk, ad: on && stk };
   }
   // donde esta el nodo: el guardado al activarlo, o el del registro en la red
+  // coordenadas imposibles: 0,0 o en el borde del mapa (algunos nodos de Sepolia se registraron escribiendolas mal a mano)
+  function mala(la, lo) { return !isFinite(la) || !isFinite(lo) || (Math.abs(la) < 0.01 && Math.abs(lo) < 0.01) || Math.abs(la) >= 84.9 || Math.abs(lo) >= 179.9; }
   function lugar() {
     var n = nodo();
-    if (n && isFinite(n.lat) && isFinite(n.lon)) return { lat: n.lat, lon: n.lon, name: n.name, place: n.place || "" };
-    if (est && est.reg && est.nd && isFinite(est.nd.lat) && isFinite(est.nd.lon) && (est.nd.lat || est.nd.lon)) return { lat: est.nd.lat, lon: est.nd.lon, name: "", place: "" };
+    if (n && !mala(n.lat, n.lon)) return { lat: n.lat, lon: n.lon, name: n.name, place: n.place || "" };
+    if (est && est.reg && est.nd && !mala(est.nd.lat, est.nd.lon)) return { lat: est.nd.lat, lon: est.nd.lon, name: "", place: "" };
+    // si lo guardado no sirve, la ubicacion aproximada que el dashboard detecta ahora (dashboard-node-geo.js)
+    var g = window.__sectoraGeo;
+    if ((n || (est && est.reg)) && g && !mala(g.lat, g.lon)) return { lat: g.lat, lon: g.lon, name: n ? n.name : "", place: g.place || "" };
     return null;
   }
 
@@ -100,6 +105,7 @@
         (ad ? '<div class="v2-ad"><span class="lbl">' + esc(t("hashdash.v2.box.k", "Airdrop of this node")) + "</span>" +
           '<div class="v2-ad-g"><div><span>' + esc(t("hashdash.v2.box.earned", "Released so far")) + '</span><b id="v2Rel">' + num(vivo(), 6, 6) + " SECT</b></div>" +
           "<div><span>" + esc(t("hashdash.v2.box.total", "This node will generate")) + "</span><b>" + num(r.proj || r.prize) + " SECT</b><small>" + esc(t("hashdash.v2.box.totalS", "on completing your time")) + "</small></div></div>" +
+          (r.paused > 0.00005 ? '<p class="v2-ad-p">' + esc(t("hashdash.v2.box.paused", "{n} SECT paused: they continue when your SECT return to staking. To collect them, complete 30 days inside.").replace("{n}", num(r.paused, 4, 4))) + "</p>" : "") +
           '<p class="v2-ad-d"><i></i>' + esc(t("hashdash.v2.box.deliv", "Delivered at the launch of SectoraEVM")) + "</p>" +
           '<div class="v2-a"><a class="btn key" href="/myairdrop/?a=' + est.addr + '">' + esc(t("hashdash.v2.box.btn", "Airdrop panel")) + " ↗</a></div></div>" : "") +
         (stk ? "" : '<div class="v2-lv"><span class="lbl">' + esc(t("hashdash.v2.lv.k", "Airdrop levels: the higher, the bigger your reward")) + "</span><div>" +
@@ -313,6 +319,7 @@
     var rp = window.__sectoraLandRepaint;
     window.__sectoraLandRepaint = function () { if (rp) rp.apply(this, arguments); M.sucia = true; M.base = null; mapa(); };
     var rt; addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { M.base = null; mapa(); }, 200); });
+    document.addEventListener("sectora:geo", function () { M.base = null; mapa(); });
   }
 
   var css = document.createElement("style");
@@ -336,6 +343,7 @@
     ".v2-ad-g b{display:block;margin-top:6px;font-weight:400;font-size:clamp(18px,1.7vw,22px);color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.01em}" +
     ".v2-ad-g small{display:block;margin-top:3px;font-size:12px;color:var(--ink3)}" +
     ".v2-ad-d{display:flex;align-items:center;gap:8px;margin:14px 0 0;font:400 10px/1.4 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--live)}" +
+    ".v2-ad-p{margin:12px 0 0;font-size:12.5px;line-height:1.55;color:var(--ink3)}" +
     ".v2-ad-d i{width:6px;height:6px;border-radius:50%;background:var(--live);flex:none}.v2-node .v2-ad .v2-a{margin-top:14px}" +
     ".v2-lv{margin-top:18px}.v2-lv > div{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}" +
     ".v2-lv i{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(21,105,255,.38);background:rgba(21,105,255,.06);font:400 11px/1 'IBM Plex Mono',monospace;font-style:normal;letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}" +
