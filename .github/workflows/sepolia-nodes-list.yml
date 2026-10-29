@@ -1,0 +1,42 @@
+name: Sepolia nodes list
+
+# Solo lectura: lista los nodos del registro de la testnet (Sepolia) con su posicion aproximada
+# (la misma que muestra el mapa del dash) y si estan encendidos. No firma ni envia nada.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  list:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Leer la red
+        run: |
+          cat > list.mjs <<'JS'
+          const REG = "0x8dba83ffA1dF76B4136B39C9edfCD6Ca0B2e9BF1";
+          const SEP = ["https://ethereum-sepolia-rpc.publicnode.com", "https://sepolia.gateway.tenderly.co"];
+          const word = (h, n) => BigInt("0x" + (h.slice(2 + 64 * n, 2 + 64 * (n + 1)) || "0"));
+          const s32 = v => Number(BigInt.asIntN(32, v));
+          async function call(data) {
+            for (const u of SEP) {
+              try {
+                const r = await fetch(u, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: REG, data }, "latest"] }) });
+                const j = await r.json(); if (j.result) return j.result;
+              } catch (e) {}
+            }
+            throw new Error("rpc");
+          }
+          const n = Number(word(await call("0x0f43a677"), 0));
+          let on = 0; const out = [];
+          for (let i = 0; i < n; i++) {
+            const h = await call("0x35aa2e44" + i.toString(16).padStart(64, "0"));
+            const lat = s32(word(h, 2)) / 1e6, lon = s32(word(h, 3)) / 1e6, at = Number(word(h, 5)), act = word(h, 6) === 1n;
+            if (act) on++;
+            out.push([+lat.toFixed(2), +lon.toFixed(2), act ? 1 : 0, at]);
+          }
+          console.log("TOTAL", n, "ENCENDIDOS", on);
+          console.log("NODOS " + JSON.stringify(out));
+          JS
+          node list.mjs
