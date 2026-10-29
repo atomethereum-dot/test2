@@ -20,6 +20,13 @@
       "c": "Arraiolos, PT",
       "la": 38.7,
       "lo": -8
+    },
+    "0x74efff89605998411b9cc080d86c9812ba357bbe": {
+      "t": 1793315056000,
+      "n": "Sectora Node Mesa",
+      "c": "Mesa, US",
+      "la": 33.4,
+      "lo": -111.8
     }
   }
 }
