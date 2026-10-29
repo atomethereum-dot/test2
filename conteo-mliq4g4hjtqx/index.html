@@ -186,6 +186,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       <div class="tile"><span class="k">Wallets Titan</span><span class="v" id="t-titan">0</span><span class="s" id="t-titans"></span></div>
       <div class="tile"><span class="k">Falta encender el nodo</span><span class="v" id="t-nonode">0</span><span class="s">Tienen staking pero el nodo no está activo</span></div>
       <div class="tile"><span class="k">Falta el staking</span><span class="v" id="t-p2">0</span><span class="s">Tienen el nodo activado pero aún no hacen staking</span></div>
+      <div class="tile"><span class="k">Entradas al airdrop hoy</span><span class="v" id="t-today">0</span><span class="s" id="t-todays"></span></div>
     </div>
     <div class="lvls">
       <div class="lv"><span>Scout</span><b id="l1">0</b></div>
@@ -509,6 +510,11 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       L[k].reverse();
     });
     recent = L;
+    // entradas de hoy (desde las 00:00 de este aparato) y de ayer para comparar
+    var d0 = new Date(); d0.setHours(0, 0, 0, 0); var hoy = d0.getTime(); d0.setDate(d0.getDate() - 1); var ayer = d0.getTime();
+    var cuenta = function (l, a, b) { return l.filter(function (o) { return o.t >= a && o.t < b; }).length; };
+    $("t-today").textContent = nf0.format(cuenta(L.entry, hoy, Infinity));
+    $("t-todays").textContent = "Desde las 00:00 · ayer " + nf0.format(cuenta(L.entry, ayer, hoy)) + " · nodos activados hoy " + nf0.format(cuenta(L.node, hoy, Infinity));
   }
   function ago(t) {
     var s = (Date.now() - t) / 1000;
