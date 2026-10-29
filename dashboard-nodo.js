@@ -96,6 +96,12 @@
         (ad ? fila(t("hashdash.v2.card.level", "Level"), LV[r.level]) +
           fila(t("hashdash.v2.card.prize", "Your airdrop prize"), num(r.prize) + " SECT") : "") +
         "</div>" +
+        // el airdrop de este nodo: lo liberado hasta ahora (en vivo), lo que generara y cuando se entrega
+        (ad ? '<div class="v2-ad"><span class="lbl">' + esc(t("hashdash.v2.box.k", "Airdrop of this node")) + "</span>" +
+          '<div class="v2-ad-g"><div><span>' + esc(t("hashdash.v2.box.earned", "Released so far")) + '</span><b id="v2Rel">' + num(vivo(), 6, 6) + " SECT</b></div>" +
+          "<div><span>" + esc(t("hashdash.v2.box.total", "This node will generate")) + "</span><b>" + num(r.proj || r.prize) + " SECT</b><small>" + esc(t("hashdash.v2.box.totalS", "on completing your time")) + "</small></div></div>" +
+          '<p class="v2-ad-d"><i></i>' + esc(t("hashdash.v2.box.deliv", "Delivered at the launch of SectoraEVM")) + "</p>" +
+          '<div class="v2-a"><a class="btn key" href="/myairdrop/?a=' + est.addr + '">' + esc(t("hashdash.v2.box.btn", "Airdrop panel")) + " ↗</a></div></div>" : "") +
         (stk ? "" : '<div class="v2-lv"><span class="lbl">' + esc(t("hashdash.v2.lv.k", "Airdrop levels: the higher, the bigger your reward")) + "</span><div>" +
           LV.slice(1).map(function (n, i) { return "<i><em>" + (i + 1) + "</em>" + n + "</i>"; }).join("") + "</div></div>") +
         (!on ? '<div class="v2-a"><button class="btn key" type="button" data-v2="plan">' + esc(t("hashdash.v2.plan.btn", "Activate my node")) + "</button></div>"
@@ -257,7 +263,7 @@
     } else if ((est.r.items || []).length) K.intentos = 0;
     linea(t("hashdash.v2.vis.lStart", "airdrop active · {r} SECT per day").replace("{r}", num(pd, 4)), "c-ok");
     K.ult = vivo();
-    var pinta = function () { tot.textContent = num(vivo(), 6, 6) + " SECT"; };
+    var pinta = function () { var v = num(vivo(), 6, 6) + " SECT", rel = document.getElementById("v2Rel"); tot.textContent = v; if (rel) rel.textContent = v; };
     pinta(); K.tic = setInterval(pinta, 250);
     K.timer = setInterval(function () {
       var v = vivo(), d = v - K.ult; K.ult = v;
@@ -324,6 +330,13 @@
     ".v2-node .v2-st.off i{background:transparent;border:1.5px solid var(--ink4)}" +
     ".v2-node .v2-rows{margin-top:16px}.v2-node .v2-ok{color:var(--live)}" +
     ".v2-node .v2-wait i{display:inline-block;width:9px;height:9px;margin-right:10px;border-radius:50%;background:var(--blue);animation:v2p 1.2s ease-in-out infinite}" +
+    ".v2-node .v2-ad{margin-top:20px;padding:16px 18px;border:1px solid rgba(62,207,142,.28);background:rgba(62,207,142,.04)}" +
+    ".v2-ad-g{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}@media (max-width:520px){.v2-ad-g{grid-template-columns:1fr}}" +
+    ".v2-ad-g span{display:block;font:400 9.5px/1.3 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}" +
+    ".v2-ad-g b{display:block;margin-top:6px;font-weight:400;font-size:clamp(18px,1.7vw,22px);color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.01em}" +
+    ".v2-ad-g small{display:block;margin-top:3px;font-size:12px;color:var(--ink3)}" +
+    ".v2-ad-d{display:flex;align-items:center;gap:8px;margin:14px 0 0;font:400 10px/1.4 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--live)}" +
+    ".v2-ad-d i{width:6px;height:6px;border-radius:50%;background:var(--live);flex:none}.v2-node .v2-ad .v2-a{margin-top:14px}" +
     ".v2-lv{margin-top:18px}.v2-lv > div{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}" +
     ".v2-lv i{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(21,105,255,.38);background:rgba(21,105,255,.06);font:400 11px/1 'IBM Plex Mono',monospace;font-style:normal;letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}" +
     ".v2-lv i em{font-style:normal;color:var(--blue2);font-size:10px}" +

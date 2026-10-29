@@ -718,3 +718,22 @@
   var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
   Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; K.forEach(function (k, i) { d[k] = V[l][i]; }); });
 })();
+/* el airdrop de este nodo, en la tarjeta "Tu nodo": lo liberado, lo que generara y la entrega */
+(function () {
+  var K = ["k", "earned", "total", "totalS", "deliv", "btn"].map(function (k) { return "hashdash.v2.box." + k; });
+  var V = {
+    en: ["Airdrop of this node", "Released so far", "This node will generate", "on completing your time", "Delivered at the launch of SectoraEVM", "Airdrop panel"],
+    es: ["Airdrop de este nodo", "Liberado hasta ahora", "Generará este nodo", "al completar tu tiempo", "Se entrega en el lanzamiento de SectoraEVM", "Panel del airdrop"],
+    pt: ["Airdrop deste nó", "Liberado até agora", "Este nó vai gerar", "ao completar seu tempo", "Entregue no lançamento da SectoraEVM", "Painel do airdrop"],
+    fr: ["Airdrop de ce nœud", "Libéré jusqu’ici", "Ce nœud générera", "en complétant votre temps", "Livré au lancement de SectoraEVM", "Panneau de l’airdrop"],
+    de: ["Airdrop dieses Nodes", "Bisher freigegeben", "Dieser Node erzeugt", "nach Abschluss deiner Zeit", "Auszahlung beim Start von SectoraEVM", "Airdrop-Panel"],
+    ru: ["Эйрдроп этого узла", "Начислено на данный момент", "Узел сгенерирует", "по завершении вашего срока", "Выдаётся при запуске SectoraEVM", "Панель эйрдропа"],
+    zh: ["此节点的空投", "目前已释放", "此节点将产生", "完成你的时间后", "在 SectoraEVM 上线时发放", "空投面板"],
+    ja: ["このノードのエアドロップ", "これまでに解放", "このノードが生み出す量", "期間を満了したとき", "SectoraEVM のローンチ時に配布", "エアドロップ・パネル"],
+    ko: ["이 노드의 에어드롭", "지금까지 적립", "이 노드가 생성할 양", "기간을 채우면", "SectoraEVM 출시 때 지급", "에어드롭 패널"],
+    ar: ["إيردروب هذه العقدة", "المُحرَّر حتى الآن", "ستولّد هذه العقدة", "عند إكمال مدتك", "يُسلَّم عند إطلاق SectoraEVM", "لوحة الإيردروب"],
+    hi: ["इस नोड का एयरड्रॉप", "अब तक जारी", "यह नोड जनरेट करेगा", "अपना समय पूरा करने पर", "SectoraEVM के लॉन्च पर दिया जाएगा", "एयरड्रॉप पैनल"]
+  };
+  var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
+  Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; K.forEach(function (k, i) { d[k] = V[l][i]; }); });
+})();
