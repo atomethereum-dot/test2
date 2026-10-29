@@ -996,6 +996,11 @@ html.booting,body.booting{overflow:hidden}
 </style>
 <script src="/analytics.js" defer></script>
 <style>/* /testv2 */.hm,#rewards,#tnGrid,#tnRef,#pBal{display:none!important}@media (min-width:900px){.how-steps{grid-template-columns:repeat(3,minmax(0,1fr))!important}}</style>
+<style>/* /testv2: red de validadores en el plan */.v2-why{margin-top:24px;padding-top:20px;border-top:1px solid var(--hair);max-width:64ch}
+.v2-why-h{margin:0;font-size:clamp(16px,1.3vw,18px);font-weight:400;line-height:1.4;color:var(--ink)}
+.v2-why-p{margin:9px 0 0;font-size:13.5px;line-height:1.7;color:var(--ink3)}
+.v2-why-l{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;padding:0;list-style:none}
+.v2-why-l li{padding:7px 11px;border:1px solid rgba(21,105,255,.38);background:rgba(21,105,255,.06);color:var(--blue2);font:400 10px/1.2 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase}</style>
 </head>
 <body>
 <div class="reticle" id="reticle" aria-hidden="true"><span class="rx"></span><span class="ry"></span></div>
@@ -1116,6 +1121,11 @@ html.booting,body.booting{overflow:hidden}
               <a class="plan-gas" href="/staking/" data-i18n="hashdash.v2.s1.go">Go to staking</a></li>
             <li><span class="num">3</span><span data-i18n="hashdash.v2.plan2.s2">In any order: with both done, your airdrop is active</span></li>
           </ol>
+          <div class="v2-why">
+            <p class="v2-why-h" data-i18n="hashdash.v2.why.h">Be part of the network that secures SectoraEVM.</p>
+            <p class="v2-why-p" data-i18n="hashdash.v2.why.p">Join our network of security validator nodes and help build SectoraEVM: a 100% decentralized network, protected by security analysis from nodes all over the world. Every node makes the network stronger, and with Airdrop Genesis you earn rewards for building it with us as part of the Sectora team.</p>
+            <ul class="v2-why-l"><li data-i18n="hashdash.v2.why.l1">Global validator network</li><li data-i18n="hashdash.v2.why.l2">100% decentralized</li><li data-i18n="hashdash.v2.why.l3">Rewards with Airdrop Genesis</li></ul>
+          </div>
         </div>
         <div class="plan-r">
           <div class="plan-big num">50<em>TH/s</em></div>
@@ -1372,7 +1382,7 @@ html.booting,body.booting{overflow:hidden}
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="/translations.js"></script>
 <script src="/dashboard-i18n-extra.js?v=20261029c"></script>
-<script src="/testv2/i18n-v2.js?v=6"></script>
+<script src="/testv2/i18n-v2.js?v=8"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="/i18n.js?v=2"></script>
 <script src="/dashboard-reticle.js?v=20260820b"></script>
@@ -4195,9 +4205,9 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   }));
 })();
 </script>
-<script src="/testv2/count.js?v=1"></script>
+<script src="/testv2/count.js?v=2"></script>
 <script src="/dashboard-testnet.js?v=20261029d"></script>
-<script src="/testv2/nodo.js?v=4"></script>
+<script src="/testv2/nodo.js?v=5"></script>
 <script src="/dashboard-node-geo.js?v=2" defer></script>
 </body>
 </html>

@@ -155,7 +155,9 @@
     return batch(MAINNET, list.map(function (w) { return ["eth_call", [{ to: STAKING, data: "0xf85b90e2" + pad(w).slice(2) }, "latest"]]; }))
       .then(function (res) { var m = {}; list.forEach(function (w, i) { var h = res[i]; if (h && h.length >= 2 + 64 * 3) m[w] = { staked: sect(word(h, 0)), claimable: sect(word(h, 1)), wallet: sect(word(h, 2)) }; }); return m; });
   }
-  function parseNode(v) { return { who: "0x" + v.slice(26, 66).toLowerCase(), at: Number(word(v, 5)) * 1000, active: word(v, 6) === 1n }; }
+  // int32 con signo en una palabra de 256 bits (latitud y longitud en micro-grados)
+  function i32(v, n) { var b = word(v, n); if (b >> 255n) b -= 1n << 256n; return Number(b) / 1e6; }
+  function parseNode(v) { return { who: "0x" + v.slice(26, 66).toLowerCase(), at: Number(word(v, 5)) * 1000, active: word(v, 6) === 1n, lat: i32(v, 2), lon: i32(v, 3) }; }
   function nodes() {
     return rpc(SEPOLIA, "eth_call", [{ to: REGISTRY, data: SEL.count }, "latest"]).then(function (h) {
       var n = Number(word(h, 0)), calls = [];
@@ -171,7 +173,7 @@
     (n.spans || (n.active ? [[n.at, Infinity]] : [])).forEach(function (s) { if (s[0] < AUTO) out.push([s[0], Math.min(s[1], AUTO)]); });
     var last = out[out.length - 1];
     if (last && last[1] >= AUTO) last[1] = Infinity; else out.push([AUTO, Infinity]);
-    return { who: n.who, at: n.at, active: true, spans: out, reg: true };
+    return { who: n.who, at: n.at, active: true, spans: out, reg: true, lat: n.lat, lon: n.lon };
   }
 
   /* ---------- reglas ---------- */
