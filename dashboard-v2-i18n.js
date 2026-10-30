@@ -845,3 +845,9 @@
   var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
   Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.wallet.wcOnlyS"] = V[l][0]; d["hashdash.wallet.wcWarn"] = V[l][1]; d["hashdash.wallet.wcPaste"] = V[l][2]; d["hashdash.wallet.wcScanOnly"] = V[l][3]; });
 })();
+/* boton "Copiar enlace" de "Otra wallet" y boton para cerrar el panel de WalletConnect */
+(function () {
+  var V = {"en": ["Copy link", "Copied ✓", "Close WalletConnect"], "es": ["Copiar enlace", "Copiado ✓", "Cerrar WalletConnect"], "pt": ["Copiar link", "Copiado ✓", "Fechar WalletConnect"], "fr": ["Copier le lien", "Copié ✓", "Fermer WalletConnect"], "de": ["Link kopieren", "Kopiert ✓", "WalletConnect schließen"], "ru": ["Копировать ссылку", "Скопировано ✓", "Закрыть WalletConnect"], "zh": ["复制链接", "已复制 ✓", "关闭 WalletConnect"], "ja": ["リンクをコピー", "コピーしました ✓", "WalletConnect を閉じる"], "ko": ["링크 복사", "복사됨 ✓", "WalletConnect 닫기"], "ar": ["نسخ الرابط", "تم النسخ ✓", "إغلاق WalletConnect"], "hi": ["लिंक कॉपी करें", "कॉपी हो गया ✓", "WalletConnect बंद करें"]};
+  var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
+  Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.wallet.copyBtn"] = V[l][0]; d["hashdash.wallet.copiedBtn"] = V[l][1]; d["hashdash.wallet.closeWc"] = V[l][2]; });
+})();
