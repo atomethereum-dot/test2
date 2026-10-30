@@ -31,6 +31,36 @@
   /* sin wallet en este navegador: en el movil, abrir esta pagina dentro de la app de cada wallet; en el
      ordenador, su pagina oficial de descarga */
   var MOVIL = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "") || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  // logos: los mismos del Dashboard y del staking (dashboard-wallet-logos.js) y el de Phantom aqui mismo
+  var PHANTOM = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#ab9ff2"/><path d="M7 21.5V13a7 7 0 0 1 14 0v8.5l-2.33-1.75-2.34 1.75L14 19.75l-2.33 1.75-2.34-1.75z" fill="#fff"/><ellipse cx="11.6" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/><ellipse cx="16.4" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/></svg>');
+  var KEY = { "MetaMask": "metaMask", "Trust Wallet": "trust", "Binance Wallet": "binance", "Coinbase Wallet": "coinbase", "OKX Wallet": "okx" };
+  var WT = {
+    en: ["Opens this page in the app", "Download"], es: ["Abre esta página en la app", "Descargar"], pt: ["Abre esta página no app", "Baixar"],
+    fr: ["Ouvre cette page dans l’app", "Télécharger"], de: ["Öffnet diese Seite in der App", "Herunterladen"], ru: ["Открывает эту страницу в приложении", "Скачать"],
+    zh: ["在 App 中打开此页面", "下载"], ja: ["アプリでこのページを開きます", "ダウンロード"], ko: ["앱에서 이 페이지를 엽니다", "다운로드"],
+    ar: ["يفتح هذه الصفحة في التطبيق", "تنزيل"], hi: ["यह पेज ऐप में खोलता है", "डाउनलोड करें"]
+  };
+  var logosPedidos = false;
+  function pideLogos() {
+    if (window.SECTORA_WALLET_LOGOS || logosPedidos) return;
+    logosPedidos = true;
+    var sc = document.createElement("script"); sc.src = "/dashboard-wallet-logos.js";
+    sc.onload = ponLogos;
+    document.head.appendChild(sc);
+  }
+  // los logos son SVG en data URI con comillas: se ponen por propiedad del DOM, nunca dentro del HTML
+  function ponLogos() {
+    var L0 = window.SECTORA_WALLET_LOGOS; if (!L0) return;
+    document.querySelectorAll(".el-wl [data-logo]").forEach(function (sp) {
+      var src = L0[sp.getAttribute("data-logo")]; if (!src) return;
+      var im = document.createElement("img"); im.alt = ""; im.src = src; sp.replaceWith(im);
+    });
+  }
+  function filaW(w) {
+    var tw = WT[lang()] || WT.en, k = KEY[w[0]];
+    var ico = w[0] === "Phantom" ? '<img alt="" src="' + PHANTOM + '">' : '<span class="ph" data-logo="' + (k || "") + '">' + w[0].slice(0, 1) + "</span>";
+    return '<a href="' + esc(w[1]) + '" rel="noopener" data-w="' + esc(w[0]) + '">' + ico + "<span><b>" + w[0] + "</b><small>" + (MOVIL ? tw[0] : tw[1]) + "</small></span><i>→</i></a>";
+  }
   function wallets() {
     var u = location.origin + "/airdrop/", e = encodeURIComponent;
     if (!MOVIL) return [["MetaMask", "https://metamask.io/download/"], ["Phantom", "https://phantom.com/download"], ["Trust Wallet", "https://trustwallet.com/download"],
@@ -141,8 +171,14 @@
     ".el-b + .el-b{margin-top:10px}",
     ".el-alt{margin-top:16px;padding-top:14px;border-top:1px solid rgba(7,8,10,.07);font-size:14px;color:#6b7280}",
     ".el-alt a{color:#0d4fd8}",
-    ".el-wl{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}",
-    ".el-wl a{display:inline-flex;align-items:center;padding:9px 13px;border:1px solid rgba(7,8,10,.14);border-radius:99px;font-size:13.5px;color:#07080a;text-decoration:none;background:#fff}",
+    ".el-wl{display:grid;gap:8px;margin-top:12px}",
+    ".el-wl a{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid rgba(7,8,10,.1);border-radius:12px;color:#07080a;text-decoration:none;background:#fff}",
+    ".el-wl a:hover{border-color:#0d4fd8}",
+    ".el-wl img,.el-wl .ph{width:34px;height:34px;border-radius:9px;flex:none;object-fit:cover}",
+    ".el-wl .ph{display:grid;place-items:center;background:#eef2f7;color:#6b7280;font-weight:500}",
+    ".el-wl b{display:block;font-weight:500;font-size:15px;line-height:1.3}",
+    ".el-wl small{display:block;font-size:12px;color:#6b7280;line-height:1.3}",
+    ".el-wl i{margin-left:auto;font-style:normal;color:#0d4fd8;font-size:16px}",
     ".el-f{display:flex;gap:8px;margin-top:10px}",
     ".el-f input{flex:1;min-width:0;padding:12px 14px;border:1px solid rgba(7,8,10,.16);border-radius:10px;background:#fff;color:#07080a;font-family:'IBM Plex Mono',monospace;font-size:14px;outline:none}",
     ".el-f input:focus{border-color:#1569ff;box-shadow:0 0 0 3px rgba(21,105,255,.15)}",
@@ -314,10 +350,11 @@
     bd.innerHTML = '<h3>' + t("h") + '</h3><p class="el-in">' + t("intro") + '</p>' +
       (hasW ? '<button class="el-b go mono" type="button" data-a="connect"><span>' + t("connect") + '</span><span>→</span></button>' : "") +
       (msg ? '<p class="el-msg">' + esc(msg) + '</p>' : "") +
-      '<div class="el-alt">' + (hasW ? "" : t("nowallet") + '<div class="el-wl">' + wallets().map(function (w) { return '<a href="' + esc(w[1]) + '" rel="noopener">' + w[0] + ' ↗</a>'; }).join("") + '</div><br>') +
+      '<div class="el-alt">' + (hasW ? "" : t("nowallet") + '<div class="el-wl">' + wallets().map(filaW).join("") + '</div><br>') +
       t("or") + '<form class="el-f"><input name="a" placeholder="0x…" autocomplete="off" spellcheck="false" aria-label="' + t("or") + '"><button class="mono" type="submit">' + t("check") + '</button></form></div>' +
       '<p class="mono el-rule">' + t("rule") + '</p>';
     var b = bd.querySelector('[data-a="connect"]'); if (b) b.addEventListener("click", connect);
+    if (!hasW) { pideLogos(); ponLogos(); }
     bd.querySelector("form").addEventListener("submit", function (e) {
       e.preventDefault(); var v = this.a.value.trim();
       if (!/^0x[0-9a-fA-F]{40}$/.test(v)) { start(t("bad")); return; }
