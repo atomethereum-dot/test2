@@ -232,12 +232,30 @@
     document.querySelectorAll('.tn-apy-v').forEach(el => { el.textContent = pct + '%'; });   /* guia "como funciona" */
   }
 
+  /* nodos activados con el boton del Dashboard (sin Sepolia): los guarda la tarea "Nodos activados" de GitHub
+     en nodos/activaciones.json. Se suman a los activos del registro de Sepolia, sin contar dos veces una wallet */
+  function leeActivados(){
+    return fetch('/nodos/activaciones.json?t=' + Math.floor(Date.now() / 3e5))
+      .then(r => r.ok ? r.json() : null).then(j => (j && j.nodos) || {}).catch(() => ({}));
+  }
+  /* los activos del registro de Sepolia, por wallet (null si no se pudo leer) */
+  async function activosRegistro(){
+    try{
+      const n = Number(await registryRO.validatorCount());
+      const lote = await registryRO.getValidators(0, Math.min(n, 200));
+      return lote.filter(v => v.active);
+    }catch(e){ return null; }
+  }
+
   async function leeRed(){
     try{ APY = Number(await marketRO.apyBps()) / 10000; }catch(e){}
     pintaApy();
     try{
-      const [s, act] = await Promise.all([marketRO.getStats(), registryRO.activeValidatorCount()]);
-      const val = Number(act) + PREVIEW;
+      const [s, act, lista, nodos] = await Promise.all([marketRO.getStats(), registryRO.activeValidatorCount(), activosRegistro(), leeActivados()]);
+      const enRegistro = new Set((lista || []).map(v => String(v.operator).toLowerCase()));
+      /* sin la lista del registro no se puede saber quien ya esta contado: no se suma nada para no inflar */
+      const nuevos = lista ? Object.keys(nodos).filter(w => !enRegistro.has(w)).length : 0;
+      const val = Number(act) + nuevos + PREVIEW;
       const kv = q('#kVal'), mv = q('#mVal'), kh = q('#kHash'), kb = q('#kBuy');
       if(kv) kv.textContent = val.toLocaleString('en-US');
       if(mv) mv.textContent = val.toLocaleString('en-US');
@@ -251,14 +269,17 @@
 
   async function pintaNodos(){
     if(typeof window.__sectoraMapAdd !== 'function') return;
-    try{
-      const n = Number(await registryRO.validatorCount());
-      const lote = await registryRO.getValidators(0, Math.min(n, 200));
-      for(const v of lote){
-        if(!v.active) continue;
-        window.__sectoraMapAdd(Number(v.lonMicro) / 1e6, Number(v.latMicro) / 1e6, v.name);
-      }
-    }catch(e){}
+    const [lista, nodos] = await Promise.all([activosRegistro(), leeActivados()]);
+    const enRegistro = new Set();
+    for(const v of lista || []){
+      enRegistro.add(String(v.operator).toLowerCase());
+      window.__sectoraMapAdd(Number(v.lonMicro) / 1e6, Number(v.latMicro) / 1e6, v.name);
+    }
+    /* y los activados con el boton del Dashboard que no estan ya en el registro */
+    for(const [w, x] of Object.entries(nodos)){
+      if(enRegistro.has(w) || !isFinite(x.lo) || !isFinite(x.la)) continue;
+      window.__sectoraMapAdd(Number(x.lo), Number(x.la), x.n);
+    }
   }
 
   let turno = 0;             /* solo vale la lectura mas reciente */

@@ -4241,6 +4241,9 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 
   const PROPIOS = [];
   window.__sectoraMapAdd = function(lon, lat, nombre){
+    /* el mismo nodo puede llegar del registro y de las activaciones: una sola marca */
+    const r = v => Math.round(v * 10) / 10;
+    if (PROPIOS.some(p => p.nombre === nombre && r(p.lon) === r(lon) && r(p.lat) === r(lat))) return;
     PROPIOS.push({ lon, lat, nombre });
     pinta();
   };
@@ -4374,7 +4377,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 })();
 </script>
 <script src="/airdrop/count.js?v=22"></script>
-<script src="/dashboard-testnet.js?v=20261029d"></script>
+<script src="/dashboard-testnet.js?v=20261030n"></script>
 <script src="/dashboard-nodo.js?v=6"></script>
 <script src="/dashboard-node-geo.js?v=4" defer></script>
 </body>
