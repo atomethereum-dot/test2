@@ -817,3 +817,19 @@
   var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
   Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.wallet.soloOtherN"] = V[l][0]; d["hashdash.wallet.soloOtherS"] = V[l][1]; d["hashdash.wallet.soloCopied"] = V[l][2]; });
 })();
+/* modo temporal SOLO_APP en el ordenador: sin QR, extensiones y el enlace para el telefono */
+(function () {
+  var V = {"en": "To connect here, install a wallet extension. On your phone, open this page inside your wallet app.",
+    "es": "Para conectar aquí, instala una extensión de wallet. En el teléfono, abre esta página dentro de la app de tu wallet.",
+    "pt": "Para conectar aqui, instale uma extensão de carteira. No celular, abra esta página dentro do app da sua carteira.",
+    "fr": "Pour vous connecter ici, installez une extension de wallet. Sur votre téléphone, ouvrez cette page dans l’app de votre wallet.",
+    "de": "Um dich hier zu verbinden, installiere eine Wallet-Erweiterung. Auf dem Handy öffne diese Seite in deiner Wallet-App.",
+    "ru": "Чтобы подключиться здесь, установите расширение кошелька. На телефоне откройте эту страницу в приложении кошелька.",
+    "zh": "要在此连接，请安装钱包浏览器扩展。在手机上，请在钱包 App 内打开此页面。",
+    "ja": "ここで接続するには、ウォレットの拡張機能をインストールしてください。スマホでは、ウォレットアプリ内でこのページを開いてください。",
+    "ko": "여기서 연결하려면 지갑 확장 프로그램을 설치하세요. 휴대폰에서는 지갑 앱 안에서 이 페이지를 여세요.",
+    "ar": "للاتصال هنا، ثبّت إضافة محفظة. على هاتفك، افتح هذه الصفحة داخل تطبيق محفظتك.",
+    "hi": "यहाँ कनेक्ट करने के लिए वॉलेट एक्सटेंशन इंस्टॉल करें। फ़ोन पर, यह पेज अपने वॉलेट ऐप के अंदर खोलें।"};
+  var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
+  Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.wallet.soloPc"] = V[l]; });
+})();

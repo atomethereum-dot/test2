@@ -1383,7 +1383,7 @@ html.booting,body.booting{overflow:hidden}
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="/translations.js"></script>
 <script src="/dashboard-i18n-extra.js?v=20261029c"></script>
-<script src="/dashboard-v2-i18n.js?v=10"></script>
+<script src="/dashboard-v2-i18n.js?v=11"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="/i18n.js?v=2"></script>
 <script src="/dashboard-reticle.js?v=20260820b"></script>
@@ -3618,10 +3618,11 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     { id:'rainbow', nombre:'Rainbow', logo:'rainbow', nativo:'rainbow://' }
   ];
   const conWC = a => !!a.nativo;
-  /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, en el movil sin wallet (Chrome,
-     Safari...) no se conecta por WalletConnect: se abre esta pagina en la app de la wallet, donde no sale
-     ninguna alerta. Para volver a como estaba: SOLO_APP = false. */
-  /* enlace privado de prueba (?wcprueba=1): en esa visita el movil vuelve a conectar por WalletConnect,
+  /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, no se conecta por WalletConnect:
+     en el movil sin wallet (Chrome, Safari...) se abre esta pagina en la app de la wallet, donde no sale
+     ninguna alerta, y en el ordenador no hay QR (extensiones y el enlace para el telefono).
+     Para volver a como estaba: SOLO_APP = false. */
+  /* enlace privado de prueba (?wcprueba=1): en esa visita vuelven WalletConnect en el movil y el QR del ordenador,
      para comprobar si la alerta de Reown sigue; para todos los demas no cambia nada */
   const SOLO_APP = !/[?&]wcprueba=1(&|$)/.test(location.search);
 
@@ -3808,6 +3809,11 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     lista.appendChild(n);
   }
 
+  /* copia esta pagina para abrirla en el navegador de la wallet (sin WalletConnect) */
+  function copiaAqui(){
+    const ok = () => estado(t('hashdash.wallet.soloCopied','Link copied. Open your wallet app, go to its browser and paste it.'));
+    (navigator.clipboard ? navigator.clipboard.writeText(aqui()) : Promise.reject()).then(ok, () => estado(aqui()));
+  }
   /* movil sin wallet, mientras dura SOLO_APP: solo abrir esta pagina en la app de la wallet */
   function vistaSoloApp(){
     cabeza();
@@ -3820,10 +3826,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     /* cualquier otra wallet con navegador: copiar el enlace y abrirlo ahi (sin WalletConnect: en el iPhone el
        enlace de WalletConnect lo abre la wallet que tenga asignada, casi siempre MetaMask) */
     lista.appendChild(fila({ icono: ENLACE, nombre: t('hashdash.wallet.soloOtherN','Another wallet'),
-      sub: t('hashdash.wallet.soloOtherS','Copy the link and open it in your wallet’s browser'), accion: () => {
-        const ok = () => estado(t('hashdash.wallet.soloCopied','Link copied. Open your wallet app, go to its browser and paste it.'));
-        (navigator.clipboard ? navigator.clipboard.writeText(aqui()) : Promise.reject()).then(ok, () => estado(aqui()));
-      } }));
+      sub: t('hashdash.wallet.soloOtherS','Copy the link and open it in your wallet’s browser'), accion: copiaAqui }));
     const n = document.createElement('div'); n.className = 'wsel-note';
     n.textContent = t('hashdash.wallet.soloF','Your node, staking and airdrop work the same inside your wallet app. On a computer you can also connect as usual.');
     lista.appendChild(n);
@@ -3890,15 +3893,22 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     const ext = inyectadas();
     ext.forEach(w => lista.appendChild(fila({ icono: w.icono, nombre: w.nombre,
       sub: t('hashdash.wallet.wExt','Browser extension'), etiqueta: t('hashdash.wallet.detected','Detected'), accion: () => conectaIny(w) })));
-    const qr = document.createElement('div');
-    if(ext.length && !qrAbierto){
-      const f = fila({ logo: 'walletConnect', nombre: t('hashdash.wallet.wPhone','Wallet on your phone'),
-        sub: t('hashdash.wallet.wPhoneSub','Scan a QR code with your phone'), etiqueta: t('hashdash.wallet.qrCode','QR code'),
-        accion: () => { f.remove(); qrAbierto = true; mostrarQR(qr); } });
-      lista.appendChild(f);
+    if(SOLO_APP){
+      /* mientras dura SOLO_APP, sin QR (WalletConnect): el enlace para abrir la pagina en la app del telefono */
+      if(!ext.length) estado(t('hashdash.wallet.soloPc','To connect here, install a wallet extension. On your phone, open this page inside your wallet app.'));
+      lista.appendChild(fila({ icono: ENLACE, nombre: t('hashdash.wallet.wPhone','Wallet on your phone'),
+        sub: t('hashdash.wallet.soloOtherS','Copy the link and open it in your wallet’s browser'), accion: copiaAqui }));
+    }else{
+      const qr = document.createElement('div');
+      if(ext.length && !qrAbierto){
+        const f = fila({ logo: 'walletConnect', nombre: t('hashdash.wallet.wPhone','Wallet on your phone'),
+          sub: t('hashdash.wallet.wPhoneSub','Scan a QR code with your phone'), etiqueta: t('hashdash.wallet.qrCode','QR code'),
+          accion: () => { f.remove(); qrAbierto = true; mostrarQR(qr); } });
+        lista.appendChild(f);
+      }
+      lista.appendChild(qr);
+      if(!ext.length || qrAbierto) mostrarQR(qr);
     }
-    lista.appendChild(qr);
-    if(!ext.length || qrAbierto) mostrarQR(qr);
     if(!ext.length){
       const h = document.createElement('div');
       h.className = 'wsel-sub'; h.textContent = t('hashdash.wallet.others','Other compatible wallets');

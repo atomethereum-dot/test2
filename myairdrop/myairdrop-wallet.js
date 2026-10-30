@@ -23,7 +23,15 @@
   /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, en el movil sin wallet (Chrome,
      Safari...) no se conecta por WalletConnect: se abre la pagina en la app de la wallet, donde no sale ninguna
      alerta. Para volver a como estaba: SOLO_APP = false. */
-  var SOLO_APP = true;
+  var SOLO_APP = true;   // en el ordenador, lo mismo: sin QR (extensiones y el enlace para el telefono)
+  // para el ordenador sin extension: sus paginas oficiales de descarga
+  var INSTALAR = [
+    { id: "i-metamask", nombre: "MetaMask", logo: "metaMask", web: "https://metamask.io/download/" },
+    { id: "i-trust", nombre: "Trust Wallet", logo: "trust", web: "https://trustwallet.com/download" },
+    { id: "i-coinbase", nombre: "Coinbase Wallet", logo: "coinbase", web: "https://www.coinbase.com/wallet/downloads" },
+    { id: "i-okx", nombre: "OKX Wallet", logo: "okx", web: "https://www.okx.com/web3" },
+    { id: "i-rainbow", nombre: "Rainbow", logo: "rainbow", web: "https://rainbow.me/download" }
+  ];
   var ENLACE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#13213d"/><path d="M12.2 15.8l3.6-3.6M11 13.4l-1.6 1.6a2.6 2.6 0 0 0 3.6 3.6l1.6-1.6M17 14.6l1.6-1.6a2.6 2.6 0 0 0-3.6-3.6L13.4 11" fill="none" stroke="#4d8dff" stroke-width="1.6" stroke-linecap="round"/></svg>');
   var AQUI = location.origin + location.pathname;
   var enc = encodeURIComponent;
@@ -61,6 +69,9 @@
   // textos del modo temporal SOLO_APP (abrir la pagina en la app de la wallet)
   var SOLO = {"en": {"soloT": "Open this page in your wallet", "soloS": "To connect from your phone, open this page inside your wallet app. Tap your wallet:", "soloF": "Your node, staking and airdrop work the same inside your wallet app. On a computer you can also connect as usual."}, "es": {"soloT": "Abre esta página en tu wallet", "soloS": "Para conectar desde el teléfono, abre esta página dentro de la app de tu wallet. Toca tu wallet:", "soloF": "Tu nodo, tu staking y tu airdrop funcionan igual dentro de la app de tu wallet. En el ordenador también puedes conectar como siempre."}, "pt": {"soloT": "Abra esta página na sua carteira", "soloS": "Para conectar pelo celular, abra esta página dentro do app da sua carteira. Toque na sua carteira:", "soloF": "Seu nó, seu staking e seu airdrop funcionam igual dentro do app da sua carteira. No computador você também pode conectar como sempre."}, "fr": {"soloT": "Ouvrez cette page dans votre wallet", "soloS": "Pour vous connecter depuis votre téléphone, ouvrez cette page dans l’app de votre wallet. Touchez votre wallet :", "soloF": "Votre nœud, votre staking et votre airdrop fonctionnent de la même façon dans l’app de votre wallet. Sur ordinateur, vous pouvez aussi vous connecter comme d’habitude."}, "de": {"soloT": "Öffne diese Seite in deiner Wallet", "soloS": "Um dich vom Handy aus zu verbinden, öffne diese Seite in der App deiner Wallet. Tippe auf deine Wallet:", "soloF": "Dein Node, dein Staking und dein Airdrop funktionieren in der App deiner Wallet genauso. Am Computer kannst du dich auch wie gewohnt verbinden."}, "ru": {"soloT": "Откройте эту страницу в своём кошельке", "soloS": "Чтобы подключиться с телефона, откройте эту страницу в приложении своего кошелька. Выберите кошелёк:", "soloF": "Узел, стейкинг и аирдроп работают так же внутри приложения кошелька. На компьютере можно подключаться как обычно."}, "zh": {"soloT": "在你的钱包中打开此页面", "soloS": "如需在手机上连接，请在钱包 App 内打开此页面。选择你的钱包：", "soloF": "在钱包 App 内，你的节点、质押和空投一切照常。在电脑上也可以照常连接。"}, "ja": {"soloT": "このページをウォレットで開いてください", "soloS": "スマホから接続するには、ウォレットアプリ内でこのページを開いてください。ウォレットを選んでください：", "soloF": "ノード、ステーキング、エアドロップはウォレットアプリ内でも同じように使えます。パソコンからはこれまで通り接続できます。"}, "ko": {"soloT": "이 페이지를 지갑에서 여세요", "soloS": "휴대폰에서 연결하려면 지갑 앱 안에서 이 페이지를 여세요. 지갑을 선택하세요:", "soloF": "노드, 스테이킹, 에어드랍은 지갑 앱 안에서도 똑같이 작동합니다. 컴퓨터에서는 평소처럼 연결할 수 있습니다."}, "ar": {"soloT": "افتح هذه الصفحة في محفظتك", "soloS": "للاتصال من هاتفك، افتح هذه الصفحة داخل تطبيق محفظتك. اختر محفظتك:", "soloF": "عقدتك وتخزينك والإيردروب تعمل بالطريقة نفسها داخل تطبيق محفظتك. ويمكنك على الحاسوب الاتصال كالمعتاد."}, "hi": {"soloT": "यह पेज अपने वॉलेट में खोलें", "soloS": "फ़ोन से कनेक्ट करने के लिए यह पेज अपने वॉलेट ऐप के अंदर खोलें। अपना वॉलेट चुनें:", "soloF": "आपका नोड, स्टेकिंग और एयरड्रॉप वॉलेट ऐप के अंदर भी वैसे ही चलते हैं। कंप्यूटर पर आप हमेशा की तरह कनेक्ट कर सकते हैं।"}};
   var OTRA = {"en": {"soloOtherN": "Another wallet", "soloOtherS": "Copy the link and open it in your wallet’s browser", "soloCopied": "Link copied. Open your wallet app, go to its browser and paste it."}, "es": {"soloOtherN": "Otra wallet", "soloOtherS": "Copia el enlace y ábrelo en el navegador de tu wallet", "soloCopied": "Enlace copiado. Abre la app de tu wallet, entra en su navegador y pégalo."}, "pt": {"soloOtherN": "Outra carteira", "soloOtherS": "Copie o link e abra no navegador da sua carteira", "soloCopied": "Link copiado. Abra o app da sua carteira, vá ao navegador dela e cole."}, "fr": {"soloOtherN": "Un autre wallet", "soloOtherS": "Copiez le lien et ouvrez-le dans le navigateur de votre wallet", "soloCopied": "Lien copié. Ouvrez l’app de votre wallet, allez dans son navigateur et collez-le."}, "de": {"soloOtherN": "Andere Wallet", "soloOtherS": "Kopiere den Link und öffne ihn im Browser deiner Wallet", "soloCopied": "Link kopiert. Öffne deine Wallet-App, geh in ihren Browser und füge ihn ein."}, "ru": {"soloOtherN": "Другой кошелёк", "soloOtherS": "Скопируйте ссылку и откройте её в браузере кошелька", "soloCopied": "Ссылка скопирована. Откройте приложение кошелька, перейдите в его браузер и вставьте её."}, "zh": {"soloOtherN": "其他钱包", "soloOtherS": "复制链接并在钱包的浏览器中打开", "soloCopied": "链接已复制。打开你的钱包 App，进入其浏览器并粘贴。"}, "ja": {"soloOtherN": "その他のウォレット", "soloOtherS": "リンクをコピーしてウォレットのブラウザで開いてください", "soloCopied": "リンクをコピーしました。ウォレットアプリを開き、ブラウザに貼り付けてください。"}, "ko": {"soloOtherN": "다른 지갑", "soloOtherS": "링크를 복사해 지갑의 브라우저에서 여세요", "soloCopied": "링크가 복사되었습니다. 지갑 앱을 열고 브라우저에 붙여 넣으세요."}, "ar": {"soloOtherN": "محفظة أخرى", "soloOtherS": "انسخ الرابط وافتحه في متصفح محفظتك", "soloCopied": "تم نسخ الرابط. افتح تطبيق محفظتك وادخل إلى متصفحه والصقه."}, "hi": {"soloOtherN": "कोई और वॉलेट", "soloOtherS": "लिंक कॉपी करें और अपने वॉलेट के ब्राउज़र में खोलें", "soloCopied": "लिंक कॉपी हो गया। अपना वॉलेट ऐप खोलें, उसके ब्राउज़र में जाएँ और पेस्ट करें।"}};
+  // ordenador sin QR mientras dura SOLO_APP: extensiones y el enlace para el telefono
+  var PC = {"en": {"soloPc": "To connect here, install a wallet extension. On your phone, open this page inside your wallet app.", "inst": "Install the browser extension"}, "es": {"soloPc": "Para conectar aquí, instala una extensión de wallet. En el teléfono, abre esta página dentro de la app de tu wallet.", "inst": "Instala la extensión del navegador"}, "pt": {"soloPc": "Para conectar aqui, instale uma extensão de carteira. No celular, abra esta página dentro do app da sua carteira.", "inst": "Instale a extensão do navegador"}, "fr": {"soloPc": "Pour vous connecter ici, installez une extension de wallet. Sur votre téléphone, ouvrez cette page dans l’app de votre wallet.", "inst": "Installez l’extension du navigateur"}, "de": {"soloPc": "Um dich hier zu verbinden, installiere eine Wallet-Erweiterung. Auf dem Handy öffne diese Seite in deiner Wallet-App.", "inst": "Browser-Erweiterung installieren"}, "ru": {"soloPc": "Чтобы подключиться здесь, установите расширение кошелька. На телефоне откройте эту страницу в приложении кошелька.", "inst": "Установить расширение браузера"}, "zh": {"soloPc": "要在此连接，请安装钱包浏览器扩展。在手机上，请在钱包 App 内打开此页面。", "inst": "安装浏览器扩展"}, "ja": {"soloPc": "ここで接続するには、ウォレットの拡張機能をインストールしてください。スマホでは、ウォレットアプリ内でこのページを開いてください。", "inst": "ブラウザ拡張機能をインストール"}, "ko": {"soloPc": "여기서 연결하려면 지갑 확장 프로그램을 설치하세요. 휴대폰에서는 지갑 앱 안에서 이 페이지를 여세요.", "inst": "브라우저 확장 프로그램 설치"}, "ar": {"soloPc": "للاتصال هنا، ثبّت إضافة محفظة. على هاتفك، افتح هذه الصفحة داخل تطبيق محفظتك.", "inst": "ثبّت إضافة المتصفح"}, "hi": {"soloPc": "यहाँ कनेक्ट करने के लिए वॉलेट एक्सटेंशन इंस्टॉल करें। फ़ोन पर, यह पेज अपने वॉलेट ऐप के अंदर खोलें।", "inst": "ब्राउज़र एक्सटेंशन इंस्टॉल करें"}};
+  for (var pl in PC) { SOLO[pl] = SOLO[pl] || {}; for (var pk in PC[pl]) SOLO[pl][pk] = PC[pl][pk]; }
   for (var ol in OTRA) { SOLO[ol] = SOLO[ol] || {}; for (var ok2 in OTRA[ol]) SOLO[ol][ok2] = OTRA[ol][ok2]; }
   for (var sl in SOLO) { T[sl] = T[sl] || {}; for (var sk in SOLO[sl]) T[sl][sk] = SOLO[sl][sk]; }
   function t(k, v) { var l = (document.documentElement.lang || "en").slice(0, 2), s = (T[l] || T.en)[k]; if (s == null) s = T.en[k]; if (v) for (var x in v) s = s.split("{" + x + "}").join(v[x]); return s; }
@@ -239,6 +250,11 @@
     b.addEventListener("click", function () { if (!uri) return; try { navigator.clipboard.writeText(uri).then(function () { b.textContent = t("copied"); setTimeout(function () { b.textContent = t("copy"); }, 1600); }); } catch (e) {} });
     return b;
   }
+  // copia esta pagina para abrirla en el navegador de la wallet (sin WalletConnect)
+  function copiaAqui() {
+    var ok = function () { estado(t("soloCopied")); };
+    (navigator.clipboard ? navigator.clipboard.writeText(AQUI) : Promise.reject()).then(ok, function () { estado(AQUI); });
+  }
   // movil sin wallet, mientras dura SOLO_APP: solo abrir esta pagina en la app de la wallet
   function vistaSoloApp() {
     caja.textContent = ""; cabecera(t("soloT")); estado(t("soloS"));
@@ -247,10 +263,7 @@
     APPS.filter(function (a) { return a.navegador; }).forEach(function (a) { var f = fila("a", a, a.nombre, t("brw")); f.href = a.navegador(); f.rel = "noopener"; lista.appendChild(f); });
     // cualquier otra wallet con navegador: copiar el enlace y abrirlo ahi (sin WalletConnect)
     var otra = fila("button", { id: "otra" }, t("soloOtherN"), t("soloOtherS"), ENLACE);
-    otra.addEventListener("click", function () {
-      var ok = function () { estado(t("soloCopied")); };
-      (navigator.clipboard ? navigator.clipboard.writeText(AQUI) : Promise.reject()).then(ok, function () { estado(AQUI); });
-    });
+    otra.addEventListener("click", copiaAqui);
     lista.appendChild(otra);
     caja.appendChild(lista);
     var pie = nodo("div", "maw-f"); pie.appendChild(nodo("p", "maw-a", t("soloF"))); pie.appendChild(nodo("p", "maw-o", t("only"))); caja.appendChild(pie);
@@ -282,6 +295,14 @@
     var lista = nodo("div", "maw-l"), ext = inyectadas();
     ext.forEach(function (w) { var f = fila("button", { id: "iny" }, w.nombre, t("ext"), w.icono); f.addEventListener("click", function () { usar(w.proveedor); }); lista.appendChild(f); });
     caja.appendChild(lista);
+    if (SOLO_APP) {
+      // mientras dura SOLO_APP, sin QR (WalletConnect): el enlace para abrir la pagina en la app del telefono
+      if (!ext.length) estado(t("soloPc"));
+      var tel = fila("button", { id: "otra" }, t("phone"), t("soloOtherS"), ENLACE); tel.addEventListener("click", copiaAqui); lista.appendChild(tel);
+      if (!ext.length) INSTALAR.forEach(function (w) { var i = fila("a", w, w.nombre, t("inst")); i.href = w.web; i.target = "_blank"; i.rel = "noopener"; lista.appendChild(i); });
+      var pie0 = nodo("div", "maw-f"); pie0.appendChild(nodo("p", "maw-o", t("only"))); caja.appendChild(pie0);
+      return;
+    }
     var qr = nodo("div", "maw-q");
     if (ext.length) { var f = fila("button", OTRAS, t("phone"), t("phoneS")); f.addEventListener("click", function () { f.remove(); mostrarQR(qr); }); lista.appendChild(f); }
     caja.appendChild(qr);

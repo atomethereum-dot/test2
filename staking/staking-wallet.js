@@ -76,10 +76,19 @@
     { id: "rainbow", nombre: "Rainbow", logo: "rainbow", nativo: "rainbow://" },
   ];
   const conWC = (a) => !!a.nativo;
-  /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, en el movil sin wallet
-     (Chrome, Safari...) no se conecta por WalletConnect: se abre esta pagina dentro de la app de la wallet,
-     donde no sale ninguna alerta. Para volver a como estaba: SOLO_APP = false. */
+  /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, no se conecta por WalletConnect:
+     en el movil sin wallet (Chrome, Safari...) se abre esta pagina dentro de la app de la wallet, donde no
+     sale ninguna alerta, y en el ordenador no hay QR (extensiones y el enlace para el telefono).
+     Para volver a como estaba: SOLO_APP = false. */
   const SOLO_APP = true;
+  // para el ordenador sin extension: sus paginas oficiales de descarga
+  const INSTALAR = [
+    { id: "i-metamask", nombre: "MetaMask", logo: "metaMask", web: "https://metamask.io/download/" },
+    { id: "i-trust", nombre: "Trust Wallet", logo: "trust", web: "https://trustwallet.com/download" },
+    { id: "i-coinbase", nombre: "Coinbase Wallet", logo: "coinbase", web: "https://www.coinbase.com/wallet/downloads" },
+    { id: "i-okx", nombre: "OKX Wallet", logo: "okx", web: "https://www.okx.com/web3" },
+    { id: "i-rainbow", nombre: "Rainbow", logo: "rainbow", web: "https://rainbow.me/download" },
+  ];
   const ENLACE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#13213d"/><path d="M12.2 15.8l3.6-3.6M11 13.4l-1.6 1.6a2.6 2.6 0 0 0 3.6 3.6l1.6-1.6M17 14.6l1.6-1.6a2.6 2.6 0 0 0-3.6-3.6L13.4 11" fill="none" stroke="#4d8dff" stroke-width="1.6" stroke-linecap="round"/></svg>');
   const OTRAS = { id: "otras", nombre: "Other wallets", logo: "walletConnect" };
 
@@ -338,6 +347,12 @@
     return b;
   }
 
+  // copia esta pagina para abrirla en el navegador de la wallet (sin WalletConnect)
+  function copiaAqui() {
+    const ok = () => estado("Link copied. Open your wallet app, go to its browser and paste it.");
+    (navigator.clipboard ? navigator.clipboard.writeText(AQUI) : Promise.reject()).then(ok, () => estado(AQUI));
+  }
+
   /** Movil sin wallet inyectada, mientras dura SOLO_APP: solo abrir esta pagina en la app de la wallet. */
   function vistaSoloApp() {
     caja.textContent = "";
@@ -358,10 +373,7 @@
     });
     // cualquier otra wallet con navegador: copiar el enlace y abrirlo ahi (sin WalletConnect)
     const otra = fila("button", { id: "otra", nombre: "Another wallet" }, "Copy the link and open it in your wallet’s browser", { icono: ENLACE });
-    otra.addEventListener("click", () => {
-      const ok = () => estado("Link copied. Open your wallet app, go to its browser and paste it.");
-      (navigator.clipboard ? navigator.clipboard.writeText(AQUI) : Promise.reject()).then(ok, () => estado(AQUI));
-    });
+    otra.addEventListener("click", copiaAqui);
     lista.appendChild(otra);
     caja.appendChild(lista);
     const pie = nodo("div", "wpick-foot");
@@ -433,6 +445,22 @@
       lista.appendChild(f);
     });
     caja.appendChild(lista);
+
+    if (SOLO_APP) {
+      // mientras dura SOLO_APP, sin QR (WalletConnect): el enlace para abrir la pagina en la app del telefono
+      if (!ext.length) estado("To connect here, install a wallet extension. On your phone, open this page inside your wallet app.");
+      const tel = fila("button", { id: "otra", nombre: "Wallet on your phone" }, "Copy the link and open it in your wallet’s browser", { icono: ENLACE });
+      tel.addEventListener("click", copiaAqui);
+      lista.appendChild(tel);
+      if (!ext.length) INSTALAR.forEach((w) => {
+        const f = fila("a", w, "Install the browser extension");
+        f.href = w.web;
+        f.target = "_blank";
+        f.rel = "noopener";
+        lista.appendChild(f);
+      });
+      return;
+    }
 
     const qr = nodo("div", "wpick-qr");
     if (ext.length) {
