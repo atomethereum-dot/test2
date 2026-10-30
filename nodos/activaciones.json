@@ -34,6 +34,13 @@
       "c": "Santo André, BR",
       "la": -23.6,
       "lo": -46.6
+    },
+    "0xf499d49eb47f99e4ef6cd0f7a071334c6f143643": {
+      "t": 1793326884000,
+      "n": "Sectora Node Ho Chi Minh City",
+      "c": "Ho Chi Minh City, VN",
+      "la": 10.8,
+      "lo": 106.6
     }
   }
 }
