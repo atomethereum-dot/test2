@@ -69,6 +69,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0xa5dab5e6bc58187b602d113f14887265b940693e": {
+      "t": 1793384260000,
+      "n": "Sectora Node Buenos Aires",
+      "c": "Buenos Aires, AR",
+      "la": -34.6,
+      "lo": -58.5
     }
   }
 }
