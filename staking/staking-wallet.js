@@ -58,9 +58,15 @@
      que un enlace https puede acabar en una web intermedia y perderla.
      navegador: abre esta pagina dentro de la app, con la wallet inyectada.
      Coinbase va asi tambien en AppKit. */
+  const PHANTOM = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#ab9ff2"/><path d="M7 21.5V13a7 7 0 0 1 14 0v8.5l-2.33-1.75-2.34 1.75L14 19.75l-2.33 1.75-2.34-1.75z" fill="#fff"/><ellipse cx="11.6" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/><ellipse cx="16.4" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/></svg>');
+  /* icono sencillo (inicial sobre su color) para las wallets que no estan en dashboard-wallet-logos.js */
+  const INI = (l, c) => 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" rx="6" fill="' + c + '"/><text x="14" y="19" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#fff">' + l + '</text></svg>');
   const APPS = [
     { id: "metamask", nombre: "MetaMask", logo: "metaMask", nativo: "metamask://",
       navegador: () => "https://metamask.app.link/dapp/" + AQUI.replace(/^https?:\/\//, "") },
+    // Phantom no usa WalletConnect para Ethereum: abre esta pagina en su navegador
+    { id: "phantom", nombre: "Phantom", icono: PHANTOM,
+      navegador: () => "https://phantom.app/ul/browse/" + enc(AQUI) + "?ref=" + enc(location.origin) },
     { id: "trust", nombre: "Trust Wallet", logo: "trust", nativo: "trust://",
       navegador: () => "https://link.trustwallet.com/open_url?coin_id=60&url=" + enc(AQUI) },
     { id: "binance", nombre: "Binance Wallet", logo: "binance", navegador: binance },
@@ -73,7 +79,11 @@
     { id: "tokenpocket", nombre: "TokenPocket", logo: "tokenPocket",
       navegador: () => "tpdapp://open?params=" + enc(JSON.stringify({ url: AQUI, chain: "ETH", source: "Sectora" })) },
     { id: "imtoken", nombre: "imToken", logo: "imToken", navegador: () => "imtokenv2://navigate/DappView?url=" + enc(AQUI) },
-    { id: "rainbow", nombre: "Rainbow", logo: "rainbow", nativo: "rainbow://" },
+    { id: "rainbow", nombre: "Rainbow", logo: "rainbow", nativo: "rainbow://",
+      navegador: () => "https://rnbwapp.com/dapp?url=" + enc(AQUI) },
+    { id: "rabby", nombre: "Rabby", icono: INI("R", "#7084ff"), navegador: () => "https://go.rabby.io/mobile/index.html?_cmd=open-dapp&dapp=" + enc(AQUI) },
+    { id: "magiceden", nombre: "Magic Eden", icono: INI("M", "#e42575"), navegador: () => "magiceden://browser/" + enc(AQUI) },
+    { id: "ronin", nombre: "Ronin Wallet", icono: INI("R", "#1273ea"), navegador: () => "roninwallet://in_app_browser?url=" + enc(AQUI) },
   ];
   const conWC = (a) => !!a.nativo;
   /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, no se conecta por WalletConnect:
@@ -82,7 +92,6 @@
      queda solo para las wallets sin navegador propio ni extension (Tangem, Ledger Live, Safe...), con aviso previo.
      Para volver a como estaba: SOLO_APP = false. */
   const SOLO_APP = true;
-  const PHANTOM = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#ab9ff2"/><path d="M7 21.5V13a7 7 0 0 1 14 0v8.5l-2.33-1.75-2.34 1.75L14 19.75l-2.33 1.75-2.34-1.75z" fill="#fff"/><ellipse cx="11.6" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/><ellipse cx="16.4" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/></svg>');
   /* para el ordenador: las que no estan instaladas (web: su pagina oficial de descarga);
      sin web, las que son solo app del movil. m reconoce la extension ya detectada */
   const INSTALAR = [
@@ -96,6 +105,7 @@
     { id: "i-tokenpocket", nombre: "TokenPocket", logo: "tokenPocket", m: /tokenpocket/i },
     { id: "i-imtoken", nombre: "imToken", logo: "imToken", m: /imtoken/i },
     { id: "i-rainbow", nombre: "Rainbow", logo: "rainbow", m: /rainbow/i, web: "https://rainbow.me/download" },
+    { id: "i-rabby", nombre: "Rabby", icono: INI("R", "#7084ff"), m: /rabby/i, web: "https://rabby.io/" },
   ];
   const ENLACE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#13213d"/><path d="M12.2 15.8l3.6-3.6M11 13.4l-1.6 1.6a2.6 2.6 0 0 0 3.6 3.6l1.6-1.6M17 14.6l1.6-1.6a2.6 2.6 0 0 0-3.6-3.6L13.4 11" fill="none" stroke="#4d8dff" stroke-width="1.6" stroke-linecap="round"/></svg>');
   const OTRAS = { id: "otras", nombre: "Other wallets", logo: "walletConnect" };
@@ -397,7 +407,7 @@
       lista.appendChild(f);
     });
     APPS.filter((a) => a.navegador).forEach((a) => {
-      const f = fila("a", a, "Opens this page in the app");
+      const f = fila("a", a, "Opens this page in the app", { icono: a.icono });
       f.href = a.navegador();
       f.rel = "noopener";
       lista.appendChild(f);
@@ -427,7 +437,7 @@
       lista.appendChild(f);
     });
     APPS.forEach((a) => {
-      const f = fila("a", a, conWC(a) ? "Approve in the app" : "Opens this page in the app");
+      const f = fila("a", a, conWC(a) ? "Approve in the app" : "Opens this page in the app", { icono: a.icono });
       if (conWC(a)) {
         f.setAttribute("aria-disabled", "true");
         f.addEventListener("click", (e) => {

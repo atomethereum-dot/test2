@@ -27,6 +27,8 @@
   var PHANTOM = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#ab9ff2"/><path d="M7 21.5V13a7 7 0 0 1 14 0v8.5l-2.33-1.75-2.34 1.75L14 19.75l-2.33 1.75-2.34-1.75z" fill="#fff"/><ellipse cx="11.6" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/><ellipse cx="16.4" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/></svg>');
   // para el ordenador: las que no estan instaladas (web: su pagina oficial de descarga);
   // sin web, las que son solo app del movil. m reconoce la extension ya detectada
+  // icono sencillo (inicial sobre su color) para las wallets que no estan en dashboard-wallet-logos.js
+  function INI(l, c) { return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" rx="6" fill="' + c + '"/><text x="14" y="19" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#fff">' + l + '</text></svg>'); }
   var INSTALAR = [
     { id: "i-metamask", nombre: "MetaMask", logo: "metaMask", m: /metamask/i, web: "https://metamask.io/download/" },
     { id: "i-phantom", nombre: "Phantom", icono: PHANTOM, m: /phantom/i, web: "https://phantom.com/download" },
@@ -37,7 +39,8 @@
     { id: "i-bitget", nombre: "Bitget Wallet", logo: "bitget", m: /bitget/i, web: "https://web3.bitget.com/" },
     { id: "i-tokenpocket", nombre: "TokenPocket", logo: "tokenPocket", m: /tokenpocket/i },
     { id: "i-imtoken", nombre: "imToken", logo: "imToken", m: /imtoken/i },
-    { id: "i-rainbow", nombre: "Rainbow", logo: "rainbow", m: /rainbow/i, web: "https://rainbow.me/download" }
+    { id: "i-rainbow", nombre: "Rainbow", logo: "rainbow", m: /rainbow/i, web: "https://rainbow.me/download" },
+    { id: "i-rabby", nombre: "Rabby", icono: INI("R", "#7084ff"), m: /rabby/i, web: "https://rabby.io/" }
   ];
   var ENLACE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#13213d"/><path d="M12.2 15.8l3.6-3.6M11 13.4l-1.6 1.6a2.6 2.6 0 0 0 3.6 3.6l1.6-1.6M17 14.6l1.6-1.6a2.6 2.6 0 0 0-3.6-3.6L13.4 11" fill="none" stroke="#4d8dff" stroke-width="1.6" stroke-linecap="round"/></svg>');
   var AQUI = location.origin + location.pathname;
@@ -94,6 +97,8 @@
   }
   var APPS = [
     { id: "metamask", nombre: "MetaMask", logo: "metaMask", nativo: "metamask://", navegador: function () { return "https://metamask.app.link/dapp/" + AQUI.replace(/^https?:\/\//, ""); } },
+    // Phantom no usa WalletConnect para Ethereum: abre esta pagina en su navegador
+    { id: "phantom", nombre: "Phantom", icono: PHANTOM, navegador: function () { return "https://phantom.app/ul/browse/" + enc(AQUI) + "?ref=" + enc(location.origin); } },
     { id: "trust", nombre: "Trust Wallet", logo: "trust", nativo: "trust://", navegador: function () { return "https://link.trustwallet.com/open_url?coin_id=60&url=" + enc(AQUI); } },
     { id: "binance", nombre: "Binance Wallet", logo: "binance", navegador: binance },
     { id: "coinbase", nombre: "Coinbase Wallet", logo: "coinbase", navegador: function () { return "https://go.cb-w.com/dapp?cb_url=" + enc(AQUI); } },
@@ -102,7 +107,10 @@
     { id: "bitget", nombre: "Bitget Wallet", logo: "bitget", navegador: function () { return "https://bkcode.vip?action=dapp&url=" + enc(AQUI); } },
     { id: "tokenpocket", nombre: "TokenPocket", logo: "tokenPocket", navegador: function () { return "tpdapp://open?params=" + enc(JSON.stringify({ url: AQUI, chain: "ETH", source: "Sectora" })); } },
     { id: "imtoken", nombre: "imToken", logo: "imToken", navegador: function () { return "imtokenv2://navigate/DappView?url=" + enc(AQUI); } },
-    { id: "rainbow", nombre: "Rainbow", logo: "rainbow", nativo: "rainbow://" }
+    { id: "rainbow", nombre: "Rainbow", logo: "rainbow", nativo: "rainbow://", navegador: function () { return "https://rnbwapp.com/dapp?url=" + enc(AQUI); } },
+    { id: "rabby", nombre: "Rabby", icono: INI("R", "#7084ff"), navegador: function () { return "https://go.rabby.io/mobile/index.html?_cmd=open-dapp&dapp=" + enc(AQUI); } },
+    { id: "magiceden", nombre: "Magic Eden", icono: INI("M", "#e42575"), navegador: function () { return "magiceden://browser/" + enc(AQUI); } },
+    { id: "ronin", nombre: "Ronin Wallet", icono: INI("R", "#1273ea"), navegador: function () { return "roninwallet://in_app_browser?url=" + enc(AQUI); } }
   ];
   var OTRAS = { id: "otras", nombre: "", logo: "walletConnect" };
   function conWC(a) { return !!a.nativo; }
@@ -282,7 +290,7 @@
     caja.textContent = ""; cabecera(t("soloT")); estado(t("soloS"));
     var lista = nodo("div", "maw-l");
     inyectadas().forEach(function (w) { var f = fila("button", { id: "iny" }, w.nombre, t("det"), w.icono); f.addEventListener("click", function () { usar(w.proveedor); }); lista.appendChild(f); });
-    APPS.filter(function (a) { return a.navegador; }).forEach(function (a) { var f = fila("a", a, a.nombre, t("brw")); f.href = a.navegador(); f.rel = "noopener"; lista.appendChild(f); });
+    APPS.filter(function (a) { return a.navegador; }).forEach(function (a) { var f = fila("a", a, a.nombre, t("brw"), a.icono); f.href = a.navegador(); f.rel = "noopener"; lista.appendChild(f); });
     // cualquier otra wallet con navegador: copiar el enlace y abrirlo ahi (sin WalletConnect)
     var otra = fila("button", { id: "otra" }, t("soloOtherN"), t("soloOtherS"), ENLACE);
     otra.addEventListener("click", copiaAqui);
@@ -297,7 +305,7 @@
     var lista = nodo("div", "maw-l");
     inyectadas().forEach(function (w) { var f = fila("button", { id: "iny" }, w.nombre, t("det"), w.icono); f.addEventListener("click", function () { usar(w.proveedor); }); lista.appendChild(f); });
     APPS.forEach(function (a) {
-      var f = fila("a", a, a.nombre, conWC(a) ? t("wc") : t("brw"));
+      var f = fila("a", a, a.nombre, conWC(a) ? t("wc") : t("brw"), a.icono);
       if (conWC(a)) {
         f.setAttribute("aria-disabled", "true");
         f.addEventListener("click", function (e) { if (!uri) { e.preventDefault(); return; } estado(t("appr", { a: a.nombre })); });

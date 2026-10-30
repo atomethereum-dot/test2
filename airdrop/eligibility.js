@@ -33,7 +33,8 @@
   var MOVIL = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "") || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   // logos: los mismos del Dashboard y del staking (dashboard-wallet-logos.js) y el de Phantom aqui mismo
   var PHANTOM = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#ab9ff2"/><path d="M7 21.5V13a7 7 0 0 1 14 0v8.5l-2.33-1.75-2.34 1.75L14 19.75l-2.33 1.75-2.34-1.75z" fill="#fff"/><ellipse cx="11.6" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/><ellipse cx="16.4" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/></svg>');
-  var KEY = { "MetaMask": "metaMask", "Trust Wallet": "trust", "Binance Wallet": "binance", "Coinbase Wallet": "coinbase", "OKX Wallet": "okx" };
+  var KEY = { "MetaMask": "metaMask", "Trust Wallet": "trust", "Binance Wallet": "binance", "Coinbase Wallet": "coinbase", "OKX Wallet": "okx",
+    "Bitget Wallet": "bitget", "TokenPocket": "tokenPocket", "imToken": "imToken", "Rainbow": "rainbow" };
   var WT = {
     en: ["Opens this page in the app", "Download"], es: ["Abre esta página en la app", "Descargar"], pt: ["Abre esta página no app", "Baixar"],
     fr: ["Ouvre cette page dans l’app", "Télécharger"], de: ["Öffnet diese Seite in der App", "Herunterladen"], ru: ["Открывает эту страницу в приложении", "Скачать"],
@@ -56,21 +57,29 @@
       var im = document.createElement("img"); im.alt = ""; im.src = src; sp.replaceWith(im);
     });
   }
+  // icono sencillo (inicial sobre su color) para las wallets que no estan en dashboard-wallet-logos.js
+  var INI = { "Rabby": ["R", "#7084ff"], "Magic Eden": ["M", "#e42575"], "Ronin Wallet": ["R", "#1273ea"] };
+  function ini(l, c) { return "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" rx="6" fill="' + c + '"/><text x="14" y="19" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#fff">' + l + "</text></svg>"); }
   function filaW(w) {
     var tw = WT[lang()] || WT.en, k = KEY[w[0]];
-    var ico = w[0] === "Phantom" ? '<img alt="" src="' + PHANTOM + '">' : '<span class="ph" data-logo="' + (k || "") + '">' + w[0].slice(0, 1) + "</span>";
+    var ico = w[0] === "Phantom" ? '<img alt="" src="' + PHANTOM + '">' : INI[w[0]] ? '<img alt="" src="' + ini(INI[w[0]][0], INI[w[0]][1]) + '">' : '<span class="ph" data-logo="' + (k || "") + '">' + w[0].slice(0, 1) + "</span>";
     return '<a href="' + esc(w[1]) + '" rel="noopener" data-w="' + esc(w[0]) + '">' + ico + "<span><b>" + w[0] + "</b><small>" + (MOVIL ? tw[0] : tw[1]) + "</small></span><i>→</i></a>";
   }
   function wallets() {
     var u = location.origin + "/airdrop/", e = encodeURIComponent;
     if (!MOVIL) return [["MetaMask", "https://metamask.io/download/"], ["Phantom", "https://phantom.com/download"], ["Trust Wallet", "https://trustwallet.com/download"],
-      ["Coinbase Wallet", "https://www.coinbase.com/wallet/downloads"], ["OKX Wallet", "https://www.okx.com/web3"]];
+      ["Coinbase Wallet", "https://www.coinbase.com/wallet/downloads"], ["OKX Wallet", "https://www.okx.com/web3"], ["Bitget Wallet", "https://web3.bitget.com/"],
+      ["Rainbow", "https://rainbow.me/download"], ["Rabby", "https://rabby.io/"]];
     var bn = new URL("bnc://app.binance.com/mp/app");
     bn.searchParams.set("appId", "yFK5FCqYprrXDiVFbhyRx7"); bn.searchParams.set("startPagePath", btoa("/pages/browser/index"));
     bn.searchParams.set("startPageQuery", btoa("url=" + e(u) + "&defaultChainId=1"));
     var bu = new URL("https://app.binance.com/en/download"); bu.searchParams.set("_dp", btoa(bn.toString()));
     return [["MetaMask", MM], ["Trust Wallet", "https://link.trustwallet.com/open_url?coin_id=60&url=" + e(u)], ["Phantom", "https://phantom.app/ul/browse/" + e(u) + "?ref=" + e(location.origin)],
-      ["Binance Wallet", bu.toString()], ["Coinbase Wallet", "https://go.cb-w.com/dapp?cb_url=" + e(u)], ["OKX Wallet", "https://www.okx.com/download?deeplink=" + e("okx://wallet/dapp/url?dappUrl=" + e(u))]];
+      ["Binance Wallet", bu.toString()], ["Coinbase Wallet", "https://go.cb-w.com/dapp?cb_url=" + e(u)], ["OKX Wallet", "https://www.okx.com/download?deeplink=" + e("okx://wallet/dapp/url?dappUrl=" + e(u))],
+      ["Bitget Wallet", "https://bkcode.vip?action=dapp&url=" + e(u)], ["TokenPocket", "tpdapp://open?params=" + e(JSON.stringify({ url: u, chain: "ETH", source: "Sectora" }))],
+      ["imToken", "imtokenv2://navigate/DappView?url=" + e(u)], ["Rainbow", "https://rnbwapp.com/dapp?url=" + e(u)],
+      ["Rabby", "https://go.rabby.io/mobile/index.html?_cmd=open-dapp&dapp=" + e(u)], ["Magic Eden", "magiceden://browser/" + e(u)],
+      ["Ronin Wallet", "roninwallet://in_app_browser?url=" + e(u)]];
   }
   // la wallet del navegador: window.ethereum o, si solo esta Phantom, su proveedor de Ethereum
   function prov() { return window.ethereum || (window.phantom && window.phantom.ethereum) || null; }

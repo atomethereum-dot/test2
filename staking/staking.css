@@ -358,7 +358,7 @@ html[lang=ar] .stk-msg :is(.stk-msg-k,dt,dd){letter-spacing:0;font-family:'IBM P
 #wcFirma{order:3;margin-top:8px;color:var(--p-ink);border-color:rgba(0,0,0,.16);font-size:11px;letter-spacing:.14em}
 #wcFirma[hidden]{display:none}
 #wcFirma:not([href]){cursor:default}
-.wpick{margin-top:8px;border:1px solid rgba(0,0,0,.14);background:#fff;text-align:left;
+.wpick{position:relative;z-index:6;margin-top:8px;border:1px solid rgba(0,0,0,.14);background:#fff;text-align:left;
   animation:wpickIn .38s var(--ease-out) both}
 .wpick[hidden]{display:none}
 @keyframes wpickIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
@@ -384,7 +384,7 @@ html[lang=ar] .stk-msg :is(.stk-msg-k,dt,dd){letter-spacing:0;font-family:'IBM P
 img.wpick-ico{background:none}
 .wpick-txt{display:grid;gap:2px;min-width:0}
 .wpick-name{font-size:15px;font-weight:400;letter-spacing:-.005em}
-.wpick-sub{font-size:10.5px;letter-spacing:.06em;color:var(--p-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wpick-sub{font-size:10.5px;letter-spacing:.06em;line-height:1.5;color:var(--p-ink-3)}
 .wpick-sec{padding:14px 14px 7px;border-bottom:1px solid var(--p-line);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--p-ink-3)}
 .wpick-go{color:var(--blue);font-size:15px;transition:transform .3s var(--ease)}
 .wpick-row:hover .wpick-go{transform:translateX(3px)}
@@ -404,8 +404,8 @@ img.wpick-ico{background:none}
 .wpick-copy:disabled{opacity:.4;cursor:not-allowed}
 .wpick-qr .wpick-copy{justify-self:center}
 .wpick-alt{font-size:12.5px;line-height:1.65;color:var(--p-ink-2)}
-/* sobre la ventana de conectar, el cursor de coordenadas no se pinta encima de los textos */
-body:has(.wpick:hover) .reticle,body:has(.wpick:hover) .readout{opacity:0!important}
+/* con la ventana de conectar abierta, el cursor de coordenadas no se pinta encima de los textos */
+body:has(.wpick:not([hidden])) .reticle,body:has(.wpick:not([hidden])) .readout{opacity:0!important}
 .wpick-alt a{color:var(--blue-deep);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(13,79,216,.35)}
 @media (prefers-reduced-motion:reduce){.wpick{animation:none}.wpick-state i,.wpick-qrbox:empty::before{animation:none}}
 

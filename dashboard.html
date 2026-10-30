@@ -3599,6 +3599,8 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     u.searchParams.set('_dp', btoa(dentro.toString()));
     return u.toString();
   }
+  /* icono sencillo (inicial sobre su color) para las wallets que no estan en dashboard-wallet-logos.js */
+  const INI = (l, c) => 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" rx="6" fill="' + c + '"/><text x="14" y="19" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" fill="#fff">' + l + '</text></svg>');
   /* nativo: esquema de la app; con "wc?uri=" detras abre la peticion de conexion.
      navegador: abre esta pagina dentro de la app, con la wallet inyectada */
   const APPS = [
@@ -3619,7 +3621,11 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     { id:'tokenpocket', nombre:'TokenPocket', logo:'tokenPocket',
       navegador: () => 'tpdapp://open?params=' + enc(JSON.stringify({ url: aqui(), chain: 'ETH', source: 'Sectora' })) },
     { id:'imtoken', nombre:'imToken', logo:'imToken', navegador: () => 'imtokenv2://navigate/DappView?url=' + enc(aqui()) },
-    { id:'rainbow', nombre:'Rainbow', logo:'rainbow', nativo:'rainbow://' }
+    { id:'rainbow', nombre:'Rainbow', logo:'rainbow', nativo:'rainbow://',
+      navegador: () => 'https://rnbwapp.com/dapp?url=' + enc(aqui()) },
+    { id:'rabby', nombre:'Rabby', icono: INI('R', '#7084ff'), navegador: () => 'https://go.rabby.io/mobile/index.html?_cmd=open-dapp&dapp=' + enc(aqui()) },
+    { id:'magiceden', nombre:'Magic Eden', icono: INI('M', '#e42575'), navegador: () => 'magiceden://browser/' + enc(aqui()) },
+    { id:'ronin', nombre:'Ronin Wallet', icono: INI('R', '#1273ea'), navegador: () => 'roninwallet://in_app_browser?url=' + enc(aqui()) }
   ];
   const conWC = a => !!a.nativo;
   /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, no se conecta por WalletConnect:
@@ -3749,7 +3755,8 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     {n:'Bitget Wallet', k:'bitget', m:/bitget/i, web:'https://web3.bitget.com/'},
     {n:'TokenPocket', k:'tokenPocket', m:/tokenpocket/i},
     {n:'imToken', k:'imToken', m:/imtoken/i},
-    {n:'Rainbow', k:'rainbow', m:/rainbow/i, web:'https://rainbow.me/download'}
+    {n:'Rainbow', k:'rainbow', m:/rainbow/i, web:'https://rainbow.me/download'},
+    {n:'Rabby', i: INI('R', '#7084ff'), m:/rabby/i, web:'https://rabby.io/'}
   ];
   const ENLACE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#13213d"/><path d="M12.2 15.8l3.6-3.6M11 13.4l-1.6 1.6a2.6 2.6 0 0 0 3.6 3.6l1.6-1.6M17 14.6l1.6-1.6a2.6 2.6 0 0 0-3.6-3.6L13.4 11" fill="none" stroke="#4d8dff" stroke-width="1.6" stroke-linecap="round"/></svg>');
 
