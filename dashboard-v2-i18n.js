@@ -787,3 +787,21 @@
   var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
   Object.keys(S).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.wallet.sepolia"] = S[l]; d["hashdash.wallet.wNoSepolia"] = W[l]; });
 })();
+/* nodo listo: se activa solo al pulsar el boton */
+(function () {
+  var V = {
+    en: "Your node is ready. Press “Activate my node” to turn it on. It's free.",
+    es: "Tu nodo está listo. Pulsa «Activar mi nodo» para encenderlo. Es gratis.",
+    pt: "Seu nó está pronto. Toque em “Ativar meu nó” para ligá-lo. É grátis.",
+    fr: "Votre nœud est prêt. Appuyez sur « Activer mon nœud » pour l’allumer. C’est gratuit.",
+    de: "Dein Node ist bereit. Tippe auf „Meinen Node aktivieren“, um ihn einzuschalten. Kostenlos.",
+    ru: "Ваш узел готов. Нажмите «Активировать мой узел», чтобы включить его. Это бесплатно.",
+    zh: "你的节点已就绪。点击「激活我的节点」即可开启，免费。",
+    ja: "ノードの準備ができました。「ノードを有効にする」を押してオンにしてください。無料です。",
+    ko: "노드가 준비되었습니다. ‘내 노드 활성화’를 눌러 켜세요. 무료입니다.",
+    ar: "عقدتك جاهزة. اضغط «تفعيل عقدتي» لتشغيلها. مجانًا.",
+    hi: "आपका नोड तैयार है। इसे चालू करने के लिए “मेरा नोड चालू करें” दबाएँ। यह मुफ़्त है।"
+  };
+  var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
+  Object.keys(V).forEach(function (l) { (X[l] = X[l] || {})["hashdash.v2.plan.stReady"] = V[l]; });
+})();

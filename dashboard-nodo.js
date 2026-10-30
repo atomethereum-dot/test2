@@ -3,7 +3,8 @@
    registro de nodo con /airdrop/count.js. Nodo y staking van por separado: el nodo se activa en el plan
    (mercado.js) y el airdrop queda activo con los dos, en cualquier orden.
    La tarjeta tiene dos columnas: los datos, y a la derecha un mapa con la ubicacion del nodo y una
-   consola con lo que va sumando en el airdrop, segundo a segundo. Solo lectura: no firma ni envia nada.
+   consola con lo que va sumando en el airdrop, segundo a segundo. Solo lectura: no firma nada, y la constancia
+   de activacion solo se envia cuando la persona pulsa "Activar mi nodo".
    Sin % en premios, solo SECT. */
 (function () {
   "use strict";
@@ -303,9 +304,9 @@
       if (mio !== turno) return;
       var act = (w.node && w.node.act) || null;
       calcula(addr, w);
-      // activado en este navegador pero aun sin constancia publica: se vuelve a enviar
+      // activado en este navegador hace poco (lo pulso la persona) pero aun sin constancia publica: se reintenta
       var loc = local(addr);
-      if (loc && !act && !est.reg) envia(addr, loc);
+      if (loc && !act && !est.reg && loc.t && Date.now() - loc.t < 12 * 36e5) envia(addr, loc);
       pinta(); avisa({ addr: addr, lv: est.r.level, bal: est.r.bal, reg: est.reg, act: act });
     }).catch(function () { if (mio === turno) { est = { addr: addr, err: true }; pinta(); } });
   }

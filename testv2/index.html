@@ -1973,6 +1973,8 @@ window.__sectoraMarket = {
     // ya activado (en este navegador o en el registro publico de activaciones)
     var n = nodoLeer() || (e.act ? { name: e.act.n, place: e.act.c, lat: e.act.la, lon: e.act.lo } : null);
     if (!n) {
+      // solo al pulsar "Activar mi nodo": conectar la wallet nunca envia nada
+      if (!manual) return false;
       var la = parseFloat(($("#nLat") || {}).value), lo = parseFloat(($("#nLon") || {}).value);
       if (!isFinite(la) || !isFinite(lo) || Math.abs(la) > 85 || Math.abs(lo) > 180) {
         if (manual) { var f = $(".v2-reg .form"); if (f) f.classList.remove("geo-auto"); var x = $("#nLat"); if (x) x.focus(); }
@@ -4210,6 +4212,6 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 <script src="/testv2/count.js?v=3"></script>
 <script src="/dashboard-testnet.js?v=20261029d"></script>
 <script src="/testv2/nodo.js?v=9"></script>
-<script src="/dashboard-node-geo.js?v=2" defer></script>
+<script src="/dashboard-node-geo.js?v=4" defer></script>
 </body>
 </html>

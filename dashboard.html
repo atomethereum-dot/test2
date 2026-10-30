@@ -1383,7 +1383,7 @@ html.booting,body.booting{overflow:hidden}
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="/translations.js"></script>
 <script src="/dashboard-i18n-extra.js?v=20261029c"></script>
-<script src="/dashboard-v2-i18n.js?v=7"></script>
+<script src="/dashboard-v2-i18n.js?v=8"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="/i18n.js?v=2"></script>
 <script src="/dashboard-reticle.js?v=20260820b"></script>
@@ -1974,6 +1974,8 @@ window.__sectoraMarket = {
     // ya activado (en este navegador o en el registro publico de activaciones)
     var n = nodoLeer() || (e.act ? { name: e.act.n, place: e.act.c, lat: e.act.la, lon: e.act.lo } : null);
     if (!n) {
+      // solo al pulsar "Activar mi nodo": conectar la wallet nunca envia nada
+      if (!manual) return false;
       var la = parseFloat(($("#nLat") || {}).value), lo = parseFloat(($("#nLon") || {}).value);
       if (!isFinite(la) || !isFinite(lo) || Math.abs(la) > 85 || Math.abs(lo) > 180) {
         if (manual) { var f = $(".v2-reg .form"); if (f) f.classList.remove("geo-auto"); var x = $("#nLat"); if (x) x.focus(); }
@@ -2012,11 +2014,13 @@ window.__sectoraMarket = {
     else if (activa(false) && conStake()) { txt = tt("hashdash.v2.plan2.stBoth", "Node active · Airdrop active."); ok = 2; act = "on"; lbl = tt("hashdash.v2.plan.btnOn", "Node active ✓"); }
     else if (activa(false)) { txt = tt("hashdash.v2.plan2.stNode", "Node active. Stake #SECT to activate your airdrop: the higher your level, the bigger your rewards."); ok = 2; act = "stake"; lbl = tt("hashdash.v2.card.stake", "Go to staking"); }
     else {
-      // falta la ubicacion: se espera a que llegue sola o a que se escriba y se pulse el boton
+      // listo para activar: falta pulsar el boton (o escribir la ubicacion si no se detecto)
       var fm = $(".v2-reg .form"), aMano = fm && !fm.classList.contains("geo-auto");   // no se detecto: se escribe a mano
-      txt = aMano ? tt("hashdash.v2.plan.stManual", "Type your city's latitude and longitude above, then press “Activate my node”.") : tt("hashdash.node.geoWait", "Detecting your node's location…");
+      var hay = isFinite(parseFloat(($("#nLat") || {}).value)) && isFinite(parseFloat(($("#nLon") || {}).value));
+      txt = aMano ? tt("hashdash.v2.plan.stManual", "Type your city's latitude and longitude above, then press “Activate my node”.")
+        : hay ? tt("hashdash.v2.plan.stReady", "Your node is ready. Press “Activate my node” to turn it on. It's free.") : tt("hashdash.node.geoWait", "Detecting your node's location…");
       act = "save"; lbl = tt("hashdash.v2.plan.btn", "Activate my node");
-      if (esperas++ < 40) setTimeout(function () { plan(); }, 700);
+      if (!hay && esperas++ < 40) setTimeout(function () { plan(); }, 700);
     }
     st.querySelector("span").textContent = txt;
     st.className = "plan-st" + (ok === 2 ? " ok" : "");
@@ -4233,7 +4237,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
 </script>
 <script src="/airdrop/count.js?v=22"></script>
 <script src="/dashboard-testnet.js?v=20261029d"></script>
-<script src="/dashboard-nodo.js?v=5"></script>
-<script src="/dashboard-node-geo.js?v=3" defer></script>
+<script src="/dashboard-nodo.js?v=6"></script>
+<script src="/dashboard-node-geo.js?v=4" defer></script>
 </body>
 </html>
