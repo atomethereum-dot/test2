@@ -55,6 +55,13 @@
       "c": "Mérida, VE",
       "la": 8.6,
       "lo": -71.2
+    },
+    "0xa10c647a482703402d4f7f7c13e0b8547de2f2b1": {
+      "t": 1793366622000,
+      "n": "Sectora Node Caracas",
+      "c": "Caracas, VE",
+      "la": 10.5,
+      "lo": -66.9
     }
   }
 }
