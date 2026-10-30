@@ -27,6 +27,13 @@
       "c": "Mesa, US",
       "la": 33.4,
       "lo": -111.8
+    },
+    "0x9b53975317a5f7d162f51625406d20abd598bdf8": {
+      "t": 1793322116000,
+      "n": "Sectora Node Santo André",
+      "c": "Santo André, BR",
+      "la": -23.6,
+      "lo": -46.6
     }
   }
 }
