@@ -405,6 +405,7 @@
     qr.appendChild(x);
     qr.appendChild(nodo("p", "wpick-warn", "Only for wallets without their own browser (Tangem, Ledger Live, Safe…). " +
       "While WalletConnect reviews our domain, your wallet may show a security warning by mistake. " +
+      "Right now WalletConnect is waiting for its history to be updated so this erroneous message is removed. " +
       "Sectora and its contracts are verified on Etherscan, and connecting only reads your address."));
     qr.appendChild(nodo("p", "wpick-state"));
     if (MOVIL) qr.appendChild(copiarBoton());   // en el telefono se copia el enlace: el boton va antes del QR
