@@ -1383,7 +1383,7 @@ html.booting,body.booting{overflow:hidden}
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="/translations.js"></script>
 <script src="/dashboard-i18n-extra.js?v=20261029c"></script>
-<script src="/dashboard-v2-i18n.js?v=8"></script>
+<script src="/dashboard-v2-i18n.js?v=9"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="/i18n.js?v=2"></script>
 <script src="/dashboard-reticle.js?v=20260820b"></script>
@@ -3613,6 +3613,10 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     { id:'rainbow', nombre:'Rainbow', logo:'rainbow', nativo:'rainbow://' }
   ];
   const conWC = a => !!a.nativo;
+  /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, en el movil sin wallet (Chrome,
+     Safari...) no se conecta por WalletConnect: se abre esta pagina en la app de la wallet, donde no sale
+     ninguna alerta. Para volver a como estaba: SOLO_APP = false. */
+  const SOLO_APP = true;
 
   const cargas = {};
   function cargaJS(src, listo){
@@ -3793,8 +3797,21 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     lista.appendChild(n);
   }
 
+  /* movil sin wallet, mientras dura SOLO_APP: solo abrir esta pagina en la app de la wallet */
+  function vistaSoloApp(){
+    cabeza();
+    estado(t('hashdash.wallet.soloS','To connect from your phone, open this page inside your wallet app. Tap your wallet:'));
+    inyectadas().forEach(w => lista.appendChild(fila({ icono: w.icono, nombre: w.nombre,
+      sub: t('hashdash.wallet.wDetHere','Detected in this browser'), accion: () => conectaIny(w) })));
+    APPS.filter(a => a.navegador).forEach(a => lista.appendChild(fila({ icono: a.icono, logo: a.logo, nombre: a.nombre, app: a.id,
+      sub: t('hashdash.wallet.wOpensHere','Opens this page in the app'), enlace: a.navegador() })));
+    const n = document.createElement('div'); n.className = 'wsel-note';
+    n.textContent = t('hashdash.wallet.soloF','Your node, staking and airdrop work the same inside your wallet app. On a computer you can also connect as usual.');
+    lista.appendChild(n);
+  }
   /* movil sin wallet inyectada: Chrome, Safari, Samsung Internet... */
   function vistaMovil(){
+    if(SOLO_APP){ vistaSoloApp(); return; }
     cabeza();
     inyectadas().forEach(w => lista.appendChild(fila({ icono: w.icono, nombre: w.nombre,
       sub: t('hashdash.wallet.wDetHere','Detected in this browser'), accion: () => conectaIny(w) })));
@@ -3959,7 +3976,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   /* volver a pintar (idioma, wallet anunciada tarde) sin perder el enlace en curso */
   function refresca(){
     vista();
-    if(uri && (MOVIL || qrAbierto)) pintarUri();
+    if(uri && ((MOVIL && !SOLO_APP) || qrAbierto)) pintarUri();
     else if(pidiendo) estado(t('hashdash.wallet.wcPrep','Preparing the connection…'));
   }
 
@@ -3972,7 +3989,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     vista();
     caja.classList.add('on');
     requestAnimationFrame(() => caja.classList.add('vis'));
-    if(MOVIL){ if(uri) pintarUri(); else pedirConexionWC(); }
+    if(MOVIL && !SOLO_APP){ if(uri) pintarUri(); else pedirConexionWC(); }
   }
   function cierra(){
     caja.classList.remove('vis');

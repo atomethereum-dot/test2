@@ -20,6 +20,10 @@
   var MARCA = "ma-wc";                                        // hay (o hubo) una sesion de WalletConnect aqui
   var ua = navigator.userAgent || "";
   var MOVIL = /Android|iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, en el movil sin wallet (Chrome,
+     Safari...) no se conecta por WalletConnect: se abre la pagina en la app de la wallet, donde no sale ninguna
+     alerta. Para volver a como estaba: SOLO_APP = false. */
+  var SOLO_APP = true;
   var AQUI = location.origin + location.pathname;
   var enc = encodeURIComponent;
 
@@ -53,7 +57,10 @@
       or: " ou ", only: "Só o seu endereço é lido: sem assinaturas nem transações." }
   };
   if (window.MA_WALLET_I18N) for (var lk in window.MA_WALLET_I18N) T[lk] = window.MA_WALLET_I18N[lk];
-  function t(k, v) { var l = (document.documentElement.lang || "en").slice(0, 2), s = (T[l] || T.en)[k]; if (v) for (var x in v) s = s.split("{" + x + "}").join(v[x]); return s; }
+  // textos del modo temporal SOLO_APP (abrir la pagina en la app de la wallet)
+  var SOLO = {"en": {"soloT": "Open this page in your wallet", "soloS": "To connect from your phone, open this page inside your wallet app. Tap your wallet:", "soloF": "Your node, staking and airdrop work the same inside your wallet app. On a computer you can also connect as usual."}, "es": {"soloT": "Abre esta página en tu wallet", "soloS": "Para conectar desde el teléfono, abre esta página dentro de la app de tu wallet. Toca tu wallet:", "soloF": "Tu nodo, tu staking y tu airdrop funcionan igual dentro de la app de tu wallet. En el ordenador también puedes conectar como siempre."}, "pt": {"soloT": "Abra esta página na sua carteira", "soloS": "Para conectar pelo celular, abra esta página dentro do app da sua carteira. Toque na sua carteira:", "soloF": "Seu nó, seu staking e seu airdrop funcionam igual dentro do app da sua carteira. No computador você também pode conectar como sempre."}, "fr": {"soloT": "Ouvrez cette page dans votre wallet", "soloS": "Pour vous connecter depuis votre téléphone, ouvrez cette page dans l’app de votre wallet. Touchez votre wallet :", "soloF": "Votre nœud, votre staking et votre airdrop fonctionnent de la même façon dans l’app de votre wallet. Sur ordinateur, vous pouvez aussi vous connecter comme d’habitude."}, "de": {"soloT": "Öffne diese Seite in deiner Wallet", "soloS": "Um dich vom Handy aus zu verbinden, öffne diese Seite in der App deiner Wallet. Tippe auf deine Wallet:", "soloF": "Dein Node, dein Staking und dein Airdrop funktionieren in der App deiner Wallet genauso. Am Computer kannst du dich auch wie gewohnt verbinden."}, "ru": {"soloT": "Откройте эту страницу в своём кошельке", "soloS": "Чтобы подключиться с телефона, откройте эту страницу в приложении своего кошелька. Выберите кошелёк:", "soloF": "Узел, стейкинг и аирдроп работают так же внутри приложения кошелька. На компьютере можно подключаться как обычно."}, "zh": {"soloT": "在你的钱包中打开此页面", "soloS": "如需在手机上连接，请在钱包 App 内打开此页面。选择你的钱包：", "soloF": "在钱包 App 内，你的节点、质押和空投一切照常。在电脑上也可以照常连接。"}, "ja": {"soloT": "このページをウォレットで開いてください", "soloS": "スマホから接続するには、ウォレットアプリ内でこのページを開いてください。ウォレットを選んでください：", "soloF": "ノード、ステーキング、エアドロップはウォレットアプリ内でも同じように使えます。パソコンからはこれまで通り接続できます。"}, "ko": {"soloT": "이 페이지를 지갑에서 여세요", "soloS": "휴대폰에서 연결하려면 지갑 앱 안에서 이 페이지를 여세요. 지갑을 선택하세요:", "soloF": "노드, 스테이킹, 에어드랍은 지갑 앱 안에서도 똑같이 작동합니다. 컴퓨터에서는 평소처럼 연결할 수 있습니다."}, "ar": {"soloT": "افتح هذه الصفحة في محفظتك", "soloS": "للاتصال من هاتفك، افتح هذه الصفحة داخل تطبيق محفظتك. اختر محفظتك:", "soloF": "عقدتك وتخزينك والإيردروب تعمل بالطريقة نفسها داخل تطبيق محفظتك. ويمكنك على الحاسوب الاتصال كالمعتاد."}, "hi": {"soloT": "यह पेज अपने वॉलेट में खोलें", "soloS": "फ़ोन से कनेक्ट करने के लिए यह पेज अपने वॉलेट ऐप के अंदर खोलें। अपना वॉलेट चुनें:", "soloF": "आपका नोड, स्टेकिंग और एयरड्रॉप वॉलेट ऐप के अंदर भी वैसे ही चलते हैं। कंप्यूटर पर आप हमेशा की तरह कनेक्ट कर सकते हैं।"}};
+  for (var sl in SOLO) { T[sl] = T[sl] || {}; for (var sk in SOLO[sl]) T[sl][sk] = SOLO[sl][sk]; }
+  function t(k, v) { var l = (document.documentElement.lang || "en").slice(0, 2), s = (T[l] || T.en)[k]; if (s == null) s = T.en[k]; if (v) for (var x in v) s = s.split("{" + x + "}").join(v[x]); return s; }
 
   function binance() {
     var dentro = new URL("bnc://app.binance.com/mp/app");
@@ -225,7 +232,17 @@
     b.addEventListener("click", function () { if (!uri) return; try { navigator.clipboard.writeText(uri).then(function () { b.textContent = t("copied"); setTimeout(function () { b.textContent = t("copy"); }, 1600); }); } catch (e) {} });
     return b;
   }
+  // movil sin wallet, mientras dura SOLO_APP: solo abrir esta pagina en la app de la wallet
+  function vistaSoloApp() {
+    caja.textContent = ""; cabecera(t("soloT")); estado(t("soloS"));
+    var lista = nodo("div", "maw-l");
+    inyectadas().forEach(function (w) { var f = fila("button", { id: "iny" }, w.nombre, t("det"), w.icono); f.addEventListener("click", function () { usar(w.proveedor); }); lista.appendChild(f); });
+    APPS.filter(function (a) { return a.navegador; }).forEach(function (a) { var f = fila("a", a, a.nombre, t("brw")); f.href = a.navegador(); f.rel = "noopener"; lista.appendChild(f); });
+    caja.appendChild(lista);
+    var pie = nodo("div", "maw-f"); pie.appendChild(nodo("p", "maw-a", t("soloF"))); pie.appendChild(nodo("p", "maw-o", t("only"))); caja.appendChild(pie);
+  }
   function vistaMovil() {
+    if (SOLO_APP) { vistaSoloApp(); return; }
     caja.textContent = ""; cabecera(t("pickM"));
     var lista = nodo("div", "maw-l");
     inyectadas().forEach(function (w) { var f = fila("button", { id: "iny" }, w.nombre, t("det"), w.icono); f.addEventListener("click", function () { usar(w.proveedor); }); lista.appendChild(f); });
@@ -308,7 +325,7 @@
     // dentro del navegador de una wallet se conecta directa (Brave y Opera traen su propia wallet: ahi se deja elegir)
     if (MOVIL && iny.length && !iny[0].proveedor.isBraveWallet && !/OPR\//.test(ua)) { usar(iny[0].proveedor); return; }
     pedirLogos();
-    if (MOVIL) { vistaMovil(); ov.hidden = false; if (uri) pintarUri(); else pedirConexion(); }
+    if (MOVIL) { vistaMovil(); ov.hidden = false; if (!SOLO_APP) { if (uri) pintarUri(); else pedirConexion(); } }
     else { vistaPC(); ov.hidden = false; if (uri && caja.querySelector(".maw-q[data-on]")) pintarUri(); }
   }
   function cerrar() { if (ov) ov.hidden = true; }

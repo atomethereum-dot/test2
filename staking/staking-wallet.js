@@ -71,6 +71,10 @@
     { id: "rainbow", nombre: "Rainbow", logo: "rainbow", nativo: "rainbow://" },
   ];
   const conWC = (a) => !!a.nativo;
+  /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, en el movil sin wallet
+     (Chrome, Safari...) no se conecta por WalletConnect: se abre esta pagina dentro de la app de la wallet,
+     donde no sale ninguna alerta. Para volver a como estaba: SOLO_APP = false. */
+  const SOLO_APP = true;
   const OTRAS = { id: "otras", nombre: "Other wallets", logo: "walletConnect" };
 
   const $ = (id) => document.getElementById(id);
@@ -328,8 +332,33 @@
     return b;
   }
 
+  /** Movil sin wallet inyectada, mientras dura SOLO_APP: solo abrir esta pagina en la app de la wallet. */
+  function vistaSoloApp() {
+    caja.textContent = "";
+    cabecera("Open this page in your wallet");
+    estado("To connect from your phone, open this page inside your wallet app. Tap your wallet:");
+    const e = caja.querySelector(".wpick-state"); if (e) e.classList.add("solo");
+    const lista = nodo("div", "wpick-list");
+    inyectadas().forEach((w) => {
+      const f = fila("button", { id: "inyectada", nombre: w.nombre }, "Detected in this browser", { icono: w.icono });
+      f.addEventListener("click", () => usarInyectada(w.proveedor));
+      lista.appendChild(f);
+    });
+    APPS.filter((a) => a.navegador).forEach((a) => {
+      const f = fila("a", a, "Opens this page in the app");
+      f.href = a.navegador();
+      f.rel = "noopener";
+      lista.appendChild(f);
+    });
+    caja.appendChild(lista);
+    const pie = nodo("div", "wpick-foot");
+    pie.appendChild(nodo("p", "wpick-alt", "Your staking, rewards and withdrawals work the same inside your wallet app. On a computer you can also connect as usual."));
+    caja.appendChild(pie);
+  }
+
   /** Vista del movil sin wallet inyectada: Chrome, Safari, Samsung Internet... */
   function vistaMovil() {
+    if (SOLO_APP) { vistaSoloApp(); return; }
     caja.textContent = "";
     cabecera("Choose your wallet app");
     const lista = nodo("div", "wpick-list");
@@ -535,7 +564,7 @@
     if (MOVIL) {
       vistaMovil();
       caja.hidden = false;
-      if (uri) pintarUri(); else pedirConexionWC();
+      if (!SOLO_APP) { if (uri) pintarUri(); else pedirConexionWC(); }
     } else {
       vistaPC();
       caja.hidden = false;
