@@ -83,6 +83,16 @@ button,input{font:inherit;color:inherit}
 .bar2{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:30px}
 .bar2 h2{font-size:18px;font-weight:400}
 .bar2 .ctl{flex:1 1 320px;justify-content:flex-end}
+.qw{margin-top:22px}
+.qin{width:100%;padding:14px 16px;border:1px solid var(--line-2);border-radius:12px;background:var(--panel);font:400 14px var(--mono);color:var(--ink)}
+.qin:focus{outline:none;border-color:var(--blue-l)}
+.qres{display:grid;gap:8px;margin-top:10px}.qres:empty{display:none}
+.qr{display:grid;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);cursor:pointer;text-align:left;color:var(--ink);font:inherit}
+.qr:hover{border-color:var(--line-2)}
+.qr .w{font:500 13px var(--mono);word-break:break-all}
+.qr .cs{display:flex;flex-wrap:wrap;gap:6px}
+.qr .ln2{font-size:12.5px;color:var(--ink-2)}
+.qno{padding:12px 14px;border:1px dashed var(--line-2);border-radius:12px;color:var(--ink-2);font-size:13px}
 .find{padding:10px 12px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel);font:400 13px var(--mono);width:min(280px,100%)}
 .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .tabs button{padding:7px 11px;border:1px solid var(--line-2);border-radius:99px;background:transparent;font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);cursor:pointer}
@@ -193,6 +203,10 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   <div class="load" id="load"><span class="spin"></span><span id="step">Leyendo la blockchain…</span></div>
 
   <section id="sum" hidden>
+    <div class="qw">
+      <input class="qin" id="qw" placeholder="Buscar wallet · pega la dirección 0x… o una parte" autocomplete="off" spellcheck="false" aria-label="Buscar wallet">
+      <div class="qres" id="qwr"></div>
+    </div>
     <div class="tiles">
       <div class="tile hi"><span class="k">Ganado hasta ahora</span><span class="v" id="t-earned">0</span><span class="s" id="t-secured"></span></div>
       <div class="tile"><span class="k">Bolsa reservada</span><span class="v" id="t-res">0</span><div class="bar"><i id="t-resbar"></i></div><span class="s" id="t-resp"></span></div>
@@ -387,7 +401,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     $("t-resbar").style.width = pct + "%"; $("t-resp").textContent = nf2.format(pct) + " % de 7.000.000" + (reserved >= C.BAG ? " · bolsa completa" : "");
     $("t-secured").textContent = nf0.format(secured) + " SECT ya asegurados (día 30 o más)";
     [1, 2, 3, 4].forEach(function (k) { $("l" + k).textContent = nf0.format(lv[k]); });
-    tabsDraw(); draw(); recentBuild(); recentDraw(); refCompute();
+    tabsDraw(); draw(); recentBuild(); recentDraw(); refCompute(); qDraw();
     clearInterval(tick); tick = setInterval(live, 250); live();
   }
 
@@ -664,6 +678,32 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     var rest = list.length - rshow;
     $("rmore").hidden = rest <= 0; if (rest > 0) $("rmore").textContent = "Ver " + Math.min(20, rest) + " más";
   }
+
+  /* ---------- buscador de wallets: en que participa cada una ---------- */
+  function qDraw() {
+    var q = $("qw").value.trim().toLowerCase(), box = $("qwr");
+    if (q.length < 4) { box.innerHTML = q ? '<p class="qno">Escribe al menos 4 caracteres de la dirección.</p>' : ""; return; }
+    var hit = rows.map(function (x, i) { return { x: x, i: i }; }).filter(function (o) { return o.x.who.indexOf(q) >= 0; });
+    if (!hit.length) {
+      box.innerHTML = '<p class="qno">' + (/^0x[0-9a-f]{40}$/.test(q) ? "Esta wallet no participa: no tiene staking ni nodo activado." : "Ninguna wallet coincide con «" + escH(q) + "».") + "</p>";
+      return;
+    }
+    box.innerHTML = hit.slice(0, 8).map(function (o) {
+      var x = o.x, r = x.r, st = ST[r.status] || ["—", "mute"], n = x.node;
+      var nodo = r.node === "on" ? '<span class="chip ok">Nodo activo' + (n && n.act && !n.reg ? " · Dashboard" : n && n.reg ? " · Sepolia" : "") + "</span>"
+        : r.node === "off" ? '<span class="chip warn">Nodo pausado</span>' : '<span class="chip mute">Sin nodo</span>';
+      var stk = r.bal > 0 ? '<span class="chip lv' + (r.level || 0) + '">' + (r.level ? LV[r.level] : "Sin nivel") + " · " + nf0.format(r.bal) + " SECT en staking</span>" : '<span class="chip mute">Sin staking</span>';
+      var ad = r.level && r.node === "on" ? '<span class="chip ok">Airdrop activo</span>' : '<span class="chip mute">Airdrop inactivo</span>';
+      var tr = (x.tr || []), ult = tr.length ? tr[tr.length - 1] : null;
+      var hist = ult ? (ult.e === Infinity ? "Dentro desde el " + dtf.format(ult.s) : "Salió el " + dtf.format(ult.e) + (ult.why === "stake" ? " (retiró el staking)" : " (apagó el nodo)")) + (tr.length > 1 ? " · " + tr.length + " entradas" : "") : "Nunca ha entrado al airdrop";
+      return '<button class="qr" type="button" data-r="' + o.i + '"><span class="w">' + x.who + '</span><span class="cs">' + nodo + stk + ad + '<span class="chip ' + st[1] + '">' + st[0] + "</span></span>" +
+        '<span class="ln2">Ganado: <b>' + nf2.format(earnedNow(r)) + " SECT</b>" + (r.prize ? " de " + nf0.format(r.proj || r.prize) : "") + " · " + escH(hist) + " · toca para ver el detalle</span></button>";
+    }).join("") + (hit.length > 8 ? '<p class="qno">' + nf0.format(hit.length - 8) + " más: escribe más caracteres para acotar.</p>" : "");
+    box.querySelectorAll(".qr").forEach(function (b) { b.addEventListener("click", function () { show(+b.dataset.r); }); });
+  }
+  $("qw").addEventListener("input", qDraw);
+  // Enter abre la primera; sin preventDefault el mismo Enter pulsaria el boton de cerrar del detalle
+  $("qw").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); var b = $("qwr").querySelector(".qr"); if (b) setTimeout(function () { b.click(); }, 0); } });
 
   /* ---------- detalle de una wallet ---------- */
   var LAY = { early: ["Antes del día 30", "warn"], run: ["Asegurada", "ok"], full: ["Completa", "ok"], closed: ["En pausa · conserva lo ganado", "mute"], lost: ["En pausa · menos de 30 días", "warn"] };
