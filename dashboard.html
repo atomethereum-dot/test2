@@ -1967,6 +1967,11 @@ window.__sectoraMarket = {
   var enMapa = {}, esperas = 0;
   var nodoKey = function () { var e = est(); return e ? "sectora:v2:node:" + e.addr.toLowerCase() : ""; };
   function nodoLeer() { try { return JSON.parse(localStorage.getItem(nodoKey()) || "null"); } catch (e) { return null; } }
+  // "Activar mi nodo" sin wallet conectada: conecta y, en cuanto se lee la wallet, enciende el nodo.
+  // Solo pasa si la persona pulso el boton (5 min); conectar desde otro sitio solo lee la direccion
+  var PIDE = "sectora:v2:activar";
+  function pide(si) { try { if (si) sessionStorage.setItem(PIDE, String(Date.now())); else sessionStorage.removeItem(PIDE); } catch (e) {} }
+  function pidio() { try { return Date.now() - (+sessionStorage.getItem(PIDE) || 0) < 5 * 60000; } catch (e) { return false; } }
   // encender el nodo no pide staking: basta la wallet conectada
   function activa(manual) {
     var e = est(); if (!e) return false;
@@ -2008,6 +2013,7 @@ window.__sectoraMarket = {
      El staking va aparte: con el nodo activado y 100 SECT en staking (en cualquier orden) el airdrop queda activo */
   plan = function () {
     var st = $("#planSt"), bp = $("#bPlan"); if (!st || !bp) return;
+    if (conectado && est() && pidio()) { pide(false); activa(true); }   // pulso "Activar mi nodo" antes de conectar
     var txt, ok = 0, act, lbl;
     if (!conectado) { txt = tt("hashdash.v2.plan.st0", "Connect your wallet to activate the plan."); act = "connect"; lbl = tt("hashdash.v2.plan.btn", "Activate my node"); }
     else if (!est()) { txt = tt("hashdash.v2.card.reading", "Reading your staking…"); act = "wait"; lbl = txt; }
@@ -2039,7 +2045,7 @@ window.__sectoraMarket = {
     if (!b) return;
     e.stopPropagation(); e.preventDefault();
     var a = b.id === "bPlan" ? b.dataset.act : b.dataset.v2;
-    if (a === "connect") { var bc = $("#bConnect"); if (bc) bc.click(); }
+    if (a === "connect") { pide(true); var bc = $("#bConnect"); if (bc) bc.click(); }
     else if (a === "stake") location.href = "/staking/";
     else if (a === "save") { if (activa(true)) todo(); }
     else if (a === "act") {
@@ -2060,7 +2066,7 @@ window.__sectoraMarket = {
     var w = window.__sectoraWallet;
     if (w) { var oc = w.onConnect, od = w.onDisconnect;
       w.onConnect = function (d, b) { if (oc) oc.call(w, d, b); todo(); };
-      w.onDisconnect = function () { if (od) od.call(w); todo(); }; }
+      w.onDisconnect = function () { if (od) od.call(w); pide(false); todo(); }; }
     todo();
   }
   document.addEventListener("v2:estado", todo);
