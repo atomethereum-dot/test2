@@ -28,6 +28,22 @@
   var DASH = "/dashboard.html#plan";
   var STAKE = "/staking/";
   var MM = "https://metamask.app.link/dapp/sectoraorg.com/airdrop/";
+  /* sin wallet en este navegador: en el movil, abrir esta pagina dentro de la app de cada wallet; en el
+     ordenador, su pagina oficial de descarga */
+  var MOVIL = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "") || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  function wallets() {
+    var u = location.origin + "/airdrop/", e = encodeURIComponent;
+    if (!MOVIL) return [["MetaMask", "https://metamask.io/download/"], ["Phantom", "https://phantom.com/download"], ["Trust Wallet", "https://trustwallet.com/download"],
+      ["Coinbase Wallet", "https://www.coinbase.com/wallet/downloads"], ["OKX Wallet", "https://www.okx.com/web3"]];
+    var bn = new URL("bnc://app.binance.com/mp/app");
+    bn.searchParams.set("appId", "yFK5FCqYprrXDiVFbhyRx7"); bn.searchParams.set("startPagePath", btoa("/pages/browser/index"));
+    bn.searchParams.set("startPageQuery", btoa("url=" + e(u) + "&defaultChainId=1"));
+    var bu = new URL("https://app.binance.com/en/download"); bu.searchParams.set("_dp", btoa(bn.toString()));
+    return [["MetaMask", MM], ["Trust Wallet", "https://link.trustwallet.com/open_url?coin_id=60&url=" + e(u)], ["Phantom", "https://phantom.app/ul/browse/" + e(u) + "?ref=" + e(location.origin)],
+      ["Binance Wallet", bu.toString()], ["Coinbase Wallet", "https://go.cb-w.com/dapp?cb_url=" + e(u)], ["OKX Wallet", "https://www.okx.com/download?deeplink=" + e("okx://wallet/dapp/url?dappUrl=" + e(u))]];
+  }
+  // la wallet del navegador: window.ethereum o, si solo esta Phantom, su proveedor de Ethereum
+  function prov() { return window.ethereum || (window.phantom && window.phantom.ethereum) || null; }
   var PROG = "/airdrop/progress.json";
   // END: fecha prevista (interna) del lanzamiento de SectoraEVM, no se muestra; DUR: el mismo tiempo para todos
   var MIN = 30, DAY = 864e5, END = Date.UTC(2027, 2, 25), DUR = 150 * DAY;
@@ -125,6 +141,8 @@
     ".el-b + .el-b{margin-top:10px}",
     ".el-alt{margin-top:16px;padding-top:14px;border-top:1px solid rgba(7,8,10,.07);font-size:14px;color:#6b7280}",
     ".el-alt a{color:#0d4fd8}",
+    ".el-wl{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}",
+    ".el-wl a{display:inline-flex;align-items:center;padding:9px 13px;border:1px solid rgba(7,8,10,.14);border-radius:99px;font-size:13.5px;color:#07080a;text-decoration:none;background:#fff}",
     ".el-f{display:flex;gap:8px;margin-top:10px}",
     ".el-f input{flex:1;min-width:0;padding:12px 14px;border:1px solid rgba(7,8,10,.16);border-radius:10px;background:#fff;color:#07080a;font-family:'IBM Plex Mono',monospace;font-size:14px;outline:none}",
     ".el-f input:focus{border-color:#1569ff;box-shadow:0 0 0 3px rgba(21,105,255,.15)}",
@@ -292,11 +310,11 @@
   function head() { ov.querySelector(".el-k").textContent = t("k"); ov.querySelector(".el-pv").textContent = DEMO ? t("pv") : ""; ov.querySelector(".el-x").setAttribute("aria-label", t("close")); }
   function start(msg) {
     stop(); head(); cur = null;
-    var hasW = !!window.ethereum;
+    var hasW = !!prov();
     bd.innerHTML = '<h3>' + t("h") + '</h3><p class="el-in">' + t("intro") + '</p>' +
       (hasW ? '<button class="el-b go mono" type="button" data-a="connect"><span>' + t("connect") + '</span><span>→</span></button>' : "") +
       (msg ? '<p class="el-msg">' + esc(msg) + '</p>' : "") +
-      '<div class="el-alt">' + (hasW ? "" : t("nowallet") + ' <a href="' + MM + '">' + t("openmm") + ' ↗</a><br><br>') +
+      '<div class="el-alt">' + (hasW ? "" : t("nowallet") + '<div class="el-wl">' + wallets().map(function (w) { return '<a href="' + esc(w[1]) + '" rel="noopener">' + w[0] + ' ↗</a>'; }).join("") + '</div><br>') +
       t("or") + '<form class="el-f"><input name="a" placeholder="0x…" autocomplete="off" spellcheck="false" aria-label="' + t("or") + '"><button class="mono" type="submit">' + t("check") + '</button></form></div>' +
       '<p class="mono el-rule">' + t("rule") + '</p>';
     var b = bd.querySelector('[data-a="connect"]'); if (b) b.addEventListener("click", connect);
@@ -307,7 +325,7 @@
     });
   }
   function connect() {
-    window.ethereum.request({ method: "eth_requestAccounts" }).then(function (acc) {
+    prov().request({ method: "eth_requestAccounts" }).then(function (acc) {
       if (acc && acc[0]) show(acc[0], true); else start(t("rej"));
     }).catch(function () { start(t("rej")); });
   }
