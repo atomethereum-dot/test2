@@ -3809,8 +3809,19 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     estado(t('hashdash.wallet.soloS','To connect from your phone, open this page inside your wallet app. Tap your wallet:'));
     inyectadas().forEach(w => lista.appendChild(fila({ icono: w.icono, nombre: w.nombre,
       sub: t('hashdash.wallet.wDetHere','Detected in this browser'), accion: () => conectaIny(w) })));
-    APPS.filter(a => a.navegador).forEach(a => lista.appendChild(fila({ icono: a.icono, logo: a.logo, nombre: a.nombre, app: a.id,
+    /* sin data-app: pintarUri no las toca y siguen abriendo la pagina dentro de la app (sin WalletConnect) */
+    APPS.filter(a => a.navegador).forEach(a => lista.appendChild(fila({ icono: a.icono, logo: a.logo, nombre: a.nombre,
       sub: t('hashdash.wallet.wOpensHere','Opens this page in the app'), enlace: a.navegador() })));
+    /* para quien no tiene ninguna de las principales: cualquier wallet por WalletConnect (sin QR) */
+    const o = fila({ logo: 'walletConnect', nombre: t('hashdash.wallet.wOtherWallets','Other wallets'), app: 'otras', enlace: true,
+      sub: t('hashdash.wallet.wAnyWC','Any WalletConnect wallet') });
+    o.setAttribute('aria-disabled', 'true');
+    o.addEventListener('click', e => {
+      if(!uri){ e.preventDefault(); return; }
+      guardar(ELEGIDA, null); guardar(DEEPLINK, null); guardar(PEND, String(Date.now()));
+      estado(t('hashdash.wallet.wApproveAny','Approve the connection in your wallet, then come back to this tab.'));
+    });
+    lista.appendChild(o);
     const n = document.createElement('div'); n.className = 'wsel-note';
     n.textContent = t('hashdash.wallet.soloF','Your node, staking and airdrop work the same inside your wallet app. On a computer you can also connect as usual.');
     lista.appendChild(n);
@@ -3929,16 +3940,17 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
         box.innerHTML = q.createSvgTag({cellSize: 4, margin: 2});   /* SVG generado aqui, sin texto ajeno */
       }).catch(() => estado(t('hashdash.wallet.wQrFail','Could not draw the QR code. Use “Copy connection link”.'), true));
     }
-    estado(MOVIL ? t('hashdash.wallet.wcPick','Choose your wallet app. Approve the connection there, then come back to this tab.')
+    estado(MOVIL && SOLO_APP ? t('hashdash.wallet.soloS','To connect from your phone, open this page inside your wallet app. Tap your wallet:')
+         : MOVIL ? t('hashdash.wallet.wcPick','Choose your wallet app. Approve the connection there, then come back to this tab.')
                  : t('hashdash.wallet.wcWait','Waiting for approval in your wallet…'));
   }
 
   /* pide el enlace de conexion antes de que la persona toque su app: en Safari del
      iPhone la app solo se abre si el enlace sale directo del toque, sin esperas */
   async function pedirConexionWC(){
-    if(pidiendo){ if(uri) pintarUri(); else estado(t('hashdash.wallet.wcPrep','Preparing the connection…')); return; }
+    if(pidiendo){ if(uri) pintarUri(); else if(!(MOVIL && SOLO_APP)) estado(t('hashdash.wallet.wcPrep','Preparing the connection…')); return; }
     pidiendo = true;
-    estado(t('hashdash.wallet.wcPrep','Preparing the connection…'));
+    if(!(MOVIL && SOLO_APP)) estado(t('hashdash.wallet.wcPrep','Preparing the connection…'));
     let p;
     try{ p = await proveedorWC(); }
     catch(e){
@@ -3982,8 +3994,8 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   /* volver a pintar (idioma, wallet anunciada tarde) sin perder el enlace en curso */
   function refresca(){
     vista();
-    if(uri && ((MOVIL && !SOLO_APP) || qrAbierto)) pintarUri();
-    else if(pidiendo) estado(t('hashdash.wallet.wcPrep','Preparing the connection…'));
+    if(uri && (MOVIL || qrAbierto)) pintarUri();
+    else if(pidiendo && !(MOVIL && SOLO_APP)) estado(t('hashdash.wallet.wcPrep','Preparing the connection…'));
   }
 
   function abre(){
@@ -3995,7 +4007,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     vista();
     caja.classList.add('on');
     requestAnimationFrame(() => caja.classList.add('vis'));
-    if(MOVIL && !SOLO_APP){ if(uri) pintarUri(); else pedirConexionWC(); }
+    if(MOVIL){ if(uri) pintarUri(); else pedirConexionWC(); }
   }
   function cierra(){
     caja.classList.remove('vis');
