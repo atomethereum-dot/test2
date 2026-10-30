@@ -48,6 +48,13 @@
       "c": "Rotterdam, NL",
       "la": 51.9,
       "lo": 4.5
+    },
+    "0x783503fd8e7854b2f9db8a9be51896fecd8333e0": {
+      "t": 1793359055000,
+      "n": "Sectora Node Mérida",
+      "c": "Mérida, VE",
+      "la": 8.6,
+      "lo": -71.2
     }
   }
 }
