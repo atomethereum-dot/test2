@@ -286,7 +286,9 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
 </div>
 
 <!-- conteo con los nodos activados en el Dashboard nuevo (registro en Sepolia + activaciones) -->
-<script src="/airdrop/count.js?v=22"></script>
+<!-- el panel privado tambien lee los avisos recientes de ntfy: ve al momento un nodo recien activado -->
+<script>window.SA_NTFY = true;</script>
+<script src="/airdrop/count.js?v=23"></script>
 <script>
 (function () {
   "use strict";

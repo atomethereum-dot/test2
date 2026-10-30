@@ -169,8 +169,9 @@
   }
 
   // activaciones: { wallet: { t, n, c, la, lo } }; si no se pueden leer, como si no hubiera ninguna.
-  // Son las guardadas en el repositorio mas los avisos de las ultimas 12 h en ntfy (la tarea de GitHub que
-  // las guarda puede tardar): asi un nodo recien activado cuenta al momento. Vale la primera de cada wallet.
+  // Son las guardadas en el repositorio (la tarea de GitHub las guarda cada 5 minutos, con la hora del aviso).
+  // Solo el panel privado (window.SA_NTFY) suma ademas los avisos de las ultimas 12 h en ntfy, para ver al
+  // momento un nodo recien activado: las paginas publicas no se conectan a ntfy. Vale la primera de cada wallet.
   var actP = null;
   function guardadas() {
     return fetch(ACT_URL + "?m=" + Math.floor(Date.now() / 60000), { cache: "no-store" })
@@ -180,6 +181,7 @@
   function texto(v, max) { return String(v == null ? "" : v).replace(/[\u0000-\u001f\u007f<>]/g, "").trim().slice(0, max); }
   // misma validacion que .github/scripts/nodos-sync.mjs
   function recientes() {
+    if (!root.SA_NTFY) return Promise.resolve(null);
     return fetch(NTFY_URL, { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("ntfy"); return r.text(); }).then(function (txt) {
       var m = {};
       txt.split("\n").forEach(function (l) {
