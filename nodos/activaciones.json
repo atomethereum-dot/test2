@@ -41,6 +41,13 @@
       "c": "Ho Chi Minh City, VN",
       "la": 10.8,
       "lo": 106.6
+    },
+    "0x65993ddc757f4957925816970a818f40335199aa": {
+      "t": 1793347407000,
+      "n": "Sectora Node Rotterdam",
+      "c": "Rotterdam, NL",
+      "la": 51.9,
+      "lo": 4.5
     }
   }
 }
