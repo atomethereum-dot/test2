@@ -268,6 +268,7 @@
   let caja = null;
   let uri = "";
   let pidiendo = false;     // hay un connect() de WalletConnect en curso
+  let wcAbierto = false;    // la persona abrio el panel de WalletConnect (Tangem, Ledger Live, Safe...)
   let logosPedidos = false;
 
   function nodo(tag, clase, texto) {
@@ -317,13 +318,15 @@
     return f;
   }
 
+  // el estado va arriba y, con el panel de WalletConnect abierto, tambien junto a su QR
   function estado(texto, error) {
-    const e = caja && caja.querySelector(".wpick-state");
-    if (!e) return;
-    e.textContent = "";
-    if (!error) e.appendChild(nodo("i"));
-    e.appendChild(document.createTextNode(texto));
-    e.classList.toggle("err", !!error);
+    if (!caja) return;
+    caja.querySelectorAll(".wpick-state").forEach((e) => {
+      e.textContent = "";
+      if (!error) e.appendChild(nodo("i"));
+      e.appendChild(document.createTextNode(texto));
+      e.classList.toggle("err", !!error);
+    });
   }
 
   function montarCaja() {
@@ -376,7 +379,7 @@
   function filaSoloWC(qr) {
     const f = fila("button", { id: "solo-wc", nombre: "Tangem, Ledger Live, Safe…", logo: "walletConnect" },
       "Wallets without their own browser · WalletConnect");
-    f.addEventListener("click", () => { f.remove(); panelWC(qr); });
+    f.addEventListener("click", () => { wcAbierto = true; panelWC(qr); });
     return f;
   }
 
@@ -385,13 +388,14 @@
     qr.appendChild(nodo("p", "wpick-warn", "Only for wallets without their own browser (Tangem, Ledger Live, Safe…). " +
       "While WalletConnect reviews our domain, your wallet may show a security warning by mistake. " +
       "Sectora and its contracts are verified on Etherscan, and connecting only reads your address."));
-    if (!MOVIL) {
-      qr.appendChild(nodo("div", "wpick-qrbox"));
-      qr.appendChild(nodo("p", "wpick-qrtxt", "Scan this QR code with your wallet, or copy the connection link and paste it in its WalletConnect section."));
-    }
-    qr.appendChild(copiarBoton());
+    qr.appendChild(nodo("p", "wpick-state"));
+    if (MOVIL) qr.appendChild(copiarBoton());   // en el telefono se copia el enlace: el boton va antes del QR
+    qr.appendChild(nodo("div", "wpick-qrbox"));
+    qr.appendChild(nodo("p", "wpick-qrtxt", "Scan this QR code with your wallet, or copy the connection link and paste it in its WalletConnect section."));
+    if (!MOVIL) qr.appendChild(copiarBoton());
     qr.dataset.on = "1";
     pedirConexionWC();
+    if (qr.isConnected) requestAnimationFrame(() => qr.scrollIntoView({ block: "nearest", behavior: "smooth" }));
   }
 
   /** Movil sin wallet inyectada, mientras dura SOLO_APP: solo abrir esta pagina en la app de la wallet. */
@@ -420,6 +424,7 @@
     lista.appendChild(filaSoloWC(qr));
     caja.appendChild(lista);
     caja.appendChild(qr);
+    if (wcAbierto) panelWC(qr);
     const pie = nodo("div", "wpick-foot");
     pie.appendChild(nodo("p", "wpick-alt", "Your staking, rewards and withdrawals work the same inside your wallet app. On a computer you can also connect as usual."));
     caja.appendChild(pie);
@@ -514,6 +519,7 @@
       const qr = nodo("div", "wpick-qr");
       lista.appendChild(filaSoloWC(qr));
       caja.appendChild(qr);
+      if (wcAbierto) panelWC(qr);
       return;
     }
 
@@ -608,10 +614,12 @@
       if (caja && !caja.hidden) {
         const rechazo = /reject|denied|cancel/i.test((e && e.message) || "");
         estado(rechazo ? "The connection was rejected in the wallet." : "The link expired.", true);
-        const otra = nodo("button", "wpick-retry mono", "Try again");
-        otra.type = "button";
-        otra.addEventListener("click", () => { abrir(); });
-        caja.querySelector(".wpick-state").appendChild(otra);
+        caja.querySelectorAll(".wpick-state").forEach((e) => {
+          const otra = nodo("button", "wpick-retry mono", "Try again");
+          otra.type = "button";
+          otra.addEventListener("click", () => { abrir(); });
+          e.appendChild(otra);
+        });
         filasWC().forEach((f) => { f.removeAttribute("href"); f.setAttribute("aria-disabled", "true"); });
         caja.querySelectorAll(".wpick-copy").forEach((b) => (b.disabled = true));
         const box = caja.querySelector(".wpick-qrbox");

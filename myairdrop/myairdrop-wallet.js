@@ -183,6 +183,7 @@
 
   /* ---------- el selector ---------- */
   var ov = null, caja = null, uri = "", pidiendo = false, logosPedidos = false;
+  var wcAbierto = false;   // la persona abrio el panel de WalletConnect (Tangem, Ledger Live, Safe...)
   function nodo(tag, clase, texto) { var n = document.createElement(tag); if (clase) n.className = clase; if (texto) n.textContent = texto; return n; }
   function estilos() {
     if (document.getElementById("maw-css")) return;
@@ -253,9 +254,12 @@
     f.appendChild(nodo("span", "maw-g", "→"));
     return f;
   }
+  // el estado va arriba y, con el panel de WalletConnect abierto, tambien junto a su QR
   function estado(texto, error) {
-    var e = caja && caja.querySelector(".maw-st"); if (!e) return;
-    e.textContent = ""; if (!error) e.appendChild(nodo("i")); e.appendChild(document.createTextNode(texto)); e.classList.toggle("err", !!error);
+    if (!caja) return;
+    caja.querySelectorAll(".maw-st").forEach(function (e) {
+      e.textContent = ""; if (!error) e.appendChild(nodo("i")); e.appendChild(document.createTextNode(texto)); e.classList.toggle("err", !!error);
+    });
   }
   function cabecera(titulo) {
     var h = nodo("div", "maw-h mono"); h.appendChild(nodo("span", "", titulo));
@@ -276,14 +280,16 @@
   // Ledger Live, Safe...): primero un aviso; luego el QR en el ordenador y el enlace para pegar en el movil
   function filaSoloWC(qr) {
     var f = fila("button", { id: "solo-wc", logo: "walletConnect" }, "Tangem, Ledger Live, Safe…", t("wcOnlyS"));
-    f.addEventListener("click", function () { f.remove(); panelWC(qr); });
+    f.addEventListener("click", function () { wcAbierto = true; panelWC(qr); });
     return f;
   }
   function panelWC(qr) {
-    qr.textContent = ""; qr.appendChild(nodo("p", "maw-w", t("wcWarn")));
-    if (!MOVIL) { qr.appendChild(nodo("div", "maw-qb")); qr.appendChild(nodo("p", "maw-qt", t("wcScanOnly"))); }
-    qr.appendChild(copiar());
+    qr.textContent = ""; qr.appendChild(nodo("p", "maw-w", t("wcWarn"))); qr.appendChild(nodo("p", "maw-st"));
+    if (MOVIL) qr.appendChild(copiar());   // en el telefono se copia el enlace: el boton va antes del QR
+    qr.appendChild(nodo("div", "maw-qb")); qr.appendChild(nodo("p", "maw-qt", t("wcScanOnly")));
+    if (!MOVIL) qr.appendChild(copiar());
     qr.dataset.on = "1"; pedirConexion();
+    if (qr.isConnected) requestAnimationFrame(function () { qr.scrollIntoView({ block: "nearest", behavior: "smooth" }); });
   }
   // movil sin wallet, mientras dura SOLO_APP: solo abrir esta pagina en la app de la wallet
   function vistaSoloApp() {
@@ -296,7 +302,7 @@
     otra.addEventListener("click", copiaAqui);
     lista.appendChild(otra);
     var qrm = nodo("div", "maw-q"); lista.appendChild(filaSoloWC(qrm));
-    caja.appendChild(lista); caja.appendChild(qrm);
+    caja.appendChild(lista); caja.appendChild(qrm); if (wcAbierto) panelWC(qrm);
     var pie = nodo("div", "maw-f"); pie.appendChild(nodo("p", "maw-a", t("soloF"))); pie.appendChild(nodo("p", "maw-o", t("only"))); caja.appendChild(pie);
   }
   function vistaMovil() {
@@ -339,7 +345,7 @@
         lista.appendChild(i);
       });
       var tel = fila("button", { id: "otra" }, t("phone"), t("soloOtherS"), ENLACE); tel.addEventListener("click", copiaAqui); lista.appendChild(tel);
-      var qrp = nodo("div", "maw-q"); lista.appendChild(filaSoloWC(qrp)); caja.appendChild(qrp);
+      var qrp = nodo("div", "maw-q"); lista.appendChild(filaSoloWC(qrp)); caja.appendChild(qrp); if (wcAbierto) panelWC(qrp);
       var pie0 = nodo("div", "maw-f"); pie0.appendChild(nodo("p", "maw-o", t("only"))); caja.appendChild(pie0);
       return;
     }
@@ -379,8 +385,10 @@
         uri = "";
         if (ov && !ov.hidden) {
           estado(/reject|denied|cancel/i.test((e && e.message) || "") ? t("rej") : t("exp"), true);
-          var otra = nodo("button", "mono", t("retry")); otra.type = "button"; otra.addEventListener("click", function () { abrir(); });
-          caja.querySelector(".maw-st").appendChild(otra);
+          caja.querySelectorAll(".maw-st").forEach(function (st) {
+            var otra = nodo("button", "mono", t("retry")); otra.type = "button"; otra.addEventListener("click", function () { abrir(); });
+            st.appendChild(otra);
+          });
           filasWC().forEach(function (f) { f.removeAttribute("href"); f.setAttribute("aria-disabled", "true"); });
           caja.querySelectorAll(".maw-c").forEach(function (b) { b.disabled = true; });
           var box = caja.querySelector(".maw-qb"); if (box) box.textContent = "";

@@ -836,6 +836,7 @@ a.wsel-i{text-decoration:none}
   font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase}
 @keyframes wselSp{to{transform:rotate(360deg)}}
 .wsel-qrw{padding:4px 4px 2px}
+.wsel-qrw .wsel-state{margin:0 0 6px}
 .wsel-warn{margin:6px 0 8px;padding:11px 12px;border:1px solid rgba(232,180,92,.35);background:rgba(232,180,92,.07);
   color:#f1d6a4;font-size:13px;line-height:1.55}
 .wsel-qr{width:min(240px,100%);margin:8px auto 6px;padding:12px;background:#fff;border-radius:10px}
@@ -3783,9 +3784,11 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     return b;
   }
 
+  /* el estado va arriba y, con el panel de WalletConnect abierto, tambien junto a su QR */
   function estado(texto, error, reintento){
-    const e = lista.querySelector('.wsel-state');
-    if(!e) return;
+    lista.querySelectorAll('.wsel-state').forEach(e => estadoEn(e, texto, error, reintento));
+  }
+  function estadoEn(e, texto, error, reintento){
     e.textContent = '';
     e.classList.toggle('err', !!error);
     if(!texto) return;
@@ -3836,7 +3839,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   function filaSoloWC(qr){
     const f = fila({ logo: 'walletConnect', nombre: 'Tangem, Ledger Live, Safe…',
       sub: t('hashdash.wallet.wcOnlyS','Wallets without their own browser · WalletConnect'),
-      accion: () => { f.remove(); qrAbierto = true; panelWC(qr); } });
+      accion: () => { qrAbierto = true; panelWC(qr); } });
     return f;
   }
   function panelWC(qr){
@@ -3845,14 +3848,15 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     const w = document.createElement('p'); w.className = 'wsel-warn';
     w.textContent = t('hashdash.wallet.wcWarn','Only for wallets without their own browser (Tangem, Ledger Live, Safe…). While WalletConnect reviews our domain, your wallet may show a security warning by mistake. Sectora and its contracts are verified on Etherscan, and connecting only reads your address.');
     qr.appendChild(w);
-    if(!MOVIL){
-      const box = document.createElement('div'); box.className = 'wsel-qr'; qr.appendChild(box);
-      const p = document.createElement('p'); p.className = 'wsel-qrtxt';
-      p.textContent = t('hashdash.wallet.wcScanOnly','Scan this QR code with your wallet, or copy the connection link and paste it in its WalletConnect section.');
-      qr.appendChild(p);
-    }
-    qr.appendChild(copiarBoton());
+    const st = document.createElement('p'); st.className = 'wsel-state'; qr.appendChild(st);
+    if(MOVIL) qr.appendChild(copiarBoton());   /* en el telefono se copia el enlace: el boton va antes del QR */
+    const box = document.createElement('div'); box.className = 'wsel-qr'; qr.appendChild(box);
+    const p = document.createElement('p'); p.className = 'wsel-qrtxt';
+    p.textContent = t('hashdash.wallet.wcScanOnly','Scan this QR code with your wallet, or copy the connection link and paste it in its WalletConnect section.');
+    qr.appendChild(p);
+    if(!MOVIL) qr.appendChild(copiarBoton());
     if(uri) pintarUri(); else pedirConexionWC();
+    if(qr.isConnected) requestAnimationFrame(() => qr.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
   }
   /* movil sin wallet, mientras dura SOLO_APP: solo abrir esta pagina en la app de la wallet */
   function vistaSoloApp(){
@@ -3868,7 +3872,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     lista.appendChild(fila({ icono: ENLACE, nombre: t('hashdash.wallet.soloOtherN','Another wallet'),
       sub: t('hashdash.wallet.soloOtherS','Copy the link and open it in your wallet’s browser'), accion: copiaAqui }));
     const qr = document.createElement('div');
-    if(!qrAbierto) lista.appendChild(filaSoloWC(qr));
+    lista.appendChild(filaSoloWC(qr));
     lista.appendChild(qr);
     if(qrAbierto) panelWC(qr);
     const n = document.createElement('div'); n.className = 'wsel-note';
@@ -3954,7 +3958,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       lista.appendChild(fila({ icono: ENLACE, nombre: t('hashdash.wallet.wPhone','Wallet on your phone'),
         sub: t('hashdash.wallet.soloOtherS','Copy the link and open it in your wallet’s browser'), accion: copiaAqui }));
       const qr = document.createElement('div');
-      if(!qrAbierto) lista.appendChild(filaSoloWC(qr));
+      lista.appendChild(filaSoloWC(qr));
       lista.appendChild(qr);
       if(qrAbierto) panelWC(qr);
       nota();
