@@ -395,6 +395,7 @@ img.wpick-ico{background:none}
   border-radius:50%;animation:wpickSpin .9s linear infinite}
 @keyframes wpickSpin{to{transform:rotate(360deg)}}
 .wpick-qrbox svg{display:block;width:200px;height:200px}
+.wpick-warn{max-width:44ch;margin:0;padding:10px 12px;border:1px solid rgba(196,128,20,.35);background:#fff8ec;color:#6b4206;font-size:12.5px;line-height:1.6}
 .wpick-qrtxt{max-width:34ch;text-align:center;font-size:12px;line-height:1.6;color:var(--p-ink-3)}
 .wpick-foot{display:grid;gap:10px;padding:12px 14px}
 .wpick-copy{justify-self:start;background:none;border:1px solid rgba(0,0,0,.16);padding:8px 12px;cursor:pointer;font-size:9.5px;color:var(--p-ink);

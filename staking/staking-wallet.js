@@ -78,7 +78,8 @@
   const conWC = (a) => !!a.nativo;
   /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, no se conecta por WalletConnect:
      en el movil sin wallet (Chrome, Safari...) se abre esta pagina dentro de la app de la wallet, donde no
-     sale ninguna alerta, y en el ordenador no hay QR (extensiones y el enlace para el telefono).
+     sale ninguna alerta, y en el ordenador no hay QR (extensiones y el enlace para el telefono). WalletConnect
+     queda solo para las wallets sin navegador propio ni extension (Tangem, Ledger Live, Safe...), con aviso previo.
      Para volver a como estaba: SOLO_APP = false. */
   const SOLO_APP = true;
   const PHANTOM = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#ab9ff2"/><path d="M7 21.5V13a7 7 0 0 1 14 0v8.5l-2.33-1.75-2.34 1.75L14 19.75l-2.33 1.75-2.34-1.75z" fill="#fff"/><ellipse cx="11.6" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/><ellipse cx="16.4" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/></svg>');
@@ -360,6 +361,29 @@
     (navigator.clipboard ? navigator.clipboard.writeText(AQUI) : Promise.reject()).then(ok, () => estado(AQUI));
   }
 
+  /* Mientras dura SOLO_APP, WalletConnect solo para las wallets sin navegador propio ni extension (Tangem,
+     Ledger Live, Safe...): primero un aviso; luego el QR en el ordenador y el enlace para pegar en el movil. */
+  function filaSoloWC(qr) {
+    const f = fila("button", { id: "solo-wc", nombre: "Tangem, Ledger Live, Safe…", logo: "walletConnect" },
+      "Wallets without their own browser · WalletConnect");
+    f.addEventListener("click", () => { f.remove(); panelWC(qr); });
+    return f;
+  }
+
+  function panelWC(qr) {
+    qr.textContent = "";
+    qr.appendChild(nodo("p", "wpick-warn", "Only for wallets without their own browser (Tangem, Ledger Live, Safe…). " +
+      "While WalletConnect reviews our domain, your wallet may show a security warning by mistake. " +
+      "Sectora and its contracts are verified on Etherscan, and connecting only reads your address."));
+    if (!MOVIL) {
+      qr.appendChild(nodo("div", "wpick-qrbox"));
+      qr.appendChild(nodo("p", "wpick-qrtxt", "Scan this QR code with your wallet, or copy the connection link and paste it in its WalletConnect section."));
+    }
+    qr.appendChild(copiarBoton());
+    qr.dataset.on = "1";
+    pedirConexionWC();
+  }
+
   /** Movil sin wallet inyectada, mientras dura SOLO_APP: solo abrir esta pagina en la app de la wallet. */
   function vistaSoloApp() {
     caja.textContent = "";
@@ -382,7 +406,10 @@
     const otra = fila("button", { id: "otra", nombre: "Another wallet" }, "Copy the link and open it in your wallet’s browser", { icono: ENLACE });
     otra.addEventListener("click", copiaAqui);
     lista.appendChild(otra);
+    const qr = nodo("div", "wpick-qr");
+    lista.appendChild(filaSoloWC(qr));
     caja.appendChild(lista);
+    caja.appendChild(qr);
     const pie = nodo("div", "wpick-foot");
     pie.appendChild(nodo("p", "wpick-alt", "Your staking, rewards and withdrawals work the same inside your wallet app. On a computer you can also connect as usual."));
     caja.appendChild(pie);
@@ -474,6 +501,9 @@
       const tel = fila("button", { id: "otra", nombre: "Wallet on your phone" }, "Copy the link and open it in your wallet’s browser", { icono: ENLACE });
       tel.addEventListener("click", copiaAqui);
       lista.appendChild(tel);
+      const qr = nodo("div", "wpick-qr");
+      lista.appendChild(filaSoloWC(qr));
+      caja.appendChild(qr);
       return;
     }
 
@@ -500,7 +530,7 @@
 
   // las filas que conectan por WalletConnect (no las que abren el navegador de la app)
   function filasWC() {
-    if (!caja) return [];
+    if (!caja || SOLO_APP) return [];   // con SOLO_APP ninguna fila de wallet pasa por WalletConnect
     return Array.from(caja.querySelectorAll("a.wpick-row")).filter((f) => {
       const a = APPS.find((x) => x.id === f.dataset.app);
       return f.dataset.app === "otras" || (a && conWC(a));
@@ -524,7 +554,8 @@
         box.innerHTML = q.createSvgTag({ cellSize: 4, margin: 2 });   // SVG generado aqui, sin texto ajeno
       }).catch(() => estado("Could not draw the QR code. Use Copy connection link.", true));
     }
-    estado(MOVIL ? "Tap your wallet app. Approve the connection there, then come back to this tab."
+    estado(MOVIL ? (SOLO_APP ? "Copy the connection link, open your wallet, go to WalletConnect and paste it. Then come back to this tab."
+                             : "Tap your wallet app. Approve the connection there, then come back to this tab.")
                  : "Scan the code with your phone to connect.");
   }
 
