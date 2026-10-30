@@ -334,6 +334,10 @@ html[lang=ar] .stk-msg :is(.stk-msg-k,dt,dd){letter-spacing:0;font-family:'IBM P
 }
 #earnLive{order:0}
 #connectBtn{order:1}
+/* el boton de conectar lleva su texto suelto (la direccion conectada): el relleno del hover va por debajo
+   del texto, no encima. En el movil el toque deja el hover puesto y el texto desaparecia */
+#connectBtn{z-index:0}
+#connectBtn::before{z-index:-1}
 #chainActions{order:2}
 #chainMsg{order:3}
 #stakeAddr{order:4}
