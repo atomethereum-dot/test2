@@ -76,6 +76,13 @@
       "c": "Buenos Aires, AR",
       "la": -34.6,
       "lo": -58.5
+    },
+    "0x881857bcb1e7929e73efb9b444c7735153d33cc6": {
+      "t": 1793388356000,
+      "n": "Sectora Node New York",
+      "c": "New York, US",
+      "la": 40.7,
+      "lo": -74
     }
   }
 }
