@@ -68,6 +68,11 @@
       navegador: () => "https://go.cb-w.com/dapp?cb_url=" + enc(AQUI) },
     { id: "okx", nombre: "OKX Wallet", logo: "okx",
       navegador: () => "https://www.okx.com/download?deeplink=" + enc("okx://wallet/dapp/url?dappUrl=" + enc(AQUI)) },
+    // mas wallets con navegador propio: abren esta pagina dentro de su app
+    { id: "bitget", nombre: "Bitget Wallet", logo: "bitget", navegador: () => "https://bkcode.vip?action=dapp&url=" + enc(AQUI) },
+    { id: "tokenpocket", nombre: "TokenPocket", logo: "tokenPocket",
+      navegador: () => "tpdapp://open?params=" + enc(JSON.stringify({ url: AQUI, chain: "ETH", source: "Sectora" })) },
+    { id: "imtoken", nombre: "imToken", logo: "imToken", navegador: () => "imtokenv2://navigate/DappView?url=" + enc(AQUI) },
     { id: "rainbow", nombre: "Rainbow", logo: "rainbow", nativo: "rainbow://" },
   ];
   const conWC = (a) => !!a.nativo;
@@ -75,6 +80,7 @@
      (Chrome, Safari...) no se conecta por WalletConnect: se abre esta pagina dentro de la app de la wallet,
      donde no sale ninguna alerta. Para volver a como estaba: SOLO_APP = false. */
   const SOLO_APP = true;
+  const ENLACE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#13213d"/><path d="M12.2 15.8l3.6-3.6M11 13.4l-1.6 1.6a2.6 2.6 0 0 0 3.6 3.6l1.6-1.6M17 14.6l1.6-1.6a2.6 2.6 0 0 0-3.6-3.6L13.4 11" fill="none" stroke="#4d8dff" stroke-width="1.6" stroke-linecap="round"/></svg>');
   const OTRAS = { id: "otras", nombre: "Other wallets", logo: "walletConnect" };
 
   const $ = (id) => document.getElementById(id);
@@ -350,6 +356,13 @@
       f.rel = "noopener";
       lista.appendChild(f);
     });
+    // cualquier otra wallet con navegador: copiar el enlace y abrirlo ahi (sin WalletConnect)
+    const otra = fila("button", { id: "otra", nombre: "Another wallet" }, "Copy the link and open it in your wallet’s browser", { icono: ENLACE });
+    otra.addEventListener("click", () => {
+      const ok = () => estado("Link copied. Open your wallet app, go to its browser and paste it.");
+      (navigator.clipboard ? navigator.clipboard.writeText(AQUI) : Promise.reject()).then(ok, () => estado(AQUI));
+    });
+    lista.appendChild(otra);
     caja.appendChild(lista);
     const pie = nodo("div", "wpick-foot");
     pie.appendChild(nodo("p", "wpick-alt", "Your staking, rewards and withdrawals work the same inside your wallet app. On a computer you can also connect as usual."));
