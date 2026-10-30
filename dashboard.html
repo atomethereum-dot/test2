@@ -3431,7 +3431,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   const PHANTOM = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#ab9ff2"/><path d="M7 21.5V13a7 7 0 0 1 14 0v8.5l-2.33-1.75-2.34 1.75L14 19.75l-2.33 1.75-2.34-1.75z" fill="#fff"/><ellipse cx="11.6" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/><ellipse cx="16.4" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/></svg>');
   function inyectadas(){
     const l = [...hallados.values()].map(d => ({ nombre: d.info.name || t('hashdash.wallet.browserWallet','Browser wallet'),
-      icono: d.info.icon, proveedor: d.provider, rdns: d.info.rdns }));
+      icono: d.info.icon || (d.info.rdns === 'app.phantom' || /phantom/i.test(d.info.name || '') ? PHANTOM : null), proveedor: d.provider, rdns: d.info.rdns }));
     /* navegadores antiguos que solo exponen window.ethereum */
     const e = window.ethereum;
     if(!l.length && e) l.push({ nombre: e.isPhantom ? 'Phantom' : t('hashdash.wallet.browserWallet','Browser wallet'),
@@ -3638,8 +3638,9 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       .then(() => window.WalletConnectEthereumProvider.EthereumProvider.init({
         projectId: CONFIG.walletConnectProjectId,
         /* mainnet como red de la sesion (la aceptan todas las wallets) y Sepolia opcional */
-        chains: [1], optionalChains: [1, 11155111],
-        rpcMap: { 1: 'https://ethereum-rpc.publicnode.com', 11155111: CONFIG.rpc[0] },
+        /* solo Ethereum: el Dashboard ya no usa Sepolia y wallets como Tangem rechazan la sesion si se pide */
+        chains: [1], optionalChains: [1],
+        rpcMap: { 1: 'https://ethereum-rpc.publicnode.com' },
         showQrModal: false,
         customStoragePrefix: 'sectora-dash',
         metadata: { name: 'Sectora Dashboard', description: 'Sectora testnet dashboard and Hash Node.',
@@ -3742,7 +3743,10 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     if(app) b.dataset.app = app;
     const src = icono || (logo && LOGO()[logo]);
     /* el icono va por propiedad: los SVG en data: traen comillas que romperian el HTML */
-    if(src){ const i = document.createElement('img'); i.alt = ''; i.src = src; b.appendChild(i); }
+    if(src){ const i = document.createElement('img'); i.alt = ''; i.src = src; b.appendChild(i);
+      /* icono que no carga (algunas extensiones anuncian uno roto): el de Phantom o la inicial */
+      i.onerror = () => { i.onerror = null; if(/phantom/i.test(nombre)) i.src = PHANTOM;
+        else { const s = document.createElement('span'); s.className = 'ph'; s.textContent = nombre.slice(0,1); i.replaceWith(s); } }; }
     else { const s = document.createElement('span'); s.className = 'ph'; s.textContent = nombre.slice(0,1); if(logo) s.dataset.logo = logo; b.appendChild(s); }
     const tx = document.createElement('span'); tx.className = 'wsel-t';
     const n = document.createElement('span'); n.textContent = nombre; tx.appendChild(n);
