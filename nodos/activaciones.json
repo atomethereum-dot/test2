@@ -90,6 +90,13 @@
       "c": "Stockholm, SE",
       "la": 59.3,
       "lo": 18.1
+    },
+    "0xc7f7b6e424866924c3a2f0d4d4efbff5f1b01931": {
+      "t": 1793396358000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
