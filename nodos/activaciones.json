@@ -62,6 +62,13 @@
       "c": "Caracas, VE",
       "la": 10.5,
       "lo": -66.9
+    },
+    "0xcedd15c088177109c58d1cac0acdcc4e791830c7": {
+      "t": 1793369784000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
