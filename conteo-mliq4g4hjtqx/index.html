@@ -68,6 +68,9 @@ button,input{font:inherit;color:inherit}
 .tile .v small{font:400 12px var(--mono);color:var(--ink-3);letter-spacing:.06em;margin-left:4px}
 .tile .s{font-size:13px;color:var(--ink-2)}
 .tile .lvs{display:flex;flex-wrap:wrap;gap:6px}.tile .lvs:empty{display:none}
+.tile.tap{cursor:pointer;transition:border-color .15s}.tile.tap:hover{border-color:var(--line-2)}.tile .go{float:right;font-style:normal;color:var(--blue-l);letter-spacing:.08em}
+.hoy ul{list-style:none;display:grid;gap:10px}.hoy li{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font-size:13px;color:var(--ink-2);padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.hoy li .t{font:500 12.5px var(--mono);color:var(--ink-3);min-width:44px}.hoy li .w{appearance:none;border:0;background:none;padding:0;color:var(--ink);font:400 13px var(--mono);cursor:pointer}.hoy li .w::after{content:' ›';color:var(--ink-3)}
 .tile.hi{border-color:rgba(21,105,255,.45);background:linear-gradient(160deg,rgba(21,105,255,.16),var(--panel) 60%)}
 .bar{height:7px;border-radius:99px;background:var(--line);overflow:hidden}
 .bar i{display:block;height:100%;width:0;background:var(--blue);border-radius:inherit;transition:width .4s}
@@ -193,8 +196,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     <div class="tiles">
       <div class="tile hi"><span class="k">Ganado hasta ahora</span><span class="v" id="t-earned">0</span><span class="s" id="t-secured"></span></div>
       <div class="tile"><span class="k">Bolsa reservada</span><span class="v" id="t-res">0</span><div class="bar"><i id="t-resbar"></i></div><span class="s" id="t-resp"></span></div>
-      <div class="tile"><span class="k">Entradas al airdrop hoy</span><span class="v" id="t-today">0</span><span class="s" id="t-todays"></span><span class="lvs" id="t-todayl"></span></div>
-      <div class="tile"><span class="k">Salidas del airdrop hoy</span><span class="v" id="t-out">0</span><span class="s" id="t-outs"></span><span class="lvs" id="t-outl"></span></div>
+      <div class="tile tap" role="button" tabindex="0" data-hoy="in"><span class="k">Entradas al airdrop hoy <i class="go">Ver ›</i></span><span class="v" id="t-today">0</span><span class="s" id="t-todays"></span><span class="lvs" id="t-todayl"></span></div>
+      <div class="tile tap" role="button" tabindex="0" data-hoy="out"><span class="k">Salidas del airdrop hoy <i class="go">Ver ›</i></span><span class="v" id="t-out">0</span><span class="s" id="t-outs"></span><span class="lvs" id="t-outl"></span></div>
       <div class="tile"><span class="k">Entraron (nodo activado)</span><span class="v" id="t-in">0</span><span class="s" id="t-ins"></span></div>
       <div class="tile"><span class="k">Tienen todo (participando)</span><span class="v" id="t-part">0</span><span class="s" id="t-parts"></span></div>
       <div class="tile"><span class="k">Wallets Titan</span><span class="v" id="t-titan">0</span><span class="s" id="t-titans"></span></div>
@@ -263,7 +266,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
 
 <div class="dr" id="dr" hidden>
   <div class="dr-in" role="dialog" aria-modal="true" aria-labelledby="dr-h">
-    <div class="dr-hd"><div><span class="k">Detalle de la wallet</span><h3 id="dr-h"></h3></div><button class="dr-x" id="dr-x" type="button" aria-label="Cerrar">×</button></div>
+    <div class="dr-hd"><div><span class="k" id="dr-k">Detalle de la wallet</span><h3 id="dr-h"></h3></div><button class="dr-x" id="dr-x" type="button" aria-label="Cerrar">×</button></div>
     <div id="dr-b" style="display:grid;gap:14px"></div>
   </div>
 </div>
@@ -554,6 +557,15 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   var hf = new Intl.DateTimeFormat("es-ES", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
   var tf = new Intl.DateTimeFormat("es-ES", { hour: "2-digit", minute: "2-digit" });
   // historial por dias: entraron, salieron, neto y cuantas wallets quedaban dentro al cerrar cada dia
+  // una entrada o salida: hora, tipo, nivel, wallet y detalle
+  function mov(v) {
+    var x = rows[v.o.i], r = x.r, w = x.who.slice(0, 8) + "…" + x.who.slice(-6), chip, why;
+    var lvc = '<span class="chip lv' + (v.o.lv || 0) + '">' + (v.o.lv ? LV[v.o.lv] : "Sin nivel") + "</span>";
+    if (v.k === "in") { chip = v.o.re ? '<span class="chip blue">Volvió</span>' : '<span class="chip ok">Entró</span>'; why = "Entró como " + nivel(v.o.lv, v.o.b) + (r.level !== v.o.lv || Math.round(r.bal) !== Math.round(v.o.b) ? " · ahora " + (r.level ? nivel(r.level, r.bal) : "fuera") : ""); }
+    else { chip = '<span class="chip bad">Salió</span>'; why = "Era " + nivel(v.o.lv, v.o.b) + " · " + (v.o.why === "stake" ? "retiró el staking, quedó con " + nf0.format(v.o.left) + " SECT" : "apagó el nodo"); }
+    chip += lvc;
+    return '<li><span class="t">' + tf.format(v.o.t) + "</span>" + chip + '<button class="w" type="button" data-r="' + v.o.i + '">' + w + "</button><span>" + escH(why) + "</span></li>";
+  }
   function histDraw() {
     var ins = recent.entry || [], outs = recent.exit || [], now = Date.now(), hoy = dia(now);
     var all = ins.concat(outs);
@@ -576,14 +588,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
         '<td class="r">' + nf0.format(dentro(d === hoy ? now : e - 1)) + "</td></tr>";
       if (op) {
         var ev = a.map(function (o) { return { o: o, k: "in" }; }).concat(b.map(function (o) { return { o: o, k: "out" }; })).sort(function (p, q) { return q.o.t - p.o.t; });
-        html += '<tr class="hx"><td colspan="5"><ul>' + ev.map(function (v) {
-          var x = rows[v.o.i], r = x.r, w = x.who.slice(0, 8) + "…" + x.who.slice(-6), chip, why;
-          var lvc = '<span class="chip lv' + (v.o.lv || 0) + '">' + (v.o.lv ? LV[v.o.lv] : "Sin nivel") + "</span>";
-          if (v.k === "in") { chip = v.o.re ? '<span class="chip blue">Volvió</span>' : '<span class="chip ok">Entró</span>'; why = "Entró como " + nivel(v.o.lv, v.o.b) + (r.level !== v.o.lv || Math.round(r.bal) !== Math.round(v.o.b) ? " · ahora " + (r.level ? nivel(r.level, r.bal) : "fuera") : ""); }
-          else { chip = '<span class="chip bad">Salió</span>'; why = "Era " + nivel(v.o.lv, v.o.b) + " · " + (v.o.why === "stake" ? "retiró el staking, quedó con " + nf0.format(v.o.left) + " SECT" : "apagó el nodo"); }
-          chip += lvc;
-          return '<li><span class="t">' + tf.format(v.o.t) + "</span>" + chip + '<button class="w" type="button" data-r="' + v.o.i + '">' + w + "</button><span>" + escH(why) + "</span></li>";
-        }).join("") + "</ul></td></tr>";
+        html += '<tr class="hx"><td colspan="5"><ul>' + ev.map(mov).join("") + "</ul></td></tr>";
       }
     });
     $("hrows").innerHTML = html;
@@ -686,7 +691,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     var r = x.r, a = x.acc, dep = 0, wd = 0, first = 0, bal = 0;
     x.ev.forEach(function (e) { if (e.dep) { dep += e.amt; if (!first) first = e.t; } else wd += e.amt; });
     var st = ST[r.status] || ["—", "mute"];
-    $("dr-h").textContent = x.who;
+    $("dr-k").textContent = "Detalle de la wallet"; $("dr-h").textContent = x.who;
     var h = '<div class="links"><a href="https://etherscan.io/address/' + x.who + '" target="_blank" rel="noopener">Etherscan ↗</a>' +
       '<a href="https://sepolia.etherscan.io/address/' + x.who + '" target="_blank" rel="noopener">Nodo en Sepolia ↗</a>' +
       '<button type="button" id="dr-copy">Copiar dirección</button><span class="chip ' + st[1] + '">' + st[0] + "</span></div>";
@@ -734,6 +739,22 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     $("dr-copy").addEventListener("click", function () { var b = this; (navigator.clipboard ? navigator.clipboard.writeText(x.who) : Promise.reject()).then(function () { b.textContent = "Copiada"; }, function () { b.textContent = x.who; }); });
     $("dr").hidden = false; document.documentElement.style.overflow = "hidden"; $("dr-x").focus();
   }
+  // lista de hoy al tocar los recuadros de entradas o salidas
+  function hoyShow(k) {
+    var hoy = dia(Date.now()), l = (k === "in" ? recent.entry : recent.exit) || [];
+    var v = l.filter(function (o) { return o.t >= hoy; }).sort(function (p, q) { return q.t - p.t; }).map(function (o) { return { o: o, k: k }; });
+    cur = -1; $("dr-k").textContent = "Hoy";
+    $("dr-h").textContent = (k === "in" ? "Entradas al airdrop hoy" : "Salidas del airdrop hoy") + " · " + nf0.format(v.length);
+    $("dr-b").innerHTML = '<div class="hoy">' + (v.length ? "<ul>" + v.map(mov).join("") + "</ul>" : '<p class="empty">' + (k === "in" ? "Nadie ha entrado hoy todavía." : "Nadie ha salido hoy.") + "</p>") +
+      '<p class="foot">Toca una wallet para ver su detalle. Hoy = desde las 00:00 de este aparato.</p></div>';
+    $("dr-b").querySelectorAll("button[data-r]").forEach(function (b) { b.addEventListener("click", function () { show(+b.dataset.r); }); });
+    $("dr").hidden = false; document.documentElement.style.overflow = "hidden"; $("dr-x").focus();
+  }
+  document.querySelectorAll(".tile[data-hoy]").forEach(function (t) {
+    var go = function () { if (recent.entry) hoyShow(t.dataset.hoy); };
+    t.addEventListener("click", go);
+    t.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+  });
   function hide() { $("dr").hidden = true; cur = -1; document.documentElement.style.overflow = ""; }
   $("dr-x").addEventListener("click", hide);
   $("dr").addEventListener("click", function (e) { if (e.target === $("dr")) hide(); });
