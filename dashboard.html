@@ -3616,7 +3616,9 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, en el movil sin wallet (Chrome,
      Safari...) no se conecta por WalletConnect: se abre esta pagina en la app de la wallet, donde no sale
      ninguna alerta. Para volver a como estaba: SOLO_APP = false. */
-  const SOLO_APP = true;
+  /* enlace privado de prueba (?wcprueba=1): en esa visita el movil vuelve a conectar por WalletConnect,
+     para comprobar si la alerta de Reown sigue; para todos los demas no cambia nada */
+  const SOLO_APP = !/[?&]wcprueba=1(&|$)/.test(location.search);
 
   const cargas = {};
   function cargaJS(src, listo){
