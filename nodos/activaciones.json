@@ -83,6 +83,13 @@
       "c": "New York, US",
       "la": 40.7,
       "lo": -74
+    },
+    "0x1716b45e3ec14537303bd2497822c1ba381d4c1d": {
+      "t": 1793395725000,
+      "n": "Sectora Node Stockholm",
+      "c": "Stockholm, SE",
+      "la": 59.3,
+      "lo": 18.1
     }
   }
 }
