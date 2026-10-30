@@ -81,13 +81,20 @@
      sale ninguna alerta, y en el ordenador no hay QR (extensiones y el enlace para el telefono).
      Para volver a como estaba: SOLO_APP = false. */
   const SOLO_APP = true;
-  // para el ordenador sin extension: sus paginas oficiales de descarga
+  const PHANTOM = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#ab9ff2"/><path d="M7 21.5V13a7 7 0 0 1 14 0v8.5l-2.33-1.75-2.34 1.75L14 19.75l-2.33 1.75-2.34-1.75z" fill="#fff"/><ellipse cx="11.6" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/><ellipse cx="16.4" cy="13.2" rx="1.15" ry="1.7" fill="#ab9ff2"/></svg>');
+  /* para el ordenador: las que no estan instaladas (web: su pagina oficial de descarga);
+     sin web, las que son solo app del movil. m reconoce la extension ya detectada */
   const INSTALAR = [
-    { id: "i-metamask", nombre: "MetaMask", logo: "metaMask", web: "https://metamask.io/download/" },
-    { id: "i-trust", nombre: "Trust Wallet", logo: "trust", web: "https://trustwallet.com/download" },
-    { id: "i-coinbase", nombre: "Coinbase Wallet", logo: "coinbase", web: "https://www.coinbase.com/wallet/downloads" },
-    { id: "i-okx", nombre: "OKX Wallet", logo: "okx", web: "https://www.okx.com/web3" },
-    { id: "i-rainbow", nombre: "Rainbow", logo: "rainbow", web: "https://rainbow.me/download" },
+    { id: "i-metamask", nombre: "MetaMask", logo: "metaMask", m: /metamask/i, web: "https://metamask.io/download/" },
+    { id: "i-phantom", nombre: "Phantom", icono: PHANTOM, m: /phantom/i, web: "https://phantom.com/download" },
+    { id: "i-trust", nombre: "Trust Wallet", logo: "trust", m: /trust/i, web: "https://trustwallet.com/download" },
+    { id: "i-binance", nombre: "Binance Wallet", logo: "binance", m: /binance/i },
+    { id: "i-coinbase", nombre: "Coinbase Wallet", logo: "coinbase", m: /coinbase/i, web: "https://www.coinbase.com/wallet/downloads" },
+    { id: "i-okx", nombre: "OKX Wallet", logo: "okx", m: /okx/i, web: "https://www.okx.com/web3" },
+    { id: "i-bitget", nombre: "Bitget Wallet", logo: "bitget", m: /bitget/i, web: "https://web3.bitget.com/" },
+    { id: "i-tokenpocket", nombre: "TokenPocket", logo: "tokenPocket", m: /tokenpocket/i },
+    { id: "i-imtoken", nombre: "imToken", logo: "imToken", m: /imtoken/i },
+    { id: "i-rainbow", nombre: "Rainbow", logo: "rainbow", m: /rainbow/i, web: "https://rainbow.me/download" },
   ];
   const ENLACE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#13213d"/><path d="M12.2 15.8l3.6-3.6M11 13.4l-1.6 1.6a2.6 2.6 0 0 0 3.6 3.6l1.6-1.6M17 14.6l1.6-1.6a2.6 2.6 0 0 0-3.6-3.6L13.4 11" fill="none" stroke="#4d8dff" stroke-width="1.6" stroke-linecap="round"/></svg>');
   const OTRAS = { id: "otras", nombre: "Other wallets", logo: "walletConnect" };
@@ -447,18 +454,26 @@
     caja.appendChild(lista);
 
     if (SOLO_APP) {
-      // mientras dura SOLO_APP, sin QR (WalletConnect): el enlace para abrir la pagina en la app del telefono
+      // mientras dura SOLO_APP, sin QR (WalletConnect): todas las wallets, siempre. Las no instaladas llevan a
+      // su extension; las que solo son app del movil y la ultima fila copian el enlace para abrirlo en el telefono
       if (!ext.length) estado("To connect here, install a wallet extension. On your phone, open this page inside your wallet app.");
+      else lista.appendChild(nodo("div", "wpick-sec mono", "Other compatible wallets"));
+      INSTALAR.filter((w) => !ext.some((e) => w.m.test(e.nombre))).forEach((w) => {
+        if (w.web) {
+          const f = fila("a", w, "Install the browser extension", { icono: w.icono });
+          f.href = w.web;
+          f.target = "_blank";
+          f.rel = "noopener";
+          lista.appendChild(f);
+        } else {
+          const f = fila("button", w, "Phone app · copy the link and open it there", { icono: w.icono });
+          f.addEventListener("click", copiaAqui);
+          lista.appendChild(f);
+        }
+      });
       const tel = fila("button", { id: "otra", nombre: "Wallet on your phone" }, "Copy the link and open it in your wallet’s browser", { icono: ENLACE });
       tel.addEventListener("click", copiaAqui);
       lista.appendChild(tel);
-      if (!ext.length) INSTALAR.forEach((w) => {
-        const f = fila("a", w, "Install the browser extension");
-        f.href = w.web;
-        f.target = "_blank";
-        f.rel = "noopener";
-        lista.appendChild(f);
-      });
       return;
     }
 

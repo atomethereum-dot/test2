@@ -800,34 +800,34 @@ svg{display:block}
 .wsel.vis .wsel-box{transform:none}
 .wsel-h{display:flex;align-items:center;justify-content:space-between;gap:14px;
   padding:16px 18px;border-bottom:1px solid var(--hair)}
-.wsel-h b{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;
+.wsel-h b{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;
   text-transform:uppercase;font-weight:400;color:var(--ink)}
-.wsel-x{padding:6px 9px;border:1px solid var(--hair);color:var(--ink4);
-  font-family:'IBM Plex Mono',monospace;font-size:9px;cursor:pointer;
+.wsel-x{padding:6px 9px;border:1px solid var(--hair);color:var(--ink3);
+  font-family:'IBM Plex Mono',monospace;font-size:10px;cursor:pointer;
   transition:color .25s var(--ease),border-color .25s var(--ease)}
 .wsel-x:hover{color:var(--ink);border-color:var(--rule)}
-.wsel-list{padding:8px;max-height:min(56vh,420px);overflow-y:auto}
+.wsel-list{padding:8px;max-height:min(calc(86vh - 150px),640px);overflow-y:auto}
 .wsel-i{display:flex;align-items:center;gap:13px;width:100%;padding:13px 12px;
-  cursor:pointer;color:var(--ink2);font-size:14px;text-align:left;
+  cursor:pointer;color:var(--ink);font-size:15px;font-weight:400;text-align:left;
   transition:background .25s var(--ease),color .25s var(--ease)}
 .wsel-i:hover{background:rgba(21,105,255,.12);color:var(--ink)}
 .wsel-i img,.wsel-i .ph{width:28px;height:28px;flex:none;border-radius:6px;object-fit:cover;
   background:rgba(21,105,255,.14);display:grid;place-items:center;
   font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--blue2)}
-.wsel-i .tag{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:8px;
-  letter-spacing:.16em;text-transform:uppercase;color:var(--ink4)}
+.wsel-i .tag{margin-left:auto;flex:none;font-family:'IBM Plex Mono',monospace;font-size:10px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
 .wsel-none{padding:18px 14px;color:var(--ink3);font-size:13px;line-height:1.7}
 .wsel-none a{color:var(--blue2);text-decoration:underline;text-underline-offset:3px}
-.wsel-sub{padding:14px 12px 6px;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--ink4);border-top:1px solid var(--hair);margin-top:6px}
-.wsel-note{padding:12px 12px 6px;color:var(--ink4);font-size:12px;line-height:1.55}
+.wsel-sub{padding:14px 12px 6px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink3);border-top:1px solid var(--hair);margin-top:6px}
+.wsel-note{padding:12px 12px 6px;color:var(--ink3);font-size:13px;line-height:1.55}
 /* WalletConnect: QR en el ordenador, apps en el movil */
 .wsel-i .wsel-t{display:flex;flex-direction:column;gap:3px;min-width:0}
-.wsel-i .wsel-t small{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.04em;color:var(--ink4)}
+.wsel-i .wsel-t small{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.01em;line-height:1.45;color:var(--ink3)}
 a.wsel-i{text-decoration:none}
 .wsel-i[aria-disabled="true"]{opacity:.45}
 .wsel-state{display:flex;align-items:flex-start;gap:10px;margin:2px 4px 8px;padding:11px 12px;
-  border:1px solid var(--hair);background:rgba(21,105,255,.06);color:var(--ink2);font-size:12.5px;line-height:1.55}
+  border:1px solid var(--hair);background:rgba(21,105,255,.06);color:var(--ink);font-size:13.5px;line-height:1.55}
 .wsel-state:empty{display:none}
 .wsel-state i{flex:none;width:11px;height:11px;margin-top:3px;border:2px solid rgba(255,255,255,.18);
   border-top-color:var(--blue2);border-radius:50%;animation:wselSp .8s linear infinite}
@@ -843,11 +843,13 @@ a.wsel-i{text-decoration:none}
 .wsel-copy{display:block;width:calc(100% - 8px);margin:8px 4px 4px;padding:11px;border:1px solid var(--rule);
   color:var(--ink2);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase}
 .wsel-copy:disabled{opacity:.4;cursor:default}
-.wsel-alt{padding:10px 10px 2px;color:var(--ink4);font-size:12px;line-height:1.6}
+.wsel-alt{padding:10px 10px 2px;color:var(--ink3);font-size:13px;line-height:1.6}
 .wsel-alt a{color:var(--blue2);text-decoration:underline;text-underline-offset:3px}
 .wsel-f{padding:12px 18px;border-top:1px solid var(--hair);
-  font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--ink4);line-height:1.7}
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink3);line-height:1.7}
+/* con la ventana abierta, el cursor de coordenadas no se pinta encima de los textos */
+body:has(.wsel.on) .reticle,body:has(.wsel.on) .readout{display:none}
 .pill.wrong{border-color:rgba(232,180,92,.4);color:var(--amber);cursor:pointer}
 @media (max-width:640px){
   .wsel{padding:7vh 14px 14px}
@@ -1383,7 +1385,7 @@ html.booting,body.booting{overflow:hidden}
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="/translations.js"></script>
 <script src="/dashboard-i18n-extra.js?v=20261029c"></script>
-<script src="/dashboard-v2-i18n.js?v=11"></script>
+<script src="/dashboard-v2-i18n.js?v=12"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="/i18n.js?v=2"></script>
 <script src="/dashboard-reticle.js?v=20260820b"></script>
@@ -3732,14 +3734,19 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       });
     }).catch(() => {});
   }
-  /* para el ordenador sin extension: sus paginas oficiales de descarga */
+  /* para el ordenador: las que no estan instaladas (web: su pagina oficial de descarga);
+     sin web, las que son solo app del movil. m reconoce la extension ya detectada */
   const INSTALAR = [
-    {n:'MetaMask', k:'metaMask', web:'https://metamask.io/download/'},
-    {n:'Phantom', i: PHANTOM, web:'https://phantom.com/download'},
-    {n:'Trust Wallet', k:'trust', web:'https://trustwallet.com/download'},
-    {n:'Coinbase Wallet', k:'coinbase', web:'https://www.coinbase.com/wallet/downloads'},
-    {n:'OKX Wallet', k:'okx', web:'https://www.okx.com/web3'},
-    {n:'Rainbow', k:'rainbow', web:'https://rainbow.me/download'}
+    {n:'MetaMask', k:'metaMask', m:/metamask/i, web:'https://metamask.io/download/'},
+    {n:'Phantom', i: PHANTOM, m:/phantom/i, web:'https://phantom.com/download'},
+    {n:'Trust Wallet', k:'trust', m:/trust/i, web:'https://trustwallet.com/download'},
+    {n:'Binance Wallet', k:'binance', m:/binance/i},
+    {n:'Coinbase Wallet', k:'coinbase', m:/coinbase/i, web:'https://www.coinbase.com/wallet/downloads'},
+    {n:'OKX Wallet', k:'okx', m:/okx/i, web:'https://www.okx.com/web3'},
+    {n:'Bitget Wallet', k:'bitget', m:/bitget/i, web:'https://web3.bitget.com/'},
+    {n:'TokenPocket', k:'tokenPocket', m:/tokenpocket/i},
+    {n:'imToken', k:'imToken', m:/imtoken/i},
+    {n:'Rainbow', k:'rainbow', m:/rainbow/i, web:'https://rainbow.me/download'}
   ];
   const ENLACE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#13213d"/><path d="M12.2 15.8l3.6-3.6M11 13.4l-1.6 1.6a2.6 2.6 0 0 0 3.6 3.6l1.6-1.6M17 14.6l1.6-1.6a2.6 2.6 0 0 0-3.6-3.6L13.4 11" fill="none" stroke="#4d8dff" stroke-width="1.6" stroke-linecap="round"/></svg>');
 
@@ -3894,10 +3901,23 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     ext.forEach(w => lista.appendChild(fila({ icono: w.icono, nombre: w.nombre,
       sub: t('hashdash.wallet.wExt','Browser extension'), etiqueta: t('hashdash.wallet.detected','Detected'), accion: () => conectaIny(w) })));
     if(SOLO_APP){
-      /* mientras dura SOLO_APP, sin QR (WalletConnect): el enlace para abrir la pagina en la app del telefono */
+      /* mientras dura SOLO_APP, sin QR (WalletConnect): todas las wallets, siempre. Las no instaladas llevan a
+         su extension; las que solo son app del movil y la ultima fila copian el enlace para abrirlo en el telefono */
       if(!ext.length) estado(t('hashdash.wallet.soloPc','To connect here, install a wallet extension. On your phone, open this page inside your wallet app.'));
+      else{
+        const h = document.createElement('div');
+        h.className = 'wsel-sub'; h.textContent = t('hashdash.wallet.others','Other compatible wallets');
+        lista.appendChild(h);
+      }
+      INSTALAR.filter(w => !ext.some(e => w.m.test(e.nombre))).forEach(w => lista.appendChild(w.web
+        ? fila({ icono: w.i, logo: w.k, nombre: w.n, sub: t('hashdash.wallet.wExt','Browser extension'),
+            etiqueta: t('hashdash.wallet.install','Install'), accion: () => window.open(w.web, '_blank', 'noopener') })
+        : fila({ icono: w.i, logo: w.k, nombre: w.n, sub: t('hashdash.wallet.soloOtherS','Copy the link and open it in your wallet’s browser'),
+            etiqueta: t('hashdash.wallet.tagPhone','Phone'), accion: copiaAqui })));
       lista.appendChild(fila({ icono: ENLACE, nombre: t('hashdash.wallet.wPhone','Wallet on your phone'),
         sub: t('hashdash.wallet.soloOtherS','Copy the link and open it in your wallet’s browser'), accion: copiaAqui }));
+      nota();
+      return;
     }else{
       const qr = document.createElement('div');
       if(ext.length && !qrAbierto){
@@ -3913,7 +3933,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
       const h = document.createElement('div');
       h.className = 'wsel-sub'; h.textContent = t('hashdash.wallet.others','Other compatible wallets');
       lista.appendChild(h);
-      INSTALAR.forEach(w => lista.appendChild(fila({ icono: w.i, logo: w.k, nombre: w.n, etiqueta: t('hashdash.wallet.install','Install'),
+      INSTALAR.filter(w => w.web).forEach(w => lista.appendChild(fila({ icono: w.i, logo: w.k, nombre: w.n, etiqueta: t('hashdash.wallet.install','Install'),
         accion: () => window.open(w.web, '_blank', 'noopener') })));
     }
     nota();

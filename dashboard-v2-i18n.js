@@ -833,3 +833,9 @@
   var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
   Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.wallet.soloPc"] = V[l]; });
 })();
+/* ordenador: etiqueta de las wallets que son solo app del movil */
+(function () {
+  var V = {"en": "Phone", "es": "Móvil", "pt": "Celular", "fr": "Mobile", "de": "Handy", "ru": "Телефон", "zh": "手机", "ja": "スマホ", "ko": "휴대폰", "ar": "الهاتف", "hi": "फ़ोन"};
+  var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
+  Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.wallet.tagPhone"] = V[l]; });
+})();
