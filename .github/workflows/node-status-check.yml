@@ -1,0 +1,44 @@
+name: Node status check
+
+# Solo lectura: estado del Hash Node y del airdrop de una wallet, buscada por el final de su direccion
+# (el mismo calculo que la web, airdrop/count.js). No envia nada. La direccion sale acortada.
+on:
+  workflow_dispatch:
+    inputs:
+      final:
+        description: "Ultimos caracteres de la wallet (ej. f267)"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Revisar
+        env:
+          FINAL: ${{ github.event.inputs.final }}
+        run: |
+          cat > run.cjs <<'JS'
+          global.window = globalThis;
+          require("./airdrop/count.js");
+          const C = window.SACount, fin = String(process.env.FINAL || "").toLowerCase();
+          const f = t => t ? new Date(t).toISOString().replace("T", " ").slice(0, 16) + " UTC" : "-";
+          const corta = w => w.slice(0, 6) + "…" + w.slice(-4);
+          (async () => {
+            const todos = await C.everyone();
+            const m = todos.filter(x => x.who.toLowerCase().endsWith(fin));
+            console.log("Wallets que terminan en", fin + ":", m.length);
+            for (const x of m) {
+              const n = x.node;
+              const bal = x.ev.reduce((a, e) => a + (e.dep ? e.amt : -e.amt), 0);
+              console.log("WALLET", corta(x.who), "· staking:", bal.toFixed(2), "SECT");
+              console.log("  nodo:", n ? ("encendido=" + n.active + " · desde " + f(n.at) + " · registrado en Sepolia=" + !!n.reg + " · activado con el boton=" + (n.act ? f(n.act.t) : "no")) : "SIN NODO");
+              const r = C.evaluate(x.ev, n, C.OPEN, Date.now());
+              console.log("  airdrop: estado", r.status, "· nivel", r.level, "· premio", r.prize.toFixed(2), "· dia", r.day, "· generado ahora", C.liveEarned(r.items, r.closed, Date.now()).toFixed(4), "SECT");
+            }
+          })().catch(e => console.log("ERROR", e && e.message));
+          JS
+          node run.cjs
