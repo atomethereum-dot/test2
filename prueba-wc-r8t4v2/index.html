@@ -94,7 +94,21 @@
     estado("Conectado: " + d.slice(0, 6) + "…" + d.slice(-4) + ". Pulsa «Nueva prueba» para repetir.", "ok");
   }
 
+  /* cada prueba empieza de cero: tras rechazar o caducar, la pagina se recarga sola con un enlace nuevo y
+     enseña el resultado anterior; asi no hay que recargar a mano */
+  var ANT = "sectora-prueba-wc-ultimo";
+  function otraVez(msg) {
+    try { sessionStorage.setItem(ANT, msg); } catch (e) {}
+    var fin = prov && prov.session ? prov.disconnect().catch(function () {}) : Promise.resolve();
+    fin.then(function () { setTimeout(function () { location.reload(); }, 600); });
+  }
+  function previo() {
+    var m = ""; try { m = sessionStorage.getItem(ANT) || ""; sessionStorage.removeItem(ANT); } catch (e) {}
+    return m;
+  }
+
   function iniciar() {
+    var antes = previo();
     estado("Preparando la conexión…");
     carga(WC_JS, function () { return !!window.WalletConnectEthereumProvider; })
       .then(function () {
@@ -108,12 +122,21 @@
       })
       .then(function (p) {
         prov = p;
-        p.on("display_uri", function (u) { uri = u; pinta(); });
+        p.on("display_uri", function (u) {
+          uri = u; pinta();
+          if (antes) estado(antes + " Ya tienes un enlace nuevo listo: pulsa tu wallet otra vez.", "err");
+        });
         p.on("connect", conectado);
-        if (p.session && p.accounts && p.accounts.length) { conectado(); return; }
-        return p.connect().then(conectado);
+        // una sesion guardada no ensenaria la pantalla de la wallet (ni la alerta): se cierra y se pide de nuevo
+        var limpio = p.session ? p.disconnect().catch(function () {}) : Promise.resolve();
+        return limpio.then(function () { return p.connect(); }).then(conectado);
       })
-      .catch(function (e) { estado("No se conectó (" + (e && e.message ? e.message : e) + "). Pulsa «Nueva prueba».", "err"); });
+      .catch(function (e) {
+        var m = (e && e.message) || String(e);
+        if (!prov) { estado("No se pudo preparar la conexión (" + m + "). Recarga la página.", "err"); return; }
+        otraVez(/reject|denied|cancel|user/i.test(m) ? "Última prueba: la rechazaste en la wallet."
+                                                     : "Última prueba: el enlace caducó o se cortó.");
+      });
   }
 
   $("copy").addEventListener("click", function () {
@@ -123,10 +146,7 @@
       setTimeout(function () { $("copy").textContent = "Copiar enlace de conexión"; }, 1800);
     }, function () { estado(uri); });
   });
-  $("nueva").addEventListener("click", function () {
-    var fin = prov && prov.session ? prov.disconnect().catch(function () {}) : Promise.resolve();
-    fin.then(function () { location.reload(); });
-  });
+  $("nueva").addEventListener("click", function () { otraVez(""); });
 
   iniciar();
 })();
