@@ -697,8 +697,36 @@
   function usarInyectada(proveedor) {
     cerrar();
     conectadoCon = proveedor;
-    alConectar(proveedor, { wc: false });
+    alConectar(envolver(proveedor), { wc: false });
     revisaRed(proveedor);
+  }
+
+  /* staking-chain.js recarga la pagina en chainChanged (con los contratos ya cargados, es lo seguro). Si la wallet
+     estaba en otra red, no hay nada cargado: el cambio a Ethereum se resuelve volviendo a leer la cuenta, sin
+     recargar. Cualquier otro cambio de red sigue recargando. staking-chain.js recibe este envoltorio de la wallet. */
+  const envs = new WeakMap();
+  function envolver(p) {
+    if (envs.has(p)) return envs.get(p);
+    const cambios = [];
+    const env = {
+      request: (a) => p.request(a),
+      on: (ev, f) => { if (ev === "chainChanged") cambios.push(f); else if (p.on) p.on(ev, f); },
+      removeListener: (ev, f) => {
+        if (ev === "chainChanged") { const i = cambios.indexOf(f); if (i >= 0) cambios.splice(i, 1); }
+        else if (p.removeListener) p.removeListener(ev, f);
+      },
+    };
+    if (p.on) p.on("chainChanged", (c) => {
+      const pedido = Date.now() - cambiando < 15000;   // el cambio lo pidio el boton desde una red equivocada
+      if (conectadoCon === p && (redMal || pedido)) {
+        try { sessionStorage.removeItem(RECON); } catch (e) {}
+        if (!pedido) { avisoFuera(); alConectar(env, { wc: false }); revisaRed(p); }   // si lo pidio el boton, ya lo hace cambiaRed
+        return;
+      }
+      cambios.forEach((f) => { try { f(c); } catch (e) {} });
+    });
+    envs.set(p, env);
+    return env;
   }
 
   /* Red equivocada (Binance Wallet entra por defecto en BNB Chain): un boton bajo "Connect wallet" pide a la wallet
@@ -722,16 +750,20 @@
     btn.appendChild(nodo("span", "", "Switch to Ethereum"));
   }
   // pide a la wallet el cambio a Ethereum (la abre para aceptarlo) y vuelve a leer la cuenta
+  let cambiando = 0;   // cuando se pidio el cambio a Ethereum desde una red equivocada
+  // el aviso de red equivocada de staking-chain.js: con la wallet ya en Ethereum sobra (al volver a leer la cuenta
+  // staking-chain.js pone el que toque)
+  function avisoFuera() { const m = $("chainMsg"); if (m) m.textContent = ""; }
   async function cambiaRed(p) {
     if (!p) return;
+    if (redMal) cambiando = Date.now();
     // staking-chain.js recarga la pagina al cambiar de red: con esta marca la wallet se vuelve a conectar sola
     let rdns = "";
     anunciadas.forEach((d) => { if (d.provider === p && d.info) rdns = d.info.rdns || ""; });
     try { sessionStorage.setItem(RECON, JSON.stringify({ t: Date.now(), bn: p === bn, wc: p === wc, rdns })); } catch (e) {}
     try {
       await p.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x1" }] });
-      botonRed(null);
-      if (conectadoCon === p) alConectar(p, { wc: p === wc });
+      if (conectadoCon === p) { if (cambiando) avisoFuera(); alConectar(p === wc ? p : envolver(p), { wc: p === wc }); revisaRed(p); }
     } catch (e) {
       console.warn("[sectora] cambio de red", e);
     }
