@@ -80,17 +80,32 @@ jobs:
               "0x9008d19f58aabd9ed0d60971565aa8510560ab41": "CoW Swap"
             };
             const hex = n => "0x" + n.toString(16);
+            // los mismos nodos que usa la web para leer eventos antiguos (airdrop/count.js)
+            const LOGS = ["https://gateway.tenderly.co/public/mainnet", "https://rpc.mevblocker.io", "https://ethereum-rpc.publicnode.com"];
+            async function logsDe(params) {
+              for (const u of LOGS) {
+                try {
+                  const r = await fetch(u, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_getLogs", params }) });
+                  const j = await r.json(); if (j && Array.isArray(j.result)) return j.result;
+                } catch (e) {}
+              }
+              return null;
+            }
             const ultimo = parseInt(await rpc("eth_blockNumber", []), 16);
-            const desde = ultimo - 7200 * 150;   // ultimos ~150 dias
+            const desde = ultimo - 7200 * 240;   // ultimos ~240 dias
             const titanes = stakers.filter(x => x.bal >= 4000).sort((a, b) => b.bal - a.bal);
             const codigo = {};
             for (const t of titanes) {
               const pad = "0x" + "0".repeat(24) + t.who.slice(2).toLowerCase();
               const txs = new Set();
-              for (let a0 = desde; a0 <= ultimo; a0 += 50000) {
-                const l = await rpc("eth_getLogs", [{ address: SECT, fromBlock: hex(a0), toBlock: hex(Math.min(ultimo, a0 + 49999)), topics: [T_TRANSFER, null, pad] }]);
-                (l || []).forEach(x => txs.add(x.transactionHash));
+              let fallos = 0, step = 50000;
+              for (let a0 = desde; a0 <= ultimo;) {
+                const b0 = Math.min(ultimo, a0 + step - 1);
+                const l = await logsDe([{ address: SECT, fromBlock: hex(a0), toBlock: hex(b0), topics: [T_TRANSFER, null, pad] }]);
+                if (l === null) { if (step > 1000) { step = Math.floor(step / 2); continue; } fallos++; a0 = b0 + 1; continue; }
+                l.forEach(x => txs.add(x.transactionHash)); a0 = b0 + 1;
               }
+              if (fallos) console.log("  (aviso: " + fallos + " tramos no se pudieron leer)");
               const vias = {};
               for (const h of txs) {
                 const tx = await rpc("eth_getTransactionByHash", [h]);
@@ -105,7 +120,7 @@ jobs:
                 }
                 vias[via] = (vias[via] || 0) + 1;
               }
-              console.log("TITAN", corta(t.who), "(" + t.bal.toFixed(2) + " SECT):", Object.keys(vias).length ? Object.entries(vias).map(([k, v]) => k + " ×" + v).join(" | ") : "sin entradas de SECT en los ultimos 150 dias");
+              console.log("TITAN", corta(t.who), "(" + t.bal.toFixed(2) + " SECT):", Object.keys(vias).length ? Object.entries(vias).map(([k, v]) => k + " ×" + v).join(" | ") : "sin entradas de SECT en los ultimos 240 dias");
             }
           })().catch(e => { console.log("ERROR", e && e.message); });
           JS
