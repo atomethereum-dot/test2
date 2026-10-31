@@ -1398,8 +1398,8 @@ html.booting,body.booting{overflow:hidden}
 </div>
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="/translations.js"></script>
-<script src="/dashboard-i18n-extra.js?v=20261029c"></script>
-<script src="/dashboard-v2-i18n.js?v=17"></script>
+<script src="/dashboard-i18n-extra.js?v=20261031a"></script>
+<script src="/dashboard-v2-i18n.js?v=18"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="/i18n.js?v=2"></script>
 <script src="/dashboard-reticle.js?v=20260820b"></script>
@@ -3868,7 +3868,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
      Ledger Live, Safe...): primero un aviso; luego el QR en el ordenador y el enlace para pegar en el movil */
   function filaSoloWC(qr){
     const f = fila({ icono: CARTERA, nombre: 'Tangem, Ledger Live, Safe…',
-      sub: t('hashdash.wallet.wcOnlyS','Wallets without their own browser · WalletConnect'),
+      sub: t('hashdash.wallet.wcOnlyS','Wallets without their own browser · QR connection'),
       accion: () => { qrAbierto = true; panelWC(qr); } });
     return f;
   }
@@ -3876,17 +3876,17 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     qr.innerHTML = '';
     qr.className = 'wsel-qrw';
     const x = document.createElement('button'); x.type = 'button'; x.className = 'wsel-wcx';
-    x.textContent = '✕ ' + t('hashdash.wallet.closeWc','Close WalletConnect');
+    x.textContent = '✕ ' + t('hashdash.wallet.closeWc','Close QR connection');
     x.addEventListener('click', () => { qrAbierto = false; vista(); });   /* cierra el panel; el resto de la ventana sigue igual */
     qr.appendChild(x);
     const w = document.createElement('p'); w.className = 'wsel-warn';
-    w.textContent = t('hashdash.wallet.wcWarn','Only for wallets without their own browser (Tangem, Ledger Live, Safe…). While WalletConnect reviews our domain, your wallet may show a security warning by mistake. Right now WalletConnect is waiting for its history to be updated so this erroneous message is removed. Sectora and its contracts are verified on Etherscan, and connecting only reads your address.');
+    w.textContent = t('hashdash.wallet.wcWarn','Only for wallets without their own browser (Tangem, Ledger Live, Safe…). While our domain is being reviewed, your wallet may show a security warning by mistake. Right now the connection service is waiting for its history to be updated so this erroneous message is removed. Sectora and its contracts are verified on Etherscan, and connecting only reads your address.');
     qr.appendChild(w);
     const st = document.createElement('p'); st.className = 'wsel-state'; qr.appendChild(st);
     if(MOVIL) qr.appendChild(copiarBoton());   /* en el telefono se copia el enlace: el boton va antes del QR */
     const box = document.createElement('div'); box.className = 'wsel-qr'; qr.appendChild(box);
     const p = document.createElement('p'); p.className = 'wsel-qrtxt';
-    p.textContent = t('hashdash.wallet.wcScanOnly','Scan this QR code with your wallet, or copy the connection link and paste it in its WalletConnect section.');
+    p.textContent = t('hashdash.wallet.wcScanOnly','Scan this QR code with your wallet, or copy the connection link and paste it in its connect section.');
     qr.appendChild(p);
     if(!MOVIL) qr.appendChild(copiarBoton());
     if(uri) pintarUri(); else pedirConexionWC();
@@ -3904,7 +3904,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     if(!uniAbierto) return;
     caja.className = 'wsel-qrw';
     const p = document.createElement('p'); p.className = 'wsel-uni';
-    p.textContent = t('hashdash.wallet.uniTxt','Uniswap Wallet connects from your computer: open this page in Chrome with the Uniswap extension, using the same wallet you have in the app. It connects directly, without WalletConnect.');
+    p.textContent = t('hashdash.wallet.uniTxt','Uniswap Wallet connects from your computer: open this page in Chrome with the Uniswap extension, using the same wallet you have in the app. It connects directly.');
     caja.appendChild(p);
     const c = document.createElement('button'); c.type = 'button'; c.className = 'wsel-ubtn';
     const txt = t('hashdash.wallet.uniCopy','Copy link to open on your computer');
@@ -4082,7 +4082,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
         box.innerHTML = q.createSvgTag({cellSize: 4, margin: 2});   /* SVG generado aqui, sin texto ajeno */
       }).catch(() => estado(t('hashdash.wallet.wQrFail','Could not draw the QR code. Use “Copy connection link”.'), true));
     }
-    estado(MOVIL && SOLO_APP ? t('hashdash.wallet.wcPaste','Copy the connection link, open your wallet, go to WalletConnect and paste it. Then come back to this tab.')
+    estado(MOVIL && SOLO_APP ? t('hashdash.wallet.wcPaste','Copy the connection link, open your wallet, go to its connect section and paste it. Then come back to this tab.')
          : MOVIL ? t('hashdash.wallet.wcPick','Choose your wallet app. Approve the connection there, then come back to this tab.')
                  : t('hashdash.wallet.wcWait','Waiting for approval in your wallet…'));
   }
@@ -4098,7 +4098,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     catch(e){
       console.error('[sectora] WalletConnect', e);
       pidiendo = false;
-      estado(t('hashdash.wallet.wcErr','Could not start WalletConnect. Check your connection and try again.'), true, true);
+      estado(t('hashdash.wallet.wcErr','Could not start the connection. Check your connection and try again.'), true, true);
       return;
     }
     if(p.session && p.accounts && p.accounts.length){ pidiendo = false; entregar(p); return; }   /* ya habia sesion */

@@ -398,25 +398,25 @@
      Ledger Live, Safe...): primero un aviso; luego el QR en el ordenador y el enlace para pegar en el movil. */
   function filaSoloWC(qr) {
     const f = fila("button", { id: "solo-wc", nombre: "Tangem, Ledger Live, Safe…" },
-      "Wallets without their own browser · WalletConnect", { icono: CARTERA });
+      "Wallets without their own browser · QR connection", { icono: CARTERA });
     f.addEventListener("click", () => { wcAbierto = true; panelWC(qr); });
     return f;
   }
 
   function panelWC(qr) {
     qr.textContent = "";
-    const x = nodo("button", "wpick-wcx mono", "✕ Close WalletConnect");
+    const x = nodo("button", "wpick-wcx mono", "✕ Close QR connection");
     x.type = "button";
     x.addEventListener("click", () => { wcAbierto = false; abrir(); });   // cierra el panel; el resto de la ventana sigue igual
     qr.appendChild(x);
     qr.appendChild(nodo("p", "wpick-warn", "Only for wallets without their own browser (Tangem, Ledger Live, Safe…). " +
-      "While WalletConnect reviews our domain, your wallet may show a security warning by mistake. " +
-      "Right now WalletConnect is waiting for its history to be updated so this erroneous message is removed. " +
+      "While our domain is being reviewed, your wallet may show a security warning by mistake. " +
+      "Right now the connection service is waiting for its history to be updated so this erroneous message is removed. " +
       "Sectora and its contracts are verified on Etherscan, and connecting only reads your address."));
     qr.appendChild(nodo("p", "wpick-state"));
     if (MOVIL) qr.appendChild(copiarBoton());   // en el telefono se copia el enlace: el boton va antes del QR
     qr.appendChild(nodo("div", "wpick-qrbox"));
-    qr.appendChild(nodo("p", "wpick-qrtxt", "Scan this QR code with your wallet, or copy the connection link and paste it in its WalletConnect section."));
+    qr.appendChild(nodo("p", "wpick-qrtxt", "Scan this QR code with your wallet, or copy the connection link and paste it in its connect section."));
     if (!MOVIL) qr.appendChild(copiarBoton());
     qr.dataset.on = "1";
     pedirConexionWC();
@@ -436,7 +436,7 @@
     box.hidden = !uniAbierto;
     if (!uniAbierto) return;
     box.appendChild(nodo("p", "wpick-uni", "Uniswap Wallet connects from your computer: open this page in Chrome with the Uniswap extension, " +
-      "using the same wallet you have in the app. It connects directly, without WalletConnect."));
+      "using the same wallet you have in the app. It connects directly."));
     const c = nodo("button", "wpick-ubtn mono", "Copy link to open on your computer");
     c.type = "button";
     c.addEventListener("click", () => {
@@ -622,7 +622,7 @@
         box.innerHTML = q.createSvgTag({ cellSize: 4, margin: 2 });   // SVG generado aqui, sin texto ajeno
       }).catch(() => estado("Could not draw the QR code. Use Copy connection link.", true));
     }
-    estado(MOVIL ? (SOLO_APP ? "Copy the connection link, open your wallet, go to WalletConnect and paste it. Then come back to this tab."
+    estado(MOVIL ? (SOLO_APP ? "Copy the connection link, open your wallet, go to its connect section and paste it. Then come back to this tab."
                              : "Tap your wallet app. Approve the connection there, then come back to this tab.")
                  : "Scan the code with your phone to connect.");
   }
@@ -642,7 +642,7 @@
       p = await proveedorWC();
     } catch (e) {
       pidiendo = false;
-      estado("WalletConnect did not load. Check your connection and try again.", true);
+      estado("The connection did not load. Check your connection and try again.", true);
       return;
     }
     if (p.session && p.accounts && p.accounts.length) {   // ya habia sesion
@@ -693,7 +693,7 @@
   function vistaConectada(direccion) {
     caja.textContent = "";
     cabecera("Connected");
-    const via = conectadoCon && conectadoCon === wc ? nombreSesion(wc) + " · WalletConnect" : "Browser wallet";
+    const via = conectadoCon && conectadoCon === wc ? nombreSesion(wc) : "Browser wallet";
     estado(via + " · " + direccion.slice(0, 6) + "…" + direccion.slice(-4));
     const b = nodo("button", "wpick-copy mono", "Disconnect");
     b.type = "button";
