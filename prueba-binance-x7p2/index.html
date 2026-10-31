@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Prueba Binance</title>
+<style>
+  :root{--bg:#07090f;--card:#0d1220;--rule:rgba(255,255,255,.12);--ink:#f3f5f9;--ink3:#8d95a8;--yel:#f0b90b}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  main{max-width:460px;margin:0 auto;padding:24px 16px 40px}
+  h1{margin:0 0 6px;font-size:20px}
+  p{margin:0 0 14px;color:var(--ink3);font-size:13.5px}
+  a{display:flex;align-items:center;gap:12px;margin:0 0 10px;padding:16px 14px;border:1px solid var(--rule);background:var(--card);color:var(--ink);text-decoration:none;font-size:16px}
+  a b{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:8px;background:var(--yel);color:#111;font-size:17px}
+  a small{display:block;color:var(--ink3);font-size:12px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Prueba: abrir Sectora en Binance Wallet</h1>
+  <p>Abre esta página en Chrome del Android (no dentro de Binance). Pulsa el botón 1; si sale un error o no pasa nada, vuelve aquí y pulsa el 2, y así. Apunta el número que abra sectoraorg.com/staking dentro de Binance.</p>
+  <div id="l"></div>
+</main>
+<script>
+(function () {
+  var U = "https://sectoraorg.com/staking/";
+  var APP = "yFK5FCqYprrXDiVFbhyRx7";
+  var enc = encodeURIComponent;
+  var b64 = function (s) { return btoa(s); };
+  var b64url = function (s) { return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
+  var PATH = b64("/pages/browser/index"), PATHu = b64url("/pages/browser/index");
+  var Q = "url=" + U + "&defaultChainId=1", Qe = "url=" + enc(U) + "&defaultChainId=1";
+  var mp = "app.binance.com/mp/app?appId=" + APP;
+  var oficial = mp + "&startPagePath=" + PATH + "&startPageQuery=" + b64(Q);
+  var segura = mp + "&startPagePath=" + PATHu + "&startPageQuery=" + b64url(Q);
+  var codif = mp + "&startPagePath=" + enc(PATH) + "&startPageQuery=" + enc(b64(Qe));
+  var intent = function (q) { return "intent://" + q + "#Intent;scheme=bnc;package=com.binance.dev;end"; };
+  var V = [
+    ["bnc:// oficial", "bnc://" + oficial],
+    ["bnc:// base64 seguro (sin =)", "bnc://" + segura],
+    ["bnc:// codificado (como Reown)", "bnc://" + codif],
+    ["intent de Android, oficial", intent(oficial)],
+    ["intent de Android, base64 seguro", intent(segura)],
+    ["intent de Android, codificado", intent(codif)],
+    ["web app.binance.com/?_dp (formato Android de Binance)", "https://app.binance.com/?_dp=" + b64url("/mp/app?appId=" + APP + "&startPagePath=" + PATH + "&startPageQuery=" + b64url(Q))],
+    ["web /en/download?_dp oficial (el del iPhone)", "https://app.binance.com/en/download?_dp=" + b64("bnc://" + oficial)]
+  ];
+  var l = document.getElementById("l");
+  V.forEach(function (v, i) {
+    var a = document.createElement("a"); a.href = v[1]; a.rel = "noopener";
+    var n = document.createElement("b"); n.textContent = String(i + 1); a.appendChild(n);
+    var s = document.createElement("span"); s.textContent = "Probar " + (i + 1);
+    var sm = document.createElement("small"); sm.textContent = v[0]; s.appendChild(sm); a.appendChild(s);
+    l.appendChild(a);
+  });
+})();
+</script>
+</body>
+</html>
