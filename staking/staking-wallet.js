@@ -398,7 +398,7 @@
      Ledger Live, Safe...): primero un aviso; luego el QR en el ordenador y el enlace para pegar en el movil. */
   function filaSoloWC(qr) {
     const f = fila("button", { id: "solo-wc", nombre: "Tangem, Ledger Live, Safe…" },
-      "Wallets without their own browser · QR connection", { icono: CARTERA });
+      "Wallets without their own browser", { icono: CARTERA });
     f.addEventListener("click", () => { wcAbierto = true; panelWC(qr); });
     return f;
   }

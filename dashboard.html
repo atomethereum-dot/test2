@@ -1399,7 +1399,7 @@ html.booting,body.booting{overflow:hidden}
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="/translations.js"></script>
 <script src="/dashboard-i18n-extra.js?v=20261031a"></script>
-<script src="/dashboard-v2-i18n.js?v=18"></script>
+<script src="/dashboard-v2-i18n.js?v=19"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="/i18n.js?v=2"></script>
 <script src="/dashboard-reticle.js?v=20260820b"></script>
@@ -3868,7 +3868,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
      Ledger Live, Safe...): primero un aviso; luego el QR en el ordenador y el enlace para pegar en el movil */
   function filaSoloWC(qr){
     const f = fila({ icono: CARTERA, nombre: 'Tangem, Ledger Live, Safe…',
-      sub: t('hashdash.wallet.wcOnlyS','Wallets without their own browser · QR connection'),
+      sub: t('hashdash.wallet.wcOnlyS','Wallets without their own browser'),
       accion: () => { qrAbierto = true; panelWC(qr); } });
     return f;
   }
