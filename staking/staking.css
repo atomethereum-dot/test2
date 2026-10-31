@@ -411,6 +411,12 @@ img.wpick-ico{background:none}
 .wpick-copy:hover:not(:disabled){border-color:var(--p-ink);background:#f4f4f1}
 .wpick-copy:disabled{opacity:.4;cursor:not-allowed}
 .wpick-qr .wpick-copy{justify-self:center}
+.wpick-unibox{display:grid;gap:8px;padding:12px 14px 14px;border-bottom:1px solid var(--p-line)}
+.wpick-unibox[hidden]{display:none}
+.wpick-uni{margin:0;padding:10px 12px;border:1px solid rgba(255,0,122,.3);background:#fff2f8;color:#5c1236;font-size:12.5px;line-height:1.6}
+.wpick-ubtn{display:block;text-align:center;text-decoration:none;background:none;border:1px solid rgba(0,0,0,.16);padding:9px 12px;cursor:pointer;
+  font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--p-ink)}
+.wpick-ubtn:hover{border-color:var(--p-ink);background:#f4f4f1}
 .wpick-alt{font-size:12.5px;line-height:1.65;color:var(--p-ink-2)}
 /* con la ventana de conectar abierta, el cursor de coordenadas no se pinta encima de los textos */
 body:has(.wpick:not([hidden])) .reticle,body:has(.wpick:not([hidden])) .readout{opacity:0!important}
