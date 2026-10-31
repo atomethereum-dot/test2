@@ -161,6 +161,57 @@ jobs:
               }
               console.log("TITAN", corta(t.who), "(" + t.bal.toFixed(2) + " SECT):", Object.keys(vias).length ? Object.entries(vias).map(([k, v]) => k + " ×" + v).join(" | ") : "sin entradas de SECT en los ultimos 240 dias");
             }
+            // Todos los que tienen SECT en la wallet (no solo staking): que tipo de wallet es cada uno
+            const dec = parseInt(await rpc("eth_call", [{ to: SECT, data: "0x313ce567" }, "latest"]), 16) || 18;
+            const saldo = {};
+            let next = "", paginas = 0;
+            for (; paginas < 300; paginas++) {
+              let j;
+              try { j = await (await fetch("https://eth.blockscout.com/api/v2/tokens/" + SECT + "/holders" + next, { headers: { accept: "application/json" } })).json(); } catch (e) { break; }
+              (j.items || []).forEach(x => { saldo[String(x.address.hash).toLowerCase()] = Number(x.value) / 10 ** dec; });
+              if (!j.next_page_params) break;
+              next = "?" + new URLSearchParams(j.next_page_params).toString();
+            }
+            if (!Object.keys(saldo).length) {
+              // sin Blockscout: saldos sumando todas las transferencias de SECT de los ultimos ~2 años
+              console.log("(Blockscout no respondio: calculo los saldos con los eventos)");
+              const ini = ultimo - 7200 * 730;
+              let step = 50000;
+              for (let a0 = ini; a0 <= ultimo;) {
+                const b0 = Math.min(ultimo, a0 + step - 1);
+                const l = await logsDe([{ address: SECT, fromBlock: hex(a0), toBlock: hex(b0), topics: [T_TRANSFER] }]);
+                if (l === null) { if (step > 1000) { step = Math.floor(step / 2); continue; } a0 = b0 + 1; continue; }
+                l.forEach(x => {
+                  const de = "0x" + x.topics[1].slice(26), a = "0x" + x.topics[2].slice(26), v = Number(BigInt(x.data && x.data !== "0x" ? x.data : 0)) / 10 ** dec;
+                  saldo[de] = (saldo[de] || 0) - v; saldo[a] = (saldo[a] || 0) + v;
+                });
+                a0 = b0 + 1;
+              }
+            }
+            const conSaldo = Object.entries(saldo).filter(([w, b]) => b > 0.0001 && w !== "0x0000000000000000000000000000000000000000");
+            const DELEG = {
+              "0x000000005c84f8fd50b21cac312528a64437030e": "Uniswap Wallet",
+              "0x63c0c19a282a1b52b07dd5a65b58948a07dae32b": "MetaMask",
+              "0x80296ff8d1ed46f8e3c7992664d13b833504c2bb": "OKX Wallet",
+              "0x69007702764179f14f51cdce752f4f775d74e139": "Alchemy"
+            };
+            const grupos = {};
+            for (const [w, b] of conSaldo) {
+              const code = await rpc("eth_getCode", [w, "latest"]);
+              let g;
+              if (code === null) g = "No se pudo comprobar";
+              else if (code === "0x") g = "Wallet normal (sin cuenta inteligente)";
+              else if (/^0xef0100/i.test(code)) { const d = "0x" + code.slice(8, 48).toLowerCase(); g = "Cuenta inteligente " + (DELEG[d] || await etiqueta(d)); }
+              else g = "Contrato: " + await etiqueta(w);
+              (grupos[g] = grupos[g] || []).push({ w, b });
+            }
+            const total = conSaldo.reduce((a, [, b]) => a + b, 0);
+            console.log("HOLDERS de SECT con saldo en la wallet:", conSaldo.length, "· total", total.toFixed(2), "SECT");
+            Object.entries(grupos).sort((a, b) => b[1].reduce((s, x) => s + x.b, 0) - a[1].reduce((s, x) => s + x.b, 0)).forEach(([g, l]) => {
+              const suma = l.reduce((s, x) => s + x.b, 0);
+              const ver = /Uniswap|MetaMask|OKX|Alchemy|Contrato/.test(g) || l.length <= 15;
+              console.log("GRUPO", g + ":", l.length, "wallets ·", suma.toFixed(2), "SECT", ver ? "→ " + l.sort((a, b) => b.b - a.b).map(x => corta(x.w) + " " + x.b.toFixed(2) + (esStaker.has(x.w) ? " (+staking)" : "")).join(", ") : "");
+            });
           })().catch(e => { console.log("ERROR", e && e.message); });
           JS
           node run.cjs
