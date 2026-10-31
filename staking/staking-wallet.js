@@ -719,16 +719,19 @@
       btn.insertAdjacentElement("afterend", b);
     }
     if (!b) return;
-    b.onclick = async () => {
-      try {
-        await p.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x1" }] });
-        botonRed(null);
-        if (conectadoCon === p) alConectar(p, { wc: p === wc });   // vuelve a leer la cuenta, ya en Ethereum
-      } catch (e) {
-        console.warn("[sectora] cambio de red", e);
-      }
-    };
+    b.onclick = () => cambiaRed(p);
     b.hidden = false;
+  }
+  // pide a la wallet el cambio a Ethereum (la abre para aceptarlo) y vuelve a leer la cuenta
+  async function cambiaRed(p) {
+    if (!p) return;
+    try {
+      await p.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x1" }] });
+      botonRed(null);
+      if (conectadoCon === p) alConectar(p, { wc: p === wc });
+    } catch (e) {
+      console.warn("[sectora] cambio de red", e);
+    }
   }
 
   /* Binance Wallet en Android: su app no abre webs desde un enlace, asi que se conecta con el conector oficial de
@@ -767,7 +770,12 @@
     const b = nodo("button", "wpick-copy mono", "Disconnect");
     b.type = "button";
     b.addEventListener("click", desconectar);
+    // cambiar la red de la wallet a Ethereum, siempre a mano
+    const r = nodo("button", "wpick-copy mono", "Switch to Ethereum");
+    r.type = "button";
+    r.addEventListener("click", () => { const p = conectadoCon; cerrar(); cambiaRed(p); });
     const pie = nodo("div", "wpick-foot");
+    pie.appendChild(r);
     pie.appendChild(b);
     caja.appendChild(pie);
   }
