@@ -1,0 +1,102 @@
+name: Buyers check
+
+# Solo lectura: todas las compras de SECT en los pools de Uniswap, agrupadas por el sistema que las hizo
+# (router o agregador) y por quien cobro comision dentro de la compra, para saber desde que wallet compran.
+# No envia nada ni toca ningun contrato. Las direcciones de compradores salen acortadas.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revisar compras
+        run: |
+          cat > run.cjs <<'JS'
+          const RPCS = ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org", "https://1rpc.io/eth"];
+          const LOGS = ["https://gateway.tenderly.co/public/mainnet", "https://rpc.mevblocker.io", "https://ethereum-rpc.publicnode.com"];
+          async function llama(urls, method, params, ok) {
+            for (const u of urls) {
+              try {
+                const r = await fetch(u, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }) });
+                const j = await r.json(); if (j && ok(j.result)) return j.result;
+              } catch (e) {}
+            }
+            return null;
+          }
+          const rpc = (m, p) => llama(RPCS, m, p, r => r !== undefined && r !== null);
+          const logsDe = (p) => llama(LOGS, "eth_getLogs", [p], r => Array.isArray(r));
+          const hex = n => "0x" + n.toString(16);
+          const corta = w => w.slice(0, 6) + "…" + w.slice(-4);
+          const pad = a => "0x" + "0".repeat(24) + a.slice(2).toLowerCase();
+          const SECT = "0x8c9984b06281f1ca9416e493c2e602aab08513db";
+          const T = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+          // pools donde se compra SECT: Uniswap v3 SECT y el PoolManager de Uniswap v4
+          const POOLS = ["0xa12a11fc202827b7c734cf2019f2c7a6cf061d69", "0x000000000004444c5dc75cb358380d2e3de08a90"];
+          const WETH = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+          const ETIQ = {};
+          async function etiqueta(a) {
+            a = a.toLowerCase();
+            if (a in ETIQ) return ETIQ[a];
+            let n = "";
+            try {
+              const j = await (await fetch("https://eth.blockscout.com/api/v2/addresses/" + a, { headers: { accept: "application/json" } })).json();
+              const tags = ((j.metadata && j.metadata.tags) || []).map(t => t.name)
+                .concat((j.public_tags || []).map(t => t.display_name || t.label))
+                .concat((j.implementations || []).map(i => i.name));
+              n = [j.name].concat(tags).filter(Boolean).filter((v, i, s) => s.indexOf(v) === i).join(" / ");
+              if (!n) n = j.is_contract ? "contrato sin nombre" : "wallet";
+            } catch (e) {}
+            return ETIQ[a] = n || "sin nombre publico";
+          }
+          (async () => {
+            const ultimo = parseInt(await rpc("eth_blockNumber", []), 16);
+            const ini = ultimo - 7200 * 730;
+            const compras = new Map();   // tx -> comprador (quien recibio los SECT del pool)
+            for (const pool of POOLS) {
+              let step = 200000;
+              for (let a0 = ini; a0 <= ultimo;) {
+                const b0 = Math.min(ultimo, a0 + step - 1);
+                const l = await logsDe({ address: SECT, fromBlock: hex(a0), toBlock: hex(b0), topics: [T, pad(pool)] });
+                if (l === null) { if (step > 1000) { step = Math.floor(step / 2); continue; } a0 = b0 + 1; continue; }
+                l.forEach(x => compras.set(x.transactionHash, true));
+                a0 = b0 + 1;
+              }
+            }
+            console.log("Compras de SECT encontradas (transacciones):", compras.size);
+            const grupos = {}, comision = {}, compradores = {};
+            for (const h of compras.keys()) {
+              const tx = await rpc("eth_getTransactionByHash", [h]);
+              const rc = await rpc("eth_getTransactionReceipt", [h]);
+              if (!tx || !rc) continue;
+              const from = String(tx.from).toLowerCase(), to = String(tx.to || "").toLowerCase();
+              const via = to === from ? "su propia cuenta inteligente" : await etiqueta(to);
+              const clave = via + " (" + corta(to) + ")";
+              (grupos[clave] = grupos[clave] || new Set()).add(from);
+              // comisiones: tokens que salen hacia alguien que no es el comprador, un pool, el router ni WETH
+              const fuera = new Set([from, to, WETH, ...POOLS]);
+              const tr = rc.logs.filter(x => x.topics && x.topics[0] === T && x.topics.length === 3);
+              const destinos = new Set(tr.map(x => "0x" + x.topics[2].slice(26)));
+              const origenes = new Set(tr.map(x => "0x" + x.topics[1].slice(26)));
+              for (const d of destinos) {
+                if (fuera.has(d) || origenes.has(d)) continue;   // intermedios (pools, routers) envian despues
+                const recibeSect = tr.some(x => "0x" + x.topics[2].slice(26) === d && String(x.address).toLowerCase() === SECT);
+                if (recibeSect) continue;                         // es quien se quedo los SECT
+                const k = await etiqueta(d) + " (" + corta(d) + ")";
+                (comision[clave] = comision[clave] || {})[k] = ((comision[clave] || {})[k] || 0) + 1;
+              }
+              compradores[from] = (compradores[from] || 0) + 1;
+            }
+            console.log("Compradores distintos:", Object.keys(compradores).length);
+            Object.entries(grupos).sort((a, b) => b[1].size - a[1].size).forEach(([k, s]) => {
+              const c = comision[k] ? " · comision a: " + Object.entries(comision[k]).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([n, v]) => n + " ×" + v).join(", ") : "";
+              console.log("VIA", k + ":", s.size, "compradores" + c, s.size <= 25 ? "→ " + [...s].map(corta).join(", ") : "");
+            });
+            const tg = Object.keys(ETIQ).filter(a => /tangem/i.test(ETIQ[a]));
+            console.log("Direcciones con 'Tangem' en su nombre publico:", tg.length ? tg.map(a => corta(a) + " " + ETIQ[a]).join(", ") : "ninguna");
+          })().catch(e => { console.log("ERROR", e && e.message); });
+          JS
+          node run.cjs
