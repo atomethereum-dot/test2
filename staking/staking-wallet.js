@@ -703,28 +703,31 @@
 
   /* Red equivocada (Binance Wallet entra por defecto en BNB Chain): un boton bajo "Connect wallet" pide a la wallet
      el cambio a Ethereum y la abre para aceptarlo. Solo cambia la red de la wallet: no toca el staking. */
+  let redMal = false;   // la wallet conectada esta en otra red
   async function revisaRed(p) {
-    let red = null;
+    let red = null, dir = "";
     try { red = await p.request({ method: "eth_chainId" }); } catch (e) { return; }
-    if (conectadoCon === p) botonRed(Number(red) === 1 ? null : p);
+    try { const cs = await p.request({ method: "eth_accounts" }); dir = (cs && cs[0]) || ""; } catch (e) {}
+    if (conectadoCon === p) botonRed(Number(red) === 1 ? null : p, dir);
   }
-  function botonRed(p) {
-    let b = $("redBtn");
-    if (!p) { if (b) b.hidden = true; return; }
+  // en otra red, el boton azul dice con que wallet esta conectado y "Switch to Ethereum"; al pulsarlo pide el cambio
+  // (abrir). En Ethereum, staking-chain.js vuelve a poner la direccion en el boton.
+  function botonRed(p, dir) {
+    redMal = !!p;
+    if (!p) return;
     const btn = $("connectBtn");
-    if (!b && btn && btn.parentNode) {
-      b = nodo("button", "btn btn-ghost wide mono", "Switch to Ethereum");
-      b.type = "button";
-      b.id = "redBtn";
-      btn.insertAdjacentElement("afterend", b);
-    }
-    if (!b) return;
-    b.onclick = () => cambiaRed(p);
-    b.hidden = false;
+    if (!btn) return;
+    btn.textContent = "";
+    if (dir) btn.appendChild(nodo("span", "", dir.slice(0, 6) + "…" + dir.slice(-4) + " · "));
+    btn.appendChild(nodo("span", "", "Switch to Ethereum"));
   }
   // pide a la wallet el cambio a Ethereum (la abre para aceptarlo) y vuelve a leer la cuenta
   async function cambiaRed(p) {
     if (!p) return;
+    // staking-chain.js recarga la pagina al cambiar de red: con esta marca la wallet se vuelve a conectar sola
+    let rdns = "";
+    anunciadas.forEach((d) => { if (d.provider === p && d.info) rdns = d.info.rdns || ""; });
+    try { sessionStorage.setItem(RECON, JSON.stringify({ t: Date.now(), bn: p === bn, wc: p === wc, rdns })); } catch (e) {}
     try {
       await p.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x1" }] });
       botonRed(null);
@@ -781,6 +784,7 @@
   }
 
   function abrir(direccion) {
+    if (direccion && conectadoCon && redMal) { cambiaRed(conectadoCon); return; }
     if (!montarCaja()) return;
     if (direccion && conectadoCon) {
       vistaConectada(direccion);
@@ -814,6 +818,7 @@
     const p = conectadoCon;
     cerrar();
     botonRed(null);
+    try { sessionStorage.removeItem(RECON); } catch (e) {}
     if (p && p === wc) {
       try { await wc.disconnect(); } catch (e) {}
       olvidarWC();
@@ -879,8 +884,37 @@
     }).catch(() => {});
   }
 
+  /* Despues de "Switch to Ethereum" la pagina se recarga (staking-chain.js): si la marca es reciente, se vuelve a
+     conectar la misma wallet sin pedir nada (eth_accounts no abre ninguna ventana). WalletConnect ya se restaura solo. */
+  const RECON = "sect-reconectar";
+  let listo = false;
+  function reconectar() {
+    let m = null;
+    try { m = JSON.parse(sessionStorage.getItem(RECON) || "null"); sessionStorage.removeItem(RECON); } catch (e) {}
+    if (!m || !(Date.now() - m.t < 60000) || m.wc) return;
+    const intenta = async (n) => {
+      if (!listo) { if (n < 60) setTimeout(() => intenta(n + 1), 150); return; }
+      if (m.bn) {
+        try {
+          await cargaBinance();
+          if (!bn) bn = window.BinanceW3W.getProvider({ chainId: 1, showQrCodeModal: true, lng: "en", rpc: { 1: RPC } });
+          if (bn.connected) usarInyectada(bn);
+        } catch (e) {}
+        return;
+      }
+      window.dispatchEvent(new Event("eip6963:requestProvider"));
+      await new Promise((r) => setTimeout(r, 400));
+      let prov = null;
+      anunciadas.forEach((d) => { if (!prov && d.info && m.rdns && d.info.rdns === m.rdns) prov = d.provider; });
+      if (!prov) prov = (inyectadas()[0] || {}).proveedor || null;
+      if (!prov) return;
+      try { const cs = await prov.request({ method: "eth_accounts" }); if (cs && cs.length) usarInyectada(prov); } catch (e) {}
+    };
+    intenta(0);
+  }
+
   window.SectoraStakeWallet = {
-    alConectar: (cb) => { alConectar = cb; },
+    alConectar: (cb) => { alConectar = cb; listo = true; },
     alDesconectar: (cb) => { alDesconectar = cb; },
     abrir: abrir,
     cerrar: cerrar,
@@ -889,4 +923,5 @@
     restaurar: restaurar,
     esWC: (p) => !!p && p === wc,
   };
+  reconectar();
 })();
