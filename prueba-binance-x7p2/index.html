@@ -21,6 +21,7 @@
 <main>
   <h1>Prueba: abrir Sectora en Binance Wallet</h1>
   <p>Abre esta página en Chrome del Android (no dentro de Binance). Pulsa el botón 1; si sale un error o no pasa nada, vuelve aquí y pulsa el 2, y así. Apunta el número que abra sectoraorg.com/staking dentro de Binance.</p>
+  <p>Los botones 9 a 12 solo intentan abrir Binance Wallet (sin la web): apunta cuál abre la billetera Web3 de Binance sin error.</p>
   <div id="l"></div>
 </main>
 <script>
@@ -37,6 +38,8 @@
   var segura = mp + "&startPagePath=" + PATHu + "&startPageQuery=" + b64url(Q);
   var codif = mp + "&startPagePath=" + enc(PATH) + "&startPageQuery=" + enc(b64(Qe));
   var intent = function (q) { return "intent://" + q + "#Intent;scheme=bnc;package=com.binance.dev;end"; };
+  var DASH = "L3BhZ2VzL2Rhc2hib2FyZC1uZXcvaW5kZXg=";   // /pages/dashboard-new/index, tal cual en @binance/w3w-utils
+  var WALLET = "app.binance.com/mp/app?appId=xoqXxUSMRccLCrZNRebmzj&startPagePath=" + DASH;
   var V = [
     ["bnc:// oficial", "bnc://" + oficial],
     ["bnc:// base64 seguro (sin =)", "bnc://" + segura],
@@ -45,7 +48,12 @@
     ["intent de Android, base64 seguro", intent(segura)],
     ["intent de Android, codificado", intent(codif)],
     ["web app.binance.com/?_dp (formato Android de Binance)", "https://app.binance.com/?_dp=" + b64url("/mp/app?appId=" + APP + "&startPagePath=" + PATH + "&startPageQuery=" + b64url(Q))],
-    ["web /en/download?_dp oficial (el del iPhone)", "https://app.binance.com/en/download?_dp=" + b64("bnc://" + oficial)]
+    ["web /en/download?_dp oficial (el del iPhone)", "https://app.binance.com/en/download?_dp=" + b64("bnc://" + oficial)],
+    /* solo abrir Binance Wallet (sin la web): la ruta que usa la libreria de Binance en Android */
+    ["SOLO ABRIR Binance Wallet (bnc://, la de Binance para Android)", "bnc://" + WALLET],
+    ["SOLO ABRIR Binance Wallet (intent de Android)", intent(WALLET)],
+    ["SOLO ABRIR Binance Wallet (web ?_dp)", "https://app.binance.com/?_dp=" + b64url("/mp/app?appId=xoqXxUSMRccLCrZNRebmzj&startPagePath=" + DASH)],
+    ["SOLO ABRIR la app de Binance", "bnc://app.binance.com/"]
   ];
   var l = document.getElementById("l");
   V.forEach(function (v, i) {
