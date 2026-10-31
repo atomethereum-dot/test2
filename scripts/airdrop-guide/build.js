@@ -110,6 +110,7 @@ function build(l) {
     13: [["do"], ["vis", [shot("air-1-page", { cap: S[13].cap1 }), shot("air-2-status", { size: "narrow", cap: S[13].cap2 })], "two"], ["see"]]
   };
   const PART = { 1: "A", 8: "B", 12: "C" };
+  const GO = { A: ["/staking/", "staking"], B: ["/dashboard", "dashboard"] };
   const partOf = (n) => (n <= 7 ? "A" : n <= 11 ? "B" : "C");
   function block(n, b, print) {
     const c = S[n];
@@ -148,7 +149,10 @@ function build(l) {
     let steps = ""; for (let n = from; n <= to; n++) steps += stepWeb(n);
     return '<section class="sec part" id="part-' + P.toLowerCase() + '"><div class="wrap"><div class="part-h"><span class="part-l" aria-hidden="true">' + P + '</span><div><p class="m">' + p.k + "</p><h2>" + p.h + '</h2><p class="sub">' + p.sub + "</p>" +
       (P === "A" && C.common.stakingEnglish ? '<p class="lang-note">' + C.common.stakingEnglish + "</p>" : "") +
-      '<div class="tags">' + p.tags.map((t, i) => '<span class="' + (P === "A" && i === 0 ? "real" : (P !== "A" && i === 0 ? "free" : "")) + '">' + t + "</span>").join("") + '</div></div></div><ol class="steps">' + steps + "</ol></div></section>";
+      '<div class="tags">' + p.tags.map((t, i) => '<span class="' + (P === "A" && i === 0 ? "real" : (P !== "A" && i === 0 ? "free" : "")) + '">' + t + "</span>").join("") + "</div>" +
+      // enlace directo a la pagina de esta parte (staking o dashboard), en una pestana nueva para no perder la guia
+      (GO[P] ? '<a class="btn pri go" href="' + GO[P][0] + '" target="_blank" rel="noopener">sectoraorg.com/' + GO[P][1] + " <small>↗</small></a>" : "") +
+      '</div></div><ol class="steps">' + steps + "</ol></div></section>";
   }
   const alt = LANGS.map((x) => '<link rel="alternate" hreflang="' + x + '" href="' + BASE + (x === "en" ? "" : x + "/") + '">').join("\n") + '\n<link rel="alternate" hreflang="x-default" href="' + BASE + '">';
   const web = `<!DOCTYPE html>
@@ -173,7 +177,7 @@ function build(l) {
 ${alt}
 <meta name="theme-color" content="#ffffff">
 <link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/airdrop-guide/guide.css?v=4">
+<link rel="stylesheet" href="/airdrop-guide/guide.css?v=5">
 <script src="/analytics.js" defer></script>
 </head>
 <body>
@@ -302,7 +306,10 @@ ${partWeb("C", 12, 13)}
 `;
   const webDir = l === "en" ? OUT : path.join(OUT, l);
   fs.mkdirSync(webDir, { recursive: true });
-  fs.writeFileSync(path.join(webDir, "index.html"), web);
+  // las direcciones de staking y dashboard que salen en los pasos se pueden pulsar (pestana nueva)
+  const webLinks = web.replace(/<b>sectoraorg\.com\/(staking|dashboard)<\/b>/g, (m, d) =>
+    '<a class="lk" href="/' + (d === "staking" ? "staking/" : "dashboard") + '" target="_blank" rel="noopener">' + m + "</a>");
+  fs.writeFileSync(path.join(webDir, "index.html"), webLinks);
 
   /* ---------- PDF: paginas A4 fijas ---------- */
   const pages = [];
