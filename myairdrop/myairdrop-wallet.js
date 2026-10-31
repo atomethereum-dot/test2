@@ -46,6 +46,8 @@
     { id: "i-rainbow", nombre: "Rainbow", logo: "rainbow", m: /rainbow/i, web: "https://rainbow.me/download" },
     { id: "i-rabby", nombre: "Rabby", icono: LOGO_EXTRA.rabby, m: /rabby/i, web: "https://rabby.io/" }
   ];
+  // icono neutro de cartera para la opcion de WalletConnect (sin su logo)
+  var CARTERA = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#13213d"/><path d="M8.5 10.5l8-3.2 1.2 3.2" fill="none" stroke="#4d8dff" stroke-width="1.5" stroke-linejoin="round"/><rect x="7" y="10.5" width="14" height="10" rx="2" fill="none" stroke="#4d8dff" stroke-width="1.5"/><path d="M21 14h-3.5a1.5 1.5 0 0 0 0 3H21" fill="none" stroke="#4d8dff" stroke-width="1.5"/></svg>');
   var ENLACE = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" fill="#13213d"/><path d="M12.2 15.8l3.6-3.6M11 13.4l-1.6 1.6a2.6 2.6 0 0 0 3.6 3.6l1.6-1.6M17 14.6l1.6-1.6a2.6 2.6 0 0 0-3.6-3.6L13.4 11" fill="none" stroke="#4d8dff" stroke-width="1.6" stroke-linecap="round"/></svg>');
   var AQUI = location.origin + location.pathname;
   var enc = encodeURIComponent;
@@ -300,7 +302,7 @@
   // mientras dura SOLO_APP, WalletConnect solo para las wallets sin navegador propio ni extension (Tangem,
   // Ledger Live, Safe...): primero un aviso; luego el QR en el ordenador y el enlace para pegar en el movil
   function filaSoloWC(qr) {
-    var f = fila("button", { id: "solo-wc", logo: "walletConnect" }, "Tangem, Ledger Live, Safe…", t("wcOnlyS"));
+    var f = fila("button", { id: "solo-wc" }, "Tangem, Ledger Live, Safe…", t("wcOnlyS"), CARTERA);
     f.addEventListener("click", function () { wcAbierto = true; panelWC(qr); });
     return f;
   }
