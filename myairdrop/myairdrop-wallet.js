@@ -94,6 +94,9 @@
   // Uniswap Wallet solo desde el ordenador (extension de Uniswap), sin WalletConnect
   var UNI = {"en": {"uniS": "Computer only · Uniswap extension", "uniTxt": "Uniswap Wallet connects from your computer: open this page in Chrome with the Uniswap extension, using the same wallet you have in the app. It connects directly.", "uniGet": "Get the Uniswap extension", "uniCopy": "Copy link to open on your computer"}, "es": {"uniS": "Solo desde el ordenador · extensión de Uniswap", "uniTxt": "Uniswap Wallet se conecta desde el ordenador: abre esta página en Chrome con la extensión de Uniswap, usando la misma wallet que tienes en la app. Se conecta directamente.", "uniGet": "Descargar la extensión de Uniswap", "uniCopy": "Copiar enlace para abrirlo en el ordenador"}, "pt": {"uniS": "Só pelo computador · extensão da Uniswap", "uniTxt": "A Uniswap Wallet conecta pelo computador: abra esta página no Chrome com a extensão da Uniswap, usando a mesma carteira que você tem no app. Ela conecta diretamente.", "uniGet": "Baixar a extensão da Uniswap", "uniCopy": "Copiar link para abrir no computador"}, "fr": {"uniS": "Ordinateur uniquement · extension Uniswap", "uniTxt": "Uniswap Wallet se connecte depuis un ordinateur : ouvrez cette page dans Chrome avec l’extension Uniswap, en utilisant le même wallet que dans l’app. La connexion est directe.", "uniGet": "Télécharger l’extension Uniswap", "uniCopy": "Copier le lien pour l’ouvrir sur l’ordinateur"}, "de": {"uniS": "Nur am Computer · Uniswap-Erweiterung", "uniTxt": "Uniswap Wallet verbindet sich am Computer: Öffne diese Seite in Chrome mit der Uniswap-Erweiterung und nutze dieselbe Wallet wie in der App. Die Verbindung erfolgt direkt.", "uniGet": "Uniswap-Erweiterung herunterladen", "uniCopy": "Link kopieren, um ihn am Computer zu öffnen"}, "ru": {"uniS": "Только с компьютера · расширение Uniswap", "uniTxt": "Uniswap Wallet подключается с компьютера: откройте эту страницу в Chrome с расширением Uniswap, используя тот же кошелёк, что и в приложении. Подключение идёт напрямую.", "uniGet": "Скачать расширение Uniswap", "uniCopy": "Скопировать ссылку, чтобы открыть на компьютере"}, "zh": {"uniS": "仅限电脑 · Uniswap 扩展", "uniTxt": "Uniswap Wallet 需在电脑上连接：请在安装了 Uniswap 扩展的 Chrome 中打开此页面，并使用与 App 中相同的钱包。它会直接连接。", "uniGet": "下载 Uniswap 扩展", "uniCopy": "复制链接，在电脑上打开"}, "ja": {"uniS": "パソコンのみ · Uniswap 拡張機能", "uniTxt": "Uniswap Wallet はパソコンから接続します。Uniswap 拡張機能を入れた Chrome でこのページを開き、アプリと同じウォレットを使ってください。そのまま直接接続できます。", "uniGet": "Uniswap 拡張機能を入手", "uniCopy": "パソコンで開くためにリンクをコピー"}, "ko": {"uniS": "컴퓨터 전용 · Uniswap 확장 프로그램", "uniTxt": "Uniswap Wallet은 컴퓨터에서 연결합니다. Uniswap 확장 프로그램이 설치된 Chrome에서 이 페이지를 열고, 앱과 같은 지갑을 사용하세요. 바로 연결됩니다.", "uniGet": "Uniswap 확장 프로그램 받기", "uniCopy": "컴퓨터에서 열 수 있도록 링크 복사"}, "ar": {"uniS": "من الكمبيوتر فقط · إضافة Uniswap", "uniTxt": "تتصل Uniswap Wallet من الكمبيوتر: افتح هذه الصفحة في Chrome مع إضافة Uniswap، باستخدام نفس المحفظة الموجودة في التطبيق. يتم الاتصال مباشرة.", "uniGet": "تنزيل إضافة Uniswap", "uniCopy": "انسخ الرابط لفتحه على الكمبيوتر"}, "hi": {"uniS": "सिर्फ़ कंप्यूटर से · Uniswap एक्सटेंशन", "uniTxt": "Uniswap Wallet कंप्यूटर से कनेक्ट होता है: Uniswap एक्सटेंशन वाले Chrome में यह पेज खोलें और वही वॉलेट इस्तेमाल करें जो आपके ऐप में है। यह सीधे कनेक्ट होता है।", "uniGet": "Uniswap एक्सटेंशन डाउनलोड करें", "uniCopy": "कंप्यूटर पर खोलने के लिए लिंक कॉपी करें"}};
   for (var ul in UNI) { T[ul] = T[ul] || {}; for (var uk in UNI[ul]) T[ul][uk] = UNI[ul][uk]; }
+  // Binance Wallet en Android: conector oficial de Binance (se abre Binance para aprobar)
+  var BNT = {"en": {"bnApprove": "Opens Binance to approve the connection", "bnOpening": "Opening Binance Wallet… approve the connection there, then come back to this tab.", "bnFail": "Binance Wallet did not connect. Try again."}, "es": {"bnApprove": "Abre Binance para aprobar la conexión", "bnOpening": "Abriendo Binance Wallet… aprueba la conexión allí y vuelve a esta pestaña.", "bnFail": "Binance Wallet no se conectó. Inténtalo de nuevo."}, "pt": {"bnApprove": "Abre a Binance para aprovar a conexão", "bnOpening": "Abrindo a Binance Wallet… aprove a conexão lá e volte para esta aba.", "bnFail": "A Binance Wallet não conectou. Tente de novo."}, "fr": {"bnApprove": "Ouvre Binance pour approuver la connexion", "bnOpening": "Ouverture de Binance Wallet… approuvez la connexion, puis revenez sur cet onglet.", "bnFail": "Binance Wallet ne s’est pas connecté. Réessayez."}, "de": {"bnApprove": "Öffnet Binance, um die Verbindung zu bestätigen", "bnOpening": "Binance Wallet wird geöffnet … bestätige dort die Verbindung und komm dann zu diesem Tab zurück.", "bnFail": "Binance Wallet hat sich nicht verbunden. Versuche es erneut."}, "ru": {"bnApprove": "Откроет Binance для подтверждения подключения", "bnOpening": "Открываем Binance Wallet… подтвердите подключение там и вернитесь на эту вкладку.", "bnFail": "Binance Wallet не подключился. Попробуйте снова."}, "zh": {"bnApprove": "打开 Binance 以批准连接", "bnOpening": "正在打开 Binance Wallet… 请在那里批准连接，然后回到此页面。", "bnFail": "Binance Wallet 未连接，请重试。"}, "ja": {"bnApprove": "Binance を開いて接続を承認します", "bnOpening": "Binance Wallet を開いています… そこで接続を承認し、このタブに戻ってください。", "bnFail": "Binance Wallet に接続できませんでした。もう一度お試しください。"}, "ko": {"bnApprove": "Binance를 열어 연결을 승인합니다", "bnOpening": "Binance Wallet을 여는 중… 그곳에서 연결을 승인한 뒤 이 탭으로 돌아오세요.", "bnFail": "Binance Wallet이 연결되지 않았습니다. 다시 시도하세요."}, "ar": {"bnApprove": "يفتح Binance للموافقة على الاتصال", "bnOpening": "جارٍ فتح Binance Wallet… وافق على الاتصال هناك ثم عد إلى هذه الصفحة.", "bnFail": "لم يتصل Binance Wallet. حاول مرة أخرى."}, "hi": {"bnApprove": "कनेक्शन मंज़ूर करने के लिए Binance खोलता है", "bnOpening": "Binance Wallet खुल रहा है… वहाँ कनेक्शन मंज़ूर करें, फिर इस टैब पर लौटें।", "bnFail": "Binance Wallet कनेक्ट नहीं हुआ। फिर कोशिश करें।"}};
+  for (var bl in BNT) { T[bl] = T[bl] || {}; for (var bk in BNT[bl]) T[bl][bk] = BNT[bl][bk]; }
   function t(k, v) { var l = (document.documentElement.lang || "en").slice(0, 2), s = (T[l] || T.en)[k]; if (s == null) s = T.en[k]; if (v) for (var x in v) s = s.split("{" + x + "}").join(v[x]); return s; }
 
   // el enlace oficial de Binance (getDeepLink de @binance/w3w-utils) para abrir esta web en Binance Wallet:
@@ -348,8 +351,11 @@
     inyectadas().forEach(function (w) { var f = fila("button", { id: "iny" }, w.nombre, t("det"), w.icono); f.addEventListener("click", function () { usar(w.proveedor); }); lista.appendChild(f); });
     // Uniswap Wallet va segunda, detras de MetaMask
     APPS.filter(function (a) { return a.navegador; }).forEach(function (a, i) {
-      // Binance en Android no abre webs desde un enlace: se copia el enlace para pegarlo en su navegador
-      if (a.id === "binance" && ANDROID) lista.appendChild(filaCopiar(a.nombre, a));
+      // Binance en Android no abre webs desde un enlace: conecta con su conector oficial
+      if (a.id === "binance" && ANDROID) {
+        var fb = fila("button", a, a.nombre, t("bnApprove"), a.icono); fb.addEventListener("click", usarBinance); lista.appendChild(fb);
+        cargaBinance().catch(function () {});   // listo antes del toque, para que Binance se abra en seguida
+      }
       else { var f = fila("a", a, a.nombre, t("brw"), a.icono); f.href = a.navegador(); f.rel = "noopener"; lista.appendChild(f); }
       if (i === 0) { var u = nodo("div", "maw-ux"); lista.appendChild(filaUni(u)); lista.appendChild(u); panelUni(u); }
     });
@@ -456,6 +462,20 @@
       if (a && a[0]) { conectado = proveedor; alDir(a[0], ""); }
     }).catch(function () {});
   }
+  // Binance Wallet en Android: su app no abre webs desde un enlace, asi que se conecta con el conector oficial de
+  // Binance (@binance/w3w-ethereum-provider, /binance-w3w.min.js): se abre Binance para aceptar; va por los servidores
+  // de Binance, no por WalletConnect. Solo se carga en Android al abrir la ventana de conectar.
+  var BN_JS = "/binance-w3w.min.js?v=20261031a", bn = null;
+  function cargaBinance() { return cargar(BN_JS, function () { return !!window.BinanceW3W; }); }
+  function usarBinance() {
+    estado(t("bnOpening"));
+    cargaBinance().then(function () {
+      if (!bn) bn = window.BinanceW3W.getProvider({ chainId: 1, showQrCodeModal: true, lng: "en", rpc: { 1: "https://ethereum-rpc.publicnode.com" } });
+      return bn.request({ method: "eth_requestAccounts" });
+    }).then(function (a) {
+      if (a && a[0]) { cerrar(); conectado = bn; alDir(a[0], "Binance Wallet"); } else estado(t("bnFail"), true);
+    }).catch(function (e) { console.warn("[sectora] Binance Wallet", e); estado(t("bnFail"), true); });
+  }
   function abrir() {
     montar();
     var iny = inyectadas();
@@ -469,6 +489,7 @@
   function salir() {
     var p = conectado; conectado = null;
     if (p && p === wc) { try { wc.disconnect().catch(function () {}); } catch (e) {} guardar(MARCA, null); }
+    if (p && p === bn) { try { bn.disconnect(); } catch (e) {} }
   }
   /* al volver a la pagina: la sesion de WalletConnect abierta aqui (en el navegador de una wallet manda la inyectada) */
   function restaurar() {
