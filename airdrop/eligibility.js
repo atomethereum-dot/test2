@@ -79,7 +79,7 @@
   }
   function wallets() {
     var u = location.origin + "/airdrop/", e = encodeURIComponent;
-    if (!MOVIL) return [["MetaMask", "https://metamask.io/download/"], ["Binance Wallet", "https://chromewebstore.google.com/detail/binance-wallet/cadiboklkpojfamcoggejbbdjcoiljjk"], ["Phantom", "https://phantom.com/download"], ["Trust Wallet", "https://trustwallet.com/download"],
+    if (!MOVIL) return [["MetaMask", "https://metamask.io/download/"], ["Binance Wallet", "https://www.binance.com/en/web3wallet"], ["Phantom", "https://phantom.com/download"], ["Trust Wallet", "https://trustwallet.com/download"],
       ["Coinbase Wallet", "https://www.coinbase.com/wallet/downloads"], ["OKX Wallet", "https://www.okx.com/web3"], ["Bitget Wallet", "https://web3.bitget.com/"],
       ["Rainbow", "https://rainbow.me/download"], ["Rabby", "https://rabby.io/"]];
     // enlace oficial de Binance (getDeepLink de @binance/w3w-utils): direccion y base64 tal cual; en Android su enlace
@@ -181,6 +181,7 @@
   var css = [
     /* una sola ventana: tarjeta redondeada que recorta su contenido; si la pantalla
        es baja, solo el cuerpo se desplaza y sin barra visible */
+    "html .maw{z-index:300}",
     ".el-ov{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(5,7,12,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;visibility:hidden;transition:opacity .28s ease,visibility 0s linear .28s}",
     ".el-ov.on{opacity:1;visibility:visible;transition:opacity .28s ease}",
     ".el{position:relative;display:flex;flex-direction:column;width:min(540px,100%);max-height:calc(100dvh - 32px);overflow:hidden;background:#fff;color:#07080a;border-radius:20px;box-shadow:0 40px 100px -24px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:300;transform:translateY(18px) scale(.97);opacity:0;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .3s ease}",
@@ -376,7 +377,8 @@
   function head() { ov.querySelector(".el-k").textContent = t("k"); ov.querySelector(".el-pv").textContent = DEMO ? t("pv") : ""; ov.querySelector(".el-x").setAttribute("aria-label", t("close")); }
   function start(msg) {
     stop(); head(); cur = null;
-    var hasW = !!prov();
+    // con la ventana de conectar de Mi Airdrop (la misma que el Dashboard y el Staking) siempre hay boton de conectar
+    var hasW = !!window.SectoraMyWallet || !!prov();
     bd.innerHTML = '<h3>' + t("h") + '</h3><p class="el-in">' + t("intro") + '</p>' +
       (hasW ? '<button class="el-b go mono" type="button" data-a="connect"><span>' + t("connect") + '</span><span>→</span></button>' : "") +
       (msg ? '<p class="el-msg">' + esc(msg) + '</p>' : "") +
@@ -392,6 +394,7 @@
     });
   }
   function connect() {
+    if (window.SectoraMyWallet) { window.SectoraMyWallet.abrir(); return; }   // la misma ventana que en Mi Airdrop
     prov().request({ method: "eth_requestAccounts" }).then(function (acc) {
       if (acc && acc[0]) show(acc[0], true); else start(t("rej"));
     }).catch(function () { start(t("rej")); });
@@ -584,6 +587,11 @@
   }, true);
 
   function open() { ov.classList.add("on"); document.documentElement.style.overflow = "hidden"; if (cur) show(cur, curConn); else start(); }
+  // la ventana de conectar compartida (myairdrop-wallet.js): al conectar, "Tu airdrop" muestra esa wallet
+  if (window.SectoraMyWallet) {
+    window.SectoraMyWallet.alDir(function (a) { if (!ov.classList.contains("on")) { ov.classList.add("on"); document.documentElement.style.overflow = "hidden"; } show(a, true); });
+    window.SectoraMyWallet.alSalir(function () { if (curConn && ov.classList.contains("on")) start(); });
+  }
   function close() { stop(); ov.classList.remove("on"); document.documentElement.style.overflow = ""; }
   if (window.ethereum && window.ethereum.on) window.ethereum.on("accountsChanged", function (a) { if (ov.classList.contains("on") && a && a[0]) show(a[0], true); });
 
