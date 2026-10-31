@@ -704,12 +704,49 @@
   /* staking-chain.js recarga la pagina en chainChanged (con los contratos ya cargados, es lo seguro). Si la wallet
      estaba en otra red, no hay nada cargado: el cambio a Ethereum se resuelve volviendo a leer la cuenta, sin
      recargar. Cualquier otro cambio de red sigue recargando. staking-chain.js recibe este envoltorio de la wallet. */
+  /* Lecturas (decimales, saldos, recibos): si la wallet no las contesta (le pasa a la extension de Uniswap), se leen
+     de los nodos publicos de Ethereum que ya usa la pagina. Solo lecturas y solo con la wallet en Ethereum: firmas,
+     aprobaciones y envios van siempre a la wallet. */
+  const LECTURA = /^eth_(call|estimateGas|getBalance|blockNumber|getCode|getStorageAt|getTransactionReceipt|getTransactionByHash|getTransactionCount|getBlockByNumber|getBlockByHash|getLogs|gasPrice|maxPriorityFeePerGas|feeHistory)$/;
+  const PUBLICOS = [RPC, "https://eth.drpc.org", "https://1rpc.io/eth"];
+  function conTiempo(pr, ms) {
+    return Promise.race([pr, new Promise((_, no) => setTimeout(() => no(new Error("sin respuesta")), ms))]);
+  }
+  async function leePublico(a) {
+    let ultimo;
+    for (const url of PUBLICOS) {
+      let j;
+      try {
+        const r = await conTiempo(fetch(url, { method: "POST", headers: { "content-type": "application/json" },
+          body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: a.method, params: a.params || [] }) }), 10000);
+        j = await r.json();
+      } catch (e) { ultimo = e; continue; }   // nodo caido: el siguiente
+      if (j && j.error) {   // respuesta del nodo (p. ej. un revert): es la buena, se devuelve tal cual
+        const e = new Error(j.error.message || "rpc error"); e.code = j.error.code; e.data = j.error.data; throw e;
+      }
+      if (j && "result" in j) return j.result;
+    }
+    throw ultimo || new Error("sin nodo publico");
+  }
+  async function pide(p, a) {
+    if (!a || !LECTURA.test(a.method)) return p.request(a);
+    try { return await conTiempo(p.request(a), 12000); }
+    catch (e) {
+      if (e && e.code === 4001) throw e;
+      let red;
+      try { red = await conTiempo(p.request({ method: "eth_chainId" }), 6000); } catch (x) { throw e; }
+      if (Number(red) !== 1) throw e;
+      console.warn("[sectora] la wallet no contesto " + a.method + "; se lee del nodo publico", e);
+      return leePublico(a);
+    }
+  }
+
   const envs = new WeakMap();
   function envolver(p) {
     if (envs.has(p)) return envs.get(p);
     const cambios = [];
     const env = {
-      request: (a) => p.request(a),
+      request: (a) => pide(p, a),
       on: (ev, f) => { if (ev === "chainChanged") cambios.push(f); else if (p.on) p.on(ev, f); },
       removeListener: (ev, f) => {
         if (ev === "chainChanged") { const i = cambios.indexOf(f); if (i >= 0) cambios.splice(i, 1); }
