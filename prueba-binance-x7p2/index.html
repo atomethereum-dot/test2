@@ -19,7 +19,8 @@
 </head>
 <body>
 <main>
-  <h1>Prueba Binance · ronda 2</h1>
+  <h1>Prueba Binance</h1>
+  <p><b>Primero actualiza Binance en Play Store</b> y pulsa A y B. Apunta si alguno abre sectoraorg.com/staking dentro de Binance.</p>
   <p>Abre esta página en Chrome del Android (no dentro de Binance). Pulsa el botón 1; vuelve aquí y pulsa el 2, y así hasta el 12. Para cada uno apunta qué pasa: error, abre solo la wallet, o abre sectoraorg.com/staking dentro de Binance.</p>
   <div id="l"></div>
 </main>
@@ -34,7 +35,10 @@
   var DASH = "L3BhZ2VzL2Rhc2hib2FyZC1uZXcvaW5kZXg=", BROWSER = b64("/pages/browser/index");
   var mp = function (app, path, q) { return "app.binance.com/mp/app?appId=" + app + "&startPagePath=" + path + (q ? "&startPageQuery=" + q : ""); };
   var intent = function (q) { return "intent://" + q + "#Intent;scheme=bnc;package=com.binance.dev;end"; };
+  var IPH = "app.binance.com/mp/app?appId=" + NAVEGADOR + "&startPagePath=" + BROWSER + "&startPageQuery=" + b64("url=" + U + "&defaultChainId=1");
   var V = [
+    ["A · EL MISMO ENLACE QUE ABRE EN TU IPHONE", "https://app.binance.com/en/download?_dp=" + b64("bnc://" + IPH)],
+    ["B · el mismo, en formato propio de Binance (bnc://)", "bnc://" + IPH],
     ["miniapp del panel + página del navegador (base64)", "bnc://" + mp(PANEL, BROWSER, b64("url=" + U + "&defaultChainId=1"))],
     ["miniapp del panel + página del navegador (base64 seguro)", "bnc://" + mp(PANEL, BROWSER, b64url("url=" + U + "&defaultChainId=1"))],
     ["miniapp del panel + url", "bnc://" + mp(PANEL, DASH, b64url("url=" + U))],
@@ -51,8 +55,9 @@
   var l = document.getElementById("l");
   V.forEach(function (v, i) {
     var a = document.createElement("a"); a.href = v[1]; a.rel = "noopener";
-    var n = document.createElement("b"); n.textContent = String(i + 1); a.appendChild(n);
-    var s = document.createElement("span"); s.textContent = "Probar " + (i + 1);
+    var id = i < 2 ? (i ? "B" : "A") : String(i - 1);   // A y B arriba; el resto, 1 a 12
+    var n = document.createElement("b"); n.textContent = id; a.appendChild(n);
+    var s = document.createElement("span"); s.textContent = "Probar " + id;
     var sm = document.createElement("small"); sm.textContent = v[0]; s.appendChild(sm); a.appendChild(s);
     l.appendChild(a);
   });
