@@ -256,6 +256,9 @@
       /* sin la lista del registro no se puede saber quien ya esta contado: no se suma nada para no inflar */
       const nuevos = lista ? Object.keys(nodos).filter(w => !enRegistro.has(w)).length : 0;
       const val = Number(act) + nuevos + PREVIEW;
+      /* la intro de arranque (hashnode-intro.js) cuenta hasta este mismo numero */
+      window.__sectoraNodosN = val;
+      if(PREVIEW === PREVIEW_DEFECTO){ try{ localStorage.setItem('sect-nodos-n', String(val)); }catch(e){} }
       const kv = q('#kVal'), mv = q('#mVal'), kh = q('#kHash'), kb = q('#kBuy');
       if(kv) kv.textContent = val.toLocaleString('en-US');
       if(mv) mv.textContent = val.toLocaleString('en-US');
