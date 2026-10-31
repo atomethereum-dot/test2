@@ -391,7 +391,7 @@
   /* Mientras dura SOLO_APP, WalletConnect solo para las wallets sin navegador propio ni extension (Tangem,
      Ledger Live, Safe...): primero un aviso; luego el QR en el ordenador y el enlace para pegar en el movil. */
   function filaSoloWC(qr) {
-    const f = fila("button", { id: "solo-wc", nombre: "Tangem, Ledger Live, Safe…", logo: "walletConnect" },
+    const f = fila("button", { id: "solo-wc", nombre: "Uniswap Wallet, Tangem, Ledger Live, Safe…", logo: "walletConnect" },
       "Wallets without their own browser · WalletConnect");
     f.addEventListener("click", () => { wcAbierto = true; panelWC(qr); });
     return f;
@@ -403,7 +403,7 @@
     x.type = "button";
     x.addEventListener("click", () => { wcAbierto = false; abrir(); });   // cierra el panel; el resto de la ventana sigue igual
     qr.appendChild(x);
-    qr.appendChild(nodo("p", "wpick-warn", "Only for wallets without their own browser (Tangem, Ledger Live, Safe…). " +
+    qr.appendChild(nodo("p", "wpick-warn", "Only for wallets without their own browser (Uniswap Wallet, Tangem, Ledger Live, Safe…). " +
       "While WalletConnect reviews our domain, your wallet may show a security warning by mistake. " +
       "Right now WalletConnect is waiting for its history to be updated so this erroneous message is removed. " +
       "Sectora and its contracts are verified on Etherscan, and connecting only reads your address."));
