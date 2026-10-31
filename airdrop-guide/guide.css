@@ -357,5 +357,7 @@ footer a:hover{color:var(--ink)}
 @media (max-width:560px){.step{grid-template-columns:minmax(0,1fr)}.ui{white-space:normal}}
 /* enlaces a staking y dashboard */
 .part-h .go{margin-top:18px}
-a.lk{color:inherit;text-decoration:underline;text-decoration-color:rgba(21,105,255,.55);text-decoration-thickness:2px;text-underline-offset:3px}
-a.lk:hover{text-decoration-color:currentColor}
+a.lk{display:inline-flex;align-items:center;gap:6px;margin:2px 1px;padding:3px 11px;border-radius:4px;background:var(--blue);color:#fff;text-decoration:none;white-space:nowrap;line-height:1.5;box-shadow:0 6px 16px -8px rgba(21,105,255,.8);transition:background .15s,transform .15s}
+a.lk b{color:#fff;font-weight:600}
+a.lk:after{content:"↗";font-size:.8em;opacity:.85}
+a.lk:hover{background:var(--blue-deep);transform:translateY(-1px)}
