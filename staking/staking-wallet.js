@@ -467,10 +467,13 @@
     });
     // Uniswap Wallet va segunda, detras de MetaMask
     APPS.filter((a) => a.navegador).forEach((a, i) => {
-      // Binance en Android no abre webs desde un enlace ("Ce lien ne fonctionne pas"): se copia el enlace
-      // de esta pagina para pegarlo en el navegador de Binance Wallet
-      if (a.id === "binance" && ANDROID) lista.appendChild(filaCopiar(a.nombre, a));
-      else {
+      // Binance en Android no abre webs desde un enlace ("Ce lien ne fonctionne pas"): conecta con su conector oficial
+      if (a.id === "binance" && ANDROID) {
+        const f = fila("button", a, "Opens Binance to approve the connection", { icono: a.icono });
+        f.addEventListener("click", usarBinance);
+        lista.appendChild(f);
+        cargaBinance().catch(() => {});   // listo antes del toque, para que Binance se abra en seguida
+      } else {
         const f = fila("a", a, "Opens this page in the app", { icono: a.icono });
         f.href = a.navegador();
         f.rel = "noopener";
@@ -695,11 +698,38 @@
     alConectar(proveedor, { wc: false });
   }
 
+  /* Binance Wallet en Android: su app no abre webs desde un enlace, asi que se conecta con el conector oficial de
+     Binance (@binance/w3w-ethereum-provider, empaquetado en ../binance-w3w.min.js). Se abre Binance para aceptar la
+     conexion y cada firma se aprueba alli; va por los servidores de Binance, no por WalletConnect. Solo se carga
+     en Android al abrir esta ventana. */
+  const BN_JS = "../binance-w3w.min.js?v=20261031a";
+  // abre Binance Wallet en Android (la ruta de la libreria de Binance): para volver a la app al firmar
+  const BN_ABRIR = "bnc://app.binance.com/mp/app?appId=xoqXxUSMRccLCrZNRebmzj&startPagePath=L3BhZ2VzL2Rhc2hib2FyZC1uZXcvaW5kZXg=";
+  let bn = null;
+  const cargaBinance = () => cargar(BN_JS, () => !!window.BinanceW3W);
+  async function usarBinance() {
+    estado("Opening Binance Wallet… approve the connection there, then come back to this tab.");
+    try {
+      await cargaBinance();
+      if (!bn) bn = window.BinanceW3W.getProvider({ chainId: 1, showQrCodeModal: true, lng: "en", rpc: { 1: RPC } });
+      const cuentas = await bn.request({ method: "eth_requestAccounts" });
+      if (!cuentas || !cuentas.length) { estado("Binance Wallet did not connect. Try again.", true); return; }
+      try {
+        const red = await bn.request({ method: "eth_chainId" });
+        if (Number(red) !== 1) await bn.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x1" }] });
+      } catch (e) {}
+      usarInyectada(bn);
+    } catch (e) {
+      console.warn("[sectora] Binance Wallet", e);
+      estado("Binance Wallet did not connect. Try again.", true);
+    }
+  }
+
   /** Vista con la wallet ya conectada: a quien y como desconectar. */
   function vistaConectada(direccion) {
     caja.textContent = "";
     cabecera("Connected");
-    const via = conectadoCon && conectadoCon === wc ? nombreSesion(wc) : "Browser wallet";
+    const via = conectadoCon && conectadoCon === wc ? nombreSesion(wc) : conectadoCon && conectadoCon === bn ? "Binance Wallet" : "Browser wallet";
     estado(via + " · " + direccion.slice(0, 6) + "…" + direccion.slice(-4));
     const b = nodo("button", "wpick-copy mono", "Disconnect");
     b.type = "button";
@@ -747,6 +777,12 @@
       olvidarWC();
       return;
     }
+    if (p && p === bn) {
+      try { bn.disconnect(); } catch (e) {}
+      conectadoCon = null;
+      alDesconectar();
+      return;
+    }
     if (p && p.request) {
       try { await p.request({ method: "wallet_revokePermissions", params: [{ eth_accounts: {} }] }); } catch (e) {}
     }
@@ -759,7 +795,7 @@
   // ---------------------------------------------------------------
   function firmando(si) {
     let b = $("wcFirma");
-    if (!si || !conectadoCon || conectadoCon !== wc) {
+    if (!si || !conectadoCon || (conectadoCon !== wc && conectadoCon !== bn)) {
       if (b) b.hidden = true;
       return;
     }
@@ -770,6 +806,12 @@
       btn.parentNode.appendChild(b);
     }
     if (!b) return;
+    if (conectadoCon === bn) {
+      b.href = BN_ABRIR;
+      b.textContent = "Open Binance Wallet to confirm";
+      b.hidden = false;
+      return;
+    }
     const nombre = nombreSesion(wc);
     const href = MOVIL ? enlaceApp(wc) : null;
     if (href) {
