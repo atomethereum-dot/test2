@@ -34,6 +34,7 @@
   const DEEPLINK = "WALLETCONNECT_DEEPLINK_CHOICE"; // el SDK la lee para abrir la app al firmar
 
   const ua = navigator.userAgent || "";
+  const ANDROID = /Android/i.test(ua);
   const MOVIL = /Android|iPhone|iPad|iPod/i.test(ua) ||
     (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);   // iPadOS se presenta como Mac
 
@@ -380,8 +381,9 @@
   }
 
   // fila que copia el enlace de esta pagina, con su boton "Copy link" a la vista
-  function filaCopiar(nombre) {
-    const f = fila("button", { id: "otra", nombre }, "Copy the link and open it in your wallet’s browser", { icono: ENLACE });
+  function filaCopiar(nombre, app) {
+    const f = fila("button", app ? { id: app.id + "-copia", nombre, logo: app.logo } : { id: "otra", nombre },
+      "Copy the link and open it in your wallet’s browser", { icono: app ? app.icono : ENLACE });
     const b = nodo("span", "wpick-copybtn mono", "Copy link");
     f.querySelector(".wpick-go").remove();
     f.querySelector(".wpick-txt").appendChild(b);   // debajo del texto, que se lee entero
@@ -465,10 +467,15 @@
     });
     // Uniswap Wallet va segunda, detras de MetaMask
     APPS.filter((a) => a.navegador).forEach((a, i) => {
-      const f = fila("a", a, "Opens this page in the app", { icono: a.icono });
-      f.href = a.navegador();
-      f.rel = "noopener";
-      lista.appendChild(f);
+      // Binance en Android no abre webs desde un enlace ("Ce lien ne fonctionne pas"): se copia el enlace
+      // de esta pagina para pegarlo en el navegador de Binance Wallet
+      if (a.id === "binance" && ANDROID) lista.appendChild(filaCopiar(a.nombre, a));
+      else {
+        const f = fila("a", a, "Opens this page in the app", { icono: a.icono });
+        f.href = a.navegador();
+        f.rel = "noopener";
+        lista.appendChild(f);
+      }
       if (i === 0) { const u = nodo("div", "wpick-unibox"); lista.appendChild(filaUni(u)); lista.appendChild(u); panelUni(u); }
     });
     // cualquier otra wallet con navegador: copiar el enlace y abrirlo ahi (sin WalletConnect)

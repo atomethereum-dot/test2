@@ -41,6 +41,18 @@
     zh: ["在 App 中打开此页面", "下载"], ja: ["アプリでこのページを開きます", "ダウンロード"], ko: ["앱에서 이 페이지를 엽니다", "다운로드"],
     ar: ["يفتح هذه الصفحة في التطبيق", "تنزيل"], hi: ["यह पेज ऐप में खोलता है", "डाउनलोड करें"]
   };
+  // Binance en Android no abre webs desde un enlace: su fila copia el enlace para pegarlo en su navegador
+  var WC2 = {"en": ["Copy the link and open it in your wallet’s browser", "Copied ✓"], "es": ["Copia el enlace y ábrelo en el navegador de tu wallet", "Copiado ✓"], "pt": ["Copie o link e abra no navegador da sua carteira", "Copiado ✓"], "fr": ["Copiez le lien et ouvrez-le dans le navigateur de votre wallet", "Copié ✓"], "de": ["Kopiere den Link und öffne ihn im Browser deiner Wallet", "Kopiert ✓"], "ru": ["Скопируйте ссылку и откройте её в браузере кошелька", "Скопировано ✓"], "zh": ["复制链接并在钱包的浏览器中打开", "已复制 ✓"], "ja": ["リンクをコピーしてウォレットのブラウザで開いてください", "コピーしました ✓"], "ko": ["링크를 복사해 지갑의 브라우저에서 여세요", "복사됨 ✓"], "ar": ["انسخ الرابط وافتحه في متصفح محفظتك", "تم النسخ ✓"], "hi": ["लिंक कॉपी करें और अपने वॉलेट के ब्राउज़र में खोलें", "कॉपी हो गया ✓"]};
+  var ANDROID = /Android/i.test(navigator.userAgent || "");
+  document.addEventListener("click", function (ev) {
+    var a = ev.target && ev.target.closest && ev.target.closest(".el-wl a[data-copia]");
+    if (!a) return;
+    ev.preventDefault();
+    var tc = WC2[lang()] || WC2.en, sm = a.querySelector("small"), u = location.origin + "/airdrop/";
+    (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(function () {
+      sm.textContent = tc[1]; setTimeout(function () { sm.textContent = tc[0]; }, 2000);
+    }, function () { sm.textContent = u; });
+  });
   var logosPedidos = false;
   function pideLogos() {
     if (window.SECTORA_WALLET_LOGOS || logosPedidos) return;
@@ -62,6 +74,7 @@
   function filaW(w) {
     var tw = WT[lang()] || WT.en, k = KEY[w[0]];
     var ico = w[0] === "Phantom" ? '<img alt="" src="' + PHANTOM + '">' : LOGO_EXTRA[w[0]] ? '<img alt="" src="' + LOGO_EXTRA[w[0]] + '">' : '<span class="ph" data-logo="' + (k || "") + '">' + w[0].slice(0, 1) + "</span>";
+    if (w[1] === "copia") return '<a href="#" data-copia="1" data-w="' + esc(w[0]) + '">' + ico + "<span><b>" + w[0] + "</b><small>" + (WC2[lang()] || WC2.en)[0] + "</small></span><i>→</i></a>";
     return '<a href="' + esc(w[1]) + '" rel="noopener" data-w="' + esc(w[0]) + '">' + ico + "<span><b>" + w[0] + "</b><small>" + (MOVIL ? tw[0] : tw[1]) + "</small></span><i>→</i></a>";
   }
   function wallets() {
@@ -75,7 +88,7 @@
       "&startPageQuery=" + btoa("url=" + u + "&defaultChainId=1");
     var bu = /Android/i.test(navigator.userAgent) ? bnc : "https://app.binance.com/en/download?_dp=" + btoa(bnc);
     return [["MetaMask", MM], ["Trust Wallet", "https://link.trustwallet.com/open_url?coin_id=60&url=" + e(u)], ["Phantom", "https://phantom.app/ul/browse/" + e(u) + "?ref=" + e(location.origin)],
-      ["Binance Wallet", bu], ["Coinbase Wallet", "https://go.cb-w.com/dapp?cb_url=" + e(u)], ["OKX Wallet", "https://www.okx.com/download?deeplink=" + e("okx://wallet/dapp/url?dappUrl=" + e(u))],
+      ["Binance Wallet", ANDROID ? "copia" : bu], ["Coinbase Wallet", "https://go.cb-w.com/dapp?cb_url=" + e(u)], ["OKX Wallet", "https://www.okx.com/download?deeplink=" + e("okx://wallet/dapp/url?dappUrl=" + e(u))],
       ["Bitget Wallet", "https://bkcode.vip?action=dapp&url=" + e(u)], ["TokenPocket", "tpdapp://open?params=" + e(JSON.stringify({ url: u, chain: "ETH", source: "Sectora" }))],
       ["imToken", "imtokenv2://navigate/DappView?url=" + e(u)], ["Rainbow", "https://rnbwapp.com/dapp?url=" + e(u)],
       ["Rabby", "https://go.rabby.io/mobile/index.html?_cmd=open-dapp&dapp=" + e(u)], ["Magic Eden", "magiceden://browser/" + e(u)],

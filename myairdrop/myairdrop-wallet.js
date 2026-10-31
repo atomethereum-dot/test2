@@ -19,6 +19,7 @@
   var PREFIJO = "sect-myairdrop";                             // almacen propio de WalletConnect
   var MARCA = "ma-wc";                                        // hay (o hubo) una sesion de WalletConnect aqui
   var ua = navigator.userAgent || "";
+  var ANDROID = /Android/i.test(ua);
   var MOVIL = /Android|iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, en el movil sin wallet (Chrome,
      Safari...) no se conecta por WalletConnect: se abre la pagina en la app de la wallet, donde no sale ninguna
@@ -293,8 +294,8 @@
     (navigator.clipboard ? navigator.clipboard.writeText(AQUI) : Promise.reject()).then(ok, function () { estado(AQUI); });
   }
   // fila que copia el enlace de esta pagina, con su boton "Copiar enlace" a la vista
-  function filaCopiar(nombre) {
-    var f = fila("button", { id: "otra" }, nombre, t("soloOtherS"), ENLACE);
+  function filaCopiar(nombre, app) {
+    var f = fila("button", app ? { id: app.id + "-copia", logo: app.logo } : { id: "otra" }, nombre, t("soloOtherS"), app ? app.icono : ENLACE);
     var b = nodo("span", "maw-cb mono", t("copyBtn")); f.querySelector(".maw-g").remove(); f.querySelector(".maw-t").appendChild(b);   // debajo del texto
     f.addEventListener("click", function () { copiaAqui(); b.textContent = t("copiedBtn"); setTimeout(function () { b.textContent = t("copyBtn"); }, 2000); });
     return f;
@@ -347,7 +348,9 @@
     inyectadas().forEach(function (w) { var f = fila("button", { id: "iny" }, w.nombre, t("det"), w.icono); f.addEventListener("click", function () { usar(w.proveedor); }); lista.appendChild(f); });
     // Uniswap Wallet va segunda, detras de MetaMask
     APPS.filter(function (a) { return a.navegador; }).forEach(function (a, i) {
-      var f = fila("a", a, a.nombre, t("brw"), a.icono); f.href = a.navegador(); f.rel = "noopener"; lista.appendChild(f);
+      // Binance en Android no abre webs desde un enlace: se copia el enlace para pegarlo en su navegador
+      if (a.id === "binance" && ANDROID) lista.appendChild(filaCopiar(a.nombre, a));
+      else { var f = fila("a", a, a.nombre, t("brw"), a.icono); f.href = a.navegador(); f.rel = "noopener"; lista.appendChild(f); }
       if (i === 0) { var u = nodo("div", "maw-ux"); lista.appendChild(filaUni(u)); lista.appendChild(u); panelUni(u); }
     });
     // cualquier otra wallet con navegador: copiar el enlace y abrirlo ahi (sin WalletConnect)

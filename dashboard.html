@@ -3593,6 +3593,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
   const MARCA = 'sectora:wc', ELEGIDA = 'sectora:wc-app', PEND = 'sectora:wc-pending';
   const DEEPLINK = 'WALLETCONNECT_DEEPLINK_CHOICE';   /* el SDK la lee para abrir la app al firmar */
   const ua = navigator.userAgent || '';
+  const ANDROID = /Android/i.test(ua);
   const MOVIL = /Android|iPhone|iPad|iPod/i.test(ua) ||
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);   /* iPadOS se presenta como Mac */
   /* esta misma pagina con su ?ref= de invitacion, para abrirla dentro del navegador de una wallet */
@@ -3849,9 +3850,9 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     (navigator.clipboard ? navigator.clipboard.writeText(aqui()) : Promise.reject()).then(ok, () => estado(aqui()));
   }
   /* fila que copia el enlace de esta pagina, con su boton "Copiar enlace" a la vista */
-  function filaCopiar(nombre){
+  function filaCopiar(nombre, app){
     const copiar = t('hashdash.wallet.copyBtn','Copy link');
-    const f = fila({ icono: ENLACE, nombre, sub: t('hashdash.wallet.soloOtherS','Copy the link and open it in your wallet’s browser'), etiqueta: copiar });
+    const f = fila({ icono: app ? app.icono : ENLACE, logo: app && app.logo, nombre, sub: t('hashdash.wallet.soloOtherS','Copy the link and open it in your wallet’s browser'), etiqueta: copiar });
     const g = f.querySelector('.tag'); g.classList.add('copy');
     f.querySelector('.wsel-t').appendChild(g);   /* debajo del texto, que se lee entero */
     f.addEventListener('click', () => {
@@ -3927,7 +3928,9 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     /* sin data-app: pintarUri no las toca y siguen abriendo la pagina dentro de la app (sin WalletConnect).
        Uniswap Wallet va segunda, detras de MetaMask */
     APPS.filter(a => a.navegador).forEach((a, i) => {
-      lista.appendChild(fila({ icono: a.icono, logo: a.logo, nombre: a.nombre,
+      /* Binance en Android no abre webs desde un enlace ("Ce lien ne fonctionne pas"): se copia el enlace
+         de esta pagina para pegarlo en el navegador de Binance Wallet */
+      lista.appendChild(a.id === 'binance' && ANDROID ? filaCopiar(a.nombre, a) : fila({ icono: a.icono, logo: a.logo, nombre: a.nombre,
         sub: t('hashdash.wallet.wOpensHere','Opens this page in the app'), enlace: a.navegador() }));
       if(i === 0){ const u = document.createElement('div'); lista.appendChild(filaUni(u)); lista.appendChild(u); panelUni(u); }
     });
