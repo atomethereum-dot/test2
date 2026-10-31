@@ -222,6 +222,7 @@
     if (MOVIL) recordarApp(p); else guardar(DEEPLINK, null);   // en el PC el SDK no debe abrir apps
     cerrar();
     alConectar(p, { wc: true, nombre: nombreSesion(p) });
+    revisaRed(p);
   }
 
   function olvidarWC() {
@@ -230,6 +231,7 @@
     guardar(DEEPLINK, null);
     if (conectadoCon && conectadoCon === wc) {
       conectadoCon = null;
+      botonRed(null);
       alDesconectar();
     }
   }
@@ -696,6 +698,37 @@
     cerrar();
     conectadoCon = proveedor;
     alConectar(proveedor, { wc: false });
+    revisaRed(proveedor);
+  }
+
+  /* Red equivocada (Binance Wallet entra por defecto en BNB Chain): un boton bajo "Connect wallet" pide a la wallet
+     el cambio a Ethereum y la abre para aceptarlo. Solo cambia la red de la wallet: no toca el staking. */
+  async function revisaRed(p) {
+    let red = null;
+    try { red = await p.request({ method: "eth_chainId" }); } catch (e) { return; }
+    if (conectadoCon === p) botonRed(Number(red) === 1 ? null : p);
+  }
+  function botonRed(p) {
+    let b = $("redBtn");
+    if (!p) { if (b) b.hidden = true; return; }
+    const btn = $("connectBtn");
+    if (!b && btn && btn.parentNode) {
+      b = nodo("button", "btn btn-ghost wide mono", "Switch to Ethereum");
+      b.type = "button";
+      b.id = "redBtn";
+      btn.insertAdjacentElement("afterend", b);
+    }
+    if (!b) return;
+    b.onclick = async () => {
+      try {
+        await p.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x1" }] });
+        botonRed(null);
+        if (conectadoCon === p) alConectar(p, { wc: p === wc });   // vuelve a leer la cuenta, ya en Ethereum
+      } catch (e) {
+        console.warn("[sectora] cambio de red", e);
+      }
+    };
+    b.hidden = false;
   }
 
   /* Binance Wallet en Android: su app no abre webs desde un enlace, asi que se conecta con el conector oficial de
@@ -772,6 +805,7 @@
   async function desconectar() {
     const p = conectadoCon;
     cerrar();
+    botonRed(null);
     if (p && p === wc) {
       try { await wc.disconnect(); } catch (e) {}
       olvidarWC();
