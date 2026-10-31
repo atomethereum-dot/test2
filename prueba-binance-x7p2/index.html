@@ -19,41 +19,34 @@
 </head>
 <body>
 <main>
-  <h1>Prueba: abrir Sectora en Binance Wallet</h1>
-  <p>Abre esta página en Chrome del Android (no dentro de Binance). Pulsa el botón 1; si sale un error o no pasa nada, vuelve aquí y pulsa el 2, y así. Apunta el número que abra sectoraorg.com/staking dentro de Binance.</p>
-  <p>Los botones 9 a 12 solo intentan abrir Binance Wallet (sin la web): apunta cuál abre la billetera Web3 de Binance sin error.</p>
+  <h1>Prueba Binance · ronda 2</h1>
+  <p>Abre esta página en Chrome del Android (no dentro de Binance). Pulsa el botón 1; vuelve aquí y pulsa el 2, y así hasta el 12. Para cada uno apunta qué pasa: error, abre solo la wallet, o abre sectoraorg.com/staking dentro de Binance.</p>
   <div id="l"></div>
 </main>
 <script>
 (function () {
   var U = "https://sectoraorg.com/staking/";
-  var APP = "yFK5FCqYprrXDiVFbhyRx7";
   var enc = encodeURIComponent;
   var b64 = function (s) { return btoa(s); };
   var b64url = function (s) { return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
-  var PATH = b64("/pages/browser/index"), PATHu = b64url("/pages/browser/index");
-  var Q = "url=" + U + "&defaultChainId=1", Qe = "url=" + enc(U) + "&defaultChainId=1";
-  var mp = "app.binance.com/mp/app?appId=" + APP;
-  var oficial = mp + "&startPagePath=" + PATH + "&startPageQuery=" + b64(Q);
-  var segura = mp + "&startPagePath=" + PATHu + "&startPageQuery=" + b64url(Q);
-  var codif = mp + "&startPagePath=" + enc(PATH) + "&startPageQuery=" + enc(b64(Qe));
+  /* la miniapp que SI abre en Android (panel de la wallet, la de @binance/w3w-utils) y la del navegador */
+  var PANEL = "xoqXxUSMRccLCrZNRebmzj", NAVEGADOR = "yFK5FCqYprrXDiVFbhyRx7";
+  var DASH = "L3BhZ2VzL2Rhc2hib2FyZC1uZXcvaW5kZXg=", BROWSER = b64("/pages/browser/index");
+  var mp = function (app, path, q) { return "app.binance.com/mp/app?appId=" + app + "&startPagePath=" + path + (q ? "&startPageQuery=" + q : ""); };
   var intent = function (q) { return "intent://" + q + "#Intent;scheme=bnc;package=com.binance.dev;end"; };
-  var DASH = "L3BhZ2VzL2Rhc2hib2FyZC1uZXcvaW5kZXg=";   // /pages/dashboard-new/index, tal cual en @binance/w3w-utils
-  var WALLET = "app.binance.com/mp/app?appId=xoqXxUSMRccLCrZNRebmzj&startPagePath=" + DASH;
   var V = [
-    ["bnc:// oficial", "bnc://" + oficial],
-    ["bnc:// base64 seguro (sin =)", "bnc://" + segura],
-    ["bnc:// codificado (como Reown)", "bnc://" + codif],
-    ["intent de Android, oficial", intent(oficial)],
-    ["intent de Android, base64 seguro", intent(segura)],
-    ["intent de Android, codificado", intent(codif)],
-    ["web app.binance.com/?_dp (formato Android de Binance)", "https://app.binance.com/?_dp=" + b64url("/mp/app?appId=" + APP + "&startPagePath=" + PATH + "&startPageQuery=" + b64url(Q))],
-    ["web /en/download?_dp oficial (el del iPhone)", "https://app.binance.com/en/download?_dp=" + b64("bnc://" + oficial)],
-    /* solo abrir Binance Wallet (sin la web): la ruta que usa la libreria de Binance en Android */
-    ["SOLO ABRIR Binance Wallet (bnc://, la de Binance para Android)", "bnc://" + WALLET],
-    ["SOLO ABRIR Binance Wallet (intent de Android)", intent(WALLET)],
-    ["SOLO ABRIR Binance Wallet (web ?_dp)", "https://app.binance.com/?_dp=" + b64url("/mp/app?appId=xoqXxUSMRccLCrZNRebmzj&startPagePath=" + DASH)],
-    ["SOLO ABRIR la app de Binance", "bnc://app.binance.com/"]
+    ["miniapp del panel + página del navegador (base64)", "bnc://" + mp(PANEL, BROWSER, b64("url=" + U + "&defaultChainId=1"))],
+    ["miniapp del panel + página del navegador (base64 seguro)", "bnc://" + mp(PANEL, BROWSER, b64url("url=" + U + "&defaultChainId=1"))],
+    ["miniapp del panel + url", "bnc://" + mp(PANEL, DASH, b64url("url=" + U))],
+    ["miniapp del panel + url + isDeepLink", "bnc://" + mp(PANEL, DASH, b64url("url=" + enc(U) + "&isDeepLink=true"))],
+    ["miniapp del panel + dappUrl", "bnc://" + mp(PANEL, DASH, b64url("dappUrl=" + enc(U) + "&isDeepLink=true"))],
+    ["miniapp del panel + link", "bnc://" + mp(PANEL, DASH, b64url("link=" + enc(U) + "&isDeepLink=true"))],
+    ["intent: miniapp del panel + página del navegador", intent(mp(PANEL, BROWSER, b64("url=" + U + "&defaultChainId=1")))],
+    ["miniapp del navegador + isDeepLink (base64 seguro)", "bnc://" + mp(NAVEGADOR, BROWSER, b64url("url=" + U + "&defaultChainId=1&isDeepLink=true"))],
+    ["web ?_dp: miniapp del navegador + isDeepLink", "https://app.binance.com/?_dp=" + b64url("/mp/app?appId=" + NAVEGADOR + "&startPagePath=" + BROWSER + "&startPageQuery=" + b64url("url=" + U + "&defaultChainId=1&isDeepLink=true"))],
+    ["ruta cedefi/browser", "bnc://app.binance.com/cedefi/browser?url=" + enc(U)],
+    ["ruta cedefi/dapp", "bnc://app.binance.com/cedefi/dapp?url=" + enc(U)],
+    ["ruta web3/dapp", "bnc://app.binance.com/web3/dapp?url=" + enc(U)]
   ];
   var l = document.getElementById("l");
   V.forEach(function (v, i) {
