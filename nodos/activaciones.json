@@ -132,6 +132,13 @@
       "c": "Caracas, VE",
       "la": 10.5,
       "lo": -66.9
+    },
+    "0x2d5129ed868ea6cd21728d5a226fbf4ca019123e": {
+      "t": 1793474316000,
+      "n": "Sectora Node Caracas",
+      "c": "Caracas, VE",
+      "la": 10.5,
+      "lo": -66.9
     }
   }
 }
