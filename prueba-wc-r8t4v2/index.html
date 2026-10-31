@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Prueba de conexión</title>
+<style>
+  :root{--bg:#07090f;--card:#0d1220;--rule:rgba(255,255,255,.1);--ink:#f3f5f9;--ink2:#c3c9d6;--ink3:#8d95a8;--blue:#1569ff;--blue2:#7fb0ff;--warn:#e8b45c}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  main{max-width:460px;margin:0 auto;padding:28px 16px 40px}
+  h1{margin:0 0 6px;font-size:21px;font-weight:600}
+  .sub{margin:0 0 18px;color:var(--ink3);font-size:13.5px}
+  .st{margin:0 0 16px;padding:12px 13px;border:1px solid var(--rule);background:var(--card);color:var(--ink2);font-size:14px}
+  .st.err{border-color:rgba(232,180,92,.45);color:#f1d6a4}
+  .st.ok{border-color:rgba(70,200,130,.45);color:#9fe3bd}
+  .apps{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
+  .apps a{display:flex;justify-content:space-between;align-items:center;padding:14px 4px;border-bottom:1px solid var(--rule);color:var(--ink);text-decoration:none;font-size:16px}
+  .apps a span{color:var(--blue2);font-size:13px}
+  .apps a[aria-disabled=true]{opacity:.4;pointer-events:none}
+  button{display:block;width:100%;margin:12px 0 0;padding:12px;border:1px solid var(--rule);background:none;color:var(--ink2);font:inherit;font-size:14px;cursor:pointer}
+  button:disabled{opacity:.4;cursor:default}
+  .qr{width:min(240px,100%);margin:18px auto 8px;padding:12px;background:#fff;border-radius:10px}
+  .qr:empty{aspect-ratio:1;background:rgba(255,255,255,.06)}
+  .qr svg{display:block;width:100%;height:auto}
+  .nota{margin:6px 0 0;color:var(--ink3);font-size:13px;text-align:center}
+  .mira{margin:18px 0 0;padding:12px 13px;border:1px solid rgba(232,180,92,.35);background:rgba(232,180,92,.07);color:#f1d6a4;font-size:13.5px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Prueba de conexión</h1>
+  <p class="sub">Página privada para comprobar si la alerta sigue saliendo al conectar con sectoraorg.com. Solo pide conectar y lee la dirección; no envía nada.</p>
+  <p class="st" id="st">Preparando la conexión…</p>
+
+  <div class="apps" id="apps"></div>
+  <button type="button" id="copy" disabled>Copiar enlace de conexión</button>
+
+  <div class="qr" id="qr"></div>
+  <p class="nota">En el ordenador: escanea este QR con la wallet del móvil.</p>
+
+  <p class="mira">Mira la pantalla de tu wallet <b>antes de aprobar</b>: si sale la alerta roja, sigue marcado; recházala. Si no sale, ya la quitaron.</p>
+
+  <button type="button" id="nueva">Nueva prueba</button>
+</main>
+<script>
+(function () {
+  /* misma configuracion que las paginas oficiales (mismo proyecto y dominio), con su propio almacen para no
+     tocar las sesiones del Dashboard, el Staking o Mi Airdrop */
+  var PROYECTO = "a491fc0784a2751d886adfc7a687c8cb";
+  var WC_JS = "/walletconnect-provider.min.js?v=20260809a", QR_JS = "/qrcode-generator.min.js?v=20260809a";
+  var APPS = [["MetaMask", "metamask://"], ["Trust Wallet", "trust://"], ["Uniswap Wallet", "uniswap://"], ["Rainbow", "rainbow://"], ["Ledger Live", "ledgerlive://"]];
+  var $ = function (id) { return document.getElementById(id); };
+  var prov = null, uri = "";
+
+  function estado(t, clase) { var e = $("st"); e.textContent = t; e.className = "st" + (clase ? " " + clase : ""); }
+  function carga(src, listo) {
+    if (listo()) return Promise.resolve();
+    return new Promise(function (ok, mal) {
+      var s = document.createElement("script"); s.src = src;
+      s.onload = function () { listo() ? ok() : mal(new Error("vacio: " + src)); };
+      s.onerror = function () { mal(new Error("no carga: " + src)); };
+      document.head.appendChild(s);
+    });
+  }
+
+  /* filas de apps: enlaces directos, listos antes del toque (en el iPhone la app solo se abre asi) */
+  APPS.forEach(function (a) {
+    var l = document.createElement("a");
+    l.setAttribute("aria-disabled", "true"); l.dataset.esquema = a[1];
+    l.textContent = a[0];
+    var s = document.createElement("span"); s.textContent = "Abrir →"; l.appendChild(s);
+    l.addEventListener("click", function () { estado("Mira tu wallet: aprueba o rechaza y vuelve a esta pestaña."); });
+    $("apps").appendChild(l);
+  });
+
+  function pinta() {
+    document.querySelectorAll("#apps a").forEach(function (l) {
+      l.href = l.dataset.esquema + "wc?uri=" + encodeURIComponent(uri);
+      l.removeAttribute("aria-disabled");
+    });
+    $("copy").disabled = false;
+    carga(QR_JS, function () { return !!window.SectoraQR; }).then(function () {
+      var q = window.SectoraQR(0, "M"); q.addData(uri); q.make();
+      $("qr").innerHTML = q.createSvgTag({ cellSize: 4, margin: 2 });
+    }).catch(function () { estado("No se pudo dibujar el QR. Usa «Copiar enlace de conexión».", "err"); });
+    estado("Listo. En el móvil pulsa tu wallet; en el ordenador escanea el QR.");
+  }
+
+  function conectado() {
+    var d = prov && prov.accounts && prov.accounts[0];
+    if (!d) return;
+    estado("Conectado: " + d.slice(0, 6) + "…" + d.slice(-4) + ". Pulsa «Nueva prueba» para repetir.", "ok");
+  }
+
+  function iniciar() {
+    estado("Preparando la conexión…");
+    carga(WC_JS, function () { return !!window.WalletConnectEthereumProvider; })
+      .then(function () {
+        return window.WalletConnectEthereumProvider.EthereumProvider.init({
+          projectId: PROYECTO, chains: [1], optionalChains: [1],
+          rpcMap: { 1: "https://ethereum-rpc.publicnode.com" },
+          showQrModal: false, customStoragePrefix: "sectora-prueba-wc",
+          metadata: { name: "Sectora", description: "Prueba de conexión", url: location.origin,
+            icons: [location.origin + "/icons/v2/icon-192.png"] }
+        });
+      })
+      .then(function (p) {
+        prov = p;
+        p.on("display_uri", function (u) { uri = u; pinta(); });
+        p.on("connect", conectado);
+        if (p.session && p.accounts && p.accounts.length) { conectado(); return; }
+        return p.connect().then(conectado);
+      })
+      .catch(function (e) { estado("No se conectó (" + (e && e.message ? e.message : e) + "). Pulsa «Nueva prueba».", "err"); });
+  }
+
+  $("copy").addEventListener("click", function () {
+    if (!uri) return;
+    (navigator.clipboard ? navigator.clipboard.writeText(uri) : Promise.reject()).then(function () {
+      $("copy").textContent = "Copiado ✓";
+      setTimeout(function () { $("copy").textContent = "Copiar enlace de conexión"; }, 1800);
+    }, function () { estado(uri); });
+  });
+  $("nueva").addEventListener("click", function () {
+    var fin = prov && prov.session ? prov.disconnect().catch(function () {}) : Promise.resolve();
+    fin.then(function () { location.reload(); });
+  });
+
+  iniciar();
+})();
+</script>
+</body>
+</html>
