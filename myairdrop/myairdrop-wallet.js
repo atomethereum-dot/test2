@@ -38,7 +38,7 @@
     { id: "i-uniswap", nombre: "Uniswap Wallet", icono: LOGO_EXTRA.uniswap, m: /uniswap/i, web: UNI_WEB },
     { id: "i-phantom", nombre: "Phantom", icono: PHANTOM, m: /phantom/i, web: "https://phantom.com/download" },
     { id: "i-trust", nombre: "Trust Wallet", logo: "trust", m: /trust/i, web: "https://trustwallet.com/download" },
-    { id: "i-binance", nombre: "Binance Wallet", logo: "binance", m: /binance/i },
+    { id: "i-binance", nombre: "Binance Wallet", logo: "binance", m: /binance/i, web: "https://chromewebstore.google.com/detail/binance-wallet/cadiboklkpojfamcoggejbbdjcoiljjk" },   // su extension oficial de Chrome
     { id: "i-coinbase", nombre: "Coinbase Wallet", logo: "coinbase", m: /coinbase/i, web: "https://www.coinbase.com/wallet/downloads" },
     { id: "i-okx", nombre: "OKX Wallet", logo: "okx", m: /okx/i, web: "https://www.okx.com/web3" },
     { id: "i-bitget", nombre: "Bitget Wallet", logo: "bitget", m: /bitget/i, web: "https://web3.bitget.com/" },

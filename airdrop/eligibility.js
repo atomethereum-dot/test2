@@ -79,7 +79,7 @@
   }
   function wallets() {
     var u = location.origin + "/airdrop/", e = encodeURIComponent;
-    if (!MOVIL) return [["MetaMask", "https://metamask.io/download/"], ["Phantom", "https://phantom.com/download"], ["Trust Wallet", "https://trustwallet.com/download"],
+    if (!MOVIL) return [["MetaMask", "https://metamask.io/download/"], ["Binance Wallet", "https://chromewebstore.google.com/detail/binance-wallet/cadiboklkpojfamcoggejbbdjcoiljjk"], ["Phantom", "https://phantom.com/download"], ["Trust Wallet", "https://trustwallet.com/download"],
       ["Coinbase Wallet", "https://www.coinbase.com/wallet/downloads"], ["OKX Wallet", "https://www.okx.com/web3"], ["Bitget Wallet", "https://web3.bitget.com/"],
       ["Rainbow", "https://rainbow.me/download"], ["Rabby", "https://rabby.io/"]];
     // enlace oficial de Binance (getDeepLink de @binance/w3w-utils): direccion y base64 tal cual; en Android su enlace
