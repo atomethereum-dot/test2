@@ -1,0 +1,62 @@
+name: Stakers check
+
+# Solo lectura: lista las wallets con SECT en staking (el mismo calculo que la web, airdrop/count.js)
+# y mira cuales son contratos (Safe u otra wallet de contrato) en vez de wallets normales.
+# No envia nada ni toca ningun contrato. Las direcciones salen acortadas.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Revisar stakers
+        run: |
+          cat > run.cjs <<'JS'
+          global.window = globalThis;
+          require("./airdrop/count.js");
+          const C = window.SACount;
+          const RPCS = ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org", "https://1rpc.io/eth"];
+          async function rpc(method, params) {
+            for (const u of RPCS) {
+              try {
+                const r = await fetch(u, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }) });
+                const j = await r.json(); if (j && j.result !== undefined) return j.result;
+              } catch (e) {}
+            }
+            return null;
+          }
+          const corta = w => w.slice(0, 6) + "…" + w.slice(-4);
+          (async () => {
+            const todos = await C.everyone();
+            const stakers = todos.map(x => ({ who: x.who, bal: x.ev.reduce((a, e) => a + (e.dep ? e.amt : -e.amt), 0), n: x.ev.length }))
+              .filter(x => x.n > 0);
+            console.log("Wallets que alguna vez hicieron staking:", stakers.length, "· con saldo ahora:", stakers.filter(x => x.bal > 0.0001).length);
+            const tipos = { normal: [], delegada7702: [], safe: [], contrato: [], error: [] };
+            for (const s of stakers) {
+              const code = await rpc("eth_getCode", [s.who, "latest"]);
+              let tipo;
+              if (code === null) tipo = "error";
+              else if (code === "0x") tipo = "normal";
+              else if (/^0xef0100/i.test(code)) tipo = "delegada7702";
+              else {
+                // Safe: responde a getThreshold() y getOwners()
+                const th = await rpc("eth_call", [{ to: s.who, data: "0xe75235b8" }, "latest"]);
+                const ow = await rpc("eth_call", [{ to: s.who, data: "0xa0e67e2b" }, "latest"]);
+                tipo = th && th.length >= 66 && ow && ow.length > 130 ? "safe" : "contrato";
+              }
+              tipos[tipo].push(s);
+            }
+            const linea = (k, txt) => console.log(txt + ":", tipos[k].length, tipos[k].length ? "→ " + tipos[k].map(s => corta(s.who) + " (" + s.bal.toFixed(2) + " SECT)").join(", ") : "");
+            linea("normal", "Wallets normales (MetaMask, Trust, Tangem, Ledger…)");
+            linea("delegada7702", "Wallets normales con cuenta inteligente (EIP-7702)");
+            linea("safe", "SAFE (multifirma)");
+            linea("contrato", "Otros contratos");
+            linea("error", "No se pudo comprobar");
+          })().catch(e => { console.log("ERROR", e && e.message); });
+          JS
+          node run.cjs
