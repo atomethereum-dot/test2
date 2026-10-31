@@ -57,6 +57,14 @@ jobs:
             linea("safe", "SAFE (multifirma)");
             linea("contrato", "Otros contratos");
             linea("error", "No se pudo comprobar");
+            // cuentas inteligentes (EIP-7702): a que contrato delega cada una (MetaMask, Uniswap, otra wallet...)
+            const dest = {};
+            for (const s of tipos.delegada7702) {
+              const code = await rpc("eth_getCode", [s.who, "latest"]);
+              const d = "0x" + String(code).slice(8, 48).toLowerCase();
+              (dest[d] = dest[d] || []).push(corta(s.who));
+            }
+            Object.keys(dest).forEach(d => console.log("Delegan en", d, ":", dest[d].length, "→", dest[d].join(", ")));
           })().catch(e => { console.log("ERROR", e && e.message); });
           JS
           node run.cjs
