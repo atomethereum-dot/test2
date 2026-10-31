@@ -125,6 +125,13 @@
       "c": "Lisbon, PT",
       "la": 38.7,
       "lo": -9.1
+    },
+    "0x6678d7d0adc5d9e494dbf145fbc1190dbe8056a5": {
+      "t": 1793462198000,
+      "n": "Sectora Node Caracas",
+      "c": "Caracas, VE",
+      "la": 10.5,
+      "lo": -66.9
     }
   }
 }
