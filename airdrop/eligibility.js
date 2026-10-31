@@ -69,12 +69,11 @@
     if (!MOVIL) return [["MetaMask", "https://metamask.io/download/"], ["Phantom", "https://phantom.com/download"], ["Trust Wallet", "https://trustwallet.com/download"],
       ["Coinbase Wallet", "https://www.coinbase.com/wallet/downloads"], ["OKX Wallet", "https://www.okx.com/web3"], ["Bitget Wallet", "https://web3.bitget.com/"],
       ["Rainbow", "https://rainbow.me/download"], ["Rabby", "https://rabby.io/"]];
-    var bn = new URL("bnc://app.binance.com/mp/app");
-    bn.searchParams.set("appId", "yFK5FCqYprrXDiVFbhyRx7"); bn.searchParams.set("startPagePath", btoa("/pages/browser/index"));
-    bn.searchParams.set("startPageQuery", btoa("url=" + e(u) + "&defaultChainId=1"));
-    var bu = new URL("https://app.binance.com/en/download"); bu.searchParams.set("_dp", btoa(bn.toString()));
+    // enlace oficial de Binance (getDeepLink de @binance/w3w-utils): direccion y base64 tal cual
+    var bu = "https://app.binance.com/en/download?_dp=" + btoa("bnc://app.binance.com/mp/app?appId=yFK5FCqYprrXDiVFbhyRx7&startPagePath=" +
+      btoa("/pages/browser/index") + "&startPageQuery=" + btoa("url=" + u + "&defaultChainId=1"));
     return [["MetaMask", MM], ["Trust Wallet", "https://link.trustwallet.com/open_url?coin_id=60&url=" + e(u)], ["Phantom", "https://phantom.app/ul/browse/" + e(u) + "?ref=" + e(location.origin)],
-      ["Binance Wallet", bu.toString()], ["Coinbase Wallet", "https://go.cb-w.com/dapp?cb_url=" + e(u)], ["OKX Wallet", "https://www.okx.com/download?deeplink=" + e("okx://wallet/dapp/url?dappUrl=" + e(u))],
+      ["Binance Wallet", bu], ["Coinbase Wallet", "https://go.cb-w.com/dapp?cb_url=" + e(u)], ["OKX Wallet", "https://www.okx.com/download?deeplink=" + e("okx://wallet/dapp/url?dappUrl=" + e(u))],
       ["Bitget Wallet", "https://bkcode.vip?action=dapp&url=" + e(u)], ["TokenPocket", "tpdapp://open?params=" + e(JSON.stringify({ url: u, chain: "ETH", source: "Sectora" }))],
       ["imToken", "imtokenv2://navigate/DappView?url=" + e(u)], ["Rainbow", "https://rnbwapp.com/dapp?url=" + e(u)],
       ["Rabby", "https://go.rabby.io/mobile/index.html?_cmd=open-dapp&dapp=" + e(u)], ["Magic Eden", "magiceden://browser/" + e(u)],

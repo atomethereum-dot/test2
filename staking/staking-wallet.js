@@ -42,14 +42,12 @@
   const enc = encodeURIComponent;
 
   function binance() {
-    // el formato que usa Reown AppKit para abrir una web en Binance Wallet
-    const dentro = new URL("bnc://app.binance.com/mp/app");
-    dentro.searchParams.set("appId", "yFK5FCqYprrXDiVFbhyRx7");
-    dentro.searchParams.set("startPagePath", btoa("/pages/browser/index"));
-    dentro.searchParams.set("startPageQuery", btoa("url=" + enc(location.href.split("#")[0]) + "&defaultChainId=1"));
-    const u = new URL("https://app.binance.com/en/download");
-    u.searchParams.set("_dp", btoa(dentro.toString()));
-    return u.toString();
+    // el enlace oficial de Binance (getDeepLink de @binance/w3w-utils) para abrir esta web en Binance Wallet:
+    // la direccion y el base64 van tal cual; codificados (%3D...) la app dice que el enlace no funciona
+    const url = location.href.split("#")[0];
+    const bnc = "bnc://app.binance.com/mp/app?appId=yFK5FCqYprrXDiVFbhyRx7&startPagePath=" + btoa("/pages/browser/index") +
+      "&startPageQuery=" + btoa("url=" + url + "&defaultChainId=1");
+    return "https://app.binance.com/en/download?_dp=" + btoa(bnc);
   }
 
   /* nativo: esquema de la app. Con "wc?uri=" detras abre la peticion de
