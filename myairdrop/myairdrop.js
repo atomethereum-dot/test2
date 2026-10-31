@@ -410,7 +410,7 @@
   /* lo generado sube en vivo (como en /airdrop) */
   function live(a) {
     var acc = app.querySelector("[data-acc]"), bar = app.querySelector("[data-bar]"), days = app.querySelector("[data-days]");
-    var n4 = nf(4);
+    var n4 = nf(6);   // 6 decimales, como el Dashboard: la cifra se ve subir sin parar
     var items = a.items || [], fin = items.map(function (it) { return it.s + it.sp; }), done = fin.length ? Math.max.apply(null, fin) : 0;
     var late = fin.filter(function (x) { return x > END; });
     var many = late.length && (late.length < fin.length || late.some(function (x) { return x !== late[0]; }));

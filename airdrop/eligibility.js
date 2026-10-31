@@ -458,7 +458,8 @@
   function stop() { if (timer) { clearInterval(timer); timer = 0; } }
   function live(items, closed, proj) {
     var acc = bd.querySelector("[data-acc]"), bar = bd.querySelector("[data-bar]"), days = bd.querySelector("[data-days]");
-    var nf = new Intl.NumberFormat(L[lang()].loc, { minimumFractionDigits: 4, maximumFractionDigits: 4, useGrouping: "always" });
+    // 6 decimales, como el Dashboard: la cifra se ve subir sin parar
+    var nf = new Intl.NumberFormat(L[lang()].loc, { minimumFractionDigits: 6, maximumFractionDigits: 6, useGrouping: "always" });
     // cada parte se paga por separado al completar su tiempo, desde el lanzamiento de SectoraEVM.
     // END es la fecha prevista (interna) del lanzamiento: nunca se muestra; solo se muestran fechas posteriores
     var first = Math.min.apply(null, items.map(function (it) { return it.s; }));

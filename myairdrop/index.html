@@ -90,6 +90,8 @@ h1 b{font-weight:400}
 .chip.ok{border-color:rgba(62,207,142,.35);color:var(--ok)}
 .chip.warn{border-color:rgba(224,160,48,.4);color:var(--warn)}
 .big{margin:22px 0 0;font-weight:200;font-size:clamp(44px,8vw,104px);letter-spacing:-.04em;line-height:1}
+/* lo ganado va con 6 decimales: en los moviles mas estrechos un poco mas pequeno, para que siempre quepa */
+@media (max-width:400px){.big{font-size:clamp(32px,10.5vw,44px)}}
 .big em{font-style:normal;color:var(--ink)}
 .big small{display:inline-block;margin-inline-start:14px;font-size:clamp(11px,1.1vw,14px);letter-spacing:.14em;color:var(--ink-3);vertical-align:.6em}
 .of{margin:12px 0 0;color:var(--ink-2);font-size:clamp(15px,1.4vw,19px)}
@@ -218,6 +220,6 @@ h1 b{font-weight:400}
 <script src="/airdrop/lang-pick.js?v=2"></script>
 <script src="/myairdrop/i18n-more.js?v=9"></script>
 <script src="/myairdrop/myairdrop-wallet.js?v=13"></script>
-<script src="/myairdrop/myairdrop.js?v=19"></script>
+<script src="/myairdrop/myairdrop.js?v=20"></script>
 </body>
 </html>
