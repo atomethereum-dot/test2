@@ -96,12 +96,13 @@
   function t(k, v) { var l = (document.documentElement.lang || "en").slice(0, 2), s = (T[l] || T.en)[k]; if (s == null) s = T.en[k]; if (v) for (var x in v) s = s.split("{" + x + "}").join(v[x]); return s; }
 
   // el enlace oficial de Binance (getDeepLink de @binance/w3w-utils) para abrir esta web en Binance Wallet:
-  // la direccion y el base64 van tal cual; codificados (%3D...) la app dice que el enlace no funciona
+  // la direccion y el base64 van tal cual; codificados (%3D...) la app dice que el enlace no funciona.
+  // En Android la app solo abre su enlace propio (bnc://), como hace la libreria de Binance; el web es para el iPhone
   function binance() {
     var url = location.href.split("#")[0];
     var bnc = "bnc://app.binance.com/mp/app?appId=yFK5FCqYprrXDiVFbhyRx7&startPagePath=" + btoa("/pages/browser/index") +
       "&startPageQuery=" + btoa("url=" + url + "&defaultChainId=1");
-    return "https://app.binance.com/en/download?_dp=" + btoa(bnc);
+    return /Android/i.test(navigator.userAgent) ? bnc : "https://app.binance.com/en/download?_dp=" + btoa(bnc);
   }
   var APPS = [
     { id: "metamask", nombre: "MetaMask", logo: "metaMask", nativo: "metamask://", navegador: function () { return "https://metamask.app.link/dapp/" + AQUI.replace(/^https?:\/\//, ""); } },

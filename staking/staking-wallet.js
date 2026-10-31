@@ -43,11 +43,12 @@
 
   function binance() {
     // el enlace oficial de Binance (getDeepLink de @binance/w3w-utils) para abrir esta web en Binance Wallet:
-    // la direccion y el base64 van tal cual; codificados (%3D...) la app dice que el enlace no funciona
+    // la direccion y el base64 van tal cual; codificados (%3D...) la app dice que el enlace no funciona.
+    // En Android la app solo abre su enlace propio (bnc://), como hace la libreria de Binance; el web es para el iPhone
     const url = location.href.split("#")[0];
     const bnc = "bnc://app.binance.com/mp/app?appId=yFK5FCqYprrXDiVFbhyRx7&startPagePath=" + btoa("/pages/browser/index") +
       "&startPageQuery=" + btoa("url=" + url + "&defaultChainId=1");
-    return "https://app.binance.com/en/download?_dp=" + btoa(bnc);
+    return /Android/i.test(navigator.userAgent) ? bnc : "https://app.binance.com/en/download?_dp=" + btoa(bnc);
   }
 
   /* nativo: esquema de la app. Con "wc?uri=" detras abre la peticion de

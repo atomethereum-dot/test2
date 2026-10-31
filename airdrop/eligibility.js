@@ -69,9 +69,11 @@
     if (!MOVIL) return [["MetaMask", "https://metamask.io/download/"], ["Phantom", "https://phantom.com/download"], ["Trust Wallet", "https://trustwallet.com/download"],
       ["Coinbase Wallet", "https://www.coinbase.com/wallet/downloads"], ["OKX Wallet", "https://www.okx.com/web3"], ["Bitget Wallet", "https://web3.bitget.com/"],
       ["Rainbow", "https://rainbow.me/download"], ["Rabby", "https://rabby.io/"]];
-    // enlace oficial de Binance (getDeepLink de @binance/w3w-utils): direccion y base64 tal cual
-    var bu = "https://app.binance.com/en/download?_dp=" + btoa("bnc://app.binance.com/mp/app?appId=yFK5FCqYprrXDiVFbhyRx7&startPagePath=" +
-      btoa("/pages/browser/index") + "&startPageQuery=" + btoa("url=" + u + "&defaultChainId=1"));
+    // enlace oficial de Binance (getDeepLink de @binance/w3w-utils): direccion y base64 tal cual; en Android su enlace
+    // propio (bnc://), como hace la libreria de Binance, y el web en el iPhone
+    var bnc = "bnc://app.binance.com/mp/app?appId=yFK5FCqYprrXDiVFbhyRx7&startPagePath=" + btoa("/pages/browser/index") +
+      "&startPageQuery=" + btoa("url=" + u + "&defaultChainId=1");
+    var bu = /Android/i.test(navigator.userAgent) ? bnc : "https://app.binance.com/en/download?_dp=" + btoa(bnc);
     return [["MetaMask", MM], ["Trust Wallet", "https://link.trustwallet.com/open_url?coin_id=60&url=" + e(u)], ["Phantom", "https://phantom.app/ul/browse/" + e(u) + "?ref=" + e(location.origin)],
       ["Binance Wallet", bu], ["Coinbase Wallet", "https://go.cb-w.com/dapp?cb_url=" + e(u)], ["OKX Wallet", "https://www.okx.com/download?deeplink=" + e("okx://wallet/dapp/url?dappUrl=" + e(u))],
       ["Bitget Wallet", "https://bkcode.vip?action=dapp&url=" + e(u)], ["TokenPocket", "tpdapp://open?params=" + e(JSON.stringify({ url: u, chain: "ETH", source: "Sectora" }))],
