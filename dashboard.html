@@ -3648,9 +3648,7 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
      ninguna alerta, y en el ordenador no hay QR (extensiones y el enlace para el telefono). WalletConnect queda
      solo para las wallets sin navegador propio ni extension (Tangem, Ledger Live, Safe...), con aviso previo.
      Para volver a como estaba: SOLO_APP = false. */
-  /* enlace privado de prueba (?wcprueba=1): en esa visita vuelven WalletConnect en el movil y el QR del ordenador,
-     para comprobar si la alerta de Reown sigue; para todos los demas no cambia nada */
-  const SOLO_APP = !/[?&]wcprueba=1(&|$)/.test(location.search);
+  const SOLO_APP = true;
 
   const cargas = {};
   function cargaJS(src, listo){
