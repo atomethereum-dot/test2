@@ -167,6 +167,13 @@
       "c": "Santiago, CL",
       "la": -33.5,
       "lo": -70.7
+    },
+    "0x7efb634f31ea28a6dbdab0a08752d6dada6044d5": {
+      "t": 1793561505000,
+      "n": "Sectora Node Manila",
+      "c": "Manila, PH",
+      "la": 14.6,
+      "lo": 121
     }
   }
 }
