@@ -160,6 +160,13 @@
       "c": "New York, US",
       "la": 40.7,
       "lo": -74
+    },
+    "0x0cb0c69f747799c8fdde59aebd671d171b7c4ff0": {
+      "t": 1793546583000,
+      "n": "Sectora Node Santiago",
+      "c": "Santiago, CL",
+      "la": -33.5,
+      "lo": -70.7
     }
   }
 }
