@@ -70,31 +70,19 @@ tr.row.on td.rw{color:#7dffb3;text-shadow:0 0 calc(12 * var(--u)) rgba(51,224,12
 .sweep:before{content:"";position:absolute;top:0;bottom:0;width:calc(260 * var(--u));left:var(--s,calc(-400 * var(--u)));transform:skewX(-18deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
 .sg{background:linear-gradient(#fff,#fff) no-repeat left bottom/var(--w,0%) calc(3 * var(--u));padding-bottom:calc(4 * var(--u))}
 
-/* movil: lienzo de 750 x 690 (mas alto que la franja de ordenador), titular grande y niveles a todo el ancho */
+/* movil: el mismo diseno de la franja, en un lienzo de 1200 x 500 (2,4:1): un poco mas alta que en ordenador
+   y con todo un 25 % mas grande para que no se vea tan fina */
 @media (max-width:700px){
-:root{--u:calc(100vw / 750)}
-body{width:calc(750 * var(--u));height:calc(690 * var(--u))}
-.top{left:calc(32 * var(--u));right:calc(32 * var(--u));top:calc(26 * var(--u));font-size:calc(16 * var(--u))}
-.since{display:none}
-.dot{width:calc(10 * var(--u));height:calc(10 * var(--u))}
-.left{left:calc(32 * var(--u));top:calc(78 * var(--u));width:calc(686 * var(--u))}
-.kick{font-size:calc(15 * var(--u))}
-h1{font-size:calc(110 * var(--u));margin-top:calc(14 * var(--u))}
-.sub{font-size:calc(23 * var(--u));margin-top:calc(16 * var(--u))}
-.cur{width:calc(12 * var(--u));height:calc(24 * var(--u))}
-.panel{left:calc(32 * var(--u));right:calc(32 * var(--u));width:auto;top:calc(322 * var(--u));padding:calc(16 * var(--u)) calc(22 * var(--u)) calc(14 * var(--u))}
-.ph{font-size:calc(14 * var(--u));padding-bottom:calc(10 * var(--u))}
-table{font-size:calc(21 * var(--u));margin-top:calc(6 * var(--u))}
-table tr:first-child{display:none}
-td{padding:calc(6 * var(--u)) 0}
-.pf{display:none}
-.pool{left:calc(32 * var(--u));bottom:calc(30 * var(--u));gap:calc(28 * var(--u))}
-.pool .n{font-size:calc(46 * var(--u))}
-.pool .n sup{font-size:calc(14 * var(--u))}
-.pool .l{font-size:calc(12 * var(--u))}
-.url{font-size:calc(32 * var(--u))}
-.vr{height:calc(52 * var(--u))}
-.pool > div:last-child .l{display:none}
+:root{--u:calc(100vw / 1200)}
+body{width:calc(1200 * var(--u));height:calc(500 * var(--u))}
+.left{width:calc(640 * var(--u))}
+h1{font-size:calc(100 * var(--u));white-space:nowrap}
+.sub{font-size:calc(23 * var(--u))}
+.panel{width:calc(440 * var(--u))}
+.pool{gap:calc(30 * var(--u))}
+.pool .n{font-size:calc(40 * var(--u))}
+.url{font-size:calc(27 * var(--u))}
+}
 }
 </style></head><body>
 <div class="grid"></div><div class="sweep" id="sweep"></div>
@@ -122,7 +110,7 @@ td{padding:calc(6 * var(--u)) 0}
   <div class="pf"><span>● paid on SectoraEVM</span><em>min. 30 days</em></div>
 </div>
 <script>
-const U = () => innerWidth / (innerWidth <= 700 ? 750 : 1500);
+const U = () => innerWidth / (innerWidth <= 700 ? 1200 : 1500);
 const $ = id => document.getElementById(id);
 const cl = (x,a=0,b=1) => Math.min(b,Math.max(a,x));
 const p = (t,a,b) => cl((t-a)/(b-a));
