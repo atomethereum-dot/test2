@@ -267,6 +267,19 @@
     align-items:center;padding:clamp(48px,7vh,96px) var(--pad);
   }
 
+  /* banner a todo el ancho de la pantalla, justo debajo de los botones (guia de compra).
+     Se dibuja con texto real (iframe /banner-airdrop/), asi que es nitido en cualquier pantalla.
+     En el ordenador va pegado al borde de abajo de la portada: el propio banner es la division con la
+     seccion siguiente y no se ve ninguna linea. En el movil va entre los botones y la ficha. */
+  .hero-banner{grid-column:1/-1;grid-row:2;margin:0 calc(-1 * var(--pad));align-self:end}
+  .hero > .sheet{grid-column:2;grid-row:1}
+  .sbn{position:relative;width:100%;aspect-ratio:3/1;background:#1569ff;overflow:hidden}
+  .sbn iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;pointer-events:none}
+  .sbn-link{position:absolute;inset:0;z-index:1}
+  .sbn-link:hover{background:rgba(255,255,255,.04)}
+  @media (min-width:981px){ .hero:has(.hero-banner){padding-bottom:0;grid-template-rows:1fr auto} }
+  @media (max-width:980px){ .hero-banner{grid-row:auto} .hero > .sheet{grid-column:auto;grid-row:auto} }
+  @media (max-width:700px){ .sbn{aspect-ratio:750/690} }
   /* ficha del token */
   .sheet{
     color:var(--ink-3);
@@ -5466,6 +5479,13 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
           <a class="btn btn-guide" id="hero-guide" href="https://sectoraorg.com/guide/"><i class="gs" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></i><span>Guide to acquiring $SECT, step by step</span><span class="arrow">→</span></a>
         </div>
       </div>
+
+        <div class="hero-banner lift" style="--d:1s">
+          <div class="sbn">
+            <iframe src="/banner-airdrop/?v=4" title="Sectora Airdrop Genesis" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+            <a class="sbn-link" href="/airdrop/" aria-label="Airdrop Genesis is live: join the airdrop"></a>
+          </div>
+        </div>
 
       <aside class="sheet lift" style="--d:.86s">
         <h2>Token <em style="font-style:normal;color:var(--ink-4)">SECT</em></h2>

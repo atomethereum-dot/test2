@@ -65,13 +65,40 @@ tr.row.on td.rw{color:#7dffb3;text-shadow:0 0 calc(12 * var(--u)) rgba(51,224,12
 .scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(127,176,255,.95),transparent);pointer-events:none;z-index:2}
 .gloss{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:3}
 .gloss:before{content:"";position:absolute;top:-20%;bottom:-20%;width:calc(120 * var(--u));left:var(--g,calc(-200 * var(--u)));transform:skewX(-18deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),transparent)}
-#ua{background:linear-gradient(#fff,#fff) no-repeat left bottom/var(--u,0%) 2px;padding-bottom:2px}
+#ua{background:linear-gradient(#fff,#fff) no-repeat left bottom/var(--w,0%) 2px;padding-bottom:2px}
 .sweep{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .sweep:before{content:"";position:absolute;top:0;bottom:0;width:calc(260 * var(--u));left:var(--s,calc(-400 * var(--u)));transform:skewX(-18deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
-.sg{background:linear-gradient(#fff,#fff) no-repeat left bottom/var(--u,0%) calc(3 * var(--u));padding-bottom:calc(4 * var(--u))}
+.sg{background:linear-gradient(#fff,#fff) no-repeat left bottom/var(--w,0%) calc(3 * var(--u));padding-bottom:calc(4 * var(--u))}
+
+/* movil: lienzo de 750 x 690 (mas alto que la franja de ordenador), titular grande y niveles a todo el ancho */
+@media (max-width:700px){
+:root{--u:calc(100vw / 750)}
+body{width:calc(750 * var(--u));height:calc(690 * var(--u))}
+.top{left:calc(32 * var(--u));right:calc(32 * var(--u));top:calc(26 * var(--u));font-size:calc(16 * var(--u))}
+.since{display:none}
+.dot{width:calc(10 * var(--u));height:calc(10 * var(--u))}
+.left{left:calc(32 * var(--u));top:calc(78 * var(--u));width:calc(686 * var(--u))}
+.kick{font-size:calc(15 * var(--u))}
+h1{font-size:calc(110 * var(--u));margin-top:calc(14 * var(--u))}
+.sub{font-size:calc(23 * var(--u));margin-top:calc(16 * var(--u))}
+.cur{width:calc(12 * var(--u));height:calc(24 * var(--u))}
+.panel{left:calc(32 * var(--u));right:calc(32 * var(--u));width:auto;top:calc(322 * var(--u));padding:calc(16 * var(--u)) calc(22 * var(--u)) calc(14 * var(--u))}
+.ph{font-size:calc(14 * var(--u));padding-bottom:calc(10 * var(--u))}
+table{font-size:calc(21 * var(--u));margin-top:calc(6 * var(--u))}
+table tr:first-child{display:none}
+td{padding:calc(6 * var(--u)) 0}
+.pf{display:none}
+.pool{left:calc(32 * var(--u));bottom:calc(30 * var(--u));gap:calc(28 * var(--u))}
+.pool .n{font-size:calc(46 * var(--u))}
+.pool .n sup{font-size:calc(14 * var(--u))}
+.pool .l{font-size:calc(12 * var(--u))}
+.url{font-size:calc(32 * var(--u))}
+.vr{height:calc(52 * var(--u))}
+.pool > div:last-child .l{display:none}
+}
 </style></head><body>
 <div class="grid"></div><div class="sweep" id="sweep"></div>
-<div class="top mono"><div><b>Sectora</b><span class="sep">//</span>Airdrop Genesis</div><div><span class="dot"></span><b>Open now</b><span class="sep">·</span>Since Oct 27, 2026</div></div>
+<div class="top mono"><div><b>Sectora</b><span class="sep">//</span>Airdrop Genesis</div><div><span class="dot"></span><b>Open now</b><span class="since"><span class="sep">·</span>Since Oct 27, 2026</span></div></div>
 <div class="left">
   <div class="kick mono">Airdrop Genesis · Ethereum · #SECT</div>
   <h1 id="h1"><span id="w1">Airdrop</span> <b id="w2">Active</b><i id="pd">.</i></h1>
@@ -95,6 +122,7 @@ tr.row.on td.rw{color:#7dffb3;text-shadow:0 0 calc(12 * var(--u)) rgba(51,224,12
   <div class="pf"><span>● paid on SectoraEVM</span><em>min. 30 days</em></div>
 </div>
 <script>
+const U = () => innerWidth / (innerWidth <= 700 ? 750 : 1500);
 const $ = id => document.getElementById(id);
 const cl = (x,a=0,b=1) => Math.min(b,Math.max(a,x));
 const p = (t,a,b) => cl((t-a)/(b-a));
@@ -110,7 +138,7 @@ window.render = function (t) {
   [$("w1"), $("w2")].forEach(e => { e.style.backgroundImage = h>0 && h<1 ? g : "none"; });
   const pd = p(t, 1.4, 1.75); $("pd").style.transform = `scale(${1 + .6*Math.sin(pd*Math.PI)})`;
   // 2) reflejo diagonal por todo el banner
-  $("sweep").style.setProperty("--s", ((-400 + eio(p(t, .2, 2.2))*2300) * innerWidth / 1500) + "px");
+  $("sweep").style.setProperty("--s", ((-400 + eio(p(t, .2, 2.2))*2300) * U()) + "px");
   // 3) el pool gira como una ruleta y se para en 7,000,000
   const r = p(t, .25, 1.35);
   if (r > 0 && r < 1) {
@@ -118,18 +146,18 @@ window.render = function (t) {
     $("pool").textContent = base.map((c, n) => { if (c === ",") return c; k++; const stop = .25 + k*.1; return r < stop ? String(Math.floor((Math.sin((t*97 + n*13)) * .5 + .5) * 10) % 10) : c; }).join("");
   } else $("pool").textContent = "7,000,000";
   // 4) subrayado que recorre el subtitulo frase a frase
-  [0,1,2].forEach(i => { const a = 1.8 + i*.6, u = p(t, a, a+.3) - p(t, a+.45, a+.6); $("s"+i).style.setProperty("--u", (eio(cl(u))*100) + "%"); });
+  [0,1,2].forEach(i => { const a = 1.8 + i*.6, u = p(t, a, a+.3) - p(t, a+.45, a+.6); $("s"+i).style.setProperty("--w", (eio(cl(u))*100) + "%"); });
   // 5) panel: escaneo, filas que se iluminan y su premio vuelve a contar
   const sc = p(t, 2.0, 4.8); $("scan").style.top = (6 + sc*90) + "%"; $("scan").style.opacity = sc>0 && sc<1 ? 1 : 0;
   rows.forEach((row,i) => {
     const a = 2.15 + i*.65, on = t >= a && t < a+.6; row.classList.toggle("on", on);
     const v = REW[i] * (on ? eio(p(t, a, a+.4)) : 1); $("r"+i).textContent = "+" + Math.round(v).toLocaleString("en-US") + (i===3 ? "+" : "");
   });
-  $("gloss").style.setProperty("--g", ((-200 + eio(p(t, 4.9, 5.7))*800) * innerWidth / 1500) + "px");
+  $("gloss").style.setProperty("--g", ((-200 + eio(p(t, 4.9, 5.7))*800) * U()) + "px");
   // 6) esquinas que respiran (bucle exacto)
-  const b = 5*Math.sin(2*Math.PI*t/T*2) * innerWidth / 1500; brs.forEach((e,i) => e.style.transform = `translate(${i%2? b : -b}px, ${i<2? -b : b}px)`);
+  const b = 5*Math.sin(2*Math.PI*t/T*2) * U(); brs.forEach((e,i) => e.style.transform = `translate(${i%2? b : -b}px, ${i<2? -b : b}px)`);
   // 7) subrayado de /airdrop
-  const u = p(t, 3.9, 4.5) - p(t, 5.1, 5.6); $("ua").style.setProperty("--u", (eio(cl(u))*100) + "%");
+  const u = p(t, 3.9, 4.5) - p(t, 5.1, 5.6); $("ua").style.setProperty("--w", (eio(cl(u))*100) + "%");
   // 8) punto verde y cursor
   const ph = Math.sin(Math.PI * ((t % 1.2)/1.2)); dot.style.boxShadow = `0 0 ${5+14*ph}px #33e07f`; dot.style.opacity = .55 + .45*ph;
   $("cur").style.opacity = (t % 1) < .5 ? 1 : 0;
