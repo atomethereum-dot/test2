@@ -153,6 +153,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x391171904f2dc20292a7ae100f4db88dd7f27ea3": {
+      "t": 1793492175000,
+      "n": "Sectora Node New York",
+      "c": "New York, US",
+      "la": 40.7,
+      "lo": -74
     }
   }
 }
