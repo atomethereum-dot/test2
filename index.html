@@ -280,6 +280,13 @@
   @media (min-width:981px){ .hero:has(.hero-banner){padding-bottom:0;grid-template-rows:1fr auto} }
   @media (max-width:980px){ .hero-banner{grid-row:auto} .hero > .sheet{grid-column:auto;grid-row:auto} }
   @media (max-width:700px){ .sbn{aspect-ratio:1200/500} }
+  .sbn-guide{display:flex;justify-content:center;align-items:baseline;flex-wrap:wrap;gap:6px 14px;padding:16px var(--pad) 18px;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink);text-decoration:none;background:var(--bg);border-bottom:1px solid var(--hair-soft);transition:color .25s var(--ease)}
+  .sbn-guide em{font-style:normal;color:#ffd43b;border-bottom:1px solid rgba(255,212,59,.35);padding-bottom:3px;transition:color .25s var(--ease),border-color .25s var(--ease)}
+  .sbn-guide b{font-weight:400;color:#ffd43b;display:inline-block;transition:transform .25s var(--ease-out),color .25s var(--ease)}
+  .sbn-guide:hover em,.sbn-guide:focus-visible em{border-color:#ffd43b}
+  .sbn-guide:hover b,.sbn-guide:focus-visible b{transform:translateX(4px)}
   /* ficha del token */
   .sheet{
     color:var(--ink-3);
@@ -5485,6 +5492,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
             <iframe src="/banner-airdrop/?v=6" title="Sectora Airdrop Genesis" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
             <a class="sbn-link" href="/airdrop/" aria-label="Airdrop Genesis is live: join the airdrop"></a>
           </div>
+          <a class="sbn-guide" href="/airdrop-guide/"><span>How to join the Airdrop Genesis</span><em>Read the guide</em><b aria-hidden="true">→</b></a>
         </div>
 
       <aside class="sheet lift" style="--d:.86s">
