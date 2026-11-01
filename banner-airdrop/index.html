@@ -1,0 +1,153 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Sectora · Airdrop Genesis banner</title>
+<link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:Plex;src:url('/fonts/IBMPlexSans.woff2') format('woff2');font-weight:100 700}
+@font-face{font-family:Mono;src:url('/fonts/IBMPlexMono-400.woff2') format('woff2');font-weight:400}
+@font-face{font-family:Mono;src:url('/fonts/IBMPlexMono-500.woff2') format('woff2');font-weight:500}
+*{margin:0;padding:0;box-sizing:border-box}
+html{overflow:hidden;background:#1569ff}
+body{width:1500px;height:500px;overflow:hidden;transform-origin:0 0}
+body{background:#1569ff;color:#fff;font-family:Plex,sans-serif;position:relative}
+.mono{font-family:Mono,monospace;text-transform:uppercase;letter-spacing:.18em}
+/* rejilla sutil y dial como en los videos */
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(ellipse 70% 90% at 78% 50%,#000 30%,transparent 75%)}
+.top{position:absolute;left:56px;right:56px;top:26px;display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,.82)}
+.top b{font-weight:500;color:#fff}
+.top .sep{opacity:.5;margin:0 14px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#33e07f;margin-right:9px;box-shadow:0 0 10px #33e07f;vertical-align:1px}
+.left{position:absolute;left:56px;top:92px;width:860px}
+.kick{font-size:13px;color:rgba(255,255,255,.88);display:flex;align-items:center;gap:14px}
+.kick:before{content:"";width:34px;height:1px;background:rgba(255,255,255,.8)}
+h1{margin-top:20px;font-size:128px;line-height:.98;letter-spacing:-.035em;font-weight:250}
+h1 b{font-weight:700;letter-spacing:-.04em}
+h1 i{font-style:normal;color:#07090f}
+.sub{margin-top:24px;font-size:27px;font-weight:300;line-height:1.3;color:#fff}
+.sub b{font-weight:600}
+.pool{position:absolute;left:56px;bottom:34px;display:flex;align-items:flex-end;gap:42px}
+.pool .n{font-size:44px;font-weight:300;letter-spacing:-.02em;line-height:1}
+.pool .n sup{font-family:Mono,monospace;font-size:13px;letter-spacing:.12em;vertical-align:top;margin-left:6px;position:relative;top:4px}
+.pool .l{font-size:11px;color:rgba(255,255,255,.75);margin-top:8px}
+.url{font-size:30px;font-weight:300;letter-spacing:-.01em;line-height:1}
+.url b{font-weight:600}
+.vr{width:1px;height:56px;background:rgba(255,255,255,.35)}
+/* panel terminal */
+.panel{position:absolute;right:56px;top:84px;width:470px;background:#07090f;padding:22px 26px 20px;box-shadow:0 30px 70px rgba(0,10,60,.35)}
+.br{position:absolute;width:22px;height:22px;border-color:#fff;border-style:solid}
+.br.a{left:-12px;top:-12px;border-width:2px 0 0 2px}.br.b{right:-12px;top:-12px;border-width:2px 2px 0 0}
+.br.c{left:-12px;bottom:-12px;border-width:0 0 2px 2px}.br.d{right:-12px;bottom:-12px;border-width:0 2px 2px 0}
+.ph{display:flex;justify-content:space-between;font-size:11px;color:#8d95a8;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.1)}
+.ph b{color:#fff;font-weight:500}
+.ph span{color:#7fb0ff}
+table{width:100%;border-collapse:collapse;font-family:Mono,monospace;font-size:17px;margin-top:10px}
+th{font-weight:400;text-align:left;color:#6c7488;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:6px 0 8px}
+td{padding:7px 0;color:#d6dbe6}
+td.lv{color:#7fb0ff}
+td.ar{color:#5b6377;width:34px}
+td.rw{color:#33e07f;text-align:right}
+th.rw{text-align:right}
+.pf{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);font-family:Mono,monospace;font-size:13px;color:#33e07f;display:flex;justify-content:space-between}
+.pf em{font-style:normal;color:#8d95a8}
+.logo{position:absolute;right:56px;bottom:30px;display:none}
+
+#pd{font-style:normal;color:#07090f;display:inline-block;font-weight:700;letter-spacing:-.04em;transform-origin:50% 80%}
+#w1,#w2{-webkit-background-clip:text;background-clip:text;color:transparent;background-color:#fff}
+.cur{display:inline-block;width:14px;height:28px;background:#fff;margin-left:8px;vertical-align:-4px}
+tr.row td:first-child,th:first-child{padding-left:8px}
+td.rw,th.rw{padding-right:8px}
+tr.row.on td{background:rgba(21,105,255,.24)}
+tr.row.on td.ar{color:#33e07f}
+tr.row.on td.rw{color:#7dffb3;text-shadow:0 0 12px rgba(51,224,127,.6)}
+.scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(127,176,255,.95),transparent);pointer-events:none;z-index:2}
+.gloss{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:3}
+.gloss:before{content:"";position:absolute;top:-20%;bottom:-20%;width:120px;left:var(--g,-200px);transform:skewX(-18deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),transparent)}
+#ua{background:linear-gradient(#fff,#fff) no-repeat left bottom/var(--u,0%) 2px;padding-bottom:2px}
+.sweep{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.sweep:before{content:"";position:absolute;top:0;bottom:0;width:260px;left:var(--s,-400px);transform:skewX(-18deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
+.sg{background:linear-gradient(#fff,#fff) no-repeat left bottom/var(--u,0%) 3px;padding-bottom:4px}
+</style></head><body>
+<div class="grid"></div><div class="sweep" id="sweep"></div>
+<div class="top mono"><div><b>Sectora</b><span class="sep">//</span>Airdrop Genesis</div><div><span class="dot"></span><b>Open now</b><span class="sep">·</span>Since Oct 27, 2026</div></div>
+<div class="left">
+  <div class="kick mono">Airdrop Genesis · Ethereum · #SECT</div>
+  <h1 id="h1"><span id="w1">Airdrop</span> <b id="w2">Active</b><i id="pd">.</i></h1>
+  <p class="sub"><span class="sg" id="s0">Stake <b>#SECT</b>.</span> <span class="sg" id="s1">Turn on your Hash Node.</span> <span class="sg" id="s2"><b>Get rewarded.</b></span><span id="cur" class="cur"></span></p>
+</div>
+<div class="pool">
+  <div><div class="n"><span id="pool">7,000,000</span><sup>SECT</sup></div><div class="l mono">Reward pool</div></div>
+  <div class="vr"></div>
+  <div><div class="url">sectoraorg.com<b id="ua">/airdrop</b></div><div class="l mono">01 Stake · 02 Turn on · 03 Build · 04 Receive</div></div>
+</div>
+<div class="panel" id="panel"><div class="scan" id="scan"></div><div class="gloss" id="gloss"></div>
+  <i class="br a"></i><i class="br b"></i><i class="br c"></i><i class="br d"></i>
+  <div class="ph mono"><b>Airdrop · Levels</b><span>One per person</span></div>
+  <table>
+    <tr><th>Level</th><th>Staked</th><th></th><th class="rw">Reward</th></tr>
+    <tr class="row"><td class="lv">scout</td><td>100 SECT</td><td class="ar">→</td><td class="rw" id="r0">+55</td></tr>
+    <tr class="row"><td class="lv">sentinel</td><td>500 SECT</td><td class="ar">→</td><td class="rw" id="r1">+325</td></tr>
+    <tr class="row"><td class="lv">guardian</td><td>1,000 SECT</td><td class="ar">→</td><td class="rw" id="r2">+750</td></tr>
+    <tr class="row"><td class="lv">titan</td><td>4,000 SECT</td><td class="ar">→</td><td class="rw" id="r3">+3,600+</td></tr>
+  </table>
+  <div class="pf"><span>● paid on SectoraEVM</span><em>min. 30 days</em></div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const cl = (x,a=0,b=1) => Math.min(b,Math.max(a,x));
+const p = (t,a,b) => cl((t-a)/(b-a));
+const eio = x => x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const T = 6;
+const REW = [55,325,750,3600];
+const rows = [...document.querySelectorAll("tr.row")], brs = [...document.querySelectorAll(".br")], dot = document.querySelector(".dot");
+/* todo esta siempre visible: el movimiento va encima. t=0 y t=T son el mismo fotograma (bucle sin cortes) */
+window.render = function (t) {
+  // 1) franja oscura que recorre el titulo (las letras nunca desaparecen)
+  const h = eio(p(t, .5, 1.6)), x = -20 + h*140;
+  const g = `linear-gradient(100deg, #fff ${x-14}%, #07090f ${x-6}%, #07090f ${x-2}%, #fff ${x+6}%, #fff 100%)`;
+  [$("w1"), $("w2")].forEach(e => { e.style.backgroundImage = h>0 && h<1 ? g : "none"; });
+  const pd = p(t, 1.4, 1.75); $("pd").style.transform = `scale(${1 + .6*Math.sin(pd*Math.PI)})`;
+  // 2) reflejo diagonal por todo el banner
+  $("sweep").style.setProperty("--s", (-400 + eio(p(t, .2, 2.2))*2300) + "px");
+  // 3) el pool gira como una ruleta y se para en 7,000,000
+  const r = p(t, .25, 1.35);
+  if (r > 0 && r < 1) {
+    const base = "7,000,000".split(""); let k = 0;
+    $("pool").textContent = base.map((c, n) => { if (c === ",") return c; k++; const stop = .25 + k*.1; return r < stop ? String(Math.floor((Math.sin((t*97 + n*13)) * .5 + .5) * 10) % 10) : c; }).join("");
+  } else $("pool").textContent = "7,000,000";
+  // 4) subrayado que recorre el subtitulo frase a frase
+  [0,1,2].forEach(i => { const a = 1.8 + i*.6, u = p(t, a, a+.3) - p(t, a+.45, a+.6); $("s"+i).style.setProperty("--u", (eio(cl(u))*100) + "%"); });
+  // 5) panel: escaneo, filas que se iluminan y su premio vuelve a contar
+  const sc = p(t, 2.0, 4.8); $("scan").style.top = (6 + sc*90) + "%"; $("scan").style.opacity = sc>0 && sc<1 ? 1 : 0;
+  rows.forEach((row,i) => {
+    const a = 2.15 + i*.65, on = t >= a && t < a+.6; row.classList.toggle("on", on);
+    const v = REW[i] * (on ? eio(p(t, a, a+.4)) : 1); $("r"+i).textContent = "+" + Math.round(v).toLocaleString("en-US") + (i===3 ? "+" : "");
+  });
+  $("gloss").style.setProperty("--g", (-200 + eio(p(t, 4.9, 5.7))*800) + "px");
+  // 6) esquinas que respiran (bucle exacto)
+  const b = 5*Math.sin(2*Math.PI*t/T*2); brs.forEach((e,i) => e.style.transform = `translate(${i%2? b : -b}px, ${i<2? -b : b}px)`);
+  // 7) subrayado de /airdrop
+  const u = p(t, 3.9, 4.5) - p(t, 5.1, 5.6); $("ua").style.setProperty("--u", (eio(cl(u))*100) + "%");
+  // 8) punto verde y cursor
+  const ph = Math.sin(Math.PI * ((t % 1.2)/1.2)); dot.style.boxShadow = `0 0 ${5+14*ph}px #33e07f`; dot.style.opacity = .55 + .45*ph;
+  $("cur").style.opacity = (t % 1) < .5 ? 1 : 0;
+};
+/* el banner se dibuja con texto y formas reales a su tamano final: nitido en cualquier pantalla */
+(function () {
+  const conZoom = CSS.supports && CSS.supports('zoom', '1');
+  function ajusta() { const k = innerWidth / 1500;
+    if (conZoom) { document.body.style.zoom = k; document.body.style.transform = ''; } else document.body.style.transform = 'scale(' + k + ')'; }
+  ajusta(); addEventListener('resize', ajusta);
+  const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  render(0); if (quieto) return;
+  let t0 = null, visible = true, pausa = 0, ultimo = 0;
+  try { new IntersectionObserver(e => { visible = e[0].isIntersecting; }).observe(document.body); } catch (e) {}
+  function paso(now) {
+    if (t0 === null) { t0 = now; ultimo = now; }
+    if (!visible || document.hidden) { pausa += now - ultimo; }
+    else render(((now - t0 - pausa) / 1000) % 6);
+    ultimo = now; requestAnimationFrame(paso);
+  }
+  document.fonts && document.fonts.ready.then(() => requestAnimationFrame(paso));
+})();
+</script></body></html>
