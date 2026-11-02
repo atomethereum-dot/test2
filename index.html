@@ -4866,6 +4866,22 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
 </style>
 <noscript><style>.intro{display:none!important}</style></noscript>
 <script src="/analytics.js" defer></script>
+<script>
+/* Si el idioma del navegador esta entre los de la pagina, la traduce la propia web y no Chrome
+   (el traductor de Chrome alargaba textos fuera de la pantalla en el movil). */
+(function () {
+  var L = ["es", "zh", "hi", "ar", "pt", "fr", "ru", "de", "ja", "ko", "it"], n = navigator.languages || [navigator.language || ""];
+  for (var i = 0; i < n.length; i++) {
+    var c = String(n[i] || "").slice(0, 2).toLowerCase();
+    if (c === "en") return;
+    if (L.indexOf(c) >= 0) {
+      document.documentElement.setAttribute("translate", "no");
+      var m = document.createElement("meta"); m.name = "google"; m.content = "notranslate"; document.head.appendChild(m);
+      return;
+    }
+  }
+})();
+</script>
 </head>
 <body>
 
@@ -10717,7 +10733,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   bt.addEventListener('pointerenter', () => { cargarTR().catch(() => {}); }, {once:true});
   lst.addEventListener('click', e => {
     const li = e.target.closest('li'); if(!li) return;
-    abrir(false); aplicar(li.dataset.c);
+    abrir(false); aplicar(li.dataset.c); guardaIdioma(li.dataset.c);
   });
   document.addEventListener('click', e => { if(!sel.contains(e.target)) abrir(false); });
   document.addEventListener('keydown', e => { if(e.key === 'Escape') abrir(false); });
@@ -10751,10 +10767,27 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
   if(protegidos.length && window.MutationObserver)
     new MutationObserver(vigilarTraductor).observe(document.documentElement, {attributes:true, attributeFilter:['class','lang']});
 
-  /* la pagina abre siempre en ingles */
+  /* abre en el idioma que la persona eligio antes o, si no, en el de su navegador (si la pagina lo tiene):
+     asi Chrome no la traduce encima (su traduccion sacaba textos de la pantalla en el movil) */
+  const CLAVE_IDIOMA = 'sectora_home_lang';
+  function guardaIdioma(c){ try{ localStorage.setItem(CLAVE_IDIOMA, c); }catch(e){} }
+  function idiomaInicial(){
+    let g = null;
+    try{ g = localStorage.getItem(CLAVE_IDIOMA); }catch(e){}
+    if(g && IDIOMAS.some(x => x[0] === g)) return g;
+    const n = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en'];
+    for(const raw of n){
+      const c = String(raw || '').slice(0, 2).toLowerCase();
+      if(c === 'en') return 'en';
+      if(IDIOMAS.some(x => x[0] === c)) return c;
+    }
+    return 'en';
+  }
   marcar('en');
   document.documentElement.lang = 'en';
   window.__SECT_IDIOMA = aplicar;
+  const inicial = idiomaInicial();
+  if(inicial !== 'en') aplicar(inicial);
 })();
 </script>
 
