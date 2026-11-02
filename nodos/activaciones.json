@@ -188,6 +188,20 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x206988545541fac2e8c6ab965f06b9db351e8b25": {
+      "t": 1793639181000,
+      "n": "Sectora Node Luxembourg",
+      "c": "Luxembourg, LU",
+      "la": 49.6,
+      "lo": 6.2
+    },
+    "0xc475323c584f540dded00a88f13522d8562cf621": {
+      "t": 1793639275000,
+      "n": "Sectora Node Luxembourg",
+      "c": "Luxembourg, LU",
+      "la": 49.6,
+      "lo": 6.2
     }
   }
 }
