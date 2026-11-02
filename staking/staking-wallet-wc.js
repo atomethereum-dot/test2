@@ -526,7 +526,7 @@
         f.rel = "noopener";
       }
       lista.appendChild(f);
-      if (a.id === UNI_APP.id) lista.appendChild(otras());
+      if (a.id === "phantom") lista.appendChild(otras());
     });
     caja.appendChild(lista);
 
@@ -565,9 +565,11 @@
       const qr = nodo("div", "wpick-qr");
       let wcPuesto = false;
       const ponWC = () => { if (wcPuesto) return; wcPuesto = true; lista.appendChild(filaSoloWC(qr)); lista.appendChild(qr); };
-      const binDet = ext.some((e) => /binance/i.test(e.nombre)), uniDet = ext.some((e) => /uniswap/i.test(e.nombre));
-      if (binDet && uniDet) ponWC();   // las dos ya detectadas arriba
-      INSTALAR.filter((w) => !ext.some((e) => w.m.test(e.nombre))).forEach((w) => {
+      const resto = INSTALAR.filter((w) => !ext.some((e) => w.m.test(e.nombre)));
+      // WalletConnect va debajo de Uniswap, Binance y Phantom (de las que esten en esta lista)
+      const tras = ["i-uniswap", "i-binance", "i-phantom"].filter((id) => resto.some((w) => w.id === id)).pop();
+      if (!tras) ponWC();
+      resto.forEach((w) => {
         if (w.web) {
           const f = fila("a", w, "Install the browser extension", { icono: w.icono });
           f.href = w.web;
@@ -579,7 +581,7 @@
           f.addEventListener("click", () => { wcAbierto = true; panelWC(qr); });
           lista.appendChild(f);
         }
-        if (w.id === "i-binance" || (w.id === "i-uniswap" && binDet)) ponWC();
+        if (w.id === tras) ponWC();
       });
       ponWC();
       lista.appendChild(filaCopiar("Wallet on your phone"));
