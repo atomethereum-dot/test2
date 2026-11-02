@@ -63,7 +63,7 @@ function build(l) {
   const box = (kind, html) => '<div class="' + kind + '"><i>' + ICON[kind] + "</i><span>" + chip(html) + "</span></div>";
   const dos = (list) => '<ol class="do">' + list.map((x) => "<li>" + chip(x) + "</li>").join("") + "</ol>";
   const done = (d) => '<div class="done">' + ICON.done + "<div><b>" + d[0] + "</b><p>" + d[1] + "</p></div></div>";
-  const check = (h, rows) => '<div class="check"><p class="m">' + chip(h) + "</p><dl>" + rows.map((r) => "<dt>" + chip(r[0]) + "</dt><dd>" + chip(r[1]) + "</dd>").join("") + "</dl></div>";
+  const check = (h, rows) => '<div class="check">' + (h ? '<p class="m">' + chip(h) + "</p>" : "") + "<dl>" + rows.map((r) => "<dt>" + chip(r[0]) + "</dt><dd>" + chip(r[1]) + "</dd>").join("") + "</dl></div>";
   const urlbar = (p) => '<div class="urlbar" aria-hidden="true"><div class="ub-t"><i></i><i></i><i></i></div><div class="ub-u">' + ICON.lock + "<b>sectoraorg.com</b><span>/" + p + "</span></div></div>";
   const lv = (s5) => '<div class="lv">' + [["Scout", "100", "55"], ["Sentinel", "500", "325"], ["Guardian", "1,000", "750"], ["Titan", "4,000", "3,600"]].map((x, i) =>
     "<div><span>" + x[0] + "</span><b>" + x[1] + " #SECT</b><small>" + s5.prize.replace("{n}", x[2]) + (i === 3 ? " · " + s5.nomax : "") + "</small></div>").join("") + "</div>";
@@ -104,7 +104,7 @@ function build(l) {
     7: [["do"], ["vis", [shot("stk-4-done", { light: true, bar: "staking", cap: S[7].cap }), wallet("deposit")], "w2"], ["warn"], ["done", S[7].done]],
     8: [["do"], ["lang"], ["vis", [shot("dsh-1-connect", { bar: "dashboard" })]], ["vis", [shot("dsh-phone-1", { phone: true, cap: S[8].capPhone }), shot("dsh-phone-2", { phone: true, cap: S[8].capPhone2 })], "phones"], ["warn"]],
     9: [["do"], ["vis", [shot("dsh-2-wallet", { size: "narrow" }), wallet("connect")], "w2"], ["tip"]],
-    10: [["do"], ["vis", [shot("dsh-3-active", { size: "mid", cap: S[10].cap })]], ["tip"], ["break"], ["check", S[10].planH, S[10].plan, "manual"], ["vis", [shot("dsh-3b-manual", { size: "narrow", cap: S[10].planCap })]]],
+    10: [["do"], ["vis", [shot("dsh-3-active", { size: "mid", cap: S[10].cap })]], ["tip"], ["break"], ["planb", [["check", S[10].planH, S[10].plan, "manual"], ["vis", [shot("dsh-3b-manual", { size: "narrow", cap: S[10].planCap })]]], "manual", S[10].planH]],
     11: [["do"], ["vis", [shot("dsh-4-node", { bar: "dashboard" })]], ["onoff"], ["done", S[11].done]],
     12: [["do"], ["vis", [shot("my-1-panel", { bar: "myairdrop", cap: S[12].cap })]], ["check", S[12].checkH, S[12].check]],
     13: [["do"], ["vis", [shot("air-1-page", { cap: S[13].cap1 }), shot("air-2-status", { size: "narrow", cap: S[13].cap2 })], "two"], ["see"]]
@@ -132,6 +132,15 @@ function build(l) {
         return '<div class="' + (b[2] === "w2" ? "vis2" : b[2] === "phones" ? "phone-row" : "shots2" + (b[2] === "ph2" ? " ph2" : "")) + '">' + items.join("") + "</div>";
       }
       case "break": return print ? "\u0000" : "";
+      case "planb": {
+        // plan B (solo si el Dashboard no detecta la ubicacion; lo normal es un clic): en la web va en un
+        // desplegable cerrado, con su titulo como boton; en el PDF sigue abierto, como antes
+        if (print) return b[1].map((x) => block(n, x, true)).join("");
+        const dentro = b[1].map((x) => (x[0] === "check" ? check("", x[2]) : block(n, x, false))).join("");
+        // en el titulo del desplegable, sin las comillas alrededor del boton (quedaban sueltas en otra linea)
+        const titulo = String(b[3]).replace(/["“”«„「『]\s*(\{ui:[A-Za-z]+\})\s*["”“»」』]/, "$1");
+        return '<details class="planb" id="' + b[2] + '"><summary><span>' + chip(titulo) + '</span></summary><div class="planb-in">' + dentro + "</div></details>";
+      }
     }
     return "";
   }
@@ -183,7 +192,7 @@ function build(l) {
 ${alt}
 <meta name="theme-color" content="#ffffff">
 <link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/airdrop-guide/guide.css?v=8">
+<link rel="stylesheet" href="/airdrop-guide/guide.css?v=11">
 <link rel="stylesheet" href="/traduccion-chrome.css?v=1">
 <script src="/analytics.js" defer></script>
 </head>

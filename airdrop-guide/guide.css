@@ -387,3 +387,27 @@ a.lk:hover{background:var(--blue-deep);transform:translateY(-1px)}
   .st-v .vis2{grid-template-columns:minmax(0,1fr)}
   .st-v .vis2 .wm{margin-inline:auto}
 }
+
+/* plan B del paso 10 (solo si el Dashboard no detecta la ubicacion): desplegable cerrado */
+.planb{margin-top:16px;max-width:900px;border:1px solid var(--line);border-radius:3px;background:var(--paper-2)}
+.planb>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:13px 14px;
+  font-size:15px;font-weight:400;color:var(--ink-2);line-height:1.55}
+.planb>summary::-webkit-details-marker{display:none}
+.planb>summary::after{content:'+';flex:none;margin-inline-start:auto;width:26px;height:26px;display:grid;place-items:center;border:1px solid var(--line);
+  border-radius:50%;background:#fff;color:var(--blue-deep);font-size:15px;letter-spacing:0}
+.planb[open]>summary::after{content:'−'}
+.planb>summary:hover{color:var(--ink)}
+.planb-in{padding:0 14px 14px}
+.planb-in .check{margin-top:0;background:#fff}
+.planb-in .shot{margin-top:14px}
+/* en el movil, dentro del plan B, cada nombre va encima de su texto (asi el texto usa todo el ancho) */
+@media (max-width:640px){
+  .planb-in .check dl{grid-template-columns:minmax(0,1fr)}
+  .planb-in .check dt{padding-bottom:2px;border-bottom:0;font-size:12px;letter-spacing:.04em}
+  .planb-in .check dd{padding-top:0}
+  .planb-in .check dl>dt:nth-last-child(2){border-bottom:0}
+  .planb-in .check dl>dd:last-child{border-bottom:0}
+  .planb-in .check dl>dd:not(:last-child){border-bottom:1px solid var(--line-2)}
+}
+.planb>summary>span{flex:1;min-width:0}
+.planb>summary .ui{white-space:normal}
