@@ -1166,5 +1166,93 @@
 {
 "id": "k291",
 "en": "Staking works exactly as it did from day one: your rewards accrue every second and you can claim them whenever you want. They never mix with the airdrop rules. The airdrop is an optional extra."
+},
+{
+"id": "k292",
+"en": "Open this page in your wallet"
+},
+{
+"id": "k293",
+"en": "To connect from your phone, open this page inside your wallet app. Tap your wallet:"
+},
+{
+"id": "k294",
+"en": "Opens Binance to approve the connection"
+},
+{
+"id": "k295",
+"en": "Another wallet"
+},
+{
+"id": "k296",
+"en": "Copy the link and open it in your wallet’s browser"
+},
+{
+"id": "k297",
+"en": "Copy link"
+},
+{
+"id": "k298",
+"en": "Copied ✓"
+},
+{
+"id": "k299",
+"en": "Link copied. Open your wallet app, go to its browser and paste it."
+},
+{
+"id": "k300",
+"en": "Your staking, rewards and withdrawals work the same inside your wallet app. On a computer you can also connect as usual."
+},
+{
+"id": "k301",
+"en": "To connect here, install a wallet extension. On your phone, open this page inside your wallet app."
+},
+{
+"id": "k302",
+"en": "Other compatible wallets"
+},
+{
+"id": "k303",
+"en": "Install the browser extension"
+},
+{
+"id": "k304",
+"en": "Phone app · copy the link and open it there"
+},
+{
+"id": "k305",
+"en": "Connection link · Tangem, Ledger Live, Safe and more"
+},
+{
+"id": "k306",
+"en": "QR code · Tangem, Ledger Live, Safe and more"
+},
+{
+"id": "k307",
+"en": "✕ Close QR connection"
+},
+{
+"id": "k308",
+"en": "Scan this QR code with your wallet, or copy the connection link and paste it in its connect section."
+},
+{
+"id": "k309",
+"en": "Copy the connection link, open your wallet, go to its connect section and paste it. Then come back to this tab."
+},
+{
+"id": "k310",
+"en": "Preparing the connection… tap again in a second."
+},
+{
+"id": "k311",
+"en": "The connection did not load. Check your connection and try again."
+},
+{
+"id": "k312",
+"en": "Opening Binance Wallet… approve the connection there, then come back to this tab."
+},
+{
+"id": "k313",
+"en": "Binance Wallet did not connect. Try again."
 }
 ]
