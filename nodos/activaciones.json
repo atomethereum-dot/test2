@@ -202,6 +202,13 @@
       "c": "Luxembourg, LU",
       "la": 49.6,
       "lo": 6.2
+    },
+    "0xb0ebb9045a181470ed8f49d3fc7bda5b77898c7e": {
+      "t": 1793643531000,
+      "n": "Sectora Node Manila",
+      "c": "Manila, PH",
+      "la": 14.6,
+      "lo": 121
     }
   }
 }
