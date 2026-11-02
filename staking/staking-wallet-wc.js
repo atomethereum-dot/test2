@@ -67,45 +67,45 @@
   const APPS = [
     { id: "metamask", nombre: "MetaMask", logo: "metaMask", nativo: "metamask://",
       navegador: () => "https://metamask.app.link/dapp/" + AQUI.replace(/^https?:\/\//, "") },
-    { id: "binance", nombre: "Binance Wallet", logo: "binance", nativo: "bnc://app.binance.com/cedefi/", navegador: binance },
     // Phantom no usa WalletConnect para Ethereum: abre esta pagina en su navegador
     { id: "phantom", nombre: "Phantom", icono: PHANTOM,
       navegador: () => "https://phantom.app/ul/browse/" + enc(AQUI) + "?ref=" + enc(location.origin) },
     { id: "trust", nombre: "Trust Wallet", logo: "trust", nativo: "trust://",
       navegador: () => "https://link.trustwallet.com/open_url?coin_id=60&url=" + enc(AQUI) },
+    { id: "binance", nombre: "Binance Wallet", logo: "binance", navegador: binance },
     { id: "coinbase", nombre: "Coinbase Wallet", logo: "coinbase",
       navegador: () => "https://go.cb-w.com/dapp?cb_url=" + enc(AQUI) },
-    { id: "okx", nombre: "OKX Wallet", logo: "okx", nativo: "okex://main/",
+    { id: "okx", nombre: "OKX Wallet", logo: "okx",
       navegador: () => "https://www.okx.com/download?deeplink=" + enc("okx://wallet/dapp/url?dappUrl=" + enc(AQUI)) },
     // mas wallets con navegador propio: abren esta pagina dentro de su app
-    { id: "bitget", nombre: "Bitget Wallet", logo: "bitget", nativo: "bitkeep://", navegador: () => "https://bkcode.vip?action=dapp&url=" + enc(AQUI) },
-    { id: "tokenpocket", nombre: "TokenPocket", logo: "tokenPocket", nativo: "tpoutside://",
+    { id: "bitget", nombre: "Bitget Wallet", logo: "bitget", navegador: () => "https://bkcode.vip?action=dapp&url=" + enc(AQUI) },
+    { id: "tokenpocket", nombre: "TokenPocket", logo: "tokenPocket",
       navegador: () => "tpdapp://open?params=" + enc(JSON.stringify({ url: AQUI, chain: "ETH", source: "Sectora" })) },
-    { id: "imtoken", nombre: "imToken", logo: "imToken", nativo: "imtokenv2://", navegador: () => "imtokenv2://navigate/DappView?url=" + enc(AQUI) },
+    { id: "imtoken", nombre: "imToken", logo: "imToken", navegador: () => "imtokenv2://navigate/DappView?url=" + enc(AQUI) },
     { id: "rainbow", nombre: "Rainbow", logo: "rainbow", nativo: "rainbow://",
       navegador: () => "https://rnbwapp.com/dapp?url=" + enc(AQUI) },
     { id: "rabby", nombre: "Rabby", icono: LOGO_EXTRA.rabby, navegador: () => "https://go.rabby.io/mobile/index.html?_cmd=open-dapp&dapp=" + enc(AQUI) },
     { id: "magiceden", nombre: "Magic Eden", icono: LOGO_EXTRA.magicEden, navegador: () => "magiceden://browser/" + enc(AQUI) },
-    { id: "ronin", nombre: "Ronin Wallet", icono: LOGO_EXTRA.ronin, nativo: "roninwallet://", navegador: () => "roninwallet://in_app_browser?url=" + enc(AQUI) },
+    { id: "ronin", nombre: "Ronin Wallet", icono: LOGO_EXTRA.ronin, navegador: () => "roninwallet://in_app_browser?url=" + enc(AQUI) },
   ];
-  // Uniswap Wallet (app del movil) conecta por WalletConnect con su esquema propio
+  // Uniswap Wallet (app del movil, sin navegador propio): conecta por WalletConnect con uniswap://wc?uri=
   const UNI_APP = { id: "uniswap", nombre: "Uniswap Wallet", icono: LOGO_EXTRA.uniswap, nativo: "uniswap://" };
-  APPS.splice(APPS.findIndex((a) => a.id === "binance") + 1, 0, UNI_APP);
+  APPS.push(UNI_APP);   // sin "navegador": no sale en la lista de abrir en la app; sirve para volver a la app al firmar
   const conWC = (a) => !!a.nativo;
-  /* 2 nov 2026: Reown ya quito la marca de sectoraorg.com: todo vuelve a WalletConnect, como antes.
-     Movil: cada wallet con enlace de WalletConnect (MetaMask, Binance, Uniswap, Trust, OKX, Bitget...) abre su app
-     para aprobar y vuelve a esta pestana; Phantom, Coinbase, Rabby y Magic Eden (sin WalletConnect para Ethereum
-     en el movil) abren esta pagina en su app. Ordenador: extensiones y el QR de WalletConnect.
-     SOLO_APP = true: la version temporal sin WalletConnect (abrir la pagina dentro de cada app). */
-  const SOLO_APP = false;
+  /* TEMPORAL (30 oct 2026): mientras Reown quita la marca de sectoraorg.com, no se conecta por WalletConnect:
+     en el movil sin wallet (Chrome, Safari...) se abre esta pagina dentro de la app de la wallet, donde no
+     sale ninguna alerta, y en el ordenador no hay QR (extensiones y el enlace para el telefono). WalletConnect
+     queda solo para las wallets sin navegador propio ni extension (Tangem, Ledger Live, Safe...), con aviso previo.
+     Para volver a como estaba: SOLO_APP = false. */
+  const SOLO_APP = true;
   /* para el ordenador: las que no estan instaladas (web: su pagina oficial de descarga);
      sin web, las que son solo app del movil. m reconoce la extension ya detectada */
   const INSTALAR = [
     { id: "i-metamask", nombre: "MetaMask", logo: "metaMask", m: /metamask/i, web: "https://metamask.io/download/" },
     { id: "i-uniswap", nombre: "Uniswap Wallet", icono: LOGO_EXTRA.uniswap, m: /uniswap/i, web: UNI_WEB },
-    { id: "i-binance", nombre: "Binance Wallet", logo: "binance", m: /binance/i, web: "https://www.binance.com/en/web3wallet" },   // su pagina oficial (la extension no esta en todos los paises)
     { id: "i-phantom", nombre: "Phantom", icono: PHANTOM, m: /phantom/i, web: "https://phantom.com/download" },
     { id: "i-trust", nombre: "Trust Wallet", logo: "trust", m: /trust/i, web: "https://trustwallet.com/download" },
+    { id: "i-binance", nombre: "Binance Wallet", logo: "binance", m: /binance/i, web: "https://www.binance.com/en/web3wallet" },   // su pagina oficial (la extension no esta en todos los paises)
     { id: "i-coinbase", nombre: "Coinbase Wallet", logo: "coinbase", m: /coinbase/i, web: "https://www.coinbase.com/wallet/downloads" },
     { id: "i-okx", nombre: "OKX Wallet", logo: "okx", m: /okx/i, web: "https://www.okx.com/web3" },
     { id: "i-bitget", nombre: "Bitget Wallet", logo: "bitget", m: /bitget/i, web: "https://web3.bitget.com/" },
@@ -279,8 +279,7 @@
   let caja = null;
   let uri = "";
   let pidiendo = false;     // hay un connect() de WalletConnect en curso
-  let wcAbierto = false;    // la persona abrio el panel de WalletConnect (QR o enlace de conexion)
-  let qrCerrado = false;    // la persona cerro el QR que se abre solo en el ordenador
+  let wcAbierto = false;    // la persona abrio el panel de WalletConnect (Tangem, Ledger Live, Safe...)
   let logosPedidos = false;
 
   function nodo(tag, clase, texto) {
@@ -345,11 +344,6 @@
     if (caja) return caja;
     const btn = $("connectBtn");
     if (!btn || !btn.parentNode) return null;
-    if (!$("wpickWcCss")) {   // estilo del boton "Open in my wallet" (un enlace con aspecto de boton)
-      const st = nodo("style"); st.id = "wpickWcCss";
-      st.textContent = "a.wpick-copy{display:inline-block;text-decoration:none}a.wpick-copy[aria-disabled=true]{opacity:.4;pointer-events:none}";
-      document.head.appendChild(st);
-    }
     caja = nodo("div", "wpick");
     caja.id = "walletPick";
     caja.setAttribute("role", "region");
@@ -406,28 +400,23 @@
     return f;
   }
 
-  /* WalletConnect: el QR en el ordenador; en el movil, abrir o copiar el enlace de conexion. */
+  /* Mientras dura SOLO_APP, WalletConnect solo para las wallets sin navegador propio ni extension (Tangem,
+     Ledger Live, Safe...): primero un aviso; luego el QR en el ordenador y el enlace para pegar en el movil. */
   function filaSoloWC(qr) {
-    const f = fila("button", { id: "solo-wc", nombre: "WalletConnect", logo: "walletConnect" },
-      MOVIL ? "Any wallet · open or copy the connection link" : "Scan a QR code with your phone's wallet");
+    const f = fila("button", { id: "solo-wc", nombre: "Tangem, Ledger Live, Safe…" },
+      "Wallets without their own browser", { icono: CARTERA });
     f.addEventListener("click", () => { wcAbierto = true; panelWC(qr); });
     return f;
   }
 
   function panelWC(qr) {
     qr.textContent = "";
-    const x = nodo("button", "wpick-wcx mono", MOVIL ? "✕ Close WalletConnect" : "✕ Close QR connection");
+    const x = nodo("button", "wpick-wcx mono", "✕ Close QR connection");
     x.type = "button";
-    x.addEventListener("click", () => { wcAbierto = false; qrCerrado = true; abrir(); });   // cierra el panel; el resto de la ventana sigue igual
+    x.addEventListener("click", () => { wcAbierto = false; abrir(); });   // cierra el panel; el resto de la ventana sigue igual
     qr.appendChild(x);
     qr.appendChild(nodo("p", "wpick-state"));
-    if (MOVIL) {   // en el telefono: abrir el enlace en la wallet instalada o copiarlo; van antes del QR
-      const o = nodo("a", "wpick-copy wpick-wcopen mono", "Open in my wallet");
-      o.setAttribute("aria-disabled", "true");
-      o.addEventListener("click", (e) => { if (!uri) e.preventDefault(); else { guardar(ELEGIDA, null); guardar(DEEPLINK, null); } });
-      qr.appendChild(o);
-      qr.appendChild(copiarBoton());
-    }
+    if (MOVIL) qr.appendChild(copiarBoton());   // en el telefono se copia el enlace: el boton va antes del QR
     qr.appendChild(nodo("div", "wpick-qrbox"));
     qr.appendChild(nodo("p", "wpick-qrtxt", "Scan this QR code with your wallet, or copy the connection link and paste it in its connect section."));
     if (!MOVIL) qr.appendChild(copiarBoton());
@@ -454,7 +443,7 @@
   function vistaSoloApp() {
     caja.textContent = "";
     cabecera("Open this page in your wallet");
-    estado("Tap your wallet to connect:");
+    estado("To connect from your phone, open this page inside your wallet app. Tap your wallet:");
     const e = caja.querySelector(".wpick-state"); if (e) e.classList.add("solo");
     const lista = nodo("div", "wpick-list");
     inyectadas().forEach((w) => {
@@ -462,8 +451,7 @@
       f.addEventListener("click", () => usarInyectada(w.proveedor));
       lista.appendChild(f);
     });
-    // orden: MetaMask, Binance, Uniswap Wallet, WalletConnect y el resto
-    const qr = nodo("div", "wpick-qr");
+    // Uniswap Wallet va segunda, detras de MetaMask
     APPS.filter((a) => a.navegador).forEach((a, i) => {
       // Binance en Android no abre webs desde un enlace ("Ce lien ne fonctionne pas"): conecta con su conector oficial
       if (a.id === "binance" && ANDROID) {
@@ -477,15 +465,18 @@
         f.rel = "noopener";
         lista.appendChild(f);
       }
-      if (a.id === "binance") { lista.appendChild(filaUniWC()); lista.appendChild(filaSoloWC(qr)); lista.appendChild(qr); }
+      if (i === 0) lista.appendChild(filaUniWC());
     });
     // cualquier otra wallet con navegador: copiar el enlace y abrirlo ahi (sin WalletConnect)
     lista.appendChild(filaCopiar("Another wallet"));
+    const qr = nodo("div", "wpick-qr");
+    lista.appendChild(filaSoloWC(qr));
     caja.appendChild(lista);
+    caja.appendChild(qr);
     if (wcAbierto) panelWC(qr);
     else pedirConexionWC();   // deja listo el enlace de Uniswap Wallet
     const pie = nodo("div", "wpick-foot");
-    pie.appendChild(nodo("p", "wpick-alt", "Your staking, rewards and withdrawals work the same in every wallet. On a computer you can also connect as usual."));
+    pie.appendChild(nodo("p", "wpick-alt", "Your staking, rewards and withdrawals work the same inside your wallet app. On a computer you can also connect as usual."));
     caja.appendChild(pie);
   }
 
@@ -500,23 +491,12 @@
       f.addEventListener("click", () => usarInyectada(w.proveedor));
       lista.appendChild(f);
     });
-    const otras = () => {
-      const o = fila("a", { id: OTRAS.id, nombre: "WalletConnect", logo: OTRAS.logo }, "Any WalletConnect wallet");
-      o.setAttribute("aria-disabled", "true");
-      o.addEventListener("click", (e) => {
-        if (!uri) { e.preventDefault(); estado("Preparing the connection… tap again in a second."); return; }
-        guardar(ELEGIDA, null);
-        guardar(DEEPLINK, null);
-        estado("Approve the connection in your wallet, then come back to this tab.");
-      });
-      return o;
-    };
     APPS.forEach((a) => {
       const f = fila("a", a, conWC(a) ? "Approve in the app" : "Opens this page in the app", { icono: a.icono });
       if (conWC(a)) {
         f.setAttribute("aria-disabled", "true");
         f.addEventListener("click", (e) => {
-          if (!uri) { e.preventDefault(); estado("Preparing the connection… tap again in a second."); return; }
+          if (!uri) { e.preventDefault(); return; }
           guardar(ELEGIDA, a.id);
           guardar(DEEPLINK, JSON.stringify({ href: a.nativo, name: a.nombre }));
           estado("Approve the connection in " + a.nombre + ", then come back to this tab.");
@@ -526,15 +506,23 @@
         f.rel = "noopener";
       }
       lista.appendChild(f);
-      if (a.id === "phantom") lista.appendChild(otras());
     });
+    const o = fila("a", OTRAS, "Any WalletConnect wallet");
+    o.setAttribute("aria-disabled", "true");
+    o.addEventListener("click", (e) => {
+      if (!uri) { e.preventDefault(); return; }
+      guardar(ELEGIDA, null);
+      guardar(DEEPLINK, null);
+      estado("Approve the connection in your wallet, then come back to this tab.");
+    });
+    lista.appendChild(o);
     caja.appendChild(lista);
 
     const pie = nodo("div", "wpick-foot");
     pie.appendChild(copiarBoton());
     const alt = nodo("p", "wpick-alt");
     alt.append("Prefer your wallet’s own browser? Open this page in ");
-    APPS.filter((a) => conWC(a) && a.navegador && !(a.id === "binance" && ANDROID)).slice(0, 4).forEach((a, i, l) => {
+    APPS.filter((a) => conWC(a) && a.navegador).forEach((a, i, l) => {
       const l1 = nodo("a", "", a.nombre);
       l1.href = a.navegador();
       l1.rel = "noopener";
@@ -557,19 +545,12 @@
     });
     caja.appendChild(lista);
 
-    {
-      // todas las wallets, siempre: las no instaladas llevan a su extension; las que solo son app del movil
-      // y la fila de WalletConnect abren el QR para el telefono
-      if (!ext.length) estado("Use a wallet extension, or WalletConnect to connect the wallet on your phone.");
+    if (SOLO_APP) {
+      // mientras dura SOLO_APP, sin QR (WalletConnect): todas las wallets, siempre. Las no instaladas llevan a
+      // su extension; las que solo son app del movil y la ultima fila copian el enlace para abrirlo en el telefono
+      if (!ext.length) estado("To connect here, install a wallet extension. On your phone, open this page inside your wallet app.");
       else lista.appendChild(nodo("div", "wpick-sec mono", "Other compatible wallets"));
-      const qr = nodo("div", "wpick-qr");
-      let wcPuesto = false;
-      const ponWC = () => { if (wcPuesto) return; wcPuesto = true; lista.appendChild(filaSoloWC(qr)); lista.appendChild(qr); };
-      const resto = INSTALAR.filter((w) => !ext.some((e) => w.m.test(e.nombre)));
-      // WalletConnect va debajo de Uniswap, Binance y Phantom (de las que esten en esta lista)
-      const tras = ["i-uniswap", "i-binance", "i-phantom"].filter((id) => resto.some((w) => w.id === id)).pop();
-      if (!tras) ponWC();
-      resto.forEach((w) => {
+      INSTALAR.filter((w) => !ext.some((e) => w.m.test(e.nombre))).forEach((w) => {
         if (w.web) {
           const f = fila("a", w, "Install the browser extension", { icono: w.icono });
           f.href = w.web;
@@ -577,18 +558,28 @@
           f.rel = "noopener";
           lista.appendChild(f);
         } else {
-          const f = fila("button", w, "Phone app · scan the WalletConnect QR", { icono: w.icono });
-          f.addEventListener("click", () => { wcAbierto = true; panelWC(qr); });
+          const f = fila("button", w, "Phone app · copy the link and open it there", { icono: w.icono });
+          f.addEventListener("click", copiaAqui);
           lista.appendChild(f);
         }
-        if (w.id === tras) ponWC();
       });
-      ponWC();
       lista.appendChild(filaCopiar("Wallet on your phone"));
-      // sin extension, el QR se abre solo (como antes); si la persona lo cierra, ya no vuelve a abrirse solo
-      if (!ext.length && !qrCerrado) wcAbierto = true;
+      const qr = nodo("div", "wpick-qr");
+      lista.appendChild(filaSoloWC(qr));
+      caja.appendChild(qr);
       if (wcAbierto) panelWC(qr);
+      return;
     }
+
+    const qr = nodo("div", "wpick-qr");
+    if (ext.length) {
+      const f = fila("button", OTRAS, "Scan a QR code with your phone");
+      f.querySelector(".wpick-name").textContent = "Wallet on your phone";
+      f.addEventListener("click", () => { f.remove(); mostrarQR(qr); });
+      lista.appendChild(f);
+    }
+    caja.appendChild(qr);
+    if (!ext.length) mostrarQR(qr);
   }
 
   function mostrarQR(qr) {
@@ -604,7 +595,7 @@
   // las filas que conectan por WalletConnect (no las que abren el navegador de la app)
   function filasWC() {
     if (!caja) return [];
-    if (SOLO_APP) return Array.from(caja.querySelectorAll("a.wpick-row[data-wc], a.wpick-wcopen"));   // Uniswap Wallet y "Open in my wallet"
+    if (SOLO_APP) return Array.from(caja.querySelectorAll("a.wpick-row[data-wc]"));   // con SOLO_APP, solo Uniswap Wallet
     return Array.from(caja.querySelectorAll("a.wpick-row")).filter((f) => {
       const a = APPS.find((x) => x.id === f.dataset.app);
       return f.dataset.app === "otras" || (a && conWC(a));
@@ -615,7 +606,7 @@
     if (!caja) return;
     filasWC().forEach((f) => {
       const a = APPS.find((x) => x.id === f.dataset.app);
-      f.href = f.dataset.wc ? f.dataset.wc + "wc?uri=" + enc(uri) : a && a.nativo ? a.nativo + "wc?uri=" + enc(uri) : uri;
+      f.href = f.dataset.wc ? f.dataset.wc + "wc?uri=" + enc(uri) : a ? a.nativo + "wc?uri=" + enc(uri) : uri;
       f.removeAttribute("aria-disabled");
     });
     caja.querySelectorAll(".wpick-copy").forEach((b) => (b.disabled = false));
@@ -628,8 +619,8 @@
         box.innerHTML = q.createSvgTag({ cellSize: 4, margin: 2 });   // SVG generado aqui, sin texto ajeno
       }).catch(() => estado("Could not draw the QR code. Use Copy connection link.", true));
     }
-    if (SOLO_APP && !wcAbierto) return;   // enlace preparado para Uniswap Wallet: la lista sigue con su texto
-    estado(MOVIL ? (SOLO_APP ? "Open the link in your wallet, or copy it and paste it in your wallet's connect section. Then come back to this tab."
+    if (SOLO_APP && !wcAbierto) return;   // enlace listo para Uniswap Wallet: la lista conserva su texto
+    estado(MOVIL ? (SOLO_APP ? "Copy the connection link, open your wallet, go to its connect section and paste it. Then come back to this tab."
                              : "Tap your wallet app. Approve the connection there, then come back to this tab.")
                  : "Scan the code with your phone to connect.");
   }
@@ -672,11 +663,11 @@
       // el selector sigue abierto
       uri = "";
       const rechazo = /reject|denied|cancel/i.test((e && e.message) || "");
-      // enlace de Uniswap Wallet caducado sin que nadie lo usara: se prepara otro en silencio
-      if (caja && !caja.hidden && !wcAbierto && MOVIL && !rechazo) {
+      // enlace de Uniswap Wallet caducado sin usarlo: se prepara otro en silencio
+      if (caja && !caja.hidden && SOLO_APP && !wcAbierto && MOVIL && !rechazo) {
         filasWC().forEach((f) => { f.removeAttribute("href"); f.setAttribute("aria-disabled", "true"); });
         setTimeout(() => { if (caja && !caja.hidden) pedirConexionWC(); }, 400);
-      } else if (caja && !caja.hidden) {
+      } else if (caja && !caja.hidden && (!SOLO_APP || wcAbierto || rechazo)) {
         estado(rechazo ? "The connection was rejected in the wallet." : "The link expired.", true);
         caja.querySelectorAll(".wpick-state").forEach((e) => {
           const otra = nodo("button", "wpick-retry mono", "Try again");
