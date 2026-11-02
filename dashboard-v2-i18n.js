@@ -863,3 +863,9 @@
   var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
   Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.wallet.bnApprove"] = V[l][0]; d["hashdash.wallet.bnOpening"] = V[l][1]; d["hashdash.wallet.bnFail"] = V[l][2]; });
 })();
+/* fila de WalletConnect con su nombre (2 nov 2026: Reown ya quito la marca del dominio) */
+(function () {
+  var V = {"en": ["Connection link · Tangem, Ledger Live, Safe and more", "QR code · Tangem, Ledger Live, Safe and more"], "es": ["Enlace de conexión · Tangem, Ledger Live, Safe y más", "Código QR · Tangem, Ledger Live, Safe y más"], "pt": ["Link de conexão · Tangem, Ledger Live, Safe e mais", "Código QR · Tangem, Ledger Live, Safe e mais"], "fr": ["Lien de connexion · Tangem, Ledger Live, Safe et plus", "Code QR · Tangem, Ledger Live, Safe et plus"], "de": ["Verbindungslink · Tangem, Ledger Live, Safe und mehr", "QR-Code · Tangem, Ledger Live, Safe und mehr"], "ru": ["Ссылка подключения · Tangem, Ledger Live, Safe и другие", "QR-код · Tangem, Ledger Live, Safe и другие"], "zh": ["连接链接 · Tangem、Ledger Live、Safe 等", "二维码 · Tangem、Ledger Live、Safe 等"], "ja": ["接続リンク · Tangem、Ledger Live、Safe など", "QRコード · Tangem、Ledger Live、Safe など"], "ko": ["연결 링크 · Tangem, Ledger Live, Safe 등", "QR 코드 · Tangem, Ledger Live, Safe 등"], "ar": ["رابط الربط · Tangem وLedger Live وSafe وغيرها", "رمز QR · Tangem وLedger Live وSafe وغيرها"], "hi": ["कनेक्शन लिंक · Tangem, Ledger Live, Safe और अन्य", "QR कोड · Tangem, Ledger Live, Safe और अन्य"]};
+  var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
+  Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.wallet.wcRowM"] = V[l][0]; d["hashdash.wallet.wcRowD"] = V[l][1]; });
+})();

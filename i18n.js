@@ -16,9 +16,9 @@
   ];
   const RTL_LANGS = new Set(["ar"]);
   const SUPPORTED = new Set(LANGS.map((l) => l.code));
-  // Spanish-speaking visitors default to English unless they pick Spanish
-  // themselves from the switcher — browser-language auto-detection skips it.
-  const AUTO_DETECT_EXCLUDE = new Set(["es"]);
+  // Every supported browser language is detected (Spanish included since 2 Nov 2026), so the page opens in
+  // the visitor's language and Chrome does not translate it on top.
+  const AUTO_DETECT_EXCLUDE = new Set([]);
   // A page can set window.SECTORA_LANG_START (e.g. the dashboard: "en") to always open in that
   // language; a language picked from its switcher holds only for the rest of that visit.
   const START = typeof window.SECTORA_LANG_START === "string" && SUPPORTED.has(window.SECTORA_LANG_START) ? window.SECTORA_LANG_START : null;
