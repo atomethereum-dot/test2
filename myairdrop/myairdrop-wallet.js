@@ -97,6 +97,9 @@
   // Binance Wallet en Android: conector oficial de Binance (se abre Binance para aprobar)
   var BNT = {"en": {"bnApprove": "Opens Binance to approve the connection", "bnOpening": "Opening Binance Wallet… approve the connection there, then come back to this tab.", "bnFail": "Binance Wallet did not connect. Try again."}, "es": {"bnApprove": "Abre Binance para aprobar la conexión", "bnOpening": "Abriendo Binance Wallet… aprueba la conexión allí y vuelve a esta pestaña.", "bnFail": "Binance Wallet no se conectó. Inténtalo de nuevo."}, "pt": {"bnApprove": "Abre a Binance para aprovar a conexão", "bnOpening": "Abrindo a Binance Wallet… aprove a conexão lá e volte para esta aba.", "bnFail": "A Binance Wallet não conectou. Tente de novo."}, "fr": {"bnApprove": "Ouvre Binance pour approuver la connexion", "bnOpening": "Ouverture de Binance Wallet… approuvez la connexion, puis revenez sur cet onglet.", "bnFail": "Binance Wallet ne s’est pas connecté. Réessayez."}, "de": {"bnApprove": "Öffnet Binance, um die Verbindung zu bestätigen", "bnOpening": "Binance Wallet wird geöffnet … bestätige dort die Verbindung und komm dann zu diesem Tab zurück.", "bnFail": "Binance Wallet hat sich nicht verbunden. Versuche es erneut."}, "ru": {"bnApprove": "Откроет Binance для подтверждения подключения", "bnOpening": "Открываем Binance Wallet… подтвердите подключение там и вернитесь на эту вкладку.", "bnFail": "Binance Wallet не подключился. Попробуйте снова."}, "zh": {"bnApprove": "打开 Binance 以批准连接", "bnOpening": "正在打开 Binance Wallet… 请在那里批准连接，然后回到此页面。", "bnFail": "Binance Wallet 未连接，请重试。"}, "ja": {"bnApprove": "Binance を開いて接続を承認します", "bnOpening": "Binance Wallet を開いています… そこで接続を承認し、このタブに戻ってください。", "bnFail": "Binance Wallet に接続できませんでした。もう一度お試しください。"}, "ko": {"bnApprove": "Binance를 열어 연결을 승인합니다", "bnOpening": "Binance Wallet을 여는 중… 그곳에서 연결을 승인한 뒤 이 탭으로 돌아오세요.", "bnFail": "Binance Wallet이 연결되지 않았습니다. 다시 시도하세요."}, "ar": {"bnApprove": "يفتح Binance للموافقة على الاتصال", "bnOpening": "جارٍ فتح Binance Wallet… وافق على الاتصال هناك ثم عد إلى هذه الصفحة.", "bnFail": "لم يتصل Binance Wallet. حاول مرة أخرى."}, "hi": {"bnApprove": "कनेक्शन मंज़ूर करने के लिए Binance खोलता है", "bnOpening": "Binance Wallet खुल रहा है… वहाँ कनेक्शन मंज़ूर करें, फिर इस टैब पर लौटें।", "bnFail": "Binance Wallet कनेक्ट नहीं हुआ। फिर कोशिश करें।"}};
   for (var bl in BNT) { T[bl] = T[bl] || {}; for (var bk in BNT[bl]) T[bl][bk] = BNT[bl][bk]; }
+  // fila de WalletConnect con su nombre (2 nov 2026: Reown ya quito la marca del dominio)
+  var WCR = {"en": {"wcRowM": "Connection link · Tangem, Ledger Live, Safe and more", "wcRowD": "QR code · Tangem, Ledger Live, Safe and more"}, "es": {"wcRowM": "Enlace de conexión · Tangem, Ledger Live, Safe y más", "wcRowD": "Código QR · Tangem, Ledger Live, Safe y más"}, "pt": {"wcRowM": "Link de conexão · Tangem, Ledger Live, Safe e mais", "wcRowD": "Código QR · Tangem, Ledger Live, Safe e mais"}, "fr": {"wcRowM": "Lien de connexion · Tangem, Ledger Live, Safe et plus", "wcRowD": "Code QR · Tangem, Ledger Live, Safe et plus"}, "de": {"wcRowM": "Verbindungslink · Tangem, Ledger Live, Safe und mehr", "wcRowD": "QR-Code · Tangem, Ledger Live, Safe und mehr"}, "ru": {"wcRowM": "Ссылка подключения · Tangem, Ledger Live, Safe и другие", "wcRowD": "QR-код · Tangem, Ledger Live, Safe и другие"}, "zh": {"wcRowM": "连接链接 · Tangem、Ledger Live、Safe 等", "wcRowD": "二维码 · Tangem、Ledger Live、Safe 等"}, "ja": {"wcRowM": "接続リンク · Tangem、Ledger Live、Safe など", "wcRowD": "QRコード · Tangem、Ledger Live、Safe など"}, "ko": {"wcRowM": "연결 링크 · Tangem, Ledger Live, Safe 등", "wcRowD": "QR 코드 · Tangem, Ledger Live, Safe 등"}, "ar": {"wcRowM": "رابط الربط · Tangem وLedger Live وSafe وغيرها", "wcRowD": "رمز QR · Tangem وLedger Live وSafe وغيرها"}, "hi": {"wcRowM": "कनेक्शन लिंक · Tangem, Ledger Live, Safe और अन्य", "wcRowD": "QR कोड · Tangem, Ledger Live, Safe और अन्य"}};
+  for (var wl in WCR) { T[wl] = T[wl] || {}; for (var wk in WCR[wl]) T[wl][wk] = WCR[wl][wk]; }
   function t(k, v) { var l = (document.documentElement.lang || "en").slice(0, 2), s = (T[l] || T.en)[k]; if (s == null) s = T.en[k]; if (v) for (var x in v) s = s.split("{" + x + "}").join(v[x]); return s; }
 
   // el enlace oficial de Binance (getDeepLink de @binance/w3w-utils) para abrir esta web en Binance Wallet:
@@ -126,6 +129,8 @@
     { id: "ronin", nombre: "Ronin Wallet", icono: LOGO_EXTRA.ronin, navegador: function () { return "roninwallet://in_app_browser?url=" + enc(AQUI); } }
   ];
   var OTRAS = { id: "otras", nombre: "", logo: "walletConnect" };
+  // Uniswap Wallet (app del movil, sin navegador propio): WalletConnect con uniswap://wc?uri= (como RainbowKit)
+  var UNI_APP = { id: "uniswap", nombre: "Uniswap Wallet", icono: LOGO_EXTRA.uniswap, nativo: "uniswap://" };
   function conWC(a) { return !!a.nativo; }
   function leer(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function guardar(k, v) { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} }
@@ -196,7 +201,7 @@
 
   /* ---------- el selector ---------- */
   var ov = null, caja = null, uri = "", pidiendo = false, logosPedidos = false;
-  var wcAbierto = false;   // la persona abrio el panel de WalletConnect (Tangem, Ledger Live, Safe...)
+  var wcAbierto = false;   // la persona abrio el panel de WalletConnect (QR o enlace de conexion)
   function nodo(tag, clase, texto) { var n = document.createElement(tag); if (clase) n.className = clase; if (texto) n.textContent = texto; return n; }
   function estilos() {
     if (document.getElementById("maw-css")) return;
@@ -250,6 +255,7 @@
     if (ov) return;
     estilos();
     ov = nodo("div", "maw"); ov.hidden = true; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
+    ov.setAttribute("translate", "no");   // el traductor de Chrome rompia las filas; la ventana ya viene en el idioma de la pagina
     caja = nodo("div", "maw-p"); ov.appendChild(caja); document.body.appendChild(ov);
     ov.addEventListener("click", function (e) { if (e.target === ov) cerrar(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && ov && !ov.hidden) cerrar(); });
@@ -303,10 +309,10 @@
     f.addEventListener("click", function () { copiaAqui(); b.textContent = t("copiedBtn"); setTimeout(function () { b.textContent = t("copyBtn"); }, 2000); });
     return f;
   }
-  // mientras dura SOLO_APP, WalletConnect solo para las wallets sin navegador propio ni extension (Tangem,
-  // Ledger Live, Safe...): primero un aviso; luego el QR en el ordenador y el enlace para pegar en el movil
+  // WalletConnect, con su nombre y su logo, la primera de las wallets no instaladas: el QR en el ordenador y el
+  // enlace de conexion en el movil (tambien para Tangem, Ledger Live, Safe...)
   function filaSoloWC(qr) {
-    var f = fila("button", { id: "solo-wc" }, "Tangem, Ledger Live, Safe…", t("wcOnlyS"), CARTERA);
+    var f = fila("button", { id: "solo-wc", logo: "walletConnect" }, "WalletConnect", MOVIL ? t("wcRowM") : t("wcRowD"));
     f.addEventListener("click", function () { wcAbierto = true; panelWC(qr); });
     return f;
   }
@@ -314,7 +320,7 @@
     qr.textContent = "";
     var x = nodo("button", "maw-wcx mono", "✕ " + t("closeWc")); x.type = "button";
     x.addEventListener("click", function () { wcAbierto = false; abrir(); });   // cierra el panel; el resto de la ventana sigue igual
-    qr.appendChild(x); qr.appendChild(nodo("p", "maw-w", t("wcWarn"))); qr.appendChild(nodo("p", "maw-st"));
+    qr.appendChild(x); qr.appendChild(nodo("p", "maw-st"));
     if (MOVIL) qr.appendChild(copiar());   // en el telefono se copia el enlace: el boton va antes del QR
     qr.appendChild(nodo("div", "maw-qb")); qr.appendChild(nodo("p", "maw-qt", t("wcScanOnly")));
     if (!MOVIL) qr.appendChild(copiar());
@@ -323,6 +329,14 @@
   }
   // mientras dura SOLO_APP, Uniswap Wallet (su app no tiene navegador) se conecta desde el ordenador con su
   // extension, que entra directa sin WalletConnect: en el movil solo se explica, con el enlace para el ordenador
+  /* Uniswap Wallet en el movil: conecta por WalletConnect (uniswap://wc?uri=). El enlace se prepara al abrir
+     la ventana: en Safari la app solo se abre si el enlace sale directo del toque. */
+  function filaUniWC() {
+    var f = fila("a", UNI_APP, UNI_APP.nombre, t("wc"), UNI_APP.icono);
+    f.dataset.wc = UNI_APP.nativo; f.setAttribute("aria-disabled", "true");
+    f.addEventListener("click", function (e) { if (!uri) { e.preventDefault(); estado(t("prep")); return; } estado(t("appr", { a: UNI_APP.nombre })); });
+    return f;
+  }
   var uniAbierto = false;
   function filaUni(box) {
     var f = fila("button", { id: "uniswap-pc" }, "Uniswap Wallet", t("uniS"), LOGO_EXTRA.uniswap);
@@ -349,6 +363,7 @@
     caja.textContent = ""; cabecera(t("soloT")); estado(t("soloS"));
     var lista = nodo("div", "maw-l");
     inyectadas().forEach(function (w) { var f = fila("button", { id: "iny" }, w.nombre, t("det"), w.icono); f.addEventListener("click", function () { usar(w.proveedor); }); lista.appendChild(f); });
+    var qrm = nodo("div", "maw-q"); lista.appendChild(filaSoloWC(qrm)); lista.appendChild(qrm);
     // Uniswap Wallet va segunda, detras de MetaMask
     APPS.filter(function (a) { return a.navegador; }).forEach(function (a, i) {
       // Binance en Android no abre webs desde un enlace: conecta con su conector oficial
@@ -357,12 +372,12 @@
         cargaBinance().catch(function () {});   // listo antes del toque, para que Binance se abra en seguida
       }
       else { var f = fila("a", a, a.nombre, t("brw"), a.icono); f.href = a.navegador(); f.rel = "noopener"; lista.appendChild(f); }
-      if (i === 0) { var u = nodo("div", "maw-ux"); lista.appendChild(filaUni(u)); lista.appendChild(u); panelUni(u); }
+      if (i === 0) lista.appendChild(filaUniWC());
     });
     // cualquier otra wallet con navegador: copiar el enlace y abrirlo ahi (sin WalletConnect)
     lista.appendChild(filaCopiar(t("soloOtherN")));
-    var qrm = nodo("div", "maw-q"); lista.appendChild(filaSoloWC(qrm));
-    caja.appendChild(lista); caja.appendChild(qrm); if (wcAbierto) panelWC(qrm);
+    caja.appendChild(lista);
+    if (wcAbierto) panelWC(qrm); else pedirConexion();   // deja listo el enlace de Uniswap Wallet
     var pie = nodo("div", "maw-f"); pie.appendChild(nodo("p", "maw-a", t("soloF"))); pie.appendChild(nodo("p", "maw-o", t("only"))); caja.appendChild(pie);
   }
   function vistaMovil() {
@@ -398,6 +413,7 @@
       // la ultima fila copian el enlace para abrirlo en el telefono
       if (!ext.length) estado(t("soloPc"));
       else lista.appendChild(nodo("p", "maw-sec mono", t("others")));
+      var qrp = nodo("div", "maw-q"); lista.appendChild(filaSoloWC(qrp)); lista.appendChild(qrp);
       INSTALAR.filter(function (w) { return !ext.some(function (e) { return w.m.test(e.nombre); }); }).forEach(function (w) {
         var i;
         if (w.web) { i = fila("a", w, w.nombre, t("inst"), w.icono); i.href = w.web; i.target = "_blank"; i.rel = "noopener"; }
@@ -405,7 +421,7 @@
         lista.appendChild(i);
       });
       lista.appendChild(filaCopiar(t("phone")));
-      var qrp = nodo("div", "maw-q"); lista.appendChild(filaSoloWC(qrp)); caja.appendChild(qrp); if (wcAbierto) panelWC(qrp);
+      if (wcAbierto) panelWC(qrp);
       var pie0 = nodo("div", "maw-f"); pie0.appendChild(nodo("p", "maw-o", t("only"))); caja.appendChild(pie0);
       return;
     }
@@ -420,31 +436,39 @@
     qr.dataset.on = "1"; pedirConexion();
   }
   function filasWC() {
-    if (!caja || SOLO_APP) return [];   // con SOLO_APP ninguna fila de wallet pasa por WalletConnect
+    if (!caja) return [];
+    if (SOLO_APP) return Array.from(caja.querySelectorAll("a.maw-r[data-wc]"));   // con SOLO_APP, solo Uniswap Wallet
     return Array.from(caja.querySelectorAll("a.maw-r")).filter(function (f) { var a = APPS.find(function (x) { return x.id === f.dataset.app; }); return f.dataset.app === "otras" || (a && conWC(a)); });
   }
   function pintarUri() {
     if (!caja) return;
-    filasWC().forEach(function (f) { var a = APPS.find(function (x) { return x.id === f.dataset.app; }); f.href = a ? a.nativo + "wc?uri=" + enc(uri) : uri; f.removeAttribute("aria-disabled"); });
+    filasWC().forEach(function (f) { var a = APPS.find(function (x) { return x.id === f.dataset.app; }); f.href = f.dataset.wc ? f.dataset.wc + "wc?uri=" + enc(uri) : a ? a.nativo + "wc?uri=" + enc(uri) : uri; f.removeAttribute("aria-disabled"); });
     caja.querySelectorAll(".maw-c").forEach(function (b) { b.disabled = false; });
     var box = caja.querySelector(".maw-qb");
     if (box) cargar(QR_JS, function () { return !!window.SectoraQR; }).then(function () {
       var q = window.SectoraQR(0, "M"); q.addData(uri); q.make(); box.innerHTML = q.createSvgTag({ cellSize: 4, margin: 2 });   // SVG generado aqui
     }).catch(function () { estado(t("noqr"), true); });
+    if (SOLO_APP && !wcAbierto) return;   // enlace listo para Uniswap Wallet: la lista conserva su texto
     estado(MOVIL ? (SOLO_APP ? t("wcPaste") : t("tapM")) : t("tapD"));
   }
   /* el enlace se pide antes del toque: en Safari del iPhone la app solo se abre si el enlace sale directo del toque */
   function pedirConexion() {
-    if (pidiendo) { if (uri) pintarUri(); return; }
-    pidiendo = true; estado(t("prep"));
+    var habla = !SOLO_APP || wcAbierto;   // con SOLO_APP y el panel cerrado se prepara en silencio (Uniswap Wallet)
+    if (pidiendo) { if (uri) pintarUri(); else if (habla) estado(t("prep")); return; }
+    pidiendo = true; if (habla) estado(t("prep"));
     proveedorWC().then(function (p) {
       if (p.session && p.accounts && p.accounts.length) { pidiendo = false; entregar(p); return; }
-      var alUri = function (u) { if (typeof u === "string" && /^wc:/.test(u)) { uri = u; if (!SOLO_APP || wcAbierto) pintarUri(); } };
+      var alUri = function (u) { if (typeof u === "string" && /^wc:/.test(u)) { uri = u; pintarUri(); } };
       p.on("display_uri", alUri);
       return p.connect().then(function () { entregar(p); }, function (e) {
         uri = "";
-        if (ov && !ov.hidden && (!SOLO_APP || wcAbierto)) {
-          estado(/reject|denied|cancel/i.test((e && e.message) || "") ? t("rej") : t("exp"), true);
+        var rechazo = /reject|denied|cancel/i.test((e && e.message) || "");
+        // enlace de Uniswap Wallet caducado sin usarlo: se prepara otro en silencio
+        if (ov && !ov.hidden && SOLO_APP && !wcAbierto && MOVIL && !rechazo) {
+          filasWC().forEach(function (f) { f.removeAttribute("href"); f.setAttribute("aria-disabled", "true"); });
+          setTimeout(function () { if (ov && !ov.hidden) pedirConexion(); }, 400);
+        } else if (ov && !ov.hidden && (!SOLO_APP || wcAbierto || rechazo)) {
+          estado(rechazo ? t("rej") : t("exp"), true);
           caja.querySelectorAll(".maw-st").forEach(function (st) {
             var otra = nodo("button", "mono", t("retry")); otra.type = "button"; otra.addEventListener("click", function () { abrir(); });
             st.appendChild(otra);
@@ -454,7 +478,7 @@
           var box = caja.querySelector(".maw-qb"); if (box) box.textContent = "";
         }
       }).then(function () { if (p.removeListener) p.removeListener("display_uri", alUri); pidiendo = false; });
-    }).catch(function () { pidiendo = false; estado(t("fail"), true); });
+    }).catch(function () { pidiendo = false; if (!SOLO_APP || wcAbierto) estado(t("fail"), true); });
   }
   function usar(proveedor) {
     cerrar();

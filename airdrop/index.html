@@ -779,6 +779,22 @@ html.aiboot{overflow:hidden}
 .aint-s b{color:#fff;font-weight:400}
 @media (max-width:700px){.aint-top .r{display:none}}
 </style>
+<script>
+/* Si el idioma del navegador esta entre los de la pagina, la traduce la propia web y no Chrome
+   (el traductor de Chrome alargaba textos fuera de la pantalla y dejaba filas de wallets sin respuesta). */
+(function () {
+  var L = ["es", "pt", "zh", "ru", "fr", "ja", "ko", "ar", "de", "hi"], n = navigator.languages || [navigator.language || ""];
+  for (var i = 0; i < n.length; i++) {
+    var c = String(n[i] || "").slice(0, 2).toLowerCase();
+    if (c === "en") return;
+    if (L.indexOf(c) >= 0) {
+      document.documentElement.setAttribute("translate", "no");
+      var m = document.createElement("meta"); m.name = "google"; m.content = "notranslate"; document.head.appendChild(m);
+      return;
+    }
+  }
+})();
+</script>
 </head>
 <body>
 <script>document.documentElement.className+=" js"+(matchMedia("(prefers-reduced-motion: reduce)").matches?"":" anim")</script>
@@ -1349,7 +1365,7 @@ html.aiboot{overflow:hidden}
 
 <div class="toast mono" id="toast" role="status" aria-live="polite"></div>
 
-<script src="/airdrop/lang-pick.js?v=2"></script>
+<script src="/airdrop/lang-pick.js?v=3"></script>
 <script>
 (function(){
 "use strict";
@@ -1732,7 +1748,7 @@ function setLang(c){
   });
 }
 if(window.SALangPick && $("#langPick")) picker = window.SALangPick($("#langPick"), function(){ return lang; }, function(c){
-  try{ sessionStorage.setItem("sa_lang_visit", c); }catch(e){}
+  if(window.SALangPick.guardar) window.SALangPick.guardar(c); else { try{ sessionStorage.setItem("sa_lang_visit", c); }catch(e){} }
   setLang(c);
 });
 /* boton de la guia: un trazo azul da la vuelta al borde a velocidad constante (~200 px/s), sea cual sea su ancho */
@@ -1757,9 +1773,10 @@ $$(".js-connect").forEach(function(a){
   });
 });
 
-/* abre siempre en ingles; el idioma elegido arriba se mantiene solo durante esa visita */
+/* abre en el idioma que la persona eligio antes o, si no, en el de su navegador (si la pagina lo tiene) */
 var saved = null;
-try{ saved = sessionStorage.getItem("sa_lang_visit"); }catch(e){}
+if(window.SALangPick && window.SALangPick.inicial) saved = window.SALangPick.inicial();
+else { try{ saved = sessionStorage.getItem("sa_lang_visit"); }catch(e){} }
 if(saved && D[saved]) lang = saved;
 render();
 // un idioma extra elegido en esta visita: se descarga su paquete y se vuelve a pintar (la intro ya lo usa)
@@ -1774,7 +1791,7 @@ $$("canvas.grid").forEach(gridFx);
 </script>
 <script src="/airdrop/airdrop-intro.js?v=3" defer></script>
 <script src="/airdrop/count.js?v=23" defer></script>
-<script src="/myairdrop/myairdrop-wallet.js?v=24" defer></script>
+<script src="/myairdrop/myairdrop-wallet.js?v=25" defer></script>
 <script src="/airdrop/eligibility.js?v=67" defer></script>
 </body>
 </html>
