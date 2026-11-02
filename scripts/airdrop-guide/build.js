@@ -183,7 +183,8 @@ function build(l) {
 ${alt}
 <meta name="theme-color" content="#ffffff">
 <link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/airdrop-guide/guide.css?v=7">
+<link rel="stylesheet" href="/airdrop-guide/guide.css?v=8">
+<link rel="stylesheet" href="/traduccion-chrome.css?v=1">
 <script src="/analytics.js" defer></script>
 </head>
 <body>

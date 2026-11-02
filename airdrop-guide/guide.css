@@ -364,7 +364,7 @@ a.lk:hover{background:var(--blue-deep);transform:translateY(-1px)}
 
 /* ============ escritorio: la guia llena la pantalla sin estirar las lineas de texto ============ */
 .wrap{max-width:clamp(1120px,90vw,1720px)}
-.hero-g{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}
+@media (min-width:901px){.hero-g{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}}   /* en movil sigue en una columna */
 .hero h1{font-size:clamp(36px,5.1vw,92px)}
 .lede{max-width:58ch;font-size:clamp(16px,1.25vw,20px)}
 .need2 h2{font-size:clamp(22px,2.1vw,32px)}

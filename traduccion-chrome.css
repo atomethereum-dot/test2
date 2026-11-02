@@ -1,0 +1,50 @@
+/* Solo cuando Chrome traduce la pagina (pone translated-ltr / translated-rtl en <html> y envuelve cada texto
+   traducido en <font>): los textos traducidos suelen ser mas largos y se salian de su caja o de la pantalla
+   en el movil. Aqui solo se les deja bajar de linea; sin traduccion estas reglas no aplican y nada cambia.
+   Una palabra traducida muy larga (sobre todo en mayusculas) puede partirse para no ensanchar la pagina. */
+html.translated-ltr :where(body *):has(> font),
+html.translated-rtl :where(body *):has(> font) {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+/* los bloques que contienen texto traducido pueden estrecharse hasta caber en la pantalla */
+html.translated-ltr :where(body *):has(font),
+html.translated-rtl :where(body *):has(font) {
+  min-width: 0;
+}
+/* lo que iba en una sola linea puede partirse, salvo las etiquetas flotantes del menu (em > span) */
+html.translated-ltr :where(body *):not(em > span):has(> font),
+html.translated-rtl :where(body *):not(em > span):has(> font) {
+  white-space: normal !important;
+}
+/* portada, filas de "lo que ofrece": la columna del valor no puede dejar sin sitio a la del nombre */
+html.translated-ltr .of-row,
+html.translated-rtl .of-row {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+}
+html.translated-ltr .of-k,
+html.translated-rtl .of-k {
+  overflow-wrap: anywhere;
+}
+/* guia, tablas "comprueba esto": el nombre traducido no puede dejar sin sitio al valor */
+html.translated-ltr .check dl,
+html.translated-rtl .check dl {
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+}
+html.translated-ltr .check dd,
+html.translated-rtl .check dd {
+  overflow-wrap: anywhere;
+}
+/* portada: con el texto traducido (mas largo) el filete decorativo no cabe en el movil */
+html.translated-ltr .of-k::after,
+html.translated-rtl .of-k::after {
+  display: none;
+}
+/* dashboard: el boton de conectar de la barra de arriba puede encogerse en moviles estrechos */
+html.translated-ltr .top-r .btn,
+html.translated-rtl .top-r .btn {
+  flex-shrink: 1;
+  min-width: 0;
+  white-space: normal;
+  text-align: center;
+}
