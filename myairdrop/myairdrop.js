@@ -93,7 +93,7 @@
       rfk: "Convide e ganhe", rfcap: "seu bônus quando seus convidados completarem o tempo", rfinv: "Convidados", rfst: "SECT deles em staking", rfon: "nó ligado", rfoff: "nó desligado", rfs: "Você ganha {n} SECT a cada 1.000 SECT que seus convidados mantiverem em staking. É entregue com seu airdrop na SectoraEVM.", rfl: "Seu link de convite", rfsh: "Compartilhar", rf0: "Você ainda não tem convidados. O convite é confirmado automaticamente quando eles registram o Hash Node pelo seu link.", rfin: "Para receber seu bônus você também precisa estar no airdrop: SECT em staking e seu Hash Node ligado.", rfrev: "Cada convite é revisado antes da entrega: autoconvites e carteiras falsas não contam.", rfby: "Convidado por {a}", rfbys: "registrado na rede", rfp: "{a} convidou você", rfps: "É confirmado automaticamente quando você registra seu Hash Node no Dashboard. Se você já tinha um, confirme lá com um clique. É grátis e você mantém todo o seu airdrop.", rfgo: "Ir ao Dashboard", rfpool: "Bolsa de indicações: 840.000 SECT, separada dos 7.000.000 SECT do airdrop. Se acabar, é dividida proporcionalmente.", d: "d", h: "h", m: "min" }
   };
 
-  /* idioma: el que la persona eligio antes o, si no, el de su navegador (si la pagina lo tiene) */
+  /* idioma: abre siempre en ingles; el que se elija arriba se mantiene solo durante esa visita */
   // los otros 8 idiomas de sectoraorg.com (i18n-more.js)
   if (window.MA_I18N) for (var lk in window.MA_I18N) T[lk] = window.MA_I18N[lk];
   // nodo recien activado en otro dispositivo: el registro publico lo guarda en unos minutos

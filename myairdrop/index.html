@@ -190,22 +190,6 @@ h1 b{font-weight:400}
 }
 @media (prefers-reduced-motion:reduce){.spin{animation:none}.bar i{transition:none}}
 </style>
-<script>
-/* Si el idioma del navegador esta entre los de la pagina, la traduce la propia web y no Chrome
-   (el traductor de Chrome alargaba textos fuera de la pantalla y dejaba filas de wallets sin respuesta). */
-(function () {
-  var L = ["es", "pt", "zh", "ru", "fr", "ja", "ko", "ar", "de", "hi"], n = navigator.languages || [navigator.language || ""];
-  for (var i = 0; i < n.length; i++) {
-    var c = String(n[i] || "").slice(0, 2).toLowerCase();
-    if (c === "en") return;
-    if (L.indexOf(c) >= 0) {
-      document.documentElement.setAttribute("translate", "no");
-      var m = document.createElement("meta"); m.name = "google"; m.content = "notranslate"; document.head.appendChild(m);
-      return;
-    }
-  }
-})();
-</script>
 </head>
 <body>
 <div class="grid-bg" aria-hidden="true"></div>
@@ -233,7 +217,7 @@ h1 b{font-weight:400}
   </footer>
 </main>
 <script src="/airdrop/count.js?v=23"></script>
-<script src="/airdrop/lang-pick.js?v=3"></script>
+<script src="/airdrop/lang-pick.js?v=4"></script>
 <script src="/myairdrop/i18n-more.js?v=9"></script>
 <script src="/myairdrop/myairdrop-wallet.js?v=25"></script>
 <script src="/myairdrop/myairdrop.js?v=21"></script>

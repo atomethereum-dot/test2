@@ -147,7 +147,7 @@
       var t = dic ? tr(tituloEn) : null; document.title = t === null ? tituloEn : t;
       document.documentElement.lang = l;
       pintar();
-      if (elegido) { try { sessionStorage.setItem(CLAVE, l); localStorage.setItem(CLAVE, l); } catch (e) {} }
+      if (elegido) { try { sessionStorage.setItem(CLAVE, l); } catch (e) {} }
       window.SECTORA_STAKE_LANG = l;
       window.dispatchEvent(new CustomEvent("sectora:lang", { detail: l }));
     }, function () {});
@@ -156,16 +156,6 @@
   window.SectoraStakeT = function (s) { var x = dic ? tr(s) : null; return x === null ? s : x; };
   window.SectoraStakeLang = function () { return actual; };
 
-  // el primer idioma del navegador que tenga la pagina; ingles si llega antes el ingles o ninguno coincide
-  function navegador() {
-    var n = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "en"];
-    for (var i = 0; i < n.length; i++) {
-      var c = String(n[i] || "").slice(0, 2).toLowerCase();
-      if (c === "en") return "en";
-      if (IDIOMAS.some(function (x) { return x[0] === c; })) return c;
-    }
-    return "en";
-  }
   function arrancar() {
     montar();
     // lo que aparece despues (mensajes, selector de wallet, contador): se traduce al llegar
@@ -179,12 +169,7 @@
     var l = "en";
     var q = /[?&]lang=([a-z]{2})/.exec(location.search);
     if (q) l = q[1];
-    else {
-      var g = null;
-      try { g = localStorage.getItem(CLAVE) || sessionStorage.getItem(CLAVE); } catch (e) {}
-      // sin eleccion guardada: el idioma del navegador, si la pagina lo tiene (asi Chrome no la traduce encima)
-      l = g || navegador();
-    }
+    else { try { l = sessionStorage.getItem(CLAVE) || "en"; } catch (e) {} }
     if (l !== "en") poner(l, !!q);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", arrancar);

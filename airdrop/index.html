@@ -779,22 +779,6 @@ html.aiboot{overflow:hidden}
 .aint-s b{color:#fff;font-weight:400}
 @media (max-width:700px){.aint-top .r{display:none}}
 </style>
-<script>
-/* Si el idioma del navegador esta entre los de la pagina, la traduce la propia web y no Chrome
-   (el traductor de Chrome alargaba textos fuera de la pantalla y dejaba filas de wallets sin respuesta). */
-(function () {
-  var L = ["es", "pt", "zh", "ru", "fr", "ja", "ko", "ar", "de", "hi"], n = navigator.languages || [navigator.language || ""];
-  for (var i = 0; i < n.length; i++) {
-    var c = String(n[i] || "").slice(0, 2).toLowerCase();
-    if (c === "en") return;
-    if (L.indexOf(c) >= 0) {
-      document.documentElement.setAttribute("translate", "no");
-      var m = document.createElement("meta"); m.name = "google"; m.content = "notranslate"; document.head.appendChild(m);
-      return;
-    }
-  }
-})();
-</script>
 </head>
 <body>
 <script>document.documentElement.className+=" js"+(matchMedia("(prefers-reduced-motion: reduce)").matches?"":" anim")</script>
@@ -1365,7 +1349,7 @@ html.aiboot{overflow:hidden}
 
 <div class="toast mono" id="toast" role="status" aria-live="polite"></div>
 
-<script src="/airdrop/lang-pick.js?v=3"></script>
+<script src="/airdrop/lang-pick.js?v=4"></script>
 <script>
 (function(){
 "use strict";
@@ -1773,7 +1757,7 @@ $$(".js-connect").forEach(function(a){
   });
 });
 
-/* abre en el idioma que la persona eligio antes o, si no, en el de su navegador (si la pagina lo tiene) */
+/* abre siempre en ingles; el idioma elegido arriba se mantiene solo durante esa visita */
 var saved = null;
 if(window.SALangPick && window.SALangPick.inicial) saved = window.SALangPick.inicial();
 else { try{ saved = sessionStorage.getItem("sa_lang_visit"); }catch(e){} }

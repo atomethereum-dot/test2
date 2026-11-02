@@ -56,19 +56,11 @@
     return { refresh: paint };
   };
   window.SALangPick.codes = ORDER;
-  // idioma con el que abre la pagina: el que la persona eligio antes (se recuerda) o, si no, el del navegador
-  // cuando esta entre los 11 de sectoraorg.com; ingles si el ingles va antes o no hay ninguno
+  // idioma con el que abre la pagina: ingles, salvo el que se eligio arriba durante esta visita
   window.SALangPick.inicial = function () {
     var g = null;
-    try { g = localStorage.getItem("sa_lang") || sessionStorage.getItem("sa_lang_visit"); } catch (e) {}
-    if (g && ORDER.indexOf(g) >= 0) return g;
-    var n = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "en"];
-    for (var i = 0; i < n.length; i++) {
-      var c = String(n[i] || "").slice(0, 2).toLowerCase();
-      if (c === "en") return "en";
-      if (ORDER.indexOf(c) >= 0) return c;
-    }
-    return "en";
+    try { g = sessionStorage.getItem("sa_lang_visit"); } catch (e) {}
+    return g && ORDER.indexOf(g) >= 0 ? g : "en";
   };
-  window.SALangPick.guardar = function (c) { try { localStorage.setItem("sa_lang", c); sessionStorage.setItem("sa_lang_visit", c); } catch (e) {} };
+  window.SALangPick.guardar = function (c) { try { sessionStorage.setItem("sa_lang_visit", c); } catch (e) {} };
 })();
