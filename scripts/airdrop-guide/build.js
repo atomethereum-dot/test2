@@ -139,10 +139,16 @@ function build(l) {
   const head = (n) => '<div class="st-n">' + String(n).padStart(2, "0") + "<small>" + partLabel(partOf(n)) + '</small></div>';
 
   /* ---------- web ---------- */
+  /* en pantallas anchas el paso va en dos columnas (texto | capturas); en el resto se ve en el orden original
+     gracias a "order" (las dos columnas usan display:contents) */
   function stepWeb(n) {
     const c = S[n];
-    return '<li class="step" id="step-' + n + '">' + head(n) + '<div><p class="st-k m">' + chip(c.k) + "</p><h3>" + plain(c.h) + "</h3>" +
-      STEPS[n].map((b) => block(n, b, false)).join("") + "</div></li>";
+    const top = '<p class="st-k m">' + chip(c.k) + "</p><h3>" + plain(c.h) + "</h3>";
+    const parts = STEPS[n].map((b, i) => ({ vis: b[0] === "vis" || b[0] === "urlbar", html: block(n, b, false), i: i + 1 })).filter((x) => x.html);
+    if (!parts.some((x) => x.vis)) return '<li class="step" id="step-' + n + '">' + head(n) + "<div>" + top + parts.map((x) => x.html).join("") + "</div></li>";
+    const sb = (x) => '<div class="sb" style="order:' + x.i + '">' + x.html + "</div>";
+    return '<li class="step split" id="step-' + n + '">' + head(n) + '<div class="st-b"><div class="st-t"><div class="sb" style="order:0">' + top + "</div>" +
+      parts.filter((x) => !x.vis).map(sb).join("") + '</div><div class="st-v">' + parts.filter((x) => x.vis).map(sb).join("") + "</div></div></li>";
   }
   function partWeb(P, from, to) {
     const p = C.parts[P];
