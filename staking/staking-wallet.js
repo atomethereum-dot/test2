@@ -346,6 +346,7 @@
     if (!btn || !btn.parentNode) return null;
     caja = nodo("div", "wpick");
     caja.id = "walletPick";
+    caja.setAttribute("translate", "no");   // el traductor de Chrome rompia las filas; la traduce staking-i18n.js
     caja.setAttribute("role", "region");
     caja.setAttribute("aria-label", "Choose a wallet");
     caja.hidden = true;

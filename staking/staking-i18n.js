@@ -11,7 +11,7 @@
   var IDIOMAS = [["en", "English"], ["es", "Español"], ["zh", "中文"], ["hi", "हिन्दी"], ["ar", "العربية"], ["pt", "Português"],
     ["fr", "Français"], ["ru", "Русский"], ["de", "Deutsch"], ["ja", "日本語"], ["ko", "한국어"], ["it", "Italiano"]];
   var BANDERAS = {"en": "<rect width=\"24\" height=\"16\" fill=\"#b22234\"/><path d=\"M0 2h24M0 4.6h24M0 7.2h24M0 9.8h24M0 12.4h24M0 15h24\" stroke=\"#fff\" stroke-width=\"1.2\"/><rect width=\"10\" height=\"8.6\" fill=\"#3c3b6e\"/><circle cx=\"0.9\" cy=\"1\" r=\".45\" fill=\"#fff\"/><circle cx=\"2.6\" cy=\"1\" r=\".45\" fill=\"#fff\"/><circle cx=\"4.3\" cy=\"1\" r=\".45\" fill=\"#fff\"/><circle cx=\"6\" cy=\"1\" r=\".45\" fill=\"#fff\"/><circle cx=\"7.7\" cy=\"1\" r=\".45\" fill=\"#fff\"/><circle cx=\"9.1\" cy=\"1\" r=\".45\" fill=\"#fff\"/><circle cx=\"1.75\" cy=\"2.8\" r=\".45\" fill=\"#fff\"/><circle cx=\"3.45\" cy=\"2.8\" r=\".45\" fill=\"#fff\"/><circle cx=\"5.15\" cy=\"2.8\" r=\".45\" fill=\"#fff\"/><circle cx=\"6.85\" cy=\"2.8\" r=\".45\" fill=\"#fff\"/><circle cx=\"8.5\" cy=\"2.8\" r=\".45\" fill=\"#fff\"/><circle cx=\"0.9\" cy=\"4.6\" r=\".45\" fill=\"#fff\"/><circle cx=\"2.6\" cy=\"4.6\" r=\".45\" fill=\"#fff\"/><circle cx=\"4.3\" cy=\"4.6\" r=\".45\" fill=\"#fff\"/><circle cx=\"6\" cy=\"4.6\" r=\".45\" fill=\"#fff\"/><circle cx=\"7.7\" cy=\"4.6\" r=\".45\" fill=\"#fff\"/><circle cx=\"9.1\" cy=\"4.6\" r=\".45\" fill=\"#fff\"/><circle cx=\"1.75\" cy=\"6.4\" r=\".45\" fill=\"#fff\"/><circle cx=\"3.45\" cy=\"6.4\" r=\".45\" fill=\"#fff\"/><circle cx=\"5.15\" cy=\"6.4\" r=\".45\" fill=\"#fff\"/><circle cx=\"6.85\" cy=\"6.4\" r=\".45\" fill=\"#fff\"/><circle cx=\"8.5\" cy=\"6.4\" r=\".45\" fill=\"#fff\"/><circle cx=\"0.9\" cy=\"8\" r=\".45\" fill=\"#fff\"/><circle cx=\"2.6\" cy=\"8\" r=\".45\" fill=\"#fff\"/><circle cx=\"4.3\" cy=\"8\" r=\".45\" fill=\"#fff\"/><circle cx=\"6\" cy=\"8\" r=\".45\" fill=\"#fff\"/><circle cx=\"7.7\" cy=\"8\" r=\".45\" fill=\"#fff\"/><circle cx=\"9.1\" cy=\"8\" r=\".45\" fill=\"#fff\"/>", "es": "<rect width=\"24\" height=\"16\" fill=\"#c60b1e\"/><rect y=\"4\" width=\"24\" height=\"8\" fill=\"#ffc400\"/>", "zh": "<rect width=\"24\" height=\"16\" fill=\"#de2910\"/><circle cx=\"5\" cy=\"4.4\" r=\"2.1\" fill=\"#ffde00\"/><circle cx=\"9.4\" cy=\"2.2\" r=\".8\" fill=\"#ffde00\"/><circle cx=\"11\" cy=\"4.6\" r=\".8\" fill=\"#ffde00\"/><circle cx=\"10.6\" cy=\"7.6\" r=\".8\" fill=\"#ffde00\"/><circle cx=\"8.4\" cy=\"9.4\" r=\".8\" fill=\"#ffde00\"/>", "hi": "<rect width=\"24\" height=\"16\" fill=\"#ff9933\"/><rect y=\"5.33\" width=\"24\" height=\"5.34\" fill=\"#fff\"/><rect y=\"10.67\" width=\"24\" height=\"5.33\" fill=\"#138808\"/><circle cx=\"12\" cy=\"8\" r=\"2\" fill=\"none\" stroke=\"#000080\" stroke-width=\"1\"/>", "ar": "<rect width=\"24\" height=\"16\" fill=\"#165d31\"/><rect x=\"4\" y=\"6.6\" width=\"16\" height=\"1.5\" fill=\"#fff\"/><rect x=\"4\" y=\"9.4\" width=\"11\" height=\"1.2\" fill=\"#fff\"/>", "pt": "<rect width=\"24\" height=\"16\" fill=\"#009c3b\"/><path d=\"M12 2.2 22 8l-10 5.8L2 8z\" fill=\"#ffdf00\"/><circle cx=\"12\" cy=\"8\" r=\"3.1\" fill=\"#002776\"/>", "fr": "<rect width=\"24\" height=\"16\" fill=\"#fff\"/><rect width=\"8\" height=\"16\" fill=\"#002395\"/><rect x=\"16\" width=\"8\" height=\"16\" fill=\"#ed2939\"/>", "ru": "<rect width=\"24\" height=\"16\" fill=\"#fff\"/><rect y=\"5.33\" width=\"24\" height=\"5.34\" fill=\"#0039a6\"/><rect y=\"10.67\" width=\"24\" height=\"5.33\" fill=\"#d52b1e\"/>", "de": "<rect width=\"24\" height=\"16\" fill=\"#000\"/><rect y=\"5.33\" width=\"24\" height=\"5.34\" fill=\"#dd0000\"/><rect y=\"10.67\" width=\"24\" height=\"5.33\" fill=\"#ffce00\"/>", "ja": "<rect width=\"24\" height=\"16\" fill=\"#fff\"/><circle cx=\"12\" cy=\"8\" r=\"4.6\" fill=\"#bc002d\"/>", "ko": "<rect width=\"24\" height=\"16\" fill=\"#fff\"/><path d=\"M12 3.6a4.4 4.4 0 0 1 0 8.8 2.2 2.2 0 0 0 0-4.4 2.2 2.2 0 0 1 0-4.4z\" fill=\"#cd2e3a\"/><path d=\"M12 3.6a2.2 2.2 0 0 1 0 4.4 2.2 2.2 0 0 0 0 4.4 4.4 4.4 0 0 1 0-8.8z\" fill=\"#0047a0\"/>", "it": "<rect width=\"24\" height=\"16\" fill=\"#fff\"/><rect width=\"8\" height=\"16\" fill=\"#009246\"/><rect x=\"16\" width=\"8\" height=\"16\" fill=\"#ce2b37\"/>"};
-  var VER = "2";
+  var VER = "3";
   var CLAVE = "sectora_stake_lang";
   var NO = "script,style,svg,canvas,textarea,input,select,.sad,.sad-msg,.sad-new,#stkLang";
   var TR = window.__STK_TR = window.__STK_TR || {};
@@ -147,7 +147,7 @@
       var t = dic ? tr(tituloEn) : null; document.title = t === null ? tituloEn : t;
       document.documentElement.lang = l;
       pintar();
-      if (elegido) { try { sessionStorage.setItem(CLAVE, l); } catch (e) {} }
+      if (elegido) { try { sessionStorage.setItem(CLAVE, l); localStorage.setItem(CLAVE, l); } catch (e) {} }
       window.SECTORA_STAKE_LANG = l;
       window.dispatchEvent(new CustomEvent("sectora:lang", { detail: l }));
     }, function () {});
@@ -156,6 +156,16 @@
   window.SectoraStakeT = function (s) { var x = dic ? tr(s) : null; return x === null ? s : x; };
   window.SectoraStakeLang = function () { return actual; };
 
+  // el primer idioma del navegador que tenga la pagina; ingles si llega antes el ingles o ninguno coincide
+  function navegador() {
+    var n = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "en"];
+    for (var i = 0; i < n.length; i++) {
+      var c = String(n[i] || "").slice(0, 2).toLowerCase();
+      if (c === "en") return "en";
+      if (IDIOMAS.some(function (x) { return x[0] === c; })) return c;
+    }
+    return "en";
+  }
   function arrancar() {
     montar();
     // lo que aparece despues (mensajes, selector de wallet, contador): se traduce al llegar
@@ -169,7 +179,12 @@
     var l = "en";
     var q = /[?&]lang=([a-z]{2})/.exec(location.search);
     if (q) l = q[1];
-    else { try { l = sessionStorage.getItem(CLAVE) || "en"; } catch (e) {} }
+    else {
+      var g = null;
+      try { g = localStorage.getItem(CLAVE) || sessionStorage.getItem(CLAVE); } catch (e) {}
+      // sin eleccion guardada: el idioma del navegador, si la pagina lo tiene (asi Chrome no la traduce encima)
+      l = g || navegador();
+    }
     if (l !== "en") poner(l, !!q);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", arrancar);
