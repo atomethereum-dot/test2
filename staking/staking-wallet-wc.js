@@ -400,11 +400,11 @@
     return f;
   }
 
-  /* Mientras dura SOLO_APP, WalletConnect solo para las wallets sin navegador propio ni extension (Tangem,
-     Ledger Live, Safe...): primero un aviso; luego el QR en el ordenador y el enlace para pegar en el movil. */
+  /* WalletConnect, con su nombre y su logo, justo debajo de las wallets detectadas en el navegador:
+     el QR en el ordenador y el enlace de conexion en el movil (tambien para Tangem, Ledger Live, Safe...). */
   function filaSoloWC(qr) {
-    const f = fila("button", { id: "solo-wc", nombre: "Tangem, Ledger Live, Safe…" },
-      "Wallets without their own browser", { icono: CARTERA });
+    const f = fila("button", { id: "solo-wc", nombre: "WalletConnect", logo: "walletConnect" },
+      (MOVIL ? "Connection link" : "QR code") + " · Tangem, Ledger Live, Safe and more");
     f.addEventListener("click", () => { wcAbierto = true; panelWC(qr); });
     return f;
   }
@@ -451,6 +451,9 @@
       f.addEventListener("click", () => usarInyectada(w.proveedor));
       lista.appendChild(f);
     });
+    const qr = nodo("div", "wpick-qr");
+    lista.appendChild(filaSoloWC(qr));
+    lista.appendChild(qr);
     // Uniswap Wallet va segunda, detras de MetaMask
     APPS.filter((a) => a.navegador).forEach((a, i) => {
       // Binance en Android no abre webs desde un enlace ("Ce lien ne fonctionne pas"): conecta con su conector oficial
@@ -469,10 +472,7 @@
     });
     // cualquier otra wallet con navegador: copiar el enlace y abrirlo ahi (sin WalletConnect)
     lista.appendChild(filaCopiar("Another wallet"));
-    const qr = nodo("div", "wpick-qr");
-    lista.appendChild(filaSoloWC(qr));
     caja.appendChild(lista);
-    caja.appendChild(qr);
     if (wcAbierto) panelWC(qr);
     else pedirConexionWC();   // deja listo el enlace de Uniswap Wallet
     const pie = nodo("div", "wpick-foot");
@@ -550,6 +550,10 @@
       // su extension; las que solo son app del movil y la ultima fila copian el enlace para abrirlo en el telefono
       if (!ext.length) estado("To connect here, install a wallet extension. On your phone, open this page inside your wallet app.");
       else lista.appendChild(nodo("div", "wpick-sec mono", "Other compatible wallets"));
+      // WalletConnect, la primera de las wallets que no estan instaladas
+      const qr = nodo("div", "wpick-qr");
+      lista.appendChild(filaSoloWC(qr));
+      lista.appendChild(qr);
       INSTALAR.filter((w) => !ext.some((e) => w.m.test(e.nombre))).forEach((w) => {
         if (w.web) {
           const f = fila("a", w, "Install the browser extension", { icono: w.icono });
@@ -564,9 +568,6 @@
         }
       });
       lista.appendChild(filaCopiar("Wallet on your phone"));
-      const qr = nodo("div", "wpick-qr");
-      lista.appendChild(filaSoloWC(qr));
-      caja.appendChild(qr);
       if (wcAbierto) panelWC(qr);
       return;
     }
