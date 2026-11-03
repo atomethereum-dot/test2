@@ -216,6 +216,13 @@
       "c": "Buenos Aires, AR",
       "la": -34.6,
       "lo": -58.5
+    },
+    "0x0cd92c590087a676411d1b2959c2edfdbe635385": {
+      "t": 1793669182000,
+      "n": "Sectora Node Fortaleza",
+      "c": "Fortaleza, BR",
+      "la": -3.7,
+      "lo": -38.5
     }
   }
 }
