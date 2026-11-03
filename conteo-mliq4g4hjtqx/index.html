@@ -212,6 +212,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       <div class="tile"><span class="k">Bolsa reservada</span><span class="v" id="t-res">0</span><div class="bar"><i id="t-resbar"></i></div><span class="s" id="t-resp"></span></div>
       <div class="tile tap" role="button" tabindex="0" data-hoy="in"><span class="k">Entradas al airdrop hoy <i class="go">Ver ›</i></span><span class="v" id="t-today">0</span><span class="s" id="t-todays"></span><span class="lvs" id="t-todayl"></span></div>
       <div class="tile tap" role="button" tabindex="0" data-hoy="out"><span class="k">Salidas del airdrop hoy <i class="go">Ver ›</i></span><span class="v" id="t-out">0</span><span class="s" id="t-outs"></span><span class="lvs" id="t-outl"></span></div>
+      <div class="tile tap" role="button" tabindex="0" data-hoy="up"><span class="k">Aumentaron staking hoy <i class="go">Ver ›</i></span><span class="v" id="t-up">0</span><span class="s" id="t-ups"></span></div>
+      <div class="tile tap" role="button" tabindex="0" data-hoy="lvup"><span class="k">Subieron de nivel hoy <i class="go">Ver ›</i></span><span class="v" id="t-lvup">0</span><span class="s" id="t-lvups"></span><span class="lvs" id="t-lvupl"></span></div>
       <div class="tile"><span class="k">Entraron (nodo activado)</span><span class="v" id="t-in">0</span><span class="s" id="t-ins"></span></div>
       <div class="tile"><span class="k">Tienen todo (participando)</span><span class="v" id="t-part">0</span><span class="s" id="t-parts"></span></div>
       <div class="tile"><span class="k">Wallets Titan</span><span class="v" id="t-titan">0</span><span class="s" id="t-titans"></span></div>
@@ -303,7 +305,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   var df = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", year: "numeric" });
   var data = null, rows = [], tab = "all", q = "", tick = 0;
   // ultimos registros: nodos registrados, entradas al airdrop (staking de 100+ y nodo) y primer deposito
-  var RT = [["node", "Nodos activados"], ["entry", "Entradas al airdrop"], ["exit", "Salidas"], ["stake", "Primer staking"]];
+  var RT = [["node", "Nodos activados"], ["entry", "Entradas al airdrop"], ["exit", "Salidas"], ["stake", "Primer staking"], ["up", "Aumentaron staking"], ["lvup", "Subieron de nivel"]];
   var hshow = 14, hopen = {};
   var rtab = "node", rshow = 20, recent = {};
   // referidos: lista leida de la red (constancias de 0,0001 tSECT) y SECT que el padrino envio al invitado
@@ -568,6 +570,11 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   }
   // "Titan · 4.000 SECT"
   function nivel(lv, b) { return (LV[lv] && lv ? LV[lv] : "Sin nivel") + " · " + nf0.format(b) + " SECT"; }
+  // "+500 SECT · 600 → 1.100 SECT · Sentinel → Guardian"
+  function subida(o) {
+    return "+" + nf0.format(o.amt) + " SECT · " + nf0.format(o.b0) + " → " + nf0.format(o.b1) + " SECT en staking" +
+      (o.lv1 > o.lv0 ? " · " + (o.lv0 ? LV[o.lv0] : "Sin nivel") + " → " + LV[o.lv1] : o.lv1 ? " · sigue " + LV[o.lv1] : "");
+  }
   function dia(t) { var d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); }
   function sigDia(t) { var d = new Date(t); d.setDate(d.getDate() + 1); return d.getTime(); }
   var hf = new Intl.DateTimeFormat("es-ES", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
@@ -576,8 +583,10 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   // una entrada o salida: hora, tipo, nivel, wallet y detalle
   function mov(v) {
     var x = rows[v.o.i], r = x.r, w = x.who.slice(0, 8) + "…" + x.who.slice(-6), chip, why;
-    var lvc = '<span class="chip lv' + (v.o.lv || 0) + '">' + (v.o.lv ? LV[v.o.lv] : "Sin nivel") + "</span>";
+    var lvN = v.k === "up" || v.k === "lvup" ? v.o.lv1 : v.o.lv;   // en aumentos, el nivel con el que quedo
+    var lvc = '<span class="chip lv' + (lvN || 0) + '">' + (lvN ? LV[lvN] : "Sin nivel") + "</span>";
     if (v.k === "in") { chip = v.o.re ? '<span class="chip blue">Volvió</span>' : '<span class="chip ok">Entró</span>'; why = "Entró como " + nivel(v.o.lv, v.o.b) + (r.level !== v.o.lv || Math.round(r.bal) !== Math.round(v.o.b) ? " · ahora " + (r.level ? nivel(r.level, r.bal) : "fuera") : ""); }
+    else if (v.k === "up" || v.k === "lvup") { chip = v.k === "lvup" ? '<span class="chip ok">Subió de nivel</span>' : '<span class="chip blue">Aumentó</span>'; why = subida(v.o); }
     else { chip = '<span class="chip bad">Salió</span>'; why = "Era " + nivel(v.o.lv, v.o.b) + " · " + (v.o.why === "stake" ? "retiró el staking, quedó con " + nf0.format(v.o.left) + " SECT" : "apagó el nodo"); }
     chip += lvc;
     return '<li><span class="t">' + tf.format(v.o.t) + "</span>" + chip + '<button class="w" type="button" data-r="' + v.o.i + '">' + w + "</button><span>" + escH(why) + "</span></li>";
@@ -616,11 +625,23 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     $("hmore").hidden = rest <= 0; if (rest > 0) $("hmore").textContent = "Ver " + Math.min(14, rest) + " más";
   }
   function recentBuild() {
-    var L = { node: [], entry: [], exit: [], stake: [] };
+    var L = { node: [], entry: [], exit: [], stake: [], up: [], lvup: [] };
     rows.forEach(function (x, i) {
       var f = firstTimes(x.ev), n = x.node;
       if (n && n.at) L.node.push({ t: n.at, i: i });
       if (f.first) L.stake.push({ t: f.first, i: i });
+      // depositos despues del primero: aumentos de staking; si pasa a un nivel mayor (ya teniendo nivel), subida de nivel
+      var b = 0, prev = false;
+      x.ev.forEach(function (e) {
+        var b0 = b; b = Math.max(0, b + (e.dep ? e.amt : -e.amt));
+        if (!e.dep) return;
+        if (prev) {
+          var o = { t: e.t, i: i, amt: e.amt, b0: b0, b1: b, lv0: C.level(b0), lv1: C.level(b) };
+          L.up.push(o);
+          if (o.lv0 >= 1 && o.lv1 > o.lv0) L.lvup.push(Object.assign({}, o));   // copia: cada lista lleva su propio n.º
+        }
+        prev = true;
+      });
       x.tr = tramos(x);
       x.tr.forEach(function (z, k) {
         L.entry.push({ t: z.s, i: i, re: k > 0, lv: z.lvIn, b: z.bIn });
@@ -648,6 +669,14 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     var porNivel = function (l) { var c = {}; l.forEach(function (o) { c[o.lv || 0] = (c[o.lv || 0] || 0) + 1; });
       return [4, 3, 2, 1, 0].filter(function (k) { return c[k]; }).map(function (k) { return '<span class="chip lv' + k + '">' + (k ? LV[k] : "Sin nivel") + " " + c[k] + "</span>"; }).join(" "); };
     $("t-todayl").innerHTML = porNivel(inH); $("t-outl").innerHTML = porNivel(outH);
+    // aumentos de staking y subidas de nivel de hoy
+    var upH = en(L.up, hoy, Infinity), lvH = en(L.lvup, hoy, Infinity), sum = 0;
+    upH.forEach(function (o) { sum += o.amt; });
+    $("t-up").textContent = nf0.format(upH.length);
+    $("t-ups").textContent = (upH.length ? "+" + nf0.format(sum) + " SECT en staking · " : "Ninguno hoy · ") + "ayer " + nf0.format(en(L.up, ayer, hoy).length);
+    $("t-lvup").textContent = nf0.format(lvH.length);
+    $("t-lvups").textContent = (lvH.length ? "" : "Ninguna hoy · ") + "ayer " + nf0.format(en(L.lvup, ayer, hoy).length);
+    $("t-lvupl").innerHTML = porNivel(lvH.map(function (o) { return { lv: o.lv1 }; }));
     histDraw();
   }
   function ago(t) {
@@ -670,7 +699,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       var node = r.node === "on" ? '<span class="chip ok">Activo</span>' : r.node === "off" ? '<span class="chip warn">Pausado</span>' : '<span class="chip mute">Sin nodo</span>';
       var note = ago(o.t) + (rtab !== "stake" && open && o.t < open ? " · antes de la apertura" : "") + (o.re ? " · volvió" : "") +
         (rtab === "exit" ? " · era " + nivel(o.lv, o.b) + (o.why === "stake" ? " · retiró el staking (quedó con " + nf0.format(o.left) + " SECT)" : " · apagó el nodo") :
-         rtab === "entry" ? " · entró como " + nivel(o.lv, o.b) : "");
+         rtab === "entry" ? " · entró como " + nivel(o.lv, o.b) :
+         rtab === "up" || rtab === "lvup" ? " · " + subida(o) : "");
       html += '<tr data-r="' + o.i + '"><td class="r n">' + nf0.format(o.n) + '</td><td><span class="when">' + dtf.format(o.t) + (now - o.t < C.DAY ? '<span class="chip blue">Nuevo</span>' : "") + '</span><span class="sub">' + note + '</span><span class="m-only">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + " · " + (r.level ? LV[r.level] : nf0.format(r.bal) + " SECT") + "</span></td>" +
         '<td><button class="w" type="button">' + x.who.slice(0, 8) + "…" + x.who.slice(-6) + "</button></td><td>" + node + '</td><td class="r">' + nf0.format(r.bal) + "</td>" +
         "<td>" + (r.level ? LV[r.level] : "—") + '</td><td><span class="chip ' + st[1] + '">' + st[0] + "</span></td></tr>";
@@ -783,11 +813,13 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   }
   // lista de hoy al tocar los recuadros de entradas o salidas
   function hoyShow(k) {
-    var hoy = dia(Date.now()), l = (k === "in" ? recent.entry : recent.exit) || [];
+    var hoy = dia(Date.now()), l = recent[{ in: "entry", out: "exit", up: "up", lvup: "lvup" }[k]] || [];
     var v = l.filter(function (o) { return o.t >= hoy; }).sort(function (p, q) { return q.t - p.t; }).map(function (o) { return { o: o, k: k }; });
+    var T = { in: ["Entradas al airdrop hoy", "Nadie ha entrado hoy todavía."], out: ["Salidas del airdrop hoy", "Nadie ha salido hoy."],
+      up: ["Aumentaron staking hoy", "Nadie ha aumentado su staking hoy."], lvup: ["Subieron de nivel hoy", "Nadie ha subido de nivel hoy."] }[k];
     cur = -1; $("dr-k").textContent = "Hoy";
-    $("dr-h").textContent = (k === "in" ? "Entradas al airdrop hoy" : "Salidas del airdrop hoy") + " · " + nf0.format(v.length);
-    $("dr-b").innerHTML = '<div class="hoy">' + (v.length ? "<ul>" + v.map(mov).join("") + "</ul>" : '<p class="empty">' + (k === "in" ? "Nadie ha entrado hoy todavía." : "Nadie ha salido hoy.") + "</p>") +
+    $("dr-h").textContent = T[0] + " · " + nf0.format(v.length);
+    $("dr-b").innerHTML = '<div class="hoy">' + (v.length ? "<ul>" + v.map(mov).join("") + "</ul>" : '<p class="empty">' + T[1] + "</p>") +
       '<p class="foot">Toca una wallet para ver su detalle. Hoy = desde las 00:00 de este aparato.</p></div>';
     $("dr-b").querySelectorAll("button[data-r]").forEach(function (b) { b.addEventListener("click", function () { show(+b.dataset.r); }); });
     $("dr").hidden = false; document.documentElement.style.overflow = "hidden"; $("dr-x").focus();
