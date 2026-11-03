@@ -209,6 +209,13 @@
       "c": "Manila, PH",
       "la": 14.6,
       "lo": 121
+    },
+    "0x92f099745894ae6f33639955c1a4c93ffaac5361": {
+      "t": 1793667142000,
+      "n": "Sectora Node Buenos Aires",
+      "c": "Buenos Aires, AR",
+      "la": -34.6,
+      "lo": -58.5
     }
   }
 }
