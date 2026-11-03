@@ -230,6 +230,13 @@
       "c": "Los Angeles, US",
       "la": 34.1,
       "lo": -118.2
+    },
+    "0xc186aad9be5d85642396d45ee6d9a1456b8142c9": {
+      "t": 1793744619000,
+      "n": "Sectora Node Lisbon",
+      "c": "Lisbon, PT",
+      "la": 38.7,
+      "lo": -9.1
     }
   }
 }
