@@ -223,6 +223,13 @@
       "c": "Fortaleza, BR",
       "la": -3.7,
       "lo": -38.5
+    },
+    "0x0000000f65d503603782d94e78e30c6d05955741": {
+      "t": 1793684175000,
+      "n": "Sectora Node Los Angeles",
+      "c": "Los Angeles, US",
+      "la": 34.1,
+      "lo": -118.2
     }
   }
 }
