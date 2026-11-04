@@ -265,6 +265,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x0801a18a90c8dc10621190e056e7aeb6a7d2616e": {
+      "t": 1793822475000,
+      "n": "Sectora Node Guayaquil",
+      "c": "Guayaquil, EC",
+      "la": -2.2,
+      "lo": -79.8
     }
   }
 }
