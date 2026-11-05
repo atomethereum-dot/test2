@@ -272,6 +272,13 @@
       "c": "Guayaquil, EC",
       "la": -2.2,
       "lo": -79.8
+    },
+    "0x4c42fa7a8e495e3d8c7b6c50b703a46758ba5b66": {
+      "t": 1793845455000,
+      "n": "Sectora Node Madrid",
+      "c": "Madrid, ES",
+      "la": 40.4,
+      "lo": -3.7
     }
   }
 }
