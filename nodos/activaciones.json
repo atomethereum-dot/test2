@@ -328,6 +328,27 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xba95b4a5b130c4c1d27dc9e8adcf7f087cdb4c52": {
+      "t": 1793890389000,
+      "n": "Sectora Node Athens",
+      "c": "Athens, GR",
+      "la": 38,
+      "lo": 23.7
+    },
+    "0xc2164d0fff88082db0ee3ce9723b5438070deaf3": {
+      "t": 1793890625000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0xf8597931df874e7b6cbd75668fa77d83b29fe867": {
+      "t": 1793890645000,
+      "n": "Sectora Node Kabul",
+      "c": "Kabul, AF",
+      "la": 34.5,
+      "lo": 69.2
     }
   }
 }
