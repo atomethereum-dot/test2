@@ -1007,6 +1007,27 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x226f028f26954c186368de5ab0080884ef9544c0": {
+      "t": 1793904667000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
+    },
+    "0xf107cbaf3263d3e3344ddea94d11c0594f3ced14": {
+      "t": 1793904771000,
+      "n": "Sectora Node Blantyre",
+      "c": "Blantyre, MW",
+      "la": -15.8,
+      "lo": 35
+    },
+    "0xea4e189b2c828dd6e195a15f0dcd8cecc39c3827": {
+      "t": 1793904789000,
+      "n": "Sectora Node Vilnius",
+      "c": "Vilnius, LT",
+      "la": 54.7,
+      "lo": 25.3
     }
   }
 }
