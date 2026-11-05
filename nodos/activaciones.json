@@ -1217,6 +1217,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0xc85332b2294194a2ac2f6f44da1cc3480709f932": {
+      "t": 1793914205000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
     }
   }
 }
