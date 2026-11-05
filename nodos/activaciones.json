@@ -510,6 +510,34 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x97c69ae06bbc201fb9c73c0137b23eaa37ff93bc": {
+      "t": 1793895547000,
+      "n": "Sectora Node Lisbon",
+      "c": "Lisbon, PT",
+      "la": 38.7,
+      "lo": -9.1
+    },
+    "0x3c7ebb1fb6c7810f824805e38ce6570b846fc97a": {
+      "t": 1793895582000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
+    },
+    "0x67a06f70f19b18442a2a3990341e685f754e7dda": {
+      "t": 1793895628000,
+      "n": "Sectora Node Addis Ababa",
+      "c": "Addis Ababa, ET",
+      "la": 9,
+      "lo": 38.7
+    },
+    "0xeff13673777e5e07595e94bbf59b4c2d0b3aec66": {
+      "t": 1793895651000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
