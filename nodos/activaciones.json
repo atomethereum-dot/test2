@@ -1112,6 +1112,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x09dede7d8f457610ab470515fc6d8a13f8859304": {
+      "t": 1793906401000,
+      "n": "Sectora Node Manila",
+      "c": "Manila, PH",
+      "la": 14.6,
+      "lo": 121
     }
   }
 }
