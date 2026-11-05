@@ -419,6 +419,20 @@
       "c": "Madrid, ES",
       "la": 40.4,
       "lo": -3.7
+    },
+    "0x6cb079e83f641a02d2cae9fa35c398ffcdb59384": {
+      "t": 1793891976000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0xe538011e370aaf5f858b663be64aea5a7673891d": {
+      "t": 1793892000000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
