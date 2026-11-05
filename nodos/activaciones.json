@@ -664,6 +664,27 @@
       "c": "Manila, PH",
       "la": 14.6,
       "lo": 121
+    },
+    "0x7776cd08b99d142f743aaef086fee11c579f1b1b": {
+      "t": 1793900449000,
+      "n": "Sectora Node Beirut",
+      "c": "Beirut, LB",
+      "la": 33.9,
+      "lo": 35.5
+    },
+    "0xeb0b24f85675204b8f33cf022ef2664f0df5a519": {
+      "t": 1793900520000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x0520be080c17065fe27b26d7eae421573313caa7": {
+      "t": 1793900537000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
