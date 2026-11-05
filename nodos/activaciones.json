@@ -1098,6 +1098,20 @@
       "c": "Dhaka, BD",
       "la": 23.7,
       "lo": 90.4
+    },
+    "0x096d27105dcff0353720568cf52d21bd2430aeaf": {
+      "t": 1793906168000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
+    },
+    "0xc7751c2e8fbd059c019f0fe0f4a2fab0c5d966e7": {
+      "t": 1793906209000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
