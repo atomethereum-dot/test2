@@ -839,6 +839,34 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xfe88cc5d11414221f66de55af5f986bc62460e65": {
+      "t": 1793903064000,
+      "n": "Sectora Node Minsk",
+      "c": "Minsk, BY",
+      "la": 53.9,
+      "lo": 27.6
+    },
+    "0x8a64b8dd1fc013c70bcd88d972bc063b189a1be8": {
+      "t": 1793903073000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x7610164e3fba59a18a8dd18aa9d694d05a08c74b": {
+      "t": 1793903165000,
+      "n": "Gi",
+      "c": "",
+      "la": 21,
+      "lo": 105.9
+    },
+    "0xb8ae0200c332e17b49f94bc753434c6dfa94c176": {
+      "t": 1793903216000,
+      "n": "A112SH",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
