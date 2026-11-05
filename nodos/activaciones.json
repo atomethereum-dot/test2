@@ -874,6 +874,27 @@
       "c": "Prague, CZ",
       "la": 50.1,
       "lo": 14.4
+    },
+    "0x4a211b1f3317193ec77291c03360e50a53244140": {
+      "t": 1793903704000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x71db4acb731236ba67482bee3268a80b9cff2943": {
+      "t": 1793903874000,
+      "n": "Sectora Node Warsaw",
+      "c": "Warsaw, PL",
+      "la": 52.2,
+      "lo": 21
+    },
+    "0xfbcdd547fdef909d12bf3357b8703e027ff8d493": {
+      "t": 1793903913000,
+      "n": "Sectora Node Beirut",
+      "c": "Beirut, LB",
+      "la": 33.9,
+      "lo": 35.5
     }
   }
 }
