@@ -391,6 +391,34 @@
       "c": "Bangkok, TH",
       "la": 13.8,
       "lo": 100.5
+    },
+    "0xd6b8e0e09c337a7062e2ad74898be22a51049235": {
+      "t": 1793891618000,
+      "n": "Sectora Node Casablanca",
+      "c": "Casablanca, MA",
+      "la": 33.6,
+      "lo": -7.6
+    },
+    "0x629d9474e44a62494377010705ce12ae4c02aa16": {
+      "t": 1793891636000,
+      "n": "Sectora Node Addis Ababa",
+      "c": "Addis Ababa, ET",
+      "la": 9,
+      "lo": 38.7
+    },
+    "0x4a16e3b31d529450c3ad8791cefdf03aac985877": {
+      "t": 1793891748000,
+      "n": "Sectora Node Bangkok",
+      "c": "Bangkok, TH",
+      "la": 13.8,
+      "lo": 100.5
+    },
+    "0x991635d76bd22414cffc3eaad63b8b8d3b14ae88": {
+      "t": 1793891796000,
+      "n": "Sectora Node Madrid",
+      "c": "Madrid, ES",
+      "la": 40.4,
+      "lo": -3.7
     }
   }
 }
