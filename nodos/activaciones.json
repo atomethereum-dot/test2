@@ -1350,6 +1350,20 @@
       "c": "Antananarivo, MG",
       "la": -18.9,
       "lo": 47.5
+    },
+    "0xa920752180184e588b01768b48e0470cb4c6f17b": {
+      "t": 1793919856000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
+    },
+    "0xefdbb07bc992783eddf7327951da2e723bde2795": {
+      "t": 1793919876000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
