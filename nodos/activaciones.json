@@ -1126,6 +1126,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x036874d8544e1a46d84b21cb1b4b4e0a240677f6": {
+      "t": 1793909163000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
