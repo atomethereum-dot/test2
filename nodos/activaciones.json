@@ -685,6 +685,48 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xbe6df00910d93e575687f67eb8acf62f15f7d6c8": {
+      "t": 1793900675000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
+    },
+    "0x87a32c0bd3c0fbe74260ae0d0381cbd9fe8c5de3": {
+      "t": 1793900713000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x1f1f76f0d5bb720be5c872d602b1c9e7eba75dc3": {
+      "t": 1793900738000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0xc7adaf60c857777ec87e62876fed03edb102487f": {
+      "t": 1793900815000,
+      "n": "Sectora Node Beirut",
+      "c": "Beirut, LB",
+      "la": 33.9,
+      "lo": 35.5
+    },
+    "0x26630d2d13bbc1a2d4f21264df9b14bd6294d803": {
+      "t": 1793900884000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0xa9db6393ff5384ab1d7c2288e961fce884bed907": {
+      "t": 1793900890000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
