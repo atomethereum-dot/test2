@@ -573,6 +573,20 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x28cc833f48f4dede12746a159e34c9d4e340c7f1": {
+      "t": 1793896982000,
+      "n": "Sectora Node",
+      "c": "Dhaka, BD",
+      "la": 30.9,
+      "lo": 90.4
+    },
+    "0xb8b112c6331d805da1ec336001114e16859d3024": {
+      "t": 1793897258000,
+      "n": "Sectora Node Tripoli",
+      "c": "Tripoli, LY",
+      "la": 32.9,
+      "lo": 13.2
     }
   }
 }
