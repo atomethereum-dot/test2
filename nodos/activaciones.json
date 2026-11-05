@@ -1336,6 +1336,20 @@
       "c": "Manila, PH",
       "la": 14.6,
       "lo": 121
+    },
+    "0x7185b9c0c4ffa4eec6ecf100c5bc3583065002ab": {
+      "t": 1793919060000,
+      "n": "Sectora Node 1",
+      "c": "Kaliningrad, RU",
+      "la": 54.7,
+      "lo": 20.5
+    },
+    "0x75fdfe4ebabd60388eca6d522dacd9bfbe5a7062": {
+      "t": 1793919325000,
+      "n": "Sectora Node Antananarivo",
+      "c": "Antananarivo, MG",
+      "la": -18.9,
+      "lo": 47.5
     }
   }
 }
