@@ -1294,6 +1294,13 @@
       "c": "Bangkok, TH",
       "la": 13.8,
       "lo": 100.5
+    },
+    "0x4d6eda3b23a7c0fbc284b9b5f5efb64d47f0dde5": {
+      "t": 1793917880000,
+      "n": "Sectora Node Yerevan",
+      "c": "Yerevan, AM",
+      "la": 40.2,
+      "lo": 44.5
     }
   }
 }
