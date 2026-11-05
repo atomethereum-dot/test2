@@ -1252,6 +1252,13 @@
       "c": "Bangkok, TH",
       "la": 13.8,
       "lo": 100.5
+    },
+    "0xb8d3b75ef1719a0d4f20224686f7e314ccb3315c": {
+      "t": 1793915512000,
+      "n": "Sectora Node Madrid",
+      "c": "Madrid, ES",
+      "la": 40.4,
+      "lo": -3.7
     }
   }
 }
