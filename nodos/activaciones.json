@@ -286,6 +286,20 @@
       "c": "Buenos Aires, AR",
       "la": -34.6,
       "lo": -58.5
+    },
+    "0x00c63130ed93977f50fb5ee52f5bee0df02b15b1": {
+      "t": 1793889257000,
+      "n": "Sectora Node Kyiv",
+      "c": "Kyiv, UA",
+      "la": 50.4,
+      "lo": 30.5
+    },
+    "0xcc31180b48c3439664efe4f17077f9e83ba8c53c": {
+      "t": 1793889306000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
