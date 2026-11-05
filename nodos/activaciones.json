@@ -468,6 +468,27 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x371e36a16d700cab7d713e2b1de926815ec28272": {
+      "t": 1793894052000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0xdf58358c195cd4d801558cd1d353f74379588e81": {
+      "t": 1793894075000,
+      "n": "Sectora Node Colombo",
+      "c": "Colombo, LK",
+      "la": 6.9,
+      "lo": 79.8
+    },
+    "0x2ac37e1ac28c21aa5909544e7e323aef408730cb": {
+      "t": 1793894174000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
