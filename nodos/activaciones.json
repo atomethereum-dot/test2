@@ -1028,6 +1028,34 @@
       "c": "Vilnius, LT",
       "la": 54.7,
       "lo": 25.3
+    },
+    "0xee1bacfe8b6f1777a6af9785e9ad7f16b6da9fd2": {
+      "t": 1793904930000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
+    },
+    "0x4b3cfb60cc1a410309a395e0d59628a63432af1c": {
+      "t": 1793905102000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
+    },
+    "0x60cf0332e757a0075219d8806de980d31d504ccf": {
+      "t": 1793905104000,
+      "n": "Sectora Node Makassar",
+      "c": "Makassar, ID",
+      "la": -5.1,
+      "lo": 119.4
+    },
+    "0xd293aadc9fabd7c40b0819a6218468f1dd27ebd4": {
+      "t": 1793905178000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
     }
   }
 }
