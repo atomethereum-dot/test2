@@ -545,6 +545,13 @@
       "c": "Bangkok, TH",
       "la": 13.8,
       "lo": 100.5
+    },
+    "0x3e3a4d2a69e8df4d7f49720c300d23cb90e3387e": {
+      "t": 1793896344000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
