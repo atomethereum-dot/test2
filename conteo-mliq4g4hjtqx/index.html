@@ -159,6 +159,14 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
 .hx li .t{font:500 12.5px var(--mono);color:var(--ink-3);min-width:44px}
 .hx li .w{font-size:12.5px}
 @media (max-width:760px){.hd th,.hd td{padding:11px 9px}.hd th:nth-child(5),.hd td:nth-child(5){display:none}}
+/* nodos encendidos hoy: resumen por pais y lista con la wallet conectada */
+.ctry{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.ctry span{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--line-2);border-radius:99px;font:500 12px/1 var(--mono);color:var(--ink-2)}
+.ctry b{color:var(--ink);font-weight:500}
+.nt td a{font-size:12.5px}
+.nt .ntw i{font-style:normal}.nt .ntc{display:none}
+@media (max-width:760px){table.nt{min-width:0}.nt th,.nt td{padding:11px 9px}.nt td a{font-size:11.5px}.nt .ntw i{display:block}.nt .ntc{display:block;margin-top:5px}.nt .ntc b{font-weight:400}.nt .ntc b.ok{color:var(--ok)}.nt .ntc b.bad{color:var(--bad)}.nt .ntc b.warn{color:var(--warn)}.nt .ntc b.blue{color:var(--blue-l)}
+  .nt th:nth-child(3),.nt td:nth-child(3),.nt th:nth-child(4),.nt td:nth-child(4),.nt th:nth-child(5),.nt td:nth-child(5),.nt th:nth-child(6),.nt td:nth-child(6),.nt th:nth-child(7),.nt td:nth-child(7){display:none}}
 .rc .m-only{display:none}
 /* en el telefono: n.º, fecha con la wallet debajo y el nodo; el resto, en el detalle */
 @media (max-width:640px){
@@ -226,6 +234,17 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       <div class="lv"><span>Guardian</span><b id="l3">0</b></div>
       <div class="lv"><span>Titan</span><b id="l4">0</b></div>
     </div>
+
+    <div class="bar2">
+      <h2>Nodos encendidos hoy</h2>
+      <span class="upd" id="nt-sum"></span>
+    </div>
+    <div class="ctry" id="nt-ctry"></div>
+    <div class="tbl"><table class="nt">
+      <thead><tr><th>Hora</th><th>Wallet conectada</th><th>País</th><th>Ciudad</th><th class="r">SECT en la wallet</th><th class="r">SECT en staking</th><th>Estado</th></tr></thead>
+      <tbody id="nt-rows"></tbody>
+    </table></div>
+    <p class="foot">Nodos encendidos desde las 00:00 de hoy (hora de este aparato), el más reciente arriba. La wallet es la que conectaron al activar el nodo; el país y la ciudad son la ubicación aproximada que dio el Dashboard en ese momento. Toca una wallet para ver su detalle. Se actualiza con «Actualizar».</p>
 
     <div class="bar2">
       <h2>Entradas y salidas por día</h2>
@@ -405,8 +424,36 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     $("t-resbar").style.width = pct + "%"; $("t-resp").textContent = nf2.format(pct) + " % de 7.000.000" + (reserved >= C.BAG ? " · bolsa completa" : "");
     $("t-secured").textContent = nf0.format(secured) + " SECT ya asegurados (día 30 o más)";
     [1, 2, 3, 4].forEach(function (k) { $("l" + k).textContent = nf0.format(lv[k]); });
-    tabsDraw(); draw(); recentBuild(); recentDraw(); refCompute(); qDraw();
+    tabsDraw(); draw(); recentBuild(); recentDraw(); refCompute(); qDraw(); todayNodes();
     clearInterval(tick); tick = setInterval(live, 250); live();
+  }
+
+  /* ---------- nodos encendidos hoy: hora, wallet conectada, pais y si ya tienen SECT ---------- */
+  var RN = (function () { try { return new Intl.DisplayNames(["es"], { type: "region" }); } catch (e) { return null; } })();
+  function pais(cc) { try { return RN ? RN.of(cc) : cc; } catch (e) { return cc; } }
+  function flag(cc) { return /^[A-Z]{2}$/.test(cc) ? String.fromCodePoint(127397 + cc.charCodeAt(0), 127397 + cc.charCodeAt(1)) : ""; }
+  function sectN(v) { return v >= 1 || v === 0 ? nf0.format(v) : nf2.format(v); }
+  function todayNodes() {
+    var d0 = new Date(); d0.setHours(0, 0, 0, 0); var t0 = d0.getTime();
+    var list = rows.filter(function (x) { var n = x.node; return n && (n.act ? n.act.t : n.at) >= t0; }).map(function (x) {
+      var n = x.node, c = n.act && n.act.c ? n.act.c : "", i = c.lastIndexOf(",");
+      return { x: x, t: n.act ? n.act.t : n.at, cc: i >= 0 ? c.slice(i + 1).trim().toUpperCase() : "", city: i >= 0 ? c.slice(0, i).trim() : c };
+    }).sort(function (a, b) { return b.t - a.t; });
+    var by = {}, conSect = 0, conStake = 0;
+    list.forEach(function (e) { var k = e.cc || "?"; by[k] = (by[k] || 0) + 1; if (e.x.acc && e.x.acc.wallet > 0) conSect++; if ((e.x.r.bal || 0) >= 100) conStake++; });
+    $("nt-sum").textContent = list.length ? nf0.format(list.length) + " hoy · " + nf0.format(conSect) + " con SECT en la wallet · " + nf0.format(conStake) + " con staking de 100+" : "";
+    $("nt-ctry").innerHTML = Object.keys(by).sort(function (a, b) { return by[b] - by[a] || a.localeCompare(b); }).map(function (k) {
+      return "<span>" + (k === "?" ? "Sin país" : flag(k) + " " + escH(pais(k))) + " <b>" + by[k] + "</b></span>";
+    }).join("");
+    $("nt-rows").innerHTML = list.length ? list.map(function (e) {
+      var x = e.x, a = x.acc, st = ST[x.r.status] || ["—", "mute"];
+      return "<tr><td>" + new Date(e.t).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }) + '</td><td><a class="ntw" href="#" data-w="' + x.who + '"><i>' + x.who.slice(0, 22) + "</i><i>" + x.who.slice(22) + "</i></a>" +
+        '<span class="sub ntc">' + (e.cc ? flag(e.cc) + " " + escH(pais(e.cc)) : "Sin país") + " · " + (a ? sectN(a.wallet) : "—") + ' SECT en la wallet · <b class="' + st[1] + '">' + st[0] + "</b></span></td>" +
+        "<td>" + (e.cc ? flag(e.cc) + " " + escH(pais(e.cc)) : "—") + "</td><td>" + (escH(e.city) || "—") + "</td>" +
+        '<td class="r">' + (a ? sectN(a.wallet) : "—") + '</td><td class="r">' + sectN(x.r.bal || 0) + "</td>" +
+        '<td><span class="chip ' + st[1] + '">' + st[0] + "</span></td></tr>";
+    }).join("") : '<tr><td colspan="7" class="empty">Hoy aún no se ha encendido ningún nodo.</td></tr>';
+    $("nt-rows").querySelectorAll("a[data-w]").forEach(function (l) { l.addEventListener("click", function (ev) { ev.preventDefault(); openWho(l.dataset.w); }); });
   }
 
   /* ---------- referidos ---------- */
