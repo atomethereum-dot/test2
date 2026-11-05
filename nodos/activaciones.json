@@ -349,6 +349,20 @@
       "c": "Kabul, AF",
       "la": 34.5,
       "lo": 69.2
+    },
+    "0x17c7060a23b8851caea66d2bea8aaf9a8627ce9e": {
+      "t": 1793890674000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0xa81d8213ee2999c1256e0eb3e2b4d529aa0e903d": {
+      "t": 1793890844000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
