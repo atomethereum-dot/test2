@@ -1224,6 +1224,13 @@
       "c": "Tehran, IR",
       "la": 35.7,
       "lo": 51.4
+    },
+    "0xa495e87f77c7f8755bba2f0ec36456bc5ceef820": {
+      "t": 1793914708000,
+      "n": "Sectora Node Athens",
+      "c": "Athens, GR",
+      "la": 38,
+      "lo": 23.7
     }
   }
 }
