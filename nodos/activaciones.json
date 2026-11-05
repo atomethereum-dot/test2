@@ -769,6 +769,41 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xc1be43ddbf91144acc695a8e18c7ee3bda6f0abd": {
+      "t": 1793902162000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
+    },
+    "0x2981d36022ef62144b4804734c20a28d1b14ba1c": {
+      "t": 1793902171000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x77834f2f0763a18f0e7e3d5a85707bb2097fe42b": {
+      "t": 1793902309000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0xb19c5a7ea01f71a8a1f4ac982820f0b90d947678": {
+      "t": 1793902319000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x0543d87e082fd30b5ead2470e1015af48e65b599": {
+      "t": 1793902322000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
