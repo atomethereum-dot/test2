@@ -440,6 +440,20 @@
       "c": "Bangkok, TH",
       "la": 13.8,
       "lo": 100.5
+    },
+    "0x0695d2d73018e74880b8e57b36ab09c76624b0b3": {
+      "t": 1793893098000,
+      "n": "Sectora Node Bangkok",
+      "c": "Bangkok, TH",
+      "la": 13.8,
+      "lo": 100.5
+    },
+    "0xbae974c866c08381850ca2b0ac3e61a4a775880b": {
+      "t": 1793893341000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
