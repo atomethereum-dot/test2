@@ -454,6 +454,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0xb687e75958b907f968f0674b1d10a5d2ed946a86": {
+      "t": 1793893420000,
+      "n": "Sectora Node Qyzylorda",
+      "c": "Qyzylorda, KZ",
+      "la": 44.8,
+      "lo": 65.5
     }
   }
 }
