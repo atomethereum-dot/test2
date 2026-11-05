@@ -300,6 +300,27 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0xe7d630b97fecb7e667fb73a003b649b165309f7b": {
+      "t": 1793889511000,
+      "n": "Sectora Node Ho Chi Minh",
+      "c": "Ho Chi Minh, VN",
+      "la": 10.8,
+      "lo": 106.7
+    },
+    "0xa8e7a3089710be3db36c61ed27fc39ce0aa1b622": {
+      "t": 1793889565000,
+      "n": "Sectora Node Helsinki",
+      "c": "Helsinki, FI",
+      "la": 60.2,
+      "lo": 25
+    },
+    "0xd5d4d61204bd1fa019dace5bf7ad9dbcba9f2733": {
+      "t": 1793889659000,
+      "n": "Sectora Node Makassar",
+      "c": "Makassar, ID",
+      "la": -5.1,
+      "lo": 119.4
     }
   }
 }
