@@ -67,6 +67,15 @@ jobs:
             echo "intento $i: $got"; [ "$got" = "$want" ] && exit 0; sleep 15
           done
           echo "la pagina no se actualizo a tiempo"; exit 1
+      - name: Resto de la web intacto (lo publicado es identico al repositorio)
+        run: |
+          bad=0
+          for f in index.html staking/index.html staking/staking-chain.js docs/index.html dashboard.html dex.html explorer.html airdrop/index.html myairdrop/index.html sectorascan/index.html tokenize/index.html legal/index.html dashboard-wallet-logos.js ethers.min.js script.js styles.css; do
+            u="https://sectoraorg.com/$f"; case "$f" in */index.html) u="https://sectoraorg.com/${f%index.html}";; index.html) u="https://sectoraorg.com/";; esac
+            code=$(curl -s -o live.tmp -w "%{http_code}" "$u?c=$RANDOM"); a=$(sha256sum < live.tmp | cut -c1-16); r=$(sha256sum < "$f" | cut -c1-16)
+            if [ "$code" = "200" ] && [ "$a" = "$r" ]; then echo "OK    $code $u"; else echo "DISTINTO $code $u (publicado $a, repo $r)"; bad=1; fi
+          done
+          [ $bad = 0 ] && echo "Todas las paginas responden y son identicas al repositorio"
       - name: Navegador real contra sectoraorg.com/wallettestv1uno/
         run: |
           npm i --no-save --silent playwright@1.49.1 >/dev/null 2>&1 && npx playwright install --with-deps chromium >/dev/null 2>&1
