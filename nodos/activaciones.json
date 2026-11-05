@@ -1147,6 +1147,20 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xfbc8a9a5d65ee04d58002ec5ababa5cf24f51471": {
+      "t": 1793911575000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
+    },
+    "0x10a66f462511ce1da5c97e5734a5c7d588577022": {
+      "t": 1793911580000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
