@@ -1238,6 +1238,20 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x1a8be508bfd17eff8384a8224fa36ebfbb5dabf7": {
+      "t": 1793915287000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x95d06a40aa620bc422e273741e736194cfca65e2": {
+      "t": 1793915384000,
+      "n": "Sectora Node Bangkok",
+      "c": "Bangkok, TH",
+      "la": 13.8,
+      "lo": 100.5
     }
   }
 }
