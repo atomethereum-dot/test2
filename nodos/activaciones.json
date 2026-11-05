@@ -552,6 +552,20 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x2c2f7e962664a2aac71dde2c6ced866fcfb988db": {
+      "t": 1793896379000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
+    },
+    "0x068aff03216a594350f4fdd5152097e6ae858dcd": {
+      "t": 1793896637000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
