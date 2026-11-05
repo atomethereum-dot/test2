@@ -1364,6 +1364,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x392cc2826bfc0bb3f293612b9252408180d9fc01": {
+      "t": 1793920813000,
+      "n": "Sectora Node Istanbul",
+      "c": "Istanbul, TR",
+      "la": 41,
+      "lo": 29
     }
   }
 }
