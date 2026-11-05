@@ -587,6 +587,34 @@
       "c": "Tripoli, LY",
       "la": 32.9,
       "lo": 13.2
+    },
+    "0x523bd02d0b24ec8835e776bedab0554aa9afb956": {
+      "t": 1793897327000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "São Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
+    },
+    "0xf8d8929537a436b972f2bfb936e1fd03b5274152": {
+      "t": 1793897385000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x30c1fd89217ddb02ee8547c419edcb6042404bd1": {
+      "t": 1793897472000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x356833ce6b4e4e1460db865196d485a59737816d": {
+      "t": 1793897569000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
