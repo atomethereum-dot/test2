@@ -1210,6 +1210,13 @@
       "c": "Moscow, RU",
       "la": 55.8,
       "lo": 37.6
+    },
+    "0xb56e89eff93043c10ef5b594dbe5ede4df35adb9": {
+      "t": 1793913851000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
