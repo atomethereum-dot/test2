@@ -1175,6 +1175,13 @@
       "c": "Casablanca, MA",
       "la": 33.6,
       "lo": -7.6
+    },
+    "0xca78344ca5d02c01729d7b507ddc42f67f527b3f": {
+      "t": 1793912917000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
