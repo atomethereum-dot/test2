@@ -748,6 +748,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x4862c6ded275b30780f1c03053b13f100a3e4073": {
+      "t": 1793901227000,
+      "n": "Sectora Node Fortaleza",
+      "c": "Fortaleza, BR",
+      "la": -3.7,
+      "lo": -38.5
     }
   }
 }
