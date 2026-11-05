@@ -279,6 +279,13 @@
       "c": "Madrid, ES",
       "la": 40.4,
       "lo": -3.7
+    },
+    "0x65692ea7f557ea8320fd1c92060fb3946d956aa5": {
+      "t": 1793868645000,
+      "n": "Sectora Node Buenos Aires",
+      "c": "Buenos Aires, AR",
+      "la": -34.6,
+      "lo": -58.5
     }
   }
 }
