@@ -867,6 +867,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xe6960379de9a3e6ce49ef1c3b6fc6790e710ae69": {
+      "t": 1793903349000,
+      "n": "Sectora Node Prague",
+      "c": "Prague, CZ",
+      "la": 50.1,
+      "lo": 14.4
     }
   }
 }
