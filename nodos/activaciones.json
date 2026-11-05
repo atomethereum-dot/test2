@@ -951,6 +951,48 @@
       "c": "Manila, PH",
       "la": 14.6,
       "lo": 121
+    },
+    "0xf0f77816d509f007df8a97804eca1fe6026ecd44": {
+      "t": 1793904241000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x53f19113cdb0877904b2e80522d8d6904b6222ff": {
+      "t": 1793904242000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
+    },
+    "0x2c151e2366a2e5b1d9a98ddb0428565ee008324f": {
+      "t": 1793904282000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0xc3db12819cb11853790d4933460dcba0c6aaa7d4": {
+      "t": 1793904295000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x9f5f8d39d14aaebdf1d0d3ba7da6a04cf5e0ee8d": {
+      "t": 1793904347000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
+    },
+    "0x26b0b304f39df98099b943ec69b5a13992fb3af0": {
+      "t": 1793904396000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
     }
   }
 }
