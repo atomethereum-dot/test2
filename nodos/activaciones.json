@@ -1259,6 +1259,13 @@
       "c": "Madrid, ES",
       "la": 40.4,
       "lo": -3.7
+    },
+    "0xf15fe90a809d4045de1d3636afbbda7002c410dc": {
+      "t": 1793916001000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
