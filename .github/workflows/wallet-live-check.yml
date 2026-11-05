@@ -39,7 +39,7 @@ jobs:
               } catch (e) { console.log("RPC", u, "ERROR", e.message); } }
             const ky = "https://aggregator-api.kyberswap.com";
             console.log("KYBER", await pre(ky + "/ethereum/api/v1/routes", "GET", "x-client-id"));
-            for (const [chain, tin, tout, amt] of [["ethereum", "0xEeeeeEeeeEeEeEeEeEeEEEeeeeEeeeeeeeEEeE", "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "10000000000000000"], ["bsc", "0x55d398326f99059fF775485246999027B3197955", "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d", "5000000000000000000"], ["bsc", "0xEeeeeEeeeEeEeEeEeEeEEEeeeeEeeeeeeeEEeE", "0x55d398326f99059fF775485246999027B3197955", "10000000000000000"]]) {
+            for (const [chain, tin, tout, amt] of [["ethereum", "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "10000000000000000"], ["bsc", "0x55d398326f99059fF775485246999027B3197955", "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d", "5000000000000000000"], ["bsc", "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "0x55d398326f99059fF775485246999027B3197955", "10000000000000000"]]) {
               try { const r = await fetch(`${ky}/${chain}/api/v1/routes?tokenIn=${tin}&tokenOut=${tout}&amountIn=${amt}`, { headers: { origin: O, "x-client-id": "sectora-wallet" } }); const j = await r.json();
                 console.log("KYBER routes", chain, "| http", r.status, "| acao", r.headers.get("access-control-allow-origin"), "| router", j.data && j.data.routerAddress, "| out", j.data && j.data.routeSummary && j.data.routeSummary.amountOut, "| gasUsd", j.data && j.data.routeSummary && j.data.routeSummary.gasUsd, j.message || "");
                 if (j.data && j.data.routeSummary) { const b = await fetch(`${ky}/${chain}/api/v1/route/build`, { method: "POST", headers: { origin: O, "content-type": "application/json", "x-client-id": "sectora-wallet" }, body: JSON.stringify({ routeSummary: j.data.routeSummary, sender: EVM, recipient: EVM, slippageTolerance: 50 }) }); const d = await b.json();
@@ -49,43 +49,15 @@ jobs:
             console.log("JUP", await pre(jp + "/swap", "POST", "content-type"));
             try { const r = await fetch(`${jp}/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&amount=10000000&slippageBps=50`, { headers: { origin: O } }); const q = await r.json();
               console.log("JUP quote | http", r.status, "| acao", r.headers.get("access-control-allow-origin"), "| out", q.outAmount, "| min", q.otherAmountThreshold, q.error || "");
-              const s = await fetch(`${jp}/swap`, { method: "POST", headers: { origin: O, "content-type": "application/json" }, body: JSON.stringify({ quoteResponse: q, userPublicKey: SOL, wrapAndUnwrapSol: true, dynamicComputeUnitLimit: true, prioritizationFeeLamports: { priorityLevelWithMaxLamports: { maxLamports: 200000, priorityLevel: "medium" } } }) });
+              const s = await fetch(`${jp}/swap`, { method: "POST", headers: { origin: O, "content-type": "application/json" }, body: JSON.stringify({ quoteResponse: q, userPublicKey: "7Np41oeYqPefeNQEHSv1UDhYrehxin3NStELsSKCT4K2", wrapAndUnwrapSol: true, dynamicComputeUnitLimit: true, prioritizationFeeLamports: { priorityLevelWithMaxLamports: { maxLamports: 200000, priorityLevel: "medium" } } }) });
               const j = await s.json(); if (!j.swapTransaction) { console.log("JUP swap | http", s.status, JSON.stringify(j).slice(0, 300)); return; }
               const tx = Buffer.from(j.swapTransaction, "base64"); let off = 0, cnt = 0, sh = 0; for (;;) { const b = tx[off++]; cnt |= (b & 0x7f) << sh; if (!(b & 0x80)) break; sh += 7; }
               const msg = tx.subarray(off + cnt * 64); let m = msg[0] & 0x80 ? 1 : 0; const nreq = msg[m]; m += 3; let kc = 0; sh = 0; for (;;) { const b = msg[m++]; kc |= (b & 0x7f) << sh; if (!(b & 0x80)) break; sh += 7; }
-              console.log("JUP swap | http", s.status, "| acao", s.headers.get("access-control-allow-origin"), "| versioned", !!(msg[0] & 0x80), "| sigs", cnt, "| required", nreq, "| keys", kc, "| payer", E.encodeBase58(msg.subarray(m, m + 32)), "| payer ok", E.encodeBase58(msg.subarray(m, m + 32)) === SOL);
+              console.log("JUP swap | http", s.status, "| acao", s.headers.get("access-control-allow-origin"), "| versioned", !!(msg[0] & 0x80), "| sigs", cnt, "| required", nreq, "| keys", kc, "| payer", E.encodeBase58(msg.subarray(m, m + 32)), "| payer ok", E.encodeBase58(msg.subarray(m, m + 32)) === "7Np41oeYqPefeNQEHSv1UDhYrehxin3NStELsSKCT4K2");
             } catch (e) { console.log("JUP ERROR", e.message); }
           })();
           JS
           node api.cjs
-      - name: Diagnostico (KyberSwap nativo y metodos de Solana)
-        run: |
-          cat > diag.cjs <<'JS'
-          const O = "https://sectoraorg.com", UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36";
-          const SOL = "HAgk14JpMQLgt6rVgv7cBQFJWFto5Dqxi472uT3DKpqk", USDC = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
-          (async () => {
-            const ky = "https://aggregator-api.kyberswap.com";
-            for (const [chain, tin, tout] of [["ethereum", "0xEeeeeEeeeEeEeEeEeEeEEEeeeeEeeeeeeeEEeE", "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"], ["ethereum", "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"],
-                ["ethereum", "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"], ["ethereum", "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "0xEeeeeEeeeEeEeEeEeEeEEEeeeeEeeeeeeeEEeE"],
-                ["bsc", "0xEeeeeEeeeEeEeEeEeEeEEEeeeeEeeeeeeeEEeE", "0x55d398326f99059fF775485246999027B3197955"]]) {
-              for (const amt of ["10000000000000000", "1000000"]) { try { const r = await fetch(`${ky}/${chain}/api/v1/routes?tokenIn=${tin}&tokenOut=${tout}&amountIn=${amt}`, { headers: { origin: O, "user-agent": UA, "x-client-id": "sectora-wallet" } });
-                console.log("KY", chain, tin.slice(0, 8), "->", tout.slice(0, 8), amt, "| http", r.status, "|", (await r.text()).slice(0, 220)); } catch (e) { console.log("KY ERROR", e.message); } } }
-            const calls = [["getBalance", [SOL]], ["getLatestBlockhash", [{ commitment: "finalized" }]], ["getTokenAccountsByOwner", [SOL, { mint: USDC }, { encoding: "jsonParsed" }]],
-              ["getTokenAccountsByOwner", [SOL, { programId: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" }, { encoding: "jsonParsed" }]], ["getSignatureStatuses", [["5VERv8NMvzbJMEkV8xnrLkEaWRtSz9CosKDYjCJjBRnbJLgp8uirBgmQpjKhoR4tjF3ZpRzrFmBV6UjKdiSZkQUW"]]]];
-            for (const u of ["https://solana-rpc.publicnode.com", "https://solana.drpc.org", "https://api.mainnet-beta.solana.com", "https://solana.api.onfinality.io/public", "https://solana-mainnet.gateway.tatum.io"]) {
-              for (const [m, params] of calls) { try { const r = await fetch(u, { method: "POST", headers: { origin: O, "user-agent": UA, "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: m, params }) });
-                const t = await r.text(); console.log("SOLRPC", u, m, "| http", r.status, "| acao", r.headers.get("access-control-allow-origin"), "|", t.slice(0, 160)); } catch (e) { console.log("SOLRPC", u, m, "ERROR", e.message); } } }
-            try { const q = await (await fetch("https://lite-api.jup.ag/swap/v1/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=" + USDC + "&amount=10000000&slippageBps=50")).json();
-              const pk = "7Np41oeYqPefeNQEHSv1UDhYrehxin3NStELsSKCT4K2";
-              const s = await fetch("https://lite-api.jup.ag/swap/v1/swap", { method: "POST", headers: { origin: O, "content-type": "application/json" }, body: JSON.stringify({ quoteResponse: q, userPublicKey: pk, wrapAndUnwrapSol: true, dynamicComputeUnitLimit: true, prioritizationFeeLamports: { priorityLevelWithMaxLamports: { maxLamports: 200000, priorityLevel: "medium" } } }) });
-              const j = await s.json(); if (!j.swapTransaction) { console.log("JUP2 | http", s.status, JSON.stringify(j).slice(0, 300)); }
-              else { const tx = Buffer.from(j.swapTransaction, "base64"); let off = 0, cnt = 0, sh = 0; for (;;) { const b = tx[off++]; cnt |= (b & 0x7f) << sh; if (!(b & 0x80)) break; sh += 7; }
-                const msg = tx.subarray(off + cnt * 64); let m = msg[0] & 0x80 ? 1 : 0; const nreq = msg[m]; m += 3; let kc = 0; sh = 0; for (;;) { const b = msg[m++]; kc |= (b & 0x7f) << sh; if (!(b & 0x80)) break; sh += 7; }
-                global.window = globalThis; global.self = globalThis; require("./wallettestv1uno/ethers.min.js");
-                console.log("JUP2 | http", s.status, "| sigs", cnt, "| required", nreq, "| payer ok", globalThis.ethers.encodeBase58(msg.subarray(m, m + 32)) === pk); } } catch (e) { console.log("JUP2 ERROR", e.message); }
-          })();
-          JS
-          node diag.cjs
       - name: Esperar a que la pagina publicada tenga esta version
         run: |
           want=$(grep -o 'name="sw-build" content="[0-9]*"' wallettestv1uno/index.html | grep -o '[0-9]\{14\}')
