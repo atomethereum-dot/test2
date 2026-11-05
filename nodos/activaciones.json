@@ -1168,6 +1168,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0xa36f914ced6f4f7e0f5920f01a945fccf7ed46de": {
+      "t": 1793912615000,
+      "n": "Sectora Node Casablanca",
+      "c": "Casablanca, MA",
+      "la": 33.6,
+      "lo": -7.6
     }
   }
 }
