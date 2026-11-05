@@ -804,6 +804,20 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x40e2f14f943a8396a90102fb17a274eaa008a41f": {
+      "t": 1793902534000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x461047a74b287495994909b09dc6e9559e2b023f": {
+      "t": 1793902676000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
