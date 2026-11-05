@@ -1371,6 +1371,13 @@
       "c": "Istanbul, TR",
       "la": 41,
       "lo": 29
+    },
+    "0x9cb709ff041f91bbbe1436496932951d22d43f38": {
+      "t": 1793921218000,
+      "n": "Sectora Node Jayapura",
+      "c": "Jayapura, ID",
+      "la": -2.5,
+      "lo": 140.7
     }
   }
 }
