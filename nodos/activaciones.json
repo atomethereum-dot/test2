@@ -727,6 +727,27 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xcbe8430ee6f6e01ff7ae69a584127cda22ce1763": {
+      "t": 1793900946000,
+      "n": "Sectora Node Manila",
+      "c": "Manila, PH",
+      "la": 14.6,
+      "lo": 121
+    },
+    "0x7f24e7a6db4200cf44b8a2dbba065f5ae302d5ce": {
+      "t": 1793900982000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x289d2f630e6e3e9efe1520d13ef32bf80111e12e": {
+      "t": 1793901099000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
