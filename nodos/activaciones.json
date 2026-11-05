@@ -1322,6 +1322,20 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xda20264210692f31f99c44da1770b253e95af3d9": {
+      "t": 1793918783000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
+    },
+    "0x32a3c6cf0b32d2c6d9d2f735f1e82958f775a179": {
+      "t": 1793918789000,
+      "n": "Sectora Node Manila",
+      "c": "Manila, PH",
+      "la": 14.6,
+      "lo": 121
     }
   }
 }
