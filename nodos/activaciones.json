@@ -1182,6 +1182,20 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x5d7b5aed309e57290b4cd75eb8f4b5009fb1e84c": {
+      "t": 1793913288000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
+    },
+    "0xf114f841b71c6d8f5415b7f2350c592723875ba9": {
+      "t": 1793913300000,
+      "n": "Sectora Node Belgrade",
+      "c": "Belgrade, RS",
+      "la": 44.8,
+      "lo": 20.5
     }
   }
 }
