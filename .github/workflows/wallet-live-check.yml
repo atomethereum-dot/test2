@@ -1,0 +1,99 @@
+name: Wallet live check
+
+# Solo lectura: comprueba que sectoraorg.com/wallettestv1uno/ funciona con la red real
+# (RPC, KyberSwap y Jupiter desde el navegador). Usa la frase de prueba publica "abandon ... about",
+# pide precios y construye transacciones sin firmarlas ni enviarlas. No toca ninguna otra pagina.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "wallettestv1uno/**"
+      - ".github/workflows/wallet-live-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Servicios de red (CORS, precios y construccion de transacciones)
+        run: |
+          cat > api.cjs <<'JS'
+          global.window = globalThis; global.self = globalThis; require("./wallettestv1uno/ethers.min.js"); const E = globalThis.ethers;
+          const O = "https://sectoraorg.com", EVM = "0x9858EfFD232B4033E47d90003D41EC34EcaEda94", SOL = "HAgk14JpMQLgt6rVgv7cBQFJWFto5Dqxi472uT3DKpqk";
+          const pre = async (u, m, h) => { try { const r = await fetch(u, { method: "OPTIONS", headers: { origin: O, "access-control-request-method": m, "access-control-request-headers": h } });
+            return `preflight ${r.status} allow-origin=${r.headers.get("access-control-allow-origin")} allow-headers=${r.headers.get("access-control-allow-headers")}`; } catch (e) { return "preflight ERROR " + e.message; } };
+          const rpc = async (u, method, params = []) => { const r = await fetch(u, { method: "POST", headers: { origin: O, "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }) });
+            const j = await r.json(); return { status: r.status, acao: r.headers.get("access-control-allow-origin"), result: j.result, error: j.error && j.error.message }; };
+          (async () => {
+            for (const u of ["https://ethereum-rpc.publicnode.com", "https://eth.drpc.org", "https://bsc-rpc.publicnode.com", "https://bsc-dataseed.bnbchain.org"]) {
+              try { const a = await rpc(u, "eth_chainId"), g = await rpc(u, "eth_gasPrice"), t = await rpc(u, "eth_maxPriorityFeePerGas"), b = await rpc(u, "eth_getBlockByNumber", ["latest", false]);
+                console.log("RPC", u, "| http", a.status, "| acao", a.acao, "| chain", a.result, "| gasPrice gwei", g.result && E.formatUnits(BigInt(g.result), "gwei"), "| tip gwei", t.result ? E.formatUnits(BigInt(t.result), "gwei") : t.error, "| baseFee gwei", b.result && E.formatUnits(BigInt(b.result.baseFeePerGas || 0), "gwei"), "|", await pre(u, "POST", "content-type"));
+              } catch (e) { console.log("RPC", u, "ERROR", e.message); } }
+            for (const u of ["https://solana-rpc.publicnode.com", "https://api.mainnet-beta.solana.com"]) {
+              try { const h = await rpc(u, "getLatestBlockhash", [{ commitment: "finalized" }]), b = await rpc(u, "getBalance", [SOL]);
+                console.log("RPC", u, "| http", h.status, "| acao", h.acao, "| blockhash", h.result && h.result.value.blockhash, "| balance", b.result && b.result.value, b.error || "", "|", await pre(u, "POST", "content-type"));
+              } catch (e) { console.log("RPC", u, "ERROR", e.message); } }
+            const ky = "https://aggregator-api.kyberswap.com";
+            console.log("KYBER", await pre(ky + "/ethereum/api/v1/routes", "GET", "x-client-id"));
+            for (const [chain, tin, tout, amt] of [["ethereum", "0xEeeeeEeeeEeEeEeEeEeEEEeeeeEeeeeeeeEEeE", "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "10000000000000000"], ["bsc", "0x55d398326f99059fF775485246999027B3197955", "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d", "5000000000000000000"], ["bsc", "0xEeeeeEeeeEeEeEeEeEeEEEeeeeEeeeeeeeEEeE", "0x55d398326f99059fF775485246999027B3197955", "10000000000000000"]]) {
+              try { const r = await fetch(`${ky}/${chain}/api/v1/routes?tokenIn=${tin}&tokenOut=${tout}&amountIn=${amt}`, { headers: { origin: O, "x-client-id": "sectora-wallet" } }); const j = await r.json();
+                console.log("KYBER routes", chain, "| http", r.status, "| acao", r.headers.get("access-control-allow-origin"), "| router", j.data && j.data.routerAddress, "| out", j.data && j.data.routeSummary && j.data.routeSummary.amountOut, "| gasUsd", j.data && j.data.routeSummary && j.data.routeSummary.gasUsd, j.message || "");
+                if (j.data && j.data.routeSummary) { const b = await fetch(`${ky}/${chain}/api/v1/route/build`, { method: "POST", headers: { origin: O, "content-type": "application/json", "x-client-id": "sectora-wallet" }, body: JSON.stringify({ routeSummary: j.data.routeSummary, sender: EVM, recipient: EVM, slippageTolerance: 50 }) }); const d = await b.json();
+                  console.log("KYBER build", chain, "| http", b.status, "| code", d.code, "| router", d.data && d.data.routerAddress, "| amountIn", d.data && d.data.amountIn, "| gas", d.data && d.data.gas, "| data", d.data && d.data.data && d.data.data.slice(0, 10), d.message || ""); }
+              } catch (e) { console.log("KYBER", chain, "ERROR", e.message); } }
+            const jp = "https://lite-api.jup.ag/swap/v1";
+            console.log("JUP", await pre(jp + "/swap", "POST", "content-type"));
+            try { const r = await fetch(`${jp}/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&amount=10000000&slippageBps=50`, { headers: { origin: O } }); const q = await r.json();
+              console.log("JUP quote | http", r.status, "| acao", r.headers.get("access-control-allow-origin"), "| out", q.outAmount, "| min", q.otherAmountThreshold, q.error || "");
+              const s = await fetch(`${jp}/swap`, { method: "POST", headers: { origin: O, "content-type": "application/json" }, body: JSON.stringify({ quoteResponse: q, userPublicKey: SOL, wrapAndUnwrapSol: true, dynamicComputeUnitLimit: true, prioritizationFeeLamports: { priorityLevelWithMaxLamports: { maxLamports: 200000, priorityLevel: "medium" } } }) });
+              const j = await s.json(); if (!j.swapTransaction) { console.log("JUP swap | http", s.status, JSON.stringify(j).slice(0, 300)); return; }
+              const tx = Buffer.from(j.swapTransaction, "base64"); let off = 0, cnt = 0, sh = 0; for (;;) { const b = tx[off++]; cnt |= (b & 0x7f) << sh; if (!(b & 0x80)) break; sh += 7; }
+              const msg = tx.subarray(off + cnt * 64); let m = msg[0] & 0x80 ? 1 : 0; const nreq = msg[m]; m += 3; let kc = 0; sh = 0; for (;;) { const b = msg[m++]; kc |= (b & 0x7f) << sh; if (!(b & 0x80)) break; sh += 7; }
+              console.log("JUP swap | http", s.status, "| acao", s.headers.get("access-control-allow-origin"), "| versioned", !!(msg[0] & 0x80), "| sigs", cnt, "| required", nreq, "| keys", kc, "| payer", E.encodeBase58(msg.subarray(m, m + 32)), "| payer ok", E.encodeBase58(msg.subarray(m, m + 32)) === SOL);
+            } catch (e) { console.log("JUP ERROR", e.message); }
+          })();
+          JS
+          node api.cjs
+      - name: Esperar a que la pagina publicada tenga esta version
+        run: |
+          want=$(grep -o 'name="sw-build" content="[0-9]*"' wallettestv1uno/index.html | grep -o '[0-9]\{14\}')
+          echo "version esperada $want"
+          for i in $(seq 1 60); do
+            got=$(curl -s "https://sectoraorg.com/wallettestv1uno/?v=$i" | grep -o 'name="sw-build" content="[0-9]*"' | grep -o '[0-9]\{14\}' || true)
+            echo "intento $i: $got"; [ "$got" = "$want" ] && exit 0; sleep 15
+          done
+          echo "la pagina no se actualizo a tiempo"; exit 1
+      - name: Navegador real contra sectoraorg.com/wallettestv1uno/
+        run: |
+          npm i --no-save --silent playwright@1.49.1 >/dev/null 2>&1 && npx playwright install --with-deps chromium >/dev/null 2>&1
+          cat > ui.cjs <<'JS'
+          const { chromium } = require("playwright");
+          (async () => {
+            const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 390, height: 844 } }); const errs = [], net = [];
+            p.on("pageerror", e => errs.push("PAGEERR " + e.message)); p.on("console", m => { if (["error", "warning"].includes(m.type())) errs.push(m.type().toUpperCase() + " " + m.text().slice(0, 200)); });
+            p.on("requestfailed", r => net.push("FAILED " + r.url().slice(0, 90) + " " + (r.failure() && r.failure().errorText)));
+            await p.goto("https://sectoraorg.com/wallettestv1uno/", { waitUntil: "load" }); await p.waitForTimeout(4000);
+            await p.click("text=I already have a wallet"); await p.waitForSelector("#phrase", { timeout: 15000 });
+            await p.fill("#phrase", "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"); await p.click("#impGo"); await p.waitForSelector("#pw1");
+            if (await p.$("#wname")) await p.fill("#wname", "CI"); await p.fill("#pw1", "Sectora#2026!"); await p.fill("#pw2", "Sectora#2026!"); await p.click("#pwGo");
+            await p.waitForSelector(".rcard", { timeout: 90000 }); await p.click("text=Open my wallet"); await p.waitForSelector(".mcard");
+            const del = async () => { for (let i = 0; i < 8; i++) await p.click('[data-sk="del"]'); };
+            for (const [k, pick, amt] of [["eth", null, ["0", ".", "0", "1"]], ["bnb", "from:USDT", ["5"]], ["sol", null, ["0", ".", "0", "1"]]]) {
+              await p.click(".npill"); await p.click(`[data-net="${k}"]`); await p.waitForTimeout(500);
+              let chip = ""; for (let i = 0; i < 20; i++) { chip = await p.$eval("#syncChip", e => e.textContent); if (chip !== "Syncing…") break; await p.waitForTimeout(500); }
+              const bals = await p.$$eval(".li .r b", e => e.map(x => x.textContent));
+              await p.click('.acts4 [data-go="swap"]'); await del();
+              if (pick) { await p.click(".tokb >> nth=0"); await p.click(`[data-pick="${pick}"]`); }
+              for (const c of amt) await p.click(`[data-sk="${c}"]`);
+              let q = ""; try { await p.waitForSelector("#swapGo:not([disabled])", { timeout: 15000 }); q = await p.$eval("#qd", e => e.innerText.replace(/\s+/g, " ")); } catch (e) { q = "SIN PRECIO: " + await p.$eval("#qstate", e => e.textContent); }
+              console.log("UI", k, "| chip", chip, "| saldos", bals.join(" / "), "| precio", q);
+              await p.click('[aria-label="Back"]'); await p.waitForSelector(".mcard");
+            }
+            console.log("UI errores:", errs.length ? errs : "ninguno"); console.log("UI peticiones fallidas:", net.length ? net : "ninguna"); await b.close();
+          })().catch(e => { console.log("UI FALLO", e.message); process.exit(1); });
+          JS
+          node ui.cjs
