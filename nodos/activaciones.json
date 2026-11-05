@@ -1161,6 +1161,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x0dd3800f4fa1172b55cb49c366b59a2079b30bc4": {
+      "t": 1793911859000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
