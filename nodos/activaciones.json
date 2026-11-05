@@ -1301,6 +1301,27 @@
       "c": "Yerevan, AM",
       "la": 40.2,
       "lo": 44.5
+    },
+    "0xc31aebc88ffd6183876df2381dcca14ab7f9a24c": {
+      "t": 1793918480000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0xb0acf962b5bf58ae3a4fb2cd44c6c0e6f722c238": {
+      "t": 1793918513000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x703cc9fc9bb58a31ad3fd17699e30634209e3fc9": {
+      "t": 1793918603000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
