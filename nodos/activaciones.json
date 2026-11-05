@@ -538,6 +538,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0xddfba8f64a8cd7765a36eeb9c5f98e288dee3d21": {
+      "t": 1793895794000,
+      "n": "Sectora Node Bangkok",
+      "c": "Bangkok, TH",
+      "la": 13.8,
+      "lo": 100.5
     }
   }
 }
