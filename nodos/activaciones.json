@@ -1056,6 +1056,34 @@
       "c": "Dhaka, BD",
       "la": 23.7,
       "lo": 90.4
+    },
+    "0xa1e487595b0288d18db885cd4376cfec61b114c5": {
+      "t": 1793905309000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
+    },
+    "0xec0f1750d451a62f172f284a2c7f1994463c3764": {
+      "t": 1793905346000,
+      "n": "Sectora Node Bangkok",
+      "c": "Bangkok, TH",
+      "la": 13.8,
+      "lo": 100.5
+    },
+    "0xc5d4e7c5867bce29a01736c39b400d73ed29b2a1": {
+      "t": 1793905351000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
+    },
+    "0xcf258a4ef9dd0366441babd486a9dc2b1be61698": {
+      "t": 1793905438000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
     }
   }
 }
