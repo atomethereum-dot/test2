@@ -1378,6 +1378,20 @@
       "c": "Jayapura, ID",
       "la": -2.5,
       "lo": 140.7
+    },
+    "0xbda0d698210af7ef68e2790eaf142913125cce46": {
+      "t": 1793921479000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
+    },
+    "0xcb8851fef322bb8120bab6b1dd7ebad201862946": {
+      "t": 1793921723000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
