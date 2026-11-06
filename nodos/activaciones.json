@@ -1560,6 +1560,13 @@
       "c": "Makassar, ID",
       "la": -5.1,
       "lo": 119.4
+    },
+    "0x80b65d38f1846f4f86668422099f6ed418abd2a8": {
+      "t": 1793933821000,
+      "n": "Sectora Node Antigua",
+      "c": "Antigua, AG",
+      "la": 17.1,
+      "lo": -61.8
     }
   }
 }
