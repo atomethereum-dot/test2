@@ -1980,6 +1980,20 @@
       "c": "Manila, PH",
       "la": 14.6,
       "lo": 121
+    },
+    "0xc88417c877b4d4a5b071b93b6f3f5a5e751ba904": {
+      "t": 1793983299000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x47543fd9086d08aaef9b5a215570fdcb4c1ff1d4": {
+      "t": 1793983344000,
+      "n": "Sectora Node Seoul",
+      "c": "Seoul, KR",
+      "la": 37.5,
+      "lo": 127
     }
   }
 }
