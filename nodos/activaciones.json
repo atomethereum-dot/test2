@@ -2015,6 +2015,20 @@
       "c": "Dhaka, BD",
       "la": 23.7,
       "lo": 90.4
+    },
+    "0xcf64aa489fb78bebc959a15aae8b3b2489ecb6ee": {
+      "t": 1793990005000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x59b90c7ec4b96f83744124c65bf5e0060581bd8e": {
+      "t": 1793990166000,
+      "n": "Sectora Node Port-au-Prince",
+      "c": "Port-au-Prince, HT",
+      "la": 18.5,
+      "lo": -72.3
     }
   }
 }
