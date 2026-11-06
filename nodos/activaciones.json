@@ -1994,6 +1994,13 @@
       "c": "Seoul, KR",
       "la": 37.5,
       "lo": 127
+    },
+    "0x957d3f720232cf37b381ce9de9d64bfa76bf70d3": {
+      "t": 1793983966000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
