@@ -1630,6 +1630,13 @@
       "c": "Karachi, PK",
       "la": 24.9,
       "lo": 67
+    },
+    "0x3cc35ad83a019c7e97f126ab25b2a6938520f1ea": {
+      "t": 1793943434000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
