@@ -1420,6 +1420,27 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x7b407d5abc1bec4335443fd64547bbbdf6a2b5e9": {
+      "t": 1793923811000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
+    },
+    "0xaa3a049cf8c8a50437a1ca22fe716ebc974190be": {
+      "t": 1793923843000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
+    },
+    "0x24ebffce45e0617505953cb1103842ad6d8fa9d4": {
+      "t": 1793923848000,
+      "n": "Sectora Node Makassar",
+      "c": "Makassar, ID",
+      "la": -5.1,
+      "lo": 119.4
     }
   }
 }
