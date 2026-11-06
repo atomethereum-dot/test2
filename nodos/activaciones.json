@@ -2092,6 +2092,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x14b79e2d8babc5abbc7940722342e8b9b8945839": {
+      "t": 1794003881000,
+      "n": "Sectora Node Puerto Rico",
+      "c": "Puerto Rico, PR",
+      "la": 18.5,
+      "lo": -66.1
     }
   }
 }
