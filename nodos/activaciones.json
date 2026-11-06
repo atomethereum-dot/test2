@@ -1511,6 +1511,13 @@
       "c": "Algiers, DZ",
       "la": 36.8,
       "lo": 3
+    },
+    "0x340df06966eaaf53ac3fcde9b34032dd740980f1": {
+      "t": 1793928783000,
+      "n": "Sectora Node Makassar",
+      "c": "Makassar, ID",
+      "la": -5.1,
+      "lo": 119.4
     }
   }
 }
