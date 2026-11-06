@@ -2050,6 +2050,13 @@
       "c": "Berlin, DE",
       "la": 52.5,
       "lo": 13.4
+    },
+    "0x91e74624665feeef60762ee40b1239774c0d7070": {
+      "t": 1793998289000,
+      "n": "Sectora Node Shanghai",
+      "c": "Shanghai, CN",
+      "la": 31.2,
+      "lo": 121.5
     }
   }
 }
