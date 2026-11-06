@@ -1609,6 +1609,13 @@
       "c": "Bangkok, TH",
       "la": 13.8,
       "lo": 100.5
+    },
+    "0xa7c6e6d40f9302480484629d1df190fdbe4ef724": {
+      "t": 1793941137000,
+      "n": "Sectora Node Tijuana",
+      "c": "Tijuana, MX",
+      "la": 32.5,
+      "lo": -117
     }
   }
 }
