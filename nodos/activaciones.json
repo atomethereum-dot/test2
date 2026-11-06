@@ -1595,6 +1595,20 @@
       "c": "Karachi, PK",
       "la": 24.9,
       "lo": 67
+    },
+    "0x0cfc4daf81d7a2b29b9d479dda7ff0d0a808c18f": {
+      "t": 1793940785000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
+    },
+    "0xb7a42bd43dbf1dde9ecc4f405d845870dc97a88e": {
+      "t": 1793941025000,
+      "n": "Sectora Node Bangkok",
+      "c": "Bangkok, TH",
+      "la": 13.8,
+      "lo": 100.5
     }
   }
 }
