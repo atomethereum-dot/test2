@@ -1693,6 +1693,20 @@
       "c": "Nairobi, KE",
       "la": -1.3,
       "lo": 36.8
+    },
+    "0x159c5d3feedf68f6c21cd08fbe2eefb6d6e2a8a2": {
+      "t": 1793951654000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
+    },
+    "0x2d75649dbce4ab271db0c0c1733caf01f70d934b": {
+      "t": 1793951934000,
+      "n": "Sectora Node Makassar",
+      "c": "Makassar, ID",
+      "la": -5.1,
+      "lo": 119.4
     }
   }
 }
