@@ -1784,6 +1784,13 @@
       "c": "Makassar, ID",
       "la": -5.1,
       "lo": 119.4
+    },
+    "0xd56d7049aae71afe1f49d505c24cf7bb44fa1871": {
+      "t": 1793963908000,
+      "n": "Sectora Node Istanbul",
+      "c": "Istanbul, TR",
+      "la": 41,
+      "lo": 29
     }
   }
 }
