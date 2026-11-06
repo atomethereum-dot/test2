@@ -1945,6 +1945,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x612709c5250a04a969acbf594e768da1cdf41104": {
+      "t": 1793978879000,
+      "n": "Sectora Node Ho Chi Minh",
+      "c": "Ho Chi Minh, VN",
+      "la": 10.8,
+      "lo": 106.7
     }
   }
 }
