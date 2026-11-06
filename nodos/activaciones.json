@@ -1805,6 +1805,13 @@
       "c": "Singapore, SG",
       "la": 1.3,
       "lo": 103.8
+    },
+    "0xfcc821184d27c86fbf66e33c2cc77b356110a15c": {
+      "t": 1793966040000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
