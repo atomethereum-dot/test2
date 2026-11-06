@@ -1616,6 +1616,13 @@
       "c": "Tijuana, MX",
       "la": 32.5,
       "lo": -117
+    },
+    "0x127913354b080d1377c3daefdc1bc88f2d9e51ab": {
+      "t": 1793941410000,
+      "n": "Sectora Node Minsk",
+      "c": "Minsk, BY",
+      "la": 53.9,
+      "lo": 27.6
     }
   }
 }
