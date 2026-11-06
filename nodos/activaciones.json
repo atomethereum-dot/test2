@@ -1644,6 +1644,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x48c6c628110c6a7cd3e3b05521b79601a773c8e4": {
+      "t": 1793945229000,
+      "n": "Sectora Node Makassar",
+      "c": "Makassar, ID",
+      "la": -5.1,
+      "lo": 119.4
     }
   }
 }
