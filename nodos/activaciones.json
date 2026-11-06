@@ -1840,6 +1840,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xdbbc828d361b84e44963dc756446d759db3241fb": {
+      "t": 1793968455000,
+      "n": "Sectora Node Berlin",
+      "c": "Berlin, DE",
+      "la": 52.5,
+      "lo": 13.4
     }
   }
 }
