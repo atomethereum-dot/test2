@@ -2106,6 +2106,13 @@
       "c": "Kinshasa, CD",
       "la": -4.3,
       "lo": 15.3
+    },
+    "0xbb6e896d8dc00fd9e163d178614f472346897b98": {
+      "t": 1794006832000,
+      "n": "Sectora Node Shanghai",
+      "c": "Shanghai, CN",
+      "la": 31.2,
+      "lo": 121.5
     }
   }
 }
