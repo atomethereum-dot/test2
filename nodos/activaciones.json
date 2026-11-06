@@ -1868,6 +1868,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x7b82ba2d9db6a19f056ca052b3cab5d7a66502b8": {
+      "t": 1793971204000,
+      "n": "Sectora Node Kuala Lumpur",
+      "c": "Kuala Lumpur, MY",
+      "la": 3.2,
+      "lo": 101.7
     }
   }
 }
