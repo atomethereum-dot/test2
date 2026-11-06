@@ -1581,6 +1581,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x310362f45a36483f932f348abb0b1aa19a7eafc1": {
+      "t": 1793938829000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
     }
   }
 }
