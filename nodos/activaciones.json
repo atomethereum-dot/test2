@@ -1875,6 +1875,13 @@
       "c": "Kuala Lumpur, MY",
       "la": 3.2,
       "lo": 101.7
+    },
+    "0x25006340517aa89f2dbe8500485833e3a0ec7ff3": {
+      "t": 1793971535000,
+      "n": "Sectora Node Bandung",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
