@@ -1742,6 +1742,13 @@
       "c": "Zurich, CH",
       "la": 47.4,
       "lo": 8.5
+    },
+    "0x73a7d097dba2ad15df1df65544b367d58d5844a4": {
+      "t": 1793955805000,
+      "n": "Sectora Node Manila",
+      "c": "Manila, PH",
+      "la": 14.6,
+      "lo": 121
     }
   }
 }
