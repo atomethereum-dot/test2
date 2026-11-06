@@ -2036,6 +2036,20 @@
       "c": "Berlin, DE",
       "la": 52.5,
       "lo": 13.4
+    },
+    "0x031593f029a79378777fd8ba10fb8ae1f11d186f": {
+      "t": 1793992064000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
+    },
+    "0x5ee471ace4b51548e5c00ca3430ec3c181853f38": {
+      "t": 1793992166000,
+      "n": "Sectora Node Berlin",
+      "c": "Berlin, DE",
+      "la": 52.5,
+      "lo": 13.4
     }
   }
 }
