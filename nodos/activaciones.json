@@ -1567,6 +1567,13 @@
       "c": "Antigua, AG",
       "la": 17.1,
       "lo": -61.8
+    },
+    "0xd9bb11193a6b93f4c1079aa522e881ecc9f9ca1e": {
+      "t": 1793937745000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
