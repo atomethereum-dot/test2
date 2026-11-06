@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="google" content="notranslate">
+<title>Supply Reduction Countdown — Sectora Foundation</title>
+<meta name="description" content="Countdown to the one-time 50% $SECT supply reduction (burn) on March 15, 2027: from 50,000,000 to 25,000,000.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sectoraorg.com/burn/">
+<meta property="og:title" content="Supply Reduction Countdown — Sectora Foundation">
+<meta property="og:description" content="March 15, 2027: the $SECT supply goes from 50,000,000 to 25,000,000. One-time, forever.">
+<meta property="og:image" content="https://sectoraorg.com/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/v2/icon-192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/v2/favicon-32x32.png">
+<link rel="icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/icons/v2/apple-touch-icon.png">
+<link rel="canonical" href="https://sectoraorg.com/burn/">
+<meta name="theme-color" content="#000000">
+<link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:Plex;src:url('/fonts/IBMPlexSans.woff2') format('woff2');font-weight:100 700;font-display:swap}
+@font-face{font-family:PlexMono;src:url('/fonts/IBMPlexMono-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:PlexMono;src:url('/fonts/IBMPlexMono-500.woff2') format('woff2');font-weight:500;font-display:swap}
+:root{--blue:#1569ff;--blue-2:#5b9bff;--ink:#fff;--ink-2:rgba(255,255,255,.72);--ink-3:rgba(255,255,255,.5);--line:rgba(255,255,255,.14);--card:#0a0c11;--pad:clamp(16px,4vw,64px)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:#000;color:var(--ink);font-family:Plex,system-ui,sans-serif;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.m{font-family:PlexMono,ui-monospace,monospace;text-transform:uppercase;letter-spacing:.2em}
+.wrap{max-width:1240px;margin:0 auto;padding:0 var(--pad)}
+.eyebrow{display:flex;align-items:center;gap:14px;font-size:13px;color:var(--blue-2)}
+.eyebrow i{display:block;width:36px;height:2px;background:var(--blue)}
+
+/* cabecera */
+.top{position:sticky;top:0;z-index:20;background:rgba(0,0,0,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:.02em}
+.brand svg{width:30px;height:30px;flex:none}
+.brand span{font-size:11px;color:var(--ink-3);display:none}
+@media(min-width:720px){.brand span{display:inline}}
+.top-r{display:flex;align-items:center;gap:10px}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{background:none;border:0;color:var(--ink-3);font:500 11px PlexMono,monospace;letter-spacing:.16em;padding:8px 12px;cursor:pointer}
+.lang button.on{background:#fff;color:#000}
+.home{font-size:11px;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:8px 14px;white-space:nowrap}
+.home:hover{border-color:#fff;color:#fff}
+
+/* portada con la cuenta atras */
+.hero{position:relative;overflow:hidden;padding:clamp(48px,9vh,110px) 0 clamp(56px,9vh,104px)}
+.hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:96px 96px;-webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 25%,transparent 90%);mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 25%,transparent 90%);animation:drift 40s linear infinite}
+.hero:after{content:"";position:absolute;left:50%;top:38%;width:min(1100px,140vw);aspect-ratio:1;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(21,105,255,.28),rgba(21,105,255,.06) 40%,transparent 66%);pointer-events:none}
+@keyframes drift{to{background-position:96px 96px}}
+@media(prefers-reduced-motion:reduce){.hero:before{animation:none}}
+.hero .wrap{position:relative;z-index:1;text-align:center}
+.hero .eyebrow{justify-content:center}
+h1{margin-top:22px;font-size:clamp(38px,7.2vw,96px);font-weight:600;letter-spacing:-.035em;line-height:1.02}
+h1 .lt{font-weight:250}
+h1 b{color:var(--blue-2);font-weight:600}
+.lede{max-width:720px;margin:20px auto 0;font-size:clamp(16px,1.6vw,20px);font-weight:300;color:var(--ink-2)}
+
+.clock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.4vw,18px);max-width:980px;margin:clamp(34px,6vh,58px) auto 0}
+.cell{position:relative;background:linear-gradient(180deg,#0b0f19,#05070c);border:1px solid var(--line);border-radius:14px;padding:clamp(14px,2.4vw,30px) 6px clamp(12px,2vw,22px);overflow:hidden}
+.cell:before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(255,255,255,.06)}
+.cell.d{background:linear-gradient(180deg,#1a74ff,#0f56d9);border-color:#1569ff}
+.cell.d:before{background:rgba(255,255,255,.14)}
+.num{display:block;font-size:clamp(40px,9vw,124px);font-weight:200;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.unit{display:block;margin-top:10px;font-size:clamp(9px,1vw,12px);color:var(--ink-2)}
+.cell.d .unit{color:rgba(255,255,255,.9)}
+.tick{animation:tk .45s cubic-bezier(.2,.7,.2,1)}
+@keyframes tk{from{transform:translateY(-14%);opacity:.35}to{transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.tick{animation:none}}
+.when{margin-top:22px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;font-size:12px;color:var(--ink-2)}
+.when b{color:#fff;font-weight:500}
+.done{display:none;margin:34px auto 0;max-width:720px;padding:22px 26px;border:1px solid var(--blue);border-radius:14px;background:rgba(21,105,255,.12);font-size:18px}
+body.hecho .done{display:block}
+
+.ctas{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:34px}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;font-weight:500;font-size:16px;border:1px solid var(--line);transition:transform .2s,background .2s,border-color .2s}
+.btn.pri{background:var(--blue);border-color:var(--blue)}
+.btn.pri:hover{background:#2a78ff}
+.btn.alt:hover{border-color:#fff}
+.btn small{font:500 11px PlexMono,monospace;letter-spacing:.14em;opacity:.8}
+
+/* secciones */
+section.blk{padding:clamp(56px,9vh,104px) 0;border-top:1px solid var(--line)}
+h2{margin-top:16px;font-size:clamp(30px,4.6vw,58px);font-weight:600;letter-spacing:-.03em;line-height:1.05}
+h2 b{color:var(--blue-2);font-weight:600}
+.sub{margin-top:14px;max-width:680px;color:var(--ink-2);font-weight:300;font-size:clamp(15px,1.4vw,18px)}
+
+/* supply: barra antes / despues */
+.meter{margin-top:38px;display:grid;gap:22px}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.mlab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.mlab span{font-size:12px;color:var(--ink-2)}
+.mlab b{font-size:clamp(28px,4.4vw,56px);font-weight:200;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.bar{position:relative;height:18px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:999px}
+.bar.full i{width:100%;background:#fff}
+.bar.half i{width:50%;background:var(--blue)}
+.bar.half:after{content:"";position:absolute;left:50%;right:0;top:0;bottom:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.14) 0 6px,transparent 6px 12px)}
+.bar.half em{position:absolute;right:12px;top:50%;transform:translateY(-50%);font:500 10px PlexMono,monospace;letter-spacing:.18em;color:rgba(255,255,255,.8);font-style:normal}
+
+/* ficha */
+.facts{margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.fact{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.fact dt{font-size:11px;color:var(--ink-3)}
+.fact dd{margin-top:10px;font-size:22px;font-weight:500;letter-spacing:-.01em}
+.fact dd small{display:block;margin-top:4px;font-size:13px;font-weight:300;color:var(--ink-2);letter-spacing:0}
+.addr{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.addr code{font:400 clamp(11px,1.3vw,15px) PlexMono,monospace;word-break:break-all;flex:1;min-width:0;color:var(--ink-2)}
+.addr button{background:#fff;color:#000;border:0;border-radius:999px;padding:9px 16px;font:500 11px PlexMono,monospace;letter-spacing:.14em;cursor:pointer;text-transform:uppercase}
+
+/* listados */
+.ex{margin-top:38px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media(max-width:860px){.ex{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.xc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px 18px 18px;display:flex;flex-direction:column;align-items:center;gap:22px}
+.xc .lg{height:52px;display:flex;align-items:center;justify-content:center;gap:12px}
+.xc .lg b{font-size:28px;font-weight:600;letter-spacing:-.02em}
+.xc .lg svg{display:block;flex:none}
+.xc .ok{display:flex;align-items:center;gap:10px;font-size:10px;color:var(--ink-2)}
+.xc .ok i{width:22px;height:22px;border-radius:4px;background:var(--blue);display:grid;place-items:center}
+.xc .lg svg.wm{width:150px;height:auto;max-width:100%}
+@media(max-width:600px){.eyebrow{font-size:11px;letter-spacing:.14em;gap:10px}.hero .eyebrow i{display:none}
+  .addr .lb{flex-basis:100%}.addr code{flex-basis:100%}.xc .ok{letter-spacing:.12em}}
+@media(max-width:480px){.xc{padding:20px 12px 16px}.xc .lg{gap:8px}.xc .lg b{font-size:21px}.xc .lg svg.ic{width:36px;height:36px}.xc .lg svg.wm{width:112px}}
+
+/* pie */
+.cta-end{text-align:center}
+.cta-end .ctas{margin-top:28px}
+footer{border-top:1px solid var(--line);padding:30px 0 calc(30px + env(safe-area-inset-bottom));font-size:12px;color:var(--ink-3)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between}
+footer p{max-width:760px}
+footer .legal{font-size:11px}
+</style>
+<script src="/analytics.js" defer></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="https://sectoraorg.com/"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>SECTORA<span class="m" data-t="brandSub"></span></a>
+    <div class="top-r">
+      <div class="lang" role="group" aria-label="Language"><button type="button" data-l="en">EN</button><button type="button" data-l="es">ES</button></div>
+      <a class="home m" href="https://sectoraorg.com/" data-t="home"></a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow m"><i></i><span data-t="kicker"></span></p>
+    <h1 data-h="h1"></h1>
+    <p class="lede" data-t="lede"></p>
+    <div class="clock" role="timer" aria-live="off">
+      <div class="cell d"><span class="num" id="cd-d">---</span><span class="unit m" data-t="days"></span></div>
+      <div class="cell"><span class="num" id="cd-h">--</span><span class="unit m" data-t="hours"></span></div>
+      <div class="cell"><span class="num" id="cd-m">--</span><span class="unit m" data-t="minutes"></span></div>
+      <div class="cell"><span class="num" id="cd-s">--</span><span class="unit m" data-t="seconds"></span></div>
+    </div>
+    <div class="when m"><span><b data-t="date"></b> · 00:00 UTC</span><span><span data-t="local"></span> <b id="local"></b></span></div>
+    <div class="done" data-t="done"></div>
+    <div class="ctas">
+      <a class="btn pri" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener noreferrer"><span data-t="buy"></span> <small>UNISWAP ↗</small></a>
+      <a class="btn alt" href="https://sectoraorg.com/airdrop-guide/" data-t="airdrop"></a>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="wrap">
+    <p class="eyebrow m"><i></i><span data-t="k2"></span></p>
+    <h2 data-h="h2"></h2>
+    <p class="sub" data-t="s2"></p>
+    <div class="meter">
+      <div class="mrow"><div class="mlab"><span class="m" data-t="before"></span><b data-t="n50"></b></div><div class="bar full"><i></i></div></div>
+      <div class="mrow"><div class="mlab"><span class="m" data-t="after"></span><b style="color:var(--blue-2)" data-t="n25"></b></div><div class="bar half"><i></i><em data-t="burned"></em></div></div>
+    </div>
+    <dl class="facts">
+      <div class="fact"><dt class="m" data-t="fDate"></dt><dd><span data-t="date"></span><small>00:00 UTC</small></dd></div>
+      <div class="fact"><dt class="m" data-t="fRed"></dt><dd>50%<small data-t="fRedS"></small></dd></div>
+      <div class="fact"><dt class="m" data-t="fAfter"></dt><dd><span data-t="n25"></span><small>$SECT</small></dd></div>
+      <div class="fact"><dt class="m" data-t="fCon"></dt><dd data-h="fConV"></dd></div>
+    </dl>
+    <div class="addr"><span class="m lb" style="font-size:11px;color:var(--ink-3)" data-t="contract"></span><code id="ca">0x8C9984B06281f1CA9416e493c2E602AaB08513db</code><button type="button" id="copy" data-t="copy"></button></div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="wrap">
+    <p class="eyebrow m"><i></i><span data-t="k3"></span></p>
+    <h2 data-h="h3"></h2>
+    <p class="sub" data-t="s3"></p>
+    <div class="ex">
+      <div class="xc"><div class="lg"><svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" fill="none" viewBox="0 0 24 24" class="ic" aria-hidden="true"> <path fill="#1977F3" d="M7.2 7.406a2.113 2.113 0 0 1 3.7 0l5.814 10.28H5.2c-1.691 0-2.748-1.87-1.905-3.368z"/> <path fill="#002F81" d="M16.8 7.406a2.113 2.113 0 0 0-3.7 0l-4.123 7.296c-.753 1.327.185 2.985 1.682 2.985h8.14c1.691 0 2.748-1.872 1.904-3.369z"/> <path fill="url(#MX__a)" d="M10.659 17.686h6.055L12 9.348 8.971 14.7c-.748 1.327.19 2.985 1.687 2.985"/> <defs> <linearGradient id="MX__a" x1="9.029" x2="18.187" y1="15.981" y2="15.981" gradientUnits="userSpaceOnUse"> <stop offset=".12" stop-color="#1C6AD9"/> <stop offset=".76" stop-color="#1C6AD9" stop-opacity="0"/> </linearGradient> </defs> </svg><b>MEXC</b></div><div class="ok m"><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span data-t="conf"></span></div></div>
+      <div class="xc"><div class="lg"><svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" fill="none" viewBox="0 0 24 24" class="ic" aria-hidden="true"> <path fill="#23AF91" fill-rule="evenodd" d="m8.978 12.002 5.331 5.332 3.365-3.365a1.522 1.522 0 0 1 2.15 2.15l-4.44 4.441a1.533 1.533 0 0 1-2.15 0l-6.407-6.408v3.809a1.522 1.522 0 0 1-3.045 0V6.038a1.522 1.522 0 0 1 3.045 0v3.81l6.406-6.408a1.53 1.53 0 0 1 2.15 0l4.444 4.441a1.522 1.522 0 0 1-2.15 2.15l-3.365-3.365zm5.334-1.524a1.524 1.524 0 1 0-.002 3.05 1.524 1.524 0 0 0 .002-3.05" clip-rule="evenodd"/> </svg><b>KuCoin</b></div><div class="ok m"><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span data-t="conf"></span></div></div>
+      <div class="xc"><div class="lg"><svg xmlns="http://www.w3.org/2000/svg" width="150" height="46" fill="none" viewBox="3 9.3 18 5.52" class="wm" aria-hidden="true"> <path fill="#fff" d="M8.28 9.3H3.12a.12.12 0 0 0-.12.12v5.16a.12.12 0 0 0 .12.12h5.16a.12.12 0 0 0 .12-.12V9.42a.12.12 0 0 0-.12-.12M6.6 12.78a.12.12 0 0 1-.12.12H4.92a.12.12 0 0 1-.12-.12v-1.56a.12.12 0 0 1 .12-.12h1.56a.12.12 0 0 1 .12.12zm12.481-1.68h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12v-1.56a.12.12 0 0 0-.12-.12M17.28 9.3h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12V9.42a.12.12 0 0 0-.12-.12m3.6 0h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12V9.42a.12.12 0 0 0-.12-.12m-3.6 3.6h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12v-1.56a.12.12 0 0 0-.12-.12m3.6 0h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12v-1.56a.12.12 0 0 0-.12-.12m-6.301-3.6h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12V9.42a.12.12 0 0 0-.12-.12m0 3.6h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12v-1.56a.12.12 0 0 0-.12-.12m-1.68-1.681a.12.12 0 0 0-.12-.12h-1.68V9.42a.12.12 0 0 0-.12-.12h-1.56a.12.12 0 0 0-.12.12v5.157a.12.12 0 0 0 .12.12h1.56a.12.12 0 0 0 .12-.12v-1.678h1.68a.12.12 0 0 0 .12-.12z"/> </svg></div><div class="ok m"><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span data-t="conf"></span></div></div>
+      <div class="xc"><div class="lg"><svg xmlns="http://www.w3.org/2000/svg" width="150" height="54" fill="none" viewBox="2.8 8.6 18.4 6.6" class="wm" aria-hidden="true"> <path fill="#F6A500" d="M15.829 13.626V9h.93v4.626z"/> <path fill="#fff" d="M4.993 15H3v-4.626h1.913c.93 0 1.471.507 1.471 1.3 0 .513-.348.845-.588.955.287.13.655.423.655 1.04 0 .863-.609 1.33-1.458 1.33m-.154-3.82h-.91v1.065h.91c.395 0 .615-.214.615-.533 0-.317-.22-.532-.615-.532m.06 1.877h-.97v1.137h.97c.42 0 .622-.259.622-.571s-.201-.565-.622-.565zm4.388.046V15h-.923v-1.898l-1.431-2.728h1.01l.889 1.864.877-1.864h1.01zM13.355 15h-1.993v-4.626h1.913c.93 0 1.47.507 1.47 1.3 0 .513-.347.845-.588.955.287.13.655.423.655 1.04 0 .863-.608 1.33-1.457 1.33m-.155-3.82h-.91v1.065h.91c.395 0 .616-.214.616-.533 0-.317-.22-.532-.616-.532m.06 1.877h-.97v1.137h.97c.422 0 .622-.259.622-.571s-.2-.565-.622-.565zm6.495-1.876V15h-.929v-3.82h-1.245v-.806H21v.806z"/> </svg></div><div class="ok m"><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span data-t="conf"></span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk cta-end">
+  <div class="wrap">
+    <p class="eyebrow m" style="justify-content:center"><i></i><span data-t="k4"></span></p>
+    <h2 data-h="h4"></h2>
+    <p class="sub" style="margin-left:auto;margin-right:auto" data-t="s4"></p>
+    <div class="ctas">
+      <a class="btn pri" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener noreferrer"><span data-t="buy"></span> <small>UNISWAP ↗</small></a>
+      <a class="btn alt" href="https://sectoraorg.com/airdrop-guide/" data-t="airdrop"></a>
+      <a class="btn alt" href="https://sectoraorg.com/#cap" data-t="calc"></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p data-t="fine"></p>
+    <p class="legal m">Sectora Foundation · Chicago, IL · Illinois file 18523639 · EIN 32-0868576</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* misma fecha que la cuenta atras de la portada: 15 de marzo de 2027, 00:00 UTC */
+  var META = Date.UTC(2027, 2, 15, 0, 0, 0);
+  var TX = {
+    en: {
+      brandSub: 'Supply reduction', home: 'sectoraorg.com', kicker: 'Strategic supply reduction · Burn',
+      h1: '50M <span class="lt">→</span> 25M.<br><b>The countdown is on.</b>',
+      lede: 'On March 15, 2027, 50% of the $SECT supply is burned, one time and forever. The supply goes from 50,000,000 to 25,000,000, placing Sectora among the lowest-supply tokens in the world.',
+      days: 'Days', hours: 'Hours', minutes: 'Minutes', seconds: 'Seconds',
+      date: 'March 15, 2027', local: 'Your local time:',
+      done: 'Burn day has arrived: the $SECT supply reduction date is here.',
+      buy: 'Buy $SECT', airdrop: 'Join the Airdrop · step-by-step guide', calc: 'Price calculator',
+      k2: 'The supply', h2: 'One reduction. <b>Fixed forever.</b>',
+      s2: 'A single, scheduled reduction. No mint function and a renounced contract: after March 15, 2027 the supply cannot grow again.',
+      before: 'Supply today', after: 'Supply after the burn', burned: '−50% · burned',
+      fDate: 'Burn date', fRed: 'Reduction', fRedS: 'One-time, scheduled', fAfter: 'Supply after', fCon: 'Contract', fConV: 'Renounced<small>No mint · No owner · Ethereum ERC-20</small>',
+      contract: '$SECT contract', copy: 'Copy', copied: 'Copied',
+      k3: 'After the burn', h3: 'Listings <b>confirmed.</b>',
+      s3: 'With a 25,000,000 supply. Each exchange will announce it on its X and social channels once the 50% burn is confirmed.',
+      conf: 'Listing confirmed', n50: '50,000,000', n25: '25,000,000',
+      k4: 'Before March 15, 2027', h4: 'Position yourself: <b>HOLD.</b>',
+      s4: 'Buy $SECT on Uniswap, join Airdrop Genesis, and run your own numbers with the price calculator.',
+      fine: 'Figures describe token supply only. Nothing on this page is a price forecast, a valuation or investment advice.'
+    },
+    es: {
+      brandSub: 'Reducción de supply', home: 'sectoraorg.com', kicker: 'Reducción estratégica de supply · Quema',
+      h1: '50M <span class="lt">→</span> 25M.<br><b>La cuenta regresiva empezó.</b>',
+      lede: 'El 15 de marzo de 2027 se quema el 50 % del supply de $SECT, una sola vez y para siempre. El supply pasa de 50.000.000 a 25.000.000, dejando a Sectora entre los tokens con menor supply del mundo.',
+      days: 'Días', hours: 'Horas', minutes: 'Minutos', seconds: 'Segundos',
+      date: '15 de marzo de 2027', local: 'Tu hora local:',
+      done: 'Llegó el día de la quema: la fecha de la reducción del supply de $SECT ya está aquí.',
+      buy: 'Compra $SECT', airdrop: 'Participa en el Airdrop · guía paso a paso', calc: 'Calculadora de precio',
+      k2: 'El supply', h2: 'Una sola reducción. <b>Fija para siempre.</b>',
+      s2: 'Una única reducción programada. Sin función de minteo y con el contrato renunciado: después del 15 de marzo de 2027 el supply no puede volver a crecer.',
+      before: 'Supply hoy', after: 'Supply tras la quema', burned: '−50 % · quemado',
+      fDate: 'Fecha de la quema', fRed: 'Reducción', fRedS: 'Única y programada', fAfter: 'Supply después', fCon: 'Contrato', fConV: 'Renunciado<small>Sin minteo · Sin dueño · Ethereum ERC-20</small>',
+      contract: 'Contrato de $SECT', copy: 'Copiar', copied: 'Copiado',
+      k3: 'Tras la quema', h3: 'Listados <b>confirmados.</b>',
+      s3: 'Con 25.000.000 de supply. Cada exchange lo anunciará en su X y redes sociales al confirmarse la quema del 50 %.',
+      conf: 'Listado confirmado', n50: '50.000.000', n25: '25.000.000',
+      k4: 'Antes del 15 de marzo de 2027', h4: 'Posiciónate: <b>HOLD.</b>',
+      s4: 'Compra $SECT en Uniswap, participa en el Airdrop Genesis y haz tus propios números con la calculadora de precio.',
+      fine: 'Las cifras describen solo el supply del token. Nada en esta página es una predicción de precio, una valoración ni asesoría de inversión.'
+    }
+  };
+  var lang = 'en';
+  try { var g = localStorage.getItem('sectora:burn-lang'); if (g === 'en' || g === 'es') lang = g; else if (/^es\b/i.test(navigator.language || '')) lang = 'es'; }
+  catch (e) { if (/^es\b/i.test(navigator.language || '')) lang = 'es'; }
+
+  function pinta(){
+    var t = TX[lang];
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-t]').forEach(function(el){ el.textContent = t[el.getAttribute('data-t')]; });
+    document.querySelectorAll('[data-h]').forEach(function(el){ el.innerHTML = t[el.getAttribute('data-h')]; });
+    document.querySelectorAll('.lang button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-l') === lang); });
+    document.title = lang === 'es' ? 'Cuenta regresiva de la quema — Sectora Foundation' : 'Supply Reduction Countdown — Sectora Foundation';
+    try { var f = new Intl.DateTimeFormat(lang === 'es' ? 'es' : 'en', { dateStyle: 'medium', timeStyle: 'short' }); document.getElementById('local').textContent = f.format(new Date(META)); }
+    catch (e) { document.getElementById('local').textContent = new Date(META).toString(); }
+  }
+  document.querySelectorAll('.lang button').forEach(function(b){
+    b.addEventListener('click', function(){ lang = b.getAttribute('data-l'); try { localStorage.setItem('sectora:burn-lang', lang); } catch (e) {} pinta(); });
+  });
+  pinta();
+
+  var el = { d: document.getElementById('cd-d'), h: document.getElementById('cd-h'), m: document.getElementById('cd-m'), s: document.getElementById('cd-s') };
+  var prev = {};
+  function pon(k, v){
+    if (prev[k] === v) return; prev[k] = v; var n = el[k]; n.textContent = v;
+    n.classList.remove('tick'); void n.offsetWidth; n.classList.add('tick');
+  }
+  var dos = function(n){ return String(n).padStart(2, '0'); };
+  var reloj = 0;
+  function tic(){
+    var r = Math.max(0, Math.floor((META - Date.now()) / 1000));
+    var dd = Math.floor(r / 86400); r -= dd * 86400;
+    var hh = Math.floor(r / 3600); r -= hh * 3600;
+    var mm = Math.floor(r / 60); r -= mm * 60;
+    pon('d', String(dd).padStart(3, '0')); pon('h', dos(hh)); pon('m', dos(mm)); pon('s', dos(r));
+    if (META - Date.now() <= 0) { document.body.classList.add('hecho'); if (reloj) { clearInterval(reloj); reloj = 0; } }
+  }
+  function arranca(){ if (!reloj && !document.body.classList.contains('hecho')) { tic(); reloj = setInterval(tic, 1000); } }
+  function para(){ if (reloj) { clearInterval(reloj); reloj = 0; } }
+  document.addEventListener('visibilitychange', function(){ document.hidden ? para() : arranca(); });
+  tic(); arranca();
+
+  var bt = document.getElementById('copy');
+  bt.addEventListener('click', function(){
+    var ca = document.getElementById('ca').textContent;
+    var ok = function(){ bt.textContent = TX[lang].copied; setTimeout(function(){ bt.textContent = TX[lang].copy; }, 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ca).then(ok, function(){});
+    else { var s = document.createRange(); s.selectNodeContents(document.getElementById('ca')); var w = getSelection(); w.removeAllRanges(); w.addRange(s); try { document.execCommand('copy'); ok(); } catch (e) {} }
+  });
+})();
+</script>
+</body>
+</html>
