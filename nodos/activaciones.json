@@ -1707,6 +1707,13 @@
       "c": "Makassar, ID",
       "la": -5.1,
       "lo": 119.4
+    },
+    "0x2dbe817c0a894e89853a3ea497daf6b6a315d585": {
+      "t": 1793952321000,
+      "n": "Sectora Node Manila",
+      "c": "Manila, PH",
+      "la": 14.6,
+      "lo": 121
     }
   }
 }
