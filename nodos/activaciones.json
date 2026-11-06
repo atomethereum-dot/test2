@@ -2099,6 +2099,13 @@
       "c": "Puerto Rico, PR",
       "la": 18.5,
       "lo": -66.1
+    },
+    "0x05a2f35769d6b5ab12172dd394acfdbe327b14b4": {
+      "t": 1794005449000,
+      "n": "Sectora Node Kinshasa",
+      "c": "Kinshasa, CD",
+      "la": -4.3,
+      "lo": 15.3
     }
   }
 }
