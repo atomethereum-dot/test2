@@ -20,302 +20,297 @@
 <link rel="canonical" href="https://sectoraorg.com/burn/">
 <meta name="theme-color" content="#000000">
 <link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 @font-face{font-family:Plex;src:url('/fonts/IBMPlexSans.woff2') format('woff2');font-weight:100 700;font-display:swap}
 @font-face{font-family:PlexMono;src:url('/fonts/IBMPlexMono-400.woff2') format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:PlexMono;src:url('/fonts/IBMPlexMono-500.woff2') format('woff2');font-weight:500;font-display:swap}
-:root{--blue:#1569ff;--blue-2:#5b9bff;--ink:#fff;--ink-2:rgba(255,255,255,.72);--ink-3:rgba(255,255,255,.5);--line:rgba(255,255,255,.14);--card:#0a0c11;--pad:clamp(16px,4vw,64px)}
+:root{--blue:#1569ff;--blue-2:#5b9bff;--ink:#fff;--ink-2:rgba(255,255,255,.66);--ink-3:rgba(255,255,255,.4);--line:rgba(255,255,255,.12);--pad:clamp(16px,4vw,56px)}
 *{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%;background:#000}
 body{background:#000;color:var(--ink);font-family:Plex,system-ui,sans-serif;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
-.m{font-family:PlexMono,ui-monospace,monospace;text-transform:uppercase;letter-spacing:.2em}
-.wrap{max-width:1240px;margin:0 auto;padding:0 var(--pad)}
-.eyebrow{display:flex;align-items:center;gap:14px;font-size:13px;color:var(--blue-2)}
-.eyebrow i{display:block;width:36px;height:2px;background:var(--blue)}
+.m{font-family:PlexMono,ui-monospace,monospace;text-transform:uppercase;letter-spacing:.18em}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--pad)}
 
-/* cabecera */
-.top{position:sticky;top:0;z-index:20;background:rgba(0,0,0,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
-.brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:.02em}
-.brand svg{width:30px;height:30px;flex:none}
-.brand span{font-size:11px;color:var(--ink-3);display:none}
-@media(min-width:720px){.brand span{display:inline}}
-.top-r{display:flex;align-items:center;gap:10px}
-.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
-.lang button{background:none;border:0;color:var(--ink-3);font:500 11px PlexMono,monospace;letter-spacing:.16em;padding:8px 12px;cursor:pointer}
-.lang button.on{background:#fff;color:#000}
-.home{font-size:11px;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:8px 14px;white-space:nowrap}
-.home:hover{border-color:#fff;color:#fff}
+/* globo de fondo, fijo */
+#globe{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+.veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 58% 44% at 50% 50%,rgba(0,0,0,.8),rgba(0,0,0,.45) 62%,rgba(0,0,0,.18) 100%)}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 50%,transparent 30%,#000 100%);mask-image:radial-gradient(ellipse 90% 80% at 50% 50%,transparent 30%,#000 100%)}
+.page{position:relative;z-index:2}
 
-/* portada con la cuenta atras */
-.hero{position:relative;overflow:hidden;padding:clamp(48px,9vh,110px) 0 clamp(56px,9vh,104px)}
-.hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:96px 96px;-webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 25%,transparent 90%);mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 25%,transparent 90%);animation:drift 40s linear infinite}
-.hero:after{content:"";position:absolute;left:50%;top:38%;width:min(1100px,140vw);aspect-ratio:1;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(21,105,255,.28),rgba(21,105,255,.06) 40%,transparent 66%);pointer-events:none}
-@keyframes drift{to{background-position:96px 96px}}
-@media(prefers-reduced-motion:reduce){.hero:before{animation:none}}
-.hero .wrap{position:relative;z-index:1;text-align:center}
-.hero .eyebrow{justify-content:center}
-h1{margin-top:22px;font-size:clamp(38px,7.2vw,96px);font-weight:600;letter-spacing:-.035em;line-height:1.02}
-h1 .lt{font-weight:250}
-h1 b{color:var(--blue-2);font-weight:600}
-.lede{max-width:720px;margin:20px auto 0;font-size:clamp(16px,1.6vw,20px);font-weight:300;color:var(--ink-2)}
+/* cabecera minima */
+.top{position:fixed;left:0;right:0;top:0;z-index:5;padding:calc(14px + env(safe-area-inset-top)) var(--pad) 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:.04em;font-size:14px}
+.brand svg{width:24px;height:24px}
+.top-r{display:flex;align-items:center;gap:18px;font-size:11px;color:var(--ink-2)}
+.lang{display:flex;gap:2px}
+.lang button{background:none;border:0;color:var(--ink-3);font:500 11px PlexMono,monospace;letter-spacing:.16em;padding:6px 6px;cursor:pointer}
+.lang button.on{color:#fff;box-shadow:inset 0 -1px 0 #fff}
+.utc{display:none}
+@media(min-width:640px){.utc{display:inline}}
 
-.clock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.4vw,18px);max-width:980px;margin:clamp(34px,6vh,58px) auto 0}
-.cell{position:relative;background:linear-gradient(180deg,#0b0f19,#05070c);border:1px solid var(--line);border-radius:14px;padding:clamp(14px,2.4vw,30px) 6px clamp(12px,2vw,22px);overflow:hidden}
-.cell:before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(255,255,255,.06)}
-.cell.d{background:linear-gradient(180deg,#1a74ff,#0f56d9);border-color:#1569ff}
-.cell.d:before{background:rgba(255,255,255,.14)}
-.num{display:block;font-size:clamp(40px,9vw,124px);font-weight:200;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
-.unit{display:block;margin-top:10px;font-size:clamp(9px,1vw,12px);color:var(--ink-2)}
-.cell.d .unit{color:rgba(255,255,255,.9)}
-.tick{animation:tk .45s cubic-bezier(.2,.7,.2,1)}
-@keyframes tk{from{transform:translateY(-14%);opacity:.35}to{transform:none;opacity:1}}
-@media(prefers-reduced-motion:reduce){.tick{animation:none}}
-.when{margin-top:22px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;font-size:12px;color:var(--ink-2)}
-.when b{color:#fff;font-weight:500}
-.done{display:none;margin:34px auto 0;max-width:720px;padding:22px 26px;border:1px solid var(--blue);border-radius:14px;background:rgba(21,105,255,.12);font-size:18px}
-body.hecho .done{display:block}
-
-.ctas{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:34px}
-.btn{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;font-weight:500;font-size:16px;border:1px solid var(--line);transition:transform .2s,background .2s,border-color .2s}
+/* portada */
+.hero{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;position:relative;padding:96px var(--pad) 84px;text-align:center}
+.hud{position:absolute;font-size:10px;color:var(--ink-3);letter-spacing:.2em}
+.hud.bl{left:var(--pad);bottom:28px}.hud.br{right:var(--pad);bottom:28px}
+.corner{position:absolute;width:22px;height:22px;border-color:rgba(255,255,255,.35);border-style:solid}
+.c1{left:var(--pad);top:76px;border-width:1px 0 0 1px}.c2{right:var(--pad);top:76px;border-width:1px 1px 0 0}
+.c3{left:var(--pad);bottom:56px;border-width:0 0 1px 1px}.c4{right:var(--pad);bottom:56px;border-width:0 1px 1px 0}
+.kick{font-size:11px;color:var(--blue-2)}
+.kick b{color:#fff;font-weight:500}
+.clock{margin-top:26px;display:flex;align-items:flex-start;justify-content:center;gap:clamp(4px,1.2vw,14px)}
+.grp{display:flex;flex-direction:column;align-items:center}
+.num{font-size:clamp(46px,11.5vw,156px);font-weight:200;letter-spacing:-.03em;line-height:.95;font-variant-numeric:tabular-nums}
+.sep{font-size:clamp(46px,11.5vw,156px);font-weight:200;line-height:.95;color:var(--blue)}
+.lbl{margin-top:12px;font-size:10px;color:var(--ink-3)}
+.supply{margin-top:30px;font-size:clamp(12px,1.3vw,14px);color:var(--ink-2)}
+.supply b{color:#fff;font-weight:500}
+.supply i{font-style:normal;color:var(--blue-2)}
+.segs{display:grid;grid-template-columns:repeat(50,1fr);gap:3px;width:min(560px,100%);margin:18px auto 0}
+.segs span{height:14px;background:#fff;border-radius:1px}
+.segs span.q{background:transparent;box-shadow:inset 0 0 0 1px rgba(91,155,255,.55)}
+.legend{margin-top:10px;display:flex;justify-content:center;gap:18px;font-size:10px;color:var(--ink-3)}
+.legend em{display:inline-block;width:9px;height:9px;margin-right:7px;vertical-align:-1px;background:#fff;border-radius:1px}
+.legend em.q{background:transparent;box-shadow:inset 0 0 0 1px rgba(91,155,255,.8)}
+.date{margin-top:22px;font-size:11px;color:var(--ink-2);display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px}
+.date b{color:#fff;font-weight:500}
+.ctas{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:0 20px;border:1px solid rgba(255,255,255,.28);border-radius:4px;font:500 12px PlexMono,monospace;letter-spacing:.14em;text-transform:uppercase;background:rgba(0,0,0,.35);transition:background .2s,border-color .2s}
+.btn:hover{border-color:#fff}
 .btn.pri{background:var(--blue);border-color:var(--blue)}
 .btn.pri:hover{background:#2a78ff}
-.btn.alt:hover{border-color:#fff}
-.btn small{font:500 11px PlexMono,monospace;letter-spacing:.14em;opacity:.8}
+.done{display:none;margin-top:22px;font-size:12px;color:#fff}
+body.hecho .done{display:block}
 
-/* secciones */
-section.blk{padding:clamp(56px,9vh,104px) 0;border-top:1px solid var(--line)}
-h2{margin-top:16px;font-size:clamp(30px,4.6vw,58px);font-weight:600;letter-spacing:-.03em;line-height:1.05}
-h2 b{color:var(--blue-2);font-weight:600}
-.sub{margin-top:14px;max-width:680px;color:var(--ink-2);font-weight:300;font-size:clamp(15px,1.4vw,18px)}
-
-/* supply: barra antes / despues */
-.meter{margin-top:38px;display:grid;gap:22px}
-.mrow{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
-.mlab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
-.mlab span{font-size:12px;color:var(--ink-2)}
-.mlab b{font-size:clamp(28px,4.4vw,56px);font-weight:200;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
-.bar{position:relative;height:18px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
-.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:999px}
-.bar.full i{width:100%;background:#fff}
-.bar.half i{width:50%;background:var(--blue)}
-.bar.half:after{content:"";position:absolute;left:50%;right:0;top:0;bottom:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.14) 0 6px,transparent 6px 12px)}
-.bar.half em{position:absolute;right:12px;top:50%;transform:translateY(-50%);font:500 10px PlexMono,monospace;letter-spacing:.18em;color:rgba(255,255,255,.8);font-style:normal}
-
-/* ficha */
-.facts{margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.fact{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
-.fact dt{font-size:11px;color:var(--ink-3)}
-.fact dd{margin-top:10px;font-size:22px;font-weight:500;letter-spacing:-.01em}
-.fact dd small{display:block;margin-top:4px;font-size:13px;font-weight:300;color:var(--ink-2);letter-spacing:0}
-.addr{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
-.addr code{font:400 clamp(11px,1.3vw,15px) PlexMono,monospace;word-break:break-all;flex:1;min-width:0;color:var(--ink-2)}
-.addr button{background:#fff;color:#000;border:0;border-radius:999px;padding:9px 16px;font:500 11px PlexMono,monospace;letter-spacing:.14em;cursor:pointer;text-transform:uppercase}
-
-/* listados */
-.ex{margin-top:38px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-@media(max-width:860px){.ex{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.xc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px 18px 18px;display:flex;flex-direction:column;align-items:center;gap:22px}
-.xc .lg{height:52px;display:flex;align-items:center;justify-content:center;gap:12px}
-.xc .lg b{font-size:28px;font-weight:600;letter-spacing:-.02em}
+/* secciones minimas */
+.blk{background:rgba(0,0,0,.86);border-top:1px solid var(--line);padding:clamp(52px,8vh,88px) 0}
+.lab{font-size:11px;color:var(--blue-2);display:flex;align-items:center;gap:12px}
+.lab:before{content:"";width:28px;height:1px;background:var(--blue)}
+.strip{margin-top:28px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.strip div{padding:22px 18px 22px 0;border-right:1px solid var(--line)}
+.strip div+div{padding-left:18px}
+.strip div:last-child{border-right:0}
+.strip dt{font-size:10px;color:var(--ink-3)}
+.strip dd{margin-top:10px;font-size:clamp(20px,2.4vw,30px);font-weight:300;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.strip dd.b{color:var(--blue-2)}
+@media(max-width:720px){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}.strip div:nth-child(2){border-right:0}.strip div:nth-child(-n+2){border-bottom:1px solid var(--line)}.strip div:nth-child(3){padding-left:0}}
+.ca{margin-top:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--ink-3)}
+.ca code{font:400 clamp(11px,1.3vw,13px) PlexMono,monospace;color:var(--ink-2);word-break:break-all;text-transform:none;letter-spacing:.04em}
+.ca button{background:none;border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:4px;padding:7px 12px;font:500 10px PlexMono,monospace;letter-spacing:.16em;cursor:pointer;text-transform:uppercase}
+.ca button:hover{border-color:#fff}
+.ex{margin-top:28px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+@media(max-width:720px){.ex{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.xc{background:#000;padding:26px 12px 18px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.xc .lg{height:40px;display:flex;align-items:center;justify-content:center;gap:10px}
+.xc .lg b{font-size:22px;font-weight:600;letter-spacing:-.02em}
 .xc .lg svg{display:block;flex:none}
-.xc .ok{display:flex;align-items:center;gap:10px;font-size:10px;color:var(--ink-2)}
-.xc .ok i{width:22px;height:22px;border-radius:4px;background:var(--blue);display:grid;place-items:center}
-.xc .lg svg.wm{width:150px;height:auto;max-width:100%}
-@media(max-width:600px){.eyebrow{font-size:11px;letter-spacing:.14em;gap:10px}.hero .eyebrow i{display:none}
-  .addr .lb{flex-basis:100%}.addr code{flex-basis:100%}.xc .ok{letter-spacing:.12em}}
-@media(max-width:480px){.xc{padding:20px 12px 16px}.xc .lg{gap:8px}.xc .lg b{font-size:21px}.xc .lg svg.ic{width:36px;height:36px}.xc .lg svg.wm{width:112px}}
-
-/* pie */
-.cta-end{text-align:center}
-.cta-end .ctas{margin-top:28px}
-footer{border-top:1px solid var(--line);padding:30px 0 calc(30px + env(safe-area-inset-bottom));font-size:12px;color:var(--ink-3)}
-footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between}
-footer p{max-width:760px}
-footer .legal{font-size:11px}
+.xc .lg svg.ic{width:34px;height:34px}
+.xc .lg svg.wm{width:118px;height:auto;max-width:100%}
+.xc .ok{font-size:10px;color:var(--ink-3);display:flex;align-items:center;gap:8px}
+.xc .ok:before{content:"";width:6px;height:6px;border-radius:50%;background:#33e07f;box-shadow:0 0 8px #33e07f}
+.note{margin-top:16px;font-size:14px;font-weight:300;color:var(--ink-2);max-width:640px}
+.end{text-align:center}
+.end h2{font-size:clamp(30px,4.6vw,56px);font-weight:300;letter-spacing:-.03em;line-height:1.05}
+.end h2 b{font-weight:600;color:var(--blue-2)}
+footer{background:#000;border-top:1px solid var(--line);padding:24px 0 calc(24px + env(safe-area-inset-bottom));font-size:10px;color:var(--ink-3)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
 </style>
 <script src="/analytics.js" defer></script>
 </head>
 <body>
+<canvas id="globe" aria-hidden="true"></canvas>
+<div class="veil"></div><div class="grain"></div>
+
 <header class="top">
-  <div class="wrap">
-    <a class="brand" href="https://sectoraorg.com/"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>SECTORA<span class="m" data-t="brandSub"></span></a>
-    <div class="top-r">
-      <div class="lang" role="group" aria-label="Language"><button type="button" data-l="en">EN</button><button type="button" data-l="es">ES</button></div>
-      <a class="home m" href="https://sectoraorg.com/" data-t="home"></a>
-    </div>
-  </div>
+  <a class="brand" href="https://sectoraorg.com/"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>SECTORA</a>
+  <div class="top-r m"><span class="utc">UTC <b id="utc" style="color:#fff;font-weight:500">--:--:--</b></span><div class="lang" role="group" aria-label="Language"><button type="button" data-l="en">EN</button><button type="button" data-l="es">ES</button></div></div>
 </header>
 
-<main>
+<div class="page">
 <section class="hero">
-  <div class="wrap">
-    <p class="eyebrow m"><i></i><span data-t="kicker"></span></p>
-    <h1 data-h="h1"></h1>
-    <p class="lede" data-t="lede"></p>
+  <i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
+  <div>
+    <p class="kick m" data-h="kick"></p>
     <div class="clock" role="timer" aria-live="off">
-      <div class="cell d"><span class="num" id="cd-d">---</span><span class="unit m" data-t="days"></span></div>
-      <div class="cell"><span class="num" id="cd-h">--</span><span class="unit m" data-t="hours"></span></div>
-      <div class="cell"><span class="num" id="cd-m">--</span><span class="unit m" data-t="minutes"></span></div>
-      <div class="cell"><span class="num" id="cd-s">--</span><span class="unit m" data-t="seconds"></span></div>
+      <div class="grp"><span class="num" id="cd-d">---</span><span class="lbl m" data-t="days"></span></div><span class="sep">:</span>
+      <div class="grp"><span class="num" id="cd-h">--</span><span class="lbl m" data-t="hours"></span></div><span class="sep">:</span>
+      <div class="grp"><span class="num" id="cd-m">--</span><span class="lbl m" data-t="minutes"></span></div><span class="sep">:</span>
+      <div class="grp"><span class="num" id="cd-s">--</span><span class="lbl m" data-t="seconds"></span></div>
     </div>
-    <div class="when m"><span><b data-t="date"></b> · 00:00 UTC</span><span><span data-t="local"></span> <b id="local"></b></span></div>
-    <div class="done" data-t="done"></div>
+    <p class="supply m"><b data-t="n50"></b> <i>→</i> <b data-t="n25"></b> $SECT</p>
+    <div class="segs" aria-hidden="true" id="segs"></div>
+    <div class="legend m"><span><em></em><span data-t="remain"></span></span><span><em class="q"></em><span data-t="burn"></span></span></div>
+    <p class="date m"><span><b data-t="date"></b> · 00:00 UTC</span><span><span data-t="local"></span> <b id="local"></b></span></p>
+    <p class="done m" data-t="done"></p>
     <div class="ctas">
-      <a class="btn pri" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener noreferrer"><span data-t="buy"></span> <small>UNISWAP ↗</small></a>
-      <a class="btn alt" href="https://sectoraorg.com/airdrop-guide/" data-t="airdrop"></a>
+      <a class="btn pri" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener noreferrer"><span data-t="buy"></span> ↗</a>
+      <a class="btn" href="https://sectoraorg.com/airdrop-guide/"><span data-t="airdrop"></span> →</a>
     </div>
   </div>
+  <span class="hud bl m" id="hudl">LON ---.-°</span><span class="hud br m">sectoraorg.com/burn</span>
 </section>
 
 <section class="blk">
   <div class="wrap">
-    <p class="eyebrow m"><i></i><span data-t="k2"></span></p>
-    <h2 data-h="h2"></h2>
-    <p class="sub" data-t="s2"></p>
-    <div class="meter">
-      <div class="mrow"><div class="mlab"><span class="m" data-t="before"></span><b data-t="n50"></b></div><div class="bar full"><i></i></div></div>
-      <div class="mrow"><div class="mlab"><span class="m" data-t="after"></span><b style="color:var(--blue-2)" data-t="n25"></b></div><div class="bar half"><i></i><em data-t="burned"></em></div></div>
-    </div>
-    <dl class="facts">
-      <div class="fact"><dt class="m" data-t="fDate"></dt><dd><span data-t="date"></span><small>00:00 UTC</small></dd></div>
-      <div class="fact"><dt class="m" data-t="fRed"></dt><dd>50%<small data-t="fRedS"></small></dd></div>
-      <div class="fact"><dt class="m" data-t="fAfter"></dt><dd><span data-t="n25"></span><small>$SECT</small></dd></div>
-      <div class="fact"><dt class="m" data-t="fCon"></dt><dd data-h="fConV"></dd></div>
+    <p class="lab m" data-t="k2"></p>
+    <dl class="strip">
+      <div><dt class="m" data-t="fIni"></dt><dd data-t="n50"></dd></div>
+      <div><dt class="m" data-t="fAft"></dt><dd class="b" data-t="n25"></dd></div>
+      <div><dt class="m" data-t="fRed"></dt><dd>−50%</dd></div>
+      <div><dt class="m" data-t="fCon"></dt><dd data-t="fConV"></dd></div>
     </dl>
-    <div class="addr"><span class="m lb" style="font-size:11px;color:var(--ink-3)" data-t="contract"></span><code id="ca">0x8C9984B06281f1CA9416e493c2E602AaB08513db</code><button type="button" id="copy" data-t="copy"></button></div>
+    <div class="ca m"><span data-t="contract"></span><code id="ca">0x8C9984B06281f1CA9416e493c2E602AaB08513db</code><button type="button" id="copy" data-t="copy"></button></div>
   </div>
 </section>
 
 <section class="blk">
   <div class="wrap">
-    <p class="eyebrow m"><i></i><span data-t="k3"></span></p>
-    <h2 data-h="h3"></h2>
-    <p class="sub" data-t="s3"></p>
+    <p class="lab m" data-t="k3"></p>
     <div class="ex">
-      <div class="xc"><div class="lg"><svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" fill="none" viewBox="0 0 24 24" class="ic" aria-hidden="true"> <path fill="#1977F3" d="M7.2 7.406a2.113 2.113 0 0 1 3.7 0l5.814 10.28H5.2c-1.691 0-2.748-1.87-1.905-3.368z"/> <path fill="#002F81" d="M16.8 7.406a2.113 2.113 0 0 0-3.7 0l-4.123 7.296c-.753 1.327.185 2.985 1.682 2.985h8.14c1.691 0 2.748-1.872 1.904-3.369z"/> <path fill="url(#MX__a)" d="M10.659 17.686h6.055L12 9.348 8.971 14.7c-.748 1.327.19 2.985 1.687 2.985"/> <defs> <linearGradient id="MX__a" x1="9.029" x2="18.187" y1="15.981" y2="15.981" gradientUnits="userSpaceOnUse"> <stop offset=".12" stop-color="#1C6AD9"/> <stop offset=".76" stop-color="#1C6AD9" stop-opacity="0"/> </linearGradient> </defs> </svg><b>MEXC</b></div><div class="ok m"><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span data-t="conf"></span></div></div>
-      <div class="xc"><div class="lg"><svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" fill="none" viewBox="0 0 24 24" class="ic" aria-hidden="true"> <path fill="#23AF91" fill-rule="evenodd" d="m8.978 12.002 5.331 5.332 3.365-3.365a1.522 1.522 0 0 1 2.15 2.15l-4.44 4.441a1.533 1.533 0 0 1-2.15 0l-6.407-6.408v3.809a1.522 1.522 0 0 1-3.045 0V6.038a1.522 1.522 0 0 1 3.045 0v3.81l6.406-6.408a1.53 1.53 0 0 1 2.15 0l4.444 4.441a1.522 1.522 0 0 1-2.15 2.15l-3.365-3.365zm5.334-1.524a1.524 1.524 0 1 0-.002 3.05 1.524 1.524 0 0 0 .002-3.05" clip-rule="evenodd"/> </svg><b>KuCoin</b></div><div class="ok m"><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span data-t="conf"></span></div></div>
-      <div class="xc"><div class="lg"><svg xmlns="http://www.w3.org/2000/svg" width="150" height="46" fill="none" viewBox="3 9.3 18 5.52" class="wm" aria-hidden="true"> <path fill="#fff" d="M8.28 9.3H3.12a.12.12 0 0 0-.12.12v5.16a.12.12 0 0 0 .12.12h5.16a.12.12 0 0 0 .12-.12V9.42a.12.12 0 0 0-.12-.12M6.6 12.78a.12.12 0 0 1-.12.12H4.92a.12.12 0 0 1-.12-.12v-1.56a.12.12 0 0 1 .12-.12h1.56a.12.12 0 0 1 .12.12zm12.481-1.68h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12v-1.56a.12.12 0 0 0-.12-.12M17.28 9.3h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12V9.42a.12.12 0 0 0-.12-.12m3.6 0h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12V9.42a.12.12 0 0 0-.12-.12m-3.6 3.6h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12v-1.56a.12.12 0 0 0-.12-.12m3.6 0h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12v-1.56a.12.12 0 0 0-.12-.12m-6.301-3.6h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12V9.42a.12.12 0 0 0-.12-.12m0 3.6h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12v-1.56a.12.12 0 0 0-.12-.12m-1.68-1.681a.12.12 0 0 0-.12-.12h-1.68V9.42a.12.12 0 0 0-.12-.12h-1.56a.12.12 0 0 0-.12.12v5.157a.12.12 0 0 0 .12.12h1.56a.12.12 0 0 0 .12-.12v-1.678h1.68a.12.12 0 0 0 .12-.12z"/> </svg></div><div class="ok m"><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span data-t="conf"></span></div></div>
-      <div class="xc"><div class="lg"><svg xmlns="http://www.w3.org/2000/svg" width="150" height="54" fill="none" viewBox="2.8 8.6 18.4 6.6" class="wm" aria-hidden="true"> <path fill="#F6A500" d="M15.829 13.626V9h.93v4.626z"/> <path fill="#fff" d="M4.993 15H3v-4.626h1.913c.93 0 1.471.507 1.471 1.3 0 .513-.348.845-.588.955.287.13.655.423.655 1.04 0 .863-.609 1.33-1.458 1.33m-.154-3.82h-.91v1.065h.91c.395 0 .615-.214.615-.533 0-.317-.22-.532-.615-.532m.06 1.877h-.97v1.137h.97c.42 0 .622-.259.622-.571s-.201-.565-.622-.565zm4.388.046V15h-.923v-1.898l-1.431-2.728h1.01l.889 1.864.877-1.864h1.01zM13.355 15h-1.993v-4.626h1.913c.93 0 1.47.507 1.47 1.3 0 .513-.347.845-.588.955.287.13.655.423.655 1.04 0 .863-.608 1.33-1.457 1.33m-.155-3.82h-.91v1.065h.91c.395 0 .616-.214.616-.533 0-.317-.22-.532-.616-.532m.06 1.877h-.97v1.137h.97c.422 0 .622-.259.622-.571s-.2-.565-.622-.565zm6.495-1.876V15h-.929v-3.82h-1.245v-.806H21v.806z"/> </svg></div><div class="ok m"><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span data-t="conf"></span></div></div>
+      <div class="xc"><div class="lg"><svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="none" viewBox="0 0 24 24" class="ic" aria-hidden="true"> <path fill="#1977F3" d="M7.2 7.406a2.113 2.113 0 0 1 3.7 0l5.814 10.28H5.2c-1.691 0-2.748-1.87-1.905-3.368z"/> <path fill="#002F81" d="M16.8 7.406a2.113 2.113 0 0 0-3.7 0l-4.123 7.296c-.753 1.327.185 2.985 1.682 2.985h8.14c1.691 0 2.748-1.872 1.904-3.369z"/> <path fill="url(#MX__a)" d="M10.659 17.686h6.055L12 9.348 8.971 14.7c-.748 1.327.19 2.985 1.687 2.985"/> <defs> <linearGradient id="MX__a" x1="9.029" x2="18.187" y1="15.981" y2="15.981" gradientUnits="userSpaceOnUse"> <stop offset=".12" stop-color="#1C6AD9"/> <stop offset=".76" stop-color="#1C6AD9" stop-opacity="0"/> </linearGradient> </defs> </svg><b>MEXC</b></div><span class="ok m" data-t="conf"></span></div>
+      <div class="xc"><div class="lg"><svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="none" viewBox="0 0 24 24" class="ic" aria-hidden="true"> <path fill="#23AF91" fill-rule="evenodd" d="m8.978 12.002 5.331 5.332 3.365-3.365a1.522 1.522 0 0 1 2.15 2.15l-4.44 4.441a1.533 1.533 0 0 1-2.15 0l-6.407-6.408v3.809a1.522 1.522 0 0 1-3.045 0V6.038a1.522 1.522 0 0 1 3.045 0v3.81l6.406-6.408a1.53 1.53 0 0 1 2.15 0l4.444 4.441a1.522 1.522 0 0 1-2.15 2.15l-3.365-3.365zm5.334-1.524a1.524 1.524 0 1 0-.002 3.05 1.524 1.524 0 0 0 .002-3.05" clip-rule="evenodd"/> </svg><b>KuCoin</b></div><span class="ok m" data-t="conf"></span></div>
+      <div class="xc"><div class="lg"><svg xmlns="http://www.w3.org/2000/svg" width="150" height="46" fill="none" viewBox="3 9.3 18 5.52" class="wm" aria-hidden="true"> <path fill="#fff" d="M8.28 9.3H3.12a.12.12 0 0 0-.12.12v5.16a.12.12 0 0 0 .12.12h5.16a.12.12 0 0 0 .12-.12V9.42a.12.12 0 0 0-.12-.12M6.6 12.78a.12.12 0 0 1-.12.12H4.92a.12.12 0 0 1-.12-.12v-1.56a.12.12 0 0 1 .12-.12h1.56a.12.12 0 0 1 .12.12zm12.481-1.68h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12v-1.56a.12.12 0 0 0-.12-.12M17.28 9.3h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12V9.42a.12.12 0 0 0-.12-.12m3.6 0h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12V9.42a.12.12 0 0 0-.12-.12m-3.6 3.6h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12v-1.56a.12.12 0 0 0-.12-.12m3.6 0h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12v-1.56a.12.12 0 0 0-.12-.12m-6.301-3.6h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12V9.42a.12.12 0 0 0-.12-.12m0 3.6h-1.56a.12.12 0 0 0-.12.12v1.56c0 .066.054.12.12.12h1.56a.12.12 0 0 0 .12-.12v-1.56a.12.12 0 0 0-.12-.12m-1.68-1.681a.12.12 0 0 0-.12-.12h-1.68V9.42a.12.12 0 0 0-.12-.12h-1.56a.12.12 0 0 0-.12.12v5.157a.12.12 0 0 0 .12.12h1.56a.12.12 0 0 0 .12-.12v-1.678h1.68a.12.12 0 0 0 .12-.12z"/> </svg></div><span class="ok m" data-t="conf"></span></div>
+      <div class="xc"><div class="lg"><svg xmlns="http://www.w3.org/2000/svg" width="150" height="54" fill="none" viewBox="2.8 8.6 18.4 6.6" class="wm" aria-hidden="true"> <path fill="#F6A500" d="M15.829 13.626V9h.93v4.626z"/> <path fill="#fff" d="M4.993 15H3v-4.626h1.913c.93 0 1.471.507 1.471 1.3 0 .513-.348.845-.588.955.287.13.655.423.655 1.04 0 .863-.609 1.33-1.458 1.33m-.154-3.82h-.91v1.065h.91c.395 0 .615-.214.615-.533 0-.317-.22-.532-.615-.532m.06 1.877h-.97v1.137h.97c.42 0 .622-.259.622-.571s-.201-.565-.622-.565zm4.388.046V15h-.923v-1.898l-1.431-2.728h1.01l.889 1.864.877-1.864h1.01zM13.355 15h-1.993v-4.626h1.913c.93 0 1.47.507 1.47 1.3 0 .513-.347.845-.588.955.287.13.655.423.655 1.04 0 .863-.608 1.33-1.457 1.33m-.155-3.82h-.91v1.065h.91c.395 0 .616-.214.616-.533 0-.317-.22-.532-.616-.532m.06 1.877h-.97v1.137h.97c.422 0 .622-.259.622-.571s-.2-.565-.622-.565zm6.495-1.876V15h-.929v-3.82h-1.245v-.806H21v.806z"/> </svg></div><span class="ok m" data-t="conf"></span></div>
     </div>
+    <p class="note" data-t="s3"></p>
   </div>
 </section>
 
-<section class="blk cta-end">
+<section class="blk end">
   <div class="wrap">
-    <p class="eyebrow m" style="justify-content:center"><i></i><span data-t="k4"></span></p>
     <h2 data-h="h4"></h2>
-    <p class="sub" style="margin-left:auto;margin-right:auto" data-t="s4"></p>
     <div class="ctas">
-      <a class="btn pri" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener noreferrer"><span data-t="buy"></span> <small>UNISWAP ↗</small></a>
-      <a class="btn alt" href="https://sectoraorg.com/airdrop-guide/" data-t="airdrop"></a>
-      <a class="btn alt" href="https://sectoraorg.com/#cap" data-t="calc"></a>
+      <a class="btn pri" href="https://app.uniswap.org/swap?inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db&amp;chain=ethereum" target="_blank" rel="noopener noreferrer"><span data-t="buy"></span> ↗</a>
+      <a class="btn" href="https://sectoraorg.com/airdrop-guide/"><span data-t="airdrop"></span> →</a>
+      <a class="btn" href="https://sectoraorg.com/#cap"><span data-t="calc"></span> →</a>
     </div>
   </div>
 </section>
-</main>
 
 <footer>
-  <div class="wrap">
-    <p data-t="fine"></p>
-    <p class="legal m">Sectora Foundation · Chicago, IL · Illinois file 18523639 · EIN 32-0868576</p>
-  </div>
+  <div class="wrap m"><span data-t="fine"></span><span>Sectora Foundation · Chicago, IL · Illinois file 18523639 · EIN 32-0868576</span></div>
 </footer>
+</div>
 
+<script src="/dashboard-globe-land.js"></script>
 <script>
 (function(){
   /* misma fecha que la cuenta atras de la portada: 15 de marzo de 2027, 00:00 UTC */
   var META = Date.UTC(2027, 2, 15, 0, 0, 0);
   var TX = {
-    en: {
-      brandSub: 'Supply reduction', home: 'sectoraorg.com', kicker: 'Strategic supply reduction · Burn',
-      h1: '50M <span class="lt">→</span> 25M.<br><b>The countdown is on.</b>',
-      lede: 'On March 15, 2027, 50% of the $SECT supply is burned, one time and forever. The supply goes from 50,000,000 to 25,000,000, placing Sectora among the lowest-supply tokens in the world.',
-      days: 'Days', hours: 'Hours', minutes: 'Minutes', seconds: 'Seconds',
-      date: 'March 15, 2027', local: 'Your local time:',
-      done: 'Burn day has arrived: the $SECT supply reduction date is here.',
-      buy: 'Buy $SECT', airdrop: 'Join the Airdrop · step-by-step guide', calc: 'Price calculator',
-      k2: 'The supply', h2: 'One reduction. <b>Fixed forever.</b>',
-      s2: 'A single, scheduled reduction. No mint function and a renounced contract: after March 15, 2027 the supply cannot grow again.',
-      before: 'Supply today', after: 'Supply after the burn', burned: '−50% · burned',
-      fDate: 'Burn date', fRed: 'Reduction', fRedS: 'One-time, scheduled', fAfter: 'Supply after', fCon: 'Contract', fConV: 'Renounced<small>No mint · No owner · Ethereum ERC-20</small>',
-      contract: '$SECT contract', copy: 'Copy', copied: 'Copied',
-      k3: 'After the burn', h3: 'Listings <b>confirmed.</b>',
+    en: { kick: 'Strategic supply reduction · <b>Burn</b>', days: 'Days', hours: 'Hours', minutes: 'Min', seconds: 'Sec',
+      n50: '50,000,000', n25: '25,000,000', remain: '25M remain', burn: '25M burned',
+      date: 'March 15, 2027', local: 'Local:', done: 'Burn day has arrived.',
+      buy: 'Buy $SECT', airdrop: 'Airdrop guide', calc: 'Price calculator',
+      k2: 'Supply', fIni: 'Initial supply', fAft: 'After the burn', fRed: 'Reduction', fCon: 'Contract', fConV: 'Renounced',
+      contract: '$SECT · ERC-20', copy: 'Copy', copied: 'Copied',
+      k3: 'Listings confirmed after the burn', conf: 'Confirmed',
       s3: 'With a 25,000,000 supply. Each exchange will announce it on its X and social channels once the 50% burn is confirmed.',
-      conf: 'Listing confirmed', n50: '50,000,000', n25: '25,000,000',
-      k4: 'Before March 15, 2027', h4: 'Position yourself: <b>HOLD.</b>',
-      s4: 'Buy $SECT on Uniswap, join Airdrop Genesis, and run your own numbers with the price calculator.',
-      fine: 'Figures describe token supply only. Nothing on this page is a price forecast, a valuation or investment advice.'
-    },
-    es: {
-      brandSub: 'Reducción de supply', home: 'sectoraorg.com', kicker: 'Reducción estratégica de supply · Quema',
-      h1: '50M <span class="lt">→</span> 25M.<br><b>La cuenta regresiva empezó.</b>',
-      lede: 'El 15 de marzo de 2027 se quema el 50 % del supply de $SECT, una sola vez y para siempre. El supply pasa de 50.000.000 a 25.000.000, dejando a Sectora entre los tokens con menor supply del mundo.',
-      days: 'Días', hours: 'Horas', minutes: 'Minutos', seconds: 'Segundos',
-      date: '15 de marzo de 2027', local: 'Tu hora local:',
-      done: 'Llegó el día de la quema: la fecha de la reducción del supply de $SECT ya está aquí.',
-      buy: 'Compra $SECT', airdrop: 'Participa en el Airdrop · guía paso a paso', calc: 'Calculadora de precio',
-      k2: 'El supply', h2: 'Una sola reducción. <b>Fija para siempre.</b>',
-      s2: 'Una única reducción programada. Sin función de minteo y con el contrato renunciado: después del 15 de marzo de 2027 el supply no puede volver a crecer.',
-      before: 'Supply hoy', after: 'Supply tras la quema', burned: '−50 % · quemado',
-      fDate: 'Fecha de la quema', fRed: 'Reducción', fRedS: 'Única y programada', fAfter: 'Supply después', fCon: 'Contrato', fConV: 'Renunciado<small>Sin minteo · Sin dueño · Ethereum ERC-20</small>',
-      contract: 'Contrato de $SECT', copy: 'Copiar', copied: 'Copiado',
-      k3: 'Tras la quema', h3: 'Listados <b>confirmados.</b>',
+      h4: 'Position yourself: <b>HOLD.</b>', fine: 'Figures are illustrative.' },
+    es: { kick: 'Reducción estratégica de supply · <b>Quema</b>', days: 'Días', hours: 'Horas', minutes: 'Min', seconds: 'Seg',
+      n50: '50.000.000', n25: '25.000.000', remain: 'Quedan 25M', burn: 'Se queman 25M',
+      date: '15 de marzo de 2027', local: 'Tu hora:', done: 'Llegó el día de la quema.',
+      buy: 'Compra $SECT', airdrop: 'Guía del Airdrop', calc: 'Calculadora de precio',
+      k2: 'Supply', fIni: 'Supply inicial', fAft: 'Tras la quema', fRed: 'Reducción', fCon: 'Contrato', fConV: 'Renunciado',
+      contract: '$SECT · ERC-20', copy: 'Copiar', copied: 'Copiado',
+      k3: 'Listados confirmados tras la quema', conf: 'Confirmado',
       s3: 'Con 25.000.000 de supply. Cada exchange lo anunciará en su X y redes sociales al confirmarse la quema del 50 %.',
-      conf: 'Listado confirmado', n50: '50.000.000', n25: '25.000.000',
-      k4: 'Antes del 15 de marzo de 2027', h4: 'Posiciónate: <b>HOLD.</b>',
-      s4: 'Compra $SECT en Uniswap, participa en el Airdrop Genesis y haz tus propios números con la calculadora de precio.',
-      fine: 'Las cifras describen solo el supply del token. Nada en esta página es una predicción de precio, una valoración ni asesoría de inversión.'
-    }
+      h4: 'Posiciónate: <b>HOLD.</b>', fine: 'Las cifras son ilustrativas.' }
   };
   var lang = 'en';
   try { var g = localStorage.getItem('sectora:burn-lang'); if (g === 'en' || g === 'es') lang = g; else if (/^es\b/i.test(navigator.language || '')) lang = 'es'; }
   catch (e) { if (/^es\b/i.test(navigator.language || '')) lang = 'es'; }
-
   function pinta(){
-    var t = TX[lang];
-    document.documentElement.lang = lang;
+    var t = TX[lang]; document.documentElement.lang = lang;
     document.querySelectorAll('[data-t]').forEach(function(el){ el.textContent = t[el.getAttribute('data-t')]; });
     document.querySelectorAll('[data-h]').forEach(function(el){ el.innerHTML = t[el.getAttribute('data-h')]; });
     document.querySelectorAll('.lang button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-l') === lang); });
     document.title = lang === 'es' ? 'Cuenta regresiva de la quema — Sectora Foundation' : 'Supply Reduction Countdown — Sectora Foundation';
-    try { var f = new Intl.DateTimeFormat(lang === 'es' ? 'es' : 'en', { dateStyle: 'medium', timeStyle: 'short' }); document.getElementById('local').textContent = f.format(new Date(META)); }
-    catch (e) { document.getElementById('local').textContent = new Date(META).toString(); }
+    var loc = document.getElementById('local');
+    try { loc.textContent = new Intl.DateTimeFormat(lang, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(META)); } catch (e) { loc.textContent = new Date(META).toString(); }
   }
   document.querySelectorAll('.lang button').forEach(function(b){
     b.addEventListener('click', function(){ lang = b.getAttribute('data-l'); try { localStorage.setItem('sectora:burn-lang', lang); } catch (e) {} pinta(); });
   });
   pinta();
+  var segs = document.getElementById('segs'); for (var i = 0; i < 50; i++) { var s = document.createElement('span'); if (i >= 25) s.className = 'q'; segs.appendChild(s); }
 
-  var el = { d: document.getElementById('cd-d'), h: document.getElementById('cd-h'), m: document.getElementById('cd-m'), s: document.getElementById('cd-s') };
-  var prev = {};
-  function pon(k, v){
-    if (prev[k] === v) return; prev[k] = v; var n = el[k]; n.textContent = v;
-    n.classList.remove('tick'); void n.offsetWidth; n.classList.add('tick');
-  }
+  /* cuenta atras */
+  var el = { d: document.getElementById('cd-d'), h: document.getElementById('cd-h'), m: document.getElementById('cd-m'), s: document.getElementById('cd-s') }, utc = document.getElementById('utc');
   var dos = function(n){ return String(n).padStart(2, '0'); };
-  var reloj = 0;
   function tic(){
-    var r = Math.max(0, Math.floor((META - Date.now()) / 1000));
-    var dd = Math.floor(r / 86400); r -= dd * 86400;
-    var hh = Math.floor(r / 3600); r -= hh * 3600;
-    var mm = Math.floor(r / 60); r -= mm * 60;
-    pon('d', String(dd).padStart(3, '0')); pon('h', dos(hh)); pon('m', dos(mm)); pon('s', dos(r));
-    if (META - Date.now() <= 0) { document.body.classList.add('hecho'); if (reloj) { clearInterval(reloj); reloj = 0; } }
+    var now = Date.now(), r = Math.max(0, Math.floor((META - now) / 1000));
+    var dd = Math.floor(r / 86400); r -= dd * 86400; var hh = Math.floor(r / 3600); r -= hh * 3600; var mm = Math.floor(r / 60); r -= mm * 60;
+    el.d.textContent = String(dd).padStart(3, '0'); el.h.textContent = dos(hh); el.m.textContent = dos(mm); el.s.textContent = dos(r);
+    var u = new Date(now); utc.textContent = dos(u.getUTCHours()) + ':' + dos(u.getUTCMinutes()) + ':' + dos(u.getUTCSeconds());
+    if (META - now <= 0) document.body.classList.add('hecho');
   }
-  function arranca(){ if (!reloj && !document.body.classList.contains('hecho')) { tic(); reloj = setInterval(tic, 1000); } }
-  function para(){ if (reloj) { clearInterval(reloj); reloj = 0; } }
-  document.addEventListener('visibilitychange', function(){ document.hidden ? para() : arranca(); });
-  tic(); arranca();
+  tic(); setInterval(function(){ if (!document.hidden) tic(); }, 1000);
 
   var bt = document.getElementById('copy');
   bt.addEventListener('click', function(){
-    var ca = document.getElementById('ca').textContent;
-    var ok = function(){ bt.textContent = TX[lang].copied; setTimeout(function(){ bt.textContent = TX[lang].copy; }, 1600); };
+    var ca = document.getElementById('ca').textContent, ok = function(){ bt.textContent = TX[lang].copied; setTimeout(function(){ bt.textContent = TX[lang].copy; }, 1600); };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ca).then(ok, function(){});
-    else { var s = document.createRange(); s.selectNodeContents(document.getElementById('ca')); var w = getSelection(); w.removeAllRanges(); w.addRange(s); try { document.execCommand('copy'); ok(); } catch (e) {} }
   });
+
+  /* ---------- globo: tierra en puntos (mismos poligonos que el dashboard) y Hash Nodes reales ---------- */
+  var cv = document.getElementById('globe'), cx = cv.getContext('2d'), hud = document.getElementById('hudl');
+  var D = Math.PI / 180, W = 0, H = 0, DPR = 1, LAND = [], NODES = [], ARCS = [];
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function v3(la, lo){ return [Math.cos(la * D) * Math.sin(lo * D), Math.sin(la * D), Math.cos(la * D) * Math.cos(lo * D)]; }
+  function dentro(pols, lo, la){ var n = 0; for (var p = 0; p < pols.length; p++) { var pol = pols[p], c = false;
+    for (var i = 0, j = pol.length - 1; i < pol.length; j = i++) { var xi = pol[i][0], yi = pol[i][1], xj = pol[j][0], yj = pol[j][1]; if ((yi > la) !== (yj > la) && lo < (xj - xi) * (la - yi) / (yj - yi) + xi) c = !c; }
+    if (c) n++; } return n % 2 === 1; }
+  function tierra(){ var pols = (window.SECTORA_GLOBE_LAND && window.SECTORA_GLOBE_LAND.land) || [], st = innerWidth < 700 ? 1.7 : 1.15;
+    for (var la = -56; la <= 78; la += st) { var s2 = st / Math.max(.2, Math.cos(la * D)); for (var lo = -180; lo < 180; lo += s2) if (dentro(pols, lo, la)) LAND.push(v3(la, lo)); } }
+  tierra();
+  fetch('/nodos/activaciones.json', { cache: 'no-store' }).then(function(r){ return r.json(); }).then(function(j){
+    var seen = {}; Object.keys(j.nodos || {}).forEach(function(k){ var n = j.nodos[k]; if (typeof n.la !== 'number' || typeof n.lo !== 'number') return;
+      var key = n.la.toFixed(0) + ',' + n.lo.toFixed(0); if (seen[key]) return; seen[key] = 1; NODES.push({ v: v3(n.la, n.lo), ph: Math.random() * 6.28 }); });
+    for (var i = 0; i < Math.min(14, NODES.length * 2); i++) { var a = NODES[(Math.random() * NODES.length) | 0], b = NODES[(Math.random() * NODES.length) | 0]; if (a !== b) ARCS.push([a, b, Math.random() * 12]); }
+  }).catch(function(){});
+  function size(){ DPR = Math.min(2, window.devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); }
+  size(); addEventListener('resize', size);
+  var SOL = (function(v){ var l = Math.hypot(v[0], v[1], v[2]); return [v[0] / l, v[1] / l, v[2] / l]; })([-.5, .45, .75]);
+  function rot(v, lon, tilt){ var cy = Math.cos(-lon * D), sy = Math.sin(-lon * D), x = v[0] * cy + v[2] * sy, z = -v[0] * sy + v[2] * cy, y = v[1], ct = Math.cos(tilt * D), st = Math.sin(tilt * D); return [x, y * ct - z * st, y * st + z * ct]; }
+  function slerp(a, b, s){ var d = Math.acos(Math.max(-1, Math.min(1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]))); if (d < 1e-4) return a; var k1 = Math.sin((1 - s) * d) / Math.sin(d), k2 = Math.sin(s * d) / Math.sin(d); return [a[0] * k1 + b[0] * k2, a[1] * k1 + b[1] * k2, a[2] * k1 + b[2] * k2]; }
+  function draw(ms){
+    var t = ms / 1000, mob = W < 700, R = mob ? Math.min(W * .62, H * .36) : Math.min(W * .34, H * .46), gx = W / 2, gy = H * (mob ? .5 : .52);
+    var lon = -60 + t * 5, tilt = 18;
+    cx.clearRect(0, 0, W, H);
+    var g = cx.createRadialGradient(gx, gy, R * .96, gx, gy, R * 1.3); g.addColorStop(0, 'rgba(70,140,255,.32)'); g.addColorStop(.35, 'rgba(21,105,255,.08)'); g.addColorStop(1, 'rgba(21,105,255,0)');
+    cx.fillStyle = g; cx.beginPath(); cx.arc(gx, gy, R * 1.32, 0, 6.29); cx.fill();
+    g = cx.createRadialGradient(gx - R * .25, gy - R * .25, R * .05, gx, gy, R); g.addColorStop(0, '#0d1a36'); g.addColorStop(.7, '#050a18'); g.addColorStop(1, '#02040b');
+    cx.fillStyle = g; cx.beginPath(); cx.arc(gx, gy, R, 0, 6.29); cx.fill();
+    /* orbita */
+    cx.save(); cx.translate(gx, gy); cx.rotate(-.32); cx.strokeStyle = 'rgba(150,195,255,.18)'; cx.lineWidth = 1; cx.beginPath(); cx.ellipse(0, 0, R * 1.42, R * .36, 0, 0, 6.29); cx.stroke();
+    var sa = t * .35; cx.fillStyle = 'rgba(220,235,255,.9)'; cx.beginPath(); cx.arc(Math.cos(sa) * R * 1.42, Math.sin(sa) * R * .36, 2.2, 0, 6.29); cx.fill(); cx.restore();
+    /* tierra */
+    var ds = Math.max(1.3, R / 260), buckets = [[], [], [], [], [], []];
+    for (var i = 0; i < LAND.length; i++) { var r = rot(LAND[i], lon, tilt); if (r[2] <= .02) continue;
+      var luz = Math.max(0, Math.min(1, (r[0] * SOL[0] + r[1] * SOL[1] + r[2] * SOL[2]) * 1.5 + .2)), a = (.18 + .8 * luz) * Math.min(1, r[2] * 4);
+      buckets[Math.min(5, (a * 6) | 0)].push(gx + r[0] * R, gy - r[1] * R); }
+    for (var b = 0; b < 6; b++) { var c = buckets[b]; if (!c.length) continue; cx.fillStyle = 'rgba(' + (200 + b * 9) + ',' + (220 + b * 6) + ',255,' + ((b + .6) / 6).toFixed(2) + ')'; cx.beginPath();
+      for (var k = 0; k < c.length; k += 2) cx.rect(c[k] - ds / 2, c[k + 1] - ds / 2, ds, ds); cx.fill(); }
+    cx.strokeStyle = 'rgba(150,195,255,.35)'; cx.lineWidth = 1; cx.beginPath(); cx.arc(gx, gy, R, 0, 6.29); cx.stroke();
+    /* arcos entre nodos */
+    cx.globalCompositeOperation = 'lighter'; cx.lineCap = 'round';
+    for (var q = 0; q < ARCS.length; q++) { var A = ARCS[q], e = ((t + A[2]) % 12) / 12; if (e > .45) continue; var pr = Math.min(1, e / .25), fade = 1 - Math.max(0, (e - .3) / .15);
+      var dist = Math.acos(Math.max(-1, Math.min(1, A[0].v[0] * A[1].v[0] + A[0].v[1] * A[1].v[1] + A[0].v[2] * A[1].v[2]))), hgt = .08 + dist * .14;
+      cx.strokeStyle = 'rgba(110,175,255,' + (.65 * fade).toFixed(3) + ')'; cx.lineWidth = 1.4; cx.beginPath(); var pen = false;
+      for (var s = 0; s <= 40 * pr; s++) { var v = slerp(A[0].v, A[1].v, s / 40), kk = 1 + hgt * Math.sin(Math.PI * s / 40), rr = rot([v[0] * kk, v[1] * kk, v[2] * kk], lon, tilt);
+        if (rr[2] < -.05) { pen = false; continue; } var px = gx + rr[0] * R, py = gy - rr[1] * R; pen ? cx.lineTo(px, py) : cx.moveTo(px, py); pen = true; } cx.stroke(); }
+    /* nodos */
+    for (var n = 0; n < NODES.length; n++) { var N = NODES[n], p = rot(N.v, lon, tilt); if (p[2] < .05) continue; var x = gx + p[0] * R, y = gy - p[1] * R, vis = Math.min(1, p[2] * 4), pu = .5 + .5 * Math.sin(t * 2 + N.ph);
+      var gl = cx.createRadialGradient(x, y, 0, x, y, 12 + 6 * pu); gl.addColorStop(0, 'rgba(160,215,255,' + (.75 * vis).toFixed(3) + ')'); gl.addColorStop(1, 'rgba(21,105,255,0)');
+      cx.fillStyle = gl; cx.beginPath(); cx.arc(x, y, 12 + 6 * pu, 0, 6.29); cx.fill(); cx.fillStyle = 'rgba(255,255,255,' + vis.toFixed(3) + ')'; cx.beginPath(); cx.arc(x, y, 1.8, 0, 6.29); cx.fill(); }
+    cx.globalCompositeOperation = 'source-over';
+    var L = ((lon % 360) + 540) % 360 - 180; hud.textContent = 'LON ' + (L < 0 ? '−' : '+') + Math.abs(L).toFixed(1).padStart(5, '0') + '° · TILT ' + tilt + '°';
+  }
+  var last = 0;
+  function loop(ms){ if (!document.hidden && ms - last > 31) { last = ms; draw(ms); } requestAnimationFrame(loop); }
+  if (reduce) { draw(0); addEventListener('resize', function(){ draw(0); }); } else requestAnimationFrame(loop);
 })();
 </script>
 </body>
