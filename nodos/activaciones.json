@@ -1826,6 +1826,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x28d168e110d8f7cd97e0621ef07e13515c633b3f": {
+      "t": 1793966608000,
+      "n": "Sectora Node Seoul",
+      "c": "Seoul, KR",
+      "la": 37.5,
+      "lo": 127
     }
   }
 }
