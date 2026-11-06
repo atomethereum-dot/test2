@@ -1504,6 +1504,13 @@
       "c": "Bangkok, TH",
       "la": 13.8,
       "lo": 100.5
+    },
+    "0x99dd413e531a5d9a9c26a51d6b9bc6f16bf6444d": {
+      "t": 1793928381000,
+      "n": "Sectora Node Algiers",
+      "c": "Algiers, DZ",
+      "la": 36.8,
+      "lo": 3
     }
   }
 }
