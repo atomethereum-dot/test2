@@ -1959,6 +1959,13 @@
       "c": "Kuala Lumpur, MY",
       "la": 3.2,
       "lo": 101.7
+    },
+    "0xd6e8a0634a8ef6caf0c93a9357e7cd0e0d08f384": {
+      "t": 1793980191000,
+      "n": "Sectora Node Ho Chi Minh",
+      "c": "Ho Chi Minh, VN",
+      "la": 10.8,
+      "lo": 106.7
     }
   }
 }
