@@ -1896,6 +1896,20 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x8595690f3a5c61109456ac24ac0a719312c0e41f": {
+      "t": 1793973380000,
+      "n": "Sectora Node Cairo",
+      "c": "Cairo, EG",
+      "la": 30.1,
+      "lo": 31.2
+    },
+    "0x56b82c50c72459de7d3a629e8911873b6d8e00c9": {
+      "t": 1793973468000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
     }
   }
 }
