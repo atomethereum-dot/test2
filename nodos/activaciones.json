@@ -1721,6 +1721,27 @@
       "c": "Zurich, CH",
       "la": 47.4,
       "lo": 8.5
+    },
+    "0x21b42b6dc643689b22fc24aa251cf451dcb92eb8": {
+      "t": 1793953771000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x8819fc8157d2ea52bac2032c7b0829f218bdcc77": {
+      "t": 1793953938000,
+      "n": "Sectora Node Quang Ngai",
+      "c": "Ho Chi Minh, VN",
+      "la": 10.8,
+      "lo": 106.7
+    },
+    "0xe7265d85a7da7d727cc449f5d16bc3d10bec23a6": {
+      "t": 1793954017000,
+      "n": "Sectora Node Zurich",
+      "c": "Zurich, CH",
+      "la": 47.4,
+      "lo": 8.5
     }
   }
 }
