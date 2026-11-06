@@ -1413,6 +1413,13 @@
       "c": "Ho Chi Minh, VN",
       "la": 10.8,
       "lo": 106.7
+    },
+    "0x9c4e57db42c9d8c5ef233c74fb37baba630b88d3": {
+      "t": 1793923151000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
