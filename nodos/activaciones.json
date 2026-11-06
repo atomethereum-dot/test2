@@ -2029,6 +2029,13 @@
       "c": "Port-au-Prince, HT",
       "la": 18.5,
       "lo": -72.3
+    },
+    "0xb97e4c7cbb7d01782c0b0bb6ec4d361efe88d539": {
+      "t": 1793990896000,
+      "n": "Main Sectora Node Berlin",
+      "c": "Berlin, DE",
+      "la": 52.5,
+      "lo": 13.4
     }
   }
 }
