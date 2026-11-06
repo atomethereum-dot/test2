@@ -1448,6 +1448,20 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xae5c93c93b7b88505ab68ea1a249f69196376027": {
+      "t": 1793924613000,
+      "n": "Sectora Node Casablanca",
+      "c": "Casablanca, MA",
+      "la": 33.6,
+      "lo": -7.6
+    },
+    "0xf0ce9f74fb15d800bc0cc14238e1ccdcedf0ec65": {
+      "t": 1793924693000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
