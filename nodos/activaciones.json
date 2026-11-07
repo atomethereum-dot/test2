@@ -2442,6 +2442,13 @@
       "c": "Berlin, DE",
       "la": 52.5,
       "lo": 13.4
+    },
+    "0x1cfa25418a227063540dbb837f99c630932c45e0": {
+      "t": 1794066284000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
