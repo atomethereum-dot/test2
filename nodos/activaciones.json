@@ -2337,6 +2337,13 @@
       "c": "Kyiv, UA",
       "la": 50.4,
       "lo": 30.5
+    },
+    "0xcc4507546004d7e84199899dbc4b4cc765c2c39f": {
+      "t": 1794046352000,
+      "n": "Sectora Node Hong Kong",
+      "c": "Hong Kong, HK",
+      "la": 22.3,
+      "lo": 114.2
     }
   }
 }
