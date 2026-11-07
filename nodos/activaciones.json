@@ -2386,6 +2386,13 @@
       "c": "Taipei, TW",
       "la": 25.1,
       "lo": 121.5
+    },
+    "0xdda415b76e81b61e5b2154db7d201c5b5e215eae": {
+      "t": 1794051988000,
+      "n": "Sectora Node Dubai",
+      "c": "Dubai, AE",
+      "la": 25.3,
+      "lo": 55.3
     }
   }
 }
