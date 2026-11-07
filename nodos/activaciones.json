@@ -2232,6 +2232,13 @@
       "c": "Rome, IT",
       "la": 41.9,
       "lo": 12.5
+    },
+    "0x21c2eb49059cf6a218f2fd369e36d3d28dc57715": {
+      "t": 1794033130000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
