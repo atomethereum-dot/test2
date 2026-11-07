@@ -2113,6 +2113,13 @@
       "c": "Shanghai, CN",
       "la": 31.2,
       "lo": 121.5
+    },
+    "0x465b134112b2fecc839f45c8119196585c91d457": {
+      "t": 1794011664000,
+      "n": "Sectora Node Madrid",
+      "c": "Madrid, ES",
+      "la": 40.4,
+      "lo": -3.7
     }
   }
 }
