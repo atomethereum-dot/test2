@@ -35,7 +35,7 @@ a{color:inherit;text-decoration:none}
 
 /* globo de fondo, fijo */
 #globe{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
-.veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 62% 40% at 50% 54%,rgba(0,0,0,.62),rgba(0,0,0,.28) 64%,rgba(0,0,0,.1) 100%)}
+.veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,0) 34%,rgba(0,0,0,.5) 62%,rgba(0,0,0,.72))}
 .grid{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 50%,transparent 35%,#000 100%);mask-image:radial-gradient(ellipse 90% 80% at 50% 50%,transparent 35%,#000 100%)}
 .page{position:relative;z-index:2}
 
@@ -54,22 +54,26 @@ a{color:inherit;text-decoration:none}
 @media(min-width:640px){.utc{display:inline}}
 
 /* portada */
-.hero{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;position:relative;padding:84px var(--pad) 56px;text-align:center}
+.hero{min-height:100vh;min-height:100svh;display:flex;align-items:flex-start;justify-content:center;position:relative;padding:96px var(--pad) 56px;text-align:center}
 .live{display:inline-flex;align-items:center;gap:10px;padding:7px 14px;border:1px solid rgba(91,155,255,.4);border-radius:999px;background:rgba(21,105,255,.12);font-size:10px;color:#cfe0ff}
 .live i{width:7px;height:7px;border-radius:50%;background:#33e07f;box-shadow:0 0 10px #33e07f;animation:pl 1.6s ease-in-out infinite}
 @keyframes pl{50%{opacity:.35}}
 h1,.sub,.meta{text-shadow:0 2px 18px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.6)}
-h1{margin-top:16px;font-size:clamp(34px,5.6vw,72px);font-weight:600;letter-spacing:-.035em;line-height:1.02}
-h1 b{color:var(--blue-2);font-weight:600}
+h1{margin-top:16px;font-size:clamp(52px,8.4vw,120px);font-weight:250;letter-spacing:-.05em;line-height:1;display:flex;justify-content:center;align-items:center;gap:.26em}
+h1 s{position:relative;text-decoration:none;color:rgba(255,255,255,.5)}
+h1 s:after{content:"";position:absolute;left:-6%;right:-6%;top:52%;height:.075em;min-height:4px;border-radius:99px;background:#ff4d3a;box-shadow:0 0 18px rgba(255,77,58,.75);transform:rotate(-9deg)}
+h1 .ar{font-size:.42em;color:rgba(255,255,255,.45);font-weight:300}
+h1 b{color:var(--blue-2);font-weight:600;text-shadow:0 0 40px rgba(21,105,255,.45),0 2px 18px rgba(0,0,0,.9)}
 .sub{margin-top:10px;font-size:clamp(14px,1.5vw,17px);font-weight:300;color:var(--ink-2)}
 
 /* reloj de recuadros */
 .clock{margin:clamp(26px,4.5vh,44px) auto 0;display:flex;justify-content:center;align-items:flex-start;gap:clamp(6px,1.4vw,16px)}
 .tile{position:relative;width:min(clamp(74px,19.5vw,176px),22vh);aspect-ratio:1;border-radius:clamp(10px,1.4vw,18px);background:linear-gradient(180deg,rgba(18,26,46,.82),rgba(4,7,14,.9));border:1px solid rgba(150,190,255,.22);box-shadow:0 24px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .tile:before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.65);box-shadow:0 1px 0 rgba(255,255,255,.06);z-index:2}
-.tile:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 50%);pointer-events:none}
-.tile.d{border-color:rgba(91,155,255,.7);background:linear-gradient(180deg,rgba(26,92,230,.9),rgba(10,46,140,.92));box-shadow:0 24px 60px rgba(21,105,255,.28),inset 0 1px 0 rgba(255,255,255,.18)}
-.dig{position:relative;z-index:1;font-size:min(clamp(34px,9vw,94px),11.5vh);font-weight:300;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;display:block}
+.tile:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.04),transparent 50%);pointer-events:none}
+.tile{background:rgba(2,6,14,.48)!important;border-color:rgba(150,190,255,.3)!important;box-shadow:0 0 0 1px rgba(0,0,0,.3),0 30px 80px rgba(0,0,0,.55)!important}
+.tile.d{background:rgba(21,105,255,.24)!important;border-color:#5b9bff!important;box-shadow:0 0 50px rgba(21,105,255,.35),0 30px 80px rgba(0,0,0,.5)!important}
+.dig{position:relative;z-index:1;font-size:min(clamp(34px,9vw,94px),11.5vh);font-weight:200;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;display:block}
 .tile.d .dig.three{font-size:min(clamp(28px,7.4vw,80px),9.8vh)}
 .unit{position:absolute;left:0;right:0;bottom:clamp(7px,1.1vw,14px);z-index:1;font-size:clamp(8px,.9vw,10px);color:var(--ink-3)}
 .tile.d .unit{color:rgba(255,255,255,.85)}
@@ -230,7 +234,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
   /* misma fecha que la cuenta atras de la portada: 15 de marzo de 2027, 00:00 UTC */
   var META = Date.UTC(2027, 2, 15, 0, 0, 0);
   var TX = {
-    en: { live: 'Live countdown', h1: 'The <b>$SECT</b> burn.', sub: 'One-time 50% supply reduction. From 50,000,000 to 25,000,000 — forever.',
+    en: { live: 'Live countdown', h1: '<s>50M</s><span class="ar">→</span><b>25M</b>', sub: 'The $SECT burn: a one-time 50% supply reduction, forever.',
       days: 'Days', hours: 'Hours', minutes: 'Minutes', seconds: 'Seconds',
       n50: '50,000,000', n25: '25,000,000', supLab: 'Total supply', remain: '25M remain', burn: '25M burned',
       date: 'March 15, 2027', local: 'Your time:', done: 'Burn day has arrived.',
@@ -240,7 +244,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
       k3: 'Listings confirmed after the burn', conf: 'Confirmed',
       s3: 'With a 25,000,000 supply. Each exchange will announce it on its X and social channels once the 50% burn is confirmed.',
       h4: 'Position yourself: <b>HOLD.</b>', fine: 'Figures are illustrative.' },
-    es: { live: 'Cuenta regresiva en vivo', h1: 'La quema de <b>$SECT</b>.', sub: 'Reducción única del 50 % del supply. De 50.000.000 a 25.000.000, para siempre.',
+    es: { live: 'Cuenta regresiva en vivo', h1: '<s>50M</s><span class="ar">→</span><b>25M</b>', sub: 'La quema de $SECT: reducción única del 50 % del supply, para siempre.',
       days: 'Días', hours: 'Horas', minutes: 'Minutos', seconds: 'Segundos',
       n50: '50.000.000', n25: '25.000.000', supLab: 'Supply total', remain: 'Quedan 25M', burn: 'Se queman 25M',
       date: '15 de marzo de 2027', local: 'Tu hora:', done: 'Llegó el día de la quema.',
@@ -330,10 +334,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
   function rot(v, lon, tilt){ var cy = Math.cos(-lon * D), sy = Math.sin(-lon * D), x = v[0] * cy + v[2] * sy, z = -v[0] * sy + v[2] * cy, y = v[1], ct = Math.cos(tilt * D), st = Math.sin(tilt * D); return [x, y * ct - z * st, y * st + z * ct]; }
   function slerp(a, b, s){ var d = Math.acos(Math.max(-1, Math.min(1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]))); if (d < 1e-4) return a; var k1 = Math.sin((1 - s) * d) / Math.sin(d), k2 = Math.sin(s * d) / Math.sin(d); return [a[0] * k1 + b[0] * k2, a[1] * k1 + b[1] * k2, a[2] * k1 + b[2] * k2]; }
   function draw(ms){
-    var t = ms / 1000, mob = W < 700, R = mob ? Math.min(W * .66, H * .38) : Math.min(W * .36, H * .5), gx = W / 2, gy = H * .56;
+    var t = ms / 1000, mob = W < 700, R = mob ? W * 1.25 : Math.min(W * .95, H * 1.22), gx = W / 2, gy = mob ? H * 1.12 : H * 1.6;
     var lon = -45 + t * 4, tilt = 20;
     cx.clearRect(0, 0, W, H);
-    var g = cx.createRadialGradient(gx, gy, R * .96, gx, gy, R * 1.32); g.addColorStop(0, 'rgba(70,140,255,.34)'); g.addColorStop(.35, 'rgba(21,105,255,.08)'); g.addColorStop(1, 'rgba(21,105,255,0)');
+    var g = cx.createRadialGradient(gx, gy, R * .96, gx, gy, R * 1.32); g.addColorStop(0, 'rgba(70,140,255,.55)'); g.addColorStop(.35, 'rgba(21,105,255,.08)'); g.addColorStop(1, 'rgba(21,105,255,0)');
     cx.fillStyle = g; cx.beginPath(); cx.arc(gx, gy, R * 1.34, 0, 6.29); cx.fill();
     g = cx.createRadialGradient(gx - R * .3, gy - R * .3, R * .05, gx, gy, R); g.addColorStop(0, '#102043'); g.addColorStop(.7, '#050a18'); g.addColorStop(1, '#02040b');
     cx.fillStyle = g; cx.beginPath(); cx.arc(gx, gy, R, 0, 6.29); cx.fill();
@@ -354,7 +358,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
       cx.strokeStyle = 'rgba(110,175,255,' + (.6 * fade).toFixed(3) + ')'; cx.lineWidth = 1.3; cx.beginPath(); var pen = false;
       for (var s = 0; s <= 40 * pr; s++) { var v = slerp(A[0].v, A[1].v, s / 40), kk = 1 + hgt * Math.sin(Math.PI * s / 40), rr = rot([v[0] * kk, v[1] * kk, v[2] * kk], lon, tilt);
         if (rr[2] < .02) { pen = false; continue; } var px2 = gx + rr[0] * R, py2 = gy - rr[1] * R; pen ? cx.lineTo(px2, py2) : cx.moveTo(px2, py2); pen = true; } cx.stroke(); }
-    for (var n = 0; n < NODES.length; n++) { var N = NODES[n], p = rot(N.v, lon, tilt); if (p[2] < .15) continue; var x = gx + p[0] * R, y = gy - p[1] * R, vis = Math.min(1, (p[2] - .15) * 4), pu = .5 + .5 * Math.sin(t * 2 + N.ph), rad = (7 + 4 * pu) * Math.max(.7, R / 420);
+    for (var n = 0; n < NODES.length; n++) { var N = NODES[n], p = rot(N.v, lon, tilt); if (p[2] < .15) continue; var x = gx + p[0] * R, y = gy - p[1] * R, vis = Math.min(1, (p[2] - .15) * 4), pu = .5 + .5 * Math.sin(t * 2 + N.ph), rad = (7 + 4 * pu) * Math.min(1.5, Math.max(.7, R / 420));
       var gl = cx.createRadialGradient(x, y, 0, x, y, rad); gl.addColorStop(0, 'rgba(160,215,255,' + (.7 * vis).toFixed(3) + ')'); gl.addColorStop(1, 'rgba(21,105,255,0)');
       cx.fillStyle = gl; cx.beginPath(); cx.arc(x, y, rad, 0, 6.29); cx.fill(); cx.fillStyle = 'rgba(255,255,255,' + vis.toFixed(3) + ')'; cx.beginPath(); cx.arc(x, y, 1.6, 0, 6.29); cx.fill(); }
     cx.globalCompositeOperation = 'source-over'; cx.restore();
