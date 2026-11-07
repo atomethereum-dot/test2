@@ -2463,6 +2463,13 @@
       "c": "Tehran, IR",
       "la": 35.7,
       "lo": 51.4
+    },
+    "0x273db0a1b92b22d55f4d0503fc90db9443575a1e": {
+      "t": 1794066981000,
+      "n": "Sectora Node Algiers",
+      "c": "Algiers, DZ",
+      "la": 36.8,
+      "lo": 3
     }
   }
 }
