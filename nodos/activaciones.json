@@ -2505,6 +2505,13 @@
       "c": "Tashkent, UZ",
       "la": 41.3,
       "lo": 69.3
+    },
+    "0xa8d9af9f6069633bb432cd19da742b5ef095000a": {
+      "t": 1794072782000,
+      "n": "Sectora Node Almaty",
+      "c": "Almaty, KZ",
+      "la": 43.2,
+      "lo": 77
     }
   }
 }
