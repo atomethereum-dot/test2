@@ -2533,6 +2533,13 @@
       "c": "Paris, FR",
       "la": 48.9,
       "lo": 2.3
+    },
+    "0x5bc114f2ca21c950e38d9513549ade9dcf465204": {
+      "t": 1794083830000,
+      "n": "Sectora Node Accra",
+      "c": "Accra, GH",
+      "la": 5.5,
+      "lo": -0.2
     }
   }
 }
