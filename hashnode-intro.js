@@ -14,6 +14,8 @@
   let vista = false;
   try { vista = sessionStorage.getItem("hni_vista") === "1"; sessionStorage.setItem("hni_vista", "1"); } catch (e) {}
   if (!T || !window.SECTORA_GLOBE_TOPOLOGY || matchMedia("(prefers-reduced-motion: reduce)").matches || scrollY > 40 || vista || location.hash.length > 1) { acabar(true); return; }
+  /* si la pagina tardo en cargar (red lenta) o la pestana esta en segundo plano, no se hace esperar mas: se salta */
+  if (performance.now() > 3500 || document.visibilityState === "hidden") { acabar(true); return; }
 
   const D = Math.PI / 180;
   const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
@@ -223,7 +225,7 @@
   const FIN = 5.05, FUNDE = 0.75;
   window.__hniOn = true;
   window.__hniHold = true;                 /* el globo real no se dibuja mientras esta tapado */
-  let t0 = 0, raf = 0, saltoEn = -1, cerrada = false;
+  let t0 = 0, raf = 0, saltoEn = -1, cerrada = false, ultimo = 0;
 
   function cuadro(t) {
     const H = destino();
@@ -269,25 +271,32 @@
   function saltar() { if (saltoEn < 0) { saltoEn = performance.now(); window.__hniHold = false; } }
 
   function bucle(now) {
+    ultimo = performance.now();
     const t = (now - t0) / 1000;
     let a = 1 - io3(seg(t, FIN, FIN + FUNDE));
     if (saltoEn >= 0) a = Math.min(a, 1 - o3(seg(now, saltoEn, saltoEn + 450)));
     capa.style.opacity = a;
     if (a <= 0.001) { cerrar(); return; }
-    cuadro(Math.min(t, FIN + FUNDE));
+    /* si un cuadro falla, la capa se funde en vez de quedarse congelada */
+    try { cuadro(Math.min(t, FIN + FUNDE)); } catch (e) { if (saltoEn < 0) saltoEn = now; }
     raf = requestAnimationFrame(bucle);
   }
 
   function empezar() {
     if (cerrada || t0) return;
     ["pointerdown", "keydown", "wheel", "touchmove"].forEach(e => addEventListener(e, saltar, true));
-    cuadro(0);
-    t0 = performance.now();
+    try { cuadro(0); } catch (e) { acabar(true); cerrada = true; return; }
+    t0 = performance.now(); ultimo = t0;
     raf = requestAnimationFrame(bucle);
   }
   /* espera a las fuentes (como mucho 1,2 s) para que el contador no salte */
   const listas = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
-  Promise.race([listas, new Promise(r => setTimeout(r, 1200))]).then(empezar);
+  Promise.race([listas, new Promise(r => setTimeout(r, 700))]).then(empezar);
   /* salvavidas: pase lo que pase, la capa se retira */
-  setTimeout(() => { if (!cerrada) { capa.style.transition = "opacity .5s"; capa.style.opacity = 0; setTimeout(cerrar, 520); } }, 14000);
+  const retirar = () => { if (cerrada) return; capa.style.transition = "opacity .4s"; capa.style.opacity = 0; setTimeout(cerrar, 420); };
+  setTimeout(retirar, 9000);
+  /* vigia: si los cuadros dejan de llegar (telefono saturado, error), la capa se retira sola */
+  const vigia = setInterval(() => { if (cerrada) { clearInterval(vigia); return; } if (t0 && !document.hidden && performance.now() - ultimo > 1500) { clearInterval(vigia); retirar(); } }, 500);
+  /* al volver con "atras" desde otra pagina no queda tapando nada */
+  addEventListener("pageshow", e => { if (e.persisted) retirar(); });
 })();
