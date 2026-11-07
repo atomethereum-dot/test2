@@ -2211,6 +2211,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x30329ba6d3023c81eb663389f0c27011cbf599e0": {
+      "t": 1794030555000,
+      "n": "Sectora Node Mexico City",
+      "c": "Mexico City, MX",
+      "la": 19.4,
+      "lo": -99.2
     }
   }
 }
