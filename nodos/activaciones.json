@@ -2393,6 +2393,13 @@
       "c": "Dubai, AE",
       "la": 25.3,
       "lo": 55.3
+    },
+    "0x167b793bcf27cb3fc2f217b32217cfba7c1fd6dc": {
+      "t": 1794054629000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
