@@ -2512,6 +2512,13 @@
       "c": "Almaty, KZ",
       "la": 43.2,
       "lo": 77
+    },
+    "0x3f3d25e4033ccf1f9690e5e700f26bc46181553a": {
+      "t": 1794073275000,
+      "n": "Sectora Node Yangon",
+      "c": "Yangon, MM",
+      "la": 16.8,
+      "lo": 96.2
     }
   }
 }
