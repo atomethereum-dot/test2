@@ -2358,6 +2358,20 @@
       "c": "Lisbon, PT",
       "la": 38.7,
       "lo": -9.1
+    },
+    "0x58b44d8b11a340759f4e360633aee5f4f224ccbe": {
+      "t": 1794048097000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x79eeba75e703d44c62d4cc22f59343592b0de499": {
+      "t": 1794048257000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
