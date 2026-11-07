@@ -2379,6 +2379,13 @@
       "c": "Shanghai, CN",
       "la": 31.2,
       "lo": 121.5
+    },
+    "0x602acec474bff1e245a54cb986c4cdadd9eb9f69": {
+      "t": 1794051950000,
+      "n": "Sectora Node Taipei",
+      "c": "Taipei, TW",
+      "la": 25.1,
+      "lo": 121.5
     }
   }
 }
