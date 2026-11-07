@@ -2204,6 +2204,13 @@
       "c": "Shanghai, CN",
       "la": 31.2,
       "lo": 121.5
+    },
+    "0x1a40f4db7e4d801b94a2d8bd5e33375857c7f4ab": {
+      "t": 1794030142000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
