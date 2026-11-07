@@ -2428,6 +2428,20 @@
       "c": "Karachi, PK",
       "la": 24.9,
       "lo": 67
+    },
+    "0x57ae39443756ff08ec1ae68e6b2f7a311fcbb943": {
+      "t": 1794065219000,
+      "n": "Sectora Node Manila",
+      "c": "Manila, PH",
+      "la": 14.6,
+      "lo": 121
+    },
+    "0x873df042bafafa7162942aab6cd778a2525ae641": {
+      "t": 1794065459000,
+      "n": "Sectora Node Berlin",
+      "c": "Berlin, DE",
+      "la": 52.5,
+      "lo": 13.4
     }
   }
 }
