@@ -2176,6 +2176,13 @@
       "c": "Bangkok, TH",
       "la": 13.8,
       "lo": 100.5
+    },
+    "0x4e04fe6b1b06dec8f54ad181ec1ac2d10cb6bbda": {
+      "t": 1794024050000,
+      "n": "Sectora Node Bangkok",
+      "c": "Bangkok, TH",
+      "la": 13.8,
+      "lo": 100.5
     }
   }
 }
