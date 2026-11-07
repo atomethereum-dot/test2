@@ -2330,6 +2330,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x0ed541158342a5a15714023ae2e97e61b17ebced": {
+      "t": 1794045740000,
+      "n": "Sectora Node Kyiv",
+      "c": "Kyiv, UA",
+      "la": 50.4,
+      "lo": 30.5
     }
   }
 }
