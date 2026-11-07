@@ -2372,6 +2372,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0xb2dc494b7bd893219b86fc7fb87aa5f06f2f702e": {
+      "t": 1794051128000,
+      "n": "Sectora Node Shanghai",
+      "c": "Shanghai, CN",
+      "la": 31.2,
+      "lo": 121.5
     }
   }
 }
