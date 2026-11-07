@@ -2519,6 +2519,13 @@
       "c": "Yangon, MM",
       "la": 16.8,
       "lo": 96.2
+    },
+    "0x585de2919dd54a9bbf0af9b416f742650d75859e": {
+      "t": 1794073441000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
