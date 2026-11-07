@@ -2344,6 +2344,13 @@
       "c": "Hong Kong, HK",
       "la": 22.3,
       "lo": 114.2
+    },
+    "0xd48a500b41956604057b4ff20dacef5f55825dee": {
+      "t": 1794047529000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
