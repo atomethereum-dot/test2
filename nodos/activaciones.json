@@ -2267,6 +2267,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x38999eb6a15c6bbbf97f22fd36ba3db380127af1": {
+      "t": 1794037239000,
+      "n": "Sectora Node Shanghai",
+      "c": "Shanghai, CN",
+      "la": 31.2,
+      "lo": 121.5
     }
   }
 }
