@@ -2197,6 +2197,13 @@
       "c": "Los Angeles, US",
       "la": 34.1,
       "lo": -118.2
+    },
+    "0x749a1e88ee15b766142895bc565ea5e79ecc8e3a": {
+      "t": 1794027531000,
+      "n": "Sectora Node Shanghai",
+      "c": "Shanghai, CN",
+      "la": 31.2,
+      "lo": 121.5
     }
   }
 }
