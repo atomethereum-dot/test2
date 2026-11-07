@@ -2407,6 +2407,13 @@
       "c": "Ho Chi Minh, VN",
       "la": 10.8,
       "lo": 106.7
+    },
+    "0x9ed68d4bc07a93cb22bb1ba7559b6807b52c0456": {
+      "t": 1794058475000,
+      "n": "Sectora Node Karachi",
+      "c": "Karachi, PK",
+      "la": 24.9,
+      "lo": 67
     }
   }
 }
