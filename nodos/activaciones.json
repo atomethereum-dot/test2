@@ -2421,6 +2421,13 @@
       "c": "Manila, PH",
       "la": 14.6,
       "lo": 121
+    },
+    "0x0e05b65b76a9528592e9bd66c232b2ec788c9565": {
+      "t": 1794064784000,
+      "n": "Sectora Node Karachi",
+      "c": "Karachi, PK",
+      "la": 24.9,
+      "lo": 67
     }
   }
 }
