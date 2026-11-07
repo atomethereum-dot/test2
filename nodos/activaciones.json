@@ -2449,6 +2449,20 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x516810a96c298e884a8e25721a311dc3693e8877": {
+      "t": 1794066622000,
+      "n": "Sectora Node Pontianak",
+      "c": "Pontianak, ID",
+      "la": 0,
+      "lo": 109.3
+    },
+    "0x4fe3a70c8ed053cd0de61da0ec029adbbff1f841": {
+      "t": 1794066694000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
     }
   }
 }
