@@ -2554,6 +2554,13 @@
       "c": "Dhaka, BD",
       "la": 23.7,
       "lo": 90.4
+    },
+    "0x7629bd0cac39e37a95f9d684e809c6d4405a82f2": {
+      "t": 1794090072000,
+      "n": "Sectora Node London",
+      "c": "London, GB",
+      "la": 51.5,
+      "lo": -0.1
     }
   }
 }
