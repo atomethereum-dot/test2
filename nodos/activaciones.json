@@ -2134,6 +2134,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x55ed29c535e42f6458c1c9b99e96e6ef28784a57": {
+      "t": 1794016312000,
+      "n": "Sectora Node Madrid",
+      "c": "Madrid, ES",
+      "la": 40.4,
+      "lo": -3.7
     }
   }
 }
