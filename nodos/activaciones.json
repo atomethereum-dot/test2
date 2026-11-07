@@ -2190,6 +2190,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x05d51c454fc7a13dd4934f80f36977b4b21f248b": {
+      "t": 1794025761000,
+      "n": "Sectora Node Los Angeles",
+      "c": "Los Angeles, US",
+      "la": 34.1,
+      "lo": -118.2
     }
   }
 }
