@@ -2288,6 +2288,20 @@
       "c": "Bangkok, TH",
       "la": 13.8,
       "lo": 100.5
+    },
+    "0x49d02b895dbb0850d29e08b8ae0386f950c9224a": {
+      "t": 1794041713000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0x00d697c091d8e99aad876b6f112253b9f44c4e4d": {
+      "t": 1794041924000,
+      "n": "Sectora Node Bangkok",
+      "c": "Bangkok, TH",
+      "la": 13.8,
+      "lo": 100.5
     }
   }
 }
