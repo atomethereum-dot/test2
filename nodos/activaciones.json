@@ -2309,6 +2309,20 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xc9670a61bad06bd67eb2215a9feba630780abcb8": {
+      "t": 1794043910000,
+      "n": "Sectora Node Riyadh",
+      "c": "Riyadh, SA",
+      "la": 24.6,
+      "lo": 46.7
+    },
+    "0x412d8c1d039e0b7b39dd40aeed255a37b86a062b": {
+      "t": 1794043927000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
