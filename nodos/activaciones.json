@@ -2120,6 +2120,20 @@
       "c": "Madrid, ES",
       "la": 40.4,
       "lo": -3.7
+    },
+    "0x7cf952c2fc712499e133175a24f8e93b462b10d6": {
+      "t": 1794015644000,
+      "n": "Sectora Node Los Angeles",
+      "c": "Los Angeles, US",
+      "la": 34.1,
+      "lo": -118.2
+    },
+    "0x9b36ef4e7515251d519f9d1b1748046928b1d231": {
+      "t": 1794015694000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
