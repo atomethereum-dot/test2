@@ -2218,6 +2218,13 @@
       "c": "Mexico City, MX",
       "la": 19.4,
       "lo": -99.2
+    },
+    "0x520011f962a0c208384ff976bab7ce9e633bc81e": {
+      "t": 1794030758000,
+      "n": "Sectora Node Shanghai",
+      "c": "Shanghai, CN",
+      "la": 31.2,
+      "lo": 121.5
     }
   }
 }
