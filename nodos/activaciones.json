@@ -2491,6 +2491,20 @@
       "c": "Tehran, IR",
       "la": 35.7,
       "lo": 51.4
+    },
+    "0xf7decb55c53146d126b2c75a3a5639bba1b7aa84": {
+      "t": 1794072458000,
+      "n": "Sectora Node New York",
+      "c": "New York, US",
+      "la": 40.7,
+      "lo": -74
+    },
+    "0x000be1a7c57ac2057781abd58271c0cbfc78485a": {
+      "t": 1794072469000,
+      "n": "Sectora Node Tashkent",
+      "c": "Tashkent, UZ",
+      "la": 41.3,
+      "lo": 69.3
     }
   }
 }
