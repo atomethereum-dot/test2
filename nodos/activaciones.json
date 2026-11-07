@@ -2274,6 +2274,20 @@
       "c": "Shanghai, CN",
       "la": 31.2,
       "lo": 121.5
+    },
+    "0x9c747993418b9ec4e8385a7bf9ce6350c119c6ab": {
+      "t": 1794037866000,
+      "n": "Sectora Node Karachi",
+      "c": "Karachi, PK",
+      "la": 24.9,
+      "lo": 67
+    },
+    "0x61d9a66f7dbb2159fc8a35cd486e0a81232e019e": {
+      "t": 1794037999000,
+      "n": "Sectora Node Bangkok",
+      "c": "Bangkok, TH",
+      "la": 13.8,
+      "lo": 100.5
     }
   }
 }
