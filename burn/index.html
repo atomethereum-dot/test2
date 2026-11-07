@@ -47,9 +47,14 @@ a{color:inherit;text-decoration:none}
 .nav a:hover{color:#fff}
 @media(min-width:900px){.nav{display:flex}}
 .top-r{display:flex;align-items:center;gap:16px;font-size:11px;color:var(--ink-2)}
-.lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:2px}
-.lang button{background:none;border:0;color:var(--ink-3);font:500 10px PlexMono,monospace;letter-spacing:.16em;padding:6px 10px;border-radius:999px;cursor:pointer}
-.lang button.on{background:#fff;color:#000}
+.lang{position:relative;display:block}
+.lang select{-webkit-appearance:none;appearance:none;background:rgba(0,0,0,.35) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23fff' stroke-width='1.4'/%3E%3C/svg%3E") no-repeat right 12px center;border:1px solid rgba(255,255,255,.22);border-radius:999px;color:#fff;font:500 10px PlexMono,monospace;letter-spacing:.12em;padding:8px 30px 8px 14px;cursor:pointer;max-width:46vw;text-overflow:ellipsis}
+[dir=rtl] .lang select{background-position:left 12px center;padding:8px 14px 8px 30px}
+.lang select:hover{border-color:#fff}.lang select option{background:#0b0f19;color:#fff}
+/* escrituras sin espaciado de letras (arabe se rompe con letter-spacing) */
+html[lang=zh] .m,html[lang=ja] .m,html[lang=ko] .m,html[lang=hi] .m{letter-spacing:.06em}
+html[lang=ar] .m,html[lang=ar] .btn{letter-spacing:0}
+h1,.clock,.segs,#ca,.sup-h b,.hud,.utc{direction:ltr}
 .utc{display:none}
 @media(min-width:640px){.utc{display:inline}}
 
@@ -91,8 +96,8 @@ h1 b{color:var(--blue-2);font-weight:600;text-shadow:0 0 40px rgba(21,105,255,.4
 .meta b{color:#fff;font-weight:500}
 @media(max-width:600px){.meta{grid-template-columns:1fr}}
 .supply{margin:24px auto 0;width:min(600px,100%);padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.sup-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:10px;color:var(--ink-3)}
-.sup-h b{font-size:13px;color:#fff;font-weight:500;letter-spacing:.08em}
+.sup-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 10px;font-size:10px;color:var(--ink-3)}
+.sup-h b{font-size:13px;color:#fff;font-weight:500;letter-spacing:.08em;white-space:nowrap}
 .sup-h b em{font-style:normal;color:var(--blue-2)}
 .segs{display:grid;grid-template-columns:repeat(50,1fr);gap:2px;margin-top:10px}
 .segs span{height:12px;background:#fff;border-radius:1px}
@@ -156,7 +161,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
 <header class="top">
   <a class="brand" href="https://sectoraorg.com/"><svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="9" fill="#1569ff"/><circle cx="50" cy="50" r="27.2" fill="none" stroke="#fff" stroke-width="6.1"/></svg>SECTORA</a>
   <nav class="nav m"><a href="https://sectoraorg.com/" data-t="navHome"></a><a href="https://sectoraorg.com/docs" data-t="navWp"></a><a href="https://sectoraorg.com/airdrop/" data-t="navAir"></a><a href="https://sectoraorg.com/#cap" data-t="calc"></a></nav>
-  <div class="top-r m"><span class="utc">UTC <b id="utc" style="color:#fff;font-weight:500">--:--:--</b></span><div class="lang" role="group" aria-label="Language"><button type="button" data-l="en">EN</button><button type="button" data-l="es">ES</button></div></div>
+  <div class="top-r m"><span class="utc">UTC <b id="utc" style="color:#fff;font-weight:500">--:--:--</b></span><label class="lang"><select id="lang" aria-label="Language"></select></label></div>
 </header>
 
 <div class="page">
@@ -236,43 +241,113 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betw
 (function(){
   /* misma fecha que la cuenta atras de la portada: 15 de marzo de 2027, 00:00 UTC */
   var META = Date.UTC(2027, 2, 15, 0, 0, 0);
+  /* 12 idiomas, los mismos de la web. Las cifras y fechas salen de Intl segun el idioma */
+  var H1 = '<s>50M</s><span class="ar">→</span><b>25M</b>';
   var TX = {
-    en: { live: 'Live countdown', h1: '<s>50M</s><span class="ar">→</span><b>25M</b>', sub: 'The $SECT burn: a one-time 50% supply reduction, forever.',
-      days: 'Days', hours: 'Hours', minutes: 'Minutes', seconds: 'Seconds',
-      n50: '50,000,000', n25: '25,000,000', supLab: 'Total supply', remain: '25M remain', burn: '25M burned',
-      date: 'March 15, 2027', local: 'Your time:', done: 'Burn day has arrived.',
-      buy: 'Buy $SECT', airdrop: 'Airdrop guide', calc: 'Price calculator', navHome: 'Home', navWp: 'Whitepaper', navAir: 'Airdrop',
-      k2: 'Supply', fIni: 'Initial supply', fAft: 'After the burn', fRed: 'Reduction', fCon: 'Contract', fConV: 'Renounced',
-      contract: '$SECT · ERC-20', copy: 'Copy', copied: 'Copied',
-      k3: 'Listings confirmed after the burn', conf: 'Confirmed',
-      s3: 'With a 25,000,000 supply. Each exchange will announce it on its X and social channels once the 50% burn is confirmed.',
+    en: { name: 'English', title: 'The $SECT Burn — Countdown', live: 'Live countdown', sub: 'The $SECT burn: a one-time 50% supply reduction, forever.',
+      days: 'Days', hours: 'Hours', minutes: 'Minutes', seconds: 'Seconds', supLab: 'Total supply', remain: '25M remain', burn: '25M burned',
+      local: 'Your time:', done: 'Burn day has arrived.', buy: 'Buy $SECT', airdrop: 'Airdrop guide', calc: 'Price calculator',
+      navHome: 'Home', navWp: 'Whitepaper', navAir: 'Airdrop', k2: 'Supply', fIni: 'Initial supply', fAft: 'After the burn', fRed: 'Reduction',
+      fCon: 'Contract', fConV: 'Renounced', copy: 'Copy', copied: 'Copied', k3: 'Listings confirmed after the burn', conf: 'Confirmed',
+      s3: 'With a {N25} supply. Each exchange will announce it on its X and social channels once the 50% burn is confirmed.',
       h4: 'Position yourself: <b>HOLD.</b>', fine: 'Figures are illustrative.' },
-    es: { live: 'Cuenta regresiva en vivo', h1: '<s>50M</s><span class="ar">→</span><b>25M</b>', sub: 'La quema de $SECT: reducción única del 50 % del supply, para siempre.',
-      days: 'Días', hours: 'Horas', minutes: 'Minutos', seconds: 'Segundos',
-      n50: '50.000.000', n25: '25.000.000', supLab: 'Supply total', remain: 'Quedan 25M', burn: 'Se queman 25M',
-      date: '15 de marzo de 2027', local: 'Tu hora:', done: 'Llegó el día de la quema.',
-      buy: 'Compra $SECT', airdrop: 'Guía del Airdrop', calc: 'Calculadora de precio', navHome: 'Inicio', navWp: 'Whitepaper', navAir: 'Airdrop',
-      k2: 'Supply', fIni: 'Supply inicial', fAft: 'Tras la quema', fRed: 'Reducción', fCon: 'Contrato', fConV: 'Renunciado',
-      contract: '$SECT · ERC-20', copy: 'Copiar', copied: 'Copiado',
-      k3: 'Listados confirmados tras la quema', conf: 'Confirmado',
-      s3: 'Con 25.000.000 de supply. Cada exchange lo anunciará en su X y redes sociales al confirmarse la quema del 50 %.',
-      h4: 'Posiciónate: <b>HOLD.</b>', fine: 'Las cifras son ilustrativas.' }
+    es: { name: 'Español', title: 'La quema de $SECT — Cuenta regresiva', live: 'Cuenta regresiva en vivo', sub: 'La quema de $SECT: reducción única del 50 % del supply, para siempre.',
+      days: 'Días', hours: 'Horas', minutes: 'Minutos', seconds: 'Segundos', supLab: 'Supply total', remain: 'Quedan 25M', burn: 'Se queman 25M',
+      local: 'Tu hora:', done: 'Llegó el día de la quema.', buy: 'Compra $SECT', airdrop: 'Guía del Airdrop', calc: 'Calculadora de precio',
+      navHome: 'Inicio', navWp: 'Whitepaper', navAir: 'Airdrop', k2: 'Supply', fIni: 'Supply inicial', fAft: 'Tras la quema', fRed: 'Reducción',
+      fCon: 'Contrato', fConV: 'Renunciado', copy: 'Copiar', copied: 'Copiado', k3: 'Listados confirmados tras la quema', conf: 'Confirmado',
+      s3: 'Con {N25} de supply. Cada exchange lo anunciará en su X y redes sociales al confirmarse la quema del 50 %.',
+      h4: 'Posiciónate: <b>HOLD.</b>', fine: 'Las cifras son ilustrativas.' },
+    pt: { name: 'Português', title: 'A queima do $SECT — Contagem regressiva', live: 'Contagem regressiva ao vivo', sub: 'A queima do $SECT: uma redução única de 50% do supply, para sempre.',
+      days: 'Dias', hours: 'Horas', minutes: 'Minutos', seconds: 'Segundos', supLab: 'Supply total', remain: 'Restam 25M', burn: '25M queimados',
+      local: 'Seu horário:', done: 'Chegou o dia da queima.', buy: 'Comprar $SECT', airdrop: 'Guia do Airdrop', calc: 'Calculadora de preço',
+      navHome: 'Início', navWp: 'Whitepaper', navAir: 'Airdrop', k2: 'Supply', fIni: 'Supply inicial', fAft: 'Após a queima', fRed: 'Redução',
+      fCon: 'Contrato', fConV: 'Renunciado', copy: 'Copiar', copied: 'Copiado', k3: 'Listagens confirmadas após a queima', conf: 'Confirmado',
+      s3: 'Com um supply de {N25}. Cada exchange vai anunciar no seu X e redes sociais quando a queima de 50% for confirmada.',
+      h4: 'Posicione-se: <b>HOLD.</b>', fine: 'Os números são ilustrativos.' },
+    fr: { name: 'Français', title: 'Le burn du $SECT — Compte à rebours', live: 'Compte à rebours en direct', sub: 'Le burn du $SECT : une réduction unique de 50 % de l’offre, pour toujours.',
+      days: 'Jours', hours: 'Heures', minutes: 'Minutes', seconds: 'Secondes', supLab: 'Offre totale', remain: '25M restants', burn: '25M brûlés',
+      local: 'Votre heure :', done: 'Le jour du burn est arrivé.', buy: 'Acheter $SECT', airdrop: 'Guide de l’airdrop', calc: 'Calculateur de prix',
+      navHome: 'Accueil', navWp: 'Whitepaper', navAir: 'Airdrop', k2: 'Offre', fIni: 'Offre initiale', fAft: 'Après le burn', fRed: 'Réduction',
+      fCon: 'Contrat', fConV: 'Renoncé', copy: 'Copier', copied: 'Copié', k3: 'Listings confirmés après le burn', conf: 'Confirmé',
+      s3: 'Avec une offre de {N25}. Chaque exchange l’annoncera sur son X et ses réseaux sociaux une fois le burn de 50 % confirmé.',
+      h4: 'Positionnez-vous : <b>HOLD.</b>', fine: 'Les chiffres sont illustratifs.' },
+    de: { name: 'Deutsch', title: 'Der $SECT-Burn — Countdown', live: 'Live-Countdown', sub: 'Der $SECT-Burn: eine einmalige Reduzierung des Supplys um 50 %, für immer.',
+      days: 'Tage', hours: 'Stunden', minutes: 'Minuten', seconds: 'Sekunden', supLab: 'Gesamtsupply', remain: '25M bleiben', burn: '25M verbrannt',
+      local: 'Ihre Zeit:', done: 'Der Tag des Burns ist da.', buy: '$SECT kaufen', airdrop: 'Airdrop-Anleitung', calc: 'Preisrechner',
+      navHome: 'Start', navWp: 'Whitepaper', navAir: 'Airdrop', k2: 'Supply', fIni: 'Anfangssupply', fAft: 'Nach dem Burn', fRed: 'Reduzierung',
+      fCon: 'Vertrag', fConV: 'Ohne Owner', copy: 'Kopieren', copied: 'Kopiert', k3: 'Bestätigte Listings nach dem Burn', conf: 'Bestätigt',
+      s3: 'Mit einem Supply von {N25}. Jede Börse kündigt es auf ihrem X und in ihren sozialen Netzwerken an, sobald der 50-%-Burn bestätigt ist.',
+      h4: 'Positionieren Sie sich: <b>HOLD.</b>', fine: 'Die Zahlen sind illustrativ.' },
+    it: { name: 'Italiano', title: 'Il burn di $SECT — Conto alla rovescia', live: 'Conto alla rovescia live', sub: 'Il burn di $SECT: una riduzione unica del 50% della supply, per sempre.',
+      days: 'Giorni', hours: 'Ore', minutes: 'Minuti', seconds: 'Secondi', supLab: 'Supply totale', remain: 'Restano 25M', burn: '25M bruciati',
+      local: 'La tua ora:', done: 'È arrivato il giorno del burn.', buy: 'Compra $SECT', airdrop: 'Guida all’airdrop', calc: 'Calcolatore di prezzo',
+      navHome: 'Home', navWp: 'Whitepaper', navAir: 'Airdrop', k2: 'Supply', fIni: 'Supply iniziale', fAft: 'Dopo il burn', fRed: 'Riduzione',
+      fCon: 'Contratto', fConV: 'Rinunciato', copy: 'Copia', copied: 'Copiato', k3: 'Listing confermati dopo il burn', conf: 'Confermato',
+      s3: 'Con una supply di {N25}. Ogni exchange lo annuncerà sul proprio X e sui social una volta confermato il burn del 50%.',
+      h4: 'Posizionati: <b>HOLD.</b>', fine: 'Le cifre sono illustrative.' },
+    ru: { name: 'Русский', title: 'Сжигание $SECT — Обратный отсчёт', live: 'Обратный отсчёт онлайн', sub: 'Сжигание $SECT: единоразовое сокращение предложения на 50%, навсегда.',
+      days: 'Дни', hours: 'Часы', minutes: 'Минуты', seconds: 'Секунды', supLab: 'Общее предложение', remain: 'Останется 25M', burn: 'Сгорит 25M',
+      local: 'Ваше время:', done: 'День сжигания настал.', buy: 'Купить $SECT', airdrop: 'Гайд по аирдропу', calc: 'Калькулятор цены',
+      navHome: 'Главная', navWp: 'Whitepaper', navAir: 'Аирдроп', k2: 'Предложение', fIni: 'Начальное предложение', fAft: 'После сжигания', fRed: 'Сокращение',
+      fCon: 'Контракт', fConV: 'Без владельца', copy: 'Копировать', copied: 'Скопировано', k3: 'Листинги, подтверждённые после сжигания', conf: 'Подтверждено',
+      s3: 'С предложением {N25}. Каждая биржа объявит об этом в своём X и соцсетях после подтверждения сжигания 50%.',
+      h4: 'Займите позицию: <b>HOLD.</b>', fine: 'Цифры носят иллюстративный характер.' },
+    zh: { name: '中文', title: '$SECT 销毁 — 倒计时', live: '实时倒计时', sub: '$SECT 销毁：一次性减少 50% 供应量，永久生效。',
+      days: '天', hours: '时', minutes: '分', seconds: '秒', supLab: '总供应量', remain: '剩余 25M', burn: '销毁 25M',
+      local: '你的时间：', done: '销毁日已到来。', buy: '购买 $SECT', airdrop: '空投指南', calc: '价格计算器',
+      navHome: '首页', navWp: '白皮书', navAir: '空投', k2: '供应量', fIni: '初始供应量', fAft: '销毁后', fRed: '减少',
+      fCon: '合约', fConV: '已放弃所有权', copy: '复制', copied: '已复制', k3: '销毁后已确认上线的交易所', conf: '已确认',
+      s3: '供应量为 {N25}。50% 销毁确认后，各交易所将在其 X 和社交媒体上公布。',
+      h4: '提前布局：<b>HOLD.</b>', fine: '数据仅供示意。' },
+    ja: { name: '日本語', title: '$SECT バーン — カウントダウン', live: 'ライブカウントダウン', sub: '$SECT のバーン：供給量を一度だけ 50% 削減、永久に。',
+      days: '日', hours: '時間', minutes: '分', seconds: '秒', supLab: '総供給量', remain: '残り 25M', burn: 'バーン 25M',
+      local: 'あなたの時刻：', done: 'バーン当日を迎えました。', buy: '$SECT を購入', airdrop: 'エアドロップガイド', calc: '価格計算機',
+      navHome: 'ホーム', navWp: 'ホワイトペーパー', navAir: 'エアドロップ', k2: '供給量', fIni: '初期供給量', fAft: 'バーン後', fRed: '削減',
+      fCon: 'コントラクト', fConV: '所有権放棄済み', copy: 'コピー', copied: 'コピーしました', k3: 'バーン後に上場が確定した取引所', conf: '確定',
+      s3: '供給量は {N25}。50% のバーンが確認され次第、各取引所が X と SNS で発表します。',
+      h4: 'ポジションを取ろう：<b>HOLD.</b>', fine: '数値は参考値です。' },
+    ko: { name: '한국어', title: '$SECT 소각 — 카운트다운', live: '실시간 카운트다운', sub: '$SECT 소각: 공급량 50%를 단 한 번, 영구히 줄입니다.',
+      days: '일', hours: '시간', minutes: '분', seconds: '초', supLab: '총 공급량', remain: '25M 남음', burn: '25M 소각',
+      local: '내 시간:', done: '소각일이 되었습니다.', buy: '$SECT 구매', airdrop: '에어드롭 가이드', calc: '가격 계산기',
+      navHome: '홈', navWp: '백서', navAir: '에어드롭', k2: '공급량', fIni: '초기 공급량', fAft: '소각 후', fRed: '감소',
+      fCon: '컨트랙트', fConV: '소유권 포기', copy: '복사', copied: '복사됨', k3: '소각 후 상장 확정 거래소', conf: '확정',
+      s3: '공급량 {N25}. 50% 소각이 확인되면 각 거래소가 X와 소셜 미디어에 공지합니다.',
+      h4: '포지션을 잡으세요: <b>HOLD.</b>', fine: '수치는 예시입니다.' },
+    ar: { name: 'العربية', title: 'حرق \u2066$SECT\u2069 — العدّ التنازلي', live: 'عدّ تنازلي مباشر', sub: 'حرق \u2066$SECT\u2069: تخفيض لمرة واحدة بنسبة 50% من المعروض، إلى الأبد.',
+      days: 'أيام', hours: 'ساعات', minutes: 'دقائق', seconds: 'ثوانٍ', supLab: 'إجمالي المعروض', remain: 'يتبقى 25M', burn: 'يُحرق 25M',
+      local: 'توقيتك:', done: 'حلّ يوم الحرق.', buy: 'اشترِ \u2066$SECT\u2069', airdrop: 'دليل الإيردروب', calc: 'حاسبة السعر',
+      navHome: 'الرئيسية', navWp: 'الورقة البيضاء', navAir: 'الإيردروب', k2: 'المعروض', fIni: 'المعروض الأولي', fAft: 'بعد الحرق', fRed: 'التخفيض',
+      fCon: 'العقد', fConV: 'بدون مالك', copy: 'نسخ', copied: 'تم النسخ', k3: 'إدراجات مؤكدة بعد الحرق', conf: 'مؤكد',
+      s3: 'بمعروض قدره {N25}. ستعلن كل منصة عن ذلك على حسابها في X وشبكاتها الاجتماعية بمجرد تأكيد حرق 50%.',
+      h4: 'اتخذ موقعك: <b>HOLD.</b>', fine: 'الأرقام توضيحية.' },
+    hi: { name: 'हिन्दी', title: '$SECT बर्न — काउंटडाउन', live: 'लाइव काउंटडाउन', sub: '$SECT बर्न: सप्लाई में एक बार की 50% कटौती, हमेशा के लिए।',
+      days: 'दिन', hours: 'घंटे', minutes: 'मिनट', seconds: 'सेकंड', supLab: 'कुल सप्लाई', remain: '25M बचेंगे', burn: '25M बर्न',
+      local: 'आपका समय:', done: 'बर्न का दिन आ गया है।', buy: '$SECT खरीदें', airdrop: 'एयरड्रॉप गाइड', calc: 'प्राइस कैलकुलेटर',
+      navHome: 'होम', navWp: 'व्हाइटपेपर', navAir: 'एयरड्रॉप', k2: 'सप्लाई', fIni: 'शुरुआती सप्लाई', fAft: 'बर्न के बाद', fRed: 'कटौती',
+      fCon: 'कॉन्ट्रैक्ट', fConV: 'बिना ओनर', copy: 'कॉपी करें', copied: 'कॉपी हो गया', k3: 'बर्न के बाद कन्फ़र्म लिस्टिंग', conf: 'कन्फ़र्म',
+      s3: '{N25} की सप्लाई के साथ। 50% बर्न कन्फ़र्म होने पर हर एक्सचेंज अपने X और सोशल मीडिया पर इसकी घोषणा करेगा।',
+      h4: 'पोज़िशन लें: <b>HOLD.</b>', fine: 'आंकड़े केवल उदाहरण के लिए हैं।' }
   };
-  /* abre siempre en ingles; el cambio a ES solo dura la visita */
+  var ORDER = ['en', 'es', 'pt', 'fr', 'de', 'it', 'ru', 'zh', 'ja', 'ko', 'ar', 'hi'];
+  var LOC = { ar: 'ar-u-nu-latn', hi: 'hi-u-nu-latn', zh: 'zh-CN' };
+  /* abre siempre en ingles; ?lang=xx elige idioma y el cambio dura la visita */
   var lang = 'en';
-  try { if (sessionStorage.getItem('sectora:burn-lang') === 'es') lang = 'es'; } catch (e) {}
+  try { var q = new URLSearchParams(location.search).get('lang'); if (q && TX[q]) lang = q; else { var g = sessionStorage.getItem('sectora:burn-lang'); if (g && TX[g]) lang = g; } } catch (e) {}
+  var sel = document.getElementById('lang');
+  ORDER.forEach(function(k){ var o = document.createElement('option'); o.value = k; o.textContent = k.toUpperCase() + ' · ' + TX[k].name; sel.appendChild(o); });
   function pinta(){
-    var t = TX[lang]; document.documentElement.lang = lang;
-    document.querySelectorAll('[data-t]').forEach(function(el){ el.textContent = t[el.getAttribute('data-t')]; });
-    document.querySelectorAll('[data-h]').forEach(function(el){ el.innerHTML = t[el.getAttribute('data-h')]; });
-    document.querySelectorAll('.lang button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-l') === lang); });
-    document.title = lang === 'es' ? 'La quema de $SECT — Cuenta regresiva · Sectora Foundation' : 'The $SECT Burn — Countdown · Sectora Foundation';
-    var loc = document.getElementById('local');
-    try { loc.textContent = new Intl.DateTimeFormat(lang, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(META)); } catch (e) { loc.textContent = new Date(META).toString(); }
+    var t = TX[lang], loc = LOC[lang] || lang, nf = function(n){ try { return new Intl.NumberFormat(loc).format(n); } catch (e) { return String(n); } };
+    var root = document.documentElement; root.lang = lang; root.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    var vals = Object.assign({}, t, { h1: H1, n50: nf(50000000), n25: nf(25000000), contract: '$SECT · ERC-20', s3: t.s3.replace('{N25}', nf(25000000)) });
+    try { vals.date = new Intl.DateTimeFormat(loc, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(META)); } catch (e) { vals.date = '2027-03-15'; }
+    document.querySelectorAll('[data-t]').forEach(function(el){ el.textContent = vals[el.getAttribute('data-t')]; });
+    document.querySelectorAll('[data-h]').forEach(function(el){ el.innerHTML = vals[el.getAttribute('data-h')]; });
+    sel.value = lang; document.title = t.title + ' · Sectora Foundation';
+    var lt = document.getElementById('local');
+    try { lt.textContent = new Intl.DateTimeFormat(loc, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(META)); } catch (e) { lt.textContent = new Date(META).toString(); }
   }
-  document.querySelectorAll('.lang button').forEach(function(b){
-    b.addEventListener('click', function(){ lang = b.getAttribute('data-l'); try { sessionStorage.setItem('sectora:burn-lang', lang); } catch (e) {} pinta(); });
-  });
+  sel.addEventListener('change', function(){ lang = sel.value; try { sessionStorage.setItem('sectora:burn-lang', lang); } catch (e) {} pinta(); });
   pinta();
   var segs = document.getElementById('segs'); for (var i = 0; i < 50; i++) { var s = document.createElement('span'); if (i >= 25) s.className = 'q'; segs.appendChild(s); }
 
