@@ -2540,6 +2540,13 @@
       "c": "Accra, GH",
       "la": 5.5,
       "lo": -0.2
+    },
+    "0xe96aff16b7cae6736c453100f74946e300bc1282": {
+      "t": 1794084539000,
+      "n": "Sectora Node Cairo",
+      "c": "Cairo, EG",
+      "la": 30.1,
+      "lo": 31.2
     }
   }
 }
