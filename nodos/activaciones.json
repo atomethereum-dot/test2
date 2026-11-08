@@ -2813,6 +2813,20 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0xf9c60f002d9addfdce934420dedf25943543c037": {
+      "t": 1794155012000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
+    },
+    "0xff3c6c0ea636cdb75b1af006944b81fb694419dd": {
+      "t": 1794155025000,
+      "n": "Sectora Node Bahia",
+      "c": "Bahia, BR",
+      "la": -13,
+      "lo": -38.5
     }
   }
 }
