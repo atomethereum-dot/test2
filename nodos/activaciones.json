@@ -2561,6 +2561,13 @@
       "c": "London, GB",
       "la": 51.5,
       "lo": -0.1
+    },
+    "0x425ed1b57ce57651b000e771eb5cb2661ba7c49f": {
+      "t": 1794097064000,
+      "n": "Sectora Node London",
+      "c": "London, GB",
+      "la": 51.5,
+      "lo": -0.1
     }
   }
 }
