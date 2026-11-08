@@ -2575,6 +2575,13 @@
       "c": "Minsk, BY",
       "la": 53.9,
       "lo": 27.6
+    },
+    "0x55227f23a7fb65bf1da0b9eef21ceefab19d2c70": {
+      "t": 1794098719000,
+      "n": "Sectora Node Berlin",
+      "c": "Berlin, DE",
+      "la": 52.5,
+      "lo": 13.4
     }
   }
 }
