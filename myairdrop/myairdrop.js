@@ -278,6 +278,8 @@
       li(a.lv >= 0, t("rq1"), t("rq1s", { n: fmt(s.staked, s.staked % 1 ? 2 : 0) })) +
       li(a.on, t("rq2"), a.on ? t("rq2on") : t("rq2off")) +
       li(a.state === "run" && in30 > MIN, t("rq3"), a.state !== "run" ? t("rq3w") : in30 > MIN ? t("rq3ok") : t("rq3s", { d: in30 })) + "</ul>";
+    /* nota: el premio se completa en 150 dias y cada 30 se asegura un tramo (con los numeros de su nivel) */
+    if (window.SANota150) html += window.SANota150.html(lang, a.lv >= 0 ? { lv: a.lv, staked: s.staked, prize: a.prize } : null);
 
     /* tarjetas */
     var onMs = 0, spans = d.hist && d.hist.node && d.hist.node.spans;
