@@ -2582,6 +2582,13 @@
       "c": "Berlin, DE",
       "la": 52.5,
       "lo": 13.4
+    },
+    "0x7ed35f8d7da6a677b4f782fd54b02a453432bf81": {
+      "t": 1794102906000,
+      "n": "Sectora Node Vilnius",
+      "c": "Vilnius, LT",
+      "la": 54.7,
+      "lo": 25.3
     }
   }
 }
