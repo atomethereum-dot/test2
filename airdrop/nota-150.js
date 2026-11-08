@@ -15,6 +15,7 @@
       me: "Every 30 days, another part is secured. Your level: {lv} with {s} SECT in staking ({p} SECT prize):",
       d: "Day {d}", sec: "<b>{n} SECT</b> secured", full: "<b>{n} SECT</b> · full prize",
       p3: "It also keeps adding up every day in between. Your prize is paid in SECT: if the price of SECT goes up, the value of your prize goes up with it.",
+      p5: "Deliveries start at the launch of SectoraEVM, after the burn. With the supply reduction and the launch of the network, this could act as a catalyst for the price of SECT over time. That way, while the burn and the launch arrive, you keep generating your prize every day, without wasting time and securing your reward.",
       p4: "If you leave and come back, your count continues where it was. You don’t need to do anything: it counts on its own, and My Airdrop shows which day you’re on.",
       pk: "Choose your level" },
     es: { k: "Importante", h: "Tu premio se asegura por etapas",
@@ -23,6 +24,7 @@
       me: "Cada 30 días se asegura un tramo más. Tu nivel: {lv} con {s} SECT en staking (premio de {p} SECT):",
       d: "Día {d}", sec: "<b>{n} SECT</b> asegurados", full: "<b>{n} SECT</b> · premio completo",
       p3: "Entre un tramo y otro también sigue sumando cada día. Tu premio se paga en SECT: si el precio de SECT sube, el valor de tu premio sube con él.",
+      p5: "Las entregas empiezan con el lanzamiento de SectoraEVM, después de la quema. Con la reducción del supply y el lanzamiento de la red, esto podría servir como catalizador para el precio de SECT con el tiempo. De esa manera, mientras llegan la quema y el lanzamiento, sigues generando tu premio cada día, sin perder tiempo y asegurando tu recompensa.",
       p4: "Si sales y vuelves, tu conteo sigue donde iba. No tienes que hacer nada: cuenta solo, y en Mi Airdrop ves en qué día vas.",
       pk: "Elige tu nivel" },
     pt: { k: "Importante", h: "Seu prêmio fica garantido por etapas",
@@ -31,6 +33,7 @@
       me: "A cada 30 dias, mais uma parte fica garantida. Seu nível: {lv} com {s} SECT em staking (prêmio de {p} SECT):",
       d: "Dia {d}", sec: "<b>{n} SECT</b> garantidos", full: "<b>{n} SECT</b> · prêmio completo",
       p3: "Entre uma etapa e outra, ele também continua somando todos os dias. Seu prêmio é pago em SECT: se o preço do SECT subir, o valor do seu prêmio sobe junto.",
+      p5: "As entregas começam com o lançamento da SectoraEVM, depois da queima. Com a redução do supply e o lançamento da rede, isso pode servir como catalisador para o preço do SECT ao longo do tempo. Assim, enquanto a queima e o lançamento chegam, você continua gerando seu prêmio todos os dias, sem perder tempo e garantindo sua recompensa.",
       p4: "Se você sair e voltar, sua contagem continua de onde parou. Você não precisa fazer nada: ela conta sozinha, e no Meu Airdrop você vê em que dia está.",
       pk: "Escolha seu nível" },
     fr: { k: "Important", h: "Votre récompense est sécurisée par étapes",
@@ -39,6 +42,7 @@
       me: "Tous les 30 jours, une nouvelle part est sécurisée. Votre niveau : {lv} avec {s} SECT en staking (récompense de {p} SECT) :",
       d: "Jour {d}", sec: "<b>{n} SECT</b> sécurisés", full: "<b>{n} SECT</b> · récompense complète",
       p3: "Entre deux étapes, elle continue aussi d’augmenter chaque jour. Votre récompense est versée en SECT : si le prix du SECT monte, la valeur de votre récompense monte avec lui.",
+      p5: "Les distributions commencent au lancement de SectoraEVM, après le burn. Avec la réduction de l’offre et le lancement du réseau, cela pourrait servir de catalyseur au prix du SECT avec le temps. Ainsi, en attendant le burn et le lancement, vous continuez à générer votre récompense chaque jour, sans perdre de temps et en la sécurisant.",
       p4: "Si vous partez puis revenez, votre compteur reprend là où il en était. Vous n’avez rien à faire : il compte tout seul, et Mon Airdrop indique à quel jour vous en êtes.",
       pk: "Choisissez votre niveau" },
     de: { k: "Wichtig", h: "Deine Belohnung wird in Etappen gesichert",
@@ -47,6 +51,7 @@
       me: "Alle 30 Tage wird ein weiterer Teil gesichert. Dein Level: {lv} mit {s} SECT im Staking ({p} SECT Belohnung):",
       d: "Tag {d}", sec: "<b>{n} SECT</b> gesichert", full: "<b>{n} SECT</b> · volle Belohnung",
       p3: "Dazwischen wächst sie ebenfalls jeden Tag weiter. Deine Belohnung wird in SECT ausgezahlt: Wenn der Preis von SECT steigt, steigt der Wert deiner Belohnung mit.",
+      p5: "Die Auszahlungen beginnen mit dem Start von SectoraEVM, nach dem Burn. Mit der Verringerung des Angebots und dem Start des Netzwerks könnte das mit der Zeit als Katalysator für den Preis von SECT wirken. So erzeugst du, während Burn und Start näher rücken, jeden Tag weiter deine Belohnung – ohne Zeit zu verlieren und mit gesicherter Belohnung.",
       p4: "Wenn du gehst und zurückkommst, läuft dein Zähler dort weiter, wo er stand. Du musst nichts tun: Er zählt von selbst, und in Mein Airdrop siehst du, an welchem Tag du bist.",
       pk: "Wähle dein Level" },
     ru: { k: "Важно", h: "Ваш приз закрепляется поэтапно",
@@ -55,6 +60,7 @@
       me: "Каждые 30 дней закрепляется ещё одна часть. Ваш уровень: {lv} с {s} SECT в стейкинге (приз {p} SECT):",
       d: "День {d}", sec: "<b>{n} SECT</b> закреплено", full: "<b>{n} SECT</b> · полный приз",
       p3: "Между этапами он тоже продолжает расти каждый день. Приз выплачивается в SECT: если цена SECT вырастет, вместе с ней вырастет и стоимость вашего приза.",
+      p5: "Выдачи начинаются с запуском SectoraEVM, после сжигания. Благодаря сокращению предложения и запуску сети это со временем может стать катализатором для цены SECT. Так, пока приближаются сжигание и запуск, вы каждый день продолжаете наращивать свой приз — не теряя времени и закрепляя награду.",
       p4: "Если вы уйдёте и вернётесь, счётчик продолжится с того места, где остановился. Ничего делать не нужно: он считает сам, а в разделе «Мой аирдроп» видно, какой у вас день.",
       pk: "Выберите уровень" },
     zh: { k: "重要", h: "你的奖励分阶段归你所有",
@@ -63,6 +69,7 @@
       me: "每 30 天，又有一部分归你所有。你的等级：{lv}，质押 {s} SECT（奖励 {p} SECT）：",
       d: "第 {d} 天", sec: "<b>{n} SECT</b> 已归你所有", full: "<b>{n} SECT</b> · 全额奖励",
       p3: "两个阶段之间也会每天继续累计。你的奖励以 SECT 发放：如果 SECT 价格上涨，你的奖励价值也会随之上涨。",
+      p5: "发放从 SectoraEVM 上线时开始，在销毁之后进行。随着供应量减少和网络上线，这可能会随着时间推移成为 SECT 价格的催化剂。这样，在销毁和上线到来之前，你每天都在继续累积奖励，不浪费时间，同时确保你的奖励归你所有。",
       p4: "如果你离开后再回来，计数会从中断处继续。你无需做任何事：它会自动计数，你可以在“我的空投”中查看自己处于第几天。",
       pk: "选择你的等级" },
     ja: { k: "重要", h: "報酬は段階的に確定します",
@@ -71,6 +78,7 @@
       me: "30 日ごとに、さらに一部が確定します。あなたのレベル：{lv}、{s} SECT をステーキング（報酬 {p} SECT）：",
       d: "{d} 日目", sec: "<b>{n} SECT</b> 確定", full: "<b>{n} SECT</b> · 報酬全額",
       p3: "段階と段階の間も毎日増え続けます。報酬は SECT で支払われます。SECT の価格が上がれば、報酬の価値も一緒に上がります。",
+      p5: "配布は SectoraEVM のローンチ時、バーンの後に始まります。供給量の削減とネットワークのローンチにより、これは時間とともに SECT の価格の触媒になる可能性があります。こうして、バーンとローンチを待つ間も毎日報酬を積み上げ、時間を無駄にせず報酬を確定させていけます。",
       p4: "離脱して戻っても、カウントは止まったところから続きます。何もする必要はありません。自動でカウントされ、マイエアドロップで今が何日目か確認できます。",
       pk: "レベルを選択" },
     ko: { k: "중요", h: "보상은 단계별로 확정됩니다",
@@ -79,6 +87,7 @@
       me: "30일마다 일부가 추가로 확정됩니다. 내 레벨: {lv}, 스테이킹 {s} SECT (보상 {p} SECT):",
       d: "{d}일째", sec: "<b>{n} SECT</b> 확정", full: "<b>{n} SECT</b> · 전체 보상",
       p3: "단계 사이에도 매일 계속 늘어납니다. 보상은 SECT로 지급됩니다. SECT 가격이 오르면 보상의 가치도 함께 오릅니다.",
+      p5: "지급은 소각 이후 SectoraEVM 출시와 함께 시작됩니다. 공급량 감소와 네트워크 출시로, 이는 시간이 지나며 SECT 가격의 촉매가 될 수 있습니다. 이렇게 소각과 출시를 기다리는 동안에도 매일 보상을 쌓으며, 시간을 낭비하지 않고 보상을 확정해 나갈 수 있습니다.",
       p4: "나갔다가 돌아와도 카운트는 멈춘 곳에서 이어집니다. 아무것도 할 필요가 없습니다. 자동으로 계산되며, 내 에어드랍에서 지금 며칠째인지 확인할 수 있습니다.",
       pk: "레벨 선택" },
     ar: { k: "مهم", h: "جائزتك تُضمن على مراحل",
@@ -87,6 +96,7 @@
       me: "كل 30 يومًا يُضمن جزء آخر. مستواك: {lv} مع ‏{s} SECT في التخزين (جائزة ‏{p} SECT):",
       d: "اليوم {d}", sec: "<b>‏{n} SECT</b> مضمونة", full: "<b>‏{n} SECT</b> · الجائزة كاملة",
       p3: "وبين مرحلة وأخرى تستمر في الزيادة كل يوم. تُدفع جائزتك بعملة SECT: إذا ارتفع سعر SECT، ترتفع قيمة جائزتك معه.",
+      p5: "يبدأ التوزيع مع إطلاق SectoraEVM، بعد الحرق. ومع خفض المعروض وإطلاق الشبكة، قد يكون ذلك محفّزًا لسعر SECT مع مرور الوقت. وبهذه الطريقة، وأنت تنتظر الحرق والإطلاق، تواصل تكوين جائزتك كل يوم، دون إضاعة الوقت ومع ضمان مكافأتك.",
       p4: "إذا غادرت ثم عدت، يستمر عدّادك من حيث توقف. لا تحتاج إلى فعل أي شيء: فهو يحتسب تلقائيًا، ويمكنك أن ترى في «إيردروب الخاص بي» في أي يوم أنت.",
       pk: "اختر مستواك" },
     hi: { k: "महत्वपूर्ण", h: "आपका इनाम चरणों में सुरक्षित होता है",
@@ -95,6 +105,7 @@
       me: "हर 30 दिन में एक और हिस्सा सुरक्षित होता है। आपका स्तर: {lv}, स्टेकिंग में {s} SECT ({p} SECT इनाम):",
       d: "दिन {d}", sec: "<b>{n} SECT</b> सुरक्षित", full: "<b>{n} SECT</b> · पूरा इनाम",
       p3: "बीच के दिनों में भी यह हर दिन बढ़ता रहता है। आपका इनाम SECT में दिया जाता है: अगर SECT की कीमत बढ़ती है, तो आपके इनाम का मूल्य भी उसके साथ बढ़ता है।",
+      p5: "वितरण बर्न के बाद, SectoraEVM के लॉन्च के साथ शुरू होता है। सप्लाई में कमी और नेटवर्क के लॉन्च के साथ, यह समय के साथ SECT की कीमत के लिए उत्प्रेरक बन सकता है। इस तरह, बर्न और लॉन्च आने तक आप हर दिन अपना इनाम बनाते रहते हैं, बिना समय गँवाए और अपना इनाम सुरक्षित करते हुए।",
       p4: "अगर आप बाहर निकलकर वापस आते हैं, तो आपकी गिनती वहीं से जारी रहती है जहाँ रुकी थी। आपको कुछ नहीं करना है: यह अपने आप गिनती है, और मेरा एयरड्रॉप में आप देख सकते हैं कि आप किस दिन पर हैं।",
       pk: "अपना स्तर चुनें" }
   };
@@ -167,6 +178,7 @@
       '<p class="n150-p n150-s">' + fill(intro, { lv: lv.n, s: num(l, staked), p: num(l, prize) }) + "</p>" +
       '<ol class="n150-t">' + rows + "</ol>" +
       '<p class="n150-p n150-s">' + T.p3 + "</p>" +
+      '<p class="n150-p n150-s">' + T.p5 + "</p>" +
       '<p class="n150-p n150-s" style="margin-bottom:0">' + T.p4 + "</p></aside>";
   }
   function mount(el, l, pick) { el.innerHTML = html(l || document.documentElement.lang, null, pick, tema(el)); }
