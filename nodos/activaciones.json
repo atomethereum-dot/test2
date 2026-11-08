@@ -2589,6 +2589,13 @@
       "c": "Vilnius, LT",
       "la": 54.7,
       "lo": 25.3
+    },
+    "0xcc0c33e3c6f0b5321af0bdceff27e1715fb52551": {
+      "t": 1794103804000,
+      "n": "Sectora Node Casablanca",
+      "c": "Casablanca, MA",
+      "la": 33.6,
+      "lo": -7.6
     }
   }
 }
