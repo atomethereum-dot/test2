@@ -2946,6 +2946,20 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0xdfc3f10c509726932c40c244f37f2a7294d664e0": {
+      "t": 1794180961000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "São Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
+    },
+    "0xc2b46996c88c88ef5d23af2ed64d546e333fd3e8": {
+      "t": 1794181189000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
