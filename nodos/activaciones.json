@@ -2596,6 +2596,13 @@
       "c": "Casablanca, MA",
       "la": 33.6,
       "lo": -7.6
+    },
+    "0x0fd70b639db2061311a24266653b85d31276360f": {
+      "t": 1794109554000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
     }
   }
 }
