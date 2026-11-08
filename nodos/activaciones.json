@@ -2841,6 +2841,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x8725b6ce3b5a747a97057bf7025fcb30e6c8163a": {
+      "t": 1794158744000,
+      "n": "Sectora Node Sofia",
+      "c": "Sofia, BG",
+      "la": 42.7,
+      "lo": 23.3
     }
   }
 }
