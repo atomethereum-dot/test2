@@ -2925,6 +2925,13 @@
       "c": "Port-au-Prince, HT",
       "la": 18.5,
       "lo": -72.3
+    },
+    "0x6b51424d9144bfa41d94349322ca7a27da08617e": {
+      "t": 1794177895000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
