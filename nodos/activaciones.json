@@ -2771,6 +2771,13 @@
       "c": "Kathmandu, NP",
       "la": 27.7,
       "lo": 85.3
+    },
+    "0x9c342c0b1f8e4db5918aabe3f07e339dbc777c0f": {
+      "t": 1794151922000,
+      "n": "Sectora Node Istanbul",
+      "c": "Istanbul, TR",
+      "la": 41,
+      "lo": 29
     }
   }
 }
