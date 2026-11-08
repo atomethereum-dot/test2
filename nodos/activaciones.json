@@ -2750,6 +2750,20 @@
       "c": "Tehran, IR",
       "la": 35.7,
       "lo": 51.4
+    },
+    "0xd232e98f921d5cdd2eb735b31c871e61196b53dc": {
+      "t": 1794149645000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
+    },
+    "0xb99a8c195c4eea1f178a1c2c09f20b3b77caebd0": {
+      "t": 1794149769000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
