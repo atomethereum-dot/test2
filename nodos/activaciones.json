@@ -2603,6 +2603,13 @@
       "c": "Tehran, IR",
       "la": 35.7,
       "lo": 51.4
+    },
+    "0x11ede89bfd8b79bb0f5e3ec22d1c6fd5cae59007": {
+      "t": 1794115146000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
     }
   }
 }
