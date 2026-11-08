@@ -2848,6 +2848,13 @@
       "c": "Sofia, BG",
       "la": 42.7,
       "lo": 23.3
+    },
+    "0xb8a7fe90bdb7f1a85a9e9f23cc9595d0677161f3": {
+      "t": 1794160791000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
