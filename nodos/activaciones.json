@@ -2764,6 +2764,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x5ee6493bdfe20295482ee9aafe0575f1f7dd4a1f": {
+      "t": 1794151546000,
+      "n": "Sectora Node Kathmandu",
+      "c": "Kathmandu, NP",
+      "la": 27.7,
+      "lo": 85.3
     }
   }
 }
