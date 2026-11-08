@@ -2680,6 +2680,13 @@
       "c": "Yekaterinburg, RU",
       "la": 56.9,
       "lo": 60.6
+    },
+    "0xbea1443321572d2df7a87011a9755739a40574ff": {
+      "t": 1794141485000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
