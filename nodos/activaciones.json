@@ -2806,6 +2806,13 @@
       "c": "São Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x6496ea76d11845e7b2167fcbf69c065020b98656": {
+      "t": 1794154426000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
