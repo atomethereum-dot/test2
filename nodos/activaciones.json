@@ -2792,6 +2792,20 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x5e4d393b8f90823c5938638b468ecf47cc5aabc7": {
+      "t": 1794153514000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
+    },
+    "0x89e3fef686465c5d80fbf3a7836697b6fe7b27e0": {
+      "t": 1794153593000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "São Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
