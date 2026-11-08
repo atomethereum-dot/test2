@@ -2736,6 +2736,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x2d3d6e9e5d431dd5aed516879d6b2cfbff46ff99": {
+      "t": 1794145726000,
+      "n": "Sectora Node Irkutsk",
+      "c": "Irkutsk, RU",
+      "la": 52.3,
+      "lo": 104.3
     }
   }
 }
