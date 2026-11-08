@@ -2862,6 +2862,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x2b2c30fb932a4aaf05612e92ecce7d0d1c98e238": {
+      "t": 1794162178000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
