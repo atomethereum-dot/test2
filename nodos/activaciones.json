@@ -2694,6 +2694,34 @@
       "c": "Makassar, ID",
       "la": -5.1,
       "lo": 119.4
+    },
+    "0xc5ac381fa5d7006e75587bde34398585f72374bd": {
+      "t": 1794143264000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "São Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
+    },
+    "0x0160365579b1403409142b9b730c155fcbb3c412": {
+      "t": 1794143363000,
+      "n": "Sectora Node Aden",
+      "c": "Aden, YE",
+      "la": 12.8,
+      "lo": 45.2
+    },
+    "0x79421ff537b0586b1dbe4eb7ad7aee01c184851a": {
+      "t": 1794143429000,
+      "n": "Sectora Node Lisbon",
+      "c": "Lisboa, PT",
+      "la": 38.7,
+      "lo": -9.1
+    },
+    "0xbb927e4e4604d2da0af3c83b7d94d3863cda82ab": {
+      "t": 1794143461000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
     }
   }
 }
