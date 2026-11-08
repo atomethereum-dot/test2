@@ -2673,6 +2673,13 @@
       "c": "Karachi, PK",
       "la": 24.9,
       "lo": 67
+    },
+    "0x92074a5a349ddd3d289028ba1a9ccd2af1ff3606": {
+      "t": 1794138627000,
+      "n": "Sectora Node Yekaterinburg",
+      "c": "Yekaterinburg, RU",
+      "la": 56.9,
+      "lo": 60.6
     }
   }
 }
