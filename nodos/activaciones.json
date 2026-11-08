@@ -2729,6 +2729,13 @@
       "c": "中国上海",
       "la": 31.2,
       "lo": 121.5
+    },
+    "0xf7908ac9dfc32aca1b31537c4ae216b9f4fa3f00": {
+      "t": 1794145323000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
