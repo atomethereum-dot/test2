@@ -2568,6 +2568,13 @@
       "c": "London, GB",
       "la": 51.5,
       "lo": -0.1
+    },
+    "0x125c5426eb244b2e36ade3eeec4e5eb0742e6d37": {
+      "t": 1794098644000,
+      "n": "Sectora Node Minsk",
+      "c": "Minsk, BY",
+      "la": 53.9,
+      "lo": 27.6
     }
   }
 }
