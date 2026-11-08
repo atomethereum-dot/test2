@@ -2743,6 +2743,13 @@
       "c": "Irkutsk, RU",
       "la": 52.3,
       "lo": 104.3
+    },
+    "0x52f7f77c51b27fef4dbebf6d084aa38a203ad838": {
+      "t": 1794146168000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
     }
   }
 }
