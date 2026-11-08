@@ -2638,6 +2638,13 @@
       "c": "Samara, RU",
       "la": 53.2,
       "lo": 50.1
+    },
+    "0x0ee37ff13a31e4f273a948c7fa861e4b8dc03270": {
+      "t": 1794133354000,
+      "n": "Sectora Node Kuala Lumpur",
+      "c": "Kuala Lumpur, MY",
+      "la": 3.2,
+      "lo": 101.7
     }
   }
 }
