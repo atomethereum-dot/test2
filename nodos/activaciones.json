@@ -2687,6 +2687,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0xf97af70b7cf76624f8c1066fa192215142599f60": {
+      "t": 1794142571000,
+      "n": "Sectora Node Makassar",
+      "c": "Makassar, ID",
+      "la": -5.1,
+      "lo": 119.4
     }
   }
 }
