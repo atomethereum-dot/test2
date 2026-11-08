@@ -2939,6 +2939,13 @@
       "c": "Lisbon, PT",
       "la": 38.7,
       "lo": -9.1
+    },
+    "0xbdfd5937bcf1b65e69bfc1542d89fb7e0e79cad6": {
+      "t": 1794179561000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
