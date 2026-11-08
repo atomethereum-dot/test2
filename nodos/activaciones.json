@@ -2778,6 +2778,20 @@
       "c": "Istanbul, TR",
       "la": 41,
       "lo": 29
+    },
+    "0x6c823d6d3326dc7730b48f5640d2ed6f52d6ba11": {
+      "t": 1794152486000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
+    },
+    "0x0eb2798cbde138eeddcaabc3f4177617e5e7e093": {
+      "t": 1794152551000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
