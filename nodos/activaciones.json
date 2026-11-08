@@ -2645,6 +2645,13 @@
       "c": "Kuala Lumpur, MY",
       "la": 3.2,
       "lo": 101.7
+    },
+    "0x6204575b2ec81abefdd01dc8df4008ab4657f362": {
+      "t": 1794134647000,
+      "n": "Sectora Node Tokyo",
+      "c": "Tokyo, JP",
+      "la": 35.7,
+      "lo": 139.7
     }
   }
 }
