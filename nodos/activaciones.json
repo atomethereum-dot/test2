@@ -2918,6 +2918,13 @@
       "c": "Belem, BR",
       "la": -1.4,
       "lo": -48.5
+    },
+    "0x80e621181f4ccb03fef43acd1082fdaa22688c85": {
+      "t": 1794173748000,
+      "n": "Sectora Node Port-au-Prince",
+      "c": "Port-au-Prince, HT",
+      "la": 18.5,
+      "lo": -72.3
     }
   }
 }
