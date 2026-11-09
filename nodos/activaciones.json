@@ -3184,6 +3184,20 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x29db2fff6f6f1e4a7b6a08ea0c9d8befd6d1ab83": {
+      "t": 1794227022000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
+    },
+    "0x732d32dd2cf5bf11594c5f5ae69a7920a5ef8247": {
+      "t": 1794227306000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
     }
   }
 }
