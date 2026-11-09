@@ -3233,6 +3233,13 @@
       "c": "Kabul, AF",
       "la": 34.5,
       "lo": 69.2
+    },
+    "0xc63c0f17e7fcdd0a2a49271cc6d3741c22ccef79": {
+      "t": 1794232288000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
