@@ -3282,6 +3282,13 @@
       "c": "Vilnius, LT",
       "la": 54.7,
       "lo": 25.3
+    },
+    "0xc7b859ab0de0a12f6842bdf95c68c9bc4784fdb0": {
+      "t": 1794236273000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
