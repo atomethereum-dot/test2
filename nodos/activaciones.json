@@ -3429,6 +3429,13 @@
       "c": "Santiago, CL",
       "la": -33.5,
       "lo": -70.7
+    },
+    "0xa916e383c74ca5a301da5406dbab09b319095244": {
+      "t": 1794259819000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
