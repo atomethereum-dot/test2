@@ -3394,6 +3394,13 @@
       "c": "Dhaka, BD",
       "la": 23.7,
       "lo": 90.4
+    },
+    "0x3f493e55ee2cd36accfee6aaddd66ee89530e4a4": {
+      "t": 1794251758000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
     }
   }
 }
