@@ -3072,6 +3072,13 @@
       "c": "Colombo, LK",
       "la": 6.9,
       "lo": 79.8
+    },
+    "0x56b6146ba64828620f6a909e08deb0f40bb0d34b": {
+      "t": 1794205747000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
     }
   }
 }
