@@ -3310,6 +3310,13 @@
       "c": "Dhaka, BD",
       "la": 23.7,
       "lo": 90.4
+    },
+    "0xc191704151808280f297bbbb9a4b2efe9687181c": {
+      "t": 1794241537000,
+      "n": "Sectora Node Toronto",
+      "c": "Toronto, CA",
+      "la": 43.6,
+      "lo": -79.4
     }
   }
 }
