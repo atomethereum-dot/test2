@@ -3275,6 +3275,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x10dc1c6a17199c7a2a93050a6e696d5d994f0ab1": {
+      "t": 1794235707000,
+      "n": "Sectora Node Vilnius",
+      "c": "Vilnius, LT",
+      "la": 54.7,
+      "lo": 25.3
     }
   }
 }
