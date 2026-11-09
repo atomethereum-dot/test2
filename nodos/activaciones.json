@@ -2988,6 +2988,13 @@
       "c": "Mexico City, MX",
       "la": 19.4,
       "lo": -99.2
+    },
+    "0xde397484ac4e9ee838802ee8db52c2b3dd850632": {
+      "t": 1794184271000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
