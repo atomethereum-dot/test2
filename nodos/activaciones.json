@@ -3331,6 +3331,13 @@
       "c": "Lisbon, PT",
       "la": 38.7,
       "lo": -9.1
+    },
+    "0x5004459299fee65ddd16d4b921c0ed9c5fdc0c7d": {
+      "t": 1794244390000,
+      "n": "Sectora Node Addis Ababa",
+      "c": "Addis Ababa, ET",
+      "la": 9,
+      "lo": 38.7
     }
   }
 }
