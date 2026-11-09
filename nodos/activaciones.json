@@ -3086,6 +3086,13 @@
       "c": "Moscow, RU",
       "la": 55.8,
       "lo": 37.6
+    },
+    "0xad6377e46fcf5a3f518daf223eda404bba667aa8": {
+      "t": 1794207318000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
