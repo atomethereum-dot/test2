@@ -3100,6 +3100,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0xdc9ac7d009a177667ff8b59db83fbfc1c34c09c8": {
+      "t": 1794211408000,
+      "n": "Sectora Node Tokyo",
+      "c": "Tokyo, JP",
+      "la": 35.7,
+      "lo": 139.7
     }
   }
 }
