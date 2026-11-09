@@ -3380,6 +3380,13 @@
       "c": "Qyzylorda, KZ",
       "la": 44.8,
       "lo": 65.5
+    },
+    "0x999abb7696dc51382328bee465b2a2a9ad1d92a6": {
+      "t": 1794251051000,
+      "n": "Sectora Node Dubai",
+      "c": "Dubai, AE",
+      "la": 25.3,
+      "lo": 55.3
     }
   }
 }
