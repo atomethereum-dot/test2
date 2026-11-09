@@ -3443,6 +3443,13 @@
       "c": "New York, US",
       "la": 40.7,
       "lo": -74
+    },
+    "0xb0372a2a7b367274aa0f2ffcc24be48f29aaff37": {
+      "t": 1794264190000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
