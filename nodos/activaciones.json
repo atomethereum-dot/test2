@@ -3352,6 +3352,20 @@
       "c": "Moscow, RU",
       "la": 55.8,
       "lo": 37.6
+    },
+    "0x0fc0b2b6428c94b13cb644eb2bc489df7ffd03a5": {
+      "t": 1794248909000,
+      "n": "Sectora Node Qyzylorda",
+      "c": "Qyzylorda, KZ",
+      "la": 44.8,
+      "lo": 65.5
+    },
+    "0x64db2a465298ae72be78bd2c9cc05dcf95e8d338": {
+      "t": 1794249100000,
+      "n": "Sectora Node Cairo",
+      "c": "Cairo, EG",
+      "la": 30.1,
+      "lo": 31.2
     }
   }
 }
