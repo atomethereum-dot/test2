@@ -3345,6 +3345,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0xc5ab2ac4e1e55aeceb0261162af0b650f7d07639": {
+      "t": 1794248198000,
+      "n": "Sectora Node Moscow",
+      "c": "Moscow, RU",
+      "la": 55.8,
+      "lo": 37.6
     }
   }
 }
