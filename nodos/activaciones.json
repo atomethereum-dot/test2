@@ -3226,6 +3226,13 @@
       "c": "Paris, FR",
       "la": 48.9,
       "lo": 2.3
+    },
+    "0xb36256694031e684cc9de12c8803b4b6ba9a8d72": {
+      "t": 1794231673000,
+      "n": "Sectora Node Kabul",
+      "c": "Kabul, AF",
+      "la": 34.5,
+      "lo": 69.2
     }
   }
 }
