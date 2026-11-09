@@ -3044,6 +3044,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0xc52b1888d787b3da8f9086d2fba556c11c29528c": {
+      "t": 1794197752000,
+      "n": "Sectora Node Colombo",
+      "c": "Colombo, LK",
+      "la": 6.9,
+      "lo": 79.8
     }
   }
 }
