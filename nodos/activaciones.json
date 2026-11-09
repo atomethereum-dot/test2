@@ -3254,6 +3254,20 @@
       "c": "Colombo, LK",
       "la": 6.9,
       "lo": 79.8
+    },
+    "0x7d6c820c8d2397f89764b0ed713e9001cd294520": {
+      "t": 1794233524000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
+    },
+    "0xa890a32027e4f7c14459bf19b116b574db5b68d3": {
+      "t": 1794233654000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
     }
   }
 }
