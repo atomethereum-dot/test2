@@ -3030,6 +3030,13 @@
       "c": "Phoenix, US",
       "la": 33.4,
       "lo": -112.1
+    },
+    "0xff33786af59b06ee4305c1cf610d19265cc01942": {
+      "t": 1794194270000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
