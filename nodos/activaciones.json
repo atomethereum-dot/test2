@@ -3296,6 +3296,13 @@
       "c": "Tehran, IR",
       "la": 35.7,
       "lo": 51.4
+    },
+    "0xe100aa410581e512b41c69cb721ad0a63228f784": {
+      "t": 1794239174000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "São Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
