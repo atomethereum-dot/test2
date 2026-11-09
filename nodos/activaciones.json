@@ -3149,6 +3149,13 @@
       "c": "Shanghai, CN",
       "la": 31.2,
       "lo": 121.5
+    },
+    "0x4036094fe9db2599b3c3fc6c63529c16eb74c34a": {
+      "t": 1794219947000,
+      "n": "Sectora Node Lisbon",
+      "c": "Lisbon, PT",
+      "la": 38.7,
+      "lo": -9.1
     }
   }
 }
