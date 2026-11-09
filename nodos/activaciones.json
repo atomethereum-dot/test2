@@ -3163,6 +3163,13 @@
       "c": "Cairo, EG",
       "la": 30.1,
       "lo": 31.2
+    },
+    "0x1a309294f9d25336fb58e60f9832ed31a168ee9d": {
+      "t": 1794223331000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
