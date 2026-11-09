@@ -3121,6 +3121,13 @@
       "c": "Dhaka, BD",
       "la": 23.7,
       "lo": 90.4
+    },
+    "0x2c09e4d34297aa4fe677b5e2c4fad52e3d9965e8": {
+      "t": 1794215200000,
+      "n": "Sectora Node Bangkok",
+      "c": "Bangkok, TH",
+      "la": 13.8,
+      "lo": 100.5
     }
   }
 }
