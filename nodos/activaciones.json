@@ -3324,6 +3324,13 @@
       "c": "Karachi, PK",
       "la": 24.9,
       "lo": 67
+    },
+    "0x9eda47c4f566b5a81ac064c877ee45951b5b0088": {
+      "t": 1794244058000,
+      "n": "Sectora Node Lisbon",
+      "c": "Lisbon, PT",
+      "la": 38.7,
+      "lo": -9.1
     }
   }
 }
