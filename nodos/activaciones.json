@@ -3212,6 +3212,13 @@
       "c": "Budapest, HU",
       "la": 47.5,
       "lo": 19.1
+    },
+    "0x38db744df062f322f8477e030d6c109b4e3e14d9": {
+      "t": 1794230766000,
+      "n": "Sectora Node Warsaw",
+      "c": "Warsaw, PL",
+      "la": 52.2,
+      "lo": 21
     }
   }
 }
