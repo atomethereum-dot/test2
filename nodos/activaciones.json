@@ -3338,6 +3338,13 @@
       "c": "Addis Ababa, ET",
       "la": 9,
       "lo": 38.7
+    },
+    "0x7b933948691a0b198deee41c4599b47519a75fc2": {
+      "t": 1794245078000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
