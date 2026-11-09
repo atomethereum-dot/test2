@@ -3373,6 +3373,13 @@
       "c": "Tehran, IR",
       "la": 35.7,
       "lo": 51.4
+    },
+    "0x9ffa27defdd507f7596d13aeb6352ba06469104a": {
+      "t": 1794250595000,
+      "n": "Sectora Node Qyzylorda",
+      "c": "Qyzylorda, KZ",
+      "la": 44.8,
+      "lo": 65.5
     }
   }
 }
