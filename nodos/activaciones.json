@@ -3065,6 +3065,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x92c5ec8c82779fb0befb1e5673c5e3bec7d0fcbd": {
+      "t": 1794201155000,
+      "n": "Sectora Node Colombo",
+      "c": "Colombo, LK",
+      "la": 6.9,
+      "lo": 79.8
     }
   }
 }
