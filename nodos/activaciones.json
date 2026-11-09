@@ -3135,6 +3135,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0xd087fc160dd7d9550393ec8485a3e29fd78c74e1": {
+      "t": 1794217877000,
+      "n": "Sectora Node Denver",
+      "c": "Denver, US",
+      "la": 39.7,
+      "lo": -105
     }
   }
 }
