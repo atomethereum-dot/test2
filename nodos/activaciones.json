@@ -3366,6 +3366,13 @@
       "c": "Cairo, EG",
       "la": 30.1,
       "lo": 31.2
+    },
+    "0xb4732190b1dc76f290746dfdc0ff9b4b485da741": {
+      "t": 1794249166000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
     }
   }
 }
