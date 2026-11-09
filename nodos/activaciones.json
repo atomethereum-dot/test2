@@ -3170,6 +3170,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x1c21ab61273d026e2d7fecd23722d6dc82ef2206": {
+      "t": 1794225718000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
