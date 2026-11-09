@@ -3408,6 +3408,13 @@
       "c": "Chicago, US",
       "la": 41.9,
       "lo": -87.7
+    },
+    "0x2b6dba15077f36c2cbb516267f73b9dfd66e0bf3": {
+      "t": 1794254128000,
+      "n": "Sectora Node Istanbul",
+      "c": "Istanbul, TR",
+      "la": 41,
+      "lo": 29
     }
   }
 }
