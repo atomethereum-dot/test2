@@ -3422,6 +3422,13 @@
       "c": "Toronto, CA",
       "la": 43.6,
       "lo": -79.4
+    },
+    "0xe6d615b512a010cb52626d2705922abd1d7cf6cb": {
+      "t": 1794259488000,
+      "n": "Sectora Node Santiago",
+      "c": "Santiago, CL",
+      "la": -33.5,
+      "lo": -70.7
     }
   }
 }
