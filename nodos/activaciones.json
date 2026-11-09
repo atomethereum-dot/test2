@@ -3058,6 +3058,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xa38a25dabeb4ef7ac68436c7b7078ee41348b030": {
+      "t": 1794198792000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
