@@ -3289,6 +3289,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x1df1006f8635cd221f1cecebe2250e048942e926": {
+      "t": 1794238021000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
     }
   }
 }
