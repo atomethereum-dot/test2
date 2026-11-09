@@ -3268,6 +3268,13 @@
       "c": "Dhaka, BD",
       "la": 23.7,
       "lo": 90.4
+    },
+    "0xf825d2edd9da0b833525b3188e9f7b63d0a23349": {
+      "t": 1794234809000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
