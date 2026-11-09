@@ -3303,6 +3303,13 @@
       "c": "São Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x962ce1203154ea07f7db9d92f50c553be4de792a": {
+      "t": 1794240950000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
     }
   }
 }
