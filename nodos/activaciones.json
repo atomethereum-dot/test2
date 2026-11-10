@@ -3576,6 +3576,13 @@
       "c": "Muscat, OM",
       "la": 23.6,
       "lo": 58.6
+    },
+    "0xb11817557ff1c5b0eaa83cdb55f9ef1275d5ec3e": {
+      "t": 1794308629000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
