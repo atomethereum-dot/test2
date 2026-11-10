@@ -3590,6 +3590,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x8494eb80d3dbe7662ca9bf488ecdd1ec0d1a4d61": {
+      "t": 1794310516000,
+      "n": "Sectora Node Kathmandu",
+      "c": "Kathmandu, NP",
+      "la": 27.7,
+      "lo": 85.3
     }
   }
 }
