@@ -3786,6 +3786,13 @@
       "c": "Guatemala, GT",
       "la": 14.6,
       "lo": -90.5
+    },
+    "0x50bb74a954e39cc4d9b976aba1b76c8869db7972": {
+      "t": 1794347756000,
+      "n": "Sectora Node Mogadishu",
+      "c": "Mogadishu, SO",
+      "la": 2.1,
+      "lo": 45.4
     }
   }
 }
