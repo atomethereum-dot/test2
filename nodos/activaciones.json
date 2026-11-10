@@ -3779,6 +3779,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x783b1d5c467629f45cefd1245afad12a8b9ec7dc": {
+      "t": 1794345195000,
+      "n": "Sectora Node Guatemala",
+      "c": "Guatemala, GT",
+      "la": 14.6,
+      "lo": -90.5
     }
   }
 }
