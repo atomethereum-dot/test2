@@ -3793,6 +3793,13 @@
       "c": "Mogadishu, SO",
       "la": 2.1,
       "lo": 45.4
+    },
+    "0x339882b44825b5088f2e27f92451b85476ee5ca5": {
+      "t": 1794350784000,
+      "n": "Sectora Node Casablanca",
+      "c": "Casablanca, MA",
+      "la": 33.6,
+      "lo": -7.6
     }
   }
 }
