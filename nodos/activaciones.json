@@ -3471,6 +3471,13 @@
       "c": "Accra, GH",
       "la": 5.5,
       "lo": -0.2
+    },
+    "0x814a7814cf0982da97b68ce1dcf3b23c932436aa": {
+      "t": 1794271200000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
