@@ -3814,6 +3814,13 @@
       "c": "Amsterdam, NL",
       "la": 52.4,
       "lo": 4.9
+    },
+    "0xa81ed4e697cf1dfba4fee45744eba5c5c5731cce": {
+      "t": 1794353906000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
     }
   }
 }
