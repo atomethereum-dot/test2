@@ -3499,6 +3499,13 @@
       "c": "Bangkok, TH",
       "la": 13.8,
       "lo": 100.5
+    },
+    "0xe2bec2769a145777b5b7d4777b1b1f1f39bb58f4": {
+      "t": 1794285189000,
+      "n": "Sectora Node Makassar",
+      "c": "Makassar, ID",
+      "la": -5.1,
+      "lo": 119.4
     }
   }
 }
