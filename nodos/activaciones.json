@@ -3758,6 +3758,13 @@
       "c": "Karachi, PK",
       "la": 24.9,
       "lo": 67
+    },
+    "0x3f6176794119b18df34e203a146c4318df9738d0": {
+      "t": 1794341836000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
