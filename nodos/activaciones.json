@@ -3695,6 +3695,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0xb8b51d65e23d370aec243dda186f7d57f90ae8a3": {
+      "t": 1794328745000,
+      "n": "Sectora Node Amsterdam",
+      "c": "Amsterdam, NL",
+      "la": 52.4,
+      "lo": 4.9
     }
   }
 }
