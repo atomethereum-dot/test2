@@ -3730,6 +3730,13 @@
       "c": "Singapore, SG",
       "la": 1.3,
       "lo": 103.8
+    },
+    "0x0d0d621f37bfdbd5c5a23a8da46d1a1f7ae15d74": {
+      "t": 1794335815000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
