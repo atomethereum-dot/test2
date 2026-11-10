@@ -3807,6 +3807,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x2eab05c5637dcce2283cf36ffbf16f82ae48f07b": {
+      "t": 1794353149000,
+      "n": "Sectora Node Amsterdam",
+      "c": "Amsterdam, NL",
+      "la": 52.4,
+      "lo": 4.9
     }
   }
 }
