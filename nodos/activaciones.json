@@ -3513,6 +3513,13 @@
       "c": "Kuala Lumpur, MY",
       "la": 3.2,
       "lo": 101.7
+    },
+    "0x4e2e4886dd57fa4dc4dff51807ddfb46781417f8": {
+      "t": 1794288266000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
