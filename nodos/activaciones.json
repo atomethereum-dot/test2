@@ -3534,6 +3534,13 @@
       "c": "Amsterdam, NL",
       "la": 52.4,
       "lo": 4.9
+    },
+    "0xf37067b400ac8da86e5f74627e8ba5269d0113f3": {
+      "t": 1794291956000,
+      "n": "Sectora Node Boise",
+      "c": "Boise, US",
+      "la": 43.6,
+      "lo": -116.2
     }
   }
 }
