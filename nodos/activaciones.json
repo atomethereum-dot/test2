@@ -3520,6 +3520,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x8e4bd4bc4814ff50633348a8231eaa7dbde7bb2c": {
+      "t": 1794289909000,
+      "n": "Sectora Node Karachi",
+      "c": "Karachi, PK",
+      "la": 24.9,
+      "lo": 67
     }
   }
 }
