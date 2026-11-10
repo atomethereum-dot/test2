@@ -3569,6 +3569,13 @@
       "c": "Shanghai, CN",
       "la": 31.2,
       "lo": 121.5
+    },
+    "0x35c1adb5808ac525f884955498d94d71fb15e631": {
+      "t": 1794307333000,
+      "n": "Sectora Node Muscat",
+      "c": "Muscat, OM",
+      "la": 23.6,
+      "lo": 58.6
     }
   }
 }
