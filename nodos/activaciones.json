@@ -3464,6 +3464,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x0ad04cd0188eddb963e8b7a4a9f699919c155350": {
+      "t": 1794269291000,
+      "n": "Sectora Node Accra",
+      "c": "Accra, GH",
+      "la": 5.5,
+      "lo": -0.2
     }
   }
 }
