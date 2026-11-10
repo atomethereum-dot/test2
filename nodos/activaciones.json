@@ -3744,6 +3744,13 @@
       "c": "Madrid, ES",
       "la": 40.4,
       "lo": -3.7
+    },
+    "0x5d59b90ea3cacd56c62de3ec8b6d19a45a4d37b6": {
+      "t": 1794339173000,
+      "n": "Sectora Node Bangkok",
+      "c": "Bangkok, TH",
+      "la": 13.8,
+      "lo": 100.5
     }
   }
 }
