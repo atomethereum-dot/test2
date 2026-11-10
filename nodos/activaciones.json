@@ -3506,6 +3506,13 @@
       "c": "Makassar, ID",
       "la": -5.1,
       "lo": 119.4
+    },
+    "0x008473c59a8465c5b73f6ec1fe2f1971f3ba615a": {
+      "t": 1794287260000,
+      "n": "Sectora Node Kuala Lumpur",
+      "c": "Kuala Lumpur, MY",
+      "la": 3.2,
+      "lo": 101.7
     }
   }
 }
