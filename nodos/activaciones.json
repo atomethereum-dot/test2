@@ -3541,6 +3541,13 @@
       "c": "Boise, US",
       "la": 43.6,
       "lo": -116.2
+    },
+    "0xb4b91064b42a650d36de6e598f6be24e4a543249": {
+      "t": 1794296926000,
+      "n": "Sectora Node Karachi",
+      "c": "Karachi, PK",
+      "la": 24.9,
+      "lo": 67
     }
   }
 }
