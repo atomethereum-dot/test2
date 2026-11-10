@@ -3597,6 +3597,13 @@
       "c": "Kathmandu, NP",
       "la": 27.7,
       "lo": 85.3
+    },
+    "0x760989144b1507e5ae12f729387e785e0c329bc0": {
+      "t": 1794312548000,
+      "n": "Sectora Node Los Angeles",
+      "c": "Los Angeles, US",
+      "la": 34.1,
+      "lo": -118.2
     }
   }
 }
