@@ -3632,6 +3632,13 @@
       "c": "Lisbon, PT",
       "la": 38.7,
       "lo": -9.1
+    },
+    "0x6e9925d9bc6ca0fd8d665beb9216d758b3948d77": {
+      "t": 1794319520000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
