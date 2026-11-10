@@ -3702,6 +3702,13 @@
       "c": "Amsterdam, NL",
       "la": 52.4,
       "lo": 4.9
+    },
+    "0x0e083234028c3db33dbc0fc1a666ce20b9263a0e": {
+      "t": 1794331374000,
+      "n": "Sectora Node Moscow",
+      "c": "Moscow, RU",
+      "la": 55.8,
+      "lo": 37.6
     }
   }
 }
