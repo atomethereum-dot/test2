@@ -3527,6 +3527,13 @@
       "c": "Karachi, PK",
       "la": 24.9,
       "lo": 67
+    },
+    "0x76aed3f9e0a0032d2631c7b92173f80f9c6eb5c8": {
+      "t": 1794290120000,
+      "n": "Sectora Node Amsterdam",
+      "c": "Amsterdam, NL",
+      "la": 52.4,
+      "lo": 4.9
     }
   }
 }
