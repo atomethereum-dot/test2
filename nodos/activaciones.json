@@ -3884,6 +3884,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x6fc4e25d9f55c1b18e4fa85873c975ba4b023509": {
+      "t": 1794379899000,
+      "n": "Sectora Node Manila",
+      "c": "Manila, PH",
+      "la": 14.6,
+      "lo": 121
     }
   }
 }
