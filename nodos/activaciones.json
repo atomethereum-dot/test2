@@ -3856,6 +3856,20 @@
       "c": "Tehran, IR",
       "la": 35.7,
       "lo": 51.4
+    },
+    "0x0a17ccd8867c0bd3730eca9dd9a85046e5ec1581": {
+      "t": 1794375201000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
+    },
+    "0xb0597fb2d14ce56fbc7e305603e53b3ea1308298": {
+      "t": 1794375216000,
+      "n": "Sectora Node Chicago",
+      "c": "Chicago, US",
+      "la": 41.9,
+      "lo": -87.7
     }
   }
 }
