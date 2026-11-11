@@ -3996,6 +3996,13 @@
       "c": "Tripoli, LY",
       "la": 32.9,
       "lo": 13.2
+    },
+    "0xa75918b82094b1c9dbbb824340362474a9db581a": {
+      "t": 1794424545000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
