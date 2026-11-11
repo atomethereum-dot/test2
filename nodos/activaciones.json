@@ -3940,6 +3940,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0xb48a2da82cdf48bc48bf46f58302139721a2f63b": {
+      "t": 1794397400000,
+      "n": "Sectora Node Paris",
+      "c": "Paris, FR",
+      "la": 48.9,
+      "lo": 2.3
     }
   }
 }
