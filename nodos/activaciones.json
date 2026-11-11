@@ -3891,6 +3891,13 @@
       "c": "Manila, PH",
       "la": 14.6,
       "lo": 121
+    },
+    "0x4371ddb7874974131111757954eb354d67caa01f": {
+      "t": 1794380054000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
