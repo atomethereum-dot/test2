@@ -3912,6 +3912,13 @@
       "c": "Chicago, US",
       "la": 41.9,
       "lo": -87.7
+    },
+    "0xefd9cef52ef898bb590a70bc09cc894d24ec0045": {
+      "t": 1794391819000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
