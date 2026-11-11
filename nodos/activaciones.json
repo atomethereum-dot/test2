@@ -3821,6 +3821,13 @@
       "c": "Dhaka, BD",
       "la": 23.7,
       "lo": 90.4
+    },
+    "0x27563a856660c850b1ebeca22b5c8a153033b4da": {
+      "t": 1794363443000,
+      "n": "Sectora Node Denver",
+      "c": "Denver, US",
+      "la": 39.7,
+      "lo": -105
     }
   }
 }
