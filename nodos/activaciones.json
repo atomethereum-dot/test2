@@ -3954,6 +3954,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0xb61a9b0a475e20f374cb2d1346c77e75acb68d99": {
+      "t": 1794399618000,
+      "n": "Sectora Node Cairo",
+      "c": "Cairo, EG",
+      "la": 30.1,
+      "lo": 31.2
     }
   }
 }
