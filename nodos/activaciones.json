@@ -3828,6 +3828,13 @@
       "c": "Denver, US",
       "la": 39.7,
       "lo": -105
+    },
+    "0x0f388cd5f918b864dc5c453867f1aff4f211a340": {
+      "t": 1794372358000,
+      "n": "Sectora Node Vientiane",
+      "c": "Vientiane, LA",
+      "la": 18,
+      "lo": 102.6
     }
   }
 }
