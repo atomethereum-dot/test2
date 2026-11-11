@@ -3870,6 +3870,13 @@
       "c": "Chicago, US",
       "la": 41.9,
       "lo": -87.7
+    },
+    "0x84c12e96e77e7a1d91325caf0d6f1d7bebdc6eb0": {
+      "t": 1794379122000,
+      "n": "Sectora Node Ho Chi Minh",
+      "c": "phố Hồ Chí Minh, Việt Nam",
+      "la": 10.8,
+      "lo": 106.7
     }
   }
 }
