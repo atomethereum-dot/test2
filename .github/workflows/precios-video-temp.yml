@@ -16,4 +16,4 @@ jobs:
           curl -s "https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=0x8c9984b06281f1ca9416e493c2e602aab08513db&vs_currencies=usd&include_24hr_change=true&include_last_updated_at=true"
           echo
           echo "=== 7D ==="
-          for id in bitcoin ethereum binancecoin solana; do echo "$id"; curl -s "https://api.coingecko.com/api/v3/coins/$id/market_chart?vs_currency=usd&days=7&interval=daily" | python3 -c "import sys,json; d=json.load(sys.stdin)['prices']; print(d[0], d[-1])"; sleep 3; done
+          for id in bitcoin ethereum binancecoin solana; do sleep 8; echo "$id"; curl -s "https://api.coingecko.com/api/v3/coins/$id/market_chart?vs_currency=usd&days=7&interval=daily" | python3 -c "import sys,json; d=json.load(sys.stdin); print(json.dumps([[p[0], round(p[1], 4)] for p in d.get('prices', [])]) if 'prices' in d else d)"; done
