@@ -3877,6 +3877,13 @@
       "c": "phố Hồ Chí Minh, Việt Nam",
       "la": 10.8,
       "lo": 106.7
+    },
+    "0x6fd68d60406798f278e02c2919f054f66bd7ee3f": {
+      "t": 1794379550000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
