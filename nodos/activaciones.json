@@ -3835,6 +3835,13 @@
       "c": "Vientiane, LA",
       "la": 18,
       "lo": 102.6
+    },
+    "0xf0de45dc483ecf26e2651adca6c6f2cdf866ea68": {
+      "t": 1794373327000,
+      "n": "Sectora Node Ho Chi Minh",
+      "c": "Ho Chi Minh, VN",
+      "la": 10.8,
+      "lo": 106.7
     }
   }
 }
