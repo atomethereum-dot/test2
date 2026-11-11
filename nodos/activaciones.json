@@ -3898,6 +3898,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0xb11f06c2554ef5b434197888af08a8f8cb82e04f": {
+      "t": 1794382602000,
+      "n": "Sectora Node Cairo",
+      "c": "Cairo, EG",
+      "la": 30.1,
+      "lo": 31.2
     }
   }
 }
