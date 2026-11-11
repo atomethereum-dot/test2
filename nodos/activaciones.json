@@ -3968,6 +3968,13 @@
       "c": "Paris, FR",
       "la": 48.9,
       "lo": 2.3
+    },
+    "0x837676a564ba0618a7d39ad0d674a392d5ce1c02": {
+      "t": 1794411901000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
