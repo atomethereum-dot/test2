@@ -3961,6 +3961,13 @@
       "c": "Cairo, EG",
       "la": 30.1,
       "lo": 31.2
+    },
+    "0x1802fff02b4b8ad5f1cba122c0250583b71c0f39": {
+      "t": 1794408843000,
+      "n": "Sectora Node Paris",
+      "c": "Paris, FR",
+      "la": 48.9,
+      "lo": 2.3
     }
   }
 }
