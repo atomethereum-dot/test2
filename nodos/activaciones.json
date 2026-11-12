@@ -4024,6 +4024,13 @@
       "c": "Seoul, KR",
       "la": 37.5,
       "lo": 127
+    },
+    "0xde7a3d3bf498b1f0a9ce7938a894f3b76a4142b8": {
+      "t": 1794453523000,
+      "n": "Sectora Node Montevideo",
+      "c": "Montevideo, UY",
+      "la": -34.9,
+      "lo": -56.2
     }
   }
 }
