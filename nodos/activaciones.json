@@ -4108,6 +4108,13 @@
       "c": "Nairobi, KE",
       "la": -1.3,
       "lo": 36.8
+    },
+    "0x00f43e6c0fba9c32f281cc53c3608a2a6b834dcc": {
+      "t": 1794506828000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
