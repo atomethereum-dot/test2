@@ -4073,6 +4073,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x1af74039c372d19aaa240ce701fd1a49f05f61a5": {
+      "t": 1794488413000,
+      "n": "Sectora Node Recife",
+      "c": "Recife, BR",
+      "la": -8.1,
+      "lo": -34.9
     }
   }
 }
