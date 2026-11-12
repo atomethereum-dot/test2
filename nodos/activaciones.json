@@ -4031,6 +4031,13 @@
       "c": "Montevideo, UY",
       "la": -34.9,
       "lo": -56.2
+    },
+    "0x217ee427bbb549909ebcf30fcdf38641e820a90b": {
+      "t": 1794455521000,
+      "n": "Sectora Node Caracas",
+      "c": "Caracas, VE",
+      "la": 10.5,
+      "lo": -66.9
     }
   }
 }
