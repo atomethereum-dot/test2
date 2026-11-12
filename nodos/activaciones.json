@@ -4038,6 +4038,13 @@
       "c": "Caracas, VE",
       "la": 10.5,
       "lo": -66.9
+    },
+    "0x379f28be089bdb0e046c8f041bdaccf816640d22": {
+      "t": 1794468565000,
+      "n": "Sectora Node New York",
+      "c": "New York, US",
+      "la": 40.7,
+      "lo": -74
     }
   }
 }
