@@ -4066,6 +4066,13 @@
       "c": "Kuala Lumpur, MY",
       "la": 3.2,
       "lo": 101.7
+    },
+    "0x379f6034650076d980d7b20519c7aa062b8914fd": {
+      "t": 1794480017000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
