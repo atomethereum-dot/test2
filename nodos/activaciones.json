@@ -4080,6 +4080,13 @@
       "c": "Recife, BR",
       "la": -8.1,
       "lo": -34.9
+    },
+    "0x451bdd73da3d230740b509274afb6d971455b945": {
+      "t": 1794491780000,
+      "n": "Sectora Node Karachi",
+      "c": "Karachi, PK",
+      "la": 24.9,
+      "lo": 67
     }
   }
 }
