@@ -4192,6 +4192,13 @@
       "c": "Paris, FR",
       "la": 48.9,
       "lo": 2.3
+    },
+    "0x171f90470b7d267e8f857ae1e1ea9cbadd2588a9": {
+      "t": 1794606356000,
+      "n": "Sectora Node Makassar",
+      "c": "Makassar, ID",
+      "la": -5.1,
+      "lo": 119.4
     }
   }
 }
