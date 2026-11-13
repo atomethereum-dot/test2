@@ -4164,6 +4164,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x8058e2565cefb7f4e3a7970191ca6742dac95d2b": {
+      "t": 1794585911000,
+      "n": "Sectora Node Kathmandu",
+      "c": "Kathmandu, NP",
+      "la": 27.7,
+      "lo": 85.3
     }
   }
 }
