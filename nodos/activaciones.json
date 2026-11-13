@@ -4199,6 +4199,13 @@
       "c": "Makassar, ID",
       "la": -5.1,
       "lo": 119.4
+    },
+    "0xdec37bd7b975b43c5e7090e0f4ab37a71388dd3c": {
+      "t": 1794606496000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
