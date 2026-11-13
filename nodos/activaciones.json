@@ -4143,6 +4143,13 @@
       "c": "Brisbane, AU",
       "la": -27.5,
       "lo": 153
+    },
+    "0x68bcb6ed9e331c2771e707e325724da81e6ed917": {
+      "t": 1794545615000,
+      "n": "Sectora Node Lome",
+      "c": "Lome, TG",
+      "la": 6.1,
+      "lo": 1.2
     }
   }
 }
