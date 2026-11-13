@@ -4136,6 +4136,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x75428fbbf6474fa877f4de5aadf327a0102b9612": {
+      "t": 1794532659000,
+      "n": "Sectora Node Brisbane",
+      "c": "Brisbane, AU",
+      "la": -27.5,
+      "lo": 153
     }
   }
 }
