@@ -4220,6 +4220,13 @@
       "c": "Shanghai, CN",
       "la": 31.2,
       "lo": 121.5
+    },
+    "0xa8e5888673da41c1cb7cbc70350917c69a4822a6": {
+      "t": 1794633825000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
