@@ -4248,6 +4248,13 @@
       "c": "Central, HK",
       "la": 22.3,
       "lo": 114.2
+    },
+    "0xccbdfa25de95d23a5da0f15357d8dd69e5d5f627": {
+      "t": 1794672619000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
