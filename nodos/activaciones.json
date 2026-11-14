@@ -4262,6 +4262,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x1245a5d27bd9c3c112d2b83f9e10b458cbfad3bf": {
+      "t": 1794689851000,
+      "n": "Sectora Node Montevideo",
+      "c": "Montevideo, UY",
+      "la": -34.9,
+      "lo": -56.2
     }
   }
 }
