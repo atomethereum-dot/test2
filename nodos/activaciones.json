@@ -4241,6 +4241,13 @@
       "c": "Shanghai, CN",
       "la": 31.2,
       "lo": 121.5
+    },
+    "0x3d4c8a274afa5e955712be2b7b6734813afb0575": {
+      "t": 1794647319000,
+      "n": "Sectora Node HongKong",
+      "c": "Central, HK",
+      "la": 22.3,
+      "lo": 114.2
     }
   }
 }
