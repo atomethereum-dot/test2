@@ -4318,6 +4318,13 @@
       "c": "Porto-Novo, BJ",
       "la": 6.5,
       "lo": 2.6
+    },
+    "0x333b5d8a3214cdd5fc691d56fbcca916ad290b70": {
+      "t": 1794749000000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
