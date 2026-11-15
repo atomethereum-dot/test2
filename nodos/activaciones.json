@@ -4346,6 +4346,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x320b8b39c2dada15fba8167c0fd63d240dfee728": {
+      "t": 1794777882000,
+      "n": "Sectora Node New York",
+      "c": "New York, US",
+      "la": 40.7,
+      "lo": -74
     }
   }
 }
