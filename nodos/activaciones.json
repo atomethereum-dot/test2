@@ -4283,6 +4283,13 @@
       "c": "Manaus, BR",
       "la": -3.1,
       "lo": -60
+    },
+    "0x178e6af0e13eaa7513ee9d11092df11d75e62303": {
+      "t": 1794720989000,
+      "n": "Sectora Node Shanghai",
+      "c": "Shanghai, CN",
+      "la": 31.2,
+      "lo": 121.5
     }
   }
 }
