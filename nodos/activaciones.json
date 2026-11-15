@@ -4353,6 +4353,13 @@
       "c": "New York, US",
       "la": 40.7,
       "lo": -74
+    },
+    "0x17c5f3c87813721c3854134e77cf9b786e5b05f1": {
+      "t": 1794787178000,
+      "n": "Sectora Node Mexico City",
+      "c": "Mexico City, MX",
+      "la": 19.4,
+      "lo": -99.2
     }
   }
 }
