@@ -4304,6 +4304,13 @@
       "c": "London, GB",
       "la": 51.5,
       "lo": -0.1
+    },
+    "0x8e04d98f511e80abe3fb34ce647dcdb708bb75b3": {
+      "t": 1794737031000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
