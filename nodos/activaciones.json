@@ -4290,6 +4290,13 @@
       "c": "Shanghai, CN",
       "la": 31.2,
       "lo": 121.5
+    },
+    "0xa24ab373aa0fad3f00609d3ba99e61061692ef6f": {
+      "t": 1794721800000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
     }
   }
 }
