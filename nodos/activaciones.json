@@ -4276,6 +4276,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x897c84f6612822145a08b15ff96d3ee4f48d5b1e": {
+      "t": 1794720051000,
+      "n": "Sectora Node Manaus",
+      "c": "Manaus, BR",
+      "la": -3.1,
+      "lo": -60
     }
   }
 }
