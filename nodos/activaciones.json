@@ -4465,6 +4465,13 @@
       "c": "Caracas, VE",
       "la": 10.5,
       "lo": -66.9
+    },
+    "0x3e020bd594a448bb1dd144d853a88e47c7993dfe": {
+      "t": 1794836177000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
