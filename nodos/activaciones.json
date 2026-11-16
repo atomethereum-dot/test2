@@ -4367,6 +4367,13 @@
       "c": "Madrid, ES",
       "la": 40.4,
       "lo": -3.7
+    },
+    "0x4a2ebea3eabf1fb2d1e5c8c4777f397caac66658": {
+      "t": 1794789408000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
