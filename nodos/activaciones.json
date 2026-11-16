@@ -4437,6 +4437,34 @@
       "c": "Caracas, VE",
       "la": 10.5,
       "lo": -66.9
+    },
+    "0x10f59aa9cb36c49a4e713490d27e261531b2a18a": {
+      "t": 1794833461000,
+      "n": "Sectora Node Caracas",
+      "c": "Caracas, VE",
+      "la": 10.5,
+      "lo": -66.9
+    },
+    "0x908f63076f7c5107ec4a56708cbb3ad8e9ad400e": {
+      "t": 1794833486000,
+      "n": "Sectora Node Caracas",
+      "c": "Caracas, VE",
+      "la": 10.5,
+      "lo": -66.9
+    },
+    "0x9295039090402c56fe65435d9b4da1de74ba5e89": {
+      "t": 1794833512000,
+      "n": "Sectora Node Caracas",
+      "c": "Caracas, VE",
+      "la": 10.5,
+      "lo": -66.9
+    },
+    "0x3a1efa72692b0a215df443502b86f1e522157c82": {
+      "t": 1794833559000,
+      "n": "Sectora Node Caracas",
+      "c": "Caracas, VE",
+      "la": 10.5,
+      "lo": -66.9
     }
   }
 }
