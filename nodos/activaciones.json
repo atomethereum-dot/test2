@@ -4381,6 +4381,13 @@
       "c": "Lima, PE",
       "la": -12.1,
       "lo": -77
+    },
+    "0x3558eadcc6fec0e1b326fcc9fcda7248f4ec4971": {
+      "t": 1794806029000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
