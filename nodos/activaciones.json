@@ -4388,6 +4388,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x91eaf7dae69f9869e4cb7c2f5b5239f002d919b0": {
+      "t": 1794814908000,
+      "n": "Sectora Node New York",
+      "c": "New York, US",
+      "la": 40.7,
+      "lo": -74
     }
   }
 }
