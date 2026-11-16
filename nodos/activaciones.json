@@ -4423,6 +4423,13 @@
       "c": "Tehran, IR",
       "la": 35.7,
       "lo": 51.4
+    },
+    "0x072aa773ffe213d188806394baf70d9b40bf4b7c": {
+      "t": 1794832341000,
+      "n": "Sectora Node Caracas",
+      "c": "Caracas, VE",
+      "la": 10.5,
+      "lo": -66.9
     }
   }
 }
