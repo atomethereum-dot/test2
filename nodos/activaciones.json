@@ -4374,6 +4374,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x3fe011ed799a45e2fe1e13b8028567356a8f1e5b": {
+      "t": 1794800835000,
+      "n": "Sectora Node Lima",
+      "c": "Lima, PE",
+      "la": -12.1,
+      "lo": -77
     }
   }
 }
