@@ -4360,6 +4360,13 @@
       "c": "Mexico City, MX",
       "la": 19.4,
       "lo": -99.2
+    },
+    "0xfac77f3df227e78ed87dfa7ca57628808667a99e": {
+      "t": 1794787218000,
+      "n": "Sectora Node Madrid",
+      "c": "Madrid, ES",
+      "la": 40.4,
+      "lo": -3.7
     }
   }
 }
