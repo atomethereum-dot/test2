@@ -397,6 +397,196 @@
   </div>
 </section>
 
+<!-- ============ bloqueo de liquidez: bloque aparte, encima de la consola ============
+     Solo marcado, estilo y un script propios (cuenta atras y video), todo bajo
+     #liquidity-lock. No toca la seccion #stake, la consola ni sus scripts. -->
+<section class="paper lk" id="liquidity-lock" aria-labelledby="lk-h">
+  <div class="spine" aria-hidden="true"><em><b><svg width="9" height="11" viewBox="0 0 28 30"><rect x="3" y="13" width="22" height="15" rx="3" fill="currentColor"/><path d="M8 13V9a6 6 0 0 1 12 0v4" fill="none" stroke="currentColor" stroke-width="3.6"/></svg></b><span>Liquidity lock</span></em><i></i></div>
+  <div class="gauge" aria-hidden="true"><u></u></div>
+  <div class="lux" aria-hidden="true"></div>
+  <div class="pp-in">
+    <div class="pp-top">
+      <span class="live-tag mono"><span class="led" aria-hidden="true"></span>Locked on-chain</span>
+      <span class="pp-ser mono">Liquidity lock · Team Finance #24502</span>
+    </div>
+    <div class="pp-head">
+      <div class="hw"><h2 id="lk-h">Liquidity locked until 2035. <b>Holders first.</b></h2></div>
+      <p>100% of the #SECT/USDT liquidity on Uniswap is locked with Team Finance until January 15, 2035. No one, not even the team, can withdraw it before that date. It is our priority guarantee to every holder and investor.</p>
+    </div>
+    <figure class="frame lk-film">
+      <span class="frame-plus" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <figcaption class="band mono"><span>Film · Liquidity locked</span><b>SF·LL·FM·26</b></figcaption>
+      <div class="lk-media">
+        <video data-src="/media/sectora-liquidity-locked-2035-1080p.mp4" muted playsinline preload="none" disableremoteplayback aria-label="Video: Liquidity locked until January 2035"></video>
+        <img class="lk-cv" src="/media/sectora-liquidity-locked-2035-cover.jpg" width="1920" height="1080" alt="Liquidity locked until January 2035" loading="lazy" decoding="async">
+        <button class="lk-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+      </div>
+    </figure>
+    <ol class="lk-pts">
+      <li class="lk-pt">
+        <span class="lk-n mono">01</span>
+        <h3>100% of the liquidity</h3>
+        <p>The whole #SECT/USDT liquidity on Uniswap is held by the Team Finance locker, not by the foundation.</p>
+        <span class="lk-fact mono">Team Finance · lock #24502</span>
+      </li>
+      <li class="lk-pt">
+        <span class="lk-n mono">02</span>
+        <h3>Locked until 2035</h3>
+        <p>The lock opens on January 15, 2035 at 04:00 UTC. Until then nobody can remove a single dollar of the pool.</p>
+        <span class="lk-fact mono">Unlock · 15 Jan 2035</span>
+      </li>
+      <li class="lk-pt">
+        <span class="lk-n mono">03</span>
+        <h3>Holders first</h3>
+        <p>The liquidity every holder trades against stays in the pool. Protecting your position comes before anything else.</p>
+        <span class="lk-fact mono">Priority guarantee</span>
+      </li>
+      <li class="lk-pt">
+        <span class="lk-n mono">04</span>
+        <h3>Verifiable by anyone</h3>
+        <p>The lock lives on Ethereum. Check it on Team Finance or Etherscan whenever you want, without trusting us.</p>
+        <span class="lk-fact mono">On-chain proof</span>
+      </li>
+    </ol>
+    <div class="lk-cta">
+      <div class="lk-btns">
+        <a class="lk-btn go mono" href="https://www.team.finance/view-coin/0x8C9984B06281f1CA9416e493c2E602AaB08513db?name=Sectora&amp;symbol=SECT&amp;chainid=0x1&amp;serviceIdx=1" target="_blank" rel="noopener noreferrer"><span class="led" aria-hidden="true"></span><span>Locked · <b data-lck>8y 01m 29d 00:00:00</b></span><i aria-hidden="true">↗</i></a>
+        <a class="lk-btn mono" href="https://etherscan.io/tx/0xc430e4dc48f47c6834116eada2c38af414471348d0650a3d9d4e884ccf7d8c52" target="_blank" rel="noopener noreferrer"><span>Verify on Etherscan</span><i aria-hidden="true">↗</i></a>
+        <a class="lk-btn mono" href="https://app.uniswap.org/swap?chain=mainnet&amp;inputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7&amp;outputCurrency=0x8C9984B06281f1CA9416e493c2E602AaB08513db" target="_blank" rel="noopener noreferrer"><span>Buy #SECT on Uniswap</span><i aria-hidden="true">↗</i></a>
+      </div>
+      <p class="lk-note">The lock protects the pool against liquidity removal until January 15, 2035. Nothing here is a promise about the price of #SECT.</p>
+    </div>
+  </div>
+  <style>
+    #liquidity-lock{scroll-margin-top:70px}
+    #liquidity-lock .spine b svg{display:block;color:#3c414c}
+    #liquidity-lock .pp-head h2{max-width:16ch}
+    #liquidity-lock .pp-head h2 b{display:block;font-weight:400;color:var(--blue)}
+    #liquidity-lock .lk-film{margin:0 0 clamp(36px,4.6vw,64px)}
+    #liquidity-lock .lk-media{position:relative;aspect-ratio:16/9;background:#05070b;overflow:hidden}
+    #liquidity-lock .lk-media video,#liquidity-lock .lk-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+    #liquidity-lock .lk-cv{z-index:1;cursor:pointer;transition:opacity .4s var(--ease)}
+    #liquidity-lock .lk-cv.off{opacity:0;pointer-events:none}
+    #liquidity-lock .lk-snd{position:absolute;right:12px;bottom:12px;z-index:3;display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px;
+      background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;
+      font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase}
+    #liquidity-lock .lk-snd:hover{border-color:#fff}
+    #liquidity-lock .lk-snd i{width:6px;height:6px;border-radius:50%;background:#4a5164}
+    #liquidity-lock .lk-snd.on i{background:var(--blue)}
+    #liquidity-lock .lk-pts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+      border-top:1px solid var(--p-line);border-bottom:1px solid var(--p-line)}
+    #liquidity-lock .lk-pt{position:relative;display:flex;flex-direction:column;align-items:flex-start;
+      padding:clamp(20px,2.2vw,28px) clamp(16px,1.8vw,26px) clamp(20px,2.2vw,26px)}
+    #liquidity-lock .lk-pt + .lk-pt{border-left:1px solid var(--p-line)}
+    #liquidity-lock .lk-pt::before{content:'';position:absolute;left:0;top:-1px;height:1.5px;width:100%;background:var(--blue);
+      transform:scaleX(0);transform-origin:0 50%;transition:transform .55s var(--ease)}
+    #liquidity-lock .lk-pt:hover::before{transform:scaleX(1)}
+    #liquidity-lock .lk-n{color:var(--blue);margin-bottom:14px}
+    #liquidity-lock .lk-pt h3{margin:0;font-size:clamp(20px,1.7vw,25px);font-weight:400;letter-spacing:-.016em;line-height:1.2;color:var(--p-ink)}
+    #liquidity-lock .lk-pt p{margin:8px 0 16px;color:var(--p-ink-3);font-size:14.5px;line-height:1.65;max-width:46ch}
+    #liquidity-lock .lk-fact{margin-top:auto;padding:6px 10px;border:1px solid var(--p-line);color:var(--p-ink);font-size:10px}
+    #liquidity-lock .lk-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px 30px;
+      margin-top:clamp(36px,4vw,56px);padding-top:clamp(24px,2.6vw,32px);border-top:1px solid var(--p-line)}
+    #liquidity-lock .lk-btns{display:flex;flex-wrap:wrap;gap:12px}
+    #liquidity-lock .lk-btn{display:inline-flex;align-items:center;gap:12px;height:56px;padding:0 22px;border:1px solid var(--p-ink);
+      color:var(--p-ink);text-decoration:none;transition:background .3s var(--ease),border-color .3s var(--ease),color .3s var(--ease)}
+    #liquidity-lock .lk-btn i{font-style:normal;transition:transform .38s var(--ease)}
+    #liquidity-lock .lk-btn:hover{border-color:var(--blue);color:var(--blue)}
+    #liquidity-lock .lk-btn:hover i{transform:translate(3px,-3px)}
+    #liquidity-lock .lk-btn.go{background:var(--blue);border-color:var(--blue);color:#fff}
+    #liquidity-lock .lk-btn.go:hover{background:var(--blue-deep);border-color:var(--blue-deep);color:#fff}
+    #liquidity-lock .lk-btn b{font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+    #liquidity-lock .lk-note{margin:0;color:var(--p-ink-3);font-size:13px;line-height:1.6;max-width:56ch}
+    /* entrada, como las demas hojas: solo con JS, y sin movimiento si el sistema lo pide */
+    html.js #liquidity-lock .pp-head p,html.js #liquidity-lock .lk-film,html.js #liquidity-lock .lk-pt{opacity:0;transform:translateY(14px);
+      transition:opacity .9s var(--ease-out),transform .9s var(--ease-out)}
+    html.js #liquidity-lock .pp-head p{transition-delay:.2s}
+    html.js #liquidity-lock .lk-film{transition-delay:.35s}
+    html.js #liquidity-lock.on .pp-head p,html.js #liquidity-lock.on .lk-film,html.js #liquidity-lock.on .lk-pt{opacity:1;transform:none}
+    html.js #liquidity-lock.on .lk-pt:nth-child(2){transition-delay:.08s}
+    html.js #liquidity-lock.on .lk-pt:nth-child(3){transition-delay:.16s}
+    html.js #liquidity-lock.on .lk-pt:nth-child(4){transition-delay:.24s}
+    @media (max-width:980px){
+      #liquidity-lock .lk-pts{grid-template-columns:repeat(2,minmax(0,1fr))}
+      #liquidity-lock .lk-pt:nth-child(3){border-left:0}
+      #liquidity-lock .lk-pt:nth-child(n+3){border-top:1px solid var(--p-line)}
+    }
+    @media (max-width:620px){
+      #liquidity-lock .lk-film{padding:10px}
+      #liquidity-lock .lk-pts{grid-template-columns:minmax(0,1fr)}
+      #liquidity-lock .lk-pt + .lk-pt{border-left:0;border-top:1px solid var(--p-line)}
+      #liquidity-lock .lk-pt{padding-left:0;padding-right:0}
+      #liquidity-lock .lk-btns{width:100%}
+      #liquidity-lock .lk-btn{width:100%;justify-content:space-between}
+    }
+    @media (prefers-reduced-motion:reduce){
+      html.js #liquidity-lock .pp-head p,html.js #liquidity-lock .lk-film,html.js #liquidity-lock .lk-pt{opacity:1;transform:none;transition:none}
+    }
+  </style>
+  <script>
+  (function () {
+    var sec = document.getElementById('liquidity-lock');
+    if (!sec) return;
+
+    /* cuenta atras exacta hasta la apertura del bloqueo: 15 ene 2035, 04:00 UTC */
+    var END = Date.UTC(2035, 0, 15, 4, 0, 0), el = sec.querySelector('[data-lck]');
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function tick() {
+      var now = new Date(), ms = END - now.getTime();
+      if (ms <= 0) { el.textContent = 'Unlocked'; return; }
+      var y = new Date(END).getUTCFullYear() - now.getUTCFullYear(), m = new Date(END).getUTCMonth() - now.getUTCMonth();
+      var at = function () { return new Date(Date.UTC(now.getUTCFullYear() + y, now.getUTCMonth() + m, now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds())); };
+      var d0 = at();
+      while (d0.getTime() > END) { m--; d0 = at(); }
+      while (m < 0) { y--; m += 12; }
+      var rest = Math.floor((END - d0.getTime()) / 1000), d = Math.floor(rest / 86400); rest -= d * 86400;
+      var h = Math.floor(rest / 3600), mi = Math.floor(rest % 3600 / 60), s = rest % 60;
+      el.textContent = y + 'y ' + pad(m) + 'm ' + pad(d) + 'd ' + pad(h) + ':' + pad(mi) + ':' + pad(s);
+    }
+    if (el) { tick(); setInterval(tick, 1000); }
+
+    var io = 'IntersectionObserver' in window;
+    /* entrada: la pone staking-fx.js en todas las hojas; esto solo la asegura */
+    if (!io) sec.classList.add('on');
+    else { var ver = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { sec.classList.add('on'); ver.disconnect(); } }, { threshold: 0.12 }); ver.observe(sec); }
+
+    /* video: se pide al acercarse, arranca mudo al verse, se para al salir y vuelve a su portada */
+    var v = sec.querySelector('video'), cv = sec.querySelector('.lk-cv'), b = sec.querySelector('.lk-snd');
+    if (!v || !cv || !b) return;
+    var quiere = false, parado = false;
+    function marca() { var on = !v.muted; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); }
+    function carga() { if (!v.getAttribute('src')) { v.preload = 'metadata'; v.src = v.getAttribute('data-src'); } }
+    function juega(sonido) {
+      carga(); v.preload = 'auto';
+      if (v.ended) { try { v.currentTime = 0; } catch (e) {} }
+      v.muted = !sonido; marca();
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {
+        if (!v.muted) { v.muted = true; marca(); var q = v.play(); if (q && q.catch) q.catch(function () {}); }
+      });
+    }
+    function para() { if (!v.paused) v.pause(); try { if (v.readyState) v.currentTime = 0; } catch (e) {} cv.classList.remove('off'); }
+    var activo = function () { return !!(navigator.userActivation && navigator.userActivation.hasBeenActive); };
+    v.addEventListener('playing', function () { cv.classList.add('off'); });
+    v.addEventListener('ended', function () { cv.classList.remove('off'); });
+    cv.addEventListener('click', function () { quiere = true; parado = false; juega(true); });
+    b.addEventListener('click', function () {
+      if (v.muted) { quiere = true; parado = false; if (v.paused) juega(true); else { v.muted = false; marca(); } }
+      else { quiere = false; v.muted = true; marca(); }
+    });
+    if (io) {
+      new IntersectionObserver(function (es) { if (es[es.length - 1].isIntersecting) carga(); }, { rootMargin: '50% 0px' }).observe(v);
+      new IntersectionObserver(function (es) {
+        var e = es[es.length - 1];
+        if (e.isIntersecting) { if (!parado && v.paused && !v.ended) juega(quiere && activo()); }
+        else { parado = false; para(); }
+      }, { threshold: 0.35 }).observe(v);
+    }
+    document.addEventListener('visibilitychange', function () { if (document.hidden && !v.paused) v.pause(); });
+  })();
+  </script>
+</section>
+
 <!-- ============ 02 · stake: hoja clara, como el Hash Market de la portada ============ -->
 <section class="paper" id="stake">
   <div class="spine" aria-hidden="true"><em><b>02</b><span>Stake</span></em><i></i></div>
