@@ -4507,6 +4507,13 @@
       "c": "Istanbul, TR",
       "la": 41,
       "lo": 29
+    },
+    "0x6511669d81ddb8c47d3bdff8a0452c11627c7fa2": {
+      "t": 1794903817000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
