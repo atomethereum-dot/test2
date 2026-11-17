@@ -4514,6 +4514,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x98b40fe7372a0cba15fa5ba8b2a5529c0413afdf": {
+      "t": 1794908231000,
+      "n": "Sectora Node Vienna",
+      "c": "Vienna, AT",
+      "la": 48.2,
+      "lo": 16.3
     }
   }
 }
