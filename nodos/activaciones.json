@@ -4542,6 +4542,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x4014305094f0ac7fd2818b50a133957505968914": {
+      "t": 1794956431000,
+      "n": "Sectora Node Singapore",
+      "c": "Singapore, SG",
+      "la": 1.3,
+      "lo": 103.8
     }
   }
 }
