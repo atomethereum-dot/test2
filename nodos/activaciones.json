@@ -4549,6 +4549,13 @@
       "c": "Singapore, SG",
       "la": 1.3,
       "lo": 103.8
+    },
+    "0x62fe31f313085c1b3c41324a367fd025dbaf7d43": {
+      "t": 1794957258000,
+      "n": "Sectora Node New York",
+      "c": "New York, US",
+      "la": 40.7,
+      "lo": -74
     }
   }
 }
