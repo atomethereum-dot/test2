@@ -4500,6 +4500,13 @@
       "c": "中国",
       "la": 31.2,
       "lo": 121.5
+    },
+    "0xbd707871efaf95fd9af18c138c6bbb4420b18890": {
+      "t": 1794900650000,
+      "n": "Sectora Node Istanbul",
+      "c": "Istanbul, TR",
+      "la": 41,
+      "lo": 29
     }
   }
 }
