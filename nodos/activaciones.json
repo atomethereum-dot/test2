@@ -4528,6 +4528,13 @@
       "c": "Lagos, NG",
       "la": 6.5,
       "lo": 3.4
+    },
+    "0x4378385ff38e5a8842bcfa8ffddd6c71a7bddb27": {
+      "t": 1794929715000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
     }
   }
 }
