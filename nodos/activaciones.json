@@ -4584,6 +4584,13 @@
       "c": "Paris, FR",
       "la": 48.9,
       "lo": 2.3
+    },
+    "0x67983b89cee423e68381288aad979c84b4174e54": {
+      "t": 1795012980000,
+      "n": "Sectora Node Jakarta",
+      "c": "Jakarta, ID",
+      "la": -6.2,
+      "lo": 106.8
     }
   }
 }
