@@ -4577,6 +4577,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x938a10a04e48abffeb811a33f7deb63ee0af5fba": {
+      "t": 1795003847000,
+      "n": "Sectora Node Paris",
+      "c": "Paris, FR",
+      "la": 48.9,
+      "lo": 2.3
     }
   }
 }
