@@ -39,7 +39,7 @@
    * ------------------------------------------------------------------ */
   var T = {
     en: {
-      hero_l1: "Launch coins and", hero_l2: "tokenize <b>real assets</b>", hero_l3: "<b class=\"k\">without rugs</b>.", viz_price: "Price", viz_sold: "Tokens sold", viz_launch: "Launch", viz_grad: "Graduation · Sectora DEX", viz_burn: "SECT burn", tag1: "Anti-sniper 5 min", tag2: "LP burned", tag3: "0.3 % → SECT burn", tag4: "Shield scan", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", film_eb: "The film", film_t: "Everything you can do on Sectora Launch.", film_s: "Launch, fair window, bonding curve, Shield, SECT burn and real-world assets — in 34 seconds.", film_play: "Play with sound", fc_fair: "Fair window", fc_cap: "1% cap per wallet", fc_shield: "Shield score", fc_grad: "To graduation", fc_burn: "SECT burned · testnet", fc_ex: "Example", fc_live: "Live", banner: "SectoraEVM testnet preview — test SECT and test coins have no real value. Mainnet: March 22, 2027.",
+      hero_l1: "Launch coins and", hero_l2: "tokenize <b>real assets</b>", hero_l3: "<b class=\"k\">without rugs</b>.", viz_price: "Price", viz_sold: "Tokens sold", viz_launch: "Launch", viz_grad: "Graduation · Sectora DEX", viz_burn: "SECT burn", tag1: "Anti-sniper 5 min", tag2: "LP burned", tag3: "0.3 % → SECT burn", tag4: "Shield scan", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", film_eb: "The film", film_t: "Everything you can do on Sectora Launch.", film_s: "Launch, fair window, bonding curve, Shield, SECT burn and real-world assets — in 34 seconds.", film_play: "Play with sound", fc_fair: "Fair window", fc_cap: "1% cap per wallet", fc_shield: "Shield score", fc_grad: "To graduation", fc_burn: "SECT burned · testnet", fc_ex: "Example", fc_live: "Live", watch: "Watch with sound · 0:34", end_eb: "SectoraEVM mainnet", end_t1: "Be first", end_t2: "on SectoraEVM.", end_s: "Sectora Launch opens with the SectoraEVM mainnet. Test every feature today on the testnet — launch, trade, graduate and tokenize.", end_in: "Mainnet in", d_d: "days", d_h: "hours", d_m: "min", d_s: "sec", close: "Close", banner: "SectoraEVM testnet preview — test SECT and test coins have no real value. Mainnet: March 22, 2027.",
       nav_explore: "Explore", nav_launch: "Launch", nav_tokenize: "Tokenize", nav_assets: "Real assets", nav_me: "Account", nav_stats: "Transparency",
       connect: "Create test account", connect_s: "Test account", net: "SectoraEVM · Testnet",
       eyebrow: "Sectora Launch · on SectoraEVM",
@@ -138,7 +138,7 @@
       acct_n: "Account {n}"
     },
     es: {
-      hero_l1: "Lanza monedas y", hero_l2: "tokeniza <b>activos reales</b>", hero_l3: "<b class=\"k\">sin estafas</b>.", viz_price: "Precio", viz_sold: "Tokens vendidos", viz_launch: "Lanzamiento", viz_grad: "Graduación · Sectora DEX", viz_burn: "Quema SECT", tag1: "Anti-snipers 5 min", tag2: "LP quemado", tag3: "0,3 % → quema SECT", tag4: "Escáner Shield", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", film_eb: "El film", film_t: "Todo lo que puedes hacer en Sectora Launch.", film_s: "Lanzar, ventana justa, curva, Shield, quema de SECT y activos reales, en 34 segundos.", film_play: "Ver con sonido", fc_fair: "Ventana justa", fc_cap: "Máx. 1 % por cartera", fc_shield: "Puntuación Shield", fc_grad: "Hasta la graduación", fc_burn: "SECT quemado · testnet", fc_ex: "Ejemplo", fc_live: "En vivo", banner: "Vista previa en la testnet de SectoraEVM: el SECT y las monedas de prueba no tienen valor real. Mainnet: 22 de marzo de 2027.",
+      hero_l1: "Lanza monedas y", hero_l2: "tokeniza <b>activos reales</b>", hero_l3: "<b class=\"k\">sin estafas</b>.", viz_price: "Precio", viz_sold: "Tokens vendidos", viz_launch: "Lanzamiento", viz_grad: "Graduación · Sectora DEX", viz_burn: "Quema SECT", tag1: "Anti-snipers 5 min", tag2: "LP quemado", tag3: "0,3 % → quema SECT", tag4: "Escáner Shield", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", film_eb: "El film", film_t: "Todo lo que puedes hacer en Sectora Launch.", film_s: "Lanzar, ventana justa, curva, Shield, quema de SECT y activos reales, en 34 segundos.", film_play: "Ver con sonido", fc_fair: "Ventana justa", fc_cap: "Máx. 1 % por cartera", fc_shield: "Puntuación Shield", fc_grad: "Hasta la graduación", fc_burn: "SECT quemado · testnet", fc_ex: "Ejemplo", fc_live: "En vivo", watch: "Ver con sonido · 0:34", end_eb: "Mainnet de SectoraEVM", end_t1: "Sé el primero", end_t2: "en SectoraEVM.", end_s: "Sectora Launch abre con la mainnet de SectoraEVM. Prueba hoy todo en la testnet: lanzar, operar, graduar y tokenizar.", end_in: "Mainnet en", d_d: "días", d_h: "horas", d_m: "min", d_s: "seg", close: "Cerrar", banner: "Vista previa en la testnet de SectoraEVM: el SECT y las monedas de prueba no tienen valor real. Mainnet: 22 de marzo de 2027.",
       nav_explore: "Explorar", nav_launch: "Lanzar", nav_tokenize: "Tokenizar", nav_assets: "Activos reales", nav_me: "Cuenta", nav_stats: "Transparencia",
       connect: "Crear cuenta de prueba", connect_s: "Cuenta de prueba", net: "SectoraEVM · Testnet",
       eyebrow: "Sectora Launch · en SectoraEVM",
@@ -237,7 +237,7 @@
       acct_n: "Cuenta {n}"
     },
     pt: {
-      hero_l1: "Lance moedas e", hero_l2: "tokenize <b>ativos reais</b>", hero_l3: "<b class=\"k\">sem golpes</b>.", viz_price: "Preço", viz_sold: "Tokens vendidos", viz_launch: "Lançamento", viz_grad: "Graduação · Sectora DEX", viz_burn: "Queima SECT", tag1: "Anti-snipers 5 min", tag2: "LP queimado", tag3: "0,3 % → queima SECT", tag4: "Verificação Shield", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", film_eb: "O filme", film_t: "Tudo o que você pode fazer no Sectora Launch.", film_s: "Lançar, janela justa, curva, Shield, queima de SECT e ativos reais, em 34 segundos.", film_play: "Ver com som", fc_fair: "Janela justa", fc_cap: "Máx. 1 % por carteira", fc_shield: "Nota Shield", fc_grad: "Até a graduação", fc_burn: "SECT queimado · testnet", fc_ex: "Exemplo", fc_live: "Ao vivo", banner: "Prévia na testnet da SectoraEVM: o SECT e as moedas de teste não têm valor real. Mainnet: 22 de março de 2027.",
+      hero_l1: "Lance moedas e", hero_l2: "tokenize <b>ativos reais</b>", hero_l3: "<b class=\"k\">sem golpes</b>.", viz_price: "Preço", viz_sold: "Tokens vendidos", viz_launch: "Lançamento", viz_grad: "Graduação · Sectora DEX", viz_burn: "Queima SECT", tag1: "Anti-snipers 5 min", tag2: "LP queimado", tag3: "0,3 % → queima SECT", tag4: "Verificação Shield", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", film_eb: "O filme", film_t: "Tudo o que você pode fazer no Sectora Launch.", film_s: "Lançar, janela justa, curva, Shield, queima de SECT e ativos reais, em 34 segundos.", film_play: "Ver com som", fc_fair: "Janela justa", fc_cap: "Máx. 1 % por carteira", fc_shield: "Nota Shield", fc_grad: "Até a graduação", fc_burn: "SECT queimado · testnet", fc_ex: "Exemplo", fc_live: "Ao vivo", watch: "Ver com som · 0:34", end_eb: "Mainnet da SectoraEVM", end_t1: "Seja o primeiro", end_t2: "na SectoraEVM.", end_s: "O Sectora Launch abre com a mainnet da SectoraEVM. Teste tudo hoje na testnet: lançar, negociar, graduar e tokenizar.", end_in: "Mainnet em", d_d: "dias", d_h: "horas", d_m: "min", d_s: "seg", close: "Fechar", banner: "Prévia na testnet da SectoraEVM: o SECT e as moedas de teste não têm valor real. Mainnet: 22 de março de 2027.",
       nav_explore: "Explorar", nav_launch: "Lançar", nav_tokenize: "Tokenizar", nav_assets: "Ativos reais", nav_me: "Conta", nav_stats: "Transparência",
       connect: "Criar conta de teste", connect_s: "Conta de teste", net: "SectoraEVM · Testnet",
       eyebrow: "Sectora Launch · na SectoraEVM",
@@ -913,7 +913,7 @@
         fairT.textContent = "0" + Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0");
         if (fairA) { var c = 2 * Math.PI * 34; fairA.style.strokeDashoffset = (c * (1 - left / 300)).toFixed(1); }
       }
-      var fb = document.getElementById("slFcBurn"); if (fb) fb.textContent = nf(S.proto.burned + S.proto.launchBurned, 2);
+      var fcd = document.getElementById("slFcCd"); if (fcd) fcd.textContent = cdStr();
     }, 1000);
     MZ = { cv: cv, stop: function () { alive = false; cancelAnimationFrame(raf); clearInterval(clock); if (ob) ob.disconnect(); removeEventListener("resize", size); } };
   }
@@ -1032,7 +1032,7 @@
       '<p class="sl-hero-p fade-in" style="--d:.42s">' + esc(t("hero_s")) + "</p>" +
       '<div class="sl-hero-cta fade-in" style="--d:.55s"><a class="sl-btn sl-btn-p" href="#/create">' + ico("rocket") + esc(t("cta_launch")) + '</a><a class="sl-btn" href="#/tokenize">' + ico("building") + esc(t("cta_tokenize")) + "</a></div></div>" +
       '<div class="fade-in" style="--d:.3s">' + heroStack() + "</div></section>" +
-      '<div class="sl-band-foot fade-in" style="--d:.65s"><div class="sl-band-hud"><span class="scroll"><i></i>Scroll</span><span>SectoraEVM · ' + esc(t("live")) + ' · Block <b class="num" id="slBlk">' + nf(S.block, 0) + "</b></span></div>" + statTiles() + "</div></div></section>" + filmSection() +
+      '<div class="sl-band-foot fade-in" style="--d:.65s"><div class="sl-band-hud"><span class="scroll"><i></i>Scroll</span><span>SectoraEVM · ' + esc(t("live")) + ' · Block <b class="num" id="slBlk">' + nf(S.block, 0) + "</b></span></div>" + statTiles() + "</div></div></section>" +
       '<section class="sl-sec"><div class="sl-head"><div><h2>' + esc(t("explore")) + '</h2><span class="lbl">' + nf(coinsList().length, 0) + " · SectoraEVM</span></div>" +
       '<label class="sl-search">' + ico("search") + '<span class="sr">' + esc(t("search")) + '</span><input class="sl-input" id="slQ" type="search" placeholder="' + esc(t("search")) + '" value="' + esc(ui.q) + '"></label></div>' +
       '<div class="sl-tabs" style="margin-bottom:16px">' +
@@ -1043,21 +1043,63 @@
       "</div></section>" +
       '<section class="sl-sec"><div class="sl-head"><div><h2>' + esc(t("how_t")) + '</h2></div></div><div class="sl-steps">' +
       [1, 2, 3, 4].map(function (i) { return '<div class="sl-step"><span class="n">0' + i + "</span><h4>" + esc(t("h" + i + "_t")) + "</h4><p>" + esc(t("h" + i + "_p", { raise: raise })) + "</p></div>"; }).join("") +
-      "</div></section>";
+      "</div></section>" + endBand();
   }
 
   function heroStack() {
-    var burned = S.proto.burned + S.proto.launchBurned;
     var ring = function (id, r, col, frac) {
       var c = 2 * Math.PI * r;
       return '<svg viewBox="0 0 ' + (r * 2 + 12) + " " + (r * 2 + 12) + '" style="transform:rotate(-90deg)"><circle cx="' + (r + 6) + '" cy="' + (r + 6) + '" r="' + r + '" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="6"/><circle' + (id ? ' id="' + id + '"' : "") + ' cx="' + (r + 6) + '" cy="' + (r + 6) + '" r="' + r + '" fill="none" stroke="' + col + '" stroke-width="6" stroke-linecap="round" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + (c * (1 - frac)).toFixed(1) + '" style="filter:drop-shadow(0 0 6px ' + col + ')"/></svg>';
     };
     return '<div class="sl-stack" id="slStack"><div class="sl-stack-in">' +
-      '<div class="sl-fc fc1">' + heroViz() + "</div>" +
+      '<div class="sl-fc fc1 fc-film"><div class="fc-film-in"><i class="cm tl"></i><i class="cm tr"></i><i class="cm bl"></i><i class="cm br"></i>' +
+      '<video id="slHeroV" src="media/sectora-launch-film.mp4?v=1" poster="media/sectora-launch-film-poster.jpg?v=1" muted loop playsinline autoplay preload="auto"></video>' +
+      '<span class="fc-film-tag"><span class="sl-dot" style="color:#ff5c6c"></span>Film 01</span>' +
+      '<button class="fc-play" type="button" data-a="film"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>' + esc(t("watch")) + "</button></div></div>" +
       '<div class="sl-fc fc2"><span class="lbl">' + esc(t("fc_fair")) + '</span><div class="fc-row"><div class="fc-ring">' + ring("slFairArc", 34, "#34e7ff", 1) + '</div><div><b class="fc-big" id="slFairT">05:00</b><span class="sub">' + esc(t("fc_cap")) + "</span></div></div></div>" +
       '<div class="sl-fc fc3"><span class="lbl">' + esc(t("fc_shield")) + " <em>· " + esc(t("fc_ex")) + '</em></span><div class="fc-row"><div class="fc-ring">' + ring("", 34, "#3ecf8e", 0.96) + '<b>96</b></div><div class="fc-checks"><span>' + ico("check") + esc(t("c_supply")) + "</span><span>" + ico("check") + esc(t("c_liq")) + "</span><span>" + ico("check") + esc(t("c_dev")) + "</span></div></div></div>" +
-      '<div class="sl-fc fc4"><span class="lbl"><span class="sl-dot" style="color:var(--amber)"></span>' + esc(t("fc_burn")) + '</span><b class="fc-big amb" id="slFcBurn">' + nf(burned, 2) + "</b></div>" +
+      '<div class="sl-fc fc4"><span class="lbl"><span class="sl-dot" style="color:var(--live)"></span>' + esc(t("end_in")) + '</span><b class="fc-big fc-cd" id="slFcCd">' + cdStr() + '</b><span class="sub">SectoraEVM · 22.03.2027</span></div>' +
       "</div></div>";
+  }
+  var MAINNET = Date.UTC(2027, 2, 22, 0, 0, 0);
+  function cdParts() {
+    var ms = Math.max(0, MAINNET - Date.now()), s = Math.floor(ms / 1000);
+    return [Math.floor(s / 86400), Math.floor(s % 86400 / 3600), Math.floor(s % 3600 / 60), s % 60];
+  }
+  function cdStr() {
+    var p = cdParts(), z = function (n) { return String(n).padStart(2, "0"); };
+    return p[0] + "d " + z(p[1]) + ":" + z(p[2]) + ":" + z(p[3]);
+  }
+  function endBand() {
+    var p = cdParts(), lab = ["d_d", "d_h", "d_m", "d_s"];
+    return '<section class="sl-end"><div class="sl-end-rings" aria-hidden="true"></div><div class="sl-end-in">' +
+      '<span class="sl-eyebrow"><i class="rule"></i>' + esc(t("end_eb")) + " · 22.03.2027</span>" +
+      "<h2>" + esc(t("end_t1")) + " <b>" + esc(t("end_t2")) + "</b></h2><p>" + esc(t("end_s")) + "</p>" +
+      '<div class="sl-cd"><span class="lbl">' + esc(t("end_in")) + '</span><div class="sl-cd-row">' +
+      p.map(function (v, i) { return '<div><b id="slCd' + i + '">' + (i ? String(v).padStart(2, "0") : v) + '</b><span class="lbl">' + esc(t(lab[i])) + "</span></div>"; }).join("") + "</div></div>" +
+      '<div class="sl-hero-cta"><a class="sl-btn sl-btn-p" href="#/create">' + ico("rocket") + esc(t("cta_launch")) + '</a><a class="sl-btn" href="#/tokenize">' + ico("building") + esc(t("cta_tokenize")) + '</a><button class="sl-btn" type="button" data-a="film">' + ico("chart") + esc(t("watch")) + "</button></div>" +
+      "</div></section>";
+  }
+  function openFilm() {
+    var hv = document.getElementById("slHeroV"); if (hv) hv.pause();
+    var bg = document.createElement("div");
+    bg.className = "sl-lightbox";
+    bg.innerHTML = '<div class="sl-lb-in"><i class="cm tl"></i><i class="cm tr"></i><i class="cm bl"></i><i class="cm br"></i><video src="media/sectora-launch-film.mp4?v=1" poster="media/sectora-launch-film-poster.jpg?v=1" controls autoplay playsinline></video></div>' +
+      '<button class="sl-lb-x" type="button" aria-label="' + esc(t("close")) + '">' + ico("x") + "</button>";
+    document.body.appendChild(bg);
+    document.documentElement.classList.add("sl-lb-open");
+    var v = bg.querySelector("video");
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+    function close() {
+      document.removeEventListener("keydown", onKey);
+      bg.classList.add("is-out"); document.documentElement.classList.remove("sl-lb-open");
+      v.pause(); setTimeout(function () { bg.remove(); }, 380);
+      if (hv) { var q = hv.play(); if (q && q.catch) q.catch(function () {}); }
+    }
+    function onKey(e) { if (e.key === "Escape") close(); }
+    bg.addEventListener("click", function (e) { if (e.target === bg || e.target.closest(".sl-lb-x")) close(); });
+    document.addEventListener("keydown", onKey);
+    v.addEventListener("ended", close);
   }
   function filmSection() {
     return '<section class="sl-film" id="slFilm"><div class="sl-head"><div><h2>' + esc(t("film_eb")) + '</h2><span class="lbl">0:34 · Sectora Launch</span></div></div>' +
@@ -1709,6 +1751,7 @@
     }
     else if (act === "tokenize") doTokenize();
     else if (act === "rbuy") doRwaBuy(v);
+    else if (act === "film") openFilm();
   });
   document.addEventListener("change", function (e) {
     var el = e.target;
@@ -1834,6 +1877,8 @@
   setInterval(function () { burnTick(false); }, BURN_TICK);
   var blkTick = 0;
   setInterval(function () {
+    var cd0 = document.getElementById("slCd0");
+    if (cd0) { var pp = cdParts(); for (var ci = 0; ci < 4; ci++) { var ce = document.getElementById("slCd" + ci); if (ce) ce.textContent = ci ? String(pp[ci]).padStart(2, "0") : pp[ci]; } }
     if (++blkTick % 2 === 0) {
       S.block += 1;
       var bk = document.getElementById("slBlk");
