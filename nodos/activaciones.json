@@ -4633,6 +4633,13 @@
       "c": "Samarqand, UZ",
       "la": 39.7,
       "lo": 66.8
+    },
+    "0x3eca81d8ff607de99687d3c14d8861404481bb5c": {
+      "t": 1795069367000,
+      "n": "Sectora Node Lagos",
+      "c": "Lagos, NG",
+      "la": 6.5,
+      "lo": 3.4
     }
   }
 }
