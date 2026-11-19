@@ -39,7 +39,7 @@
    * ------------------------------------------------------------------ */
   var T = {
     en: {
-      banner: "SectoraEVM testnet preview — test SECT and test coins have no real value. Mainnet: March 22, 2027.",
+      hero_l1: "Launch coins and", hero_l2: "tokenize <b>real assets</b>", hero_l3: "<b class=\"k\">without rugs</b>.", viz_price: "Price", viz_sold: "Tokens sold", viz_launch: "Launch", viz_grad: "Graduation · Sectora DEX", viz_burn: "SECT burn", tag1: "Anti-sniper 5 min", tag2: "LP burned", tag3: "0.3 % → SECT burn", tag4: "Shield scan", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", banner: "SectoraEVM testnet preview — test SECT and test coins have no real value. Mainnet: March 22, 2027.",
       nav_explore: "Explore", nav_launch: "Launch", nav_tokenize: "Tokenize", nav_assets: "Real assets", nav_me: "Account", nav_stats: "Transparency",
       connect: "Create test account", connect_s: "Test account", net: "SectoraEVM · Testnet",
       eyebrow: "Sectora Launch · on SectoraEVM",
@@ -138,7 +138,7 @@
       acct_n: "Account {n}"
     },
     es: {
-      banner: "Vista previa en la testnet de SectoraEVM: el SECT y las monedas de prueba no tienen valor real. Mainnet: 22 de marzo de 2027.",
+      hero_l1: "Lanza monedas y", hero_l2: "tokeniza <b>activos reales</b>", hero_l3: "<b class=\"k\">sin estafas</b>.", viz_price: "Precio", viz_sold: "Tokens vendidos", viz_launch: "Lanzamiento", viz_grad: "Graduación · Sectora DEX", viz_burn: "Quema SECT", tag1: "Anti-snipers 5 min", tag2: "LP quemado", tag3: "0,3 % → quema SECT", tag4: "Escáner Shield", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", banner: "Vista previa en la testnet de SectoraEVM: el SECT y las monedas de prueba no tienen valor real. Mainnet: 22 de marzo de 2027.",
       nav_explore: "Explorar", nav_launch: "Lanzar", nav_tokenize: "Tokenizar", nav_assets: "Activos reales", nav_me: "Cuenta", nav_stats: "Transparencia",
       connect: "Crear cuenta de prueba", connect_s: "Cuenta de prueba", net: "SectoraEVM · Testnet",
       eyebrow: "Sectora Launch · en SectoraEVM",
@@ -237,7 +237,7 @@
       acct_n: "Cuenta {n}"
     },
     pt: {
-      banner: "Prévia na testnet da SectoraEVM: o SECT e as moedas de teste não têm valor real. Mainnet: 22 de março de 2027.",
+      hero_l1: "Lance moedas e", hero_l2: "tokenize <b>ativos reais</b>", hero_l3: "<b class=\"k\">sem golpes</b>.", viz_price: "Preço", viz_sold: "Tokens vendidos", viz_launch: "Lançamento", viz_grad: "Graduação · Sectora DEX", viz_burn: "Queima SECT", tag1: "Anti-snipers 5 min", tag2: "LP queimado", tag3: "0,3 % → queima SECT", tag4: "Verificação Shield", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", banner: "Prévia na testnet da SectoraEVM: o SECT e as moedas de teste não têm valor real. Mainnet: 22 de março de 2027.",
       nav_explore: "Explorar", nav_launch: "Lançar", nav_tokenize: "Tokenizar", nav_assets: "Ativos reais", nav_me: "Conta", nav_stats: "Transparência",
       connect: "Criar conta de teste", connect_s: "Conta de teste", net: "SectoraEVM · Testnet",
       eyebrow: "Sectora Launch · na SectoraEVM",
@@ -708,7 +708,7 @@
   function txModal(run) {
     var bg = document.createElement("div");
     bg.className = "sl-modal-bg";
-    bg.innerHTML = '<div class="sl-modal" role="dialog" aria-live="polite"><div class="sl-spin"></div><h3>' + esc(t("tx_wait")) + "</h3></div>";
+    bg.innerHTML = '<div class="sl-modal" role="dialog" aria-live="polite"><div class="sl-blocks"><i></i><i></i><i></i><i></i></div><h3>' + esc(t("tx_wait")) + '</h3><p class="mono">SectoraEVM · ' + esc(t("tx_block", { b: nf(S.block + 1, 0) })) + "</p></div>";
     document.body.appendChild(bg);
     setTimeout(function () {
       var res;
@@ -716,15 +716,20 @@
       var m = bg.querySelector(".sl-modal");
       if (!res) { bg.remove(); render(); return; }
       m.innerHTML = '<div class="sl-okmark">' + ico("check") + "</div><h3>" + esc(t("tx_ok")) + "</h3><p>" + res.msg + '</p><p class="mono">' + esc(t("tx_block", { b: nf(res.block, 0) })) + " · " + esc(res.hash) + "</p>";
-      setTimeout(function () { bg.remove(); if (res.go) location.hash = res.go; else render(); }, 1100);
-    }, 650);
+      setTimeout(function () {
+        bg.style.transition = "opacity .3s"; bg.style.opacity = "0";
+        setTimeout(function () { bg.remove(); if (res.go) location.hash = res.go; else render(); }, 280);
+      }, 1100);
+    }, 900);
   }
 
+  var entering = true;
   var view = "home", arg = "", ui = { tab: "trend", q: "", side: "buy", itab: "trades", ctab: "trades", cls: "re" };
   function route() {
     var h = (location.hash || "#/").replace(/^#\/?/, "").split("/");
     view = h[0] || "home"; arg = h[1] || "";
     if (["home", "create", "coin", "tokenize", "assets", "asset", "me", "stats"].indexOf(view) < 0) view = "home";
+    entering = true;
     render();
     window.scrollTo(0, 0);
   }
@@ -742,14 +747,14 @@
     var a = acct();
     var accBtn = a
       ? '<a class="sl-acct is-on" href="#/me"><span class="dot"></span><span class="num">' + compact(a.bal) + ' SECT</span></a>'
-      : '<button class="sl-acct" data-a="newacct"><span class="l">' + esc(t("connect")) + '</span><span class="s">' + esc(t("connect_s")) + "</span></button>";
+      : '<button class="sl-acct" data-a="newacct">' + ico("user").replace("<svg", '<svg width="14" height="14"') + '<span class="l">' + esc(t("connect")) + '</span><span class="s">' + esc(t("connect_s")) + "</span></button>";
     document.getElementById("slTop").innerHTML =
-      '<a class="sl-brand" href="#/"><img src="/icons/v2/icon-192.png" alt=""><span>Sectora <b>Launch</b></span></a>' +
+      '<a class="sl-brand" href="#/" aria-label="Sectora Launch"><span class="sl-mark"><i></i></span><span class="sl-word">SECTORA <em>LAUNCH</em></span></a>' +
       '<nav class="sl-nav">' + NAV.map(function (n) { return '<a href="' + n[1] + '"' + (navOn(n[0]) ? ' class="on"' : "") + ">" + esc(t(n[2])) + "</a>"; }).join("") + "</nav>" +
-      '<div class="sl-top-r"><span class="sl-net"><i></i>' + esc(t("net")) + "</span>" +
+      '<div class="sl-top-r"><span class="sl-pill live"><span class="sl-dot"></span>SectoraEVM · ' + esc(t("live")) + "</span>" +
       '<select class="sl-lang" data-a="lang" aria-label="Language">' + ["en", "es", "pt"].map(function (l) { return '<option value="' + l + '"' + (l === L ? " selected" : "") + ">" + l.toUpperCase() + "</option>"; }).join("") + "</select>" +
       accBtn + "</div>";
-    document.getElementById("slBanner").textContent = t("banner");
+    document.getElementById("slBanner").innerHTML = '<span class="sl-dot" style="color:var(--live)"></span><span>' + esc(t("banner")) + "</span>";
     document.getElementById("slTabbar").innerHTML = NAV.filter(function (n) { return n[0] !== "stats"; }).map(function (n) {
       return '<a href="' + n[1] + '"' + (navOn(n[0]) ? ' class="on"' : "") + ">" + ico(n[3]) + "<span>" + esc(t(n[2])) + "</span></a>";
     }).join("");
@@ -771,6 +776,17 @@
     else if (view === "me") h = vMe();
     else if (view === "stats") h = vStats();
     m.innerHTML = h;
+    m.className = entering ? "sl-enter" : "";
+    if (entering) {
+      Array.prototype.forEach.call(m.children, function (el, i) { el.style.setProperty("--k", Math.min(i, 8)); });
+      reveal(m);
+      var hero = m.querySelector(".sl-hero");
+      if (hero) requestAnimationFrame(function () { requestAnimationFrame(function () { m.classList.add("go"); hero.classList.add("go"); countUp(m); }); });
+      else m.querySelectorAll("[data-count]").length && countUp(m);
+    } else {
+      m.classList.add("go"); var hero2 = m.querySelector(".sl-hero"); if (hero2) hero2.classList.add("go");
+    }
+    entering = false;
     wire();
   }
 
@@ -781,17 +797,48 @@
   function assetsList() { return S.aorder.map(function (a) { return S.assets[a]; }).filter(Boolean); }
   function statTiles() {
     var cs = coinsList(), rwa = assetsList().filter(function (x) { return x.status === "approved"; }).reduce(function (s, x) { return s + x.val; }, 0);
-    function tile(cls, icon, label, val, sub, id) {
-      return '<div class="sl-stat ' + cls + '"><span>' + ico(icon) + esc(label) + '</span><b' + (id ? ' id="' + id + '"' : "") + ">" + val + "</b><small" + (id ? ' id="' + id + 'U"' : "") + ">" + (sub || "&nbsp;") + "</small></div>";
+    function tile(cls, icon, label, v, kind, unit, sub, id) {
+      return '<div class="sl-stat ' + cls + '"><span class="lbl">' + ico(icon) + esc(label) + '</span><b class="big"' + (id ? ' id="' + id + '"' : "") + ' data-count="' + v + '" data-kind="' + kind + '" data-unit="' + (unit || "") + '">' + bigVal(v, kind, unit) + '</b><span class="sub"' + (id ? ' id="' + id + 'U"' : "") + ">" + (sub || "&nbsp;") + "</span></div>";
     }
     var burnedTotal = S.proto.burned + S.proto.launchBurned;
     return '<div class="sl-stats">' +
-      tile("", "rocket", t("st_coins"), nf(cs.length, 0), "") +
-      tile("", "chart", t("st_vol"), compact(S.proto.volume) + " SECT", usd(S.proto.volume)) +
-      tile("", "users", t("st_creators"), compact(S.proto.creator) + " SECT", usd(S.proto.creator)) +
-      tile("is-burn", "fire", t("st_burn"), compact(burnedTotal) + " SECT", compact(S.proto.burnQueue) + " " + t("st_queue"), "slBurn") +
-      tile("is-wide", "building", t("st_rwa"), "$" + compact(rwa), nf(assetsList().length, 0) + " · " + t("nav_assets").toLowerCase()) +
+      tile("", "rocket", t("st_coins"), cs.length, "int", "", "SectoraEVM · " + t("live")) +
+      tile("", "chart", t("st_vol"), S.proto.volume, "c", "SECT", usd(S.proto.volume) || "&nbsp;") +
+      tile("", "users", t("st_creators"), S.proto.creator, "c", "SECT", usd(S.proto.creator) || "&nbsp;") +
+      tile("is-burn", "fire", t("st_burn"), burnedTotal, "c", "SECT", compact(S.proto.burnQueue) + " " + t("st_queue"), "slBurn") +
+      tile("is-wide", "building", t("st_rwa"), rwa, "usd", "", nf(assetsList().length, 0) + " · " + t("nav_assets")) +
       "</div>";
+  }
+  function bigVal(v, kind, unit) {
+    var s = kind === "int" ? nf(Math.round(v), 0) : kind === "usd" ? "$" + compact(v) : compact(v);
+    return s + (unit ? "<small>" + unit + "</small>" : "");
+  }
+  function countUp(root) {
+    var els = root.querySelectorAll("[data-count]");
+    if (!els.length || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) return;
+    var t0 = performance.now(), D = 1300;
+    Array.prototype.forEach.call(els, function (el) { el._to = parseFloat(el.getAttribute("data-count")) || 0; });
+    function step(now) {
+      var k = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - k, 4);
+      Array.prototype.forEach.call(els, function (el) {
+        el.innerHTML = bigVal(el._to * e, el.getAttribute("data-kind"), el.getAttribute("data-unit"));
+      });
+      if (k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var io = null;
+  function reveal(root) {
+    var els = root.querySelectorAll(".sl-grid > .sl-card, .sl-why-i, .sl-step, .sl-head");
+    if (!("IntersectionObserver" in window)) return;
+    if (!io) io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -6% 0px", threshold: 0.08 });
+    Array.prototype.forEach.call(els, function (el, i) {
+      var sib = el.parentNode ? Array.prototype.indexOf.call(el.parentNode.children, el) : 0;
+      el.classList.add("rv"); el.style.setProperty("--d", (Math.min(sib, 8) * 0.06) + "s");
+      io.observe(el);
+    });
   }
   function coinCard(c) {
     var sh = shield(c), pr = progress(c);
@@ -827,20 +874,57 @@
     var raise = nf(GRAD_RAISE, 0);
     var tabs = [["trend", "tab_trend"], ["new", "tab_new"], ["soon", "tab_soon"], ["grad", "tab_grad"]];
     var why = [["bolt", 1], ["users", 2], ["lock", 3], ["scale", 4], ["fire", 5], ["shield", 6], ["chart", 7], ["copycat", 8], ["file", 9], ["badge", 10]];
-    return '<section class="sl-hero"><div><span class="sl-eyebrow">' + ico("rocket").replace("<svg", '<svg width="14" height="14"') + esc(t("eyebrow")) + "</span>" +
-      "<h1>" + t("hero_t") + "</h1><p>" + esc(t("hero_s")) + "</p>" +
-      '<div class="sl-hero-cta"><a class="sl-btn sl-btn-p" href="#/create">' + ico("rocket").replace("<svg", '<svg width="17" height="17"') + esc(t("cta_launch")) + '</a><a class="sl-btn" href="#/tokenize">' + ico("building").replace("<svg", '<svg width="17" height="17"') + esc(t("cta_tokenize")) + "</a></div></div>" +
-      statTiles() + "</section>" +
-      '<section class="sl-sec"><div class="sl-sec-h"><h2>' + esc(t("explore")) + '</h2><div class="sl-tabs">' +
-      tabs.map(function (x) { return '<button data-a="tab" data-v="' + x[0] + '"' + (ui.tab === x[0] ? ' class="on"' : "") + ">" + esc(t(x[1])) + "</button>"; }).join("") +
-      '</div><label class="sl-search">' + ico("search") + '<span class="sr">' + esc(t("search")) + '</span><input class="sl-input" id="slQ" type="search" placeholder="' + esc(t("search")) + '" value="' + esc(ui.q) + '"></label></div>' +
+    return '<section class="sl-hero"><div><span class="sl-eyebrow fade-in" style="--d:.05s"><i class="rule"></i>' + esc(t("eyebrow2")) + "</span>" +
+      "<h1>" + ["hero_l1", "hero_l2", "hero_l3"].map(function (k, i) { return '<span class="ln"><span style="--i:' + i + '">' + t(k) + "</span></span>"; }).join("") + "</h1>" +
+      '<p class="sl-hero-p fade-in" style="--d:.42s">' + esc(t("hero_s")) + "</p>" +
+      '<div class="sl-hero-cta fade-in" style="--d:.55s"><a class="sl-btn sl-btn-p" href="#/create">' + ico("rocket") + esc(t("cta_launch")) + '</a><a class="sl-btn" href="#/tokenize">' + ico("building") + esc(t("cta_tokenize")) + "</a></div></div>" +
+      '<div class="fade-in" style="--d:.3s">' + heroViz() + "</div></section>" +
+      '<div class="fade-in" style="--d:.65s">' + statTiles() + "</div>" +
+      '<section class="sl-sec"><div class="sl-head"><div><h2>' + esc(t("explore")) + '</h2><span class="lbl">' + nf(coinsList().length, 0) + " · SectoraEVM</span></div>" +
+      '<label class="sl-search">' + ico("search") + '<span class="sr">' + esc(t("search")) + '</span><input class="sl-input" id="slQ" type="search" placeholder="' + esc(t("search")) + '" value="' + esc(ui.q) + '"></label></div>' +
+      '<div class="sl-tabs" style="margin-bottom:16px">' +
+      tabs.map(function (x) { return '<button data-a="tab" data-v="' + x[0] + '"' + (ui.tab === x[0] ? ' class="on"' : "") + ">" + esc(t(x[1])) + "</button>"; }).join("") + "</div>" +
       '<div class="sl-grid" id="slGrid">' + gridHtml() + "</div></section>" +
-      '<section class="sl-sec"><h2>' + esc(t("why_t")) + '</h2><p class="sl-sec-sub">' + esc(t("why_s")) + '</p><div class="sl-why">' +
+      '<section class="sl-sec"><div class="sl-head"><div><h2>' + esc(t("why_t")) + '</h2></div></div><p class="sl-sec-sub">' + esc(t("why_s")) + '</p><div class="sl-why">' +
       why.map(function (w) { return '<div class="sl-why-i">' + ico(w[0]) + "<h4>" + esc(t("w" + w[1] + "_t")) + "</h4><p>" + esc(t("w" + w[1] + "_p")) + '</p><span class="vs">' + esc(t("w" + w[1] + "_v")) + "</span></div>"; }).join("") +
       "</div></section>" +
-      '<section class="sl-sec"><h2>' + esc(t("how_t")) + '</h2><p class="sl-sec-sub"></p><div class="sl-steps">' +
-      [1, 2, 3, 4].map(function (i) { return '<div class="sl-step"><h4>' + esc(t("h" + i + "_t")) + "</h4><p>" + esc(t("h" + i + "_p", { raise: raise })) + "</p></div>"; }).join("") +
+      '<section class="sl-sec"><div class="sl-head"><div><h2>' + esc(t("how_t")) + '</h2></div></div><div class="sl-steps">' +
+      [1, 2, 3, 4].map(function (i) { return '<div class="sl-step"><span class="n">0' + i + "</span><h4>" + esc(t("h" + i + "_t")) + "</h4><p>" + esc(t("h" + i + "_p", { raise: raise })) + "</p></div>"; }).join("") +
       "</div></section>";
+  }
+
+  function heroViz() {
+    var W = 560, H = 385, x0 = 46, x1 = 514, y0 = 318, y1 = 58, N = 48, p0 = V_SECT0 / V_TOK0, pg = (V_SECT0 + GRAD_RAISE) / (V_TOK0 - CURVE_TOKENS);
+    var pts = [];
+    for (var i = 0; i <= N; i++) {
+      var sold = CURVE_TOKENS * i / N, vt = V_TOK0 - sold, pr = V_SECT0 * V_TOK0 / vt / vt;
+      pts.push([x0 + (x1 - x0) * i / N, y0 - (y0 - y1) * (pr - p0) / (pg - p0)]);
+    }
+    var d = pts.map(function (q, i) { return (i ? "L" : "M") + q[0].toFixed(1) + " " + q[1].toFixed(1); }).join(" ");
+    var grid = "";
+    for (var gx = x0; gx <= x1 + 1; gx += 52) grid += '<line x1="' + gx + '" y1="30" x2="' + gx + '" y2="' + y0 + '"/>';
+    for (var gy = y0; gy >= 30; gy -= 48) grid += '<line x1="' + x0 + '" y1="' + gy + '" x2="' + x1 + '" y2="' + gy + '"/>';
+    var embers = [0.3, 0.46, 0.6, 0.72, 0.84].map(function (f, i) {
+      var q = pts[Math.round(f * N)];
+      return '<circle class="ember" cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="1.8" style="animation-delay:' + (i * 0.9) + 's"/>';
+    }).join("");
+    var e = pts[N];
+    return '<div class="sl-viz" aria-hidden="true"><svg viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="xMidYMid meet">' +
+      '<defs><linearGradient id="vzG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1569ff"/><stop offset=".7" stop-color="#4d8dff"/><stop offset="1" stop-color="#3ecf8e"/></linearGradient>' +
+      '<linearGradient id="vzA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1569ff" stop-opacity=".22"/><stop offset="1" stop-color="#1569ff" stop-opacity="0"/></linearGradient></defs>' +
+      '<g class="grid">' + grid + "</g>" +
+      '<path class="area" d="' + d + " L" + x1 + " " + y0 + " L" + x0 + " " + y0 + ' Z"/>' +
+      '<line class="thr" x1="' + x1 + '" y1="30" x2="' + x1 + '" y2="' + y0 + '"/>' +
+      '<path id="vzP" class="curve" d="' + d + '"/>' + embers +
+      '<circle class="ring" cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="9"/>' +
+      '<circle cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="3.2" fill="#3ecf8e"/>' +
+      '<circle class="runner" r="4"><animateMotion dur="6s" begin="2.4s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines=".45 0 .55 1"><mpath href="#vzP"/></animateMotion></circle>' +
+      '<text x="' + x0 + '" y="22">' + esc(t("viz_price")) + "</text>" +
+      '<text x="' + x1 + '" y="' + (y0 + 22) + '" text-anchor="end">' + esc(t("viz_sold")) + "</text>" +
+      '<text x="' + (x0 + 6) + '" y="' + (y0 - 10) + '">' + esc(t("viz_launch")) + "</text>" +
+      '<text class="t-live" x="' + (e[0] - 22) + '" y="' + (e[1] + 4) + '" text-anchor="end">' + esc(t("viz_grad")) + "</text>" +
+      '<text class="t-amber" x="' + (pts[Math.round(0.6 * N)][0] - 16) + '" y="' + (pts[Math.round(0.6 * N)][1] - 34) + '" text-anchor="end">' + esc(t("viz_burn")) + "</text>" +
+      '</svg><div class="sl-viz-tags"><span>' + esc(t("tag1")) + "</span><span>" + esc(t("tag2")) + "</span><span>" + esc(t("tag3")) + "</span><span>" + esc(t("tag4")) + "</span></div></div>";
   }
 
   /* ---------- Create ---------- */
@@ -899,7 +983,7 @@
     }
     var touched = draft._touched || {};
     return '<a class="sl-back" href="#/">' + ico("back") + esc(t("back")) + "</a>" +
-      '<div class="sl-pagehead"><h1>' + esc(t("launch_t")) + "</h1><p>" + esc(t("launch_s")) + "</p></div>" +
+      '<div class="sl-pagehead"><span class="sl-eyebrow"><i class="rule"></i>Sectora Launch</span><h1>' + esc(t("launch_t")) + "</h1><p>" + esc(t("launch_s")) + "</p></div>" +
       '<div class="sl-2col"><div><div class="sl-panel">' +
       '<div class="sl-field"><span class="sl-label">' + esc(t("f_logo")) + '</span><div class="sl-upload"><img class="sl-logo" id="slLogoPv" src="' + coinLogo({ img: draft.img, sym: (draft.sym || "?").toUpperCase() }) + '" alt="">' +
       '<div><label class="sl-btn sl-btn-sm" for="slLogo">' + ico("upload").replace("<svg", '<svg width="15" height="15"') + esc(t("f_logo_btn")) + '</label><input type="file" id="slLogo" accept="image/png,image/jpeg,image/webp,image/gif" hidden><small style="display:block;margin-top:6px">' + esc(t("f_logo_hint")) + "</small></div></div></div>" +
@@ -937,7 +1021,8 @@
     var col = up ? "#14e0a0" : "#ff5c6c";
     var area = line + " L" + W + " " + H + " L0 " + H + " Z";
     return '<div class="sl-chart-wrap"><svg class="sl-chart" viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none"><defs><linearGradient id="slG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + col + '" stop-opacity=".28"/><stop offset="1" stop-color="' + col + '" stop-opacity="0"/></linearGradient></defs>' +
-      '<path d="' + area + '" fill="url(#slG)"/><path d="' + line + '" fill="none" stroke="' + col + '" stroke-width="2.2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg></div>';
+      '<path class="ar-path" d="' + area + '" fill="url(#slG)"/><path class="ln-path" pathLength="1" d="' + line + '" fill="none" stroke="' + col + '" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" style="filter:drop-shadow(0 0 5px ' + col + '88)"/></svg>' +
+      '<span class="pt" style="position:absolute;right:0;top:' + (coords[coords.length - 1][1] / H * 100).toFixed(2) + '%;width:9px;height:9px;margin:-4.5px -2px 0 0;border-radius:50%;background:' + col + ';box-shadow:0 0 0 4px ' + col + '33,0 0 14px ' + col + '"></span></div>';
   }
   function tradePanel(c) {
     var a = acct(), side = ui.side;
@@ -1018,7 +1103,7 @@
     return '<div class="sl-table-wrap"><table class="sl-table"><thead><tr><th>' + esc(t("th_time")) + "</th><th>" + esc(t("th_type")) + "</th><th>" + esc(t("th_acct")) + '</th><th class="r">' + esc(t("th_sect")) + '</th><th class="r">' + esc(t("th_tok")) + '</th><th class="r sl-hide-sm">' + esc(t("th_price")) + '</th><th class="sl-hide-sm">' + esc(t("th_tx")) + "</th></tr></thead><tbody>" +
       list.slice(0, 60).map(function (tr) {
         var type = tr.s === "buy" ? '<span class="sl-side-pill buy">' + esc(t("buy")) + "</span>" : tr.s === "sell" ? '<span class="sl-side-pill sell">' + esc(t("sell")) + "</span>" : '<span class="sl-side-pill ev">' + esc(tr.s === "grad" ? t("ev_grad") : t("ev_launch")) + "</span>";
-        return "<tr><td class=\"mono dim\">" + esc(timeStr(tr.t)) + "</td><td>" + type + "</td><td>" + (tr.s === "grad" ? "Sectora DEX" : acctName(tr.a)) + '</td><td class="r num">' + nf(tr.x, 2) + '</td><td class="r num">' + compact(tr.k) + '</td><td class="r num sl-hide-sm">' + fmtPrice(tr.p) + '</td><td class="mono faint sl-hide-sm">' + esc(short(tr.h)) + "</td></tr>";
+        return "<tr" + (tr.h === ui.fresh ? ' class="nueva"' : "") + "><td class=\"mono dim\">" + esc(timeStr(tr.t)) + "</td><td>" + type + "</td><td>" + (tr.s === "grad" ? "Sectora DEX" : acctName(tr.a)) + '</td><td class="r num">' + nf(tr.x, 2) + '</td><td class="r num">' + compact(tr.k) + '</td><td class="r num sl-hide-sm">' + fmtPrice(tr.p) + '</td><td class="mono faint sl-hide-sm">' + esc(short(tr.h)) + "</td></tr>";
       }).join("") + "</tbody></table></div>";
   }
   function holdersTable(c) {
@@ -1105,7 +1190,7 @@
       return '<div class="sl-field"><label for="' + id + '">' + esc(label) + "</label>" + (unit ? '<div class="sl-input-wrap">' + input + '<span class="unit">' + unit + "</span></div>" : input) + (err ? '<small style="color:var(--red)">' + esc(err) + "</small>" : "") + "</div>";
     }
     return '<a class="sl-back" href="#/assets">' + ico("back") + esc(t("back")) + "</a>" +
-      '<div class="sl-pagehead"><h1>' + esc(t("tok_t")) + "</h1><p>" + esc(t("tok_s")) + "</p></div>" +
+      '<div class="sl-pagehead"><span class="sl-eyebrow"><i class="rule"></i>Sectora Launch</span><h1>' + esc(t("tok_t")) + "</h1><p>" + esc(t("tok_s")) + "</p></div>" +
       '<div class="sl-2col"><div><div class="sl-panel">' +
       '<span class="sl-label">' + esc(t("cls")) + '</span><div class="sl-classes" style="margin-top:8px">' +
       CLASSES.map(function (c) { return '<button type="button" class="sl-class' + (adraft.cls === c.id ? " on" : "") + '" data-a="acls" data-v="' + c.id + '">' + ico(c.i) + esc(t("cl_" + c.id)) + "</button>"; }).join("") + "</div>" +
@@ -1135,7 +1220,7 @@
   }
   function vAssets() {
     var xs = assetsList().slice().sort(function (a, b) { return b.created - a.created; });
-    return '<div class="sl-sec-h"><div class="sl-pagehead" style="margin:0"><h1>' + esc(t("assets_t")) + "</h1><p>" + esc(t("assets_s")) + '</p></div><a class="sl-btn sl-btn-gold" href="#/tokenize">' + esc(t("cta_tokenize")) + "</a></div>" +
+    return '<div class="sl-sec-h"><div class="sl-pagehead" style="margin:0"><span class="sl-eyebrow"><i class="rule"></i>Sectora Launch · RWA</span><h1>' + esc(t("assets_t")) + "</h1><p>" + esc(t("assets_s")) + '</p></div><a class="sl-btn sl-btn-gold" href="#/tokenize">' + esc(t("cta_tokenize")) + "</a></div>" +
       '<div class="sl-grid" style="margin-top:8px">' + (xs.length ? xs.map(assetCard).join("") :
         '<div class="sl-empty">' + ico("building") + "<h3>" + esc(t("assets_empty")) + "</h3><p>" + esc(t("assets_empty_p")) + '</p><a class="sl-btn sl-btn-gold" href="#/tokenize">' + esc(t("cta_tokenize")) + "</a></div>") + "</div>";
   }
@@ -1199,13 +1284,13 @@
   function vMe() {
     var a = acct();
     if (!a) {
-      return '<div class="sl-pagehead"><h1>' + esc(t("me_t")) + "</h1><p>" + esc(t("me_s")) + '</p></div><div class="sl-empty">' + ico("user") + "<h3>" + esc(t("need_acct")) + '</h3><p></p><button class="sl-btn sl-btn-p" data-a="newacct">' + esc(t("connect")) + "</button></div>";
+      return '<div class="sl-pagehead"><span class="sl-eyebrow"><i class="rule"></i>Sectora Launch</span><h1>' + esc(t("me_t")) + "</h1><p>" + esc(t("me_s")) + '</p></div><div class="sl-empty">' + ico("user") + "<h3>" + esc(t("need_acct")) + '</h3><p></p><button class="sl-btn sl-btn-p" data-a="newacct">' + esc(t("connect")) + "</button></div>";
     }
     var wait = a.faucetAt ? a.faucetAt + FAUCET_EVERY - Date.now() : 0;
     var mine = coinsList().filter(function (c) { return c.creator === a.addr; });
     var holds = coinsList().filter(function (c) { return bal(c, a.addr) > 1e-6; });
     var rwa = assetsList().filter(function (x) { return x.holders && x.holders[a.addr] > 0; });
-    return '<div class="sl-pagehead"><h1>' + esc(t("me_t")) + "</h1><p>" + esc(t("me_s")) + "</p></div>" +
+    return '<div class="sl-pagehead"><span class="sl-eyebrow"><i class="rule"></i>Sectora Launch</span><h1>' + esc(t("me_t")) + "</h1><p>" + esc(t("me_s")) + "</p></div>" +
       '<div class="sl-2col"><div>' +
       '<div class="sl-panel"><div class="sl-acctcard"><img class="sl-avatar" src="' + avatar(a.addr) + '" alt=""><div style="flex:1;min-width:0"><b style="font-size:17px">' + esc(a.name) + '</b><div><button class="sl-addr" data-a="copy" data-v="' + a.addr + '">' + esc(short(a.addr)) + ico("copy") + "</button></div></div>" +
       '<div style="text-align:right"><div class="dim" style="font-size:12.5px">' + esc(t("balance")) + '</div><b class="num" style="font-size:22px">' + nf(a.bal, 2) + ' <small class="dim">SECT</small></b></div></div>' +
@@ -1235,7 +1320,7 @@
       ["p_supply", nf(SUPPLY, 0)], ["p_curve", nf(CURVE_TOKENS, 0) + " (80 %)"], ["p_pool", nf(POOL_TOKENS, 0) + " (20 %)"], ["p_grad", t("v_grad", { raise: raise })],
       ["p_fee", "1 % · 0.5 / 0.3 / 0.2"], ["p_launch", t("v_launch")], ["p_dev", t("v_dev")], ["p_vest", t("v_vest")], ["p_fair", t("v_fair")], ["p_burn", t("v_burn")]
     ];
-    return '<div class="sl-pagehead"><h1>' + esc(t("tr_t")) + "</h1><p>" + esc(t("tr_s")) + "</p></div>" + statTiles() +
+    return '<div class="sl-pagehead"><span class="sl-eyebrow"><i class="rule"></i>Sectora Launch</span><h1>' + esc(t("tr_t")) + "</h1><p>" + esc(t("tr_s")) + "</p></div>" + statTiles() +
       '<div class="sl-2col" style="margin-top:20px"><div>' +
       '<div class="sl-panel"><h3>' + ico("scale") + esc(t("tr_split")) + '</h3><div class="sl-fees"><i style="flex:5"></i><i style="flex:3"></i><i style="flex:2"></i></div>' +
       '<div class="sl-legend"><div style="--c:var(--blue)">' + esc(t("to_creator")) + "<b>" + nf(p.creator, 2) + ' SECT</b></div><div style="--c:var(--amber)">' + esc(t("to_burn")) + "<b>" + nf(p.burned + p.burnQueue, 2) + ' SECT</b></div><div style="--c:var(--violet)">' + esc(t("to_protocol")) + "<b>" + nf(p.protocol, 2) + " SECT</b></div></div>" +
@@ -1254,7 +1339,11 @@
   }
   function liveUpdate() {
     var el = document.getElementById("slBurn");
-    if (el) { el.textContent = compact(S.proto.burned + S.proto.launchBurned) + " SECT"; var u = document.getElementById("slBurnU"); if (u) u.textContent = compact(S.proto.burnQueue) + " " + t("st_queue"); }
+    if (el) {
+      var nv = bigVal(S.proto.burned + S.proto.launchBurned, "c", "SECT");
+      if (el.innerHTML !== nv) { el.innerHTML = nv; el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); }
+      var u = document.getElementById("slBurnU"); if (u) u.textContent = compact(S.proto.burnQueue) + " " + t("st_queue");
+    }
     var b2 = document.getElementById("slBurn2"); if (b2) b2.textContent = nf(S.proto.burned + S.proto.launchBurned, 4) + " SECT";
     var q2 = document.getElementById("slQueue2"); if (q2) q2.textContent = nf(S.proto.burnQueue, 4) + " SECT";
     var bt = document.getElementById("slBurns"); if (bt) bt.innerHTML = burnsTable();
@@ -1489,6 +1578,7 @@
       txModal(function () {
         var r = doBuy(c, a.addr, v); if (!r) return null;
         a.bal -= r.q.used; save();
+        ui.fresh = r.tr.h;
         return { msg: esc(t("t_bought", { t: compact(r.q.tokens), s: "$" + c.sym })), block: r.tr.b, hash: r.tr.h };
       });
     } else {
@@ -1497,6 +1587,7 @@
       txModal(function () {
         var r = doSell(c, a.addr, v); if (!r) return null;
         a.bal += r.q.out; save();
+        ui.fresh = r.tr.h;
         return { msg: esc(t("t_sold", { t: compact(v), s: "$" + c.sym })), block: r.tr.b, hash: r.tr.h };
       });
     }
@@ -1540,6 +1631,21 @@
       return { msg: esc(t("t_rwa_buy", { q: nf(qn, 0), s: x.sym })), block: b, hash: h };
     });
   }
+
+  document.addEventListener("pointermove", function (e) {
+    var el = e.target.closest && e.target.closest(".sl-panel, .sl-card, .sl-why-i, .sl-step, .sl-stat");
+    if (!el) return;
+    var r = el.getBoundingClientRect();
+    el.style.setProperty("--gx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
+    el.style.setProperty("--gy", ((e.clientY - r.top) / r.height * 100).toFixed(1) + "%");
+  }, { passive: true });
+  var sprog = null;
+  window.addEventListener("scroll", function () {
+    if (!sprog) sprog = document.querySelector(".sl-sprog i");
+    if (!sprog) return;
+    var h = document.documentElement.scrollHeight - innerHeight;
+    sprog.style.transform = "scaleX(" + (h > 0 ? Math.min(1, scrollY / h) : 0) + ")";
+  }, { passive: true });
 
   /* ------------------------------------------------------------------ *
    * Boot                                                                 *
