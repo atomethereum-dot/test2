@@ -39,7 +39,7 @@
    * ------------------------------------------------------------------ */
   var T = {
     en: {
-      hero_l1: "Launch coins and", hero_l2: "tokenize <b>real assets</b>", hero_l3: "<b class=\"k\">without rugs</b>.", viz_price: "Price", viz_sold: "Tokens sold", viz_launch: "Launch", viz_grad: "Graduation · Sectora DEX", viz_burn: "SECT burn", tag1: "Anti-sniper 5 min", tag2: "LP burned", tag3: "0.3 % → SECT burn", tag4: "Shield scan", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", banner: "SectoraEVM testnet preview — test SECT and test coins have no real value. Mainnet: March 22, 2027.",
+      hero_l1: "Launch coins and", hero_l2: "tokenize <b>real assets</b>", hero_l3: "<b class=\"k\">without rugs</b>.", viz_price: "Price", viz_sold: "Tokens sold", viz_launch: "Launch", viz_grad: "Graduation · Sectora DEX", viz_burn: "SECT burn", tag1: "Anti-sniper 5 min", tag2: "LP burned", tag3: "0.3 % → SECT burn", tag4: "Shield scan", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", film_eb: "The film", film_t: "Everything you can do on Sectora Launch.", film_s: "Launch, fair window, bonding curve, Shield, SECT burn and real-world assets — in 34 seconds.", film_play: "Play with sound", fc_fair: "Fair window", fc_cap: "1% cap per wallet", fc_shield: "Shield score", fc_grad: "To graduation", fc_burn: "SECT burned · testnet", fc_ex: "Example", fc_live: "Live", banner: "SectoraEVM testnet preview — test SECT and test coins have no real value. Mainnet: March 22, 2027.",
       nav_explore: "Explore", nav_launch: "Launch", nav_tokenize: "Tokenize", nav_assets: "Real assets", nav_me: "Account", nav_stats: "Transparency",
       connect: "Create test account", connect_s: "Test account", net: "SectoraEVM · Testnet",
       eyebrow: "Sectora Launch · on SectoraEVM",
@@ -138,7 +138,7 @@
       acct_n: "Account {n}"
     },
     es: {
-      hero_l1: "Lanza monedas y", hero_l2: "tokeniza <b>activos reales</b>", hero_l3: "<b class=\"k\">sin estafas</b>.", viz_price: "Precio", viz_sold: "Tokens vendidos", viz_launch: "Lanzamiento", viz_grad: "Graduación · Sectora DEX", viz_burn: "Quema SECT", tag1: "Anti-snipers 5 min", tag2: "LP quemado", tag3: "0,3 % → quema SECT", tag4: "Escáner Shield", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", banner: "Vista previa en la testnet de SectoraEVM: el SECT y las monedas de prueba no tienen valor real. Mainnet: 22 de marzo de 2027.",
+      hero_l1: "Lanza monedas y", hero_l2: "tokeniza <b>activos reales</b>", hero_l3: "<b class=\"k\">sin estafas</b>.", viz_price: "Precio", viz_sold: "Tokens vendidos", viz_launch: "Lanzamiento", viz_grad: "Graduación · Sectora DEX", viz_burn: "Quema SECT", tag1: "Anti-snipers 5 min", tag2: "LP quemado", tag3: "0,3 % → quema SECT", tag4: "Escáner Shield", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", film_eb: "El film", film_t: "Todo lo que puedes hacer en Sectora Launch.", film_s: "Lanzar, ventana justa, curva, Shield, quema de SECT y activos reales, en 34 segundos.", film_play: "Ver con sonido", fc_fair: "Ventana justa", fc_cap: "Máx. 1 % por cartera", fc_shield: "Puntuación Shield", fc_grad: "Hasta la graduación", fc_burn: "SECT quemado · testnet", fc_ex: "Ejemplo", fc_live: "En vivo", banner: "Vista previa en la testnet de SectoraEVM: el SECT y las monedas de prueba no tienen valor real. Mainnet: 22 de marzo de 2027.",
       nav_explore: "Explorar", nav_launch: "Lanzar", nav_tokenize: "Tokenizar", nav_assets: "Activos reales", nav_me: "Cuenta", nav_stats: "Transparencia",
       connect: "Crear cuenta de prueba", connect_s: "Cuenta de prueba", net: "SectoraEVM · Testnet",
       eyebrow: "Sectora Launch · en SectoraEVM",
@@ -237,7 +237,7 @@
       acct_n: "Cuenta {n}"
     },
     pt: {
-      hero_l1: "Lance moedas e", hero_l2: "tokenize <b>ativos reais</b>", hero_l3: "<b class=\"k\">sem golpes</b>.", viz_price: "Preço", viz_sold: "Tokens vendidos", viz_launch: "Lançamento", viz_grad: "Graduação · Sectora DEX", viz_burn: "Queima SECT", tag1: "Anti-snipers 5 min", tag2: "LP queimado", tag3: "0,3 % → queima SECT", tag4: "Verificação Shield", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", banner: "Prévia na testnet da SectoraEVM: o SECT e as moedas de teste não têm valor real. Mainnet: 22 de março de 2027.",
+      hero_l1: "Lance moedas e", hero_l2: "tokenize <b>ativos reais</b>", hero_l3: "<b class=\"k\">sem golpes</b>.", viz_price: "Preço", viz_sold: "Tokens vendidos", viz_launch: "Lançamento", viz_grad: "Graduação · Sectora DEX", viz_burn: "Queima SECT", tag1: "Anti-snipers 5 min", tag2: "LP queimado", tag3: "0,3 % → queima SECT", tag4: "Verificação Shield", eyebrow2: "Sectora Launch · SectoraEVM", live: "Testnet", film_eb: "O filme", film_t: "Tudo o que você pode fazer no Sectora Launch.", film_s: "Lançar, janela justa, curva, Shield, queima de SECT e ativos reais, em 34 segundos.", film_play: "Ver com som", fc_fair: "Janela justa", fc_cap: "Máx. 1 % por carteira", fc_shield: "Nota Shield", fc_grad: "Até a graduação", fc_burn: "SECT queimado · testnet", fc_ex: "Exemplo", fc_live: "Ao vivo", banner: "Prévia na testnet da SectoraEVM: o SECT e as moedas de teste não têm valor real. Mainnet: 22 de março de 2027.",
       nav_explore: "Explorar", nav_launch: "Lançar", nav_tokenize: "Tokenizar", nav_assets: "Ativos reais", nav_me: "Conta", nav_stats: "Transparência",
       connect: "Criar conta de teste", connect_s: "Conta de teste", net: "SectoraEVM · Testnet",
       eyebrow: "Sectora Launch · na SectoraEVM",
@@ -810,64 +810,136 @@
     entering = false;
     wire();
     if (document.getElementById("slCells")) startMosaic(); else stopMosaic();
+    wireFilm();
   }
 
-  /* ---------- live cell mosaic behind the hero (same motif as the main site) ---------- */
+  /* ---------- live launch field behind the hero: coins launching along bonding curves ---------- */
   var MZ = null;
   function stopMosaic() { if (MZ) { MZ.stop(); MZ = null; } }
   function startMosaic() {
     var cv = document.getElementById("slCells");
     if (MZ && MZ.cv === cv) return;
     stopMosaic();
-    var ctx = cv.getContext("2d"), band = cv.parentNode, W = 0, H = 0, C = 54, cells = [], mx = -1e4, my = -1e4, raf = 0, last = 0, visible = true, alive = true;
-    var reduced = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var ctx = cv.getContext("2d"), band = cv.parentNode, W = 0, H = 0, raf = 0, last = 0, visible = true, alive = true, stars = [], streaks = [], sparks = [], nextAt = 0;
+    var stack = document.getElementById("slStack");
+    var COLS = ["21,105,255", "52,231,255", "62,207,142", "77,141,255"];
+    function shapeY(u) { var V0 = 30000, T0 = 1.073e9, CT = 8e8, p0 = V0 / T0, pg = V0 * T0 / Math.pow(T0 - CT, 2), vt = T0 - CT * u; return (V0 * T0 / vt / vt - p0) / (pg - p0); }
     function size() {
       var r = band.getBoundingClientRect(); W = r.width; H = r.height;
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
       cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      C = W < 700 ? 38 : 54; cells = [];
-      for (var y = 0; y < H + C; y += C) for (var x = 0; x < W + C; x += C) {
-        var r1 = Math.random();
-        cells.push({ x: x, y: y, lit: r1 > 0.84, deep: r1 > 0.965, ph: Math.random() * 6.283, sp: 0.25 + Math.random() * 0.9, base: Math.random() * 0.03,
-          hex: Math.random() > 0.985 ? ((Math.random() * 65535) | 0).toString(16).toUpperCase().padStart(4, "0") : "" });
-      }
+      stars = []; var n = Math.round(W * H / 9000);
+      for (var i = 0; i < n; i++) stars.push({ x: Math.random() * W, y: Math.random() * H, z: 0.2 + Math.random() * 0.8, p: Math.random() * 6.28 });
+    }
+    function spawn(x0, y0, big) {
+      var w = (big ? 0.5 : 0.35 + Math.random() * 0.5) * W, h = (0.25 + Math.random() * 0.45) * H;
+      streaks.push({ x0: x0 == null ? -W * 0.1 + Math.random() * W * 0.6 : x0, y0: y0 == null ? H * (0.6 + Math.random() * 0.45) : y0, w: w, h: h,
+        t0: performance.now(), dur: 1600 + Math.random() * 1600, c: COLS[(Math.random() * COLS.length) | 0], grad: Math.random() < 0.35 });
     }
     function draw(now) {
       if (!alive) return;
       raf = requestAnimationFrame(draw);
-      if (!visible || now - last < 40) return;
-      last = now;
+      if (!visible || now - last < 33) return;
+      var dt = Math.min(60, now - last); last = now;
       ctx.clearRect(0, 0, W, H);
-      var t = now / 1000, sy = ((t * 70) % (H + 200)) - 100;
-      ctx.font = "500 9px 'IBM Plex Mono', monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      for (var i = 0; i < cells.length; i++) {
-        var c = cells[i], a = c.base;
-        if (c.lit) a += (c.deep ? 0.34 : 0.13) * Math.max(0, Math.sin(t * c.sp + c.ph));
-        var d = Math.hypot(c.x + C / 2 - mx, c.y + C / 2 - my);
-        if (d < 260) a += (1 - d / 260) * 0.3;
-        var ds = Math.abs(c.y + C / 2 - sy);
-        if (ds < C * 1.6) a += (1 - ds / (C * 1.6)) * 0.07;
-        if (a < 0.012) continue;
-        if (c.hex && a > 0.05) { ctx.fillStyle = "rgba(52,231,255," + Math.min(0.7, a * 2).toFixed(3) + ")"; ctx.fillText(c.hex, c.x + C / 2, c.y + C / 2); continue; }
-        ctx.fillStyle = "rgba(" + (c.deep ? "30,110,255" : "21,105,255") + "," + Math.min(0.62, a).toFixed(3) + ")";
-        ctx.fillRect(c.x + 1, c.y + 1, C - 2, C - 2);
+      var t = now / 1000, i, s;
+      for (i = 0; i < stars.length; i++) {
+        s = stars[i]; var a = 0.12 + 0.3 * s.z * (0.6 + 0.4 * Math.sin(t * 1.6 + s.p));
+        ctx.fillStyle = "rgba(170,205,255," + a.toFixed(3) + ")"; ctx.fillRect((s.x + t * 6 * s.z) % W, s.y, 1.2 * s.z + 0.4, 1.2 * s.z + 0.4);
       }
-      ctx.strokeStyle = "rgba(255,255,255,.035)"; ctx.lineWidth = 1; ctx.beginPath();
+      ctx.strokeStyle = "rgba(255,255,255,.028)"; ctx.lineWidth = 1; ctx.beginPath();
+      var C = W < 700 ? 40 : 60;
       for (var gx = 0; gx <= W; gx += C) { ctx.moveTo(gx + 0.5, 0); ctx.lineTo(gx + 0.5, H); }
       for (var gy = 0; gy <= H; gy += C) { ctx.moveTo(0, gy + 0.5); ctx.lineTo(W, gy + 0.5); }
       ctx.stroke();
+      if (now > nextAt) { spawn(); nextAt = now + 420 + Math.random() * 700; }
+      ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.lineCap = "round";
+      for (var k = streaks.length - 1; k >= 0; k--) {
+        var st = streaks[k], u = (now - st.t0) / st.dur;
+        if (u > 1.7) { streaks.splice(k, 1); continue; }
+        var head = Math.min(1, u), tail = Math.max(0, u - 0.5), fade = u > 1 ? Math.max(0, 1 - (u - 1) / 0.7) : 1, seg = 30;
+        for (var j = 0; j < seg; j++) {
+          var ua = tail + (head - tail) * j / seg, ub = tail + (head - tail) * (j + 1) / seg;
+          ctx.strokeStyle = "rgba(" + st.c + "," + ((j / seg) * 0.55 * fade).toFixed(3) + ")"; ctx.lineWidth = 1.8;
+          ctx.beginPath(); ctx.moveTo(st.x0 + st.w * ua, st.y0 - st.h * shapeY(ua)); ctx.lineTo(st.x0 + st.w * ub, st.y0 - st.h * shapeY(ub)); ctx.stroke();
+        }
+        if (u <= 1) {
+          var hx = st.x0 + st.w * head, hy = st.y0 - st.h * shapeY(head);
+          var g = ctx.createRadialGradient(hx, hy, 0, hx, hy, 22);
+          g.addColorStop(0, "rgba(255,255,255,.9)"); g.addColorStop(0.25, "rgba(" + st.c + ",.55)"); g.addColorStop(1, "rgba(" + st.c + ",0)");
+          ctx.fillStyle = g; ctx.fillRect(hx - 22, hy - 22, 44, 44);
+          if (Math.random() < 0.6) sparks.push({ x: hx, y: hy, vx: -0.3 - Math.random() * 0.8, vy: 0.2 + Math.random() * 0.6, l: 1, c: Math.random() < 0.2 ? "232,180,92" : st.c });
+        } else if (st.grad && !st.ring) st.ring = now;
+        if (st.ring) {
+          var pr = (now - st.ring) / 700;
+          if (pr < 1) { ctx.strokeStyle = "rgba(62,207,142," + (0.8 * (1 - pr)).toFixed(3) + ")"; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(st.x0 + st.w, st.y0 - st.h, 4 + pr * 46, 0, 6.283); ctx.stroke(); }
+        }
+      }
+      for (var q = sparks.length - 1; q >= 0; q--) {
+        var p = sparks[q]; p.x += p.vx * dt * 0.06; p.y += p.vy * dt * 0.06; p.vy += 0.02 * dt * 0.06; p.l -= 0.02 * dt * 0.06;
+        if (p.l <= 0) { sparks.splice(q, 1); continue; }
+        ctx.fillStyle = "rgba(" + p.c + "," + (p.l * 0.8).toFixed(3) + ")"; ctx.fillRect(p.x, p.y, 1.6, 1.6);
+      }
+      if (sparks.length > 500) sparks.splice(0, sparks.length - 500);
+      ctx.restore();
     }
-    function onMove(e) { var r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; }
-    function onLeave() { mx = my = -1e4; }
+    function onMove(e) {
+      var r = band.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+      if (stack && W > 960) {
+        stack.style.setProperty("--rx", (((my / H) - 0.5) * -10).toFixed(2) + "deg");
+        stack.style.setProperty("--ry", (((mx / W) - 0.5) * 14).toFixed(2) + "deg");
+      }
+    }
+    function onLeave() { if (stack) { stack.style.setProperty("--rx", "0deg"); stack.style.setProperty("--ry", "0deg"); } }
+    function onDown(e) {
+      if (e.target.closest("a,button,input,select,.sl-fc")) return;
+      var r = band.getBoundingClientRect(); spawn(e.clientX - r.left - 40, e.clientY - r.top + 20, true);
+    }
     var ob = "IntersectionObserver" in window ? new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }) : null;
-    size();
+    size(); spawn(null, null, true);
     if (ob) ob.observe(band);
     band.addEventListener("pointermove", onMove, { passive: true });
     band.addEventListener("pointerleave", onLeave);
+    band.addEventListener("pointerdown", onDown);
     addEventListener("resize", size);
-    if (reduced) { visible = true; draw(performance.now()); alive = false; cancelAnimationFrame(raf); }
+    var reduced = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) { visible = true; draw(performance.now() + 40); alive = false; cancelAnimationFrame(raf); }
     else raf = requestAnimationFrame(draw);
-    MZ = { cv: cv, stop: function () { alive = false; cancelAnimationFrame(raf); if (ob) ob.disconnect(); removeEventListener("resize", size); } };
+    // fair-window clock on the floating card, and the live testnet burn number
+    var fairT = document.getElementById("slFairT"), fairA = document.getElementById("slFairArc"), fs0 = performance.now();
+    var clock = setInterval(function () {
+      if (fairT) {
+        var left = 300 - (Math.floor((performance.now() - fs0) / 1000) % 300);
+        fairT.textContent = "0" + Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0");
+        if (fairA) { var c = 2 * Math.PI * 34; fairA.style.strokeDashoffset = (c * (1 - left / 300)).toFixed(1); }
+      }
+      var fb = document.getElementById("slFcBurn"); if (fb) fb.textContent = nf(S.proto.burned + S.proto.launchBurned, 2);
+    }, 1000);
+    MZ = { cv: cv, stop: function () { alive = false; cancelAnimationFrame(raf); clearInterval(clock); if (ob) ob.disconnect(); removeEventListener("resize", size); } };
+  }
+
+  /* ---------- the film: silent autoplay while in view, click for sound ---------- */
+  var filmObs = null;
+  function wireFilm() {
+    if (filmObs) { filmObs.disconnect(); filmObs = null; }
+    var v = document.getElementById("slFilmV"), btn = document.getElementById("slFilmPlay"), box = document.getElementById("slFilm");
+    if (!v || !btn) return;
+    var full = false;
+    if ("IntersectionObserver" in window) {
+      filmObs = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting && e.intersectionRatio > 0.35) { if (v.paused && !full) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } }
+          else if (!full && !v.paused) v.pause();
+        });
+      }, { threshold: [0, 0.35, 0.6] });
+      filmObs.observe(v);
+    }
+    btn.addEventListener("click", function () {
+      full = true; v.muted = false; v.loop = false; v.currentTime = 0; v.controls = true;
+      box.classList.add("is-playing");
+      var p = v.play(); if (p && p.catch) p.catch(function () {});
+    });
+    v.addEventListener("ended", function () { full = false; box.classList.remove("is-playing"); v.controls = false; v.muted = true; v.loop = true; v.play().catch(function () {}); });
   }
 
   /* ------------------------------------------------------------------ *
@@ -959,8 +1031,8 @@
       "<h1>" + ["hero_l1", "hero_l2", "hero_l3"].map(function (k, i) { return '<span class="ln"><span style="--i:' + i + '">' + t(k) + "</span></span>"; }).join("") + "</h1>" +
       '<p class="sl-hero-p fade-in" style="--d:.42s">' + esc(t("hero_s")) + "</p>" +
       '<div class="sl-hero-cta fade-in" style="--d:.55s"><a class="sl-btn sl-btn-p" href="#/create">' + ico("rocket") + esc(t("cta_launch")) + '</a><a class="sl-btn" href="#/tokenize">' + ico("building") + esc(t("cta_tokenize")) + "</a></div></div>" +
-      '<div class="fade-in" style="--d:.3s">' + heroViz() + "</div></section>" +
-      '<div class="sl-band-foot fade-in" style="--d:.65s"><div class="sl-band-hud"><span class="scroll"><i></i>Scroll</span><span>SectoraEVM · ' + esc(t("live")) + ' · Block <b class="num" id="slBlk">' + nf(S.block, 0) + "</b></span></div>" + statTiles() + "</div></div></section>" +
+      '<div class="fade-in" style="--d:.3s">' + heroStack() + "</div></section>" +
+      '<div class="sl-band-foot fade-in" style="--d:.65s"><div class="sl-band-hud"><span class="scroll"><i></i>Scroll</span><span>SectoraEVM · ' + esc(t("live")) + ' · Block <b class="num" id="slBlk">' + nf(S.block, 0) + "</b></span></div>" + statTiles() + "</div></div></section>" + filmSection() +
       '<section class="sl-sec"><div class="sl-head"><div><h2>' + esc(t("explore")) + '</h2><span class="lbl">' + nf(coinsList().length, 0) + " · SectoraEVM</span></div>" +
       '<label class="sl-search">' + ico("search") + '<span class="sr">' + esc(t("search")) + '</span><input class="sl-input" id="slQ" type="search" placeholder="' + esc(t("search")) + '" value="' + esc(ui.q) + '"></label></div>' +
       '<div class="sl-tabs" style="margin-bottom:16px">' +
@@ -974,6 +1046,26 @@
       "</div></section>";
   }
 
+  function heroStack() {
+    var burned = S.proto.burned + S.proto.launchBurned;
+    var ring = function (id, r, col, frac) {
+      var c = 2 * Math.PI * r;
+      return '<svg viewBox="0 0 ' + (r * 2 + 12) + " " + (r * 2 + 12) + '" style="transform:rotate(-90deg)"><circle cx="' + (r + 6) + '" cy="' + (r + 6) + '" r="' + r + '" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="6"/><circle' + (id ? ' id="' + id + '"' : "") + ' cx="' + (r + 6) + '" cy="' + (r + 6) + '" r="' + r + '" fill="none" stroke="' + col + '" stroke-width="6" stroke-linecap="round" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + (c * (1 - frac)).toFixed(1) + '" style="filter:drop-shadow(0 0 6px ' + col + ')"/></svg>';
+    };
+    return '<div class="sl-stack" id="slStack"><div class="sl-stack-in">' +
+      '<div class="sl-fc fc1">' + heroViz() + "</div>" +
+      '<div class="sl-fc fc2"><span class="lbl">' + esc(t("fc_fair")) + '</span><div class="fc-row"><div class="fc-ring">' + ring("slFairArc", 34, "#34e7ff", 1) + '</div><div><b class="fc-big" id="slFairT">05:00</b><span class="sub">' + esc(t("fc_cap")) + "</span></div></div></div>" +
+      '<div class="sl-fc fc3"><span class="lbl">' + esc(t("fc_shield")) + " <em>· " + esc(t("fc_ex")) + '</em></span><div class="fc-row"><div class="fc-ring">' + ring("", 34, "#3ecf8e", 0.96) + '<b>96</b></div><div class="fc-checks"><span>' + ico("check") + esc(t("c_supply")) + "</span><span>" + ico("check") + esc(t("c_liq")) + "</span><span>" + ico("check") + esc(t("c_dev")) + "</span></div></div></div>" +
+      '<div class="sl-fc fc4"><span class="lbl"><span class="sl-dot" style="color:var(--amber)"></span>' + esc(t("fc_burn")) + '</span><b class="fc-big amb" id="slFcBurn">' + nf(burned, 2) + "</b></div>" +
+      "</div></div>";
+  }
+  function filmSection() {
+    return '<section class="sl-film" id="slFilm"><div class="sl-head"><div><h2>' + esc(t("film_eb")) + '</h2><span class="lbl">0:34 · Sectora Launch</span></div></div>' +
+      '<div class="sl-film-grid"><div class="sl-film-txt"><span class="sl-eyebrow"><i class="rule"></i>Film 01 · SectoraEVM</span><h3>' + esc(t("film_t")) + "</h3><p>" + esc(t("film_s")) + "</p></div>" +
+      '<div class="sl-film-frame"><i class="cm tl"></i><i class="cm tr"></i><i class="cm bl"></i><i class="cm br"></i>' +
+      '<video id="slFilmV" src="media/sectora-launch-film.mp4?v=1" poster="media/sectora-launch-film-poster.jpg?v=1" muted loop playsinline preload="metadata"></video>' +
+      '<button class="sl-film-ov" id="slFilmPlay" type="button" aria-label="' + esc(t("film_play")) + '"><span class="sl-film-play"><svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="#fff"/></svg></span><span class="sl-film-lbl">' + esc(t("film_play")) + "</span></button></div></div></section>";
+  }
   function heroViz() {
     var W = 560, H = 385, x0 = 46, x1 = 514, y0 = 318, y1 = 58, N = 48, p0 = V_SECT0 / V_TOK0, pg = (V_SECT0 + GRAD_RAISE) / (V_TOK0 - CURVE_TOKENS);
     var pts = [];
