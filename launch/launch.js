@@ -725,13 +725,32 @@
 
   var entering = true;
   var view = "home", arg = "", ui = { tab: "trend", q: "", side: "buy", itab: "trades", ctab: "trades", cls: "re" };
-  function route() {
+  var booted = false;
+  function parseRoute() {
     var h = (location.hash || "#/").replace(/^#\/?/, "").split("/");
-    view = h[0] || "home"; arg = h[1] || "";
-    if (["home", "create", "coin", "tokenize", "assets", "asset", "me", "stats"].indexOf(view) < 0) view = "home";
-    entering = true;
-    render();
-    window.scrollTo(0, 0);
+    var v = h[0] || "home";
+    if (["home", "create", "coin", "tokenize", "assets", "asset", "me", "stats"].indexOf(v) < 0) v = "home";
+    return [v, h[1] || ""];
+  }
+  function route() {
+    var r = parseRoute();
+    function swap() { view = r[0]; arg = r[1]; entering = true; render(); window.scrollTo(0, 0); }
+    if (!booted) { booted = true; swap(); return; }
+    sweep(r[0], swap);
+  }
+  var SWEEP_LBL = { home: "nav_explore", create: "nav_launch", coin: "nav_explore", tokenize: "nav_tokenize", assets: "nav_assets", asset: "nav_assets", me: "nav_me", stats: "nav_stats" };
+  var sweeping = false;
+  function sweep(target, swap) {
+    var w = document.getElementById("slWipe");
+    if (!w || sweeping || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) { swap(); return; }
+    sweeping = true;
+    var b = w.querySelector(".lbl b"); if (b) b.textContent = t(SWEEP_LBL[target] || "nav_explore");
+    w.classList.remove("in", "out"); void w.offsetWidth; w.classList.add("in");
+    setTimeout(function () {
+      swap();
+      w.classList.add("out");
+      setTimeout(function () { w.classList.remove("in", "out"); sweeping = false; }, 520);
+    }, 440);
   }
   var NAV = [
     ["home", "#/", "nav_explore", "compass"], ["create", "#/create", "nav_launch", "rocket"], ["tokenize", "#/tokenize", "nav_tokenize", "building"],
@@ -781,13 +800,74 @@
       Array.prototype.forEach.call(m.children, function (el, i) { el.style.setProperty("--k", Math.min(i, 8)); });
       reveal(m);
       var hero = m.querySelector(".sl-hero");
-      if (hero) requestAnimationFrame(function () { requestAnimationFrame(function () { m.classList.add("go"); hero.classList.add("go"); countUp(m); }); });
+      if (hero) (window.SL_INTRO || Promise.resolve()).then(function () {
+        requestAnimationFrame(function () { requestAnimationFrame(function () { m.classList.add("go"); hero.classList.add("go"); countUp(m); }); });
+      });
       else m.querySelectorAll("[data-count]").length && countUp(m);
     } else {
       m.classList.add("go"); var hero2 = m.querySelector(".sl-hero"); if (hero2) hero2.classList.add("go");
     }
     entering = false;
     wire();
+    if (document.getElementById("slCells")) startMosaic(); else stopMosaic();
+  }
+
+  /* ---------- live cell mosaic behind the hero (same motif as the main site) ---------- */
+  var MZ = null;
+  function stopMosaic() { if (MZ) { MZ.stop(); MZ = null; } }
+  function startMosaic() {
+    var cv = document.getElementById("slCells");
+    if (MZ && MZ.cv === cv) return;
+    stopMosaic();
+    var ctx = cv.getContext("2d"), band = cv.parentNode, W = 0, H = 0, C = 54, cells = [], mx = -1e4, my = -1e4, raf = 0, last = 0, visible = true, alive = true;
+    var reduced = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function size() {
+      var r = band.getBoundingClientRect(); W = r.width; H = r.height;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      C = W < 700 ? 38 : 54; cells = [];
+      for (var y = 0; y < H + C; y += C) for (var x = 0; x < W + C; x += C) {
+        var r1 = Math.random();
+        cells.push({ x: x, y: y, lit: r1 > 0.84, deep: r1 > 0.965, ph: Math.random() * 6.283, sp: 0.25 + Math.random() * 0.9, base: Math.random() * 0.03,
+          hex: Math.random() > 0.985 ? ((Math.random() * 65535) | 0).toString(16).toUpperCase().padStart(4, "0") : "" });
+      }
+    }
+    function draw(now) {
+      if (!alive) return;
+      raf = requestAnimationFrame(draw);
+      if (!visible || now - last < 40) return;
+      last = now;
+      ctx.clearRect(0, 0, W, H);
+      var t = now / 1000, sy = ((t * 70) % (H + 200)) - 100;
+      ctx.font = "500 9px 'IBM Plex Mono', monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      for (var i = 0; i < cells.length; i++) {
+        var c = cells[i], a = c.base;
+        if (c.lit) a += (c.deep ? 0.34 : 0.13) * Math.max(0, Math.sin(t * c.sp + c.ph));
+        var d = Math.hypot(c.x + C / 2 - mx, c.y + C / 2 - my);
+        if (d < 260) a += (1 - d / 260) * 0.3;
+        var ds = Math.abs(c.y + C / 2 - sy);
+        if (ds < C * 1.6) a += (1 - ds / (C * 1.6)) * 0.07;
+        if (a < 0.012) continue;
+        if (c.hex && a > 0.05) { ctx.fillStyle = "rgba(52,231,255," + Math.min(0.7, a * 2).toFixed(3) + ")"; ctx.fillText(c.hex, c.x + C / 2, c.y + C / 2); continue; }
+        ctx.fillStyle = "rgba(" + (c.deep ? "30,110,255" : "21,105,255") + "," + Math.min(0.62, a).toFixed(3) + ")";
+        ctx.fillRect(c.x + 1, c.y + 1, C - 2, C - 2);
+      }
+      ctx.strokeStyle = "rgba(255,255,255,.035)"; ctx.lineWidth = 1; ctx.beginPath();
+      for (var gx = 0; gx <= W; gx += C) { ctx.moveTo(gx + 0.5, 0); ctx.lineTo(gx + 0.5, H); }
+      for (var gy = 0; gy <= H; gy += C) { ctx.moveTo(0, gy + 0.5); ctx.lineTo(W, gy + 0.5); }
+      ctx.stroke();
+    }
+    function onMove(e) { var r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; }
+    function onLeave() { mx = my = -1e4; }
+    var ob = "IntersectionObserver" in window ? new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }) : null;
+    size();
+    if (ob) ob.observe(band);
+    band.addEventListener("pointermove", onMove, { passive: true });
+    band.addEventListener("pointerleave", onLeave);
+    addEventListener("resize", size);
+    if (reduced) { visible = true; draw(performance.now()); alive = false; cancelAnimationFrame(raf); }
+    else raf = requestAnimationFrame(draw);
+    MZ = { cv: cv, stop: function () { alive = false; cancelAnimationFrame(raf); if (ob) ob.disconnect(); removeEventListener("resize", size); } };
   }
 
   /* ------------------------------------------------------------------ *
@@ -874,12 +954,13 @@
     var raise = nf(GRAD_RAISE, 0);
     var tabs = [["trend", "tab_trend"], ["new", "tab_new"], ["soon", "tab_soon"], ["grad", "tab_grad"]];
     var why = [["bolt", 1], ["users", 2], ["lock", 3], ["scale", 4], ["fire", 5], ["shield", 6], ["chart", 7], ["copycat", 8], ["file", 9], ["badge", 10]];
-    return '<section class="sl-hero"><div><span class="sl-eyebrow fade-in" style="--d:.05s"><i class="rule"></i>' + esc(t("eyebrow2")) + "</span>" +
+    return '<section class="sl-band"><canvas id="slCells" aria-hidden="true"></canvas><div class="sl-band-veil"></div><div class="sl-band-marks"><i></i><i></i><i></i><i></i></div><div class="sl-band-in">' +
+      '<section class="sl-hero"><div><span class="sl-eyebrow fade-in" style="--d:.05s"><i class="rule"></i>' + esc(t("eyebrow2")) + "</span>" +
       "<h1>" + ["hero_l1", "hero_l2", "hero_l3"].map(function (k, i) { return '<span class="ln"><span style="--i:' + i + '">' + t(k) + "</span></span>"; }).join("") + "</h1>" +
       '<p class="sl-hero-p fade-in" style="--d:.42s">' + esc(t("hero_s")) + "</p>" +
       '<div class="sl-hero-cta fade-in" style="--d:.55s"><a class="sl-btn sl-btn-p" href="#/create">' + ico("rocket") + esc(t("cta_launch")) + '</a><a class="sl-btn" href="#/tokenize">' + ico("building") + esc(t("cta_tokenize")) + "</a></div></div>" +
       '<div class="fade-in" style="--d:.3s">' + heroViz() + "</div></section>" +
-      '<div class="fade-in" style="--d:.65s">' + statTiles() + "</div>" +
+      '<div class="sl-band-foot fade-in" style="--d:.65s"><div class="sl-band-hud"><span class="scroll"><i></i>Scroll</span><span>SectoraEVM · ' + esc(t("live")) + ' · Block <b class="num" id="slBlk">' + nf(S.block, 0) + "</b></span></div>" + statTiles() + "</div></div></section>" +
       '<section class="sl-sec"><div class="sl-head"><div><h2>' + esc(t("explore")) + '</h2><span class="lbl">' + nf(coinsList().length, 0) + " · SectoraEVM</span></div>" +
       '<label class="sl-search">' + ico("search") + '<span class="sr">' + esc(t("search")) + '</span><input class="sl-input" id="slQ" type="search" placeholder="' + esc(t("search")) + '" value="' + esc(ui.q) + '"></label></div>' +
       '<div class="sl-tabs" style="margin-bottom:16px">' +
@@ -911,7 +992,9 @@
     var e = pts[N];
     return '<div class="sl-viz" aria-hidden="true"><svg viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="xMidYMid meet">' +
       '<defs><linearGradient id="vzG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1569ff"/><stop offset=".7" stop-color="#4d8dff"/><stop offset="1" stop-color="#3ecf8e"/></linearGradient>' +
-      '<linearGradient id="vzA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1569ff" stop-opacity=".22"/><stop offset="1" stop-color="#1569ff" stop-opacity="0"/></linearGradient></defs>' +
+      '<linearGradient id="vzA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1569ff" stop-opacity=".22"/><stop offset="1" stop-color="#1569ff" stop-opacity="0"/></linearGradient>' +
+      '<linearGradient id="vzS" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#34e7ff" stop-opacity="0"/><stop offset=".5" stop-color="#34e7ff" stop-opacity=".55"/><stop offset="1" stop-color="#34e7ff" stop-opacity="0"/></linearGradient></defs>' +
+      '<rect class="scanv" x="0" y="0" width="' + W + '" height="1.5" fill="url(#vzS)"/>' +
       '<g class="grid">' + grid + "</g>" +
       '<path class="area" d="' + d + " L" + x1 + " " + y0 + " L" + x0 + " " + y0 + ' Z"/>' +
       '<line class="thr" x1="' + x1 + '" y1="30" x2="' + x1 + '" y2="' + y0 + '"/>' +
@@ -1347,6 +1430,7 @@
     var b2 = document.getElementById("slBurn2"); if (b2) b2.textContent = nf(S.proto.burned + S.proto.launchBurned, 4) + " SECT";
     var q2 = document.getElementById("slQueue2"); if (q2) q2.textContent = nf(S.proto.burnQueue, 4) + " SECT";
     var bt = document.getElementById("slBurns"); if (bt) bt.innerHTML = burnsTable();
+    var blk = document.getElementById("slBlk"); if (blk) blk.textContent = nf(S.block, 0);
     if (view === "coin") {
       var c = S.coins[arg], fair = document.getElementById("slFair");
       if (c && fair) {
@@ -1656,7 +1740,13 @@
   window.addEventListener("hashchange", route);
   window.addEventListener("storage", function (e) { if (e.key === KEY) { S = load(); render(); } });
   setInterval(function () { burnTick(false); }, BURN_TICK);
+  var blkTick = 0;
   setInterval(function () {
+    if (++blkTick % 2 === 0) {
+      S.block += 1;
+      var bk = document.getElementById("slBlk");
+      if (bk) { bk.textContent = nf(S.block, 0); bk.classList.remove("flash"); void bk.offsetWidth; bk.classList.add("flash"); }
+    }
     if (view === "coin") liveUpdate();
     if (view === "asset") { var x = S.assets[arg]; if (x && x.status !== "approved") render(); }
   }, 1000);

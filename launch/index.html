@@ -13,17 +13,37 @@
 <link rel="preload" href="/fonts/IBMPlexSans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/IBMPlexMono-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="launch.css?v=20261119b">
+<link rel="stylesheet" href="launch.css?v=20261119c">
 </head>
 <body>
+<div class="li" id="li" aria-hidden="true">
+  <canvas id="liCv"></canvas>
+  <div class="li-frame"><i></i><i></i><i></i><i></i></div>
+  <div class="li-hud">
+    <span class="tl">Sectora Launch · SectoraEVM</span>
+    <span class="tr">Launchpad · Build 1.0</span>
+    <div class="li-log">
+      <span>Curve engine · constant product ok</span>
+      <span>Shield scanner · armed</span>
+      <span class="hi">Burn router · SECT 0.3%</span>
+      <span class="hi">Fair window · 300 s · 1% cap</span>
+    </div>
+    <span class="bl" id="liState"><i class="led"></i><b>Initializing</b></span>
+    <span class="br"><b id="liPct">00</b>%</span>
+    <span class="li-bar"><i id="liFill"></i></span>
+  </div>
+  <p class="li-word">Sectora Launch</p>
+</div>
 <div class="sl-vig" aria-hidden="true"></div>
 <div class="sl-grain" aria-hidden="true"></div>
 <div class="sl-sprog" aria-hidden="true"><i></i></div>
+<div class="sl-wipe" id="slWipe" aria-hidden="true"><div class="p"></div><div class="e"></div><div class="lbl"><i></i><span>Sectora Launch · <b></b></span></div></div>
 <div class="sl-banner" id="slBanner"></div>
 <header class="sl-top" id="slTop"></header>
 <main id="slMain"></main>
 <footer class="sl-foot" id="slFoot"></footer>
 <nav class="sl-tabbar" id="slTabbar" aria-label="Sections"></nav>
-<script src="launch.js?v=20261119b"></script>
+<script src="launch-intro.js?v=20261119c"></script>
+<script src="launch.js?v=20261119c"></script>
 </body>
 </html>
