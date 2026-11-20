@@ -4682,6 +4682,13 @@
       "c": "Dhaka, BD",
       "la": 23.7,
       "lo": 90.4
+    },
+    "0x83f5b634ba2dad527ae9f8e1bf6fe62b3f68f2e0": {
+      "t": 1795212525000,
+      "n": "Sectora Node Bucharest",
+      "c": "Bucharest, RO",
+      "la": 44.4,
+      "lo": 26.1
     }
   }
 }
