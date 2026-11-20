@@ -4675,6 +4675,13 @@
       "c": "Minsk, BY",
       "la": 53.9,
       "lo": 27.6
+    },
+    "0x94ed73b68f5dc6ff9197e6265e43ca7ecef85494": {
+      "t": 1795198967000,
+      "n": "Sectora Node Dhaka",
+      "c": "Dhaka, BD",
+      "la": 23.7,
+      "lo": 90.4
     }
   }
 }
