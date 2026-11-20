@@ -4668,6 +4668,13 @@
       "c": "Jakarta, ID",
       "la": -6.2,
       "lo": 106.8
+    },
+    "0x0dce1961463da1042cfcfb787059bded74a1df2b": {
+      "t": 1795195885000,
+      "n": "Sectora Node Minsk",
+      "c": "Minsk, BY",
+      "la": 53.9,
+      "lo": 27.6
     }
   }
 }
