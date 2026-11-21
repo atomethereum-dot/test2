@@ -4724,6 +4724,13 @@
       "c": "Dhaka, BD",
       "la": 23.7,
       "lo": 90.4
+    },
+    "0x7007aacd3f0fa2d0bcad401b1c796a22796ea0fe": {
+      "t": 1795276664000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
