@@ -4780,6 +4780,13 @@
       "c": "Karachi, PK",
       "la": 24.9,
       "lo": 67
+    },
+    "0x6702c4656faa58647121385f7dcd7b30472267ad": {
+      "t": 1795354894000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "São Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
