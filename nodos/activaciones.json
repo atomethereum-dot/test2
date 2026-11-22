@@ -4794,6 +4794,13 @@
       "c": "Baghdad, IQ",
       "la": 33.4,
       "lo": 44.4
+    },
+    "0x73a72a02a197698d0ea170e6923e951d78ec1932": {
+      "t": 1795370333000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
