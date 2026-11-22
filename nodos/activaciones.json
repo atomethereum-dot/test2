@@ -4745,6 +4745,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x4997ceb1c511bc7b673817a545e09f045e373a53": {
+      "t": 1795312464000,
+      "n": "Sectora Node Riyadh",
+      "c": "Riyadh, SA",
+      "la": 24.6,
+      "lo": 46.7
     }
   }
 }
