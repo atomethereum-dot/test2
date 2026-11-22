@@ -4815,6 +4815,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0xedfbfd9ec32de1882fc8f40d11cd37eee750a564": {
+      "t": 1795384709000,
+      "n": "Sectora Node Warsaw",
+      "c": "Warsaw, PL",
+      "la": 52.2,
+      "lo": 21
     }
   }
 }
