@@ -4829,6 +4829,13 @@
       "c": "Tunis, TN",
       "la": 36.8,
       "lo": 10.2
+    },
+    "0x83191278ce2fdc5ad38d4e88d8866df53ee95256": {
+      "t": 1795387876000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "São Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
