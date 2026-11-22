@@ -4773,6 +4773,13 @@
       "c": "Tehran, IR",
       "la": 35.7,
       "lo": 51.4
+    },
+    "0xa7658754abeb81d1d057c3e3c2deca2dad3983fd": {
+      "t": 1795331174000,
+      "n": "Sectora Node Karachi",
+      "c": "Karachi, PK",
+      "la": 24.9,
+      "lo": 67
     }
   }
 }
