@@ -4752,6 +4752,13 @@
       "c": "Riyadh, SA",
       "la": 24.6,
       "lo": 46.7
+    },
+    "0x8236fe25e9ab837e5ff9ea6c7ec67d651fc8c012": {
+      "t": 1795314229000,
+      "n": "Sectora Node Manaus",
+      "c": "Manaus, BR",
+      "la": -3.1,
+      "lo": -60
     }
   }
 }
