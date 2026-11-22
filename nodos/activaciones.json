@@ -4759,6 +4759,13 @@
       "c": "Manaus, BR",
       "la": -3.1,
       "lo": -60
+    },
+    "0x5880b080df0e007b700c8d95ee018f45a9f45fbd": {
+      "t": 1795323116000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
