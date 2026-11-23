@@ -4871,6 +4871,13 @@
       "c": "Campo Grande, BR",
       "la": -20.4,
       "lo": -54.6
+    },
+    "0x4abefc034be5fb58204233df827c12b35d49a455": {
+      "t": 1795409462000,
+      "n": "Sectora Node Kolkata",
+      "c": "Kolkata, IN",
+      "la": 22.5,
+      "lo": 88.4
     }
   }
 }
