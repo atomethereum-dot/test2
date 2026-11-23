@@ -4878,6 +4878,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x675e0e12f81834cc973ddd4e81d959ce24b43ad2": {
+      "t": 1795424972000,
+      "n": "Sectora Node Lisbon",
+      "c": "Lisbon, PT",
+      "la": 38.7,
+      "lo": -9.1
     }
   }
 }
