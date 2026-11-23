@@ -4899,6 +4899,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0xf6bf319c1cd0f70ff57f00174eb1464cec342f19": {
+      "t": 1795471089000,
+      "n": "Sectora Node Lisbon",
+      "c": "Lisbon, PT",
+      "la": 38.7,
+      "lo": -9.1
     }
   }
 }
