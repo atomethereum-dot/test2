@@ -4864,6 +4864,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x6a92c8f4581be78d325324b41c6148c92ce4a529": {
+      "t": 1795399967000,
+      "n": "Sectora Node Campo Grande",
+      "c": "Campo Grande, BR",
+      "la": -20.4,
+      "lo": -54.6
     }
   }
 }
