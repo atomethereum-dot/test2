@@ -4850,6 +4850,13 @@
       "c": "Paris, FR",
       "la": 48.9,
       "lo": 2.3
+    },
+    "0xc571f81e3ab5b7550af2a30dd1a01116fa564bca": {
+      "t": 1795394064000,
+      "n": "Sectora Node New York",
+      "c": "New York, US",
+      "la": 40.7,
+      "lo": -74
     }
   }
 }
