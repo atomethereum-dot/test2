@@ -4885,6 +4885,13 @@
       "c": "Lisbon, PT",
       "la": 38.7,
       "lo": -9.1
+    },
+    "0x534f1f370e6cd2bdce4f643cdb60beb7b86f1cb1": {
+      "t": 1795425320000,
+      "n": "Sectora Node Lisbon",
+      "c": "Lisbon, PT",
+      "la": 38.7,
+      "lo": -9.1
     }
   }
 }
