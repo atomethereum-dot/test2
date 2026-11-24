@@ -4941,6 +4941,13 @@
       "c": "Kolkata, IN",
       "la": 22.5,
       "lo": 88.4
+    },
+    "0x4f3f05a9772c8ea3590d06f36909d76be3cb53be": {
+      "t": 1795554082000,
+      "n": "Sectora Node Tehran",
+      "c": "Tehran, IR",
+      "la": 35.7,
+      "lo": 51.4
     }
   }
 }
