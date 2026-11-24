@@ -4913,6 +4913,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0xa094afe0eaa4db1b2fb49f83dca3f537e211845d": {
+      "t": 1795501196000,
+      "n": "Sectora Node Manila",
+      "c": "Manila, PH",
+      "la": 14.6,
+      "lo": 121
     }
   }
 }
