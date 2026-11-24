@@ -4948,6 +4948,13 @@
       "c": "Tehran, IR",
       "la": 35.7,
       "lo": 51.4
+    },
+    "0x07f47ed6c2c4cc31ecb3bc4972a24f24d5b2cd46": {
+      "t": 1795556884000,
+      "n": "Sectora Node Baghdad",
+      "c": "Baghdad, IQ",
+      "la": 33.4,
+      "lo": 44.4
     }
   }
 }
