@@ -4927,6 +4927,13 @@
       "c": "Algiers, DZ",
       "la": 36.8,
       "lo": 3
+    },
+    "0x6c25010ec552b0f073651b3a7178defb894ac5f9": {
+      "t": 1795547513000,
+      "n": "Sectora Node New York",
+      "c": "New York, US",
+      "la": 40.7,
+      "lo": -74
     }
   }
 }
