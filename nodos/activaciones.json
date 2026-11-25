@@ -4990,6 +4990,13 @@
       "c": "Dhaka, BD",
       "la": 23.7,
       "lo": 90.4
+    },
+    "0xedc7bc3e81d8ff62506c715eb6d93df1e4172e88": {
+      "t": 1795651008000,
+      "n": "Sectora Node Niamey",
+      "c": "Niamey, NE",
+      "la": 13.5,
+      "lo": 2.1
     }
   }
 }
