@@ -4962,6 +4962,13 @@
       "c": "Paris, FR",
       "la": 48.9,
       "lo": 2.3
+    },
+    "0xc92da28efc6f7689a59889f7ebc6e039c91fad65": {
+      "t": 1795578148000,
+      "n": "Sectora Node Sao Paulo",
+      "c": "Sao Paulo, BR",
+      "la": -23.5,
+      "lo": -46.6
     }
   }
 }
