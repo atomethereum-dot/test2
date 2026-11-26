@@ -4997,6 +4997,13 @@
       "c": "Niamey, NE",
       "la": 13.5,
       "lo": 2.1
+    },
+    "0xad42f2ea8695af739adc6dba850a1ec4c63efcd5": {
+      "t": 1795681994000,
+      "n": "Sectora Node Tokyo-001",
+      "c": "Tokyo, JP",
+      "la": 35.7,
+      "lo": 139.8
     }
   }
 }
