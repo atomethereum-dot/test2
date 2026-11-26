@@ -1616,6 +1616,12 @@
   .wh-lb-what{margin:clamp(18px,2.4vw,28px) 0 0;padding:clamp(14px,1.4vw,18px);border:1px solid var(--wh-line);border-left:3px solid var(--blue);border-radius:3px}
   .wh-lb-what h4{margin:0 0 8px;font-size:clamp(17px,1.4vw,20px);font-weight:500;letter-spacing:-.01em;color:var(--wh-ink)}
   .wh-lb-what p{margin:0;font-size:14.5px;line-height:1.65;color:var(--wh-ink-2)}
+  .wh-lb-pair{display:flex;gap:16px;align-items:center;margin:14px 0 0;padding:14px 16px;border-radius:3px;background:color-mix(in srgb,rgba(21,105,255,.07),rgba(77,141,255,.12) calc(var(--tinta,0)*100%))}
+  .wh-lb-pp{flex:none;display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:3px;background:var(--blue);color:#fff;font-size:13px;letter-spacing:.06em}
+  .wh-lb-pp b{font-weight:500} .wh-lb-pp i{font-style:normal;opacity:.7}
+  .wh-lb-pair strong{display:block;font-weight:500;font-size:15px;color:var(--wh-ink)}
+  .wh-lb-pair span:not(.wh-lb-pp){display:block;margin-top:4px;font-size:13.5px;line-height:1.6;color:var(--wh-ink-2)}
+  @media (max-width:640px){ .wh-lb-pair{flex-direction:column;align-items:flex-start} }
   .wh-lb-chips{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
   .wh-lb-chips li{padding:6px 10px;border:1px solid var(--wh-line);border-radius:999px;font-size:10.5px;line-height:1.3;color:var(--wh-blue)}
   .wh-lb-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.4fr);gap:clamp(8px,1vw,12px);margin-top:clamp(18px,2.4vw,28px)}
@@ -4227,6 +4233,13 @@ a.ft-wp-all em{font-style:normal;font-size:11px;opacity:.7}
   .lang-l{min-width:140px}
   .nav-end{gap:8px}
 }
+/* telefonos estrechos: la cabecera cabe entera en cualquier idioma, sin empujar el menu fuera.
+   "Legal documents" se parte en dos lineas cortas si el idioma lo pide */
+@media (max-width:440px){
+  .nav-end{gap:6px}
+  .nav-end .docs{padding:7px 9px;letter-spacing:.04em;font-size:10px;line-height:1.25;white-space:normal;max-width:112px;text-align:center}
+  .lang-b{padding:10px 9px;gap:5px}
+}
 
 /* la pagina usa colocacion absoluta y calculos de canvas pensados para
    direction:ltr; heredar direction:rtl del <html> rompe el render entero.
@@ -4911,6 +4924,7 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   .disp.d3>.dp:nth-last-child(2):nth-child(3n+1){grid-column:2/span 2}
   .disp.d3 .dp-name h3{font-size:clamp(30px,3vw,58px)}
   .disp.d3 .dp-name .mono{white-space:nowrap}
+  @media (max-width:440px){ .dp-name{flex-wrap:wrap;gap:6px 16px} .disp.d3 .dp-name .mono{white-space:normal} }
   @media (min-width:1001px) and (max-width:1180px){.disp.d3 .dp-name h3{font-size:clamp(26px,2.6vw,34px)}.disp.d3 .dp-name .mono{font-size:9.5px;letter-spacing:.14em}}
   .disp.d3 .dp-meta{grid-template-columns:1fr 1fr}.disp.d3 .dp-meta div:last-child{grid-column:1/-1}
   .gs-links{display:flex;flex-wrap:wrap;gap:12px 26px}
@@ -5880,19 +5894,25 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       <div class="wh-lb-what">
             <h4>What is Sectora Labs?</h4>
             <p>Sectora Labs is Sectora's token factory for creators: anyone can create their own coin in minutes, with no code, and launch it fairly. Buyers join a reserve at the same price as the creator, with a maximum per wallet. If the goal is not reached everyone gets 100% back, and at launch the liquidity is locked forever on Uniswap.</p>
+            <div class="wh-lb-pair">
+              <span class="wh-lb-pp mono"><b>COIN</b><i>/</i><b>#SECT</b></span>
+              <div><strong>Every coin trades as a COIN / #SECT pair</strong>
+              <span>Each coin launched on Sectora Labs has its own pair against #SECT on Uniswap. People buy the coin, not #SECT: they pay with ETH, USDT or #SECT, the contract turns the payment into #SECT and buys the coin with it. That #SECT goes into the coin's pool, where 98% stays locked forever.</span></div>
+            </div>
             <ul class="wh-lb-chips mono">
               <li>Create a coin in minutes, no code</li>
               <li>Same price as the creator</li>
               <li>100% back if the goal is not reached</li>
               <li>Liquidity locked forever</li>
+              <li>Every coin paired with #SECT</li>
             </ul>
           </div>
       <div class="wh-lb-how">
-          <p class="wh-lb-p">Every reserve on Sectora Labs is paid in ETH or USDT, and the contract turns each payment into a market buy of #SECT. At launch, 98% of that #SECT is locked forever in the coin's pool and can never be withdrawn. More coins means more #SECT bought and less #SECT in circulation.</p>
+          <p class="wh-lb-p">You don't invest in #SECT here: you buy a coin. But every coin is priced in #SECT, so every purchase made with ETH or USDT first becomes a market buy of #SECT. At launch, 98% of that #SECT is locked forever in the coin's pool and can never be withdrawn. More coins means more #SECT bought and less #SECT in circulation.</p>
           <ol class="wh-lb-flow">
-            <li><span class="wh-lb-n mono">1</span><div><b>You pay in ETH or USDT</b><span>Or in #SECT, if you already hold it.</span></div></li>
-            <li><span class="wh-lb-n mono">2</span><div><b>The contract buys #SECT</b><span>On Uniswap, with every payment: constant buying pressure on #SECT.</span></div></li>
-            <li><span class="wh-lb-n mono">3</span><div><b>98% locked forever</b><span>In the coin's pool on Uniswap, with the LP burned. That #SECT leaves circulation.</span></div></li>
+            <li><span class="wh-lb-n mono">1</span><div><b>You buy the coin</b><span>With ETH, USDT or #SECT, from the coin's page.</span></div></li>
+            <li><span class="wh-lb-n mono">2</span><div><b>Your payment becomes #SECT</b><span>The contract buys #SECT on Uniswap and uses it to buy your coin: every coin is priced in #SECT.</span></div></li>
+            <li><span class="wh-lb-n mono">3</span><div><b>98% locked forever</b><span>The #SECT of every reserve forms the COIN / #SECT pool on Uniswap, with the LP burned. That #SECT leaves circulation.</span></div></li>
             <li><span class="wh-lb-n mono">4</span><div><b>Fees burned in #SECT</b><span>Half of Sectora's 1% fee is burned on every launch.</span></div></li>
           </ol>
       </div>
@@ -10828,7 +10848,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261126b';
+      sc.src = 'i18n-home.js?v=20261126c';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
