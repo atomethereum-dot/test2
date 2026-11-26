@@ -9351,6 +9351,118 @@
       "c": "Taipei, TW",
       "la": 25,
       "lo": 121.5
+    },
+    "0x851cf41b689c48d2dea60fa15dce55bfc36cbe52": {
+      "t": 1795733951000,
+      "n": "Sectora Node Singapore-621",
+      "c": "Singapore, SG",
+      "la": 1.4,
+      "lo": 103.8
+    },
+    "0x88c4655e5ca62e838903f3f9f51ee97e6fe8d765": {
+      "t": 1795733951000,
+      "n": "Sectora Node Yokohama-618",
+      "c": "Yokohama, JP",
+      "la": 35.5,
+      "lo": 139.7
+    },
+    "0x23831605243532089876fec05a3a9a58bd7b1a75": {
+      "t": 1795733952000,
+      "n": "Sectora Node Toronto-629",
+      "c": "Toronto, CA",
+      "la": 43.7,
+      "lo": -79.4
+    },
+    "0x9caef1f73595c0f9af8892b50d4ce8529f9ebf29": {
+      "t": 1795733953000,
+      "n": "Sectora Node Frankfurt-623",
+      "c": "Frankfurt, DE",
+      "la": 50.1,
+      "lo": 8.7
+    },
+    "0x5ed6be6da509b434feac97cb9e00ef837586c2b7": {
+      "t": 1795733955000,
+      "n": "Sectora Node Zurich-626",
+      "c": "Zurich, CH",
+      "la": 47.4,
+      "lo": 8.5
+    },
+    "0x82cdd5e978e4e6ab8ea2d13eb3c8a6670d315ec3": {
+      "t": 1795733955000,
+      "n": "Sectora Node London-625",
+      "c": "London, GB",
+      "la": 51.5,
+      "lo": -0.1
+    },
+    "0x66036e22f0f4d71a810434cc5b6856ca27acb120": {
+      "t": 1795733956000,
+      "n": "Sectora Node Sydney-630",
+      "c": "Sydney, AU",
+      "la": -33.9,
+      "lo": 151.3
+    },
+    "0xca5efe9dd4679a4d2223ead180f1275c2f702fb2": {
+      "t": 1795733963000,
+      "n": "Sectora Node Singapore-636",
+      "c": "Singapore, SG",
+      "la": 1.3,
+      "lo": 103.8
+    },
+    "0xf9fa3422000b479300fc3f1dfe9150ca87077a79": {
+      "t": 1795733965000,
+      "n": "Sectora Node Seoul-634",
+      "c": "Seoul, KR",
+      "la": 37.6,
+      "lo": 126.9
+    },
+    "0x32d8fa62cc3aec05ea2a295cec9af30ac17ab1d7": {
+      "t": 1795733968000,
+      "n": "Sectora Node Tokyo-631",
+      "c": "Tokyo, JP",
+      "la": 35.7,
+      "lo": 139.7
+    },
+    "0xc12790404fd1549b3f002cc4989878e083dd5fdc": {
+      "t": 1795733970000,
+      "n": "Sectora Node SanJose-627",
+      "c": "San Jose, US",
+      "la": 37.2,
+      "lo": -122
+    },
+    "0x5026aad1ed54d00c7e51bbd4309b608dae3fcb5c": {
+      "t": 1795733977000,
+      "n": "Sectora Node Taipei-637",
+      "c": "Taipei, TW",
+      "la": 25.1,
+      "lo": 121.6
+    },
+    "0x6f13b608bb91511de7822477d26c6d693be1b144": {
+      "t": 1795733980000,
+      "n": "Sectora Node Frankfurt-638",
+      "c": "Frankfurt, DE",
+      "la": 50,
+      "lo": 8.7
+    },
+    "0x131b7c46bf3ce22df632d4b7e25ed69f153c912e": {
+      "t": 1795733983000,
+      "n": "Sectora Node Osaka-632",
+      "c": "Osaka, JP",
+      "la": 34.8,
+      "lo": 135.6
+    },
+    "0xf222d1cfb607ae5135205150512d1d4e9065d989": {
+      "t": 1795733984000,
+      "n": "Sectora Node Yokohama-633",
+      "c": "Yokohama, JP",
+      "la": 35.4,
+      "lo": 139.6
+    },
+    "0xbcaee0e1d60f1271f16904e38ad525c4e86e3593": {
+      "t": 1795733996000,
+      "n": "Sectora Node Amsterdam-639",
+      "c": "Amsterdam, NL",
+      "la": 52.4,
+      "lo": 5
     }
   }
 }
