@@ -8763,6 +8763,20 @@
       "c": "Frankfurt, DE",
       "la": 50.1,
       "lo": 8.7
+    },
+    "0xae563e98c48b08a3ac2de2868cc888bf05d7f015": {
+      "t": 1795733046000,
+      "n": "Sectora Node Singapore-531",
+      "c": "Singapore, SG",
+      "la": 1.4,
+      "lo": 103.8
+    },
+    "0x24f6ae3fbc1b092d125512d3c50b329e48ca0294": {
+      "t": 1795733047000,
+      "n": "Sectora Node SanJose-537",
+      "c": "San Jose, US",
+      "la": 37.4,
+      "lo": -121.8
     }
   }
 }
