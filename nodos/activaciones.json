@@ -5634,6 +5634,90 @@
       "c": "Sydney, AU",
       "la": -33.9,
       "lo": 151.1
+    },
+    "0x19c15daa11da31c46a215b78a0802d1feb074da4": {
+      "t": 1795688200000,
+      "n": "Sectora Node Osaka-092",
+      "c": "Osaka, JP",
+      "la": 34.8,
+      "lo": 135.5
+    },
+    "0xc4d09bc5c06464e3713877196fce1100cbedbb9a": {
+      "t": 1795688200000,
+      "n": "Sectora Node Tokyo-091",
+      "c": "Tokyo, JP",
+      "la": 35.7,
+      "lo": 139.8
+    },
+    "0x5e844f1b1a8e403bd15e523eae5f705bb40aa81b": {
+      "t": 1795688201000,
+      "n": "Sectora Node Yokohama-093",
+      "c": "Yokohama, JP",
+      "la": 35.4,
+      "lo": 139.7
+    },
+    "0x2828838d5aad85fb6b7fe5fc36a4761312d2b179": {
+      "t": 1795688202000,
+      "n": "Sectora Node Seoul-094",
+      "c": "Seoul, KR",
+      "la": 37.6,
+      "lo": 127
+    },
+    "0x6fc8d5aac361054f31368f1af40b2824ea408bf5": {
+      "t": 1795688202000,
+      "n": "Sectora Node Busan-095",
+      "c": "Busan, KR",
+      "la": 35.1,
+      "lo": 129
+    },
+    "0x3e65d26d4aeaef68b910c7ac2d207e5f974b2308": {
+      "t": 1795688203000,
+      "n": "Sectora Node Taipei-097",
+      "c": "Taipei, TW",
+      "la": 25.1,
+      "lo": 121.5
+    },
+    "0xaff215d2bbed1834d3e5e285ba4d0e255f79446b": {
+      "t": 1795688203000,
+      "n": "Sectora Node Singapore-096",
+      "c": "Singapore, SG",
+      "la": 1.3,
+      "lo": 103.8
+    },
+    "0xfed2cceba83d9b8ba9669b787f5b6da63e3cc0bd": {
+      "t": 1795688204000,
+      "n": "Sectora Node Frankfurt-098",
+      "c": "Frankfurt, DE",
+      "la": 50,
+      "lo": 8.7
+    },
+    "0xa64f1f44834b5a906cd793d179bdf8a8a7446337": {
+      "t": 1795688205000,
+      "n": "Sectora Node London-100",
+      "c": "London, GB",
+      "la": 51.6,
+      "lo": 0
+    },
+    "0xda951f3ffa27c0985cc7cfb90b711112fcecdc98": {
+      "t": 1795688205000,
+      "n": "Sectora Node Amsterdam-099",
+      "c": "Amsterdam, NL",
+      "la": 52.4,
+      "lo": 4.9
+    },
+    "0x36e8649ee3ef8479e04547d34d8bea7decabc45e": {
+      "t": 1795688206000,
+      "n": "Sectora Node Toronto-104",
+      "c": "Toronto, CA",
+      "la": 43.6,
+      "lo": -79.4
+    },
+    "0xfe1c225422c582abdf6704958abedfaeb97ecc67": {
+      "t": 1795688207000,
+      "n": "Sectora Node Tokyo-106",
+      "c": "Tokyo, JP",
+      "la": 35.6,
+      "lo": 139.7
     }
   }
 }
