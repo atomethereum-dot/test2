@@ -1597,16 +1597,26 @@
   .wh-labs::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:var(--blue)}
   .wh-lb-t{margin:12px 0 0;font-size:clamp(26px,3vw,44px);font-weight:300;letter-spacing:-.025em;line-height:1.08;color:var(--wh-ink);text-wrap:balance;max-width:22ch}
   .wh-lb-t b{font-weight:500;color:var(--wh-blue)}
-  .wh-lb-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(18px,2.6vw,40px);margin-top:clamp(18px,2.4vw,30px);align-items:start}
+  .wh-lb-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(18px,2.6vw,40px);margin-top:clamp(18px,2.4vw,30px);align-items:center}
   .wh-lb-p{margin:0;font-size:clamp(14.5px,1.05vw,16px);line-height:1.7;color:var(--wh-ink-2)}
-  .wh-lb-flow{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:8px}
+  .wh-lb-how{margin-top:clamp(18px,2.4vw,28px)}
+  .wh-labs .wh-lb-film{margin:clamp(18px,2.4vw,30px) 0 0}
+  .wh-lb-how .wh-lb-p{max-width:92ch}
+  .wh-lb-flow{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1vw,12px)}
+  @media (max-width:1180px){ .wh-lb-flow{grid-template-columns:repeat(2,minmax(0,1fr))} }
+  @media (max-width:640px){ .wh-lb-flow{grid-template-columns:minmax(0,1fr)} }
   .wh-lb-flow li{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--wh-line);border-radius:3px}
   .wh-lb-flow .wh-lb-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:11px;line-height:1;margin:0}
   .wh-lb-flow b{display:block;font-weight:500;font-size:14.5px;color:var(--wh-ink)}
   .wh-lb-flow div > span{display:block;font-size:13px;line-height:1.5;color:var(--wh-ink-3);margin-top:2px}
   .wh-lb-fig{margin:0;padding:clamp(12px,1.2vw,16px);border:1px solid var(--wh-line)}
   .wh-lb-media{position:relative;aspect-ratio:16/9;background:#fff;overflow:hidden}
-  .wh-lb-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#fff}
+  .wh-lb-media video,.wh-lb-media .film-cv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#fff}
+  .wh-lb-what{margin:clamp(18px,2.4vw,28px) 0 0;padding:clamp(14px,1.4vw,18px);border:1px solid var(--wh-line);border-left:3px solid var(--blue);border-radius:3px}
+  .wh-lb-what h4{margin:0 0 8px;font-size:clamp(17px,1.4vw,20px);font-weight:500;letter-spacing:-.01em;color:var(--wh-ink)}
+  .wh-lb-what p{margin:0;font-size:14.5px;line-height:1.65;color:var(--wh-ink-2)}
+  .wh-lb-chips{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .wh-lb-chips li{padding:6px 10px;border:1px solid var(--wh-line);border-radius:999px;font-size:10.5px;line-height:1.3;color:var(--wh-blue)}
   .wh-lb-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.4fr);gap:clamp(8px,1vw,12px);margin-top:clamp(18px,2.4vw,28px)}
   .wh-lb-tile{display:flex;flex-direction:column;gap:2px;min-width:0;padding:clamp(14px,1.4vw,20px);border:1px solid var(--wh-line);border-radius:3px}
   .wh-lb-tile > span{font-size:12px;color:var(--wh-ink-3)}
@@ -5833,19 +5843,50 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       </div>
     </div>
 
+    <div class="wh-film">
+      <figure class="wh-fig">
+        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+        <div class="wh-band mono"><span translate="no">Film · Why hold #SECT</span><b>SF·WH·01·26</b></div>
+        <div class="wh-media">
+          <video data-src="media/film-why-1080.mp4" data-src-m="media/film-why-720.mp4" muted playsinline preload="none" disableremoteplayback aria-label="Video: Why hold #SECT?"></video>
+          <img class="film-cv" src="images/film-why-cover.jpg" width="1600" height="900" alt="Why hold #SECT? Everything is still ahead." loading="lazy" decoding="async">
+          <button class="pr-snd wh-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+        </div>
+      </figure>
+    </div>
     <!-- Sectora Labs: cada moneda lanzada compra #SECT y bloquea el 98 % para siempre.
          El video lleva su portada (poster) aunque no haya cargado; las cifras usan el
          precio real de #SECT (DexScreener) y los textos fijos se traducen con el resto. -->
     <div class="wh-labs" id="why-labs">
       <div class="wh-bhead">
         <div>
-          <span class="wh-k mono">Sectora Labs · the launchpad</span>
+          <span class="wh-k mono">Sectora Labs · the token factory for creators</span>
           <p class="wh-lb-t">Every coin launched on Sectora Labs buys #SECT <b>and pushes its price up.</b></p>
         </div>
         <a class="wh-open mono" href="https://sectoralabs.com" target="_blank" rel="noopener noreferrer">sectoralabs.com <i aria-hidden="true">↗</i></a>
       </div>
-      <div class="wh-lb-grid">
-        <div class="wh-lb-txt">
+      <div class="wh-film wh-lb-film">
+        <figure class="wh-fig">
+          <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+          <div class="wh-band mono"><span>Film · Sectora Labs</span><b>SL·HW·01·26</b></div>
+          <div class="wh-media">
+            <video data-src="media/film-labs-1080.mp4" data-src-m="media/film-labs-720.mp4" muted playsinline preload="none" disableremoteplayback aria-label="Video: Sectora Labs, how it works"></video>
+            <img class="film-cv" src="images/film-labs-cover.jpg" width="1920" height="1080" alt="Sectora Labs: if it's not on Sectora Labs or SectoraEVM, it's not safe." loading="lazy" decoding="async">
+            <button class="pr-snd wlb-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+          </div>
+        </figure>
+      </div>
+      <div class="wh-lb-what">
+            <h4>What is Sectora Labs?</h4>
+            <p>Sectora Labs is Sectora's token factory for creators: anyone can create their own coin in minutes, with no code, and launch it fairly. Buyers join a reserve at the same price as the creator, with a maximum per wallet. If the goal is not reached everyone gets 100% back, and at launch the liquidity is locked forever on Uniswap.</p>
+            <ul class="wh-lb-chips mono">
+              <li>Create a coin in minutes, no code</li>
+              <li>Same price as the creator</li>
+              <li>100% back if the goal is not reached</li>
+              <li>Liquidity locked forever</li>
+            </ul>
+          </div>
+      <div class="wh-lb-how">
           <p class="wh-lb-p">Every reserve on Sectora Labs is paid in ETH or USDT, and the contract turns each payment into a market buy of #SECT. At launch, 98% of that #SECT is locked forever in the coin's pool and can never be withdrawn. More coins means more #SECT bought and less #SECT in circulation.</p>
           <ol class="wh-lb-flow">
             <li><span class="wh-lb-n mono">1</span><div><b>You pay in ETH or USDT</b><span>Or in #SECT, if you already hold it.</span></div></li>
@@ -5853,13 +5894,6 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
             <li><span class="wh-lb-n mono">3</span><div><b>98% locked forever</b><span>In the coin's pool on Uniswap, with the LP burned. That #SECT leaves circulation.</span></div></li>
             <li><span class="wh-lb-n mono">4</span><div><b>Fees burned in #SECT</b><span>Half of Sectora's 1% fee is burned on every launch.</span></div></li>
           </ol>
-        </div>
-        <figure class="wh-lb-fig">
-          <div class="wh-band mono"><span>Film · Sectora Labs</span><b>SL·HW·01·26</b></div>
-          <div class="wh-lb-media">
-            <video controls playsinline preload="none" poster="images/film-labs-cover.jpg" aria-label="Video: Sectora Labs, how it works"><source src="media/film-labs-1080.mp4" type="video/mp4"></video>
-          </div>
-        </figure>
       </div>
       <div class="wh-lb-nums">
         <div class="wh-lb-tile"><span class="mono">Goal</span><em class="mono">$3,000</em><b class="mono" data-lb="3000">—</b><span>#SECT bought</span><b class="mono wh-lb-lk" data-lb="2940">—</b><span>locked forever</span></div>
@@ -5876,17 +5910,6 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       </div>
     </div>
 
-    <div class="wh-film">
-      <figure class="wh-fig">
-        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
-        <div class="wh-band mono"><span translate="no">Film · Why hold #SECT</span><b>SF·WH·01·26</b></div>
-        <div class="wh-media">
-          <video data-src="media/film-why-1080.mp4" data-src-m="media/film-why-720.mp4" muted playsinline preload="none" disableremoteplayback aria-label="Video: Why hold #SECT?"></video>
-          <img class="film-cv" src="images/film-why-cover.jpg" width="1600" height="900" alt="Why hold #SECT? Everything is still ahead." loading="lazy" decoding="async">
-          <button class="pr-snd wh-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
-        </div>
-      </figure>
-    </div>
     <p class="wh-fine mono">Dates are the schedule published by Sectora Foundation. Nothing in this section is a promise about the price of #SECT or investment advice.</p>
   </div>
 </section>
@@ -10698,7 +10721,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
    arrancar ni mudo (modo de bajo consumo, navegadores dentro de apps), se
    queda en la portada y arranca al tocarla. Solo suena uno a la vez. */
 (() => {
-  const FILMS = [['why', '.wh-snd'], ['airdrop', '.adp-snd'], ['staking', '.stk-snd'], ['liquidity-lock', '.stk-snd'], ['hashmarket', '.hmk-snd']];
+  const FILMS = [['why', '.wh-snd'], ['why-labs', '.wlb-snd'], ['airdrop', '.adp-snd'], ['staking', '.stk-snd'], ['liquidity-lock', '.stk-snd'], ['hashmarket', '.hmk-snd']];
   const ligero = matchMedia('(max-width: 980px)').matches || !!(navigator.connection && navigator.connection.saveData);
   const activo = () => !!(navigator.userActivation && navigator.userActivation.hasBeenActive);
   const todos = [];
@@ -10804,7 +10827,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261126';
+      sc.src = 'i18n-home.js?v=20261126b';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
