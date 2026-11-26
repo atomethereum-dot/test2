@@ -1600,7 +1600,8 @@
   .wh-lb-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(18px,2.6vw,40px);margin-top:clamp(18px,2.4vw,30px);align-items:center}
   .wh-lb-p{margin:0;font-size:clamp(14.5px,1.05vw,16px);line-height:1.7;color:var(--wh-ink-2)}
   .wh-lb-how{margin-top:clamp(18px,2.4vw,28px)}
-  .wh-labs .wh-lb-film{margin:clamp(18px,2.4vw,30px) 0 0}
+  .wh-labs .wh-lb-film{margin:0 0 clamp(18px,2.4vw,30px)}
+  .wh-inner > .wh-film:first-child{margin:0 0 clamp(36px,5vh,64px)}
   .wh-lb-how .wh-lb-p{max-width:92ch}
   .wh-lb-flow{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1vw,12px)}
   @media (max-width:1180px){ .wh-lb-flow{grid-template-columns:repeat(2,minmax(0,1fr))} }
@@ -5730,6 +5731,17 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
   <div class="gauge" aria-hidden="true"><u></u></div>
   <div class="lux" aria-hidden="true"></div>
   <div class="wh-inner">
+    <div class="wh-film">
+      <figure class="wh-fig">
+        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
+        <div class="wh-band mono"><span translate="no">Film · Why hold #SECT</span><b>SF·WH·01·26</b></div>
+        <div class="wh-media">
+          <video data-src="media/film-why-1080.mp4" data-src-m="media/film-why-720.mp4" muted playsinline preload="none" disableremoteplayback aria-label="Video: Why hold #SECT?"></video>
+          <img class="film-cv" src="images/film-why-cover.jpg" width="1600" height="900" alt="Why hold #SECT? Everything is still ahead." loading="lazy" decoding="async">
+          <button class="pr-snd wh-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
+        </div>
+      </figure>
+    </div>
     <p class="eyebrow mono"><i></i>Before the sequence runs</p>
     <div class="wh-top">
       <div>
@@ -5843,28 +5855,10 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       </div>
     </div>
 
-    <div class="wh-film">
-      <figure class="wh-fig">
-        <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
-        <div class="wh-band mono"><span translate="no">Film · Why hold #SECT</span><b>SF·WH·01·26</b></div>
-        <div class="wh-media">
-          <video data-src="media/film-why-1080.mp4" data-src-m="media/film-why-720.mp4" muted playsinline preload="none" disableremoteplayback aria-label="Video: Why hold #SECT?"></video>
-          <img class="film-cv" src="images/film-why-cover.jpg" width="1600" height="900" alt="Why hold #SECT? Everything is still ahead." loading="lazy" decoding="async">
-          <button class="pr-snd wh-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
-        </div>
-      </figure>
-    </div>
     <!-- Sectora Labs: cada moneda lanzada compra #SECT y bloquea el 98 % para siempre.
          El video lleva su portada (poster) aunque no haya cargado; las cifras usan el
          precio real de #SECT (DexScreener) y los textos fijos se traducen con el resto. -->
     <div class="wh-labs" id="why-labs">
-      <div class="wh-bhead">
-        <div>
-          <span class="wh-k mono">Sectora Labs · the token factory for creators</span>
-          <p class="wh-lb-t">Every coin launched on Sectora Labs buys #SECT <b>and pushes its price up.</b></p>
-        </div>
-        <a class="wh-open mono" href="https://sectoralabs.com" target="_blank" rel="noopener noreferrer">sectoralabs.com <i aria-hidden="true">↗</i></a>
-      </div>
       <div class="wh-film wh-lb-film">
         <figure class="wh-fig">
           <span class="gs-crn c1" aria-hidden="true"></span><span class="gs-crn c2" aria-hidden="true"></span><span class="gs-crn c3" aria-hidden="true"></span><span class="gs-crn c4" aria-hidden="true"></span>
@@ -5875,6 +5869,13 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
             <button class="pr-snd wlb-snd" type="button" aria-pressed="false"><i aria-hidden="true"></i><span>Sound</span></button>
           </div>
         </figure>
+      </div>
+      <div class="wh-bhead">
+        <div>
+          <span class="wh-k mono">Sectora Labs · the token factory for creators</span>
+          <p class="wh-lb-t">Every coin launched on Sectora Labs buys #SECT <b>and pushes its price up.</b></p>
+        </div>
+        <a class="wh-open mono" href="https://sectoralabs.com" target="_blank" rel="noopener noreferrer">sectoralabs.com <i aria-hidden="true">↗</i></a>
       </div>
       <div class="wh-lb-what">
             <h4>What is Sectora Labs?</h4>
