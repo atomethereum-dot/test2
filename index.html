@@ -1589,6 +1589,49 @@
   .wh-band span{color:var(--wh-ink-3)}
   .wh-band b{color:var(--blue);font-weight:500}
   .wh-media{position:relative;aspect-ratio:16/9;background:#1569ff;overflow:hidden}
+  /* Sectora Labs dentro de "Why hold": la misma hoja, el mismo filo azul */
+  .wh-labs{position:relative;z-index:3;isolation:isolate;margin:clamp(32px,4.8vh,56px) 0 0;padding:clamp(20px,2.4vw,34px);overflow:hidden;
+    background:color-mix(in srgb,#ffffff,#0b0e14 calc(var(--tinta,0)*100%));
+    border:1px solid color-mix(in srgb,rgba(0,0,0,.09),rgba(255,255,255,.12) calc(var(--tinta,0)*100%));border-radius:3px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.92),0 26px 64px -36px rgba(7,8,10,.26)}
+  .wh-labs::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:var(--blue)}
+  .wh-lb-t{margin:12px 0 0;font-size:clamp(26px,3vw,44px);font-weight:300;letter-spacing:-.025em;line-height:1.08;color:var(--wh-ink);text-wrap:balance;max-width:22ch}
+  .wh-lb-t b{font-weight:500;color:var(--wh-blue)}
+  .wh-lb-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(18px,2.6vw,40px);margin-top:clamp(18px,2.4vw,30px);align-items:start}
+  .wh-lb-p{margin:0;font-size:clamp(14.5px,1.05vw,16px);line-height:1.7;color:var(--wh-ink-2)}
+  .wh-lb-flow{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:8px}
+  .wh-lb-flow li{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--wh-line);border-radius:3px}
+  .wh-lb-flow .wh-lb-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:11px;line-height:1;margin:0}
+  .wh-lb-flow b{display:block;font-weight:500;font-size:14.5px;color:var(--wh-ink)}
+  .wh-lb-flow div > span{display:block;font-size:13px;line-height:1.5;color:var(--wh-ink-3);margin-top:2px}
+  .wh-lb-fig{margin:0;padding:clamp(12px,1.2vw,16px);border:1px solid var(--wh-line)}
+  .wh-lb-media{position:relative;aspect-ratio:16/9;background:#fff;overflow:hidden}
+  .wh-lb-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#fff}
+  .wh-lb-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.4fr);gap:clamp(8px,1vw,12px);margin-top:clamp(18px,2.4vw,28px)}
+  .wh-lb-tile{display:flex;flex-direction:column;gap:2px;min-width:0;padding:clamp(14px,1.4vw,20px);border:1px solid var(--wh-line);border-radius:3px}
+  .wh-lb-tile > span{font-size:12px;color:var(--wh-ink-3)}
+  .wh-lb-tile > span.mono{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--wh-ink-4)}
+  .wh-lb-tile em{font-style:normal;font-size:12px;color:var(--wh-blue);margin-bottom:10px}
+  .wh-lb-tile b{font-weight:500;font-size:clamp(19px,1.8vw,25px);letter-spacing:-.02em;color:var(--wh-ink);overflow-wrap:anywhere}
+  .wh-lb-tile b.wh-lb-lk{color:var(--wh-live);margin-top:10px}
+  .wh-lb-tile.big{background:var(--blue);border-color:var(--blue);justify-content:center}
+  .wh-lb-tile.big > span,.wh-lb-tile.big b,.wh-lb-tile.big p,.wh-lb-tile.big p span{color:#fff}
+  .wh-lb-tile.big > span.mono{opacity:.85;margin-bottom:10px}
+  .wh-lb-tile.big > b{font-size:clamp(26px,2.8vw,40px)}
+  .wh-lb-tile.big p{margin:8px 0 0;font-size:12.5px;line-height:1.5}
+  .wh-lb-tile.big p b{font-size:inherit;letter-spacing:0}
+  .wh-lb-foot{display:flex;justify-content:space-between;align-items:center;gap:14px 24px;flex-wrap:wrap;margin-top:clamp(16px,2vw,22px)}
+  .wh-lb-px{margin:0;font-size:10.5px;color:var(--wh-ink-4)}
+  .wh-lb-px b{font-weight:500;color:var(--wh-ink-2)}
+  .wh-lb-cta{display:flex;gap:10px 22px;flex-wrap:wrap;align-items:center}
+  .wh-lb-cta .wh-lb-guide{margin:0}
+  @media (max-width:980px){
+    .wh-lb-grid{grid-template-columns:minmax(0,1fr)}
+    .wh-lb-nums{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .wh-lb-tile.big{grid-column:1 / -1}
+  }
+  @media (max-width:640px){ .wh-lb-nums{grid-template-columns:minmax(0,1fr)} }
+
   .wh-media video,.wh-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 
   @media (max-width:980px){
@@ -5787,6 +5830,49 @@ body.nvp-abierto .ck{opacity:0;pointer-events:none;visibility:hidden}
       <div class="wh-foot">
         <p class="wh-punch" translate="no">A holder today is positioned <b>before every one of those events</b>, not after them. Nothing about that is a forecast — it is simply where the calendar is.</p>
         <a class="btn btn-primary mono" href="https://sectoraorg.com/docs#s04"><span>Read section 04 of the whitepaper</span><span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- Sectora Labs: cada moneda lanzada compra #SECT y bloquea el 98 % para siempre.
+         El video lleva su portada (poster) aunque no haya cargado; las cifras usan el
+         precio real de #SECT (DexScreener) y los textos fijos se traducen con el resto. -->
+    <div class="wh-labs" id="why-labs">
+      <div class="wh-bhead">
+        <div>
+          <span class="wh-k mono">Sectora Labs · the launchpad</span>
+          <p class="wh-lb-t">Every coin launched on Sectora Labs buys #SECT <b>and pushes its price up.</b></p>
+        </div>
+        <a class="wh-open mono" href="https://sectoralabs.com" target="_blank" rel="noopener noreferrer">sectoralabs.com <i aria-hidden="true">↗</i></a>
+      </div>
+      <div class="wh-lb-grid">
+        <div class="wh-lb-txt">
+          <p class="wh-lb-p">Every reserve on Sectora Labs is paid in ETH or USDT, and the contract turns each payment into a market buy of #SECT. At launch, 98% of that #SECT is locked forever in the coin's pool and can never be withdrawn. More coins means more #SECT bought and less #SECT in circulation.</p>
+          <ol class="wh-lb-flow">
+            <li><span class="wh-lb-n mono">1</span><div><b>You pay in ETH or USDT</b><span>Or in #SECT, if you already hold it.</span></div></li>
+            <li><span class="wh-lb-n mono">2</span><div><b>The contract buys #SECT</b><span>On Uniswap, with every payment: constant buying pressure on #SECT.</span></div></li>
+            <li><span class="wh-lb-n mono">3</span><div><b>98% locked forever</b><span>In the coin's pool on Uniswap, with the LP burned. That #SECT leaves circulation.</span></div></li>
+            <li><span class="wh-lb-n mono">4</span><div><b>Fees burned in #SECT</b><span>Half of Sectora's 1% fee is burned on every launch.</span></div></li>
+          </ol>
+        </div>
+        <figure class="wh-lb-fig">
+          <div class="wh-band mono"><span>Film · Sectora Labs</span><b>SL·HW·01·26</b></div>
+          <div class="wh-lb-media">
+            <video controls playsinline preload="none" poster="images/film-labs-cover.jpg" aria-label="Video: Sectora Labs, how it works"><source src="media/film-labs-1080.mp4" type="video/mp4"></video>
+          </div>
+        </figure>
+      </div>
+      <div class="wh-lb-nums">
+        <div class="wh-lb-tile"><span class="mono">Goal</span><em class="mono">$3,000</em><b class="mono" data-lb="3000">—</b><span>#SECT bought</span><b class="mono wh-lb-lk" data-lb="2940">—</b><span>locked forever</span></div>
+        <div class="wh-lb-tile"><span class="mono">Goal</span><em class="mono">$7,000</em><b class="mono" data-lb="7000">—</b><span>#SECT bought</span><b class="mono wh-lb-lk" data-lb="6860">—</b><span>locked forever</span></div>
+        <div class="wh-lb-tile"><span class="mono">Goal</span><em class="mono">$15,000</em><b class="mono" data-lb="15000">—</b><span>#SECT bought</span><b class="mono wh-lb-lk" data-lb="14700">—</b><span>locked forever</span></div>
+        <div class="wh-lb-tile big"><span class="mono">100 launches of $7,000</span><b class="mono" data-lb="700000">—</b><span>bought from the market</span><p><b class="mono" id="wh-lb-pct">—</b> <span>of the 25,000,000 #SECT that remain after the supply reduction</span></p></div>
+      </div>
+      <div class="wh-lb-foot">
+        <p class="wh-lb-px mono"><span>Calculated with the live #SECT price (DexScreener):</span> <b id="wh-lb-px">—</b></p>
+        <div class="wh-lb-cta">
+          <a class="btn btn-primary mono" href="https://sectoralabs.com" target="_blank" rel="noopener"><span>Open Sectora Labs</span><span class="arrow">→</span></a>
+          <a class="wh-open mono wh-lb-guide" href="https://sectoralabs.com/intro" target="_blank" rel="noopener noreferrer">Read the guide <i aria-hidden="true">↗</i></a>
+        </div>
       </div>
     </div>
 
@@ -10718,7 +10804,7 @@ window.SECT_DPR = () => Math.min(window.devicePixelRatio || 1,
     if(pidiendo) return pidiendo;
     pidiendo = new Promise((ok, mal) => {
       const sc = document.createElement('script');
-      sc.src = 'i18n-home.js?v=20261116';
+      sc.src = 'i18n-home.js?v=20261126';
       sc.onload = () => { TR = window.__SECT_TR || {}; ok(TR); };
       sc.onerror = () => { pidiendo = null; mal(); };
       document.head.appendChild(sc);
@@ -11940,6 +12026,34 @@ window.__lejos = function(el){
   var a=document.getElementById('hero-guide'),h=document.documentElement;if(!a)return;
   var pon=function(){var l=(h.lang||'en').slice(0,2);a.href='https://sectoraorg.com/guide/'+(l==='es'?'es/':l==='pt'?'pt/':'');};
   pon();if('MutationObserver' in window)new MutationObserver(pon).observe(h,{attributes:true,attributeFilter:['lang']});
+})();
+</script>
+<script>
+/* Sectora Labs en "Why hold": cifras con el precio real de #SECT (DexScreener, el pool con mas liquidez en Ethereum) */
+(function(){
+  var box = document.getElementById('why-labs'); if(!box) return;
+  var SECT = '0x8C9984B06281f1CA9416e493c2E602AaB08513db';
+  function fmt(n){ return n >= 1e6 ? (n / 1e6).toFixed(2) + 'M' : n >= 1e3 ? (n / 1e3).toFixed(1) + 'K' : n.toFixed(0); }
+  function pinta(px){
+    box.querySelectorAll('[data-lb]').forEach(function(el){ el.textContent = fmt(+el.getAttribute('data-lb') / px) + ' #SECT'; });
+    var pc = document.getElementById('wh-lb-pct'); if(pc) pc.textContent = (700000 / px / 25e6 * 100).toFixed(1) + '%';
+    var pe = document.getElementById('wh-lb-px'); if(pe) pe.textContent = '$' + px.toFixed(px < 0.01 ? 6 : 4);
+  }
+  function carga(){
+    fetch('https://api.dexscreener.com/latest/dex/tokens/' + SECT, {cache:'no-store'}).then(function(r){ return r.json(); }).then(function(j){
+      var best = null;
+      (j.pairs || []).forEach(function(p){
+        if(!p || p.chainId !== 'ethereum' || !p.baseToken || String(p.baseToken.address).toLowerCase() !== SECT.toLowerCase()) return;
+        var l = (p.liquidity && p.liquidity.usd) || 0, u = parseFloat(p.priceUsd);
+        if(u > 0 && (!best || l > best.l)) best = {l:l, p:u};
+      });
+      if(best) pinta(best.p);
+    }).catch(function(){});
+  }
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){ if(es[0].isIntersecting){ io.disconnect(); carga(); } }, {rootMargin:'60% 0px'});
+    io.observe(box);
+  } else carga();
 })();
 </script>
 </body>
