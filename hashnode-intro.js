@@ -34,9 +34,9 @@
 
   let renderer;
   try {
-    renderer = new T.WebGLRenderer({ canvas: $(".hni-gl"), antialias: true, alpha: true, powerPreference: "high-performance" });
+    renderer = new T.WebGLRenderer({ canvas: $(".hni-gl"), antialias: !PEQ, alpha: true, powerPreference: "high-performance" });
   } catch (e) { acabar(true); return; }
-  const dpr = PEQ ? Math.min(devicePixelRatio || 1, 2) : Math.min(2, Math.max(1.5, devicePixelRatio || 1));
+  const dpr = PEQ ? Math.min(devicePixelRatio || 1, 1.5) : Math.min(2, Math.max(1.5, devicePixelRatio || 1));
   renderer.setPixelRatio(dpr); renderer.setClearColor(0x000000, 0);
   const scene = new T.Scene();
   const camera = new T.PerspectiveCamera(30, 1, 0.05, 200);
@@ -73,7 +73,7 @@
   const globe = new T.Group(); scene.add(globe);
   const surfMat = new T.ShaderMaterial({
     transparent: true,
-    uniforms: { uMask: { value: mascara(PEQ ? 1024 : 2048) }, uLand: { value: 1 }, uDiss: { value: 1 }, uTint: { value: 0 }, uL: { value: new T.Vector3(-0.35, 0.75, 0.55).normalize() } },
+    uniforms: { uMask: { value: mascara(PEQ ? 512 : 2048) }, uLand: { value: 1 }, uDiss: { value: 1 }, uTint: { value: 0 }, uL: { value: new T.Vector3(-0.35, 0.75, 0.55).normalize() } },
     vertexShader: `
       varying vec2 vUv; varying vec3 vN; varying vec3 vNv;
       void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal); vNv = normalize(normalMatrix * normal);
@@ -97,7 +97,7 @@
         gl_FragColor = vec4(base, 1.0);
       }`
   });
-  globe.add(new T.Mesh(new T.SphereGeometry(1, PEQ ? 128 : 192, PEQ ? 90 : 132), surfMat));
+  globe.add(new T.Mesh(new T.SphereGeometry(1, PEQ ? 72 : 192, PEQ ? 48 : 132), surfMat));
 
   const axisMat = new T.LineBasicMaterial({ color: 0x6f8ec9, transparent: true, opacity: 0, depthWrite: false });
   globe.add(new T.Line(new T.BufferGeometry().setFromPoints([new T.Vector3(0, -1.42, 0), new T.Vector3(0, 1.42, 0)]), axisMat));
@@ -119,10 +119,10 @@
         vec3 col=mix(vec3(.17,.17,.19),vec3(.34,.34,.36),smoothstep(.38,.68,c)); col=mix(col,vec3(.48,.48,.5),cr*.8);
         float lam=clamp(dot(vN,normalize(vec3(-.35,.75,.55)))*.5+.5,0.,1.); col*=.13+1.2*pow(lam,1.4);
         float e=1.-abs(vNv.z); col+=vec3(.66,.74,.92)*pow(e,8.)*.42*lam; gl_FragColor=vec4(col,uA);} ` });
-  const moon = new T.Mesh(new T.SphereGeometry(0.20, 48, 32), moonMat); orbit.add(moon);
+  const moon = new T.Mesh(new T.SphereGeometry(0.20, PEQ ? 24 : 48, PEQ ? 16 : 32), moonMat); orbit.add(moon);
 
   /* estrellas sobre el negro */
-  const R = rng(2027), NS = PEQ ? 1400 : 2600, spos = new Float32Array(NS * 3), ssz = new Float32Array(NS), sfa = new Float32Array(NS);
+  const R = rng(2027), NS = PEQ ? 500 : 2600, spos = new Float32Array(NS * 3), ssz = new Float32Array(NS), sfa = new Float32Array(NS);
   for (let i = 0; i < NS; i++) { const r = 13 + R() * 17, th = R() * 6.2832, ph = Math.acos(2 * R() - 1); spos[i * 3] = r * Math.sin(ph) * Math.cos(th); spos[i * 3 + 1] = r * Math.sin(ph) * Math.sin(th); spos[i * 3 + 2] = r * Math.cos(ph); ssz[i] = 0.9 + Math.pow(R(), 2.6) * 4.2; sfa[i] = R() * 6.283; }
   const sg = new T.BufferGeometry(); sg.setAttribute("position", new T.BufferAttribute(spos, 3)); sg.setAttribute("aSize", new T.BufferAttribute(ssz, 1)); sg.setAttribute("aFase", new T.BufferAttribute(sfa, 1));
   const starMat = new T.ShaderMaterial({ transparent: true, depthWrite: false, blending: T.AdditiveBlending, uniforms: { uDpr: { value: dpr }, uT: { value: 0 }, uA: { value: 0 } },
@@ -171,8 +171,8 @@
     const line = new T.Line(geo, new T.LineBasicMaterial({ color: 0x8fb4ff, transparent: true, opacity: 0, depthWrite: false, blending: T.AdditiveBlending }));
     line.visible = false; globe.add(line); arcs.push({ line, t0, n: pts.length }); }
   const r7 = rng(7);
-  for (let i = 0; i < 40; i++) addPulse(.4 + i * .07, (r7() * NN) | 0, 1.4);
-  for (let i = 0; i < 16; i++) { const a = (r7() * NN) | 0, b = (r7() * NN) | 0; addArc(.9 + i * .16, a, b); }
+  for (let i = 0; i < (PEQ ? 14 : 40); i++) addPulse(.4 + i * (PEQ ? .2 : .07), (r7() * NN) | 0, 1.4);
+  for (let i = 0; i < (PEQ ? 6 : 16); i++) { const a = (r7() * NN) | 0, b = (r7() * NN) | 0; addArc(.9 + i * (PEQ ? .42 : .16), a, b); }
 
   /* ---------- textos: los mismos de la portada, ya traducidos ---------- */
   const txt = (sel, f) => { const e = document.querySelector(sel); return (e && e.textContent.trim()) || f; };
@@ -190,6 +190,8 @@
   let nodosVisto = 0;
   try { nodosVisto = Number(localStorage.getItem("sect-nodos-n")) || 0; } catch (e) {}
   const nodosMeta = () => Number(window.__sectoraNodosN) || nodosVisto || 185;
+  /* el numero de nodos activos se muestra fijo desde el primer cuadro (sin contar hacia arriba) */
+  let nMostrado = -1;
 
   /* la marca queda en el sitio de la de la cabecera: se funde con ella */
   const marca = document.querySelector(".top .sb-brand");
@@ -222,7 +224,7 @@
     return g ? { dist: g.dist, rx: g.rx, ry: g.ry, px: 0.95, py: g.y, luna: g.luna } : HOME;
   }
 
-  const FIN = 5.05, FUNDE = 0.75;
+  const FIN = 5.05, FUNDE = 0.75, VEL = PEQ ? 1.45 : 1.25;   /* VEL: la intro dura menos (misma coreografia) */
   window.__hniOn = true;
   window.__hniHold = true;                 /* el globo real no se dibuja mientras esta tapado */
   let t0 = 0, raf = 0, saltoEn = -1, cerrada = false, ultimo = 0;
@@ -247,7 +249,7 @@
     for (const p of pulses) { const k = (t - p.t0) / p.dur; p.sp.visible = k >= 0 && k < 1; if (p.sp.visible) { p.sp.scale.setScalar(.015 + k * .26); p.sp.material.opacity = .8 * (1 - k); } }
     for (const a of arcs) { const e = t - a.t0; a.line.visible = e >= 0 && e < 3.8; if (a.line.visible) { a.line.geometry.setDrawRange(0, Math.max(2, Math.floor(Math.min(1, e / 1.4) * a.n))); a.line.material.opacity = e < 1 ? e * .5 : Math.max(0, .5 - (e - 2.4) * .26); } }
 
-    big.textContent = String(Math.round(nodosMeta() * o3(seg(t, .2, 2.4)))).padStart(3, "0");
+    const nN = nodosMeta(); if (nN !== nMostrado) { nMostrado = nN; big.textContent = nN.toLocaleString("en-US"); }
     filas.forEach((d, i) => { const k = seg(t, .5 + i * .17, .7 + i * .17); d.style.opacity = k; d.style.transform = `translateX(${(1 - o3(k)) * -14}px)`; });
     log.style.transform = `translateY(${-Math.max(0, t - 1.6) * (VERT ? 8 : 26)}px)`;
     const fuera = 1 - seg(t, 3.3, 3.9);
@@ -272,7 +274,7 @@
 
   function bucle(now) {
     ultimo = performance.now();
-    const t = (now - t0) / 1000;
+    const t = (now - t0) / 1000 * VEL;
     let a = 1 - io3(seg(t, FIN, FIN + FUNDE));
     if (saltoEn >= 0) a = Math.min(a, 1 - o3(seg(now, saltoEn, saltoEn + 450)));
     capa.style.opacity = a;
@@ -294,7 +296,7 @@
   Promise.race([listas, new Promise(r => setTimeout(r, 700))]).then(empezar);
   /* salvavidas: pase lo que pase, la capa se retira */
   const retirar = () => { if (cerrada) return; capa.style.transition = "opacity .4s"; capa.style.opacity = 0; setTimeout(cerrar, 420); };
-  setTimeout(retirar, 9000);
+  setTimeout(retirar, 6500);
   /* vigia: si los cuadros dejan de llegar (telefono saturado, error), la capa se retira sola */
   const vigia = setInterval(() => { if (cerrada) { clearInterval(vigia); return; } if (t0 && !document.hidden && performance.now() - ultimo > 1500) { clearInterval(vigia); retirar(); } }, 500);
   /* al volver con "atras" desde otra pagina no queda tapando nada */
