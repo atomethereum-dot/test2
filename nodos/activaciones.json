@@ -23064,6 +23064,20 @@
       "c": "Toronto, CA",
       "la": 43.6,
       "lo": -79.4
+    },
+    "0x0ec89c710b27a2b28164ca6b77fe29c9938c2bf4": {
+      "t": 1795750014000,
+      "n": "Sectora Node Tokyo-2581",
+      "c": "Tokyo, JP",
+      "la": 35.8,
+      "lo": 139.7
+    },
+    "0xfc26efd9182246ce90e8dfdc2db6ecc577b9e9d6": {
+      "t": 1795750017000,
+      "n": "Sectora Node Osaka-2582",
+      "c": "Osaka, JP",
+      "la": 34.7,
+      "lo": 135.6
     }
   }
 }
