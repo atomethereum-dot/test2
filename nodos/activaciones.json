@@ -26088,6 +26088,13 @@
       "c": "São Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0x1e99d069df38f04561f2a9d7c5cb8a573dce3efe": {
+      "t": 1795799151000,
+      "n": "Sectora Node Recife",
+      "c": "Recife, BR",
+      "la": -8.1,
+      "lo": -34.9
     }
   }
 }
