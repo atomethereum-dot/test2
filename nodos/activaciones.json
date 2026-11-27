@@ -16897,6 +16897,41 @@
       "c": "Taipei, TW",
       "la": 25,
       "lo": 121.6
+    },
+    "0x6f0c1753115f4e957a3797b6b6ef8ffd64b721bc": {
+      "t": 1795741792000,
+      "n": "Sectora Node Seoul-1699",
+      "c": "Seoul, KR",
+      "la": 37.7,
+      "lo": 127
+    },
+    "0x272ac3633efdcd8bc68710327805a4538b1afbbd": {
+      "t": 1795741801000,
+      "n": "Sectora Node Toronto-1694",
+      "c": "Toronto, CA",
+      "la": 43.6,
+      "lo": -79.3
+    },
+    "0x1292cc5fe1ea3e405ed912e0450f978c2a62f9ce": {
+      "t": 1795741802000,
+      "n": "Sectora Node Busan-1700",
+      "c": "Busan, KR",
+      "la": 35.2,
+      "lo": 129
+    },
+    "0x50933d455182e30eb07c02f436677b398e86ee62": {
+      "t": 1795741813000,
+      "n": "Sectora Node Singapore-1701",
+      "c": "Singapore, SG",
+      "la": 1.4,
+      "lo": 103.9
+    },
+    "0x43300a14036dc0150199d436b565de99a296996e": {
+      "t": 1795741819000,
+      "n": "Sectora Node Taipei-1702",
+      "c": "Taipei, TW",
+      "la": 25,
+      "lo": 121.5
     }
   }
 }
