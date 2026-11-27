@@ -26039,6 +26039,27 @@
       "c": "Sydney, AU",
       "la": -33.9,
       "lo": 151.3
+    },
+    "0xd8fca3f0eccbeda40e9016c9dc88246e9b0b3453": {
+      "t": 1795755255000,
+      "n": "Sectora Node Busan-2960",
+      "c": "Busan, KR",
+      "la": 35.2,
+      "lo": 129.1
+    },
+    "0x1cf53c047b2e898f1aaf3028c6891272521bcb0e": {
+      "t": 1795755257000,
+      "n": "Sectora Node Yokohama-2958",
+      "c": "Yokohama, JP",
+      "la": 35.5,
+      "lo": 139.7
+    },
+    "0x83077cc1fc66393e73a578a4dab542961305f3b1": {
+      "t": 1795755258000,
+      "n": "Sectora Node Zurich-2996",
+      "c": "Zurich, CH",
+      "la": 47.4,
+      "lo": 8.6
     }
   }
 }
