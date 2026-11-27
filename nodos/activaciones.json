@@ -26067,6 +26067,13 @@
       "c": "Karachi, PK",
       "la": 24.9,
       "lo": 67
+    },
+    "0x143d43bee2ca8dbbe6c3c1aa1644f348efa307b6": {
+      "t": 1795783157000,
+      "n": "Sectora Node Caracas",
+      "c": "Caracas, VE",
+      "la": 10.5,
+      "lo": -66.9
     }
   }
 }
