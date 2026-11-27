@@ -1403,7 +1403,7 @@ html.booting,body.booting{overflow:hidden}
 <div class="toast" id="toast"><i></i><span id="toastT"></span></div>
 <script src="/translations.js"></script>
 <script src="/dashboard-i18n-extra.js?v=20261031a"></script>
-<script src="/dashboard-v2-i18n.js?v=21"></script>
+<script src="/dashboard-v2-i18n.js?v=22"></script>
 <script>window.SECTORA_LANG_START = "en"; /* el dashboard abre siempre en ingles */</script>
 <script src="/i18n.js?v=4"></script>
 <script src="/dashboard-reticle.js?v=20260820b"></script>
@@ -1992,7 +1992,34 @@ window.__sectoraMarket = {
   var PIDE = "sectora:v2:activar";
   function pide(si) { try { if (si) sessionStorage.setItem(PIDE, String(Date.now())); else sessionStorage.removeItem(PIDE); } catch (e) {} }
   function pidio() { try { return Date.now() - (+sessionStorage.getItem(PIDE) || 0) < 5 * 60000; } catch (e) { return false; } }
-  // encender el nodo no pide staking: basta la wallet conectada
+  /* anti-bots: una wallet vacia (ninguna transaccion en Ethereum, sin SECT y sin staking) no puede encender
+     el nodo; se le avisa que compre SECT con esa wallet o deposite en staking. Si la red no responde no se
+     bloquea a nadie (el registro publico tiene su propio filtro, ver .github/scripts/nodos-sync.mjs) */
+  var RPC_ETH = ["https://ethereum-rpc.publicnode.com", "https://eth.llamarpc.com", "https://cloudflare-eth.com"];
+  var SECT_TOKEN = "0x8c9984b06281f1ca9416e493c2e602aab08513db";
+  var actividad = {}, revisando = "";       // wallet -> { ok, t }
+  function revisa(addr) {
+    var cuerpo = JSON.stringify([
+      { jsonrpc: "2.0", id: 1, method: "eth_getTransactionCount", params: [addr, "latest"] },
+      { jsonrpc: "2.0", id: 2, method: "eth_call", params: [{ to: SECT_TOKEN, data: "0x70a08231" + addr.slice(2).padStart(64, "0") }, "latest"] }]);
+    var i = 0;
+    function prueba() {
+      if (i >= RPC_ETH.length) return Promise.resolve(null);
+      var url = RPC_ETH[i++];
+      return fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: cuerpo }).then(function (r) { return r.json(); }).then(function (j) {
+        if (!Array.isArray(j) || j.length !== 2 || j.some(function (x) { return x.error || x.result == null; })) throw new Error("rpc");
+        var v = {}; j.forEach(function (x) { v[x.id] = x.result; });
+        var lleno = function (h) { return !!h && h !== "0x" && /[1-9a-f]/i.test(h.slice(2)); };
+        return lleno(v[1]) || lleno(v[2]);
+      }).catch(prueba);
+    }
+    return prueba();
+  }
+  function avisoVacia() {
+    var w = window.__sectoraWallet;
+    if (w && w.aviso) w.aviso(tt("hashdash.v2.reg.needTx", "To activate your node, your wallet needs at least 1 transaction on Ethereum: buy SECT with this wallet or deposit in staking. Then press “Activate my node” again."));
+  }
+  // encender el nodo no pide staking: basta la wallet conectada (con actividad real en Ethereum)
   function activa(manual) {
     var e = est(); if (!e) return false;
     if (e.reg) return true;
@@ -2004,6 +2031,19 @@ window.__sectoraMarket = {
       var la = parseFloat(($("#nLat") || {}).value), lo = parseFloat(($("#nLon") || {}).value);
       if (!isFinite(la) || !isFinite(lo) || Math.abs(la) > 85 || Math.abs(lo) > 180) {
         if (manual) { var f = $(".v2-reg .form"); if (f) f.classList.remove("geo-auto"); var x = $("#nLat"); if (x) x.focus(); }
+        return false;
+      }
+      var dir = e.addr.toLowerCase(), rv = actividad[dir];
+      if (!(e.bal > 0) && !(rv && rv.ok)) {
+        if (rv && !rv.ok && Date.now() - rv.t < 60000) { avisoVacia(); return false; }
+        if (revisando !== dir) {
+          revisando = dir; plan();
+          revisa(dir).then(function (ok) {
+            revisando = ""; actividad[dir] = { ok: ok !== false, t: Date.now() };
+            if (ok === false) avisoVacia(); else if (activa(true)) todo();
+            plan();
+          });
+        }
         return false;
       }
       var g = $("#nGeo b");
@@ -2046,6 +2086,9 @@ window.__sectoraMarket = {
       txt = aMano ? tt("hashdash.v2.plan.stManual", "Type your city's latitude and longitude above, then press “Activate my node”.")
         : hay ? tt("hashdash.v2.plan.stReady", "Your node is ready. Press “Activate my node” to turn it on. It's free.") : tt("hashdash.node.geoWait", "Detecting your node's location…");
       act = "save"; lbl = tt("hashdash.v2.plan.btn", "Activate my node");
+      var dir0 = est().addr.toLowerCase(), rv0 = actividad[dir0];
+      if (revisando === dir0) { txt = tt("hashdash.v2.reg.checking", "Checking your wallet on Ethereum…"); act = "wait"; lbl = txt; }
+      else if (rv0 && !rv0.ok) txt = tt("hashdash.v2.reg.needTx", "To activate your node, your wallet needs at least 1 transaction on Ethereum: buy SECT with this wallet or deposit in staking. Then press “Activate my node” again.");
       if (!hay && esperas++ < 40) setTimeout(function () { plan(); }, 700);
     }
     st.querySelector("span").textContent = txt;

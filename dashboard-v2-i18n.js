@@ -869,3 +869,21 @@
   var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
   Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.wallet.wcRowM"] = V[l][0]; d["hashdash.wallet.wcRowD"] = V[l][1]; });
 })();
+/* wallet vacia al activar el nodo (anti-bots): necesita al menos 1 transaccion en Ethereum */
+(function () {
+  var V = {
+    en: ["To activate your node, your wallet needs at least 1 transaction on Ethereum: buy SECT with this wallet or deposit in staking. Then press “Activate my node” again.", "Checking your wallet on Ethereum…"],
+    es: ["Para activar tu nodo, tu wallet necesita al menos 1 transacción en Ethereum: compra SECT con esta wallet o deposita en staking. Después vuelve a pulsar «Activar mi nodo».", "Comprobando tu wallet en Ethereum…"],
+    pt: ["Para ativar seu nó, sua carteira precisa de pelo menos 1 transação na Ethereum: compre SECT com esta carteira ou deposite em staking. Depois toque de novo em “Ativar meu nó”.", "Verificando sua carteira na Ethereum…"],
+    fr: ["Pour activer votre nœud, votre wallet doit avoir au moins 1 transaction sur Ethereum : achetez du SECT avec ce wallet ou déposez en staking. Puis appuyez à nouveau sur « Activer mon nœud ».", "Vérification de votre wallet sur Ethereum…"],
+    de: ["Um deinen Node zu aktivieren, braucht deine Wallet mindestens 1 Transaktion auf Ethereum: Kaufe SECT mit dieser Wallet oder zahle ins Staking ein. Tippe dann erneut auf „Meinen Node aktivieren“.", "Deine Wallet wird auf Ethereum geprüft…"],
+    ru: ["Чтобы активировать узел, у кошелька должна быть хотя бы 1 транзакция в Ethereum: купите SECT с этого кошелька или внесите депозит в стейкинг. Затем снова нажмите «Активировать мой узел».", "Проверяем ваш кошелёк в Ethereum…"],
+    zh: ["要激活你的节点，你的钱包需要在以太坊上至少有 1 笔交易：用这个钱包购买 SECT 或存入质押。然后再次点击「激活我的节点」。", "正在以太坊上检查你的钱包…"],
+    ja: ["ノードを有効にするには、ウォレットにイーサリアム上の取引が1件以上必要です。このウォレットでSECTを購入するか、ステーキングに預け入れてから、もう一度「ノードを有効にする」を押してください。", "イーサリアム上でウォレットを確認中…"],
+    ko: ["노드를 활성화하려면 지갑에 이더리움 거래가 최소 1건 있어야 합니다. 이 지갑으로 SECT를 구매하거나 스테이킹에 예치한 뒤 ‘내 노드 활성화’를 다시 누르세요.", "이더리움에서 지갑을 확인하는 중…"],
+    ar: ["لتفعيل عقدتك، تحتاج محفظتك إلى معاملة واحدة على الأقل على إيثريوم: اشترِ SECT بهذه المحفظة أو أودِع في التخزين. ثم اضغط «تفعيل عقدتي» مرة أخرى.", "جارٍ التحقق من محفظتك على إيثريوم…"],
+    hi: ["अपना नोड चालू करने के लिए आपके वॉलेट में Ethereum पर कम से कम 1 ट्रांज़ैक्शन होना चाहिए: इस वॉलेट से SECT खरीदें या स्टेकिंग में जमा करें। फिर “मेरा नोड चालू करें” दोबारा दबाएँ।", "Ethereum पर आपका वॉलेट जाँचा जा रहा है…"]
+  };
+  var X = window.SECTORA_I18N_EXTRA = window.SECTORA_I18N_EXTRA || {};
+  Object.keys(V).forEach(function (l) { var d = X[l] = X[l] || {}; d["hashdash.v2.reg.needTx"] = V[l][0]; d["hashdash.v2.reg.checking"] = V[l][1]; });
+})();
