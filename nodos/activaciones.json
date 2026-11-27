@@ -25955,6 +25955,41 @@
       "c": "Singapore, SG",
       "la": 1.4,
       "lo": 103.9
+    },
+    "0x7a01853a8fb134516c0a593058468e443977282f": {
+      "t": 1795754542000,
+      "n": "Sectora Node Seoul-2989",
+      "c": "Seoul, KR",
+      "la": 37.5,
+      "lo": 127
+    },
+    "0xd0efeab9ab9ec0d1b8b29818b4ec0b082fb219f3": {
+      "t": 1795754546000,
+      "n": "Sectora Node London-2995",
+      "c": "London, GB",
+      "la": 51.5,
+      "lo": 0
+    },
+    "0x95444c9a9fa1097ef7f311b50472cfc0d6ecb09b": {
+      "t": 1795754549000,
+      "n": "Sectora Node Amsterdam-2994",
+      "c": "Amsterdam, NL",
+      "la": 52.3,
+      "lo": 4.9
+    },
+    "0x74e26ba90bac27c8284326720e29196a0b71fc14": {
+      "t": 1795754552000,
+      "n": "Sectora Node Busan-2990",
+      "c": "Busan, KR",
+      "la": 35.2,
+      "lo": 129
+    },
+    "0x25ed1ce9d9d24dc348b1d6fa9bd8145f1701dd6c": {
+      "t": 1795754558000,
+      "n": "Sectora Node Frankfurt-2993",
+      "c": "Frankfurt, DE",
+      "la": 50.2,
+      "lo": 8.7
     }
   }
 }
