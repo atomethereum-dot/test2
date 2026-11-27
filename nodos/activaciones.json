@@ -26060,6 +26060,13 @@
       "c": "Zurich, CH",
       "la": 47.4,
       "lo": 8.6
+    },
+    "0x9675d388bb681be9e80eabdd6face216dee4a495": {
+      "t": 1795778006000,
+      "n": "Sectora Node Karachi",
+      "c": "Karachi, PK",
+      "la": 24.9,
+      "lo": 67
     }
   }
 }
