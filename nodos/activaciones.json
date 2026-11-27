@@ -25990,6 +25990,55 @@
       "c": "Frankfurt, DE",
       "la": 50.2,
       "lo": 8.7
+    },
+    "0xfd87e4808e50b5ba694e0d77a72b014ef6579a8f": {
+      "t": 1795754868000,
+      "n": "Sectora Node Osaka-2987",
+      "c": "Osaka, JP",
+      "la": 34.7,
+      "lo": 135.5
+    },
+    "0x27c2f0afe65b72ecb95bc26631c62a0334c0dab1": {
+      "t": 1795754870000,
+      "n": "Sectora Node SanJose-2997",
+      "c": "San Jose, US",
+      "la": 37.3,
+      "lo": -122
+    },
+    "0xbf532d8a0cbc837c6fea6344e8658bcd154b4ba4": {
+      "t": 1795754870000,
+      "n": "Sectora Node Seattle-2998",
+      "c": "Seattle, US",
+      "la": 47.6,
+      "lo": -122.3
+    },
+    "0x3a212f0b46ff646091d564584e1c60ab10af8fa1": {
+      "t": 1795754874000,
+      "n": "Sectora Node Toronto-2999",
+      "c": "Toronto, CA",
+      "la": 43.7,
+      "lo": -79.4
+    },
+    "0x32e5e53480d41195f148e6f0b4a7a41ae500398b": {
+      "t": 1795754879000,
+      "n": "Sectora Node Seattle-2968",
+      "c": "Seattle, US",
+      "la": 47.6,
+      "lo": -122.4
+    },
+    "0xc6c9a1c57a5c93f330271072c4da1527308671a8": {
+      "t": 1795754883000,
+      "n": "Sectora Node Frankfurt-2978",
+      "c": "Frankfurt, DE",
+      "la": 50.1,
+      "lo": 8.6
+    },
+    "0xbc47a9dedbe91b2a9d063a9d69b484925eda3570": {
+      "t": 1795754900000,
+      "n": "Sectora Node Sydney-3000",
+      "c": "Sydney, AU",
+      "la": -33.9,
+      "lo": 151.3
     }
   }
 }
