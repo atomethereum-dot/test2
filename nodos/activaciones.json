@@ -20453,6 +20453,41 @@
       "c": "Zurich, CH",
       "la": 47.4,
       "lo": 8.6
+    },
+    "0x8eb8bc32d098c0722155ed4829862d173ef0bcab": {
+      "t": 1795746385000,
+      "n": "Sectora Node SanJose-2217",
+      "c": "San Jose, US",
+      "la": 37.4,
+      "lo": -121.9
+    },
+    "0xfaf81dfb859a89ce96ff322ceb12644f91bbfeaa": {
+      "t": 1795746390000,
+      "n": "Sectora Node Osaka-2222",
+      "c": "Osaka, JP",
+      "la": 34.7,
+      "lo": 135.5
+    },
+    "0x0831b89f7842799df3fdc86a7176414b2e4c4da3": {
+      "t": 1795746391000,
+      "n": "Sectora Node Amsterdam-2214",
+      "c": "Amsterdam, NL",
+      "la": 52.4,
+      "lo": 5
+    },
+    "0x76e5743dcdcd66169fce8e9bba3aa54ff3383896": {
+      "t": 1795746395000,
+      "n": "Sectora Node Toronto-2219",
+      "c": "Toronto, CA",
+      "la": 43.7,
+      "lo": -79.3
+    },
+    "0xf3af98b1f9ad6bc641a5165e6b273ac6ae30b485": {
+      "t": 1795746404000,
+      "n": "Sectora Node Tokyo-2221",
+      "c": "Tokyo, JP",
+      "la": 35.6,
+      "lo": 139.8
     }
   }
 }
