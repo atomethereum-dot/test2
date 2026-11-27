@@ -290,9 +290,10 @@
     var waited = 0;
     (function wait() {
       var busy = document.getElementById("intro") || document.documentElement.classList.contains("intro-lock");
-      if (busy && waited < 20000) { waited += 250; setTimeout(wait, 250); return; }
+      if (busy && waited < 12000) { waited += 250; setTimeout(wait, 250); return; }
       setTimeout(open, 1500);
     })();
   }
-  if (document.readyState === "complete") start(); else window.addEventListener("load", start);
+  // start as soon as the page is parsed (not on "load": on phones a slow image, video or wallet script can hold "load" back for a long time)
+  if (document.readyState !== "loading") start(); else document.addEventListener("DOMContentLoaded", start);
 })();
