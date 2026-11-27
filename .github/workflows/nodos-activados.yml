@@ -5,6 +5,8 @@ name: Nodos activados
 # El horario de GitHub se retrasa mucho, asi que cada vuelta se queda vigilando unas 5 h 40 min (cada
 # 5 minutos) y al terminar lanza la siguiente. El horario queda de respaldo por si la cadena se corta.
 # Con "prueba" se comprueba el circuito con un tema aparte y sin guardar nada.
+# Anti-bots: una wallet nueva solo pasa al registro publico si tiene actividad real en Ethereum
+# (transacciones o SECT); si no, espera en nodos/pendientes.json, que no se muestra (ver nodos-sync.mjs).
 on:
   schedule:
     - cron: "*/10 * * * *"
@@ -51,8 +53,8 @@ jobs:
           REF="${{ github.ref_name }}"
           for n in $(seq 1 68); do
             node .github/scripts/nodos-sync.mjs || echo "ntfy no respondio, se reintenta en 5 minutos"
-            if ! git diff --quiet -- nodos/activaciones.json; then
-              git add nodos/activaciones.json
+            if ! git diff --quiet -- nodos/activaciones.json nodos/pendientes.json; then
+              git add nodos/activaciones.json nodos/pendientes.json
               git commit -q -m "Nodos activados: sincronización"
               for i in 1 2 3 4; do
                 git pull -q --rebase origin "$REF" && git push -q origin "HEAD:$REF" && break
