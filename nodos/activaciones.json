@@ -26074,6 +26074,13 @@
       "c": "Caracas, VE",
       "la": 10.5,
       "lo": -66.9
+    },
+    "0xe5790b20ada29dcc4a0ec18dbc7f08b1e97f01ed": {
+      "t": 1795783770000,
+      "n": "Sectora Node",
+      "c": "",
+      "la": 40,
+      "lo": 15
     }
   }
 }
