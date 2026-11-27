@@ -4335,13 +4335,18 @@ const t = (k, f) => window.SECTORA_T ? window.SECTORA_T(k) : f;
     return { bw, bh, bx: (W - bw) / 2, by: (H - bh) / 2 };
   }
 
-  const PROPIOS = [];
+  const PROPIOS = [], VISTOS = new Set();
+  let pintaPend = 0;
   window.__sectoraMapAdd = function(lon, lat, nombre){
     /* el mismo nodo puede llegar del registro y de las activaciones: una sola marca */
     const r = v => Math.round(v * 10) / 10;
-    if (PROPIOS.some(p => p.nombre === nombre && r(p.lon) === r(lon) && r(p.lat) === r(lat))) return;
+    const k = nombre + '|' + r(lon) + '|' + r(lat);
+    if (VISTOS.has(k)) return;
+    VISTOS.add(k);
     PROPIOS.push({ lon, lat, nombre });
-    pinta();
+    /* las activaciones llegan de golpe (miles): el mapa se repinta una sola vez con todas,
+       en vez de una vez por nodo (eso congelaba el telefono y la intro no terminaba) */
+    if (!pintaPend) pintaPend = setTimeout(() => { pintaPend = 0; pinta(); }, 60);
   };
 
   let intento = 0;
