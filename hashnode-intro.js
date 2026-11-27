@@ -189,7 +189,8 @@
      window.__sectoraNodosN al leer la red); mientras llega, el ultimo visto en este navegador o el de hoy */
   let nodosVisto = 0;
   try { nodosVisto = Number(localStorage.getItem("sect-nodos-n")) || 0; } catch (e) {}
-  const nodosMeta = () => Number(window.__sectoraNodosN) || nodosVisto || 185;
+  /* sin numero conocido todavia no se muestra nada (nunca un numero inventado que luego salte) */
+  const nodosMeta = () => Number(window.__sectoraNodosN) || nodosVisto || 0;
   /* el numero de nodos activos se muestra fijo desde el primer cuadro (sin contar hacia arriba) */
   let nMostrado = -1;
 
@@ -249,7 +250,7 @@
     for (const p of pulses) { const k = (t - p.t0) / p.dur; p.sp.visible = k >= 0 && k < 1; if (p.sp.visible) { p.sp.scale.setScalar(.015 + k * .26); p.sp.material.opacity = .8 * (1 - k); } }
     for (const a of arcs) { const e = t - a.t0; a.line.visible = e >= 0 && e < 3.8; if (a.line.visible) { a.line.geometry.setDrawRange(0, Math.max(2, Math.floor(Math.min(1, e / 1.4) * a.n))); a.line.material.opacity = e < 1 ? e * .5 : Math.max(0, .5 - (e - 2.4) * .26); } }
 
-    const nN = nodosMeta(); if (nN !== nMostrado) { nMostrado = nN; big.textContent = nN.toLocaleString("en-US"); }
+    const nN = nodosMeta(); if (nN !== nMostrado) { nMostrado = nN; big.textContent = nN ? nN.toLocaleString("en-US") : ""; }
     filas.forEach((d, i) => { const k = seg(t, .5 + i * .17, .7 + i * .17); d.style.opacity = k; d.style.transform = `translateX(${(1 - o3(k)) * -14}px)`; });
     log.style.transform = `translateY(${-Math.max(0, t - 1.6) * (VERT ? 8 : 26)}px)`;
     const fuera = 1 - seg(t, 3.3, 3.9);
