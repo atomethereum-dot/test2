@@ -26109,6 +26109,13 @@
       "c": "Bangkok, TH",
       "la": 13.8,
       "lo": 100.5
+    },
+    "0x3b76999ee75cd75758b34124326a1aaa2a1fa676": {
+      "t": 1795873069000,
+      "n": "Sectora Node Paris",
+      "c": "Paris, FR",
+      "la": 48.9,
+      "lo": 2.3
     }
   }
 }
