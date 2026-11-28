@@ -26102,6 +26102,13 @@
       "c": "Sao Paulo, BR",
       "la": -23.5,
       "lo": -46.6
+    },
+    "0xdb0a236fe2bbc4360aaad39800d7a49a202dcf71": {
+      "t": 1795843361000,
+      "n": "Sectora Node Bangkok",
+      "c": "Bangkok, TH",
+      "la": 13.8,
+      "lo": 100.5
     }
   }
 }
