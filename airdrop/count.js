@@ -57,12 +57,19 @@
     return fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body), signal: ctl.signal })
       .then(function (r) { clearTimeout(tm); return r.json(); }, function (e) { clearTimeout(tm); throw e; });
   }
+  // nodos que no dan eventos antiguos ("archive requests require a personal token"): para eth_getLogs se saltan
+  var NOLOGS = {};
   function rpc(urls, method, params) {
     var i = 0;
     function next() {
+      while (i < urls.length && method === "eth_getLogs" && NOLOGS[urls[i]]) i++;
       if (i >= urls.length) return Promise.reject(new Error("rpc " + method));
-      return post(urls[i++], { jsonrpc: "2.0", id: 1, method: method, params: params })
-        .then(function (j) { if (!j || j.error || j.result === undefined) throw new Error("rpc"); return j.result; })
+      var u = urls[i++];
+      return post(u, { jsonrpc: "2.0", id: 1, method: method, params: params })
+        .then(function (j) {
+          if (j && j.error && method === "eth_getLogs" && /archive|personal token/i.test(j.error.message || "")) NOLOGS[u] = 1;
+          if (!j || j.error || j.result === undefined) throw new Error("rpc"); return j.result;
+        })
         .catch(next);
     }
     return next();
@@ -115,7 +122,21 @@
         .sort(function (x, y) { return x.bn - y.bn || x.li - y.li; });
     });
   }
-  function logs(topic1) { return scan(LOGS, STAKING, [[T_DEP, T_WD], topic1 || null], DEPLOYED); }
+  function logs(topic1) {
+    var s = scan(LOGS, STAKING, [[T_DEP, T_WD], topic1 || null], DEPLOYED);
+    return topic1 ? s.catch(function () { return explorer("https://eth.blockscout.com/api", STAKING, topic1, [T_DEP, T_WD]); }) : s;
+  }
+  // respaldo para los eventos de una wallet: la API publica de Blockscout (formato Etherscan, con la hora del bloque)
+  function explorer(base, address, topic1, topic0s) {
+    var ctl = new AbortController(), tm = setTimeout(function () { ctl.abort(); }, 20000);
+    return fetch(base + "?module=logs&action=getLogs&fromBlock=0&toBlock=latest&address=" + address + "&topic1=" + topic1, { signal: ctl.signal })
+      .then(function (r) { clearTimeout(tm); return r.json(); }, function (e) { clearTimeout(tm); throw e; })
+      .then(function (j) {
+        if (!j || !Array.isArray(j.result)) throw new Error("explorer");
+        return j.result.filter(function (l) { return l.topics && topic0s.indexOf(String(l.topics[0]).toLowerCase()) >= 0; })
+          .map(function (l) { return { topics: l.topics.filter(function (t) { return t; }), data: l.data, blockNumber: l.blockNumber, logIndex: l.logIndex || "0x0", transactionHash: l.transactionHash, blockTimestamp: l.timeStamp }; });
+      });
+  }
   function stamp(list) {
     return times(LOGS, list).then(function (x) {
       return x.map(function (o) {
@@ -325,7 +346,11 @@
         Object.keys(act).forEach(function (w) { by[w] = by[w] || []; });
         var list = Object.keys(by);
         onStep && onStep("saldos");
-        return accounts(list).catch(function () { return {}; }).then(function (acc) {
+        // quien solo activo el nodo y nunca hizo staking no tiene nada en el contrato: solo se lee su saldo si lo activo hoy
+        // (el panel lo muestra en "nodos encendidos hoy"); con miles de activaciones, leerlas todas tarda minutos
+        var d0 = new Date(); d0.setHours(0, 0, 0, 0); var since = d0.getTime();
+        var leer = list.filter(function (w) { return by[w].length || (nd[w] && nd[w].at >= since) || (act[w] && act[w].t >= since); });
+        return accounts(leer).catch(function () { return {}; }).then(function (acc) {
           return list.map(function (w) { return { who: w, ev: by[w], node: junta(nd[w] ? Object.assign(nd[w], { reg: true }) : null, act[w], w), acc: acc[w] || null }; });
         });
       });

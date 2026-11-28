@@ -296,6 +296,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       <thead><tr><th>Wallet</th><th>Nivel</th><th class="r">En staking</th><th>Nodo</th><th>Día</th><th class="r">Ganado</th><th class="r">Al completar</th><th>Cobra</th><th>Estado</th></tr></thead>
       <tbody id="rows"></tbody>
     </table></div>
+    <div class="more"><button class="btn ghost" id="lmore" type="button" hidden>Ver 150 más</button></div>
     <p class="foot">Toca una wallet para ver su detalle. Se calcula en tu navegador con los datos públicos de la blockchain (staking en Ethereum, registro de nodos en la testnet y nodos activados en el Dashboard). No se guarda ni se publica nada. Es una estimación: si una wallet apagó el nodo, cuenta como "falta el nodo" hasta que lo encienda.</p>
   </section>
 </main>
@@ -310,7 +311,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
 <!-- conteo con los nodos activados en el Dashboard nuevo (registro en Sepolia + activaciones) -->
 <!-- el panel privado tambien lee los avisos recientes de ntfy: ve al momento un nodo recien activado -->
 <script>window.SA_NTFY = true;</script>
-<script src="/airdrop/count.js?v=23"></script>
+<script src="/airdrop/count.js?v=24"></script>
 <script>
 (function () {
   "use strict";
@@ -327,6 +328,8 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
   // ultimos registros: nodos registrados, entradas al airdrop (staking de 100+ y nodo) y primer deposito
   var RT = [["node", "Nodos activados"], ["entry", "Entradas al airdrop"], ["exit", "Salidas"], ["stake", "Primer staking"], ["up", "Aumentaron staking"], ["lvup", "Subieron de nivel"]];
   var hshow = 14, hopen = {};
+  // la lista se pinta por tramos: con miles de wallets, pintarlas todas (y refrescar su "Ganado" 4 veces por segundo) congela el navegador
+  var lshow = 150;
   var rtab = "node", rshow = 20, recent = {};
   // referidos: lista leida de la red (constancias de 0,0001 tSECT) y SECT que el padrino envio al invitado
   var refs = null, funded = {}, rftab = "inv", rfshow = 20, rfrows = [];
@@ -362,10 +365,11 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
     if (C.OPEN) $("open").disabled = true;
     $("open").addEventListener("change", function () { store("sa-panel-open", $("open").value); compute(); });
     $("refresh").addEventListener("click", load);
-    $("find").addEventListener("input", function () { q = this.value.trim().toLowerCase(); draw(); recentDraw(); refDraw(); });
+    $("find").addEventListener("input", function () { q = this.value.trim().toLowerCase(); lshow = 150; draw(); recentDraw(); refDraw(); });
     $("rmore").addEventListener("click", function () { rshow += 20; recentDraw(); });
     $("rf-more").addEventListener("click", function () { rfshow += 20; refDraw(); });
     $("hmore").addEventListener("click", function () { hshow += 14; histDraw(); });
+    $("lmore").addEventListener("click", function () { lshow += 150; draw(); });
     hopen[dia(Date.now())] = true;
     $("csv").addEventListener("click", csv);
     load();
@@ -564,12 +568,13 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
       var n = rows.filter(function (x) { var keep = tab; tab = t[0]; var ok = pass(x); tab = keep; return ok; }).length;
       return '<button type="button" data-t="' + t[0] + '" aria-pressed="' + (tab === t[0]) + '">' + t[1] + "<em>" + n + "</em></button>";
     }).join("");
-    $("tabs").querySelectorAll("button").forEach(function (b) { b.addEventListener("click", function () { tab = b.dataset.t; tabsDraw(); draw(); }); });
+    $("tabs").querySelectorAll("button").forEach(function (b) { b.addEventListener("click", function () { tab = b.dataset.t; lshow = 150; tabsDraw(); draw(); }); });
   }
   function draw() {
-    var html = "";
+    var html = "", n = 0;
     rows.forEach(function (x, i) {
       if (!pass(x)) return;
+      if (n++ >= lshow) return;
       var r = x.r, st = ST[r.status] || ["—", "mute"];
       var lvl = r.level ? LV[r.level] + " · " + Math.round(r.rate * 100) + " %" : "—";
       var node = r.node === "on" ? '<span class="chip ok">Activo</span>' : r.node === "off" ? '<span class="chip warn">Pausado</span>' : '<span class="chip mute">Sin nodo</span>';
@@ -581,6 +586,7 @@ tbody tr:hover td{background:rgba(233,239,248,.025)}
         '<td><span class="chip ' + st[1] + '">' + st[0] + "</span></td></tr>";
     });
     $("rows").innerHTML = html || '<tr><td colspan="9" class="empty">No hay wallets en este filtro.</td></tr>';
+    var resto = n - lshow; $("lmore").hidden = resto <= 0; if (resto > 0) $("lmore").textContent = "Ver " + Math.min(150, resto) + " más · quedan " + nf0.format(resto);
     $("rows").querySelectorAll("tr[data-r]").forEach(function (tr) { tr.addEventListener("click", function () { show(+tr.dataset.r); }); });
   }
 
