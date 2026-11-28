@@ -90,6 +90,10 @@ h1 b{font-weight:400}
 .chip{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--hair);color:var(--ink-2);font-size:10px}
 .chip.ok{border-color:rgba(62,207,142,.35);color:var(--ok)}
 .chip.warn{border-color:rgba(224,160,48,.4);color:var(--warn)}
+/* sello: 30 dias completados */
+.sello{display:flex;align-items:center;gap:14px;margin:16px 0 0;padding:14px 16px;border:1px solid rgba(62,207,142,.45);background:rgba(62,207,142,.08)}
+.sello svg{flex:none;width:34px;height:34px}.sello circle{fill:var(--ok)}.sello path{fill:none;stroke:#04140c;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.sello b{display:block;color:var(--ok);font-size:17px;font-weight:600}.sello span{display:block;margin-top:2px;color:var(--ink-2);font-size:13px;line-height:1.45}
 .big{margin:22px 0 0;font-weight:200;font-size:clamp(44px,8vw,104px);letter-spacing:-.04em;line-height:1}
 /* lo ganado va con 6 decimales: en los moviles mas estrechos un poco mas pequeno, para que siempre quepa */
 @media (max-width:400px){.big{font-size:clamp(32px,10.5vw,44px)}}
@@ -223,6 +227,6 @@ h1 b{font-weight:400}
 <script src="/myairdrop/i18n-more.js?v=9"></script>
 <script src="/myairdrop/myairdrop-wallet.js?v=25"></script>
 <script src="/airdrop/nota-150.js?v=3"></script>
-<script src="/myairdrop/myairdrop.js?v=22"></script>
+<script src="/myairdrop/myairdrop.js?v=23"></script>
 </body>
 </html>
